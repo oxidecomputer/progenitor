@@ -924,7 +924,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                             a(&format!(
                                 "    ) -> Result<{}> {{",
                                 ts.render_type(&tid)?
-                                ));
+                            ));
                         } else {
                             bail!("media type encoding, no schema: {:#?}", mt);
                         }
