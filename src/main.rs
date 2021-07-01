@@ -188,13 +188,20 @@ impl ParameterDataExt for openapiv3::ParameterData {
                     }
                     SchemaKind::Type(Type::Integer(it)) => {
                         let mut uint;
+                        let width;
 
                         use openapiv3::VariantOrUnknownOrEmpty::Unknown;
                         if let Unknown(f) = &it.format {
-                            if f == "uint" {
-                                uint = true;
-                            } else {
-                                bail!("XXX unknown integer format {}", f);
+                            match f.as_str() {
+                                "uint" | "uint32" => {
+                                    uint = true;
+                                    width = 32;
+                                }
+                                "uint64" => {
+                                    uint = true;
+                                    width = 32;
+                                }
+                                f => bail!("XXX unknown integer format {}", f),
                             }
                         } else {
                             bail!("XXX format {:?}", it.format);
@@ -222,9 +229,9 @@ impl ParameterDataExt for openapiv3::ParameterData {
                             bail!("XXX enumeration");
                         }
                         if uint {
-                            "u64".to_string()
+                            format!("u{}", width)
                         } else {
-                            "i64".to_string()
+                            format!("i{}", width)
                         }
                     }
                     x => bail!("unexpected type {:#?}", x),
