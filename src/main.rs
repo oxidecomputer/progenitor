@@ -8,6 +8,8 @@ use std::fs::{File, OpenOptions};
 use std::io::Write;
 use std::path::Path;
 
+mod template;
+
 fn save<P>(p: P, data: &str) -> Result<()>
 where
     P: AsRef<Path>,
@@ -755,11 +757,13 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     /*
      * Deal with any dependencies we require to produce this client.
      */
+    a("");
     if ts.import_chrono {
-        a("");
         a("use chrono::prelude::*;");
-        a("");
     }
+    a("use serde::{Serialize, Deserialize};");
+    a("use anyhow::Result;"); /* XXX */
+    a("");
 
     /*
      * Declare named types we know about:
@@ -767,6 +771,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     for te in ts.id_to_entry.values() {
         match &te.details {
             TypeDetails::Object(omap) => {
+                a("#[derive(Serialize, Deserialize, Debug)]");
                 a(&format!("pub struct {} {{", te.name.as_deref().unwrap()));
                 for (name, tid) in omap.iter() {
                     a(&format!("    pub {}: {},", name, ts.render_type(tid)?));
@@ -785,10 +790,26 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
      * Declare the client object:
      */
     a("pub struct Client {");
+    a("    baseurl: String,");
+    a("    client: reqwest::Client,");
     a("}");
     a("");
 
     a("impl Client {");
+    a("    pub fn new(baseurl: &str) -> Client {");
+    a("        let dur = std::time::Duration::from_secs(15);");
+    a("        let client = reqwest::ClientBuilder::new()");
+    a("            .connect_timeout(dur)");
+    a("            .timeout(dur)");
+    a("            .build()");
+    a("            .unwrap();");
+    a("");
+    a("        Client {");
+    a("            baseurl: baseurl.to_string(),");
+    a("            client,");
+    a("        }");
+    a("    }");
+    a("");
 
     /*
      * Generate a function for each Operation.
@@ -817,11 +838,11 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
             let mut bounds: Vec<String> = Vec::new();
 
-            let body_param = if let Some(b) = &o.request_body {
+            let (body_param, body_func) = if let Some(b) = &o.request_body {
                 let b = b.item()?;
                 if b.is_binary()? {
                     bounds.push("B: Into<reqwest::Body>".to_string());
-                    Some("B".to_string())
+                    (Some("B".to_string()), Some("body".to_string()))
                 } else {
                     let mt = b.content_json()?;
                     if !mt.encoding.is_empty() {
@@ -830,13 +851,16 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
                     if let Some(s) = &mt.schema {
                         let tid = ts.select(None, s)?;
-                        Some(format!("&{}", ts.render_type(&tid)?))
+                        (
+                            Some(format!("&{}", ts.render_type(&tid)?)),
+                            Some("json".to_string()),
+                        )
                     } else {
                         bail!("media type encoding, no schema: {:#?}", mt);
                     }
                 }
             } else {
-                None
+                (None, None)
             };
 
             if bounds.is_empty() {
@@ -947,7 +971,27 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                 bail!("responses? {:#?}", o.responses);
             }
 
-            a("        unimplemented!();");
+            /*
+             * Generate the URL for the request.
+             */
+            let tmp = template::parse(p)?;
+            a(&tmp.compile());
+
+            /*
+             * Perform the request.
+             */
+            a(&format!("        let res = self.client.{}(url)",
+                m.to_lowercase()));
+            if let Some(f) = &body_func {
+                a(&format!("            .{}(body)", f));
+            }
+            a("            .send()");
+            a("            .await?");
+            a("            .error_for_status()?;"); /* XXX */
+
+            a("");
+
+            a("        Ok(res.json().await?)");
             a("    }");
             a("");
 
