@@ -980,8 +980,10 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             /*
              * Perform the request.
              */
-            a(&format!("        let res = self.client.{}(url)",
-                m.to_lowercase()));
+            a(&format!(
+                "        let res = self.client.{}(url)",
+                m.to_lowercase()
+            ));
             if let Some(f) = &body_func {
                 a(&format!("            .{}(body)", f));
             }

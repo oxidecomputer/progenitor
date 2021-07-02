@@ -109,40 +109,46 @@ fn parse_inner(t: &str) -> Result<Template> {
         State::Parameter => bail!("unterminated parameter"),
     }
 
-    Ok(Template { components, })
+    Ok(Template { components })
 }
 
 #[cfg(test)]
 mod test {
+    use super::{parse, Component, Template};
     use anyhow::{anyhow, Context, Result};
-    use super::{parse, Template, Component};
 
     #[test]
     fn basic() -> Result<()> {
         let trials = vec![
-            ("/info", Template {
-                components: vec![
-                    Component::Constant("info".into()),
-                ],
-            }),
-            ("/measure/{number}", Template {
-                components: vec![
-                    Component::Constant("measure".into()),
-                    Component::Parameter("number".into()),
-                ],
-            }),
-            ("/one/{two}/three", Template {
-                components: vec![
-                    Component::Constant("one".into()),
-                    Component::Parameter("two".into()),
-                    Component::Constant("three".into()),
-                ],
-            }),
+            (
+                "/info",
+                Template {
+                    components: vec![Component::Constant("info".into())],
+                },
+            ),
+            (
+                "/measure/{number}",
+                Template {
+                    components: vec![
+                        Component::Constant("measure".into()),
+                        Component::Parameter("number".into()),
+                    ],
+                },
+            ),
+            (
+                "/one/{two}/three",
+                Template {
+                    components: vec![
+                        Component::Constant("one".into()),
+                        Component::Parameter("two".into()),
+                        Component::Constant("three".into()),
+                    ],
+                },
+            ),
         ];
 
         for (path, want) in trials.iter() {
-            let t = parse(path)
-                .with_context(|| anyhow!("path {}", path))?;
+            let t = parse(path).with_context(|| anyhow!("path {}", path))?;
             assert_eq!(&t, want);
         }
 
