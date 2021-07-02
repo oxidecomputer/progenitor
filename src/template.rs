@@ -25,7 +25,8 @@ impl Template {
         out.push_str("            self.baseurl,\n");
         for c in self.components.iter() {
             if let Component::Parameter(n) = &c {
-                out.push_str(&format!("            {},\n", n));
+                out.push_str(&format!("            \
+                    progenitor_support::encode_path({}),\n", n));
             }
         }
         out.push_str("        );\n");

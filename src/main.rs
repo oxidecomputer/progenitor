@@ -769,6 +769,39 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     a("use anyhow::Result;"); /* XXX */
     a("");
 
+    a("mod progenitor_support {");
+    a("    use percent_encoding::{AsciiSet, CONTROLS, utf8_percent_encode};");
+    a("");
+    /*
+     * The percent-encoding crate abrogates its responsibility for providing
+     * useful percent-encoding sets, so we must provide one for path components
+     * here.
+     */
+    a("    const PATH_SET: &AsciiSet = &CONTROLS");
+    /*
+     * The query percent-encode set is the C0 control percent-encode set and
+     * U+0020 SPACE, U+0022 ("), U+0023 (#), U+003C (<), and U+003E (>).
+     */
+    a("        .add(b' ')");
+    a("        .add(b'\"')");
+    a("        .add(b'#')");
+    a("        .add(b'<')");
+    a("        .add(b'>')");
+    /*
+     * The path percent-encode set is the query percent-encode set and U+003F
+     * (?), U+0060 (`), U+007B ({), and U+007D (}).
+     */
+    a("        .add(b'?')");
+    a("        .add(b'`')");
+    a("        .add(b'{')");
+    a("        .add(b'}');");
+    a("");
+    a("    pub(crate) fn encode_path(pc: &str) -> String {");
+    a("        utf8_percent_encode(pc, PATH_SET).to_string()");
+    a("    }");
+    a("}");
+    a("");
+
     /*
      * Declare named types we know about:
      */
