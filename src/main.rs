@@ -462,7 +462,7 @@ impl TypeSpace {
         }
     }
 
-    fn render_type(&self, tid: &TypeId) -> Result<String> {
+    fn render_type(&self, tid: &TypeId, in_mod: bool) -> Result<String> {
         if let Some(te) = self.id_to_entry.get(&tid) {
             match &te.details {
                 TypeDetails::Basic => {
@@ -473,30 +473,23 @@ impl TypeSpace {
                     }
                 }
                 TypeDetails::Array(itid) => {
-                    if let Some(ite) = self.id_to_entry.get(&itid) {
-                        if let Some(n) = &ite.name {
-                            Ok(format!("Vec<{}>", n))
-                        } else {
-                            bail!("array inner type {:?} no name?", ite);
-                        }
-                    } else {
-                        bail!("array inner type {:?} missing?", itid);
-                    }
+                    Ok(format!("Vec<{}>", self.render_type(itid, in_mod)?))
                 }
                 TypeDetails::Optional(itid) => {
-                    if let Some(ite) = self.id_to_entry.get(&itid) {
-                        if let Some(n) = &ite.name {
-                            Ok(format!("Option<{}>", n))
-                        } else {
-                            bail!("optional inner type {:?} no name?", ite);
-                        }
-                    } else {
-                        bail!("optional inner type {:?} missing?", itid);
-                    }
+                    Ok(format!("Option<{}>", self.render_type(itid, in_mod)?))
                 }
                 TypeDetails::Object(_) => {
                     if let Some(n) = &te.name {
-                        Ok(n.to_string())
+                        if in_mod {
+                            Ok(n.to_string())
+                        } else {
+                            /*
+                             * Model types are declared in the "types" module,
+                             * and must be referenced with that prefix when not
+                             * in the module itself.
+                             */
+                            Ok(format!("types::{}", n.to_string()))
+                        }
                     } else {
                         bail!("object type {:?} does not have a name?", tid);
                     }
@@ -762,10 +755,6 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
      * Deal with any dependencies we require to produce this client.
      */
     a("");
-    if ts.import_chrono {
-        a("use chrono::prelude::*;");
-    }
-    a("use serde::{Serialize, Deserialize};");
     a("use anyhow::Result;"); /* XXX */
     a("");
 
@@ -805,15 +794,28 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     /*
      * Declare named types we know about:
      */
+    a("pub mod types {");
+    if ts.import_chrono {
+        a("    use chrono::prelude::*;");
+    }
+    a("    use serde::{Serialize, Deserialize};");
+    a("");
     for te in ts.id_to_entry.values() {
         match &te.details {
             TypeDetails::Object(omap) => {
-                a("#[derive(Serialize, Deserialize, Debug)]");
-                a(&format!("pub struct {} {{", te.name.as_deref().unwrap()));
+                a("    #[derive(Serialize, Deserialize, Debug)]");
+                a(&format!(
+                    "    pub struct {} {{",
+                    te.name.as_deref().unwrap()
+                ));
                 for (name, tid) in omap.iter() {
-                    a(&format!("    pub {}: {},", name, ts.render_type(tid)?));
+                    a(&format!(
+                        "        pub {}: {},",
+                        name,
+                        ts.render_type(tid, true)?
+                    ));
                 }
-                a("}");
+                a("    }");
                 a("");
             }
             TypeDetails::Basic => {}
@@ -822,6 +824,8 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             TypeDetails::Optional(_) => {}
         }
     }
+    a("}");
+    a("");
 
     /*
      * Declare the client object:
@@ -889,7 +893,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                     if let Some(s) = &mt.schema {
                         let tid = ts.select(None, s)?;
                         (
-                            Some(format!("&{}", ts.render_type(&tid)?)),
+                            Some(format!("&{}", ts.render_type(&tid, false)?)),
                             Some("json".to_string()),
                         )
                     } else {
@@ -991,7 +995,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                             let tid = ts.select(None, s)?;
                             a(&format!(
                                 "    ) -> Result<{}> {{",
-                                ts.render_type(&tid)?
+                                ts.render_type(&tid, false)?
                             ));
                         } else {
                             bail!("media type encoding, no schema: {:#?}", mt);
