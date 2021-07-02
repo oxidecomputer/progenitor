@@ -345,7 +345,11 @@ enum TypeDetails {
     Basic,
     Array(TypeId),
     Optional(TypeId),
-    Object(HashMap<String, TypeId>),
+    /*
+     * Object property names are sorted lexicographically to ensure a stable
+     * order in the generated code.
+     */
+    Object(BTreeMap<String, TypeId>),
 }
 
 #[derive(Debug)]
@@ -603,7 +607,7 @@ impl TypeSpace {
                         (None, None) => bail!("types need a name? {:?}", s),
                     };
 
-                    let mut omap = HashMap::new();
+                    let mut omap = BTreeMap::new();
                     for (n, rb) in o.properties.iter() {
                         let itid = self.select_box(None, &rb)?;
                         if o.required.contains(n) {
