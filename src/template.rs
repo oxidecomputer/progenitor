@@ -1,4 +1,4 @@
-use anyhow::{Result, bail};
+use anyhow::{anyhow, bail, Context, Result};
 
 #[derive(Eq, PartialEq, Clone, Debug)]
 enum Component {
@@ -34,10 +34,16 @@ impl Template {
 }
 
 pub fn parse(t: &str) -> Result<Template> {
+    parse_inner(t)
+        .with_context(|| anyhow!("parse failure for template {:?}", t))
+}
+
+fn parse_inner(t: &str) -> Result<Template> {
     enum State {
         Start,
         ConstantOrParameter,
         Parameter,
+        ParameterSlash,
         Constant,
     }
 
@@ -79,11 +85,18 @@ pub fn parse(t: &str) -> Result<Template> {
                 if c == '}' {
                     components.push(Component::Parameter(a));
                     a = String::new();
-                    s = State::ConstantOrParameter;
+                    s = State::ParameterSlash;
                 } else if c == '/' || c == '{' {
                     bail!("expected parameter");
                 } else {
                     a.push(c);
+                }
+            }
+            State::ParameterSlash => {
+                if c == '/' {
+                    s = State::ConstantOrParameter;
+                } else {
+                    bail!("expected a slash after parameter");
                 }
             }
         }
@@ -91,7 +104,7 @@ pub fn parse(t: &str) -> Result<Template> {
 
     match s {
         State::Start => bail!("empty path"),
-        State::ConstantOrParameter => (),
+        State::ConstantOrParameter | State::ParameterSlash => (),
         State::Constant => components.push(Component::Constant(a)),
         State::Parameter => bail!("unterminated parameter"),
     }
@@ -116,6 +129,13 @@ mod test {
                 components: vec![
                     Component::Constant("measure".into()),
                     Component::Parameter("number".into()),
+                ],
+            }),
+            ("/one/{two}/three", Template {
+                components: vec![
+                    Component::Constant("one".into()),
+                    Component::Parameter("two".into()),
+                    Component::Constant("three".into()),
                 ],
             }),
         ];
