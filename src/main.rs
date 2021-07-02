@@ -1,12 +1,12 @@
 #![allow(unused_imports)]
 
-use anyhow::{bail, Result};
+use anyhow::{anyhow, bail, Context, Result};
 use openapiv3::OpenAPI;
 use serde::Deserialize;
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::path::Path;
+use std::path::{PathBuf, Path};
 
 mod template;
 
@@ -249,6 +249,87 @@ trait ExtractJsonMediaType {
     fn content_json(&self) -> Result<openapiv3::MediaType>;
 }
 
+impl ExtractJsonMediaType for openapiv3::Response {
+    fn content_json(&self) -> Result<openapiv3::MediaType> {
+        if self.content.len() != 1 {
+            bail!("expected one content entry, found {}", self.content.len());
+        }
+
+        if let Some(mt) = self.content.get("application/json") {
+            Ok(mt.clone())
+        } else {
+            bail!(
+                "could not find application/json, only found {}",
+                self.content.keys().next().unwrap()
+            );
+        }
+    }
+
+    fn is_binary(&self) -> Result<bool> {
+        if self.content.len() == 0 {
+            /*
+             * XXX If there are no content types, I guess it is not binary?
+             */
+            return Ok(false);
+        }
+
+        if self.content.len() != 1 {
+            bail!("expected one content entry, found {}", self.content.len());
+        }
+
+        if let Some(mt) = self.content.get("application/octet-stream") {
+            if !mt.encoding.is_empty() {
+                bail!("XXX encoding");
+            }
+
+            if let Some(s) = &mt.schema {
+                use openapiv3::{
+                    SchemaKind, StringFormat, Type,
+                    VariantOrUnknownOrEmpty::Item,
+                };
+
+                let s = s.item()?;
+                if s.schema_data.nullable {
+                    bail!("XXX nullable binary?");
+                }
+                if s.schema_data.default.is_some() {
+                    bail!("XXX default binary?");
+                }
+                if s.schema_data.discriminator.is_some() {
+                    bail!("XXX binary discriminator?");
+                }
+                match &s.schema_kind {
+                    SchemaKind::Type(Type::String(st)) => {
+                        if st.min_length.is_some() || st.max_length.is_some() {
+                            bail!("binary min/max length");
+                        }
+                        if !matches!(st.format, Item(StringFormat::Binary)) {
+                            bail!(
+                                "expected binary format string, got {:?}",
+                                st.format
+                            );
+                        }
+                        if st.pattern.is_some() {
+                            bail!("XXX pattern");
+                        }
+                        if !st.enumeration.is_empty() {
+                            bail!("XXX enumeration");
+                        }
+                        return Ok(true);
+                    }
+                    x => {
+                        bail!("XXX schemakind type {:?}", x);
+                    }
+                }
+            } else {
+                bail!("binary thing had no schema?");
+            }
+        }
+
+        Ok(false)
+    }
+}
+
 impl ExtractJsonMediaType for openapiv3::RequestBody {
     fn content_json(&self) -> Result<openapiv3::MediaType> {
         if self.content.len() != 1 {
@@ -266,6 +347,13 @@ impl ExtractJsonMediaType for openapiv3::RequestBody {
     }
 
     fn is_binary(&self) -> Result<bool> {
+        if self.content.len() == 0 {
+            /*
+             * XXX If there are no content types, I guess it is not binary?
+             */
+            return Ok(false);
+        }
+
         if self.content.len() != 1 {
             bail!("expected one content entry, found {}", self.content.len());
         }
@@ -873,7 +961,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             };
 
             let oid = o.operation_id.as_deref().unwrap();
-            a("    /*");
+            a("    /**");
             a(&format!("     * {}: {} {}", oid, m, p));
             a("     */");
 
@@ -885,7 +973,9 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                     bounds.push("B: Into<reqwest::Body>".to_string());
                     (Some("B".to_string()), Some("body".to_string()))
                 } else {
-                    let mt = b.content_json()?;
+                    let mt = b
+                        .content_json()
+                        .with_context(|| anyhow!("{} {}", m, pn))?;
                     if !mt.encoding.is_empty() {
                         bail!("media type encoding not empty: {:#?}", mt);
                     }
@@ -1060,7 +1150,9 @@ fn main() -> Result<()> {
     let mut opts = getopts::Options::new();
     opts.parsing_style(getopts::ParsingStyle::StopAtFirstFree);
     opts.reqopt("i", "", "OpenAPI definition document (JSON)", "INPUT");
-    opts.reqopt("o", "", "Generated Rust output file", "OUTPUT");
+    opts.reqopt("o", "", "Generated Rust crate directory", "OUTPUT");
+    opts.reqopt("n", "", "Target Rust crate name", "CRATE");
+    opts.reqopt("v", "", "Target Rust crate version", "VERSION");
 
     let args = match opts.parse(std::env::args().skip(1)) {
         Ok(args) => {
@@ -1082,7 +1174,9 @@ fn main() -> Result<()> {
 
     if let Some(components) = &api.components {
         /*
-         * First, grant each expected reference a type ID.
+         * First, grant each expected reference a type ID.  Each
+         * "components.schemas" entry needs an established reference for
+         * resolution in this and other parts of the document.
          */
         for n in components.schemas.keys() {
             println!("PREPOP {}:", n);
@@ -1090,24 +1184,132 @@ fn main() -> Result<()> {
         }
         println!();
 
+        /*
+         * Populate a type to describe each entry in the schemas section:
+         */
         for (i, (sn, s)) in components.schemas.iter().enumerate() {
             println!("SCHEMA {}/{}: {}", i + 1, components.schemas.len(), sn);
 
             let id = ts.select(Some(sn.as_str()), s)?;
             println!("    -> {:?}", id);
 
-            /*
-             * Each "components.schemas" entry needs an established reference
-             * for resolution in other parts of the document.
-             */
-
             println!();
         }
     }
 
+    /*
+     * In addition to types defined in schemas, types may be defined inline in
+     * request and response bodies.
+     */
+    for (pn, p) in api.paths.iter() {
+        let op = p.item()?;
+
+        let grab = |pn: &str,
+                    m: &str,
+                    o: Option<&openapiv3::Operation>,
+                    ts: &mut TypeSpace|
+         -> Result<()> {
+            if let Some(o) = o {
+                /*
+                 * Get the request body type, if this operation has one:
+                 */
+                match &o.request_body {
+                    Some(openapiv3::ReferenceOr::Item(body)) => {
+                        if !body.is_binary()? {
+                            let mt =
+                                body.content_json().with_context(|| {
+                                    anyhow!("{} {} request", m, pn)
+                                })?;
+                            if let Some(s) = &mt.schema {
+                                let id = ts.select(None, s)?;
+                                println!(
+                                    "    {} {} request body -> {:?}",
+                                    pn, m, id
+                                );
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+
+                /*
+                 * Get the response body type for each status code:
+                 */
+                for (code, r) in o.responses.responses.iter() {
+                    let ri = r.item()?;
+                    if !ri.is_binary()? && !ri.content.is_empty() {
+                        let mt = ri.content_json().with_context(|| {
+                            anyhow!("{} {} {}", m, pn, code)
+                        })?;
+                        if let Some(s) = &mt.schema {
+                            let id = ts.select(None, s)?;
+                            println!(
+                                "    {} {} {} response body -> {:?}",
+                                pn, m, code, id
+                            );
+                        }
+                    }
+                }
+            }
+            Ok(())
+        };
+
+        grab(pn, "GET", op.get.as_ref(), &mut ts)?;
+        grab(pn, "POST", op.post.as_ref(), &mut ts)?;
+        grab(pn, "PUT", op.put.as_ref(), &mut ts)?;
+        grab(pn, "DELETE", op.delete.as_ref(), &mut ts)?;
+        grab(pn, "OPTIONS", op.options.as_ref(), &mut ts)?;
+        grab(pn, "HEAD", op.head.as_ref(), &mut ts)?;
+        grab(pn, "PATCH", op.patch.as_ref(), &mut ts)?;
+        grab(pn, "TRACE", op.trace.as_ref(), &mut ts)?;
+    }
+
     let fail = match gen(&api, &mut ts) {
         Ok(out) => {
-            save(&args.opt_str("o").unwrap(), out.as_str())?;
+            let name = args.opt_str("n").unwrap();
+            let version = args.opt_str("v").unwrap();
+
+            /*
+             * Create the top-level crate directory:
+             */
+            let root = PathBuf::from(args.opt_str("o").unwrap());
+            std::fs::create_dir_all(&root)?;
+
+            /*
+             * Write the Cargo.toml file:
+             */
+            let mut toml = root.clone();
+            toml.push("Cargo.toml");
+            let tomlout = format!(
+                "[package]\n\
+                name = \"{}\"\n\
+                version = \"{}\"\n\
+                edition = \"2018\"\n\
+                \n\
+                [dependencies]\n\
+                anyhow = \"1\"\n\
+                chrono = \"0.4\"\n\
+                percent-encoding = \"2.1\"\n\
+                reqwest = {{ version = \"0.11\", features = [\"json\"] }}\n\
+                serde = {{ version = \"1\", features = [\"derive\"] }}\n",
+                name,
+                version,
+                );
+            save(&toml, tomlout.as_str())?;
+
+            /*
+             * Create the src/ directory:
+             */
+            let mut src = root.clone();
+            src.push("src");
+            std::fs::create_dir_all(&src)?;
+
+            /*
+             * Create the Rust source file containing the generated client:
+             */
+            let mut librs = src.clone();
+            librs.push("lib.rs");
+            save(librs, out.as_str())?;
             false
         }
         Err(e) => {
