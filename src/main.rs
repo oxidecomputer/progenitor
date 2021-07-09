@@ -4,9 +4,10 @@ use anyhow::{anyhow, bail, Context, Result};
 use openapiv3::OpenAPI;
 use serde::Deserialize;
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::ffi::OsStr;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::path::{PathBuf, Path};
+use std::path::{Path, PathBuf};
 
 mod template;
 
@@ -32,6 +33,11 @@ where
 {
     let p = p.as_ref();
     let f = File::open(p)?;
+    if let Some(ext) = p.extension() {
+        if ext == OsStr::new("yaml") || ext == OsStr::new("yml") {
+            return Ok(serde_yaml::from_reader(f)?);
+        }
+    }
     Ok(serde_json::from_reader(f)?)
 }
 
@@ -1292,9 +1298,8 @@ fn main() -> Result<()> {
                 percent-encoding = \"2.1\"\n\
                 reqwest = {{ version = \"0.11\", features = [\"json\"] }}\n\
                 serde = {{ version = \"1\", features = [\"derive\"] }}\n",
-                name,
-                version,
-                );
+                name, version,
+            );
             save(&toml, tomlout.as_str())?;
 
             /*
