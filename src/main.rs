@@ -1155,7 +1155,12 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 fn main() -> Result<()> {
     let mut opts = getopts::Options::new();
     opts.parsing_style(getopts::ParsingStyle::StopAtFirstFree);
-    opts.reqopt("i", "", "OpenAPI definition document (JSON)", "INPUT");
+    opts.reqopt(
+        "i",
+        "",
+        "OpenAPI definition document (JSON | YAML)",
+        "INPUT",
+    );
     opts.reqopt("o", "", "Generated Rust crate directory", "OUTPUT");
     opts.reqopt("n", "", "Target Rust crate name", "CRATE");
     opts.reqopt("v", "", "Target Rust crate version", "VERSION");
