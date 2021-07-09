@@ -272,7 +272,7 @@ impl ExtractJsonMediaType for openapiv3::Response {
     }
 
     fn is_binary(&self) -> Result<bool> {
-        if self.content.len() == 0 {
+        if self.content.is_empty() {
             /*
              * XXX If there are no content types, I guess it is not binary?
              */
@@ -353,7 +353,7 @@ impl ExtractJsonMediaType for openapiv3::RequestBody {
     }
 
     fn is_binary(&self) -> Result<bool> {
-        if self.content.len() == 0 {
+        if self.content.is_empty() {
             /*
              * XXX If there are no content types, I guess it is not binary?
              */
@@ -1219,23 +1219,21 @@ fn main() -> Result<()> {
                 /*
                  * Get the request body type, if this operation has one:
                  */
-                match &o.request_body {
-                    Some(openapiv3::ReferenceOr::Item(body)) => {
-                        if !body.is_binary()? {
-                            let mt =
-                                body.content_json().with_context(|| {
-                                    anyhow!("{} {} request", m, pn)
-                                })?;
-                            if let Some(s) = &mt.schema {
-                                let id = ts.select(None, s)?;
-                                println!(
-                                    "    {} {} request body -> {:?}",
-                                    pn, m, id
-                                );
-                            }
+                if let Some(openapiv3::ReferenceOr::Item(body)) =
+                    &o.request_body
+                {
+                    if !body.is_binary()? {
+                        let mt = body
+                            .content_json()
+                            .with_context(|| anyhow!("{} {} request", m, pn))?;
+                        if let Some(s) = &mt.schema {
+                            let id = ts.select(None, s)?;
+                            println!(
+                                "    {} {} request body -> {:?}",
+                                pn, m, id
+                            );
                         }
                     }
-                    _ => {}
                 }
 
                 /*
@@ -1305,14 +1303,14 @@ fn main() -> Result<()> {
             /*
              * Create the src/ directory:
              */
-            let mut src = root.clone();
+            let mut src = root;
             src.push("src");
             std::fs::create_dir_all(&src)?;
 
             /*
              * Create the Rust source file containing the generated client:
              */
-            let mut librs = src.clone();
+            let mut librs = src;
             librs.push("lib.rs");
             save(librs, out.as_str())?;
             false
