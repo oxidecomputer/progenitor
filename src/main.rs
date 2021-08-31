@@ -6,7 +6,7 @@ use serde::Deserialize;
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::path::{PathBuf, Path};
+use std::path::{Path, PathBuf};
 
 mod template;
 
@@ -438,6 +438,8 @@ enum TypeDetails {
      * order in the generated code.
      */
     Object(BTreeMap<String, TypeId>),
+    NewType(TypeId),
+    Enumeration(Vec<String>),
 }
 
 #[derive(Debug)]
@@ -541,6 +543,26 @@ impl TypeSpace {
                         format!("[OBJECT {} !NONAME?]", tid.0)
                     }
                 }
+                TypeDetails::NewType(itid) => {
+                    if let Some(ite) = self.id_to_entry.get(&itid) {
+                        if let Some(n) = &ite.name {
+                            return format!("newtype of {} <{}>", n, itid.0);
+                        }
+                    }
+
+                    /*
+                     * If there is no name attached, we should try a
+                     * recursive describe.
+                     */
+                    format!("newtype of {}", self.describe(itid))
+                }
+                TypeDetails::Enumeration(_) => {
+                    if let Some(n) = &te.name {
+                        format!("enum {}", n)
+                    } else {
+                        format!("[ENUMERATION {} !NONAME?]", tid.0)
+                    }
+                }
                 TypeDetails::Unknown => {
                     format!("[UNKNOWN {}]", tid.0)
                 }
@@ -566,7 +588,9 @@ impl TypeSpace {
                 TypeDetails::Optional(itid) => {
                     Ok(format!("Option<{}>", self.render_type(itid, in_mod)?))
                 }
-                TypeDetails::Object(_) => {
+                TypeDetails::Object(_)
+                | TypeDetails::NewType(_)
+                | TypeDetails::Enumeration(_) => {
                     if let Some(n) = &te.name {
                         if in_mod {
                             Ok(n.to_string())
@@ -720,7 +744,27 @@ impl TypeSpace {
                             )
                         }
                         Empty => {
-                            (Some("String".to_string()), TypeDetails::Basic)
+                            use TypeDetails::{Enumeration, NewType};
+
+                            if !st.enumeration.is_empty() {
+                                if let Some(name) = name {
+                                    (
+                                        Some(name.to_string()),
+                                        Enumeration(st.enumeration.clone()),
+                                    )
+                                } else {
+                                    bail!("enumeration without name: {:?}", st);
+                                }
+                            } else if let Some(name) = name {
+                                /*
+                                 * Create a newtype struct for strings that have
+                                 * a name of their own.
+                                 */
+                                let id = self.id_for_name("String");
+                                (Some(name.to_string()), NewType(id))
+                            } else {
+                                (Some("String".to_string()), TypeDetails::Basic)
+                            }
                         }
                         x => {
                             bail!("XXX string format {:?}", x);
@@ -902,6 +946,37 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                         name,
                         ts.render_type(tid, true)?
                     ));
+                }
+                a("    }");
+                a("");
+            }
+            TypeDetails::NewType(tid) => {
+                a("    #[derive(Serialize, Deserialize, Debug)]");
+                a(&format!(
+                    "    pub struct {}({});",
+                    te.name.as_deref().unwrap(),
+                    ts.render_type(tid, true)?,
+                ));
+                a("");
+            }
+            TypeDetails::Enumeration(list) => {
+                a("    #[derive(Serialize, Deserialize, Debug)]");
+                a(&format!("    pub enum {} {{", te.name.as_deref().unwrap()));
+                for name in list.iter() {
+                    /*
+                     * Attempt to make the first letter a capital letter.
+                     */
+                    let mut name = name.chars().collect::<Vec<_>>();
+                    if name[0].is_ascii_alphabetic() {
+                        name[0] = name[0].to_ascii_uppercase();
+                    }
+
+                    a(
+                        &format!(
+                            "        {},",
+                            name.iter().collect::<String>(),
+                        ),
+                    );
                 }
                 a("    }");
                 a("");
@@ -1292,9 +1367,8 @@ fn main() -> Result<()> {
                 percent-encoding = \"2.1\"\n\
                 reqwest = {{ version = \"0.11\", features = [\"json\"] }}\n\
                 serde = {{ version = \"1\", features = [\"derive\"] }}\n",
-                name,
-                version,
-                );
+                name, version,
+            );
             save(&toml, tomlout.as_str())?;
 
             /*
