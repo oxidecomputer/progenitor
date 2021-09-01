@@ -163,15 +163,23 @@ where
 
 trait ParameterDataExt {
     fn render_type(&self) -> Result<String>;
+    fn schema(&self) -> Result<&openapiv3::ReferenceOr<openapiv3::Schema>>;
 }
 
 impl ParameterDataExt for openapiv3::ParameterData {
+    fn schema(&self) -> Result<&openapiv3::ReferenceOr<openapiv3::Schema>> {
+        match &self.format {
+            openapiv3::ParameterSchemaOrContent::Schema(s) => Ok(s),
+            x => bail!("XXX param format {:#?}", x),
+        }
+    }
+
     fn render_type(&self) -> Result<String> {
         use openapiv3::{SchemaKind, Type};
 
         Ok(match &self.format {
             openapiv3::ParameterSchemaOrContent::Schema(s) => {
-                let s = s.item()?;
+                let s = s.item().context("parameter data render type")?;
                 match &s.schema_kind {
                     SchemaKind::Type(Type::String(st)) => {
                         if !st.format.is_empty() {
@@ -951,12 +959,26 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                 a("");
             }
             TypeDetails::NewType(tid) => {
+                let n = te.name.as_deref().unwrap();
                 a("    #[derive(Serialize, Deserialize, Debug)]");
                 a(&format!(
                     "    pub struct {}({});",
-                    te.name.as_deref().unwrap(),
+                    n,
                     ts.render_type(tid, true)?,
                 ));
+                a("");
+
+                /*
+                 * Implement a basic Display trait so that to_string() works
+                 * as well as it would have for the base type:
+                 */
+                a(&format!("    impl std::fmt::Display for {} {{", n));
+                a("        fn fmt(&self, f: &mut std::fmt::Formatter) -> \
+                    std::fmt::Result {");
+                a("            write!(f, \"{}\", self.0)");
+                a("        }");
+                a("    }");
+
                 a("");
             }
             TypeDetails::Enumeration(list) => {
@@ -1082,12 +1104,9 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                         parameter_data,
                         style: openapiv3::PathStyle::Simple,
                     } => {
-                        /*
-                         * XXX Parameter types should probably go through
-                         * the type space...
-                         */
                         let nam = &parameter_data.name;
-                        let typ = parameter_data.render_type()?;
+                        let tid = ts.select(None, parameter_data.schema()?)?;
+                        let typ = ts.render_type(&tid, false)?;
                         a(&format!("        {}: {},", nam, typ));
                     }
                     openapiv3::Parameter::Query {
