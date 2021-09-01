@@ -1109,6 +1109,14 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                         let nam = &parameter_data.name;
                         let typ = parameter_data.render_type()?;
                         a(&format!("        {}: {},", nam, typ));
+
+                        /*
+                         * XXX Form-style query parameters appear in the
+                         * function arguments, but there's nothing that
+                         * currently puts them in the generated URL.  Don't
+                         * silently generate an incorrect client.
+                         */
+                        bail!("XXX query parameters do not work yet");
                     }
                     x => bail!("unhandled parameter type: {:#?}", x),
                 }
