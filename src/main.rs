@@ -1382,6 +1382,11 @@ fn main() -> Result<()> {
              */
             let mut toml = root.clone();
             toml.push("Cargo.toml");
+            let chrono = if ts.import_chrono {
+                "chrono = { version = \"0.4\", features = [\"serde\"] }\n"
+            } else {
+                ""
+            };
             let tomlout = format!(
                 "[package]\n\
                 name = \"{}\"\n\
@@ -1390,11 +1395,11 @@ fn main() -> Result<()> {
                 \n\
                 [dependencies]\n\
                 anyhow = \"1\"\n\
-                chrono = \"0.4\"\n\
+                {}\
                 percent-encoding = \"2.1\"\n\
                 reqwest = {{ version = \"0.11\", features = [\"json\"] }}\n\
                 serde = {{ version = \"1\", features = [\"derive\"] }}\n",
-                name, version,
+                name, version, chrono,
             );
             save(&toml, tomlout.as_str())?;
 
