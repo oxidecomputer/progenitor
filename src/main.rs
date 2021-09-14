@@ -1063,6 +1063,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             a("     */");
 
             let mut bounds: Vec<String> = Vec::new();
+            let mut query: Vec<(String, bool)> = Vec::new();
 
             let (body_param, body_func) = if let Some(b) = &o.request_body {
                 let b = b.item()?;
@@ -1104,6 +1105,11 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                         parameter_data,
                         style: openapiv3::PathStyle::Simple,
                     } => {
+                        /*
+                         * Path parameters MUST be required.
+                         */
+                        assert!(parameter_data.required);
+
                         let nam = &parameter_data.name;
                         let tid = ts.select(None, parameter_data.schema()?)?;
                         let typ = ts.render_type(&tid, false)?;
@@ -1121,21 +1127,21 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                             }
                         }
 
-                        /*
-                         * XXX Parameter types should probably go through
-                         * the type space...
-                         */
                         let nam = &parameter_data.name;
-                        let typ = parameter_data.render_type()?;
+                        let tid = ts.select(None, parameter_data.schema()?)?;
+                        let tid = if parameter_data.required {
+                            tid
+                        } else {
+                            /*
+                             * If this is an optional parameter, we need an
+                             * Option version of the type.
+                             */
+                            ts.id_for_optional(&tid)
+                        };
+                        let typ = ts.render_type(&tid, false)?;
                         a(&format!("        {}: {},", nam, typ));
 
-                        /*
-                         * XXX Form-style query parameters appear in the
-                         * function arguments, but there's nothing that
-                         * currently puts them in the generated URL.  Don't
-                         * silently generate an incorrect client.
-                         */
-                        bail!("XXX query parameters do not work yet");
+                        query.push((nam.to_string(), !parameter_data.required));
                     }
                     x => bail!("unhandled parameter type: {:#?}", x),
                 }
@@ -1211,6 +1217,31 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             a(&tmp.compile());
 
             /*
+             * If there is a query string, generate that now.
+             */
+            if !query.is_empty() {
+                a("        let mut query = Vec::new();");
+                for (qn, opt) in query.iter() {
+                    if *opt {
+                        a(&format!("        if let Some(v) = &{} {{", qn));
+                        a(&format!(
+                            "            \
+                            query.push((\"{}\".to_string(), v.to_string()));",
+                            qn
+                        ));
+                        a("        }}");
+                    } else {
+                        a(&format!(
+                            "        \
+                            query.push((\"{}\".to_string(), {}.to_string()));",
+                            qn, qn
+                        ));
+                    }
+                }
+                a("");
+            }
+
+            /*
              * Perform the request.
              */
             a(&format!(
@@ -1219,6 +1250,9 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             ));
             if let Some(f) = &body_func {
                 a(&format!("            .{}(body)", f));
+            }
+            if !query.is_empty() {
+                a("            .query(&query)");
             }
             a("            .send()");
             a("            .await?");
