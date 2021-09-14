@@ -1229,7 +1229,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                             query.push((\"{}\".to_string(), v.to_string()));",
                             qn
                         ));
-                        a("        }}");
+                        a("        }");
                     } else {
                         a(&format!(
                             "        \
