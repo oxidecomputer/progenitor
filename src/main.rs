@@ -478,6 +478,26 @@ impl PartialEq for TypeId {
     }
 }
 
+enum UseContext {
+    Module,
+    Return,
+    Parameter,
+}
+
+impl UseContext {
+    fn is_module(&self) -> bool {
+        matches!(self, &UseContext::Module)
+    }
+
+    fn is_return(&self) -> bool {
+        matches!(self, &UseContext::Return)
+    }
+
+    fn is_parameter(&self) -> bool {
+        matches!(self, &UseContext::Parameter)
+    }
+}
+
 #[derive(Debug)]
 struct TypeSpace {
     next_id: u64,
@@ -589,21 +609,27 @@ impl TypeSpace {
         }
     }
 
-    fn render_type(&self, tid: &TypeId, in_mod: bool) -> Result<String> {
+    fn render_type(&self, tid: &TypeId, ctx: UseContext) -> Result<String> {
+        let in_mod = ctx.is_module();
+
         if let Some(te) = self.id_to_entry.get(&tid) {
             match &te.details {
                 TypeDetails::Basic => {
                     if let Some(n) = &te.name {
-                        Ok(n.to_string())
+                        Ok(if n == "String" && ctx.is_parameter() {
+                            "&str"
+                        } else {
+                            n
+                        }.to_string())
                     } else {
                         bail!("basic type {:?} does not have a name?", tid);
                     }
                 }
                 TypeDetails::Array(itid) => {
-                    Ok(format!("Vec<{}>", self.render_type(itid, in_mod)?))
+                    Ok(format!("Vec<{}>", self.render_type(itid, ctx)?))
                 }
                 TypeDetails::Optional(itid) => {
-                    Ok(format!("Option<{}>", self.render_type(itid, in_mod)?))
+                    Ok(format!("Option<{}>", self.render_type(itid, ctx)?))
                 }
                 TypeDetails::Object(_)
                 | TypeDetails::NewType(_)
@@ -971,7 +997,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                     a(&format!(
                         "        pub {}: {},",
                         name,
-                        ts.render_type(tid, true)?
+                        ts.render_type(tid, UseContext::Module)?
                     ));
                 }
                 a("    }");
@@ -983,7 +1009,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                 a(&format!(
                     "    pub struct {}({});",
                     n,
-                    ts.render_type(tid, true)?,
+                    ts.render_type(tid, UseContext::Module)?,
                 ));
                 a("");
 
@@ -1100,7 +1126,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                     if let Some(s) = &mt.schema {
                         let tid = ts.select(None, s)?;
                         (
-                            Some(format!("&{}", ts.render_type(&tid, false)?)),
+                            Some(format!("&{}", ts.render_type(&tid, UseContext::Return)?)),
                             Some("json".to_string()),
                         )
                     } else {
@@ -1131,7 +1157,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
                         let nam = &parameter_data.name;
                         let tid = ts.select(None, parameter_data.schema()?)?;
-                        let typ = ts.render_type(&tid, false)?;
+                        let typ = ts.render_type(&tid, UseContext::Parameter)?;
                         a(&format!("        {}: {},", nam, typ));
                     }
                     openapiv3::Parameter::Query {
@@ -1157,7 +1183,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                              */
                             ts.id_for_optional(&tid)
                         };
-                        let typ = ts.render_type(&tid, false)?;
+                        let typ = ts.render_type(&tid, UseContext::Parameter)?;
                         a(&format!("        {}: {},", nam, typ));
 
                         query.push((nam.to_string(), !parameter_data.required));
@@ -1212,7 +1238,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                             let tid = ts.select(None, s)?;
                             a(&format!(
                                 "    ) -> Result<{}> {{",
-                                ts.render_type(&tid, false)?
+                                ts.render_type(&tid, UseContext::Return)?
                             ));
                         } else {
                             bail!("media type encoding, no schema: {:#?}", mt);
