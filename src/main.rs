@@ -943,7 +943,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     for te in ts.id_to_entry.values() {
         match &te.details {
             TypeDetails::Object(omap) => {
-                a("    #[derive(Serialize, Deserialize, Debug)]");
+                a("    #[derive(Serialize, Deserialize, Debug, Clone)]");
                 a(&format!(
                     "    pub struct {} {{",
                     te.name.as_deref().unwrap()
@@ -960,7 +960,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             }
             TypeDetails::NewType(tid) => {
                 let n = te.name.as_deref().unwrap();
-                a("    #[derive(Serialize, Deserialize, Debug)]");
+                a("    #[derive(Serialize, Deserialize, Debug, Clone)]");
                 a(&format!(
                     "    pub struct {}({});",
                     n,
