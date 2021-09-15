@@ -505,6 +505,15 @@ impl TypeSpace {
         }
     }
 
+    fn is_optional(&self, tid: &TypeId) -> bool {
+        if let Some(te) = self.id_to_entry.get(&tid) {
+            if let TypeDetails::Optional(_) = &te.details {
+                return true;
+            }
+        }
+        false
+    }
+
     /**
      * Emit a human-readable diagnostic description for this type ID.
      */
@@ -949,6 +958,16 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                     te.name.as_deref().unwrap()
                 ));
                 for (name, tid) in omap.iter() {
+                    if ts.is_optional(tid) {
+                        /*
+                         * Omit missing optionals from the document entirely; do
+                         * not inject a "null" value.
+                         */
+                        a(
+                            "        #[serde(skip_serializing_if = \
+                            \"Option::is_none\")]"
+                        );
+                    }
                     a(&format!(
                         "        pub {}: {},",
                         name,
