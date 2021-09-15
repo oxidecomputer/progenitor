@@ -1075,6 +1075,11 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     a("            .build()");
     a("            .unwrap();");
     a("");
+    a("        Client::new_with_client(baseurl, client)");
+    a("    }");
+    a("");
+    a("    pub fn new_with_client(baseurl: &str, client: reqwest::Client) \
+        -> Client {");
     a("        Client {");
     a("            baseurl: baseurl.to_string(),");
     a("            client,");
