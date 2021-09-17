@@ -620,7 +620,8 @@ impl TypeSpace {
                             "&str"
                         } else {
                             n
-                        }.to_string())
+                        }
+                        .to_string())
                     } else {
                         bail!("basic type {:?} does not have a name?", tid);
                     }
@@ -989,10 +990,8 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                          * Omit missing optionals from the document entirely; do
                          * not inject a "null" value.
                          */
-                        a(
-                            "        #[serde(skip_serializing_if = \
-                            \"Option::is_none\")]"
-                        );
+                        a("        #[serde(skip_serializing_if = \
+                            \"Option::is_none\")]");
                     }
                     a(&format!(
                         "        pub {}: {},",
@@ -1078,8 +1077,10 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     a("        Client::new_with_client(baseurl, client)");
     a("    }");
     a("");
-    a("    pub fn new_with_client(baseurl: &str, client: reqwest::Client) \
-        -> Client {");
+    a(
+        "    pub fn new_with_client(baseurl: &str, client: reqwest::Client) \
+        -> Client {",
+    );
     a("        Client {");
     a("            baseurl: baseurl.to_string(),");
     a("            client,");
@@ -1131,7 +1132,10 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                     if let Some(s) = &mt.schema {
                         let tid = ts.select(None, s)?;
                         (
-                            Some(format!("&{}", ts.render_type(&tid, UseContext::Return)?)),
+                            Some(format!(
+                                "&{}",
+                                ts.render_type(&tid, UseContext::Return)?
+                            )),
                             Some("json".to_string()),
                         )
                     } else {
@@ -1162,7 +1166,8 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
                         let nam = &parameter_data.name;
                         let tid = ts.select(None, parameter_data.schema()?)?;
-                        let typ = ts.render_type(&tid, UseContext::Parameter)?;
+                        let typ =
+                            ts.render_type(&tid, UseContext::Parameter)?;
                         a(&format!("        {}: {},", nam, typ));
                     }
                     openapiv3::Parameter::Query {
@@ -1188,7 +1193,8 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                              */
                             ts.id_for_optional(&tid)
                         };
-                        let typ = ts.render_type(&tid, UseContext::Parameter)?;
+                        let typ =
+                            ts.render_type(&tid, UseContext::Parameter)?;
                         a(&format!("        {}: {},", nam, typ));
 
                         query.push((nam.to_string(), !parameter_data.required));
