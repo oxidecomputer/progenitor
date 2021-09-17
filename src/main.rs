@@ -1,4 +1,5 @@
 #![allow(unused_imports)]
+#![allow(clippy::single_match)]
 
 use anyhow::{anyhow, bail, Context, Result};
 use openapiv3::OpenAPI;
@@ -274,7 +275,7 @@ impl ExtractJsonMediaType for openapiv3::Response {
     }
 
     fn is_binary(&self) -> Result<bool> {
-        if self.content.len() == 0 {
+        if self.content.is_empty() {
             /*
              * XXX If there are no content types, I guess it is not binary?
              */
@@ -355,7 +356,7 @@ impl ExtractJsonMediaType for openapiv3::RequestBody {
     }
 
     fn is_binary(&self) -> Result<bool> {
-        if self.content.len() == 0 {
+        if self.content.is_empty() {
             /*
              * XXX If there are no content types, I guess it is not binary?
              */
@@ -484,6 +485,7 @@ enum UseContext {
     Parameter,
 }
 
+#[allow(dead_code)]
 impl UseContext {
     fn is_module(&self) -> bool {
         matches!(self, &UseContext::Module)
@@ -1508,14 +1510,14 @@ fn main() -> Result<()> {
             /*
              * Create the src/ directory:
              */
-            let mut src = root.clone();
+            let mut src = root;
             src.push("src");
             std::fs::create_dir_all(&src)?;
 
             /*
              * Create the Rust source file containing the generated client:
              */
-            let mut librs = src.clone();
+            let mut librs = src;
             librs.push("lib.rs");
             save(librs, out.as_str())?;
             false
