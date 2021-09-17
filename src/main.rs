@@ -968,15 +968,30 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     a("");
 
     /*
-     * Declare named types we know about:
+     * Declare named types we know about.  We want the declarations to appear in
+     * a stable order within the file, so we first collect a list of type IDs
+     * that we can sort by their visible name.
      */
+    let mut ids = ts.id_to_entry.values().filter_map(|te| match &te.details {
+        TypeDetails::Object(_)
+        | TypeDetails::NewType(_)
+        | TypeDetails::Enumeration(_) => {
+            Some((te.name.as_deref().unwrap(), &te.id))
+        }
+        TypeDetails::Basic
+        | TypeDetails::Unknown
+        | TypeDetails::Array(_)
+        | TypeDetails::Optional(_) => None,
+    }).collect::<Vec<_>>();
+    ids.sort_by(|a, b| a.0.cmp(&b.0));
+
     a("pub mod types {");
     if ts.import_chrono {
         a("    use chrono::prelude::*;");
     }
     a("    use serde::{Serialize, Deserialize};");
     a("");
-    for te in ts.id_to_entry.values() {
+    for te in ids.iter().map(|x| ts.id_to_entry.get(x.1).unwrap()) {
         match &te.details {
             TypeDetails::Object(omap) => {
                 a("    #[derive(Serialize, Deserialize, Debug, Clone)]");
@@ -1047,10 +1062,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                 a("    }");
                 a("");
             }
-            TypeDetails::Basic => {}
-            TypeDetails::Unknown => {}
-            TypeDetails::Array(_) => {}
-            TypeDetails::Optional(_) => {}
+            x => panic!("unexpected type details here: {:?}", x),
         }
     }
     a("}");
