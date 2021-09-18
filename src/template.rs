@@ -35,6 +35,16 @@ impl Template {
         out.push_str("        );\n");
         out
     }
+
+    pub fn names(&self) -> Vec<String> {
+        self.components
+            .iter()
+            .filter_map(|c| match c {
+                Component::Parameter(name) => Some(name.to_string()),
+                Component::Constant(_) => None,
+            })
+            .collect()
+    }
 }
 
 pub fn parse(t: &str) -> Result<Template> {
@@ -154,6 +164,25 @@ mod test {
         for (path, want) in trials.iter() {
             let t = parse(path).with_context(|| anyhow!("path {}", path))?;
             assert_eq!(&t, want);
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn names() -> Result<()> {
+        let trials = vec![
+            ("/info", vec![]),
+            ("/measure/{number}", vec!["number".to_string()]),
+            (
+                "/measure/{one}/{two}/and/{three}/yeah",
+                vec!["one".to_string(), "two".to_string(), "three".to_string()],
+            ),
+        ];
+
+        for (path, want) in trials.iter() {
+            let t = parse(path).with_context(|| anyhow!("path {}", path))?;
+            assert_eq!(&t.names(), want);
         }
 
         Ok(())

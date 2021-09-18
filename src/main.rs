@@ -1171,56 +1171,90 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             }
             a("        &self,");
 
-            for par in o.parameters.iter() {
-                match par.item()? {
-                    openapiv3::Parameter::Path {
-                        parameter_data,
-                        style: openapiv3::PathStyle::Simple,
-                    } => {
-                        /*
-                         * Path parameters MUST be required.
-                         */
-                        assert!(parameter_data.required);
-
-                        let nam = &parameter_data.name;
-                        let tid = ts.select(None, parameter_data.schema()?)?;
-                        let typ =
-                            ts.render_type(&tid, UseContext::Parameter)?;
-                        a(&format!("        {}: {},", nam, typ));
-                    }
-                    openapiv3::Parameter::Query {
-                        parameter_data,
-                        allow_reserved: _,
-                        style: openapiv3::QueryStyle::Form,
-                        allow_empty_value,
-                    } => {
-                        if let Some(aev) = allow_empty_value {
-                            if *aev {
-                                bail!("allow empty value is a no go");
-                            }
-                        }
-
-                        let nam = &parameter_data.name;
-                        let tid = ts.select(None, parameter_data.schema()?)?;
-                        let tid = if parameter_data.required {
-                            tid
-                        } else {
+            /*
+             * The order of parameters in the specification is effectively
+             * arbitrary, and both path and query style parameters end up
+             * mingled in the same list.
+             */
+            let mut parms = o
+                .parameters
+                .iter()
+                .map(|par| {
+                    match par.item()? {
+                        openapiv3::Parameter::Path {
+                            parameter_data,
+                            style: openapiv3::PathStyle::Simple,
+                        } => {
                             /*
-                             * If this is an optional parameter, we need an
-                             * Option version of the type.
+                             * Path parameters MUST be required.
                              */
-                            ts.id_for_optional(&tid)
-                        };
-                        let typ =
-                            ts.render_type(&tid, UseContext::Parameter)?;
-                        a(&format!("        {}: {},", nam, typ));
+                            assert!(parameter_data.required);
 
-                        query.push((nam.to_string(), !parameter_data.required));
+                            let nam = &parameter_data.name;
+                            let tid =
+                                ts.select(None, parameter_data.schema()?)?;
+                            let typ =
+                                ts.render_type(&tid, UseContext::Parameter)?;
+                            return Ok((true, nam, typ));
+                        }
+                        openapiv3::Parameter::Query {
+                            parameter_data,
+                            allow_reserved: _,
+                            style: openapiv3::QueryStyle::Form,
+                            allow_empty_value,
+                        } => {
+                            if let Some(aev) = allow_empty_value {
+                                if *aev {
+                                    bail!("allow empty value is a no go");
+                                }
+                            }
+
+                            let nam = &parameter_data.name;
+                            let tid =
+                                ts.select(None, parameter_data.schema()?)?;
+                            let tid = if parameter_data.required {
+                                tid
+                            } else {
+                                /*
+                                 * If this is an optional parameter, we need an
+                                 * Option version of the type.
+                                 */
+                                ts.id_for_optional(&tid)
+                            };
+                            let typ =
+                                ts.render_type(&tid, UseContext::Parameter)?;
+                            query.push((
+                                nam.to_string(),
+                                !parameter_data.required,
+                            ));
+                            return Ok((false, nam, typ));
+                        }
+                        x => bail!("unhandled parameter type: {:#?}", x),
                     }
-                    x => bail!("unhandled parameter type: {:#?}", x),
-                }
+                })
+                .collect::<Result<Vec<_>>>()?;
+
+            /*
+             * Deal first with path parameters, ordered by their position in the
+             * path template string.
+             */
+            let tmp = template::parse(p)?;
+            for pn in tmp.names() {
+                let par = parms.iter().find(|p| p.0 && p.1 == &pn).unwrap();
+                a(&format!("        {}: {},", par.1, par.2));
             }
 
+            /*
+             * Second, include query parameters, ordered by parameter name.
+             */
+            parms.sort_by(|a, b| a.1.cmp(&b.1));
+            for par in parms.iter().filter(|p| !p.0) {
+                a(&format!("        {}: {},", par.1, par.2));
+            }
+
+            /*
+             * Include the body parameter, if there is one, last in the list:
+             */
             if let Some(bp) = &body_param {
                 a(&format!("        body: {},", bp));
             }
@@ -1289,7 +1323,6 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             /*
              * Generate the URL for the request.
              */
-            let tmp = template::parse(p)?;
             a(&tmp.compile());
 
             /*
