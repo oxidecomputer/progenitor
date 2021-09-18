@@ -974,17 +974,21 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
      * a stable order within the file, so we first collect a list of type IDs
      * that we can sort by their visible name.
      */
-    let mut ids = ts.id_to_entry.values().filter_map(|te| match &te.details {
-        TypeDetails::Object(_)
-        | TypeDetails::NewType(_)
-        | TypeDetails::Enumeration(_) => {
-            Some((te.name.as_deref().unwrap(), &te.id))
-        }
-        TypeDetails::Basic
-        | TypeDetails::Unknown
-        | TypeDetails::Array(_)
-        | TypeDetails::Optional(_) => None,
-    }).collect::<Vec<_>>();
+    let mut ids = ts
+        .id_to_entry
+        .values()
+        .filter_map(|te| match &te.details {
+            TypeDetails::Object(_)
+            | TypeDetails::NewType(_)
+            | TypeDetails::Enumeration(_) => {
+                Some((te.name.as_deref().unwrap(), &te.id))
+            }
+            TypeDetails::Basic
+            | TypeDetails::Unknown
+            | TypeDetails::Array(_)
+            | TypeDetails::Optional(_) => None,
+        })
+        .collect::<Vec<_>>();
     ids.sort_by(|a, b| a.0.cmp(&b.0));
 
     a("pub mod types {");
