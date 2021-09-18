@@ -165,7 +165,7 @@ mod test {
         let out = t.compile();
         let want = "        let url = format!(\"{}/measure/{}\",\
             \n            self.baseurl,\
-            \n            number,\
+            \n            progenitor_support::encode_path(&number.to_string()),\
             \n        );\n";
         assert_eq!(want, &out);
         Ok(())
