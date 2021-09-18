@@ -1221,9 +1221,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                 a(&format!("        body: {},", bp));
             }
 
-            // println!("{:#?}", o.responses);
-
-            if o.responses.responses.len() == 1 {
+            let decode_response = if o.responses.responses.len() == 1 {
                 let only = o.responses.responses.iter().next().unwrap();
                 match only.0 {
                     openapiv3::StatusCode::Code(n) => {
@@ -1276,9 +1274,13 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                         bail!("too many response contents: {:#?}", i.content);
                     }
                 }
+                true
+            } else if o.responses.responses.is_empty() {
+                a("    ) -> Result<reqwest::Response> {");
+                false
             } else {
                 bail!("responses? {:#?}", o.responses);
-            }
+            };
 
             /*
              * Generate the URL for the request.
@@ -1330,7 +1332,11 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
             a("");
 
-            a("        Ok(res.json().await?)");
+            if decode_response {
+                a("        Ok(res.json().await?)");
+            } else {
+                a("        Ok(res)");
+            }
             a("    }");
             a("");
 
