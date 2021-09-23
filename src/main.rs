@@ -514,6 +514,7 @@ struct TypeSpace {
     ref_to_id: BTreeMap<String, TypeId>,
 
     import_chrono: bool,
+    import_uuid: bool,
 }
 
 impl TypeSpace {
@@ -524,6 +525,7 @@ impl TypeSpace {
             id_to_entry: BTreeMap::new(),
             ref_to_id: BTreeMap::new(),
             import_chrono: false,
+            import_uuid: false,
         }
     }
 
@@ -778,7 +780,7 @@ impl TypeSpace {
                 openapiv3::Type::String(st) => {
                     use openapiv3::{
                         StringFormat::DateTime,
-                        VariantOrUnknownOrEmpty::{Empty, Item},
+                        VariantOrUnknownOrEmpty::{Empty, Item, Unknown},
                     };
 
                     match &st.format {
@@ -786,6 +788,13 @@ impl TypeSpace {
                             self.import_chrono = true;
                             (
                                 Some("DateTime<Utc>".to_string()),
+                                TypeDetails::Basic,
+                            )
+                        }
+                        Unknown(x) if x.as_str() == "uuid" => {
+                            self.import_uuid = true;
+                            (
+                                Some("Uuid".to_string()),
                                 TypeDetails::Basic,
                             )
                         }
@@ -813,7 +822,7 @@ impl TypeSpace {
                             }
                         }
                         x => {
-                            bail!("XXX string format {:?}", x);
+                            bail!("XXX string format {:?} {:?}", x, st);
                         }
                     }
                 }
@@ -994,6 +1003,9 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     a("pub mod types {");
     if ts.import_chrono {
         a("    use chrono::prelude::*;");
+    }
+    if ts.import_uuid {
+        a("    use uuid::Uuid;");
     }
     a("    use serde::{Serialize, Deserialize};");
     a("");
@@ -1534,6 +1546,11 @@ fn main() -> Result<()> {
             } else {
                 ""
             };
+            let uuid = if ts.import_uuid {
+                "uuid = { version = \"0.8\", features = [\"serde\", \"v4\"] }\n"
+            } else {
+                ""
+            };
             let tomlout = format!(
                 "[package]\n\
                 name = \"{}\"\n\
@@ -1543,10 +1560,11 @@ fn main() -> Result<()> {
                 [dependencies]\n\
                 anyhow = \"1\"\n\
                 {}\
+                {}\
                 percent-encoding = \"2.1\"\n\
                 reqwest = {{ version = \"0.11\", features = [\"json\"] }}\n\
                 serde = {{ version = \"1\", features = [\"derive\"] }}\n",
-                name, version, chrono,
+                name, version, chrono, uuid,
             );
             save(&toml, tomlout.as_str())?;
 
