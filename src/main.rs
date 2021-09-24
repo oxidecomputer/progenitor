@@ -54,7 +54,7 @@ where
         bail!("servers not presently supported");
     }
 
-    if !api.security.is_empty() {
+    if api.security.is_some() {
         bail!("security not presently supported");
     }
 
@@ -103,7 +103,7 @@ where
      */
 
     let mut opids = HashSet::new();
-    for p in api.paths.iter() {
+    for p in api.paths.paths.iter() {
         match p.1 {
             openapiv3::ReferenceOr::Reference { reference: _ } => {
                 bail!("path {} uses reference, unsupported", p.0);
@@ -113,44 +113,32 @@ where
                  * Make sure every operation has an operation ID, and that each
                  * operation ID is only used once in the document.
                  */
-                let mut id = |o: Option<&openapiv3::Operation>| -> Result<()> {
-                    if let Some(o) = o {
-                        if let Some(oid) = o.operation_id.as_ref() {
-                            if !opids.insert(oid.to_string()) {
-                                bail!("duplicate operation ID: {}", oid);
-                            }
 
-                            if !o.tags.is_empty() {
-                                bail!("op {}: tags, unsupported", oid);
-                            }
-
-                            if !o.servers.is_empty() {
-                                bail!("op {}: servers, unsupported", oid);
-                            }
-
-                            if !o.security.is_empty() {
-                                bail!("op {}: security, unsupported", oid);
-                            }
-
-                            if o.responses.default.is_some() {
-                                bail!("op {}: has response default", oid);
-                            }
-                        } else {
-                            bail!("path {} is missing operation ID", p.0);
+                for o in item.iter() {
+                    if let Some(oid) = o.operation_id.as_ref() {
+                        if !opids.insert(oid.to_string()) {
+                            bail!("duplicate operation ID: {}", oid);
                         }
+
+                        if !o.tags.is_empty() {
+                            bail!("op {}: tags, unsupported", oid);
+                        }
+
+                        if !o.servers.is_empty() {
+                            bail!("op {}: servers, unsupported", oid);
+                        }
+
+                        if o.security.is_some() {
+                            bail!("op {}: security, unsupported", oid);
+                        }
+
+                        if o.responses.default.is_some() {
+                            bail!("op {}: has response default", oid);
+                        }
+                    } else {
+                        bail!("path {} is missing operation ID", p.0);
                     }
-
-                    Ok(())
-                };
-
-                id(item.get.as_ref())?;
-                id(item.put.as_ref())?;
-                id(item.post.as_ref())?;
-                id(item.delete.as_ref())?;
-                id(item.options.as_ref())?;
-                id(item.head.as_ref())?;
-                id(item.patch.as_ref())?;
-                id(item.trace.as_ref())?;
+                }
 
                 if !item.servers.is_empty() {
                     bail!("path {} has servers; unsupported", p.0);
@@ -740,10 +728,14 @@ impl TypeSpace {
         let (name, details) = match &s.schema_kind {
             openapiv3::SchemaKind::Type(t) => match t {
                 openapiv3::Type::Array(at) => {
+                    if at.items.is_none() {
+                        bail!("array items can't be none");
+                    }
                     /*
                      * Determine the type of item that will be in this array:
                      */
-                    let itid = self.select_box(None, &at.items)?;
+                    let itid =
+                        self.select_box(None, at.items.as_ref().unwrap())?;
                     (None, TypeDetails::Array(itid))
                 }
                 openapiv3::Type::Object(o) => {
@@ -793,19 +785,28 @@ impl TypeSpace {
                         }
                         Unknown(x) if x.as_str() == "uuid" => {
                             self.import_uuid = true;
-                            (
-                                Some("Uuid".to_string()),
-                                TypeDetails::Basic,
-                            )
+                            (Some("Uuid".to_string()), TypeDetails::Basic)
                         }
                         Empty => {
                             use TypeDetails::{Enumeration, NewType};
 
                             if !st.enumeration.is_empty() {
                                 if let Some(name) = name {
+                                    if st.enumeration.contains(&None) {
+                                        bail!(
+                                            "null found in enumeration values"
+                                        );
+                                    }
                                     (
                                         Some(name.to_string()),
-                                        Enumeration(st.enumeration.clone()),
+                                        Enumeration(
+                                            st.enumeration
+                                                .iter()
+                                                .map(|value| {
+                                                    value.clone().unwrap()
+                                                })
+                                                .collect(),
+                                        ),
                                     )
                                 } else {
                                     bail!("enumeration without name: {:?}", st);
@@ -1125,7 +1126,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
      * these, which can link in to the type space, instead of doing this inline
      * here.
      */
-    for (pn, p) in api.paths.iter() {
+    for (pn, p) in api.paths.paths.iter() {
         let op = p.item()?;
 
         let mut gen = |p: &str,
@@ -1462,7 +1463,7 @@ fn main() -> Result<()> {
      * In addition to types defined in schemas, types may be defined inline in
      * request and response bodies.
      */
-    for (pn, p) in api.paths.iter() {
+    for (pn, p) in api.paths.paths.iter() {
         let op = p.item()?;
 
         let grab = |pn: &str,
