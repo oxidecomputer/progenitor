@@ -60,9 +60,9 @@ checksum = "7fb9b38af92608140b86b693604b9ffcc5824240a484d1ecd4795bacb2fe88f3"
 
 [[package]]
 name = "openapiv3"
-version = "0.4.0"
+version = "1.0.0-beta.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b3c622a8249a19c1b9730e6b3127cf2b0d42f47fbdf2e5ba43c43cfd48eb5ee"
+checksum = "abe6e1dfe8bc4931d6e90adbe2cec19e3fd67f7453d64e9a17cbf8dc16a67ec9"
 dependencies = [
  "indexmap",
  "serde",
