@@ -491,27 +491,6 @@ impl PartialEq for TypeId {
     }
 }
 
-enum UseContext {
-    Module,
-    Return,
-    Parameter,
-}
-
-#[allow(dead_code)]
-impl UseContext {
-    fn is_module(&self) -> bool {
-        matches!(self, &UseContext::Module)
-    }
-
-    fn is_return(&self) -> bool {
-        matches!(self, &UseContext::Return)
-    }
-
-    fn is_parameter(&self) -> bool {
-        matches!(self, &UseContext::Parameter)
-    }
-}
-
 enum ParamType {
     Path,
     Query,
