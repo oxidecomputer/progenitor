@@ -1,4 +1,6 @@
 use anyhow::{anyhow, bail, Context, Result};
+use proc_macro2::TokenStream;
+use quote::{format_ident, quote};
 
 #[derive(Eq, PartialEq, Clone, Debug)]
 enum Component {
@@ -34,6 +36,33 @@ impl Template {
         }
         out.push_str("        );\n");
         out
+    }
+
+    pub fn compile2(&self) -> TokenStream {
+        let mut fmt = String::new();
+        fmt.push_str("{}");
+        for c in self.components.iter() {
+            fmt.push('/');
+            match c {
+                Component::Constant(n) => fmt.push_str(n),
+                Component::Parameter(_) => fmt.push_str("{}"),
+            }
+        }
+
+        let components = self.components.iter().filter_map(|component| {
+            if let Component::Parameter(n) = &component {
+                let param = format_ident!("{}", n);
+                Some(quote! {
+                    progenitor_support::encode_path(&#param.to_string())
+                })
+            } else {
+                None
+            }
+        });
+
+        quote! {
+            let url = format!(#fmt, self.baseurl #(, #components)*);
+        }
     }
 
     pub fn names(&self) -> Vec<String> {
