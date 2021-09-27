@@ -586,7 +586,7 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
             let tmp = template::parse(path)?;
             let names = tmp.names();
-            let url_path = tmp.compile2();
+            let url_path = tmp.compile();
 
             // Put parameters in a deterministic order.
             raw_params.sort_by(|a, b| match (&a.0, &b.0) {
