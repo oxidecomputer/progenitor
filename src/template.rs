@@ -37,7 +37,7 @@ impl Template {
         });
 
         quote! {
-            let url = format!(#fmt, self.baseurl #(, #components)*);
+            let url = format!(#fmt, self.baseurl, #(#components,)*);
         }
     }
 
@@ -197,11 +197,13 @@ mod test {
     fn compile() -> Result<()> {
         let t = parse("/measure/{number}")?;
         let out = t.compile();
-        let want = "        let url = format!(\"{}/measure/{}\",\
-            \n            self.baseurl,\
-            \n            progenitor_support::encode_path(&number.to_string()),\
-            \n        );\n";
-        assert_eq!(want, &out);
+        let want = quote::quote! {
+            let url = format!("{}/measure/{}",
+                self.baseurl,
+                progenitor_support::encode_path(&number.to_string()),
+            );
+        };
+        assert_eq!(want.to_string(), out.to_string());
         Ok(())
     }
 }
