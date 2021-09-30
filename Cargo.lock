@@ -176,7 +176,6 @@ checksum = "f497285884f3fcff424ffc933e56d7cbca511def0c9831a7f9b5f6153e3cc89b"
 [[package]]
 name = "rustfmt-wrapper"
 version = "0.1.0"
-source = "git+https://github.com/oxidecomputer/typify#65fe75c2ecf9da2e02a29f52124ba6fa51873f2e"
 dependencies = [
  "thiserror",
  "toolchain_find",
@@ -340,7 +339,6 @@ dependencies = [
 [[package]]
 name = "typify"
 version = "0.0.1"
-source = "git+https://github.com/oxidecomputer/typify#65fe75c2ecf9da2e02a29f52124ba6fa51873f2e"
 dependencies = [
  "rustfmt-wrapper",
  "typify-impl",
@@ -350,7 +348,6 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.1"
-source = "git+https://github.com/oxidecomputer/typify#65fe75c2ecf9da2e02a29f52124ba6fa51873f2e"
 dependencies = [
  "convert_case",
  "proc-macro2",
@@ -364,7 +361,6 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.1"
-source = "git+https://github.com/oxidecomputer/typify#65fe75c2ecf9da2e02a29f52124ba6fa51873f2e"
 dependencies = [
  "proc-macro2",
  "quote",

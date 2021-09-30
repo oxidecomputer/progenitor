@@ -759,6 +759,7 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
         mod progenitor_support {
             use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
 
+            #[allow(dead_code)]
             const PATH_SET: &AsciiSet = &CONTROLS
                 .add(b' ')
                 .add(b'"')
@@ -770,6 +771,7 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                 .add(b'{')
                 .add(b'}');
 
+            #[allow(dead_code)]
             pub(crate) fn encode_path(pc: &str) -> String {
                 utf8_percent_encode(pc, PATH_SET).to_string()
             }
