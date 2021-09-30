@@ -748,10 +748,13 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
         })
         .collect::<Result<Vec<_>>>()?;
 
-    let types = ts
+    let mut types = ts
         .iter_types()
-        .map(|type_entry| type_entry.output(ts))
+        .map(|type_entry| (type_entry.type_name(ts), type_entry.output(ts)))
         .collect::<Vec<_>>();
+
+    types.sort_by(|a, b| a.0.cmp(&b.0));
+    let types = types.into_iter().map(|(_, def)| def);
 
     let file = quote! {
         use anyhow::Result;
@@ -937,6 +940,28 @@ fn main() -> Result<()> {
     //     let n = ts.describe(&te.id);
     //     println!("{:>4}  {}", te.id.0, n);
     // }
+    /*
+        -----------------------------------------------------
+     TYPE SPACE
+    -----------------------------------------------------
+       1  object OutputRecord
+       2  object ReportId
+       3  object ReportSummary
+       4  String
+       5  DateTime<Utc>
+       6  i64
+       7  object EnrolBody
+       8  array of ReportSummary <3>
+       9  object GlobalJobsResult
+      10  bool
+      11  object PingResult
+      12  object ReportFinishBody
+      13  object ReportResult
+      14  object ReportOutputBody
+      15  object ReportStartBody
+    -----------------------------------------------------
+
+        */
     println!("-----------------------------------------------------");
     println!();
 
