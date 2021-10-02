@@ -437,6 +437,10 @@ enum TypeDetails {
     Object(BTreeMap<String, TypeId>),
     NewType(TypeId),
     Enumeration(Vec<String>),
+    /*
+     * A map with string keys and values of a specific type:
+     */
+    Dictionary(TypeId),
 }
 
 #[derive(Debug)]
@@ -539,6 +543,19 @@ impl TypeSpace {
                         format!("[BASIC {} !NONAME?]", tid.0)
                     }
                 }
+                TypeDetails::Dictionary(itid) => {
+                    if let Some(ite) = self.id_to_entry.get(&itid) {
+                        if let Some(n) = &ite.name {
+                            return format!("dictionary of {} <{}>", n, itid.0);
+                        }
+                    }
+
+                    /*
+                     * If there is no name attached, we should try a
+                     * recursive describe.
+                     */
+                    format!("dictionary of {}", self.describe(itid))
+                }
                 TypeDetails::Array(itid) => {
                     if let Some(ite) = self.id_to_entry.get(&itid) {
                         if let Some(n) = &ite.name {
@@ -621,6 +638,10 @@ impl TypeSpace {
                 TypeDetails::Array(itid) => {
                     Ok(format!("Vec<{}>", self.render_type(itid, ctx)?))
                 }
+                TypeDetails::Dictionary(itid) => Ok(format!(
+                    "std::collections::HashMap<String, {}>",
+                    self.render_type(itid, ctx)?
+                )),
                 TypeDetails::Optional(itid) => {
                     Ok(format!("Option<{}>", self.render_type(itid, ctx)?))
                 }
@@ -743,31 +764,60 @@ impl TypeSpace {
                      * Object types must have a consistent name.
                      */
                     let name = match (name, s.schema_data.title.as_deref()) {
-                        (Some(n), None) => n.to_string(),
-                        (None, Some(t)) => t.to_string(),
-                        (Some(n), Some(t)) if n == t => n.to_string(),
+                        (Some(n), None) => Some(n.to_string()),
+                        (None, Some(t)) => Some(t.to_string()),
+                        (Some(n), Some(t)) if n == t => Some(n.to_string()),
                         (Some(n), Some(t)) => {
                             bail!("names {} and {} conflict", n, t)
                         }
-                        (None, None) => bail!("types need a name? {:?}", s),
+                        (None, None) => None,
                     };
 
-                    let mut omap = BTreeMap::new();
-                    for (n, rb) in o.properties.iter() {
-                        let itid = self.select_box(None, &rb)?;
-                        if o.required.contains(n) {
-                            omap.insert(n.to_string(), itid);
+                    if let Some(name) = name {
+                        let mut omap = BTreeMap::new();
+                        for (n, rb) in o.properties.iter() {
+                            let itid = self.select_box(None, &rb)?;
+                            if o.required.contains(n) {
+                                omap.insert(n.to_string(), itid);
+                            } else {
+                                /*
+                                 * This is an optional member.
+                                 */
+                                omap.insert(
+                                    n.to_string(),
+                                    self.id_for_optional(&itid),
+                                );
+                            }
+                        }
+                        (Some(name), TypeDetails::Object(omap))
+                    } else {
+                        /*
+                         * An object type without a name may be intended as a
+                         * map from strings to something else.  If we also have
+                         * no properties, required or otherwise, and we have an
+                         * "additionalProperties" schema, we may be able to
+                         * represent this as a HashMap<String, T>.
+                         */
+                        use openapiv3::AdditionalProperties::Schema;
+
+                        let tid = if o.properties.is_empty()
+                            && o.required.is_empty()
+                        {
+                            if let Some(Schema(s)) = &o.additional_properties {
+                                Some(self.select(None, &s)?)
+                            } else {
+                                None
+                            }
                         } else {
-                            /*
-                             * This is an optional member.
-                             */
-                            omap.insert(
-                                n.to_string(),
-                                self.id_for_optional(&itid),
-                            );
+                            None
+                        };
+
+                        if let Some(tid) = tid {
+                            (None, TypeDetails::Dictionary(tid))
+                        } else {
+                            bail!("object types need a name? {:#?}", s);
                         }
                     }
-                    (Some(name), TypeDetails::Object(omap))
                 }
                 openapiv3::Type::String(st) => {
                     use openapiv3::{
@@ -996,6 +1046,7 @@ fn gen(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             TypeDetails::Basic
             | TypeDetails::Unknown
             | TypeDetails::Array(_)
+            | TypeDetails::Dictionary(_)
             | TypeDetails::Optional(_) => None,
         })
         .collect::<Vec<_>>();
