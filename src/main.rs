@@ -826,7 +826,8 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
     };
     let file = rustfmt_wrapper::rustfmt(file)
         .unwrap()
-        .replace("}\n", "}\n\n");
+        // Format any indented item.
+        .replace(" }\n", " }\n\n");
 
     Ok(file)
 }
