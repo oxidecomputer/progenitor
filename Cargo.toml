@@ -9,6 +9,12 @@ description = "An OpenAPI client generator"
 [dependencies]
 anyhow = "1"
 getopts = "0.2"
-serde = { version = "1", features = [ "derive" ]}
-serde_json = "1"
-openapiv3 = "1.0.0-beta.1"
+indexmap = "1.7.0"
+openapiv3 = "1.0.0-beta.2"
+proc-macro2 = "1.0.29"
+quote = "1.0.9"
+rustfmt-wrapper = { git = "https://github.com/oxidecomputer/typify" }
+schemars = "0.8.5"
+serde = { version = "1", features = [ "derive" ] }
+serde_json = "1.0.68"
+typify = { git = "https://github.com/oxidecomputer/typify" }

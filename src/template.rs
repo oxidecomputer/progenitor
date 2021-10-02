@@ -1,4 +1,6 @@
 use anyhow::{anyhow, bail, Context, Result};
+use proc_macro2::TokenStream;
+use quote::{format_ident, quote};
 
 #[derive(Eq, PartialEq, Clone, Debug)]
 enum Component {
@@ -12,28 +14,31 @@ pub struct Template {
 }
 
 impl Template {
-    pub fn compile(&self) -> String {
-        let mut out = "        let url = format!(\"{}".to_string();
+    pub fn compile(&self) -> TokenStream {
+        let mut fmt = String::new();
+        fmt.push_str("{}");
         for c in self.components.iter() {
-            out.push('/');
+            fmt.push('/');
             match c {
-                Component::Constant(n) => out.push_str(n),
-                Component::Parameter(_) => out.push_str("{}"),
+                Component::Constant(n) => fmt.push_str(n),
+                Component::Parameter(_) => fmt.push_str("{}"),
             }
         }
-        out.push_str("\",\n");
-        out.push_str("            self.baseurl,\n");
-        for c in self.components.iter() {
-            if let Component::Parameter(n) = &c {
-                out.push_str(&format!(
-                    "            \
-                    progenitor_support::encode_path(&{}.to_string()),\n",
-                    n
-                ));
+
+        let components = self.components.iter().filter_map(|component| {
+            if let Component::Parameter(n) = &component {
+                let param = format_ident!("{}", n);
+                Some(quote! {
+                    progenitor_support::encode_path(&#param.to_string())
+                })
+            } else {
+                None
             }
+        });
+
+        quote! {
+            let url = format!(#fmt, self.baseurl, #(#components,)*);
         }
-        out.push_str("        );\n");
-        out
     }
 
     pub fn names(&self) -> Vec<String> {
@@ -192,11 +197,13 @@ mod test {
     fn compile() -> Result<()> {
         let t = parse("/measure/{number}")?;
         let out = t.compile();
-        let want = "        let url = format!(\"{}/measure/{}\",\
-            \n            self.baseurl,\
-            \n            progenitor_support::encode_path(&number.to_string()),\
-            \n        );\n";
-        assert_eq!(want, &out);
+        let want = quote::quote! {
+            let url = format!("{}/measure/{}",
+                self.baseurl,
+                progenitor_support::encode_path(&number.to_string()),
+            );
+        };
+        assert_eq!(want.to_string(), out.to_string());
         Ok(())
     }
 }
