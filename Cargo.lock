@@ -175,6 +175,7 @@ dependencies = [
  "openapiv3",
  "proc-macro2",
  "quote",
+ "regex",
  "rustfmt-wrapper",
  "schemars",
  "serde",
