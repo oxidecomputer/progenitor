@@ -794,6 +794,7 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
             #(#types)*
         }
 
+        #[derive(Clone)]
         pub struct Client {
             baseurl: String,
             client: reqwest::Client,
@@ -915,7 +916,8 @@ fn main() -> Result<()> {
                 {}\
                 {}\
                 percent-encoding = \"2.1\"\n\
-                reqwest = {{ version = \"0.11\", features = [\"json\"] }}\n\
+                reqwest = {{ version = \"0.11\", features = [\"json\", \
+                    \"stream\"] }}\n\
                 serde = {{ version = \"1\", features = [\"derive\"] }}\n\
                 {}",
                 name, version, chrono, uuid, serde_json,
