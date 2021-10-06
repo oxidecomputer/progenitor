@@ -12,7 +12,7 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use quote::{format_ident, quote};
-use typify::TypeSpace;
+use typify::{TypeEntryIdentifier, TypeSpace};
 
 use crate::to_schema::ToSchema;
 
@@ -518,9 +518,9 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
                             let nam = parameter_data.name.clone();
                             let schema = parameter_data.schema()?.to_schema();
-                            let typ = ts.add_type(&schema)?;
+                            let typ = ts.add_type_details(&schema)?.parameter;
 
-                            Ok((ParamType::Path, nam, quote! { &#typ }))
+                            Ok((ParamType::Path, nam, typ))
                         }
                         openapiv3::Parameter::Query {
                             parameter_data,
@@ -536,7 +536,8 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
                             let nam = parameter_data.name.clone();
                             let schema = parameter_data.schema()?.to_schema();
-                            let mut typ = ts.add_type(&schema)?;
+                            let mut typ =
+                                ts.add_type_details(&schema)?.parameter;
                             if !parameter_data.required {
                                 typ = quote! { Option<#typ> };
                             }
@@ -544,7 +545,7 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
                                 nam.to_string(),
                                 !parameter_data.required,
                             ));
-                            Ok((ParamType::Query, nam, quote! { &#typ }))
+                            Ok((ParamType::Query, nam, typ))
                         }
                         x => bail!("unhandled parameter type: {:#?}", x),
                     }
@@ -553,32 +554,31 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
             let mut bounds = Vec::new();
 
-            let (body_param, body_func) = if let Some(b) =
-                &operation.request_body
-            {
-                let b = b.item()?;
-                if b.is_binary()? {
-                    bounds.push(quote! {B: Into<reqwest::Body>});
-                    (Some(quote! {B}), Some(quote! { .body(body) }))
-                } else {
-                    let mt = b
-                        .content_json()
-                        .with_context(|| anyhow!("{} {}", method, path))?;
-                    if !mt.encoding.is_empty() {
-                        bail!("media type encoding not empty: {:#?}", mt);
-                    }
-
-                    if let Some(s) = &mt.schema {
-                        let schema = s.to_schema();
-                        let typ = ts.add_type(&schema)?;
-                        (Some(quote! { &#typ }), Some(quote! { .json(body) }))
+            let (body_param, body_func) =
+                if let Some(b) = &operation.request_body {
+                    let b = b.item()?;
+                    if b.is_binary()? {
+                        bounds.push(quote! {B: Into<reqwest::Body>});
+                        (Some(quote! {B}), Some(quote! { .body(body) }))
                     } else {
-                        bail!("media type encoding, no schema: {:#?}", mt);
+                        let mt = b
+                            .content_json()
+                            .with_context(|| anyhow!("{} {}", method, path))?;
+                        if !mt.encoding.is_empty() {
+                            bail!("media type encoding not empty: {:#?}", mt);
+                        }
+
+                        if let Some(s) = &mt.schema {
+                            let schema = s.to_schema();
+                            let typ = ts.add_type_details(&schema)?.parameter;
+                            (Some(typ), Some(quote! { .json(body) }))
+                        } else {
+                            bail!("media type encoding, no schema: {:#?}", mt);
+                        }
                     }
-                }
-            } else {
-                (None, None)
-            };
+                } else {
+                    (None, None)
+                };
 
             if let Some(body) = body_param {
                 raw_params.push((ParamType::Body, "body".to_string(), body));
@@ -648,7 +648,7 @@ fn generate(api: &OpenAPI, ts: &mut TypeSpace) -> Result<String> {
 
                         if let Some(schema) = &mt.schema {
                             let schema = schema.to_schema();
-                            ts.add_type(&schema)?
+                            ts.add_type_details(&schema)?.ident
                         } else {
                             bail!("media type encoding, no schema: {:#?}", mt);
                         }
