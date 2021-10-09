@@ -176,7 +176,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "regex",
- "rustfmt-wrapper 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustfmt-wrapper",
  "schemars",
  "serde",
  "serde_json",
@@ -272,16 +272,6 @@ name = "rustfmt-wrapper"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7733577fb5b13c8b256232e7ca84aa424f915efae6ec980082d60a03f99da3f8"
-dependencies = [
- "tempfile",
- "thiserror",
- "toolchain_find",
-]
-
-[[package]]
-name = "rustfmt-wrapper"
-version = "0.1.0"
-source = "git+https://github.com/oxidecomputer/typify#b662d84d82feb20f81ff2cd62c1a0af8ed77515a"
 dependencies = [
  "tempfile",
  "thiserror",
@@ -426,18 +416,18 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.29"
+version = "1.0.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "602eca064b2d83369e2b2f34b09c70b605402801927c65c11071ac911d299b88"
+checksum = "854babe52e4df1653706b98fcfc05843010039b406875930a70e4d9644e5c417"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.29"
+version = "1.0.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bad553cc2c78e8de258400763a647e80e6d1b31ee237275d756f6836d204494c"
+checksum = "aa32fd3f627f367fe16f893e2597ae3c05020f8bba2666a4e6ea73d377e5714b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -460,9 +450,8 @@ dependencies = [
 [[package]]
 name = "typify"
 version = "0.0.1"
-source = "git+https://github.com/oxidecomputer/typify#b662d84d82feb20f81ff2cd62c1a0af8ed77515a"
+source = "git+https://github.com/oxidecomputer/typify#8c134692500802b6174c7ef06cfbc801c8674a78"
 dependencies = [
- "rustfmt-wrapper 0.1.0 (git+https://github.com/oxidecomputer/typify)",
  "typify-impl",
  "typify-macro",
 ]
@@ -470,7 +459,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.1"
-source = "git+https://github.com/oxidecomputer/typify#b662d84d82feb20f81ff2cd62c1a0af8ed77515a"
+source = "git+https://github.com/oxidecomputer/typify#8c134692500802b6174c7ef06cfbc801c8674a78"
 dependencies = [
  "convert_case",
  "proc-macro2",
@@ -484,7 +473,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.1"
-source = "git+https://github.com/oxidecomputer/typify#b662d84d82feb20f81ff2cd62c1a0af8ed77515a"
+source = "git+https://github.com/oxidecomputer/typify#8c134692500802b6174c7ef06cfbc801c8674a78"
 dependencies = [
  "proc-macro2",
  "quote",
