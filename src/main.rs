@@ -171,7 +171,6 @@ where
 }
 
 trait ParameterDataExt {
-    fn render_type(&self) -> Result<String>;
     fn schema(&self) -> Result<&openapiv3::ReferenceOr<openapiv3::Schema>>;
 }
 
@@ -181,83 +180,6 @@ impl ParameterDataExt for openapiv3::ParameterData {
             openapiv3::ParameterSchemaOrContent::Schema(s) => Ok(s),
             x => bail!("XXX param format {:#?}", x),
         }
-    }
-
-    fn render_type(&self) -> Result<String> {
-        use openapiv3::{SchemaKind, Type};
-
-        Ok(match &self.format {
-            openapiv3::ParameterSchemaOrContent::Schema(s) => {
-                let s = s.item().context("parameter data render type")?;
-                match &s.schema_kind {
-                    SchemaKind::Type(Type::String(st)) => {
-                        if !st.format.is_empty() {
-                            bail!("XXX format");
-                        }
-                        if st.pattern.is_some() {
-                            bail!("XXX pattern");
-                        }
-                        if !st.enumeration.is_empty() {
-                            bail!("XXX enumeration");
-                        }
-                        if st.min_length.is_some() || st.max_length.is_some() {
-                            bail!("XXX min/max length");
-                        }
-                        "&str".to_string()
-                    }
-                    SchemaKind::Type(Type::Integer(it)) => {
-                        let mut uint;
-                        let width;
-
-                        use openapiv3::VariantOrUnknownOrEmpty::Unknown;
-                        if let Unknown(f) = &it.format {
-                            match f.as_str() {
-                                "uint" | "uint32" => {
-                                    uint = true;
-                                    width = 32;
-                                }
-                                "uint64" => {
-                                    uint = true;
-                                    width = 32;
-                                }
-                                f => bail!("XXX unknown integer format {}", f),
-                            }
-                        } else {
-                            bail!("XXX format {:?}", it.format);
-                        }
-
-                        if it.multiple_of.is_some() {
-                            bail!("XXX multiple_of");
-                        }
-                        if it.exclusive_minimum || it.exclusive_maximum {
-                            bail!("XXX exclusive");
-                        }
-
-                        if let Some(min) = it.minimum {
-                            if min == 0 {
-                                uint = true;
-                            } else {
-                                bail!("XXX invalid minimum: {}", min);
-                            }
-                        }
-
-                        if it.maximum.is_some() {
-                            bail!("XXX maximum");
-                        }
-                        if !it.enumeration.is_empty() {
-                            bail!("XXX enumeration");
-                        }
-                        if uint {
-                            format!("u{}", width)
-                        } else {
-                            format!("i{}", width)
-                        }
-                    }
-                    x => bail!("unexpected type {:#?}", x),
-                }
-            }
-            x => bail!("XXX param format {:#?}", x),
-        })
     }
 }
 
@@ -440,54 +362,6 @@ impl<T> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
                 bail!("reference not supported here");
             }
         }
-    }
-}
-
-#[allow(dead_code)]
-#[derive(Debug, PartialEq)]
-enum TypeDetails {
-    Unknown,
-    Basic,
-    Array(TypeId),
-    Optional(TypeId),
-    /*
-     * Object property names are sorted lexicographically to ensure a stable
-     * order in the generated code.
-     */
-    Object(BTreeMap<String, TypeId>),
-    NewType(TypeId),
-    Enumeration(Vec<String>),
-    /*
-     * A map with string keys and values of a specific type:
-     */
-    Dictionary(TypeId),
-}
-
-#[derive(Debug)]
-struct TypeEntry {
-    id: TypeId,
-    name: Option<String>,
-    details: TypeDetails,
-}
-
-#[derive(Debug, Eq, Clone)]
-struct TypeId(u64);
-
-impl PartialOrd for TypeId {
-    fn partial_cmp(&self, other: &TypeId) -> Option<std::cmp::Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for TypeId {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.0.cmp(&other.0)
-    }
-}
-
-impl PartialEq for TypeId {
-    fn eq(&self, other: &TypeId) -> bool {
-        self.0 == other.0
     }
 }
 
