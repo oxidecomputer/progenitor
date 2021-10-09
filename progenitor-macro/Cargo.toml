@@ -1,0 +1,13 @@
+[package]
+name = "progenitor-macro"
+version = "0.0.0"
+edition = "2018"
+license = "MPL-2.0"
+repository = "https://github.com/oxidecomputer/progenitor.git"
+description = "An OpenAPI client generator - macros"
+
+[dependencies]
+progenitor-impl = { path = "../progenitor-impl" }
+
+[lib]
+proc-macro = true

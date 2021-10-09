@@ -169,6 +169,15 @@ dependencies = [
 name = "progenitor"
 version = "0.0.0"
 dependencies = [
+ "progenitor-impl",
+ "progenitor-macro",
+ "rustfmt-wrapper 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "progenitor-impl"
+version = "0.0.0"
+dependencies = [
  "anyhow",
  "getopts",
  "indexmap",
@@ -181,6 +190,13 @@ dependencies = [
  "serde",
  "serde_json",
  "typify",
+]
+
+[[package]]
+name = "progenitor-macro"
+version = "0.0.0"
+dependencies = [
+ "progenitor-impl",
 ]
 
 [[package]]

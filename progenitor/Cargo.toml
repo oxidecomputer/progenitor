@@ -1,0 +1,12 @@
+[package]
+name = "progenitor"
+version = "0.0.0"
+edition = "2018"
+license = "MPL-2.0"
+repository = "https://github.com/oxidecomputer/progenitor.git"
+description = "An OpenAPI client generator"
+
+[dependencies]
+progenitor-macro = { path = "../progenitor-macro" }
+progenitor-impl = { path = "../progenitor-impl" }
+rustfmt-wrapper = "0.1.0"
