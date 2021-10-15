@@ -1,6 +1,9 @@
-use anyhow::{anyhow, bail, Context, Result};
+// Copyright 2021 Oxide Computer Company
+
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
+
+use crate::{Error, Result};
 
 #[derive(Eq, PartialEq, Clone, Debug)]
 enum Component {
@@ -53,11 +56,6 @@ impl Template {
 }
 
 pub fn parse(t: &str) -> Result<Template> {
-    parse_inner(t)
-        .with_context(|| anyhow!("parse failure for template {:?}", t))
-}
-
-fn parse_inner(t: &str) -> Result<Template> {
     enum State {
         Start,
         ConstantOrParameter,
@@ -76,12 +74,16 @@ fn parse_inner(t: &str) -> Result<Template> {
                 if c == '/' {
                     s = State::ConstantOrParameter;
                 } else {
-                    bail!("path must start with a slash");
+                    return Err(Error::InvalidPath(
+                        "path must start with a slash".to_string(),
+                    ));
                 }
             }
             State::ConstantOrParameter => {
                 if c == '/' || c == '}' {
-                    bail!("expected a constant or parameter");
+                    return Err(Error::InvalidPath(
+                        "expected a constant or parameter".to_string(),
+                    ));
                 } else if c == '{' {
                     s = State::Parameter;
                 } else {
@@ -95,7 +97,9 @@ fn parse_inner(t: &str) -> Result<Template> {
                     a = String::new();
                     s = State::ConstantOrParameter;
                 } else if c == '{' || c == '}' {
-                    bail!("unexpected parameter");
+                    return Err(Error::InvalidPath(
+                        "unexpected parameter".to_string(),
+                    ));
                 } else {
                     a.push(c);
                 }
@@ -106,7 +110,9 @@ fn parse_inner(t: &str) -> Result<Template> {
                     a = String::new();
                     s = State::ParameterSlash;
                 } else if c == '/' || c == '{' {
-                    bail!("expected parameter");
+                    return Err(Error::InvalidPath(
+                        "unexpected parameter".to_string(),
+                    ));
                 } else {
                     a.push(c);
                 }
@@ -115,17 +121,25 @@ fn parse_inner(t: &str) -> Result<Template> {
                 if c == '/' {
                     s = State::ConstantOrParameter;
                 } else {
-                    bail!("expected a slash after parameter");
+                    return Err(Error::InvalidPath(
+                        "expected a slah after parameter".to_string(),
+                    ));
                 }
             }
         }
     }
 
     match s {
-        State::Start => bail!("empty path"),
+        State::Start => {
+            return Err(Error::InvalidPath("empty path".to_string()))
+        }
         State::ConstantOrParameter | State::ParameterSlash => (),
         State::Constant => components.push(Component::Constant(a)),
-        State::Parameter => bail!("unterminated parameter"),
+        State::Parameter => {
+            return Err(Error::InvalidPath(
+                "unterminated parameter".to_string(),
+            ))
+        }
     }
 
     Ok(Template { components })

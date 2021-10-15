@@ -3,8 +3,8 @@ members = [
 	"progenitor",
 	"progenitor-macro",
 	"progenitor-impl",
-	#"example-build",
-	#"example-macro",
+	"example-build",
+	"example-macro",
 ]
 
 default-members = [

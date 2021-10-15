@@ -1,0 +1,17 @@
+[package]
+name = "example-build"
+version = "0.0.1"
+authors = ["Adam H. Leventhal <ahl@oxidecomputer.com>"]
+edition = "2018"
+
+[dependencies]
+anyhow = "1.0.44"
+percent-encoding = "2.1.0"
+serde = { version = "1.0.130", features = ["derive"] }
+reqwest = { version = "0.11.5", features = ["json", "stream"] }
+uuid = { version = "0.8.2", features = ["serde", "v4"] }
+chrono = { version = "0.4.19", features = ["serde"] }
+
+[build-dependencies]
+progenitor = { path = "../progenitor" }
+serde_json = "1.0.68"

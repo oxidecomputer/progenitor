@@ -1,0 +1,358 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Keeper API",
+    "description": "report execution of cron jobs through a mechanism other than mail",
+    "contact": {
+      "name": "Joshua M. Clulow",
+      "url": "https://github.com/jclulow/keeper"
+    },
+    "version": "1.0"
+  },
+  "paths": {
+    "/enrol": {
+      "post": {
+        "operationId": "enrol",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "EnrolBody",
+                "type": "object",
+                "properties": {
+                  "host": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "host",
+                  "key"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation"
+          }
+        }
+      }
+    },
+    "/global/jobs": {
+      "get": {
+        "operationId": "global_jobs",
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "GlobalJobsResult",
+                  "type": "object",
+                  "properties": {
+                    "summary": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ReportSummary"
+                      }
+                    }
+                  },
+                  "required": [
+                    "summary"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "operationId": "ping",
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "PingResult",
+                  "type": "object",
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "host",
+                    "ok"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report/finish": {
+      "post": {
+        "operationId": "report_finish",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "ReportFinishBody",
+                "type": "object",
+                "properties": {
+                  "duration_millis": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "end_time": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "exit_status": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "id": {
+                    "$ref": "#/components/schemas/ReportId"
+                  }
+                },
+                "required": [
+                  "duration_millis",
+                  "end_time",
+                  "exit_status",
+                  "id"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReportResult",
+                  "type": "object",
+                  "properties": {
+                    "existed_already": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "existed_already"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report/output": {
+      "post": {
+        "operationId": "report_output",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "ReportOutputBody",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/ReportId"
+                  },
+                  "record": {
+                    "$ref": "#/components/schemas/OutputRecord"
+                  }
+                },
+                "required": [
+                  "id",
+                  "record"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReportResult",
+                  "type": "object",
+                  "properties": {
+                    "existed_already": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "existed_already"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report/start": {
+      "post": {
+        "operationId": "report_start",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "ReportStartBody",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/ReportId"
+                  },
+                  "script": {
+                    "type": "string"
+                  },
+                  "start_time": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "id",
+                  "script",
+                  "start_time"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ReportResult",
+                  "type": "object",
+                  "properties": {
+                    "existed_already": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "existed_already"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OutputRecord": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string"
+          },
+          "stream": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "msg",
+          "stream",
+          "time"
+        ]
+      },
+      "ReportId": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "type": "string"
+          },
+          "job": {
+            "type": "string"
+          },
+          "pid": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "host",
+          "job",
+          "pid",
+          "time",
+          "uuid"
+        ]
+      },
+      "ReportSummary": {
+        "type": "object",
+        "properties": {
+          "age_seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration_seconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "host": {
+            "type": "string"
+          },
+          "job": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "when": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "age_seconds",
+          "duration_seconds",
+          "host",
+          "job",
+          "status",
+          "when"
+        ]
+      }
+    }
+  }
+}
