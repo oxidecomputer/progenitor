@@ -417,10 +417,14 @@ impl Generator {
 
         // Format the file with rustfmt and some whitespace niceties.
         let content = rustfmt_wrapper::rustfmt(output).unwrap();
-        let regex = regex::Regex::new(r#"(})(\n\s*[^} ])"#).unwrap();
-        let content = regex.replace_all(&content, "$1\n$2").to_string();
 
-        Ok(content)
+        Ok(if cfg!(not(windows)) {
+            let regex = regex::Regex::new(r#"(})(\n\s*[^} ])"#).unwrap();
+            regex.replace_all(&content, "$1\n$2").to_string()
+        } else {
+            let regex = regex::Regex::new(r#"(})(\r\n\s*[^} ])"#).unwrap();
+            regex.replace_all(&content, "$1\r\n$2").to_string()
+        })
     }
 
     pub fn dependencies(&self) -> Vec<String> {
