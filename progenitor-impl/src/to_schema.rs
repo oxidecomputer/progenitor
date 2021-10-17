@@ -1,3 +1,5 @@
+// Copyright 2021 Oxide Computer Company
+
 use indexmap::IndexMap;
 use openapiv3::AnySchema;
 use serde_json::Value;
@@ -358,6 +360,74 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 format: None,
             }) if properties.is_empty() && required.is_empty() => {
                 schemars::schema::Schema::Bool(true).into_object()
+            }
+
+            // Malformed object.
+            openapiv3::SchemaKind::Any(AnySchema {
+                pattern: None,
+                multiple_of: None,
+                exclusive_minimum: None,
+                exclusive_maximum: None,
+                minimum: None,
+                maximum: None,
+                properties,
+                required,
+                additional_properties,
+                min_properties,
+                max_properties,
+                items: None,
+                min_items: None,
+                max_items: None,
+                unique_items: None,
+                format: None,
+            }) => {
+                let object = openapiv3::Schema {
+                    schema_data: self.schema_data.clone(),
+                    schema_kind: openapiv3::SchemaKind::Type(
+                        openapiv3::Type::Object(openapiv3::ObjectType {
+                            properties: properties.clone(),
+                            required: required.clone(),
+                            additional_properties: additional_properties
+                                .clone(),
+                            min_properties: *min_properties,
+                            max_properties: *max_properties,
+                        }),
+                    ),
+                };
+                object.convert().into()
+            }
+
+            // Malformed array.
+            openapiv3::SchemaKind::Any(AnySchema {
+                pattern: None,
+                multiple_of: None,
+                exclusive_minimum: None,
+                exclusive_maximum: None,
+                minimum: None,
+                maximum: None,
+                properties,
+                required,
+                additional_properties: None,
+                min_properties: None,
+                max_properties: None,
+                items: items @ Some(_),
+                min_items,
+                max_items,
+                unique_items,
+                format: None,
+            }) if properties.is_empty() && required.is_empty() => {
+                let array = openapiv3::Schema {
+                    schema_data: self.schema_data.clone(),
+                    schema_kind: openapiv3::SchemaKind::Type(
+                        openapiv3::Type::Array(openapiv3::ArrayType {
+                            items: items.clone(),
+                            min_items: *min_items,
+                            max_items: *max_items,
+                            unique_items: unique_items.unwrap_or(false),
+                        }),
+                    ),
+                };
+                array.convert().into()
             }
 
             openapiv3::SchemaKind::Any(_) => {
