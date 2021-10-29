@@ -156,18 +156,18 @@ pub struct Client {
 }
 
 impl Client {
-    pub fn new(baseurl: &str) -> Client {
+    pub fn new(baseurl: &str) -> Self {
         let dur = std::time::Duration::from_secs(15);
         let client = reqwest::ClientBuilder::new()
             .connect_timeout(dur)
             .timeout(dur)
             .build()
             .unwrap();
-        Client::new_with_client(baseurl, client)
+        Self::new_with_client(baseurl, client)
     }
 
-    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Client {
-        Client {
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
             baseurl: baseurl.to_string(),
             client,
         }
@@ -176,14 +176,18 @@ impl Client {
     #[doc = "control_hold: POST /v1/control/hold"]
     pub async fn control_hold(&self) -> Result<()> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
-        let res = self.client.post(url).send().await?.error_for_status()?;
+        let request = self.client.post(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "control_resume: POST /v1/control/resume"]
     pub async fn control_resume(&self) -> Result<()> {
         let url = format!("{}/v1/control/resume", self.baseurl,);
-        let res = self.client.post(url).send().await?.error_for_status()?;
+        let request = self.client.post(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -194,27 +198,27 @@ impl Client {
             self.baseurl,
             progenitor_support::encode_path(&task.to_string()),
         );
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "tasks_get: GET /v1/tasks"]
     pub async fn tasks_get(&self) -> Result<Vec<types::Task>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "task_submit: POST /v1/tasks"]
     pub async fn task_submit(&self, body: &types::TaskSubmit) -> Result<types::TaskSubmitResult> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -234,13 +238,9 @@ impl Client {
             query.push(("minseq", v.to_string()));
         }
 
-        let res = self
-            .client
-            .get(url)
-            .query(&query)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -251,7 +251,9 @@ impl Client {
             self.baseurl,
             progenitor_support::encode_path(&task.to_string()),
         );
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -267,27 +269,27 @@ impl Client {
             progenitor_support::encode_path(&task.to_string()),
             progenitor_support::encode_path(&output.to_string()),
         );
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res)
     }
 
     #[doc = "user_create: POST /v1/users"]
     pub async fn user_create(&self, body: &types::UserCreate) -> Result<types::UserCreateResult> {
         let url = format!("{}/v1/users", self.baseurl,);
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "whoami: GET /v1/whoami"]
     pub async fn whoami(&self) -> Result<types::WhoamiResult> {
         let url = format!("{}/v1/whoami", self.baseurl,);
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -297,20 +299,18 @@ impl Client {
         body: &types::WorkerBootstrap,
     ) -> Result<types::WorkerBootstrapResult> {
         let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "worker_ping: GET /v1/worker/ping"]
     pub async fn worker_ping(&self) -> Result<types::WorkerPingResult> {
         let url = format!("{}/v1/worker/ping", self.baseurl,);
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -325,13 +325,9 @@ impl Client {
             self.baseurl,
             progenitor_support::encode_path(&task.to_string()),
         );
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -346,13 +342,9 @@ impl Client {
             self.baseurl,
             progenitor_support::encode_path(&task.to_string()),
         );
-        let res = self
-            .client
-            .post(url)
-            .body(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).body(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -367,13 +359,9 @@ impl Client {
             self.baseurl,
             progenitor_support::encode_path(&task.to_string()),
         );
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -388,27 +376,27 @@ impl Client {
             self.baseurl,
             progenitor_support::encode_path(&task.to_string()),
         );
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "workers_list: GET /v1/workers"]
     pub async fn workers_list(&self) -> Result<types::WorkersResult> {
         let url = format!("{}/v1/workers", self.baseurl,);
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "workers_recycle: POST /v1/workers/recycle"]
     pub async fn workers_recycle(&self) -> Result<()> {
         let url = format!("{}/v1/workers/recycle", self.baseurl,);
-        let res = self.client.post(url).send().await?.error_for_status()?;
+        let request = self.client.post(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 }

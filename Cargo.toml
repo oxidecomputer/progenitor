@@ -1,14 +1,16 @@
 [workspace]
 members = [
 	"progenitor",
-	"progenitor-macro",
+	"progenitor-client",
 	"progenitor-impl",
+	"progenitor-macro",
 	"example-build",
 	"example-macro",
 ]
 
 default-members = [
 	"progenitor",
-	"progenitor-macro",
+	"progenitor-client",
 	"progenitor-impl",
+	"progenitor-macro",
 ]

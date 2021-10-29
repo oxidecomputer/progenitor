@@ -9,9 +9,10 @@ description = "An OpenAPI client generator - macros"
 [dependencies]
 openapiv3 = "1.0.0-beta.2"
 progenitor-impl = { path = "../progenitor-impl" }
-quote = "1.0.10"
-serde_json = "1.0.68"
-syn = "1.0.80"
+quote = "1.0"
+proc-macro2 = "1.0"
+serde_json = "1.0"
+syn = "1.0"
 
 [lib]
 proc-macro = true

@@ -97,18 +97,18 @@ pub struct Client {
 }
 
 impl Client {
-    pub fn new(baseurl: &str) -> Client {
+    pub fn new(baseurl: &str) -> Self {
         let dur = std::time::Duration::from_secs(15);
         let client = reqwest::ClientBuilder::new()
             .connect_timeout(dur)
             .timeout(dur)
             .build()
             .unwrap();
-        Client::new_with_client(baseurl, client)
+        Self::new_with_client(baseurl, client)
     }
 
-    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Client {
-        Client {
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
             baseurl: baseurl.to_string(),
             client,
         }
@@ -117,27 +117,27 @@ impl Client {
     #[doc = "enrol: POST /enrol"]
     pub async fn enrol(&self, body: &types::EnrolBody) -> Result<()> {
         let url = format!("{}/enrol", self.baseurl,);
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "global_jobs: GET /global/jobs"]
     pub async fn global_jobs(&self) -> Result<types::GlobalJobsResult> {
         let url = format!("{}/global/jobs", self.baseurl,);
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "ping: GET /ping"]
     pub async fn ping(&self) -> Result<types::PingResult> {
         let url = format!("{}/ping", self.baseurl,);
-        let res = self.client.get(url).send().await?.error_for_status()?;
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -147,13 +147,9 @@ impl Client {
         body: &types::ReportFinishBody,
     ) -> Result<types::ReportResult> {
         let url = format!("{}/report/finish", self.baseurl,);
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
@@ -163,26 +159,18 @@ impl Client {
         body: &types::ReportOutputBody,
     ) -> Result<types::ReportResult> {
         let url = format!("{}/report/output", self.baseurl,);
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
     #[doc = "report_start: POST /report/start"]
     pub async fn report_start(&self, body: &types::ReportStartBody) -> Result<types::ReportResult> {
         let url = format!("{}/report/start", self.baseurl,);
-        let res = self
-            .client
-            .post(url)
-            .json(body)
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 }
