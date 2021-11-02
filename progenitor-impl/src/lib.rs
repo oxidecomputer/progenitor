@@ -100,12 +100,7 @@ impl Generator {
         let mut types = self
             .type_space
             .iter_types()
-            .map(|type_entry| {
-                (
-                    type_entry.type_name(&self.type_space),
-                    type_entry.output(&self.type_space),
-                )
-            })
+            .map(|t| (t.name(), t.definition()))
             .collect::<Vec<_>>();
         types.sort_by(|(a_name, _), (b_name, _)| a_name.cmp(b_name));
         let types = types.into_iter().map(|(_, def)| def);
@@ -228,8 +223,8 @@ impl Generator {
                         );
                         let typ = self
                             .type_space
-                            .add_type_details_with_name(&schema, Some(name))?
-                            .parameter;
+                            .add_type_with_name(&schema, Some(name))?
+                            .parameter_ident();
 
                         Ok((ParamType::Path, nam, typ))
                     }
@@ -260,8 +255,8 @@ impl Generator {
 
                         let typ = self
                             .type_space
-                            .add_type_details_with_name(&schema, Some(name))?
-                            .parameter;
+                            .add_type_with_name(&schema, Some(name))?
+                            .parameter_ident();
 
                         query.push((nam.to_string(), !parameter_data.required));
                         Ok((ParamType::Query, nam, typ))
@@ -293,8 +288,8 @@ impl Generator {
                     );
                     let typ = self
                         .type_space
-                        .add_type_details_with_name(&schema, Some(name))?
-                        .parameter;
+                        .add_type_with_name(&schema, Some(name))?
+                        .parameter_ident();
                     (Some(typ), Some(quote! { .json(body) }))
                 } else {
                     todo!("media type encoding, no schema: {:#?}", mt);
@@ -375,11 +370,11 @@ impl Generator {
                                 )
                             );
                             self.type_space
-                                .add_type_details_with_name(
+                                .add_type_with_name(
                                     &schema,
                                     Some(name),
                                 )?
-                                .ident
+                                .ident()
                         } else {
                             todo!(
                                 "media type encoding, no schema: {:#?}",
@@ -515,20 +510,21 @@ impl Generator {
 
     pub fn dependencies(&self) -> Vec<String> {
         let mut deps = vec![
-            "anyhow = \"1.0.44\"",
-            "percent-encoding = \"2.1.0\"",
-            "serde = { version = \"1.0.130\", features = [\"derive\"] }",
-            "reqwest = { version = \"0.11.5\", features = [\"json\", \"stream\"] }",
+            "anyhow = \"1.0\"",
+            "percent-encoding = \"2.1\"",
+            "serde = { version = \"1.0\", features = [\"derive\"] }",
+            "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
         ];
         if self.type_space.uses_uuid() {
             deps.push(
-                "uuid = { version = \"0.8.2\", features = [\"serde\", \"v4\"] }",
+                "uuid = { version = \"0.8\", features = [\"serde\", \"v4\"] }",
             )
         }
         if self.type_space.uses_chrono() {
-            deps.push(
-                "chrono = { version = \"0.4.19\", features = [\"serde\"] }",
-            )
+            deps.push("chrono = { version = \"0.4\", features = [\"serde\"] }")
+        }
+        if self.type_space.uses_serde_json() {
+            deps.push("serde_json = \"1.0\"")
         }
         deps.sort_unstable();
         deps.iter().map(ToString::to_string).collect()
