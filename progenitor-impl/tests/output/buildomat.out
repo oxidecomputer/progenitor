@@ -173,13 +173,21 @@ impl Client {
         }
     }
 
+    pub fn baseurl(&self) -> &String {
+        &self.baseurl
+    }
+
+    pub fn client(&self) -> &reqwest::Client {
+        &self.client
+    }
+
     #[doc = "control_hold: POST /v1/control/hold"]
     pub async fn control_hold(&self) -> Result<()> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        Ok(())
     }
 
     #[doc = "control_resume: POST /v1/control/resume"]
@@ -188,7 +196,7 @@ impl Client {
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        Ok(())
     }
 
     #[doc = "task_get: GET /v1/task/{task}"]
@@ -328,7 +336,7 @@ impl Client {
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        Ok(())
     }
 
     #[doc = "worker_task_upload_chunk: POST /v1/worker/task/{task}/chunk"]
@@ -362,7 +370,7 @@ impl Client {
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        Ok(())
     }
 
     #[doc = "worker_task_add_output: POST /v1/worker/task/{task}/output"]
@@ -379,7 +387,7 @@ impl Client {
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        Ok(())
     }
 
     #[doc = "workers_list: GET /v1/workers"]
@@ -397,6 +405,6 @@ impl Client {
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        Ok(())
     }
 }

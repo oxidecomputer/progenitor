@@ -13,9 +13,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.44"
+version = "1.0.45"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61604a8f862e1d5c3229fdd78f8b02c68dcf73a4c4b05fd636d12240aaa242c1"
+checksum = "ee10e43ae4a853c0a3591d4e2ada1719e553be18199d9da9d4a83f5927c2f5c7"
 
 [[package]]
 name = "autocfg"
@@ -923,9 +923,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.68"
+version = "1.0.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f690853975602e1bfe1ccbf50504d67174e3bcf340f23b5ea9992e0587a52d8"
+checksum = "e466864e431129c7e0d3476b92f20458e5879919a0596c6472738d9fa2d342f8"
 dependencies = [
  "itoa",
  "ryu",
@@ -1129,7 +1129,7 @@ checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 [[package]]
 name = "typify"
 version = "0.0.2"
-source = "git+https://github.com/oxidecomputer/typify#70755a9c18e91d0f4c591219a8f655ae6ccb1154"
+source = "git+https://github.com/oxidecomputer/typify#69bc7f3e42fdeee40229fb8305773377b1d5e4d7"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1138,7 +1138,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.2"
-source = "git+https://github.com/oxidecomputer/typify#70755a9c18e91d0f4c591219a8f655ae6ccb1154"
+source = "git+https://github.com/oxidecomputer/typify#69bc7f3e42fdeee40229fb8305773377b1d5e4d7"
 dependencies = [
  "convert_case",
  "proc-macro2",
@@ -1152,7 +1152,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.2"
-source = "git+https://github.com/oxidecomputer/typify#70755a9c18e91d0f4c591219a8f655ae6ccb1154"
+source = "git+https://github.com/oxidecomputer/typify#69bc7f3e42fdeee40229fb8305773377b1d5e4d7"
 dependencies = [
  "proc-macro2",
  "quote",

@@ -178,6 +178,14 @@ impl Generator {
                     }
                 }
 
+                pub fn baseurl(&self) -> &String {
+                    &self.baseurl
+                }
+
+                pub fn client(&self) -> &reqwest::Client {
+                    &self.client
+                }
+
                 #(#methods)*
             }
         };
@@ -348,7 +356,11 @@ impl Generator {
                     i.content.len(),
                     i.content.get("application/json"),
                 ) {
-                    (0, _) => (quote! { () }, quote! { res.json().await? }),
+                    // TODO we should verify that the content length of the
+                    // response is zero in this case; if it's not we'll want to
+                    // do the same thing as if there were a serialization
+                    // error.
+                    (0, _) => (quote! { () }, quote! { () }),
                     (1, Some(mt)) => {
                         if !mt.encoding.is_empty() {
                             todo!(
