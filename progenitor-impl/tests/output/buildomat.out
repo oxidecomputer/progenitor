@@ -187,7 +187,7 @@ impl Client {
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res.json().await?)
     }
 
     #[doc = "control_resume: POST /v1/control/resume"]

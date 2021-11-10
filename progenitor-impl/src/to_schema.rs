@@ -105,6 +105,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
             read_only,
             write_only,
             example,
+            extensions,
         } = self.schema_data.clone();
 
         let metadata = schemars::schema::Metadata {
@@ -143,6 +144,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     pattern: pattern.clone(),
                 }))
                 .reduce(),
+                extensions: extensions.into_iter().collect(),
                 ..Default::default()
             },
             openapiv3::SchemaKind::Type(openapiv3::Type::Number(
@@ -186,6 +188,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         },
                     ))
                     .reduce(),
+                    extensions: extensions.into_iter().collect(),
                     ..Default::default()
                 }
             }
@@ -233,6 +236,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         },
                     ))
                     .reduce(),
+                    extensions: extensions.into_iter().collect(),
                     ..Default::default()
                 }
             }
@@ -261,6 +265,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     property_names: None,
                 }))
                 .reduce(),
+                extensions: extensions.into_iter().collect(),
                 ..Default::default()
             },
 
@@ -290,6 +295,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     contains: None,
                 }))
                 .reduce(),
+                extensions: extensions.into_iter().collect(),
                 ..Default::default()
             },
 
@@ -300,6 +306,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         schemars::schema::InstanceType::Boolean,
                         nullable,
                     ),
+                    extensions: extensions.into_iter().collect(),
                     ..Default::default()
                 }
             }
@@ -312,6 +319,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                             ..Default::default()
                         },
                     )),
+                    extensions: extensions.into_iter().collect(),
                     ..Default::default()
                 }
             }
@@ -324,6 +332,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                             ..Default::default()
                         },
                     )),
+                    extensions: extensions.into_iter().collect(),
                     ..Default::default()
                 }
             }
@@ -336,12 +345,27 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                             ..Default::default()
                         },
                     )),
+                    extensions: extensions.into_iter().collect(),
+                    ..Default::default()
+                }
+            }
+
+            openapiv3::SchemaKind::Not { not } => {
+                schemars::schema::SchemaObject {
+                    subschemas: Some(Box::new(
+                        schemars::schema::SubschemaValidation {
+                            not: Some(Box::new(not.convert())),
+                            ..Default::default()
+                        },
+                    )),
+                    extensions: extensions.into_iter().collect(),
                     ..Default::default()
                 }
             }
 
             // This is the permissive schema that allows anything to match.
             openapiv3::SchemaKind::Any(AnySchema {
+                typ: None,
                 pattern: None,
                 multiple_of: None,
                 exclusive_minimum: None,
@@ -358,12 +382,73 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 max_items: None,
                 unique_items: None,
                 format: None,
-            }) if properties.is_empty() && required.is_empty() => {
-                schemars::schema::Schema::Bool(true).into_object()
+                enumeration,
+                min_length: None,
+                max_length: None,
+                one_of,
+                all_of,
+                any_of,
+                not: None,
+            }) if properties.is_empty()
+                && required.is_empty()
+                && enumeration.is_empty()
+                && one_of.is_empty()
+                && all_of.is_empty()
+                && any_of.is_empty() =>
+            {
+                let mut schema =
+                    schemars::schema::Schema::Bool(true).into_object();
+                schema.extensions = extensions.into_iter().collect();
+                schema
             }
 
-            // Malformed object.
+            // A simple null value.
             openapiv3::SchemaKind::Any(AnySchema {
+                typ: None,
+                pattern: None,
+                multiple_of: None,
+                exclusive_minimum: None,
+                exclusive_maximum: None,
+                minimum: None,
+                maximum: None,
+                properties,
+                required,
+                additional_properties: None,
+                min_properties: None,
+                max_properties: None,
+                items: None,
+                min_items: None,
+                max_items: None,
+                unique_items: None,
+                format: None,
+                enumeration,
+                min_length: None,
+                max_length: None,
+                one_of,
+                all_of,
+                any_of,
+                not: None,
+            }) if properties.is_empty()
+                && required.is_empty()
+                && enumeration.len() == 1
+                && enumeration[0] == serde_json::Value::Null
+                && one_of.is_empty()
+                && all_of.is_empty()
+                && any_of.is_empty() =>
+            {
+                schemars::schema::SchemaObject {
+                    metadata,
+                    instance_type: Some(
+                        schemars::schema::InstanceType::Null.into(),
+                    ),
+                    extensions: extensions.into_iter().collect(),
+                    ..Default::default()
+                }
+            }
+
+            // Malformed object with 'type' not set.
+            openapiv3::SchemaKind::Any(AnySchema {
+                typ: None,
                 pattern: None,
                 multiple_of: None,
                 exclusive_minimum: None,
@@ -380,7 +465,18 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 max_items: None,
                 unique_items: None,
                 format: None,
-            }) => {
+                enumeration,
+                min_length: None,
+                max_length: None,
+                one_of,
+                all_of,
+                any_of,
+                not: None,
+            }) if enumeration.is_empty()
+                && one_of.is_empty()
+                && all_of.is_empty()
+                && any_of.is_empty() =>
+            {
                 let object = openapiv3::Schema {
                     schema_data: self.schema_data.clone(),
                     schema_kind: openapiv3::SchemaKind::Type(
@@ -397,8 +493,9 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 object.convert().into()
             }
 
-            // Malformed array.
+            // Malformed array with 'type' not set.
             openapiv3::SchemaKind::Any(AnySchema {
+                typ: None,
                 pattern: None,
                 multiple_of: None,
                 exclusive_minimum: None,
@@ -415,7 +512,20 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 max_items,
                 unique_items,
                 format: None,
-            }) if properties.is_empty() && required.is_empty() => {
+                enumeration,
+                min_length: None,
+                max_length: None,
+                one_of,
+                all_of,
+                any_of,
+                not: None,
+            }) if properties.is_empty()
+                && required.is_empty()
+                && enumeration.is_empty()
+                && one_of.is_empty()
+                && all_of.is_empty()
+                && any_of.is_empty() =>
+            {
                 let array = openapiv3::Schema {
                     schema_data: self.schema_data.clone(),
                     schema_kind: openapiv3::SchemaKind::Type(
@@ -493,14 +603,22 @@ impl Convert<Value> for Option<String> {
     }
 }
 
-impl Convert<Value> for f64 {
+impl Convert<Value> for Option<f64> {
     fn convert(&self) -> Value {
-        Value::Number(serde_json::Number::from_f64(*self).unwrap())
+        match self {
+            Some(value) => {
+                Value::Number(serde_json::Number::from_f64(*value).unwrap())
+            }
+            None => Value::Null,
+        }
     }
 }
-impl Convert<Value> for i64 {
+impl Convert<Value> for Option<i64> {
     fn convert(&self) -> Value {
-        Value::Number(serde_json::Number::from(*self))
+        match self {
+            Some(value) => Value::Number(serde_json::Number::from(*value)),
+            None => Value::Null,
+        }
     }
 }
 
@@ -509,14 +627,9 @@ fn instance_type(
     nullable: bool,
 ) -> Option<schemars::schema::SingleOrVec<schemars::schema::InstanceType>> {
     if nullable {
-        Some(schemars::schema::SingleOrVec::Vec(vec![
-            instance_type,
-            schemars::schema::InstanceType::Null,
-        ]))
+        Some(vec![instance_type, schemars::schema::InstanceType::Null].into())
     } else {
-        Some(schemars::schema::SingleOrVec::Single(Box::new(
-            instance_type,
-        )))
+        Some(instance_type.into())
     }
 }
 
@@ -589,5 +702,27 @@ where
             Some(s) if s != &T::default() => self,
             _ => None,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use crate::to_schema::Convert;
+
+    #[test]
+    fn test_null() {
+        let schema_value = json!({ "enum": [null] });
+        let oa_schema =
+            serde_json::from_value::<openapiv3::Schema>(schema_value).unwrap();
+
+        let schema = oa_schema.convert();
+        assert_eq!(
+            schema.into_object().instance_type,
+            Some(schemars::schema::SingleOrVec::Single(Box::new(
+                schemars::schema::InstanceType::Null
+            )))
+        );
     }
 }
