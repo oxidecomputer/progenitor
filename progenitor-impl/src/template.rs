@@ -12,11 +12,11 @@ enum Component {
 }
 
 #[derive(Eq, PartialEq, Clone, Debug)]
-pub struct Template {
+pub struct PathTemplate {
     components: Vec<Component>,
 }
 
-impl Template {
+impl PathTemplate {
     pub fn compile(&self) -> TokenStream {
         let mut fmt = String::new();
         fmt.push_str("{}");
@@ -55,7 +55,7 @@ impl Template {
     }
 }
 
-pub fn parse(t: &str) -> Result<Template> {
+pub fn parse(t: &str) -> Result<PathTemplate> {
     enum State {
         Start,
         ConstantOrParameter,
@@ -142,12 +142,24 @@ pub fn parse(t: &str) -> Result<Template> {
         }
     }
 
-    Ok(Template { components })
+    Ok(PathTemplate { components })
+}
+
+impl ToString for PathTemplate {
+    fn to_string(&self) -> std::string::String {
+        self.components
+            .iter()
+            .map(|component| match component {
+                Component::Constant(s) => s.clone(),
+                Component::Parameter(s) => format!("{{{}}}", s),
+            })
+            .fold(String::new(), |a, b| a + "/" + &b)
+    }
 }
 
 #[cfg(test)]
 mod test {
-    use super::{parse, Component, Template};
+    use super::{parse, Component, PathTemplate};
     use anyhow::{anyhow, Context, Result};
 
     #[test]
@@ -155,13 +167,13 @@ mod test {
         let trials = vec![
             (
                 "/info",
-                Template {
+                PathTemplate {
                     components: vec![Component::Constant("info".into())],
                 },
             ),
             (
                 "/measure/{number}",
-                Template {
+                PathTemplate {
                     components: vec![
                         Component::Constant("measure".into()),
                         Component::Parameter("number".into()),
@@ -170,7 +182,7 @@ mod test {
             ),
             (
                 "/one/{two}/three",
-                Template {
+                PathTemplate {
                     components: vec![
                         Component::Constant("one".into()),
                         Component::Parameter("two".into()),

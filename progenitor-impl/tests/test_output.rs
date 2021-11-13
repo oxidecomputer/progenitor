@@ -29,6 +29,11 @@ fn test_buildomat() {
     verify_file("buildomat");
 }
 
+#[test]
+fn test_nexus() {
+    verify_file("nexus");
+}
+
 // TODO this file is full of inconsistencies and incorrectly specified types.
 // It's an interesting test to consider whether we try to do our best to
 // interpret the intent or just fail.
