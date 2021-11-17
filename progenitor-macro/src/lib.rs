@@ -5,7 +5,7 @@ use std::path::Path;
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
 use progenitor_impl::Generator;
-use quote::ToTokens;
+use quote::{quote, ToTokens};
 use syn::{
     parse::{Parse, ParseStream},
     ExprClosure, LitStr, Token,
@@ -90,31 +90,39 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     );
 
     let path = dir.join(file.value());
+    let path_str = path.to_string_lossy();
 
-    let content = std::fs::read_to_string(&path).map_err(|e| {
-        syn::Error::new(
-            file.span(),
-            format!("couldn't read file {}: {}", file.value(), e.to_string()),
-        )
-    })?;
-
-    let spec = serde_json::from_str::<OpenAPI>(&content).map_err(|e| {
-        syn::Error::new(
-            file.span(),
-            format!("failed to parse {}: {}", file.value(), e.to_string()),
-        )
-    })?;
+    let spec: OpenAPI =
+        serde_json::from_reader(std::fs::File::open(&path).map_err(|e| {
+            syn::Error::new(
+                file.span(),
+                format!("couldn't read file {}: {}", path_str, e.to_string()),
+            )
+        })?)
+        .map_err(|e| {
+            syn::Error::new(
+                file.span(),
+                format!("failed to parse {}: {}", path_str, e.to_string()),
+            )
+        })?;
 
     let mut builder = Generator::new();
     inner.map(|inner_type| builder.with_inner_type(inner_type));
     pre.map(|pre_hook| builder.with_pre_hook(pre_hook));
     post.map(|post_hook| builder.with_post_hook(post_hook));
-    let ret = builder.generate_tokens(&spec).map_err(|e| {
+    let code = builder.generate_tokens(&spec).map_err(|e| {
         syn::Error::new(
             file.span(),
             format!("generation error for {}: {}", file.value(), e.to_string()),
         )
     })?;
 
-    Ok(ret.into())
+    let output = quote! {
+        #code
+
+        // Force a rebuild when the given file is modified.
+        const _: &str = include_str!(#path_str);
+    };
+
+    Ok(output.into())
 }
