@@ -7,7 +7,7 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 description = "An OpenAPI client generator - macros"
 
 [dependencies]
-openapiv3 = "1.0.0-beta.2"
+openapiv3 = "1.0.0-beta.5"
 progenitor-impl = { path = "../progenitor-impl" }
 quote = "1.0"
 proc-macro2 = "1.0"
