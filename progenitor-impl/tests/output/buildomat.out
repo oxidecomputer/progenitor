@@ -182,7 +182,7 @@ impl Client {
     }
 
     #[doc = "control_hold: POST /v1/control/hold"]
-    pub async fn control_hold(&self) -> Result<()> {
+    pub async fn control_hold<'a>(&'a self) -> Result<()> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
@@ -191,16 +191,16 @@ impl Client {
     }
 
     #[doc = "control_resume: POST /v1/control/resume"]
-    pub async fn control_resume(&self) -> Result<()> {
+    pub async fn control_resume<'a>(&'a self) -> Result<reqwest::Response> {
         let url = format!("{}/v1/control/resume", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "task_get: GET /v1/task/{task}"]
-    pub async fn task_get(&self, task: &str) -> Result<types::Task> {
+    pub async fn task_get<'a>(&'a self, task: &'a str) -> Result<types::Task> {
         let url = format!(
             "{}/v1/task/{}",
             self.baseurl,
@@ -213,7 +213,7 @@ impl Client {
     }
 
     #[doc = "tasks_get: GET /v1/tasks"]
-    pub async fn tasks_get(&self) -> Result<Vec<types::Task>> {
+    pub async fn tasks_get<'a>(&'a self) -> Result<Vec<types::Task>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -222,7 +222,10 @@ impl Client {
     }
 
     #[doc = "task_submit: POST /v1/tasks"]
-    pub async fn task_submit(&self, body: &types::TaskSubmit) -> Result<types::TaskSubmitResult> {
+    pub async fn task_submit<'a>(
+        &'a self,
+        body: &'a types::TaskSubmit,
+    ) -> Result<types::TaskSubmitResult> {
         let url = format!("{}/v1/tasks", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
@@ -231,9 +234,9 @@ impl Client {
     }
 
     #[doc = "task_events_get: GET /v1/tasks/{task}/events"]
-    pub async fn task_events_get(
-        &self,
-        task: &str,
+    pub async fn task_events_get<'a>(
+        &'a self,
+        task: &'a str,
         minseq: Option<u32>,
     ) -> Result<Vec<types::TaskEvent>> {
         let url = format!(
@@ -253,7 +256,7 @@ impl Client {
     }
 
     #[doc = "task_outputs_get: GET /v1/tasks/{task}/outputs"]
-    pub async fn task_outputs_get(&self, task: &str) -> Result<Vec<types::TaskOutput>> {
+    pub async fn task_outputs_get<'a>(&'a self, task: &'a str) -> Result<Vec<types::TaskOutput>> {
         let url = format!(
             "{}/v1/tasks/{}/outputs",
             self.baseurl,
@@ -266,10 +269,10 @@ impl Client {
     }
 
     #[doc = "task_output_download: GET /v1/tasks/{task}/outputs/{output}"]
-    pub async fn task_output_download(
-        &self,
-        task: &str,
-        output: &str,
+    pub async fn task_output_download<'a>(
+        &'a self,
+        task: &'a str,
+        output: &'a str,
     ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/v1/tasks/{}/outputs/{}",
@@ -284,7 +287,10 @@ impl Client {
     }
 
     #[doc = "user_create: POST /v1/users"]
-    pub async fn user_create(&self, body: &types::UserCreate) -> Result<types::UserCreateResult> {
+    pub async fn user_create<'a>(
+        &'a self,
+        body: &'a types::UserCreate,
+    ) -> Result<types::UserCreateResult> {
         let url = format!("{}/v1/users", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
@@ -293,7 +299,7 @@ impl Client {
     }
 
     #[doc = "whoami: GET /v1/whoami"]
-    pub async fn whoami(&self) -> Result<types::WhoamiResult> {
+    pub async fn whoami<'a>(&'a self) -> Result<types::WhoamiResult> {
         let url = format!("{}/v1/whoami", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -302,9 +308,9 @@ impl Client {
     }
 
     #[doc = "worker_bootstrap: POST /v1/worker/bootstrap"]
-    pub async fn worker_bootstrap(
-        &self,
-        body: &types::WorkerBootstrap,
+    pub async fn worker_bootstrap<'a>(
+        &'a self,
+        body: &'a types::WorkerBootstrap,
     ) -> Result<types::WorkerBootstrapResult> {
         let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
@@ -314,7 +320,7 @@ impl Client {
     }
 
     #[doc = "worker_ping: GET /v1/worker/ping"]
-    pub async fn worker_ping(&self) -> Result<types::WorkerPingResult> {
+    pub async fn worker_ping<'a>(&'a self) -> Result<types::WorkerPingResult> {
         let url = format!("{}/v1/worker/ping", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -323,11 +329,11 @@ impl Client {
     }
 
     #[doc = "worker_task_append: POST /v1/worker/task/{task}/append"]
-    pub async fn worker_task_append(
-        &self,
-        task: &str,
-        body: &types::WorkerAppendTask,
-    ) -> Result<()> {
+    pub async fn worker_task_append<'a>(
+        &'a self,
+        task: &'a str,
+        body: &'a types::WorkerAppendTask,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/v1/worker/task/{}/append",
             self.baseurl,
@@ -336,13 +342,13 @@ impl Client {
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "worker_task_upload_chunk: POST /v1/worker/task/{task}/chunk"]
-    pub async fn worker_task_upload_chunk<B: Into<reqwest::Body>>(
-        &self,
-        task: &str,
+    pub async fn worker_task_upload_chunk<'a, B: Into<reqwest::Body>>(
+        &'a self,
+        task: &'a str,
         body: B,
     ) -> Result<types::UploadedChunk> {
         let url = format!(
@@ -357,11 +363,11 @@ impl Client {
     }
 
     #[doc = "worker_task_complete: POST /v1/worker/task/{task}/complete"]
-    pub async fn worker_task_complete(
-        &self,
-        task: &str,
-        body: &types::WorkerCompleteTask,
-    ) -> Result<()> {
+    pub async fn worker_task_complete<'a>(
+        &'a self,
+        task: &'a str,
+        body: &'a types::WorkerCompleteTask,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/v1/worker/task/{}/complete",
             self.baseurl,
@@ -370,15 +376,15 @@ impl Client {
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "worker_task_add_output: POST /v1/worker/task/{task}/output"]
-    pub async fn worker_task_add_output(
-        &self,
-        task: &str,
-        body: &types::WorkerAddOutput,
-    ) -> Result<()> {
+    pub async fn worker_task_add_output<'a>(
+        &'a self,
+        task: &'a str,
+        body: &'a types::WorkerAddOutput,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/v1/worker/task/{}/output",
             self.baseurl,
@@ -387,11 +393,11 @@ impl Client {
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "workers_list: GET /v1/workers"]
-    pub async fn workers_list(&self) -> Result<types::WorkersResult> {
+    pub async fn workers_list<'a>(&'a self) -> Result<types::WorkersResult> {
         let url = format!("{}/v1/workers", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -400,11 +406,11 @@ impl Client {
     }
 
     #[doc = "workers_recycle: POST /v1/workers/recycle"]
-    pub async fn workers_recycle(&self) -> Result<()> {
+    pub async fn workers_recycle<'a>(&'a self) -> Result<reqwest::Response> {
         let url = format!("{}/v1/workers/recycle", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 }

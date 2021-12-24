@@ -1,6 +1,6 @@
 // Copyright 2021 Oxide Computer Company
 
-use std::cmp::Ordering;
+use std::{cmp::Ordering, collections::HashMap};
 
 use convert_case::{Case, Casing};
 use indexmap::IndexMap;
@@ -10,10 +10,10 @@ use openapiv3::{
 };
 use proc_macro2::TokenStream;
 
-use quote::{format_ident, quote};
+use quote::{format_ident, quote, ToTokens};
 use template::PathTemplate;
 use thiserror::Error;
-use typify::TypeSpace;
+use typify::{TypeId, TypeSpace};
 
 use crate::to_schema::ToSchema;
 
@@ -42,6 +42,7 @@ pub struct Generator {
     inner_type: Option<TokenStream>,
     pre_hook: Option<TokenStream>,
     post_hook: Option<TokenStream>,
+    uses_futures: bool,
 }
 
 struct OperationMethod {
@@ -51,6 +52,11 @@ struct OperationMethod {
     doc_comment: Option<String>,
     params: Vec<OperationParameter>,
     responses: Vec<OperationResponse>,
+    dropshot_paginated: Option<DropshotPagination>,
+}
+
+struct DropshotPagination {
+    item: TypeId,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -66,7 +72,7 @@ struct OperationParameter {
 }
 
 enum OperationParameterType {
-    TokenStream(TokenStream),
+    Type(TypeId),
     RawBody,
 }
 #[derive(Debug)]
@@ -77,7 +83,7 @@ struct OperationResponse {
 
 #[derive(Debug)]
 enum OperationResponseType {
-    TokenStream(TokenStream),
+    Type(TypeId),
     None,
     Raw,
 }
@@ -271,12 +277,11 @@ impl Generator {
                         );
                         let typ = self
                             .type_space
-                            .add_type_with_name(&schema, Some(name))?
-                            .parameter_ident();
+                            .add_type_with_name(&schema, Some(name))?;
 
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
-                            typ: OperationParameterType::TokenStream(typ),
+                            typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Path,
                         })
                     }
@@ -307,13 +312,12 @@ impl Generator {
 
                         let typ = self
                             .type_space
-                            .add_type_with_name(&schema, Some(name))?
-                            .parameter_ident();
+                            .add_type_with_name(&schema, Some(name))?;
 
                         query.push((nam, !parameter_data.required));
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
-                            typ: OperationParameterType::TokenStream(typ),
+                            typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Query(
                                 parameter_data.required,
                             ),
@@ -344,9 +348,8 @@ impl Generator {
                     );
                     let typ = self
                         .type_space
-                        .add_type_with_name(&schema, Some(name))?
-                        .parameter_ident();
-                    OperationParameterType::TokenStream(typ)
+                        .add_type_with_name(&schema, Some(name))?;
+                    OperationParameterType::Type(typ)
                 } else {
                     todo!("media type encoding, no schema: {:#?}", mt);
                 }
@@ -450,12 +453,11 @@ impl Generator {
                         );
                         self.type_space
                             .add_type_with_name(&schema, Some(name))?
-                            .ident()
                     } else {
                         todo!("media type encoding, no schema: {:#?}", mt);
                     };
 
-                    OperationResponseType::TokenStream(typ)
+                    OperationResponseType::Type(typ)
                 } else if response.content.first().is_some() {
                     OperationResponseType::Raw
                 } else {
@@ -477,13 +479,18 @@ impl Generator {
             .collect::<Result<Vec<_>>>()?;
 
         // If the API has declined to specify the characteristics of a
-        // successful response, we cons up a generic one.
+        // successful response, we cons up a generic one. Note that this is
+        // technically permissible within OpenAPI, but advised against in the
+        // spec.
         if !success {
             responses.push(OperationResponse {
                 status_code: StatusCode::Range(2),
                 typ: OperationResponseType::Raw,
             });
         }
+
+        let dropshot_paginated =
+            self.dropshot_pagination_data(operation, &raw_params, &responses);
 
         Ok(OperationMethod {
             operation_id: sanitize(operation_id, Case::Snake),
@@ -492,36 +499,44 @@ impl Generator {
             doc_comment: operation.description.clone(),
             params: raw_params,
             responses,
+            dropshot_paginated,
         })
     }
 
-    fn process_method(&self, method: &OperationMethod) -> Result<TokenStream> {
-        let operation_id = format_ident!("{}", method.operation_id,);
+    fn process_method(
+        &mut self,
+        method: &OperationMethod,
+    ) -> Result<TokenStream> {
+        let operation_id = format_ident!("{}", method.operation_id);
         let mut bounds_items: Vec<TokenStream> = Vec::new();
-        let params = method
+        let typed_params = method
             .params
             .iter()
             .map(|param| {
                 let name = format_ident!("{}", param.name);
                 let typ = match &param.typ {
-                    OperationParameterType::TokenStream(t) => t.clone(),
+                    OperationParameterType::Type(type_id) => self
+                        .type_space
+                        .get_type(type_id)
+                        .unwrap()
+                        .parameter_ident_with_lifetime("a"),
                     OperationParameterType::RawBody => {
-                        bounds_items.push(quote! { B: Into<reqwest::Body>});
-                        quote! {B}
+                        bounds_items.push(quote! { B: Into<reqwest::Body> });
+                        quote! { B }
                     }
                 };
-                quote! {
-                    #name: #typ
-                }
+                (
+                    param,
+                    quote! {
+                        #name: #typ
+                    },
+                )
             })
             .collect::<Vec<_>>();
-        let bounds = if bounds_items.is_empty() {
-            quote! {}
-        } else {
-            quote! {
-                < #(#bounds_items),* >
-            }
-        };
+
+        let params = typed_params.iter().map(|(_, stream)| stream);
+
+        let bounds = quote! { < 'a, #(#bounds_items),* > };
 
         let query_items = method
             .params
@@ -564,11 +579,11 @@ impl Generator {
         let body_func =
             method.params.iter().filter_map(|param| match &param.kind {
                 OperationParameterKind::Body => match &param.typ {
-                    OperationParameterType::TokenStream(_) => {
+                    OperationParameterType::Type(_) => {
                         Some(quote! { .json(body) })
                     }
                     OperationParameterType::RawBody => {
-                        Some(quote! { .body(body )})
+                        Some(quote! { .body(body) })
                     }
                 },
                 _ => None,
@@ -589,12 +604,12 @@ impl Generator {
         let (response_type, decode_response) = success_response_items
             .next()
             .map(|response| match &response.typ {
-                OperationResponseType::TokenStream(typ) => {
-                    (typ.clone(), quote! {res.json().await?})
-                }
+                OperationResponseType::Type(type_id) => (
+                    self.type_space.get_type(type_id).unwrap().ident(),
+                    quote! { res.json().await? },
+                ),
                 OperationResponseType::None => {
-                    // TODO this doesn't seem quite right; I think we still want to return the raw response structure here.
-                    (quote! { () }, quote! { () })
+                    (quote! { reqwest::Response }, quote! { res })
                 }
                 OperationResponseType::Raw => {
                     (quote! { reqwest::Response }, quote! { res })
@@ -632,7 +647,7 @@ impl Generator {
         let method_impl = quote! {
             #[doc = #doc_comment]
             pub async fn #operation_id #bounds (
-                &self,
+                &'a self,
                 #(#params),*
             ) -> Result<#response_type> {
                 #url_path
@@ -655,7 +670,248 @@ impl Generator {
                 Ok(#decode_response)
             }
         };
-        Ok(method_impl)
+
+        let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
+            // We're now using futures.
+            self.uses_futures = true;
+
+            let stream_id = format_ident!("{}_stream", method.operation_id);
+
+            // The parameters are the same as those to the paged method, but
+            // without "page_token"
+            let stream_params =
+                typed_params.iter().filter_map(|(param, stream)| {
+                    if param.name.as_str() == "page_token" {
+                        None
+                    } else {
+                        Some(stream)
+                    }
+                });
+
+            // The values passed to get the first page are the inputs to the
+            // stream method with "None" for the page_token.
+            let first_params = typed_params.iter().map(|(param, _)| {
+                if param.name.as_str() == "page_token" {
+                    // The page_token is None when getting the first page.
+                    quote! { None }
+                } else {
+                    // All other parameters are passed through directly.
+                    format_ident!("{}", param.name).to_token_stream()
+                }
+            });
+
+            // The values passed to get subsequent pages are "None" for
+            // everything *except* the page_token which takes its value from
+            // the previous page.
+            let step_params = typed_params.iter().map(|(param, _)| {
+                if param.name.as_str() == "page_token" {
+                    quote! { state.as_deref() }
+                } else if let OperationParameterKind::Query(_) = param.kind {
+                    // Query parameters are None; having page_token as Some(_)
+                    // is mutually exclusive with other query parameters.
+                    quote! { None }
+                } else {
+                    // Non-query parameters are passed in; this is necessary
+                    // e.g. to specify the right path. (We don't really expect
+                    // to see a body parameter here, but we pass it through
+                    // regardless.)
+                    format_ident!("{}", param.name).to_token_stream()
+                }
+            });
+
+            // The item type that we've saved (by picking apart the original
+            // function's return type) will be the Item type parameter for the
+            // Stream type we return.
+            let item = self.type_space.get_type(&page_data.item).unwrap();
+            let item_type = item.ident();
+
+            // TODO document parameters
+            let doc_comment = format!(
+                "{}returns a Stream<Item = {}> by making successive calls to {}",
+                method
+                    .doc_comment
+                    .as_ref()
+                    .map(|s| format!("{}\n\n", s))
+                    .unwrap_or_else(String::new),
+                item.name(),
+                method.operation_id,
+            );
+
+
+            quote! {
+                #[doc = #doc_comment]
+                pub fn #stream_id #bounds (
+                    &'a self,
+                    #(#stream_params),*
+                ) -> impl futures::Stream<Item = Result<#item_type>> + Unpin + '_ {
+                    use futures::StreamExt;
+                    use futures::TryFutureExt;
+                    use futures::TryStreamExt;
+
+                    // Execute the operation with the basic parameters
+                    // (omitting page_token) to get the first page.
+                    self.#operation_id(
+                        #(#first_params,)*
+                    )
+                    .map_ok(move |page| {
+                        // The first page is just an iter
+                        let first = futures::stream::iter(
+                            page.items.into_iter().map(Ok)
+                        );
+
+                        // We unfold subsequent pages using page.next_page as
+                        // the seed value. Each iteration returns its items and
+                        // the next page token.
+                        let rest = futures::stream::try_unfold(
+                            page.next_page,
+                            move |state| async move {
+                                if state.is_none() {
+                                    // There's no next page to fetch.
+                                    Ok(None)
+                                } else {
+                                    // Get the next page; here we set all query
+                                    // parameters to None (except for the
+                                    // page_token), and all other parameters as
+                                    // specified at the start of this method.
+                                    self.#operation_id(
+                                        #(#step_params,)*
+                                    )
+                                    .map_ok(|page| {
+                                        Some((
+                                            futures::stream::iter(
+                                                page
+                                                    .items
+                                                    .into_iter()
+                                                    .map(Ok),
+                                            ),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                                }
+                            },
+                        )
+                        .try_flatten();
+
+                        first.chain(rest)
+                    })
+                    .try_flatten_stream()
+                    .boxed()
+                }
+            }
+        });
+
+        let all = quote! {
+            #method_impl
+            #stream_impl
+        };
+
+        Ok(all)
+    }
+
+    // Validates all the necessary conditions for Dropshot pagination. Returns
+    // the paginated item type data if all conditions are met.
+    fn dropshot_pagination_data(
+        &self,
+        operation: &openapiv3::Operation,
+        parameters: &[OperationParameter],
+        responses: &[OperationResponse],
+    ) -> Option<DropshotPagination> {
+        if operation
+            .extensions
+            .get("x-dropshot-pagination")
+            .and_then(|v| v.as_bool())
+            != Some(true)
+        {
+            return None;
+        }
+
+        // We expect to see at least "page_token" and "limit" parameters.
+        if parameters
+            .iter()
+            .filter(|param| {
+                matches!(
+                    (param.name.as_str(), &param.kind),
+                    ("page_token", OperationParameterKind::Query(_))
+                        | ("limit", OperationParameterKind::Query(_))
+                )
+            })
+            .count()
+            != 2
+        {
+            return None;
+        }
+
+        // All query parameters must be optional since page_token may not be
+        // specified in conjunction with other query parameters.
+        if !parameters.iter().all(|param| match &param.kind {
+            OperationParameterKind::Query(required) => !required,
+            _ => true,
+        }) {
+            return None;
+        }
+
+        // There must be exactly one successful response type.
+        let mut success_response_items =
+            responses.iter().filter_map(|response| {
+                match (&response.status_code, &response.typ) {
+                    (
+                        StatusCode::Code(200..=299) | StatusCode::Range(2),
+                        OperationResponseType::Type(type_id),
+                    ) => Some(type_id),
+                    _ => None,
+                }
+            });
+
+        let success_response = match (
+            success_response_items.next(),
+            success_response_items.next(),
+        ) {
+            (None, _) | (_, Some(_)) => return None,
+            (Some(success), None) => success,
+        };
+
+        let typ = self.type_space.get_type(success_response).ok()?;
+        let details = match typ.details() {
+            typify::TypeDetails::Struct(details) => details,
+            _ => return None,
+        };
+
+        let properties = details.properties().collect::<HashMap<_, _>>();
+
+        // There should be exactly two properties: items and next_page
+        if properties.len() != 2 {
+            return None;
+        }
+
+        // We need a next_page property that's an Option<String>.
+        if let typify::TypeDetails::Option(ref opt_id) = self
+            .type_space
+            .get_type(properties.get("next_page")?)
+            .ok()?
+            .details()
+        {
+            if !matches!(
+                self.type_space.get_type(opt_id).ok()?.details(),
+                typify::TypeDetails::Builtin("String")
+            ) {
+                return None;
+            }
+        } else {
+            return None;
+        }
+
+        match self
+            .type_space
+            .get_type(properties.get("items")?)
+            .ok()?
+            .details()
+        {
+            typify::TypeDetails::Array(item) => {
+                Some(DropshotPagination { item })
+            }
+            _ => None,
+        }
     }
 
     pub fn generate_text(&mut self, spec: &OpenAPI) -> Result<String> {
@@ -665,10 +921,10 @@ impl Generator {
         let content = rustfmt_wrapper::rustfmt(output).unwrap();
 
         Ok(if cfg!(not(windows)) {
-            let regex = regex::Regex::new(r#"(})(\n\s*[^} ])"#).unwrap();
+            let regex = regex::Regex::new(r#"(})(\n\s{0,8}[^} ])"#).unwrap();
             regex.replace_all(&content, "$1\n$2").to_string()
         } else {
-            let regex = regex::Regex::new(r#"(})(\r\n\s*[^} ])"#).unwrap();
+            let regex = regex::Regex::new(r#"(})(\r\n\s{0,8}[^} ])"#).unwrap();
             regex.replace_all(&content, "$1\r\n$2").to_string()
         })
     }
@@ -687,6 +943,9 @@ impl Generator {
         }
         if self.type_space.uses_chrono() {
             deps.push("chrono = { version = \"0.4\", features = [\"serde\"] }")
+        }
+        if self.uses_futures {
+            deps.push("futures = \"0.3\"")
         }
         if self.type_space.uses_serde_json() {
             deps.push("serde_json = \"1.0\"")
