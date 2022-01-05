@@ -123,16 +123,16 @@ impl Client {
     }
 
     #[doc = "enrol: POST /enrol"]
-    pub async fn enrol(&self, body: &types::EnrolBody) -> Result<()> {
+    pub async fn enrol<'a>(&'a self, body: &'a types::EnrolBody) -> Result<reqwest::Response> {
         let url = format!("{}/enrol", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "global_jobs: GET /global/jobs"]
-    pub async fn global_jobs(&self) -> Result<types::GlobalJobsResult> {
+    pub async fn global_jobs<'a>(&'a self) -> Result<types::GlobalJobsResult> {
         let url = format!("{}/global/jobs", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -141,7 +141,7 @@ impl Client {
     }
 
     #[doc = "ping: GET /ping"]
-    pub async fn ping(&self) -> Result<types::PingResult> {
+    pub async fn ping<'a>(&'a self) -> Result<types::PingResult> {
         let url = format!("{}/ping", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -150,9 +150,9 @@ impl Client {
     }
 
     #[doc = "report_finish: POST /report/finish"]
-    pub async fn report_finish(
-        &self,
-        body: &types::ReportFinishBody,
+    pub async fn report_finish<'a>(
+        &'a self,
+        body: &'a types::ReportFinishBody,
     ) -> Result<types::ReportResult> {
         let url = format!("{}/report/finish", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
@@ -162,9 +162,9 @@ impl Client {
     }
 
     #[doc = "report_output: POST /report/output"]
-    pub async fn report_output(
-        &self,
-        body: &types::ReportOutputBody,
+    pub async fn report_output<'a>(
+        &'a self,
+        body: &'a types::ReportOutputBody,
     ) -> Result<types::ReportResult> {
         let url = format!("{}/report/output", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
@@ -174,7 +174,10 @@ impl Client {
     }
 
     #[doc = "report_start: POST /report/start"]
-    pub async fn report_start(&self, body: &types::ReportStartBody) -> Result<types::ReportResult> {
+    pub async fn report_start<'a>(
+        &'a self,
+        body: &'a types::ReportStartBody,
+    ) -> Result<types::ReportResult> {
         let url = format!("{}/report/start", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;

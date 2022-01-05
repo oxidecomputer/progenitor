@@ -187,13 +187,21 @@
           },
           "required": true
         },
-        "responses": {}
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
       }
     },
     "/logout": {
       "post": {
         "operationId": "logout",
-        "responses": {}
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
       }
     },
     "/organizations": {
@@ -975,6 +983,36 @@
         "operationId": "instance_disks_get",
         "parameters": [
           {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "nullable": true,
+              "description": "Maximum number of items returned by a single call",
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "schema": {
+              "nullable": true,
+              "description": "Token returned by previous call to retreive the subsequent page",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          },
+          {
             "in": "path",
             "name": "instance_name",
             "required": true,
@@ -1008,11 +1046,64 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Array_of_DiskAttachment",
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DiskAttachment"
-                  }
+                  "$ref": "#/components/schemas/DiskResultsPage"
+                }
+              }
+            }
+          }
+        },
+        "x-dropshot-pagination": true
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach": {
+      "post": {
+        "operationId": "instance_disks_attach",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiskIdentifier"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "successfully enqueued operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Disk"
                 }
               }
             }
@@ -1020,20 +1111,10 @@
         }
       }
     },
-    "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/{disk_name}": {
-      "get": {
-        "description": "Fetch a description of the attachment of this disk to this instance.",
-        "operationId": "instance_disks_get_disk",
+    "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach": {
+      "post": {
+        "operationId": "instance_disks_detach",
         "parameters": [
-          {
-            "in": "path",
-            "name": "disk_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          },
           {
             "in": "path",
             "name": "instance_name",
@@ -1062,117 +1143,26 @@
             "style": "simple"
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiskIdentifier"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
-          "200": {
-            "description": "successful operation",
+          "202": {
+            "description": "successfully enqueued operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DiskAttachment"
+                  "$ref": "#/components/schemas/Disk"
                 }
               }
             }
-          }
-        }
-      },
-      "put": {
-        "description": "Attach a disk to this instance.",
-        "operationId": "instance_disks_put_disk",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "disk_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "path",
-            "name": "instance_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "path",
-            "name": "organization_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "path",
-            "name": "project_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "successful creation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiskAttachment"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "description": "Detach a disk from this instance.",
-        "operationId": "instance_disks_delete_disk",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "disk_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "path",
-            "name": "instance_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "path",
-            "name": "organization_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "path",
-            "name": "project_name",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "successful deletion"
           }
         }
       }
@@ -1522,8 +1512,8 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "successful operation"
+          "204": {
+            "description": "resource updated"
           }
         }
       },
@@ -1939,8 +1929,8 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "successful operation"
+          "204": {
+            "description": "resource updated"
           }
         }
       },
@@ -2268,8 +2258,8 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "successful operation"
+          "204": {
+            "description": "resource updated"
           }
         }
       },
@@ -2570,8 +2560,8 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "successful operation"
+          "204": {
+            "description": "resource updated"
           }
         }
       },
@@ -2619,6 +2609,166 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/ips": {
+      "get": {
+        "description": "List IP addresses on a VPC subnet.",
+        "operationId": "subnets_ips_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "nullable": true,
+              "description": "Maximum number of items returned by a single call",
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "schema": {
+              "nullable": true,
+              "description": "Token returned by previous call to retreive the subsequent page",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "subnet_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "vpc_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkInterfaceResultsPage"
+                }
+              }
+            }
+          }
+        },
+        "x-dropshot-pagination": true
+      }
+    },
+    "/roles": {
+      "get": {
+        "description": "List the built-in roles",
+        "operationId": "roles_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "nullable": true,
+              "description": "Maximum number of items returned by a single call",
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "schema": {
+              "nullable": true,
+              "description": "Token returned by previous call to retreive the subsequent page",
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleResultsPage"
+                }
+              }
+            }
+          }
+        },
+        "x-dropshot-pagination": true
+      }
+    },
+    "/roles/{role_name}": {
+      "get": {
+        "description": "Fetch a specific built-in role",
+        "operationId": "roles_get_role",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "role_name",
+            "required": true,
+            "schema": {
+              "description": "The built-in role's unique name.",
+              "type": "string"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
           }
         }
       }
@@ -2702,6 +2852,49 @@
             }
           }
         }
+      }
+    },
+    "/timeseries/schema": {
+      "get": {
+        "description": "List all timeseries schema",
+        "operationId": "timeseries_schema_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "nullable": true,
+              "description": "Maximum number of items returned by a single call",
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "schema": {
+              "nullable": true,
+              "description": "Token returned by previous call to retreive the subsequent page",
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeseriesSchemaResultsPage"
+                }
+              }
+            }
+          }
+        },
+        "x-dropshot-pagination": true
       }
     },
     "/users": {
@@ -2793,6 +2986,21 @@
         "format": "uint64",
         "minimum": 0
       },
+      "DatumType": {
+        "description": "The type of an individual datum of a metric.",
+        "type": "string",
+        "enum": [
+          "Bool",
+          "I64",
+          "F64",
+          "String",
+          "Bytes",
+          "CumulativeI64",
+          "CumulativeF64",
+          "HistogramI64",
+          "HistogramF64"
+        ]
+      },
       "Disk": {
         "description": "Client view of an [`Disk`]",
         "type": "object",
@@ -2855,32 +3063,6 @@
           "timeModified"
         ]
       },
-      "DiskAttachment": {
-        "description": "Describes a Disk's attachment to an Instance",
-        "type": "object",
-        "properties": {
-          "diskId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "diskName": {
-            "$ref": "#/components/schemas/Name"
-          },
-          "diskState": {
-            "$ref": "#/components/schemas/DiskState"
-          },
-          "instanceId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "required": [
-          "diskId",
-          "diskName",
-          "diskState",
-          "instanceId"
-        ]
-      },
       "DiskCreate": {
         "description": "Create-time parameters for a [`Disk`]",
         "type": "object",
@@ -2910,6 +3092,18 @@
           "description",
           "name",
           "size"
+        ]
+      },
+      "DiskIdentifier": {
+        "description": "Parameters for the [`Disk`] to be attached or detached to an instance",
+        "type": "object",
+        "properties": {
+          "disk": {
+            "$ref": "#/components/schemas/Name"
+          }
+        },
+        "required": [
+          "disk"
         ]
       },
       "DiskResultsPage": {
@@ -3056,6 +3250,45 @@
               "state"
             ]
           }
+        ]
+      },
+      "FieldSchema": {
+        "description": "The name and type information for a field of a timeseries schema.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/FieldSource"
+          },
+          "ty": {
+            "$ref": "#/components/schemas/FieldType"
+          }
+        },
+        "required": [
+          "name",
+          "source",
+          "ty"
+        ]
+      },
+      "FieldSource": {
+        "description": "The source from which a field is derived, the target or metric.",
+        "type": "string",
+        "enum": [
+          "Target",
+          "Metric"
+        ]
+      },
+      "FieldType": {
+        "description": "The `FieldType` identifies the data type of a target or metric field.",
+        "type": "string",
+        "enum": [
+          "String",
+          "I64",
+          "IpAddr",
+          "Uuid",
+          "Bool"
         ]
       },
       "IdentityMetadata": {
@@ -3279,12 +3512,91 @@
           "username"
         ]
       },
+      "MacAddr": {
+        "title": "A MAC address",
+        "description": "A Media Access Control address, in EUI-48 format",
+        "type": "string",
+        "pattern": "^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$",
+        "minLength": 17,
+        "maxLength": 17
+      },
       "Name": {
         "title": "A name used in the API",
         "description": "Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'.",
         "type": "string",
         "pattern": "[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])",
         "maxLength": 63
+      },
+      "NetworkInterface": {
+        "description": "A `NetworkInterface` represents a virtual network interface device.",
+        "type": "object",
+        "properties": {
+          "identity": {
+            "description": "common identifying metadata",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IdentityMetadata"
+              }
+            ]
+          },
+          "instance_id": {
+            "description": "The Instance to which the interface belongs.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "ip": {
+            "description": "The IP address assigned to this interface.",
+            "type": "string",
+            "format": "ip"
+          },
+          "mac": {
+            "description": "The MAC address assigned to this interface.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MacAddr"
+              }
+            ]
+          },
+          "subnet_id": {
+            "description": "The subnet to which the interface belongs.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "vpc_id": {
+            "description": "The VPC to which the interface belongs.",
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "identity",
+          "instance_id",
+          "ip",
+          "mac",
+          "subnet_id",
+          "vpc_id"
+        ]
+      },
+      "NetworkInterfaceResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NetworkInterface"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
       },
       "Organization": {
         "description": "Client view of an [`Organization`]",
@@ -3502,6 +3814,50 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Rack"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "Role": {
+        "description": "Client view of a [`Role`]",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/RoleName"
+          }
+        },
+        "required": [
+          "description",
+          "name"
+        ]
+      },
+      "RoleName": {
+        "title": "A name for a built-in role",
+        "description": "Role names consist of two string components separated by dot (\".\").",
+        "type": "string",
+        "pattern": "[a-z-]+\\.[a-z-]+",
+        "maxLength": 63
+      },
+      "RoleResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
             }
           },
           "next_page": {
@@ -4025,6 +4381,61 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Sled"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "TimeseriesName": {
+        "title": "The name of a timeseries",
+        "description": "Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words.",
+        "type": "string",
+        "pattern": "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)"
+      },
+      "TimeseriesSchema": {
+        "description": "The schema for a timeseries.\n\nThis includes the name of the timeseries, as well as the datum type of its metric and the schema for each field.",
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "datum_type": {
+            "$ref": "#/components/schemas/DatumType"
+          },
+          "field_schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldSchema"
+            }
+          },
+          "timeseries_name": {
+            "$ref": "#/components/schemas/TimeseriesName"
+          }
+        },
+        "required": [
+          "created",
+          "datum_type",
+          "field_schema",
+          "timeseries_name"
+        ]
+      },
+      "TimeseriesSchemaResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeseriesSchema"
             }
           },
           "next_page": {

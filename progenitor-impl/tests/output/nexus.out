@@ -30,6 +30,36 @@ pub mod types {
         }
     }
 
+    #[doc = "The type of an individual datum of a metric."]
+    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum DatumType {
+        Bool,
+        I64,
+        F64,
+        String,
+        Bytes,
+        CumulativeI64,
+        CumulativeF64,
+        HistogramI64,
+        HistogramF64,
+    }
+
+    impl ToString for DatumType {
+        fn to_string(&self) -> String {
+            match self {
+                DatumType::Bool => "Bool".to_string(),
+                DatumType::I64 => "I64".to_string(),
+                DatumType::F64 => "F64".to_string(),
+                DatumType::String => "String".to_string(),
+                DatumType::Bytes => "Bytes".to_string(),
+                DatumType::CumulativeI64 => "CumulativeI64".to_string(),
+                DatumType::CumulativeF64 => "CumulativeF64".to_string(),
+                DatumType::HistogramI64 => "HistogramI64".to_string(),
+                DatumType::HistogramF64 => "HistogramF64".to_string(),
+            }
+        }
+    }
+
     #[doc = "Client view of an [`Disk`]"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Disk {
@@ -58,19 +88,6 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Describes a Disk's attachment to an Instance"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct DiskAttachment {
-        #[serde(rename = "diskId")]
-        pub disk_id: uuid::Uuid,
-        #[serde(rename = "diskName")]
-        pub disk_name: Name,
-        #[serde(rename = "diskState")]
-        pub disk_state: DiskState,
-        #[serde(rename = "instanceId")]
-        pub instance_id: uuid::Uuid,
-    }
-
     #[doc = "Create-time parameters for a [`Disk`]"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskCreate {
@@ -84,6 +101,12 @@ pub mod types {
             skip_serializing_if = "Option::is_none"
         )]
         pub snapshot_id: Option<uuid::Uuid>,
+    }
+
+    #[doc = "Parameters for the [`Disk`] to be attached or detached to an instance"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct DiskIdentifier {
+        pub disk: Name,
     }
 
     #[doc = "A single page of results"]
@@ -113,6 +136,52 @@ pub mod types {
         Destroyed,
         #[serde(rename = "faulted")]
         Faulted,
+    }
+
+    #[doc = "The name and type information for a field of a timeseries schema."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct FieldSchema {
+        pub name: String,
+        pub source: FieldSource,
+        pub ty: FieldType,
+    }
+
+    #[doc = "The source from which a field is derived, the target or metric."]
+    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum FieldSource {
+        Target,
+        Metric,
+    }
+
+    impl ToString for FieldSource {
+        fn to_string(&self) -> String {
+            match self {
+                FieldSource::Target => "Target".to_string(),
+                FieldSource::Metric => "Metric".to_string(),
+            }
+        }
+    }
+
+    #[doc = "The `FieldType` identifies the data type of a target or metric field."]
+    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum FieldType {
+        String,
+        I64,
+        IpAddr,
+        Uuid,
+        Bool,
+    }
+
+    impl ToString for FieldType {
+        fn to_string(&self) -> String {
+            match self {
+                FieldType::String => "String".to_string(),
+                FieldType::I64 => "I64".to_string(),
+                FieldType::IpAddr => "IpAddr".to_string(),
+                FieldType::Uuid => "Uuid".to_string(),
+                FieldType::Bool => "Bool".to_string(),
+            }
+        }
     }
 
     #[doc = "Supported set of sort modes for scanning by id only.\n\nCurrently, we only support scanning in ascending order."]
@@ -277,6 +346,16 @@ pub mod types {
         pub username: String,
     }
 
+    #[doc = "A Media Access Control address, in EUI-48 format"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct MacAddr(pub String);
+    impl std::ops::Deref for MacAddr {
+        type Target = String;
+        fn deref(&self) -> &Self::Target {
+            &self.0
+        }
+    }
+
     #[doc = "Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Name(pub String);
@@ -321,6 +400,31 @@ pub mod types {
                 NameSortMode::NameAscending => "name-ascending".to_string(),
             }
         }
+    }
+
+    #[doc = "A `NetworkInterface` represents a virtual network interface device."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct NetworkInterface {
+        pub identity: IdentityMetadata,
+        #[doc = "The Instance to which the interface belongs."]
+        pub instance_id: uuid::Uuid,
+        #[doc = "The IP address assigned to this interface."]
+        pub ip: String,
+        pub mac: MacAddr,
+        #[doc = "The subnet to which the interface belongs."]
+        pub subnet_id: uuid::Uuid,
+        #[doc = "The VPC to which the interface belongs."]
+        pub vpc_id: uuid::Uuid,
+    }
+
+    #[doc = "A single page of results"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct NetworkInterfaceResultsPage {
+        #[doc = "list of items on this page of results"]
+        pub items: Vec<NetworkInterface>,
+        #[doc = "token used to fetch the next page of results (if any)"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
     }
 
     #[doc = "Client view of an [`Organization`]"]
@@ -420,6 +524,33 @@ pub mod types {
     pub struct RackResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Rack>,
+        #[doc = "token used to fetch the next page of results (if any)"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    #[doc = "Client view of a [`Role`]"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Role {
+        pub description: String,
+        pub name: RoleName,
+    }
+
+    #[doc = "Role names consist of two string components separated by dot (\".\")."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct RoleName(pub String);
+    impl std::ops::Deref for RoleName {
+        type Target = String;
+        fn deref(&self) -> &Self::Target {
+            &self.0
+        }
+    }
+
+    #[doc = "A single page of results"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct RoleResultsPage {
+        #[doc = "list of items on this page of results"]
+        pub items: Vec<Role>,
         #[doc = "token used to fetch the next page of results (if any)"]
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
@@ -580,6 +711,35 @@ pub mod types {
     pub struct SledResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Sled>,
+        #[doc = "token used to fetch the next page of results (if any)"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    #[doc = "Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct TimeseriesName(pub String);
+    impl std::ops::Deref for TimeseriesName {
+        type Target = String;
+        fn deref(&self) -> &Self::Target {
+            &self.0
+        }
+    }
+
+    #[doc = "The schema for a timeseries.\n\nThis includes the name of the timeseries, as well as the datum type of its metric and the schema for each field."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct TimeseriesSchema {
+        pub created: chrono::DateTime<chrono::offset::Utc>,
+        pub datum_type: DatumType,
+        pub field_schema: Vec<FieldSchema>,
+        pub timeseries_name: TimeseriesName,
+    }
+
+    #[doc = "A single page of results"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct TimeseriesSchemaResultsPage {
+        #[doc = "list of items on this page of results"]
+        pub items: Vec<TimeseriesSchema>,
         #[doc = "token used to fetch the next page of results (if any)"]
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
@@ -976,10 +1136,10 @@ impl Client {
     }
 
     #[doc = "List racks in the system.\n\nhardware_racks_get: GET /hardware/racks"]
-    pub async fn hardware_racks_get(
-        &self,
+    pub async fn hardware_racks_get<'a>(
+        &'a self,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<types::RackResultsPage> {
         let url = format!("{}/hardware/racks", self.baseurl,);
@@ -1002,8 +1162,44 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List racks in the system.\n\nreturns a Stream<Item = Rack> by making successive calls to hardware_racks_get"]
+    pub fn hardware_racks_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::IdSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Rack>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.hardware_racks_get(limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.hardware_racks_get(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Fetch information about a particular rack.\n\nhardware_racks_get_rack: GET /hardware/racks/{rack_id}"]
-    pub async fn hardware_racks_get_rack(&self, rack_id: &uuid::Uuid) -> Result<types::Rack> {
+    pub async fn hardware_racks_get_rack<'a>(
+        &'a self,
+        rack_id: &'a uuid::Uuid,
+    ) -> Result<types::Rack> {
         let url = format!(
             "{}/hardware/racks/{}",
             self.baseurl,
@@ -1016,10 +1212,10 @@ impl Client {
     }
 
     #[doc = "List sleds in the system.\n\nhardware_sleds_get: GET /hardware/sleds"]
-    pub async fn hardware_sleds_get(
-        &self,
+    pub async fn hardware_sleds_get<'a>(
+        &'a self,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<types::SledResultsPage> {
         let url = format!("{}/hardware/sleds", self.baseurl,);
@@ -1042,8 +1238,44 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List sleds in the system.\n\nreturns a Stream<Item = Sled> by making successive calls to hardware_sleds_get"]
+    pub fn hardware_sleds_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::IdSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Sled>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.hardware_sleds_get(limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.hardware_sleds_get(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Fetch information about a sled in the system.\n\nhardware_sleds_get_sled: GET /hardware/sleds/{sled_id}"]
-    pub async fn hardware_sleds_get_sled(&self, sled_id: &uuid::Uuid) -> Result<types::Sled> {
+    pub async fn hardware_sleds_get_sled<'a>(
+        &'a self,
+        sled_id: &'a uuid::Uuid,
+    ) -> Result<types::Sled> {
         let url = format!(
             "{}/hardware/sleds/{}",
             self.baseurl,
@@ -1056,7 +1288,10 @@ impl Client {
     }
 
     #[doc = "spoof_login: POST /login"]
-    pub async fn spoof_login(&self, body: &types::LoginParams) -> Result<reqwest::Response> {
+    pub async fn spoof_login<'a>(
+        &'a self,
+        body: &'a types::LoginParams,
+    ) -> Result<reqwest::Response> {
         let url = format!("{}/login", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
@@ -1065,7 +1300,7 @@ impl Client {
     }
 
     #[doc = "logout: POST /logout"]
-    pub async fn logout(&self) -> Result<reqwest::Response> {
+    pub async fn logout<'a>(&'a self) -> Result<reqwest::Response> {
         let url = format!("{}/logout", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
@@ -1074,10 +1309,10 @@ impl Client {
     }
 
     #[doc = "List all organizations.\n\norganizations_get: GET /organizations"]
-    pub async fn organizations_get(
-        &self,
+    pub async fn organizations_get<'a>(
+        &'a self,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<types::OrganizationResultsPage> {
         let url = format!("{}/organizations", self.baseurl,);
@@ -1100,10 +1335,43 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List all organizations.\n\nreturns a Stream<Item = Organization> by making successive calls to organizations_get"]
+    pub fn organizations_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameOrIdSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Organization>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.organizations_get(limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.organizations_get(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Create a new organization.\n\norganizations_post: POST /organizations"]
-    pub async fn organizations_post(
-        &self,
-        body: &types::OrganizationCreate,
+    pub async fn organizations_post<'a>(
+        &'a self,
+        body: &'a types::OrganizationCreate,
     ) -> Result<types::Organization> {
         let url = format!("{}/organizations", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
@@ -1113,9 +1381,9 @@ impl Client {
     }
 
     #[doc = "Fetch a specific organization\n\norganizations_get_organization: GET /organizations/{organization_name}"]
-    pub async fn organizations_get_organization(
-        &self,
-        organization_name: &types::Name,
+    pub async fn organizations_get_organization<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
     ) -> Result<types::Organization> {
         let url = format!(
             "{}/organizations/{}",
@@ -1129,10 +1397,10 @@ impl Client {
     }
 
     #[doc = "Update a specific organization.\n * TODO-correctness: Is it valid for PUT to accept application/json that's a subset of what the resource actually represents?  If not, is that a problem? (HTTP may require that this be idempotent.)  If so, can we get around that having this be a slightly different content-type (e.g., \"application/json-patch\")?  We should see what other APIs do.\n\norganizations_put_organization: PUT /organizations/{organization_name}"]
-    pub async fn organizations_put_organization(
-        &self,
-        organization_name: &types::Name,
-        body: &types::OrganizationUpdate,
+    pub async fn organizations_put_organization<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        body: &'a types::OrganizationUpdate,
     ) -> Result<types::Organization> {
         let url = format!(
             "{}/organizations/{}",
@@ -1146,10 +1414,10 @@ impl Client {
     }
 
     #[doc = "Delete a specific organization.\n\norganizations_delete_organization: DELETE /organizations/{organization_name}"]
-    pub async fn organizations_delete_organization(
-        &self,
-        organization_name: &types::Name,
-    ) -> Result<()> {
+    pub async fn organizations_delete_organization<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
@@ -1158,15 +1426,15 @@ impl Client {
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "List all projects.\n\norganization_projects_get: GET /organizations/{organization_name}/projects"]
-    pub async fn organization_projects_get(
-        &self,
-        organization_name: &types::Name,
+    pub async fn organization_projects_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<types::ProjectResultsPage> {
         let url = format!(
@@ -1193,11 +1461,50 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List all projects.\n\nreturns a Stream<Item = Project> by making successive calls to organization_projects_get"]
+    pub fn organization_projects_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameOrIdSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Project>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.organization_projects_get(organization_name, limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.organization_projects_get(
+                            organization_name,
+                            None,
+                            state.as_deref(),
+                            None,
+                        )
+                        .map_ok(|page| {
+                            Some((
+                                futures::stream::iter(page.items.into_iter().map(Ok)),
+                                page.next_page,
+                            ))
+                        })
+                        .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Create a new project.\n\norganization_projects_post: POST /organizations/{organization_name}/projects"]
-    pub async fn organization_projects_post(
-        &self,
-        organization_name: &types::Name,
-        body: &types::ProjectCreate,
+    pub async fn organization_projects_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        body: &'a types::ProjectCreate,
     ) -> Result<types::Project> {
         let url = format!(
             "{}/organizations/{}/projects",
@@ -1211,10 +1518,10 @@ impl Client {
     }
 
     #[doc = "Fetch a specific project\n\norganization_projects_get_project: GET /organizations/{organization_name}/projects/{project_name}"]
-    pub async fn organization_projects_get_project(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
+    pub async fn organization_projects_get_project<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
     ) -> Result<types::Project> {
         let url = format!(
             "{}/organizations/{}/projects/{}",
@@ -1229,11 +1536,11 @@ impl Client {
     }
 
     #[doc = "Update a specific project.\n * TODO-correctness: Is it valid for PUT to accept application/json that's a subset of what the resource actually represents?  If not, is that a problem? (HTTP may require that this be idempotent.)  If so, can we get around that having this be a slightly different content-type (e.g., \"application/json-patch\")?  We should see what other APIs do.\n\norganization_projects_put_project: PUT /organizations/{organization_name}/projects/{project_name}"]
-    pub async fn organization_projects_put_project(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        body: &types::ProjectUpdate,
+    pub async fn organization_projects_put_project<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        body: &'a types::ProjectUpdate,
     ) -> Result<types::Project> {
         let url = format!(
             "{}/organizations/{}/projects/{}",
@@ -1248,11 +1555,11 @@ impl Client {
     }
 
     #[doc = "Delete a specific project.\n\norganization_projects_delete_project: DELETE /organizations/{organization_name}/projects/{project_name}"]
-    pub async fn organization_projects_delete_project(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-    ) -> Result<()> {
+    pub async fn organization_projects_delete_project<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
@@ -1262,16 +1569,16 @@ impl Client {
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "List disks in a project.\n\nproject_disks_get: GET /organizations/{organization_name}/projects/{project_name}/disks"]
-    pub async fn project_disks_get(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
+    pub async fn project_disks_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<types::DiskResultsPage> {
         let url = format!(
@@ -1299,12 +1606,53 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List disks in a project.\n\nreturns a Stream<Item = Disk> by making successive calls to project_disks_get"]
+    pub fn project_disks_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Disk>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.project_disks_get(organization_name, project_name, limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.project_disks_get(
+                            organization_name,
+                            project_name,
+                            None,
+                            state.as_deref(),
+                            None,
+                        )
+                        .map_ok(|page| {
+                            Some((
+                                futures::stream::iter(page.items.into_iter().map(Ok)),
+                                page.next_page,
+                            ))
+                        })
+                        .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Create a disk in a project.\n * TODO-correctness See note about instance create.  This should be async.\n\nproject_disks_post: POST /organizations/{organization_name}/projects/{project_name}/disks"]
-    pub async fn project_disks_post(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        body: &types::DiskCreate,
+    pub async fn project_disks_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        body: &'a types::DiskCreate,
     ) -> Result<types::Disk> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks",
@@ -1319,11 +1667,11 @@ impl Client {
     }
 
     #[doc = "Fetch a single disk in a project.\n\nproject_disks_get_disk: GET /organizations/{organization_name}/projects/{project_name}/disks/{disk_name}"]
-    pub async fn project_disks_get_disk(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        disk_name: &types::Name,
+    pub async fn project_disks_get_disk<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        disk_name: &'a types::Name,
     ) -> Result<types::Disk> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}",
@@ -1339,12 +1687,12 @@ impl Client {
     }
 
     #[doc = "Delete a disk from a project.\n\nproject_disks_delete_disk: DELETE /organizations/{organization_name}/projects/{project_name}/disks/{disk_name}"]
-    pub async fn project_disks_delete_disk(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        disk_name: &types::Name,
-    ) -> Result<()> {
+    pub async fn project_disks_delete_disk<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        disk_name: &'a types::Name,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}",
             self.baseurl,
@@ -1355,16 +1703,16 @@ impl Client {
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "List instances in a project.\n\nproject_instances_get: GET /organizations/{organization_name}/projects/{project_name}/instances"]
-    pub async fn project_instances_get(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
+    pub async fn project_instances_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<types::InstanceResultsPage> {
         let url = format!(
@@ -1392,12 +1740,53 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List instances in a project.\n\nreturns a Stream<Item = Instance> by making successive calls to project_instances_get"]
+    pub fn project_instances_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Instance>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.project_instances_get(organization_name, project_name, limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.project_instances_get(
+                            organization_name,
+                            project_name,
+                            None,
+                            state.as_deref(),
+                            None,
+                        )
+                        .map_ok(|page| {
+                            Some((
+                                futures::stream::iter(page.items.into_iter().map(Ok)),
+                                page.next_page,
+                            ))
+                        })
+                        .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Create an instance in a project.\n * TODO-correctness This is supposed to be async.  Is that right?  We can create the instance immediately -- it's just not booted yet.  Maybe the boot operation is what's a separate operation_id.  What about the response code (201 Created vs 202 Accepted)?  Is that orthogonal?  Things can return a useful response, including an operation id, with either response code.  Maybe a \"reboot\" operation would return a 202 Accepted because there's no actual resource created?\n\nproject_instances_post: POST /organizations/{organization_name}/projects/{project_name}/instances"]
-    pub async fn project_instances_post(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        body: &types::InstanceCreate,
+    pub async fn project_instances_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        body: &'a types::InstanceCreate,
     ) -> Result<types::Instance> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances",
@@ -1412,11 +1801,11 @@ impl Client {
     }
 
     #[doc = "Get an instance in a project.\n\nproject_instances_get_instance: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}"]
-    pub async fn project_instances_get_instance(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
+    pub async fn project_instances_get_instance<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
     ) -> Result<types::Instance> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}",
@@ -1432,12 +1821,12 @@ impl Client {
     }
 
     #[doc = "Delete an instance from a project.\n\nproject_instances_delete_instance: DELETE /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}"]
-    pub async fn project_instances_delete_instance(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
-    ) -> Result<()> {
+    pub async fn project_instances_delete_instance<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}",
             self.baseurl,
@@ -1448,16 +1837,19 @@ impl Client {
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "List disks attached to this instance.\n\ninstance_disks_get: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks"]
-    pub async fn instance_disks_get(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
-    ) -> Result<Vec<types::DiskAttachment>> {
+    pub async fn instance_disks_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<types::DiskResultsPage> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks",
             self.baseurl,
@@ -1465,84 +1857,123 @@ impl Client {
             progenitor_support::encode_path(&project_name.to_string()),
             progenitor_support::encode_path(&instance_name.to_string()),
         );
-        let request = self.client.get(url).build()?;
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
-    #[doc = "Fetch a description of the attachment of this disk to this instance.\n\ninstance_disks_get_disk: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/{disk_name}"]
-    pub async fn instance_disks_get_disk(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
-        disk_name: &types::Name,
-    ) -> Result<types::DiskAttachment> {
+    #[doc = "List disks attached to this instance.\n\nreturns a Stream<Item = Disk> by making successive calls to instance_disks_get"]
+    pub fn instance_disks_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Disk>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.instance_disks_get(
+            organization_name,
+            project_name,
+            instance_name,
+            limit,
+            None,
+            sort_by,
+        )
+        .map_ok(move |page| {
+            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                if state.is_none() {
+                    Ok(None)
+                } else {
+                    self.instance_disks_get(
+                        organization_name,
+                        project_name,
+                        instance_name,
+                        None,
+                        state.as_deref(),
+                        None,
+                    )
+                    .map_ok(|page| {
+                        Some((
+                            futures::stream::iter(page.items.into_iter().map(Ok)),
+                            page.next_page,
+                        ))
+                    })
+                    .await
+                }
+            })
+            .try_flatten();
+            first.chain(rest)
+        })
+        .try_flatten_stream()
+        .boxed()
+    }
+
+    #[doc = "instance_disks_attach: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach"]
+    pub async fn instance_disks_attach<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        body: &'a types::DiskIdentifier,
+    ) -> Result<types::Disk> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/{}",
+            "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
             self.baseurl,
             progenitor_support::encode_path(&organization_name.to_string()),
             progenitor_support::encode_path(&project_name.to_string()),
             progenitor_support::encode_path(&instance_name.to_string()),
-            progenitor_support::encode_path(&disk_name.to_string()),
         );
-        let request = self.client.get(url).build()?;
+        let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
         Ok(res.json().await?)
     }
 
-    #[doc = "Attach a disk to this instance.\n\ninstance_disks_put_disk: PUT /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/{disk_name}"]
-    pub async fn instance_disks_put_disk(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
-        disk_name: &types::Name,
-    ) -> Result<types::DiskAttachment> {
+    #[doc = "instance_disks_detach: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach"]
+    pub async fn instance_disks_detach<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        body: &'a types::DiskIdentifier,
+    ) -> Result<types::Disk> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/{}",
+            "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
             self.baseurl,
             progenitor_support::encode_path(&organization_name.to_string()),
             progenitor_support::encode_path(&project_name.to_string()),
             progenitor_support::encode_path(&instance_name.to_string()),
-            progenitor_support::encode_path(&disk_name.to_string()),
         );
-        let request = self.client.put(url).build()?;
+        let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
         Ok(res.json().await?)
-    }
-
-    #[doc = "Detach a disk from this instance.\n\ninstance_disks_delete_disk: DELETE /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/{disk_name}"]
-    pub async fn instance_disks_delete_disk(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
-        disk_name: &types::Name,
-    ) -> Result<()> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/{}",
-            self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
-            progenitor_support::encode_path(&disk_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
-        let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(())
     }
 
     #[doc = "Reboot an instance.\n\nproject_instances_instance_reboot: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot"]
-    pub async fn project_instances_instance_reboot(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
+    pub async fn project_instances_instance_reboot<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
     ) -> Result<types::Instance> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/reboot",
@@ -1558,11 +1989,11 @@ impl Client {
     }
 
     #[doc = "Boot an instance.\n\nproject_instances_instance_start: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start"]
-    pub async fn project_instances_instance_start(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
+    pub async fn project_instances_instance_start<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
     ) -> Result<types::Instance> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/start",
@@ -1578,11 +2009,11 @@ impl Client {
     }
 
     #[doc = "Halt an instance.\n\nproject_instances_instance_stop: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop"]
-    pub async fn project_instances_instance_stop(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        instance_name: &types::Name,
+    pub async fn project_instances_instance_stop<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
     ) -> Result<types::Instance> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/stop",
@@ -1598,12 +2029,12 @@ impl Client {
     }
 
     #[doc = "List VPCs in a project.\n\nproject_vpcs_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs"]
-    pub async fn project_vpcs_get(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
+    pub async fn project_vpcs_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<types::VpcResultsPage> {
         let url = format!(
@@ -1631,12 +2062,53 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List VPCs in a project.\n\nreturns a Stream<Item = Vpc> by making successive calls to project_vpcs_get"]
+    pub fn project_vpcs_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Vpc>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.project_vpcs_get(organization_name, project_name, limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.project_vpcs_get(
+                            organization_name,
+                            project_name,
+                            None,
+                            state.as_deref(),
+                            None,
+                        )
+                        .map_ok(|page| {
+                            Some((
+                                futures::stream::iter(page.items.into_iter().map(Ok)),
+                                page.next_page,
+                            ))
+                        })
+                        .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Create a VPC in a project.\n\nproject_vpcs_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs"]
-    pub async fn project_vpcs_post(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        body: &types::VpcCreate,
+    pub async fn project_vpcs_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        body: &'a types::VpcCreate,
     ) -> Result<types::Vpc> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs",
@@ -1651,11 +2123,11 @@ impl Client {
     }
 
     #[doc = "Get a VPC in a project.\n\nproject_vpcs_get_vpc: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
-    pub async fn project_vpcs_get_vpc(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
+    pub async fn project_vpcs_get_vpc<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
     ) -> Result<types::Vpc> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
@@ -1671,13 +2143,13 @@ impl Client {
     }
 
     #[doc = "Update a VPC.\n\nproject_vpcs_put_vpc: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
-    pub async fn project_vpcs_put_vpc(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        body: &types::VpcUpdate,
-    ) -> Result<()> {
+    pub async fn project_vpcs_put_vpc<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        body: &'a types::VpcUpdate,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
@@ -1688,16 +2160,16 @@ impl Client {
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "Delete a vpc from a project.\n\nproject_vpcs_delete_vpc: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
-    pub async fn project_vpcs_delete_vpc(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-    ) -> Result<()> {
+    pub async fn project_vpcs_delete_vpc<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
@@ -1708,17 +2180,17 @@ impl Client {
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "List firewall rules for a VPC.\n\nvpc_firewall_rules_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules"]
-    pub async fn vpc_firewall_rules_get(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
+    pub async fn vpc_firewall_rules_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<types::VpcFirewallRuleResultsPage> {
         let url = format!(
@@ -1747,13 +2219,63 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List firewall rules for a VPC.\n\nreturns a Stream<Item = VpcFirewallRule> by making successive calls to vpc_firewall_rules_get"]
+    pub fn vpc_firewall_rules_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::VpcFirewallRule>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.vpc_firewall_rules_get(
+            organization_name,
+            project_name,
+            vpc_name,
+            limit,
+            None,
+            sort_by,
+        )
+        .map_ok(move |page| {
+            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                if state.is_none() {
+                    Ok(None)
+                } else {
+                    self.vpc_firewall_rules_get(
+                        organization_name,
+                        project_name,
+                        vpc_name,
+                        None,
+                        state.as_deref(),
+                        None,
+                    )
+                    .map_ok(|page| {
+                        Some((
+                            futures::stream::iter(page.items.into_iter().map(Ok)),
+                            page.next_page,
+                        ))
+                    })
+                    .await
+                }
+            })
+            .try_flatten();
+            first.chain(rest)
+        })
+        .try_flatten_stream()
+        .boxed()
+    }
+
     #[doc = "Replace the firewall rules for a VPC\n\nvpc_firewall_rules_put: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules"]
-    pub async fn vpc_firewall_rules_put(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        body: &types::VpcFirewallRuleUpdateParams,
+    pub async fn vpc_firewall_rules_put<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        body: &'a types::VpcFirewallRuleUpdateParams,
     ) -> Result<types::VpcFirewallRuleUpdateResult> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
@@ -1769,13 +2291,13 @@ impl Client {
     }
 
     #[doc = "List VPC Custom and System Routers\n\nvpc_routers_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers"]
-    pub async fn vpc_routers_get(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
+    pub async fn vpc_routers_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<types::VpcRouterResultsPage> {
         let url = format!(
@@ -1804,13 +2326,63 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List VPC Custom and System Routers\n\nreturns a Stream<Item = VpcRouter> by making successive calls to vpc_routers_get"]
+    pub fn vpc_routers_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::VpcRouter>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.vpc_routers_get(
+            organization_name,
+            project_name,
+            vpc_name,
+            limit,
+            None,
+            sort_by,
+        )
+        .map_ok(move |page| {
+            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                if state.is_none() {
+                    Ok(None)
+                } else {
+                    self.vpc_routers_get(
+                        organization_name,
+                        project_name,
+                        vpc_name,
+                        None,
+                        state.as_deref(),
+                        None,
+                    )
+                    .map_ok(|page| {
+                        Some((
+                            futures::stream::iter(page.items.into_iter().map(Ok)),
+                            page.next_page,
+                        ))
+                    })
+                    .await
+                }
+            })
+            .try_flatten();
+            first.chain(rest)
+        })
+        .try_flatten_stream()
+        .boxed()
+    }
+
     #[doc = "Create a VPC Router\n\nvpc_routers_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers"]
-    pub async fn vpc_routers_post(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        body: &types::VpcRouterCreate,
+    pub async fn vpc_routers_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        body: &'a types::VpcRouterCreate,
     ) -> Result<types::VpcRouter> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers",
@@ -1826,12 +2398,12 @@ impl Client {
     }
 
     #[doc = "Get a VPC Router\n\nvpc_routers_get_router: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
-    pub async fn vpc_routers_get_router(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        router_name: &types::Name,
+    pub async fn vpc_routers_get_router<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
     ) -> Result<types::VpcRouter> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
@@ -1848,14 +2420,14 @@ impl Client {
     }
 
     #[doc = "Update a VPC Router\n\nvpc_routers_put_router: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
-    pub async fn vpc_routers_put_router(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        router_name: &types::Name,
-        body: &types::VpcRouterUpdate,
-    ) -> Result<()> {
+    pub async fn vpc_routers_put_router<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
+        body: &'a types::VpcRouterUpdate,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
@@ -1867,17 +2439,17 @@ impl Client {
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "Delete a router from its VPC\n\nvpc_routers_delete_router: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
-    pub async fn vpc_routers_delete_router(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        router_name: &types::Name,
-    ) -> Result<()> {
+    pub async fn vpc_routers_delete_router<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
@@ -1889,18 +2461,18 @@ impl Client {
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "List a Router's routes\n\nrouters_routes_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes"]
-    pub async fn routers_routes_get(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        router_name: &types::Name,
+    pub async fn routers_routes_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<types::RouterRouteResultsPage> {
         let url = format!(
@@ -1930,14 +2502,67 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List a Router's routes\n\nreturns a Stream<Item = RouterRoute> by making successive calls to routers_routes_get"]
+    pub fn routers_routes_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::RouterRoute>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.routers_routes_get(
+            organization_name,
+            project_name,
+            vpc_name,
+            router_name,
+            limit,
+            None,
+            sort_by,
+        )
+        .map_ok(move |page| {
+            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                if state.is_none() {
+                    Ok(None)
+                } else {
+                    self.routers_routes_get(
+                        organization_name,
+                        project_name,
+                        vpc_name,
+                        router_name,
+                        None,
+                        state.as_deref(),
+                        None,
+                    )
+                    .map_ok(|page| {
+                        Some((
+                            futures::stream::iter(page.items.into_iter().map(Ok)),
+                            page.next_page,
+                        ))
+                    })
+                    .await
+                }
+            })
+            .try_flatten();
+            first.chain(rest)
+        })
+        .try_flatten_stream()
+        .boxed()
+    }
+
     #[doc = "Create a VPC Router\n\nrouters_routes_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes"]
-    pub async fn routers_routes_post(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        router_name: &types::Name,
-        body: &types::RouterRouteCreateParams,
+    pub async fn routers_routes_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
+        body: &'a types::RouterRouteCreateParams,
     ) -> Result<types::RouterRoute> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
@@ -1954,13 +2579,13 @@ impl Client {
     }
 
     #[doc = "Get a VPC Router route\n\nrouters_routes_get_route: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
-    pub async fn routers_routes_get_route(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        router_name: &types::Name,
-        route_name: &types::Name,
+    pub async fn routers_routes_get_route<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
+        route_name: &'a types::Name,
     ) -> Result<types::RouterRoute> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
@@ -1978,15 +2603,15 @@ impl Client {
     }
 
     #[doc = "Update a Router route\n\nrouters_routes_put_route: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
-    pub async fn routers_routes_put_route(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        router_name: &types::Name,
-        route_name: &types::Name,
-        body: &types::RouterRouteUpdateParams,
-    ) -> Result<()> {
+    pub async fn routers_routes_put_route<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
+        route_name: &'a types::Name,
+        body: &'a types::RouterRouteUpdateParams,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
@@ -1999,18 +2624,18 @@ impl Client {
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "Delete a route from its router\n\nrouters_routes_delete_route: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
-    pub async fn routers_routes_delete_route(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        router_name: &types::Name,
-        route_name: &types::Name,
-    ) -> Result<()> {
+    pub async fn routers_routes_delete_route<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        router_name: &'a types::Name,
+        route_name: &'a types::Name,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
@@ -2023,17 +2648,17 @@ impl Client {
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "List subnets in a VPC.\n\nvpc_subnets_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets"]
-    pub async fn vpc_subnets_get(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
+    pub async fn vpc_subnets_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<types::VpcSubnetResultsPage> {
         let url = format!(
@@ -2062,13 +2687,63 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List subnets in a VPC.\n\nreturns a Stream<Item = VpcSubnet> by making successive calls to vpc_subnets_get"]
+    pub fn vpc_subnets_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::VpcSubnet>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.vpc_subnets_get(
+            organization_name,
+            project_name,
+            vpc_name,
+            limit,
+            None,
+            sort_by,
+        )
+        .map_ok(move |page| {
+            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                if state.is_none() {
+                    Ok(None)
+                } else {
+                    self.vpc_subnets_get(
+                        organization_name,
+                        project_name,
+                        vpc_name,
+                        None,
+                        state.as_deref(),
+                        None,
+                    )
+                    .map_ok(|page| {
+                        Some((
+                            futures::stream::iter(page.items.into_iter().map(Ok)),
+                            page.next_page,
+                        ))
+                    })
+                    .await
+                }
+            })
+            .try_flatten();
+            first.chain(rest)
+        })
+        .try_flatten_stream()
+        .boxed()
+    }
+
     #[doc = "Create a subnet in a VPC.\n\nvpc_subnets_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets"]
-    pub async fn vpc_subnets_post(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        body: &types::VpcSubnetCreate,
+    pub async fn vpc_subnets_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        body: &'a types::VpcSubnetCreate,
     ) -> Result<types::VpcSubnet> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
@@ -2084,12 +2759,12 @@ impl Client {
     }
 
     #[doc = "Get subnet in a VPC.\n\nvpc_subnets_get_subnet: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
-    pub async fn vpc_subnets_get_subnet(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        subnet_name: &types::Name,
+    pub async fn vpc_subnets_get_subnet<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        subnet_name: &'a types::Name,
     ) -> Result<types::VpcSubnet> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
@@ -2106,14 +2781,14 @@ impl Client {
     }
 
     #[doc = "Update a VPC Subnet.\n\nvpc_subnets_put_subnet: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
-    pub async fn vpc_subnets_put_subnet(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        subnet_name: &types::Name,
-        body: &types::VpcSubnetUpdate,
-    ) -> Result<()> {
+    pub async fn vpc_subnets_put_subnet<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        subnet_name: &'a types::Name,
+        body: &'a types::VpcSubnetUpdate,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
@@ -2125,17 +2800,17 @@ impl Client {
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
     }
 
     #[doc = "Delete a subnet from a VPC.\n\nvpc_subnets_delete_subnet: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
-    pub async fn vpc_subnets_delete_subnet(
-        &self,
-        organization_name: &types::Name,
-        project_name: &types::Name,
-        vpc_name: &types::Name,
-        subnet_name: &types::Name,
-    ) -> Result<()> {
+    pub async fn vpc_subnets_delete_subnet<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        subnet_name: &'a types::Name,
+    ) -> Result<reqwest::Response> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
@@ -2147,14 +2822,172 @@ impl Client {
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let res = result?.error_for_status()?;
-        Ok(())
+        Ok(res)
+    }
+
+    #[doc = "List IP addresses on a VPC subnet.\n\nsubnets_ips_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/ips"]
+    pub async fn subnets_ips_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        subnet_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<types::NetworkInterfaceResultsPage> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/ips",
+            self.baseurl,
+            progenitor_support::encode_path(&organization_name.to_string()),
+            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_support::encode_path(&subnet_name.to_string()),
+        );
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
+        Ok(res.json().await?)
+    }
+
+    #[doc = "List IP addresses on a VPC subnet.\n\nreturns a Stream<Item = NetworkInterface> by making successive calls to subnets_ips_get"]
+    pub fn subnets_ips_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        vpc_name: &'a types::Name,
+        subnet_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::NetworkInterface>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.subnets_ips_get(
+            organization_name,
+            project_name,
+            vpc_name,
+            subnet_name,
+            limit,
+            None,
+            sort_by,
+        )
+        .map_ok(move |page| {
+            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                if state.is_none() {
+                    Ok(None)
+                } else {
+                    self.subnets_ips_get(
+                        organization_name,
+                        project_name,
+                        vpc_name,
+                        subnet_name,
+                        None,
+                        state.as_deref(),
+                        None,
+                    )
+                    .map_ok(|page| {
+                        Some((
+                            futures::stream::iter(page.items.into_iter().map(Ok)),
+                            page.next_page,
+                        ))
+                    })
+                    .await
+                }
+            })
+            .try_flatten();
+            first.chain(rest)
+        })
+        .try_flatten_stream()
+        .boxed()
+    }
+
+    #[doc = "List the built-in roles\n\nroles_get: GET /roles"]
+    pub async fn roles_get<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+    ) -> Result<types::RoleResultsPage> {
+        let url = format!("{}/roles", self.baseurl,);
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
+        Ok(res.json().await?)
+    }
+
+    #[doc = "List the built-in roles\n\nreturns a Stream<Item = Role> by making successive calls to roles_get"]
+    pub fn roles_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+    ) -> impl futures::Stream<Item = Result<types::Role>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.roles_get(limit, None)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.roles_get(None, state.as_deref())
+                            .map_ok(|page| {
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    #[doc = "Fetch a specific built-in role\n\nroles_get_role: GET /roles/{role_name}"]
+    pub async fn roles_get_role<'a>(&'a self, role_name: &'a str) -> Result<types::Role> {
+        let url = format!(
+            "{}/roles/{}",
+            self.baseurl,
+            progenitor_support::encode_path(&role_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
+        Ok(res.json().await?)
     }
 
     #[doc = "List all sagas (for debugging)\n\nsagas_get: GET /sagas"]
-    pub async fn sagas_get(
-        &self,
+    pub async fn sagas_get<'a>(
+        &'a self,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<types::SagaResultsPage> {
         let url = format!("{}/sagas", self.baseurl,);
@@ -2177,8 +3010,41 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List all sagas (for debugging)\n\nreturns a Stream<Item = Saga> by making successive calls to sagas_get"]
+    pub fn sagas_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::IdSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Saga>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.sagas_get(limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.sagas_get(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Fetch information about a single saga (for debugging)\n\nsagas_get_saga: GET /sagas/{saga_id}"]
-    pub async fn sagas_get_saga(&self, saga_id: &uuid::Uuid) -> Result<types::Saga> {
+    pub async fn sagas_get_saga<'a>(&'a self, saga_id: &'a uuid::Uuid) -> Result<types::Saga> {
         let url = format!(
             "{}/sagas/{}",
             self.baseurl,
@@ -2190,11 +3056,65 @@ impl Client {
         Ok(res.json().await?)
     }
 
-    #[doc = "List the built-in system users\n\nusers_get: GET /users"]
-    pub async fn users_get(
-        &self,
+    #[doc = "List all timeseries schema\n\ntimeseries_schema_get: GET /timeseries/schema"]
+    pub async fn timeseries_schema_get<'a>(
+        &'a self,
         limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&str>,
+        page_token: Option<&'a str>,
+    ) -> Result<types::TimeseriesSchemaResultsPage> {
+        let url = format!("{}/timeseries/schema", self.baseurl,);
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let res = result?.error_for_status()?;
+        Ok(res.json().await?)
+    }
+
+    #[doc = "List all timeseries schema\n\nreturns a Stream<Item = TimeseriesSchema> by making successive calls to timeseries_schema_get"]
+    pub fn timeseries_schema_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+    ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.timeseries_schema_get(limit, None)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.timeseries_schema_get(None, state.as_deref())
+                            .map_ok(|page| {
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    #[doc = "List the built-in system users\n\nusers_get: GET /users"]
+    pub async fn users_get<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<types::UserResultsPage> {
         let url = format!("{}/users", self.baseurl,);
@@ -2217,8 +3137,41 @@ impl Client {
         Ok(res.json().await?)
     }
 
+    #[doc = "List the built-in system users\n\nreturns a Stream<Item = User> by making successive calls to users_get"]
+    pub fn users_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::User>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.users_get(limit, None, sort_by)
+            .map_ok(move |page| {
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.users_get(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     #[doc = "Fetch a specific built-in system user\n\nusers_get_user: GET /users/{user_name}"]
-    pub async fn users_get_user(&self, user_name: &types::Name) -> Result<types::User> {
+    pub async fn users_get_user<'a>(&'a self, user_name: &'a types::Name) -> Result<types::User> {
         let url = format!(
             "{}/users/{}",
             self.baseurl,
