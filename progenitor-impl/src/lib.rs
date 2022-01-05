@@ -700,9 +700,10 @@ impl Generator {
                 }
             });
 
-            // The values passed to get subsequent pages are "None" for
-            // everything *except* the page_token which takes its value from
-            // the previous page.
+            // The values passed to get subsequent pages are...
+            // - the state variable for the page_token
+            // - None for all other query parameters
+            // - The method inputs for non-query parameters
             let step_params = typed_params.iter().map(|(param, _)| {
                 if param.name.as_str() == "page_token" {
                     quote! { state.as_deref() }
@@ -766,7 +767,8 @@ impl Generator {
                             page.next_page,
                             move |state| async move {
                                 if state.is_none() {
-                                    // There's no next page to fetch.
+                                    // The page_token was None so we've reached
+                                    // the end.
                                     Ok(None)
                                 } else {
                                     // Get the next page; here we set all query
@@ -917,9 +919,10 @@ impl Generator {
     pub fn generate_text(&mut self, spec: &OpenAPI) -> Result<String> {
         let output = self.generate_tokens(spec)?;
 
-        // Format the file with rustfmt and some whitespace niceties.
+        // Format the file with rustfmt.
         let content = rustfmt_wrapper::rustfmt(output).unwrap();
 
+        // Add newlines after end-braces at <= two levels of indentation.
         Ok(if cfg!(not(windows)) {
             let regex = regex::Regex::new(r#"(})(\n\s{0,8}[^} ])"#).unwrap();
             regex.replace_all(&content, "$1\n$2").to_string()
