@@ -194,6 +194,7 @@ impl Generator {
             }
 
             pub mod types {
+                use schemars::JsonSchema;
                 use serde::{Deserialize, Serialize};
                 #(#types)*
             }

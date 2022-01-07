@@ -665,6 +665,7 @@ dependencies = [
  "progenitor-impl",
  "progenitor-macro",
  "reqwest",
+ "schemars",
  "serde",
  "serde_json",
  "uuid",
@@ -872,10 +873,12 @@ version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "271ac0c667b8229adf70f0f957697c96fafd7486ab7481e15dc5e45e3e6a4368"
 dependencies = [
+ "chrono",
  "dyn-clone",
  "schemars_derive",
  "serde",
  "serde_json",
+ "uuid",
 ]
 
 [[package]]
@@ -1158,7 +1161,7 @@ checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 [[package]]
 name = "typify"
 version = "0.0.6-dev"
-source = "git+https://github.com/oxidecomputer/typify#df983c2981fc055efeba3fc360e724221703d4bd"
+source = "git+https://github.com/oxidecomputer/typify?branch=json-schema#0be9b35a5007e3f797e43ce41eba03dcee63e503"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1167,7 +1170,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.6-dev"
-source = "git+https://github.com/oxidecomputer/typify#df983c2981fc055efeba3fc360e724221703d4bd"
+source = "git+https://github.com/oxidecomputer/typify?branch=json-schema#0be9b35a5007e3f797e43ce41eba03dcee63e503"
 dependencies = [
  "convert_case",
  "log",
@@ -1183,7 +1186,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.6-dev"
-source = "git+https://github.com/oxidecomputer/typify#df983c2981fc055efeba3fc360e724221703d4bd"
+source = "git+https://github.com/oxidecomputer/typify?branch=json-schema#0be9b35a5007e3f797e43ce41eba03dcee63e503"
 dependencies = [
  "proc-macro2",
  "quote",

@@ -19,8 +19,9 @@ mod progenitor_support {
 }
 
 pub mod types {
+    use schemars::JsonSchema;
     use serde::{Deserialize, Serialize};
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Task {
         pub id: String,
         pub name: String,
@@ -29,7 +30,7 @@ pub mod types {
         pub state: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct TaskEvent {
         pub payload: String,
         pub seq: u32,
@@ -37,14 +38,14 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct TaskOutput {
         pub id: String,
         pub path: String,
         pub size: u64,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct TaskSubmit {
         pub name: String,
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -52,35 +53,35 @@ pub mod types {
         pub script: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct TaskSubmitResult {
         pub id: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct UploadedChunk {
         pub id: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct UserCreate {
         pub name: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct UserCreateResult {
         pub id: String,
         pub name: String,
         pub token: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WhoamiResult {
         pub id: String,
         pub name: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Worker {
         pub deleted: bool,
         pub id: String,
@@ -92,58 +93,58 @@ pub mod types {
         pub tasks: Vec<WorkerTask>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkerAddOutput {
         pub chunks: Vec<String>,
         pub path: String,
         pub size: i64,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkerAppendTask {
         pub payload: String,
         pub stream: String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkerBootstrap {
         pub bootstrap: String,
         pub token: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkerBootstrapResult {
         pub id: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkerPingResult {
         pub poweroff: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub task: Option<WorkerPingTask>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkerPingTask {
         pub id: String,
         pub output_rules: Vec<String>,
         pub script: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkerTask {
         pub id: String,
         pub name: String,
         pub owner: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct WorkersResult {
         pub workers: Vec<Worker>,
     }

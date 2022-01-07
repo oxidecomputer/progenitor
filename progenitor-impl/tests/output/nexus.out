@@ -19,9 +19,10 @@ mod progenitor_support {
 }
 
 pub mod types {
+    use schemars::JsonSchema;
     use serde::{Deserialize, Serialize};
     #[doc = "A count of bytes, typically used either for memory or storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct ByteCount(pub u64);
     impl std::ops::Deref for ByteCount {
         type Target = u64;
@@ -31,7 +32,9 @@ pub mod types {
     }
 
     #[doc = "The type of an individual datum of a metric."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum DatumType {
         Bool,
         I64,
@@ -61,7 +64,7 @@ pub mod types {
     }
 
     #[doc = "Client view of an [`Disk`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Disk {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
@@ -89,7 +92,7 @@ pub mod types {
     }
 
     #[doc = "Create-time parameters for a [`Disk`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct DiskCreate {
         pub description: String,
         pub name: Name,
@@ -104,13 +107,13 @@ pub mod types {
     }
 
     #[doc = "Parameters for the [`Disk`] to be attached or detached to an instance"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct DiskIdentifier {
         pub disk: Name,
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct DiskResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Disk>,
@@ -119,7 +122,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     #[serde(tag = "state", content = "instance")]
     pub enum DiskState {
         #[serde(rename = "creating")]
@@ -139,7 +142,7 @@ pub mod types {
     }
 
     #[doc = "The name and type information for a field of a timeseries schema."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct FieldSchema {
         pub name: String,
         pub source: FieldSource,
@@ -147,7 +150,9 @@ pub mod types {
     }
 
     #[doc = "The source from which a field is derived, the target or metric."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum FieldSource {
         Target,
         Metric,
@@ -163,7 +168,9 @@ pub mod types {
     }
 
     #[doc = "The `FieldType` identifies the data type of a target or metric field."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum FieldType {
         String,
         I64,
@@ -185,7 +192,9 @@ pub mod types {
     }
 
     #[doc = "Supported set of sort modes for scanning by id only.\n\nCurrently, we only support scanning in ascending order."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum IdSortMode {
         #[serde(rename = "id-ascending")]
         IdAscending,
@@ -200,7 +209,7 @@ pub mod types {
     }
 
     #[doc = "Identity-related metadata that's included in nearly all public API objects"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct IdentityMetadata {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
@@ -216,7 +225,7 @@ pub mod types {
     }
 
     #[doc = "Client view of an [`Instance`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Instance {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
@@ -243,7 +252,7 @@ pub mod types {
     }
 
     #[doc = "The number of CPUs in an Instance"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct InstanceCpuCount(pub u16);
     impl std::ops::Deref for InstanceCpuCount {
         type Target = u16;
@@ -253,7 +262,7 @@ pub mod types {
     }
 
     #[doc = "Create-time parameters for an [`Instance`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct InstanceCreate {
         pub description: String,
         pub hostname: String,
@@ -263,7 +272,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct InstanceResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Instance>,
@@ -273,7 +282,9 @@ pub mod types {
     }
 
     #[doc = "Running state of an Instance (primarily: booted or stopped)\n\nThis typically reflects whether it's starting, running, stopping, or stopped, but also includes states related to the Instance's lifecycle"]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum InstanceState {
         #[serde(rename = "creating")]
         Creating,
@@ -312,7 +323,7 @@ pub mod types {
     }
 
     #[doc = "An IPv4 subnet, including prefix and subnet mask"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Ipv4Net(pub String);
     impl std::ops::Deref for Ipv4Net {
         type Target = String;
@@ -322,7 +333,7 @@ pub mod types {
     }
 
     #[doc = "An IPv6 subnet, including prefix and subnet mask"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Ipv6Net(pub String);
     impl std::ops::Deref for Ipv6Net {
         type Target = String;
@@ -332,7 +343,7 @@ pub mod types {
     }
 
     #[doc = "An inclusive-inclusive range of IP ports. The second port may be omitted to represent a single port"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct L4PortRange(pub String);
     impl std::ops::Deref for L4PortRange {
         type Target = String;
@@ -341,13 +352,13 @@ pub mod types {
         }
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct LoginParams {
         pub username: String,
     }
 
     #[doc = "A Media Access Control address, in EUI-48 format"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct MacAddr(pub String);
     impl std::ops::Deref for MacAddr {
         type Target = String;
@@ -357,7 +368,7 @@ pub mod types {
     }
 
     #[doc = "Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Name(pub String);
     impl std::ops::Deref for Name {
         type Target = String;
@@ -367,7 +378,9 @@ pub mod types {
     }
 
     #[doc = "Supported set of sort modes for scanning by name or id"]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum NameOrIdSortMode {
         #[serde(rename = "name-ascending")]
         NameAscending,
@@ -388,7 +401,9 @@ pub mod types {
     }
 
     #[doc = "Supported set of sort modes for scanning by name only\n\nCurrently, we only support scanning in ascending order."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum NameSortMode {
         #[serde(rename = "name-ascending")]
         NameAscending,
@@ -403,7 +418,7 @@ pub mod types {
     }
 
     #[doc = "A `NetworkInterface` represents a virtual network interface device."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct NetworkInterface {
         pub identity: IdentityMetadata,
         #[doc = "The Instance to which the interface belongs."]
@@ -418,7 +433,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct NetworkInterfaceResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<NetworkInterface>,
@@ -428,7 +443,7 @@ pub mod types {
     }
 
     #[doc = "Client view of an [`Organization`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Organization {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
@@ -444,14 +459,14 @@ pub mod types {
     }
 
     #[doc = "Create-time parameters for an [`Organization`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct OrganizationCreate {
         pub description: String,
         pub name: Name,
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct OrganizationResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Organization>,
@@ -461,7 +476,7 @@ pub mod types {
     }
 
     #[doc = "Updateable properties of an [`Organization`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct OrganizationUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -470,7 +485,7 @@ pub mod types {
     }
 
     #[doc = "Client view of a [`Project`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Project {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
@@ -488,14 +503,14 @@ pub mod types {
     }
 
     #[doc = "Create-time parameters for a [`Project`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct ProjectCreate {
         pub description: String,
         pub name: Name,
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct ProjectResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Project>,
@@ -505,7 +520,7 @@ pub mod types {
     }
 
     #[doc = "Updateable properties of a [`Project`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct ProjectUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -514,13 +529,13 @@ pub mod types {
     }
 
     #[doc = "Client view of an [`Rack`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Rack {
         pub identity: IdentityMetadata,
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct RackResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Rack>,
@@ -530,14 +545,14 @@ pub mod types {
     }
 
     #[doc = "Client view of a [`Role`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Role {
         pub description: String,
         pub name: RoleName,
     }
 
     #[doc = "Role names consist of two string components separated by dot (\".\")."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct RoleName(pub String);
     impl std::ops::Deref for RoleName {
         type Target = String;
@@ -547,7 +562,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct RoleResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Role>,
@@ -556,7 +571,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
         #[serde(rename = "ip")]
@@ -567,7 +582,7 @@ pub mod types {
         Subnet(Name),
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
         #[serde(rename = "ip")]
@@ -583,7 +598,7 @@ pub mod types {
     }
 
     #[doc = "A route defines a rule that governs where traffic should be sent based on its destination."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct RouterRoute {
         pub destination: RouteDestination,
         pub identity: IdentityMetadata,
@@ -594,7 +609,7 @@ pub mod types {
     }
 
     #[doc = "Create-time parameters for a [`RouterRoute`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct RouterRouteCreateParams {
         pub description: String,
         pub destination: RouteDestination,
@@ -603,7 +618,9 @@ pub mod types {
     }
 
     #[doc = "The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.\n\nSee [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context"]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum RouterRouteKind {
         Default,
         VpcSubnet,
@@ -623,7 +640,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct RouterRouteResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<RouterRoute>,
@@ -633,7 +650,7 @@ pub mod types {
     }
 
     #[doc = "Updateable properties of a [`RouterRoute`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct RouterRouteUpdateParams {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -643,13 +660,13 @@ pub mod types {
         pub target: RouteTarget,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Saga {
         pub id: uuid::Uuid,
         pub state: SagaState,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     #[serde(tag = "error")]
     pub enum SagaErrorInfo {
         #[serde(rename = "actionFailed")]
@@ -665,7 +682,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct SagaResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Saga>,
@@ -674,7 +691,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     #[serde(tag = "state")]
     pub enum SagaState {
         #[serde(rename = "running")]
@@ -689,7 +706,7 @@ pub mod types {
     }
 
     #[doc = "Client view of an [`Sled`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Sled {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
@@ -707,7 +724,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct SledResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Sled>,
@@ -717,7 +734,7 @@ pub mod types {
     }
 
     #[doc = "Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct TimeseriesName(pub String);
     impl std::ops::Deref for TimeseriesName {
         type Target = String;
@@ -727,7 +744,7 @@ pub mod types {
     }
 
     #[doc = "The schema for a timeseries.\n\nThis includes the name of the timeseries, as well as the datum type of its metric and the schema for each field."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct TimeseriesSchema {
         pub created: chrono::DateTime<chrono::offset::Utc>,
         pub datum_type: DatumType,
@@ -736,7 +753,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct TimeseriesSchemaResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<TimeseriesSchema>,
@@ -746,7 +763,7 @@ pub mod types {
     }
 
     #[doc = "Client view of a [`User`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct User {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
@@ -762,7 +779,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct UserResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<User>,
@@ -772,7 +789,7 @@ pub mod types {
     }
 
     #[doc = "Client view of a [`Vpc`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct Vpc {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
@@ -796,7 +813,7 @@ pub mod types {
     }
 
     #[doc = "Create-time parameters for a [`Vpc`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcCreate {
         pub description: String,
         #[serde(rename = "dnsName")]
@@ -805,7 +822,7 @@ pub mod types {
     }
 
     #[doc = "A single rule in a VPC firewall"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcFirewallRule {
         pub action: VpcFirewallRuleAction,
         pub direction: VpcFirewallRuleDirection,
@@ -818,7 +835,9 @@ pub mod types {
         pub targets: Vec<VpcFirewallRuleTarget>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum VpcFirewallRuleAction {
         #[serde(rename = "allow")]
         Allow,
@@ -835,7 +854,9 @@ pub mod types {
         }
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum VpcFirewallRuleDirection {
         #[serde(rename = "inbound")]
         Inbound,
@@ -853,7 +874,7 @@ pub mod types {
     }
 
     #[doc = "Filter for a firewall rule. A given packet must match every field that is present for the rule to apply to it. A packet matches a field if any entry in that field matches the packet."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcFirewallRuleFilter {
         #[doc = "If present, the sources (if incoming) or destinations (if outgoing) this rule applies to."]
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -866,7 +887,7 @@ pub mod types {
         pub protocols: Option<Vec<VpcFirewallRuleProtocol>>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
         #[serde(rename = "vpc")]
@@ -882,7 +903,9 @@ pub mod types {
     }
 
     #[doc = "The protocols that may be specified in a firewall rule's filter"]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum VpcFirewallRuleProtocol {
         #[serde(rename = "TCP")]
         Tcp,
@@ -903,7 +926,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcFirewallRuleResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<VpcFirewallRule>,
@@ -912,7 +935,9 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum VpcFirewallRuleStatus {
         #[serde(rename = "disabled")]
         Disabled,
@@ -929,7 +954,7 @@ pub mod types {
         }
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
         #[serde(rename = "vpc")]
@@ -941,7 +966,7 @@ pub mod types {
     }
 
     #[doc = "A single rule in a VPC firewall"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcFirewallRuleUpdate {
         pub action: VpcFirewallRuleAction,
         #[doc = "human-readable free-form text about a resource"]
@@ -955,7 +980,7 @@ pub mod types {
         pub targets: Vec<VpcFirewallRuleTarget>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcFirewallRuleUpdateParams(
         pub std::collections::HashMap<String, VpcFirewallRuleUpdate>,
     );
@@ -966,7 +991,7 @@ pub mod types {
         }
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcFirewallRuleUpdateResult(pub std::collections::HashMap<String, VpcFirewallRule>);
     impl std::ops::Deref for VpcFirewallRuleUpdateResult {
         type Target = std::collections::HashMap<String, VpcFirewallRule>;
@@ -976,7 +1001,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Vpc>,
@@ -986,7 +1011,7 @@ pub mod types {
     }
 
     #[doc = "A VPC router defines a series of rules that indicate where traffic should be sent depending on its destination."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcRouter {
         pub identity: IdentityMetadata,
         pub kind: VpcRouterKind,
@@ -995,13 +1020,15 @@ pub mod types {
     }
 
     #[doc = "Create-time parameters for a [`VpcRouter`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcRouterCreate {
         pub description: String,
         pub name: Name,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(
+        Serialize, Deserialize, JsonSchema, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash,
+    )]
     pub enum VpcRouterKind {
         #[serde(rename = "system")]
         System,
@@ -1019,7 +1046,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcRouterResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<VpcRouter>,
@@ -1029,7 +1056,7 @@ pub mod types {
     }
 
     #[doc = "Updateable properties of a [`VpcRouter`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcRouterUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -1038,7 +1065,7 @@ pub mod types {
     }
 
     #[doc = "A VPC subnet represents a logical grouping for instances that allows network traffic between them, within a IPv4 subnetwork or optionall an IPv6 subnetwork."]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcSubnet {
         pub identity: IdentityMetadata,
         #[serde(
@@ -1058,7 +1085,7 @@ pub mod types {
     }
 
     #[doc = "Create-time parameters for a [`VpcSubnet`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcSubnetCreate {
         pub description: String,
         #[serde(rename = "ipv4Block", default, skip_serializing_if = "Option::is_none")]
@@ -1069,7 +1096,7 @@ pub mod types {
     }
 
     #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcSubnetResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<VpcSubnet>,
@@ -1079,7 +1106,7 @@ pub mod types {
     }
 
     #[doc = "Updateable properties of a [`VpcSubnet`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -1092,7 +1119,7 @@ pub mod types {
     }
 
     #[doc = "Updateable properties of a [`Vpc`]"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
     pub struct VpcUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,

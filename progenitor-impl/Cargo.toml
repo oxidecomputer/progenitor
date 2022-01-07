@@ -15,11 +15,11 @@ proc-macro2 = "1.0"
 quote = "1.0"
 regex = "1.5"
 rustfmt-wrapper = "0.1"
-schemars = "0.8"
+schemars = { version = "0.8", features = [ "chrono", "uuid" ] }
 serde = { version = "1.0", features = [ "derive" ] }
 serde_json = "1.0"
 convert_case = "0.4"
-typify = { git = "https://github.com/oxidecomputer/typify" }
+typify = { git = "https://github.com/oxidecomputer/typify", branch = "json-schema" }
 thiserror = "1.0"
 
 [dev-dependencies]
