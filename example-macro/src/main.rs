@@ -1,16 +1,23 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 use progenitor::generate_api;
 
 generate_api!(
-    "../sample_openapi/keeper.json",
-    (),
-    |_, request| {
+    spec = "../sample_openapi/keeper.json",
+    inner_type = (),
+    pre_hook = (|_, request| {
         println!("doing this {:?}", request);
-    },
-    crate::all_done
+    }),
+    post_hook = crate::all_done,
+    derives = [schemars::JsonSchema],
 );
 
 fn all_done(_: &(), _result: &reqwest::Result<reqwest::Response>) {}
+
+mod buildomat {
+    use progenitor::generate_api;
+
+    generate_api!("../sample_openapi/buildomat.json");
+}
 
 fn main() {}

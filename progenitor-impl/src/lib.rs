@@ -1,4 +1,4 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 use std::{cmp::Ordering, collections::HashMap};
 
@@ -108,6 +108,11 @@ impl Generator {
         self
     }
 
+    pub fn with_derive(&mut self, derive: TokenStream) -> &mut Self {
+        self.type_space.add_derive(derive);
+        self
+    }
+
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
         // Convert our components dictionary to schemars
         let schemas = spec
@@ -194,7 +199,6 @@ impl Generator {
             }
 
             pub mod types {
-                use schemars::JsonSchema;
                 use serde::{Deserialize, Serialize};
                 #(#types)*
             }

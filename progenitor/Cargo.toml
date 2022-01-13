@@ -11,7 +11,7 @@ progenitor-macro = { path = "../progenitor-macro" }
 progenitor-impl = { path = "../progenitor-impl" }
 anyhow = "1.0"
 getopts = "0.2"
-openapiv3 = "1.0.0-beta.5"
+openapiv3 = "1.0.0"
 serde = { version = "1.0", features = [ "derive" ] }
 serde_json = "1.0"
 

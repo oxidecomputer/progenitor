@@ -19,33 +19,32 @@ mod progenitor_support {
 }
 
 pub mod types {
-    use schemars::JsonSchema;
     use serde::{Deserialize, Serialize};
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct EnrolBody {
         pub host: String,
         pub key: String,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct GlobalJobsResult {
         pub summary: Vec<ReportSummary>,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OutputRecord {
         pub msg: String,
         pub stream: String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct PingResult {
         pub host: String,
         pub ok: bool,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ReportFinishBody {
         pub duration_millis: i32,
         pub end_time: chrono::DateTime<chrono::offset::Utc>,
@@ -53,7 +52,7 @@ pub mod types {
         pub id: ReportId,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ReportId {
         pub host: String,
         pub job: String,
@@ -62,25 +61,25 @@ pub mod types {
         pub uuid: String,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ReportResult {
         pub existed_already: bool,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: String,
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[derive(Serialize, Deserialize, JsonSchema, Debug, Clone)]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ReportSummary {
         pub age_seconds: i32,
         pub duration_seconds: i32,
