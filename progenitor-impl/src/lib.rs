@@ -1,4 +1,4 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 use std::{cmp::Ordering, collections::HashMap};
 
@@ -105,6 +105,11 @@ impl Generator {
 
     pub fn with_post_hook(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook = Some(post_hook);
+        self
+    }
+
+    pub fn with_derive(&mut self, derive: TokenStream) -> &mut Self {
+        self.type_space.add_derive(derive);
         self
     }
 

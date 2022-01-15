@@ -8,19 +8,19 @@ description = "An OpenAPI client generator - core implementation"
 
 [dependencies]
 anyhow = "1.0"
+convert_case = "0.4"
 getopts = "0.2"
 indexmap = "1.7"
-openapiv3 = "1.0.0-beta.5"
+openapiv3 = "1.0.0"
 proc-macro2 = "1.0"
 quote = "1.0"
 regex = "1.5"
 rustfmt-wrapper = "0.1"
-schemars = "0.8"
+schemars = { version = "0.8", features = [ "chrono", "uuid" ] }
 serde = { version = "1.0", features = [ "derive" ] }
 serde_json = "1.0"
-convert_case = "0.4"
-typify = { git = "https://github.com/oxidecomputer/typify" }
 thiserror = "1.0"
+typify = { git = "https://github.com/oxidecomputer/typify" }
 
 [dev-dependencies]
 expectorate = "1.0"

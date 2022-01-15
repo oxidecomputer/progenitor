@@ -1,4 +1,4 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 use std::path::Path;
 
@@ -6,10 +6,9 @@ use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
 use progenitor_impl::Generator;
 use quote::{quote, ToTokens};
-use syn::{
-    parse::{Parse, ParseStream},
-    ExprClosure, LitStr, Token,
-};
+use serde::Deserialize;
+use serde_tokenstream::ParseWrapper;
+use syn::LitStr;
 
 #[proc_macro]
 pub fn generate_api(item: TokenStream) -> TokenStream {
@@ -19,101 +18,96 @@ pub fn generate_api(item: TokenStream) -> TokenStream {
     }
 }
 
+#[derive(Deserialize)]
 struct Settings {
-    file: LitStr,
-    inner: Option<proc_macro2::TokenStream>,
-    pre: Option<proc_macro2::TokenStream>,
-    post: Option<proc_macro2::TokenStream>,
+    spec: ParseWrapper<LitStr>,
+    inner_type: Option<ParseWrapper<syn::Type>>,
+    pre_hook: Option<ParseWrapper<ClosureOrPath>>,
+    post_hook: Option<ParseWrapper<ClosureOrPath>>,
+    #[serde(default)]
+    derives: Vec<ParseWrapper<syn::Path>>,
 }
 
-impl Parse for Settings {
-    fn parse(input: ParseStream) -> Result<Self, syn::Error> {
-        let file = input.parse::<LitStr>()?;
-        let inner = parse_inner(input)?;
-        let pre = parse_hook(input)?;
-        let post = parse_hook(input)?;
+#[derive(Debug)]
+struct ClosureOrPath(proc_macro2::TokenStream);
 
-        // Optional trailing comma.
-        if input.peek(Token!(,)) {
-            let _ = input.parse::<Token!(,)>();
+impl syn::parse::Parse for ClosureOrPath {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
+        let lookahead = input.lookahead1();
+
+        if lookahead.peek(syn::token::Paren) {
+            let group: proc_macro2::Group = input.parse()?;
+            return syn::parse2::<Self>(group.stream());
         }
 
-        Ok(Settings {
-            file,
-            inner,
-            pre,
-            post,
-        })
-    }
-}
+        if let Ok(closure) = input.parse::<syn::ExprClosure>() {
+            return Ok(Self(closure.to_token_stream()));
+        }
 
-fn parse_inner(
-    input: ParseStream,
-) -> Result<Option<proc_macro2::TokenStream>, syn::Error> {
-    if input.is_empty() {
-        return Ok(None);
-    }
-    let _: Token!(,) = input.parse()?;
-    if input.is_empty() {
-        return Ok(None);
-    }
-    Ok(Some(input.parse::<syn::Type>()?.to_token_stream()))
-}
-
-fn parse_hook(
-    input: ParseStream,
-) -> Result<Option<proc_macro2::TokenStream>, syn::Error> {
-    if input.is_empty() {
-        return Ok(None);
-    }
-    let _: Token!(,) = input.parse()?;
-    if input.is_empty() {
-        return Ok(None);
-    }
-    if let Ok(closure) = input.parse::<ExprClosure>() {
-        Ok(Some(closure.to_token_stream()))
-    } else {
-        Ok(Some(input.parse::<syn::Path>()?.to_token_stream()))
+        input
+            .parse::<syn::Path>()
+            .map(|path| Self(path.to_token_stream()))
     }
 }
 
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
-    let Settings {
-        file,
-        inner,
-        pre,
-        post,
-    } = syn::parse::<Settings>(item)?;
+    let (spec, inner_type, pre_hook, post_hook, derives) =
+        if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
+            (spec, None, None, None, Vec::new())
+        } else {
+            let Settings {
+                spec,
+                inner_type,
+                pre_hook,
+                post_hook,
+                derives,
+            } = serde_tokenstream::from_tokenstream(&item.into())?;
+            (
+                spec.into_inner(),
+                inner_type.map(|x| x.into_inner()),
+                pre_hook.map(|x| x.into_inner()),
+                post_hook.map(|x| x.into_inner()),
+                derives.into_iter().map(ParseWrapper::into_inner).collect(),
+            )
+        };
+
     let dir = std::env::var("CARGO_MANIFEST_DIR").map_or_else(
         |_| std::env::current_dir().unwrap(),
         |s| Path::new(&s).to_path_buf(),
     );
 
-    let path = dir.join(file.value());
+    let path = dir.join(spec.value());
     let path_str = path.to_string_lossy();
 
-    let spec: OpenAPI =
+    let oapi: OpenAPI =
         serde_json::from_reader(std::fs::File::open(&path).map_err(|e| {
             syn::Error::new(
-                file.span(),
+                spec.span(),
                 format!("couldn't read file {}: {}", path_str, e.to_string()),
             )
         })?)
         .map_err(|e| {
             syn::Error::new(
-                file.span(),
+                spec.span(),
                 format!("failed to parse {}: {}", path_str, e.to_string()),
             )
         })?;
 
     let mut builder = Generator::new();
-    inner.map(|inner_type| builder.with_inner_type(inner_type));
-    pre.map(|pre_hook| builder.with_pre_hook(pre_hook));
-    post.map(|post_hook| builder.with_post_hook(post_hook));
-    let code = builder.generate_tokens(&spec).map_err(|e| {
+    inner_type.map(|inner_type| {
+        builder.with_inner_type(inner_type.to_token_stream())
+    });
+    pre_hook.map(|pre_hook| builder.with_pre_hook(pre_hook.0));
+    post_hook.map(|post_hook| builder.with_post_hook(post_hook.0));
+
+    derives.into_iter().for_each(|derive| {
+        builder.with_derive(derive.to_token_stream());
+    });
+
+    let code = builder.generate_tokens(&oapi).map_err(|e| {
         syn::Error::new(
-            file.span(),
-            format!("generation error for {}: {}", file.value(), e.to_string()),
+            spec.span(),
+            format!("generation error for {}: {}", spec.value(), e.to_string()),
         )
     })?;
 
