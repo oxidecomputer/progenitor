@@ -715,8 +715,10 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
+ "syn",
  "thiserror",
  "typify",
+ "unicode-xid",
 ]
 
 [[package]]
@@ -1154,7 +1156,7 @@ checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 [[package]]
 name = "typify"
 version = "0.0.6-dev"
-source = "git+https://github.com/oxidecomputer/typify#a45d3058ec748c7040988700a003e4ef9aac6f02"
+source = "git+https://github.com/oxidecomputer/typify#9afa917671b29fc231bc9ce304e041bdd685af09"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1163,7 +1165,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.6-dev"
-source = "git+https://github.com/oxidecomputer/typify#a45d3058ec748c7040988700a003e4ef9aac6f02"
+source = "git+https://github.com/oxidecomputer/typify#9afa917671b29fc231bc9ce304e041bdd685af09"
 dependencies = [
  "convert_case",
  "log",
@@ -1174,12 +1176,13 @@ dependencies = [
  "serde_json",
  "syn",
  "thiserror",
+ "unicode-xid",
 ]
 
 [[package]]
 name = "typify-macro"
 version = "0.0.6-dev"
-source = "git+https://github.com/oxidecomputer/typify#a45d3058ec748c7040988700a003e4ef9aac6f02"
+source = "git+https://github.com/oxidecomputer/typify#9afa917671b29fc231bc9ce304e041bdd685af09"
 dependencies = [
  "proc-macro2",
  "quote",

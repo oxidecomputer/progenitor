@@ -14,6 +14,7 @@ use quote::{format_ident, quote, ToTokens};
 use template::PathTemplate;
 use thiserror::Error;
 use typify::{TypeId, TypeSpace};
+use unicode_xid::UnicodeXID;
 
 use crate::to_schema::ToSchema;
 
@@ -275,10 +276,10 @@ impl Generator {
 
                         let nam = parameter_data.name.clone();
                         let schema = parameter_data.schema()?.to_schema();
-                        let name = format!(
-                            "{}{}",
-                            sanitize(operation_id, Case::Pascal),
-                            sanitize(&nam, Case::Pascal),
+
+                        let name = sanitize(
+                            &format!("{}-{}", operation_id, nam),
+                            Case::Pascal,
                         );
                         let typ = self
                             .type_space
@@ -302,13 +303,13 @@ impl Generator {
 
                         let nam = parameter_data.name.clone();
                         let mut schema = parameter_data.schema()?.to_schema();
-                        let name = format!(
-                            "{}{}",
-                            sanitize(
+                        let name = sanitize(
+                            &format!(
+                                "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                Case::Pascal
+                                nam
                             ),
-                            sanitize(&nam, Case::Pascal),
+                            Case::Pascal,
                         );
 
                         if !parameter_data.required {
@@ -344,12 +345,12 @@ impl Generator {
 
                 if let Some(s) = &mt.schema {
                     let schema = s.to_schema();
-                    let name = format!(
-                        "{}Body",
-                        sanitize(
+                    let name = sanitize(
+                        &format!(
+                            "{}-body",
                             operation.operation_id.as_ref().unwrap(),
-                            Case::Pascal
-                        )
+                        ),
+                        Case::Pascal,
                     );
                     let typ = self
                         .type_space
@@ -449,12 +450,12 @@ impl Generator {
 
                     let typ = if let Some(schema) = &mt.schema {
                         let schema = schema.to_schema();
-                        let name = format!(
-                            "{}Response",
-                            sanitize(
+                        let name = sanitize(
+                            &format!(
+                                "{}-response",
                                 operation.operation_id.as_ref().unwrap(),
-                                Case::Pascal
-                            )
+                            ),
+                            Case::Pascal,
                         );
                         self.type_space
                             .add_type_with_name(&schema, Some(name))?
@@ -1244,5 +1245,21 @@ impl ComponentLookup for Schema {
 }
 
 fn sanitize(input: &str, case: Case) -> String {
-    input.replace('/', "-").to_case(case)
+    let out = input
+        .replace("'", "")
+        .replace(|c: char| !c.is_xid_continue(), "-")
+        .to_case(case);
+
+    let out = match out.chars().next() {
+        None => "x".to_case(case),
+        Some(c) if c.is_xid_start() => out,
+        Some(_) => format!("_{}", out),
+    };
+
+    // Make sure the string is a valid Rust identifier.
+    if syn::parse_str::<syn::Ident>(&out).is_ok() {
+        out
+    } else {
+        format!("{}_", out)
+    }
 }
