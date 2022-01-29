@@ -5,12 +5,13 @@ authors = ["Adam H. Leventhal <ahl@oxidecomputer.com>"]
 edition = "2018"
 
 [dependencies]
-anyhow = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 percent-encoding = "2.1"
 reqwest = { version = "0.11", features = ["json", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "0.8", features = ["serde", "v4"] }
+
+progenitor-client = { path = "../progenitor-client" }
 
 [build-dependencies]
 progenitor = { path = "../progenitor" }

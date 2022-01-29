@@ -120,10 +120,10 @@ dependencies = [
 name = "example-build"
 version = "0.0.1"
 dependencies = [
- "anyhow",
  "chrono",
  "percent-encoding",
  "progenitor",
+ "progenitor-client",
  "reqwest",
  "serde",
  "serde_json",
@@ -681,6 +681,7 @@ dependencies = [
  "getopts",
  "openapiv3",
  "percent-encoding",
+ "progenitor-client",
  "progenitor-impl",
  "progenitor-macro",
  "reqwest",
@@ -695,6 +696,7 @@ name = "progenitor-client"
 version = "0.0.0"
 dependencies = [
  "reqwest",
+ "serde",
  "serde_json",
 ]
 
