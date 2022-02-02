@@ -12,7 +12,11 @@
   "paths": {
     "/hardware/racks": {
       "get": {
-        "description": "List racks in the system.",
+        "tags": [
+          "racks"
+        ],
+        "summary": "List racks in the system.",
+        "description": "",
         "operationId": "hardware_racks_get",
         "parameters": [
           {
@@ -56,6 +60,12 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
@@ -63,7 +73,11 @@
     },
     "/hardware/racks/{rack_id}": {
       "get": {
-        "description": "Fetch information about a particular rack.",
+        "tags": [
+          "racks"
+        ],
+        "summary": "Fetch information about a particular rack.",
+        "description": "",
         "operationId": "hardware_racks_get_rack",
         "parameters": [
           {
@@ -88,13 +102,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/hardware/sleds": {
       "get": {
-        "description": "List sleds in the system.",
+        "tags": [
+          "sleds"
+        ],
+        "summary": "List sleds in the system.",
+        "description": "",
         "operationId": "hardware_sleds_get",
         "parameters": [
           {
@@ -138,6 +162,12 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
@@ -145,7 +175,11 @@
     },
     "/hardware/sleds/{sled_id}": {
       "get": {
-        "description": "Fetch information about a sled in the system.",
+        "tags": [
+          "sleds"
+        ],
+        "summary": "Fetch information about a sled in the system.",
+        "description": "",
         "operationId": "hardware_sleds_get_sled",
         "parameters": [
           {
@@ -170,12 +204,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/login": {
       "post": {
+        "tags": [
+          "hidden"
+        ],
         "operationId": "spoof_login",
         "requestBody": {
           "content": {
@@ -196,6 +239,9 @@
     },
     "/logout": {
       "post": {
+        "tags": [
+          "hidden"
+        ],
         "operationId": "logout",
         "responses": {
           "default": {
@@ -206,7 +252,11 @@
     },
     "/organizations": {
       "get": {
-        "description": "List all organizations.",
+        "tags": [
+          "organizations"
+        ],
+        "summary": "List all organizations.",
+        "description": "",
         "operationId": "organizations_get",
         "parameters": [
           {
@@ -250,12 +300,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "post": {
-        "description": "Create a new organization.",
+        "tags": [
+          "organizations"
+        ],
+        "summary": "Create a new organization.",
+        "description": "",
         "operationId": "organizations_post",
         "requestBody": {
           "content": {
@@ -277,13 +337,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}": {
       "get": {
-        "description": "Fetch a specific organization",
+        "tags": [
+          "organizations"
+        ],
+        "summary": "Fetch a specific organization",
+        "description": "",
         "operationId": "organizations_get_organization",
         "parameters": [
           {
@@ -306,11 +376,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "put": {
-        "description": "Update a specific organization.\n * TODO-correctness: Is it valid for PUT to accept application/json that's a subset of what the resource actually represents?  If not, is that a problem? (HTTP may require that this be idempotent.)  If so, can we get around that having this be a slightly different content-type (e.g., \"application/json-patch\")?  We should see what other APIs do.",
+        "tags": [
+          "organizations"
+        ],
+        "summary": "Update a specific organization.",
+        "description": "",
         "operationId": "organizations_put_organization",
         "parameters": [
           {
@@ -343,11 +423,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "delete": {
-        "description": "Delete a specific organization.",
+        "tags": [
+          "organizations"
+        ],
+        "summary": "Delete a specific organization.",
+        "description": "",
         "operationId": "organizations_delete_organization",
         "parameters": [
           {
@@ -363,13 +453,23 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects": {
       "get": {
-        "description": "List all projects.",
+        "tags": [
+          "projects"
+        ],
+        "summary": "List all projects.",
+        "description": "",
         "operationId": "organization_projects_get",
         "parameters": [
           {
@@ -422,12 +522,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "post": {
-        "description": "Create a new project.",
+        "tags": [
+          "projects"
+        ],
+        "summary": "Create a new project.",
+        "description": "",
         "operationId": "organization_projects_post",
         "parameters": [
           {
@@ -460,13 +570,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}": {
       "get": {
-        "description": "Fetch a specific project",
+        "tags": [
+          "projects"
+        ],
+        "summary": "Fetch a specific project",
+        "description": "",
         "operationId": "organization_projects_get_project",
         "parameters": [
           {
@@ -498,11 +618,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "put": {
-        "description": "Update a specific project.\n * TODO-correctness: Is it valid for PUT to accept application/json that's a subset of what the resource actually represents?  If not, is that a problem? (HTTP may require that this be idempotent.)  If so, can we get around that having this be a slightly different content-type (e.g., \"application/json-patch\")?  We should see what other APIs do.",
+        "tags": [
+          "projects"
+        ],
+        "summary": "Update a specific project.",
+        "description": "",
         "operationId": "organization_projects_put_project",
         "parameters": [
           {
@@ -544,11 +674,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "delete": {
-        "description": "Delete a specific project.",
+        "tags": [
+          "projects"
+        ],
+        "summary": "Delete a specific project.",
+        "description": "",
         "operationId": "organization_projects_delete_project",
         "parameters": [
           {
@@ -573,13 +713,23 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/disks": {
       "get": {
-        "description": "List disks in a project.",
+        "tags": [
+          "disks"
+        ],
+        "summary": "List disks in a project.",
+        "description": "",
         "operationId": "project_disks_get",
         "parameters": [
           {
@@ -641,12 +791,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "post": {
-        "description": "Create a disk in a project.\n * TODO-correctness See note about instance create.  This should be async.",
+        "tags": [
+          "disks"
+        ],
+        "summary": "Create a disk in a project.",
+        "description": "",
         "operationId": "project_disks_post",
         "parameters": [
           {
@@ -688,13 +848,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}": {
       "get": {
-        "description": "Fetch a single disk in a project.",
+        "tags": [
+          "disks"
+        ],
+        "summary": "Fetch a single disk in a project.",
+        "description": "",
         "operationId": "project_disks_get_disk",
         "parameters": [
           {
@@ -735,11 +905,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "delete": {
-        "description": "Delete a disk from a project.",
+        "tags": [
+          "disks"
+        ],
+        "summary": "Delete a disk from a project.",
+        "description": "",
         "operationId": "project_disks_delete_disk",
         "parameters": [
           {
@@ -773,13 +953,23 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/instances": {
       "get": {
-        "description": "List instances in a project.",
+        "tags": [
+          "instances"
+        ],
+        "summary": "List instances in a project.",
+        "description": "",
         "operationId": "project_instances_get",
         "parameters": [
           {
@@ -841,12 +1031,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "post": {
-        "description": "Create an instance in a project.\n * TODO-correctness This is supposed to be async.  Is that right?  We can create the instance immediately -- it's just not booted yet.  Maybe the boot operation is what's a separate operation_id.  What about the response code (201 Created vs 202 Accepted)?  Is that orthogonal?  Things can return a useful response, including an operation id, with either response code.  Maybe a \"reboot\" operation would return a 202 Accepted because there's no actual resource created?",
+        "tags": [
+          "instances"
+        ],
+        "summary": "Create an instance in a project.",
+        "description": "",
         "operationId": "project_instances_post",
         "parameters": [
           {
@@ -888,13 +1088,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}": {
       "get": {
-        "description": "Get an instance in a project.",
+        "tags": [
+          "instances"
+        ],
+        "summary": "Get an instance in a project.",
+        "description": "",
         "operationId": "project_instances_get_instance",
         "parameters": [
           {
@@ -935,11 +1145,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "delete": {
-        "description": "Delete an instance from a project.",
+        "tags": [
+          "instances"
+        ],
+        "summary": "Delete an instance from a project.",
+        "description": "",
         "operationId": "project_instances_delete_instance",
         "parameters": [
           {
@@ -973,13 +1193,23 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks": {
       "get": {
-        "description": "List disks attached to this instance.",
+        "tags": [
+          "instances"
+        ],
+        "summary": "List disks attached to this instance.",
+        "description": "",
         "operationId": "instance_disks_get",
         "parameters": [
           {
@@ -1050,6 +1280,12 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
@@ -1057,6 +1293,9 @@
     },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach": {
       "post": {
+        "tags": [
+          "instances"
+        ],
         "operationId": "instance_disks_attach",
         "parameters": [
           {
@@ -1107,12 +1346,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach": {
       "post": {
+        "tags": [
+          "instances"
+        ],
         "operationId": "instance_disks_detach",
         "parameters": [
           {
@@ -1163,13 +1411,90 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate": {
+      "post": {
+        "tags": [
+          "instances"
+        ],
+        "summary": "Migrate an instance to a different propolis-server, possibly on a different sled.",
+        "description": "",
+        "operationId": "project_instances_migrate_instance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstanceMigrate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Instance"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot": {
       "post": {
-        "description": "Reboot an instance.",
+        "tags": [
+          "instances"
+        ],
+        "summary": "Reboot an instance.",
+        "description": "",
         "operationId": "project_instances_instance_reboot",
         "parameters": [
           {
@@ -1210,13 +1535,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start": {
       "post": {
-        "description": "Boot an instance.",
+        "tags": [
+          "instances"
+        ],
+        "summary": "Boot an instance.",
+        "description": "",
         "operationId": "project_instances_instance_start",
         "parameters": [
           {
@@ -1257,13 +1592,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop": {
       "post": {
-        "description": "Halt an instance.",
+        "tags": [
+          "instances"
+        ],
+        "summary": "Halt an instance.",
+        "description": "",
         "operationId": "project_instances_instance_stop",
         "parameters": [
           {
@@ -1304,13 +1649,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs": {
       "get": {
-        "description": "List VPCs in a project.",
+        "tags": [
+          "vpcs"
+        ],
+        "summary": "List VPCs in a project.",
+        "description": "",
         "operationId": "project_vpcs_get",
         "parameters": [
           {
@@ -1372,12 +1727,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "post": {
-        "description": "Create a VPC in a project.",
+        "tags": [
+          "vpcs"
+        ],
+        "summary": "Create a VPC in a project.",
+        "description": "",
         "operationId": "project_vpcs_post",
         "parameters": [
           {
@@ -1419,13 +1784,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}": {
       "get": {
-        "description": "Get a VPC in a project.",
+        "tags": [
+          "vpcs"
+        ],
+        "summary": "Get a VPC in a project.",
+        "description": "",
         "operationId": "project_vpcs_get_vpc",
         "parameters": [
           {
@@ -1466,11 +1841,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "put": {
-        "description": "Update a VPC.",
+        "tags": [
+          "vpcs"
+        ],
+        "summary": "Update a VPC.",
+        "description": "",
         "operationId": "project_vpcs_put_vpc",
         "parameters": [
           {
@@ -1514,11 +1899,21 @@
         "responses": {
           "204": {
             "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "delete": {
-        "description": "Delete a vpc from a project.",
+        "tags": [
+          "vpcs"
+        ],
+        "summary": "Delete a vpc from a project.",
+        "description": "",
         "operationId": "project_vpcs_delete_vpc",
         "parameters": [
           {
@@ -1552,13 +1947,23 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules": {
       "get": {
-        "description": "List firewall rules for a VPC.",
+        "tags": [
+          "firewall"
+        ],
+        "summary": "List firewall rules for a VPC.",
+        "description": "",
         "operationId": "vpc_firewall_rules_get",
         "parameters": [
           {
@@ -1629,12 +2034,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "put": {
-        "description": "Replace the firewall rules for a VPC",
+        "tags": [
+          "firewall"
+        ],
+        "summary": "Replace the firewall rules for a VPC",
+        "description": "",
         "operationId": "vpc_firewall_rules_put",
         "parameters": [
           {
@@ -1685,13 +2100,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers": {
       "get": {
-        "description": "List VPC Custom and System Routers",
+        "tags": [
+          "routers"
+        ],
+        "summary": "List VPC Custom and System Routers",
+        "description": "",
         "operationId": "vpc_routers_get",
         "parameters": [
           {
@@ -1762,12 +2187,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "post": {
-        "description": "Create a VPC Router",
+        "tags": [
+          "routers"
+        ],
+        "summary": "Create a VPC Router",
+        "description": "",
         "operationId": "vpc_routers_post",
         "parameters": [
           {
@@ -1818,13 +2253,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}": {
       "get": {
-        "description": "Get a VPC Router",
+        "tags": [
+          "routers"
+        ],
+        "summary": "Get a VPC Router",
+        "description": "",
         "operationId": "vpc_routers_get_router",
         "parameters": [
           {
@@ -1874,11 +2319,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "put": {
-        "description": "Update a VPC Router",
+        "tags": [
+          "routers"
+        ],
+        "summary": "Update a VPC Router",
+        "description": "",
         "operationId": "vpc_routers_put_router",
         "parameters": [
           {
@@ -1931,11 +2386,21 @@
         "responses": {
           "204": {
             "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "delete": {
-        "description": "Delete a router from its VPC",
+        "tags": [
+          "routers"
+        ],
+        "summary": "Delete a router from its VPC",
+        "description": "",
         "operationId": "vpc_routers_delete_router",
         "parameters": [
           {
@@ -1978,13 +2443,23 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes": {
       "get": {
-        "description": "List a Router's routes",
+        "tags": [
+          "routes"
+        ],
+        "summary": "List a Router's routes",
+        "description": "",
         "operationId": "routers_routes_get",
         "parameters": [
           {
@@ -2064,12 +2539,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "post": {
-        "description": "Create a VPC Router",
+        "tags": [
+          "routes"
+        ],
+        "summary": "Create a VPC Router",
+        "description": "",
         "operationId": "routers_routes_post",
         "parameters": [
           {
@@ -2129,13 +2614,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}": {
       "get": {
-        "description": "Get a VPC Router route",
+        "tags": [
+          "routes"
+        ],
+        "summary": "Get a VPC Router route",
+        "description": "",
         "operationId": "routers_routes_get_route",
         "parameters": [
           {
@@ -2194,11 +2689,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "put": {
-        "description": "Update a Router route",
+        "tags": [
+          "routes"
+        ],
+        "summary": "Update a Router route",
+        "description": "",
         "operationId": "routers_routes_put_route",
         "parameters": [
           {
@@ -2260,11 +2765,21 @@
         "responses": {
           "204": {
             "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "delete": {
-        "description": "Delete a route from its router",
+        "tags": [
+          "routes"
+        ],
+        "summary": "Delete a route from its router",
+        "description": "",
         "operationId": "routers_routes_delete_route",
         "parameters": [
           {
@@ -2316,13 +2831,23 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets": {
       "get": {
-        "description": "List subnets in a VPC.",
+        "tags": [
+          "subnets"
+        ],
+        "summary": "List subnets in a VPC.",
+        "description": "",
         "operationId": "vpc_subnets_get",
         "parameters": [
           {
@@ -2393,12 +2918,22 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
       },
       "post": {
-        "description": "Create a subnet in a VPC.",
+        "tags": [
+          "subnets"
+        ],
+        "summary": "Create a subnet in a VPC.",
+        "description": "",
         "operationId": "vpc_subnets_post",
         "parameters": [
           {
@@ -2449,13 +2984,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}": {
       "get": {
-        "description": "Get subnet in a VPC.",
+        "tags": [
+          "subnets"
+        ],
+        "summary": "Get subnet in a VPC.",
+        "description": "",
         "operationId": "vpc_subnets_get_subnet",
         "parameters": [
           {
@@ -2505,11 +3050,21 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "put": {
-        "description": "Update a VPC Subnet.",
+        "tags": [
+          "subnets"
+        ],
+        "summary": "Update a VPC Subnet.",
+        "description": "",
         "operationId": "vpc_subnets_put_subnet",
         "parameters": [
           {
@@ -2562,11 +3117,21 @@
         "responses": {
           "204": {
             "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "delete": {
-        "description": "Delete a subnet from a VPC.",
+        "tags": [
+          "subnets"
+        ],
+        "summary": "Delete a subnet from a VPC.",
+        "description": "",
         "operationId": "vpc_subnets_delete_subnet",
         "parameters": [
           {
@@ -2609,13 +3174,23 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/ips": {
       "get": {
-        "description": "List IP addresses on a VPC subnet.",
+        "tags": [
+          "subnets"
+        ],
+        "summary": "List IP addresses on a VPC subnet.",
+        "description": "",
         "operationId": "subnets_ips_get",
         "parameters": [
           {
@@ -2695,6 +3270,12 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
@@ -2702,7 +3283,11 @@
     },
     "/roles": {
       "get": {
-        "description": "List the built-in roles",
+        "tags": [
+          "roles"
+        ],
+        "summary": "List the built-in roles",
+        "description": "",
         "operationId": "roles_get",
         "parameters": [
           {
@@ -2738,6 +3323,12 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
@@ -2745,7 +3336,11 @@
     },
     "/roles/{role_name}": {
       "get": {
-        "description": "Fetch a specific built-in role",
+        "tags": [
+          "roles"
+        ],
+        "summary": "Fetch a specific built-in role",
+        "description": "",
         "operationId": "roles_get_role",
         "parameters": [
           {
@@ -2769,13 +3364,23 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/sagas": {
       "get": {
-        "description": "List all sagas (for debugging)",
+        "tags": [
+          "sagas"
+        ],
+        "summary": "List all sagas (for debugging)",
+        "description": "",
         "operationId": "sagas_get",
         "parameters": [
           {
@@ -2819,6 +3424,12 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
@@ -2826,7 +3437,11 @@
     },
     "/sagas/{saga_id}": {
       "get": {
-        "description": "Fetch information about a single saga (for debugging)",
+        "tags": [
+          "sagas"
+        ],
+        "summary": "Fetch information about a single saga (for debugging)",
+        "description": "",
         "operationId": "sagas_get_saga",
         "parameters": [
           {
@@ -2850,13 +3465,50 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/session/me": {
+      "get": {
+        "tags": [
+          "hidden"
+        ],
+        "summary": "Fetch the user associated with the current session",
+        "operationId": "session_me",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionUser"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
     "/timeseries/schema": {
       "get": {
-        "description": "List all timeseries schema",
+        "tags": [
+          "metrics"
+        ],
+        "summary": "List all timeseries schema",
+        "description": "",
         "operationId": "timeseries_schema_get",
         "parameters": [
           {
@@ -2892,6 +3544,12 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
@@ -2899,7 +3557,11 @@
     },
     "/users": {
       "get": {
-        "description": "List the built-in system users",
+        "tags": [
+          "users"
+        ],
+        "summary": "List the built-in system users",
+        "description": "",
         "operationId": "users_get",
         "parameters": [
           {
@@ -2943,6 +3605,12 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         },
         "x-dropshot-pagination": true
@@ -2950,7 +3618,11 @@
     },
     "/users/{user_name}": {
       "get": {
-        "description": "Fetch a specific built-in system user",
+        "tags": [
+          "users"
+        ],
+        "summary": "Fetch a specific built-in system user",
+        "description": "",
         "operationId": "users_get_user",
         "parameters": [
           {
@@ -2973,12 +3645,30 @@
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     }
   },
   "components": {
+    "responses": {
+      "Error": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
     "schemas": {
       "ByteCount": {
         "description": "A count of bytes, typically used either for memory or storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience.",
@@ -3009,7 +3699,7 @@
             "description": "human-readable free-form text about a resource",
             "type": "string"
           },
-          "devicePath": {
+          "device_path": {
             "type": "string"
           },
           "id": {
@@ -3025,14 +3715,14 @@
               }
             ]
           },
-          "projectId": {
+          "project_id": {
             "type": "string",
             "format": "uuid"
           },
           "size": {
             "$ref": "#/components/schemas/ByteCount"
           },
-          "snapshotId": {
+          "snapshot_id": {
             "nullable": true,
             "type": "string",
             "format": "uuid"
@@ -3040,12 +3730,12 @@
           "state": {
             "$ref": "#/components/schemas/DiskState"
           },
-          "timeCreated": {
+          "time_created": {
             "description": "timestamp when this resource was created",
             "type": "string",
             "format": "date-time"
           },
-          "timeModified": {
+          "time_modified": {
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
@@ -3053,14 +3743,14 @@
         },
         "required": [
           "description",
-          "devicePath",
+          "device_path",
           "id",
           "name",
-          "projectId",
+          "project_id",
           "size",
           "state",
-          "timeCreated",
-          "timeModified"
+          "time_created",
+          "time_modified"
         ]
       },
       "DiskCreate": {
@@ -3081,7 +3771,7 @@
               }
             ]
           },
-          "snapshotId": {
+          "snapshot_id": {
             "nullable": true,
             "description": "id for snapshot from which the Disk should be created, if any",
             "type": "string",
@@ -3252,6 +3942,25 @@
           }
         ]
       },
+      "Error": {
+        "description": "Body of an HTTP response for an `HttpError`.  This type can be used to deserialize an HTTP response corresponding to an error in order to access the error code, message, etc.",
+        "type": "object",
+        "properties": {
+          "error_code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "request_id"
+        ]
+      },
       "FieldSchema": {
         "description": "The name and type information for a field of a timeseries schema.",
         "type": "object",
@@ -3289,46 +3998,6 @@
           "IpAddr",
           "Uuid",
           "Bool"
-        ]
-      },
-      "IdentityMetadata": {
-        "description": "Identity-related metadata that's included in nearly all public API objects",
-        "type": "object",
-        "properties": {
-          "description": {
-            "description": "human-readable free-form text about a resource",
-            "type": "string"
-          },
-          "id": {
-            "description": "unique, immutable, system-controlled identifier for each resource",
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "description": "unique, mutable, user-controlled identifier for each resource",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Name"
-              }
-            ]
-          },
-          "timeCreated": {
-            "description": "timestamp when this resource was created",
-            "type": "string",
-            "format": "date-time"
-          },
-          "timeModified": {
-            "description": "timestamp when this resource was last modified",
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "description",
-          "id",
-          "name",
-          "timeCreated",
-          "timeModified"
         ]
       },
       "Instance": {
@@ -3372,25 +4041,25 @@
               }
             ]
           },
-          "projectId": {
+          "project_id": {
             "description": "id for the project containing this Instance",
             "type": "string",
             "format": "uuid"
           },
-          "runState": {
+          "run_state": {
             "$ref": "#/components/schemas/InstanceState"
           },
-          "timeCreated": {
+          "time_created": {
             "description": "timestamp when this resource was created",
             "type": "string",
             "format": "date-time"
           },
-          "timeModified": {
+          "time_modified": {
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
           },
-          "timeRunStateUpdated": {
+          "time_run_state_updated": {
             "type": "string",
             "format": "date-time"
           }
@@ -3402,11 +4071,11 @@
           "memory",
           "name",
           "ncpus",
-          "projectId",
-          "runState",
-          "timeCreated",
-          "timeModified",
-          "timeRunStateUpdated"
+          "project_id",
+          "run_state",
+          "time_created",
+          "time_modified",
+          "time_run_state_updated"
         ]
       },
       "InstanceCpuCount": {
@@ -3443,6 +4112,19 @@
           "ncpus"
         ]
       },
+      "InstanceMigrate": {
+        "description": "Migration parameters for an [`Instance`]",
+        "type": "object",
+        "properties": {
+          "dst_sled_uuid": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "dst_sled_uuid"
+        ]
+      },
       "InstanceResultsPage": {
         "description": "A single page of results",
         "type": "object",
@@ -3474,6 +4156,7 @@
           "stopping",
           "stopped",
           "rebooting",
+          "migrating",
           "repairing",
           "failed",
           "destroyed"
@@ -3531,13 +4214,14 @@
         "description": "A `NetworkInterface` represents a virtual network interface device.",
         "type": "object",
         "properties": {
-          "identity": {
-            "description": "common identifying metadata",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/IdentityMetadata"
-              }
-            ]
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
           },
           "instance_id": {
             "description": "The Instance to which the interface belongs.",
@@ -3557,10 +4241,28 @@
               }
             ]
           },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
           "subnet_id": {
             "description": "The subnet to which the interface belongs.",
             "type": "string",
             "format": "uuid"
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
           },
           "vpc_id": {
             "description": "The VPC to which the interface belongs.",
@@ -3569,11 +4271,15 @@
           }
         },
         "required": [
-          "identity",
+          "description",
+          "id",
           "instance_id",
           "ip",
           "mac",
+          "name",
           "subnet_id",
+          "time_created",
+          "time_modified",
           "vpc_id"
         ]
       },
@@ -3619,12 +4325,12 @@
               }
             ]
           },
-          "timeCreated": {
+          "time_created": {
             "description": "timestamp when this resource was created",
             "type": "string",
             "format": "date-time"
           },
-          "timeModified": {
+          "time_modified": {
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
@@ -3634,8 +4340,8 @@
           "description",
           "id",
           "name",
-          "timeCreated",
-          "timeModified"
+          "time_created",
+          "time_modified"
         ]
       },
       "OrganizationCreate": {
@@ -3714,16 +4420,16 @@
               }
             ]
           },
-          "organizationId": {
+          "organization_id": {
             "type": "string",
             "format": "uuid"
           },
-          "timeCreated": {
+          "time_created": {
             "description": "timestamp when this resource was created",
             "type": "string",
             "format": "date-time"
           },
-          "timeModified": {
+          "time_modified": {
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
@@ -3733,9 +4439,9 @@
           "description",
           "id",
           "name",
-          "organizationId",
-          "timeCreated",
-          "timeModified"
+          "organization_id",
+          "time_created",
+          "time_modified"
         ]
       },
       "ProjectCreate": {
@@ -3797,12 +4503,40 @@
         "description": "Client view of an [`Rack`]",
         "type": "object",
         "properties": {
-          "identity": {
-            "$ref": "#/components/schemas/IdentityMetadata"
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
-          "identity"
+          "description",
+          "id",
+          "name",
+          "time_created",
+          "time_modified"
         ]
       },
       "RackResultsPage": {
@@ -4012,7 +4746,7 @@
               "type": {
                 "type": "string",
                 "enum": [
-                  "internetGateway"
+                  "internet_gateway"
                 ]
               },
               "value": {
@@ -4030,22 +4764,31 @@
         "description": "A route defines a rule that governs where traffic should be sent based on its destination.",
         "type": "object",
         "properties": {
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
           "destination": {
             "$ref": "#/components/schemas/RouteDestination"
           },
-          "identity": {
-            "description": "common identifying metadata",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/IdentityMetadata"
-              }
-            ]
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
           },
           "kind": {
             "description": "Describes the kind of router. Set at creation. `read-only`",
             "allOf": [
               {
                 "$ref": "#/components/schemas/RouterRouteKind"
+              }
+            ]
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
               }
             ]
           },
@@ -4056,14 +4799,28 @@
           },
           "target": {
             "$ref": "#/components/schemas/RouteTarget"
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
+          "description",
           "destination",
-          "identity",
+          "id",
           "kind",
+          "name",
           "router_id",
-          "target"
+          "target",
+          "time_created",
+          "time_modified"
         ]
       },
       "RouterRouteCreateParams": {
@@ -4094,10 +4851,10 @@
         "description": "The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.\n\nSee [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context",
         "type": "string",
         "enum": [
-          "Default",
-          "VpcSubnet",
-          "VpcPeering",
-          "Custom"
+          "default",
+          "vpc_subnet",
+          "vpc_peering",
+          "custom"
         ]
       },
       "RouterRouteResultsPage": {
@@ -4173,7 +4930,7 @@
               "error": {
                 "type": "string",
                 "enum": [
-                  "actionFailed"
+                  "action_failed"
                 ]
               },
               "source_error": {}
@@ -4189,7 +4946,7 @@
               "error": {
                 "type": "string",
                 "enum": [
-                  "deserializeFailed"
+                  "deserialize_failed"
                 ]
               },
               "message": {
@@ -4207,7 +4964,7 @@
               "error": {
                 "type": "string",
                 "enum": [
-                  "injectedError"
+                  "injected_error"
                 ]
               }
             },
@@ -4221,7 +4978,7 @@
               "error": {
                 "type": "string",
                 "enum": [
-                  "serializeFailed"
+                  "serialize_failed"
                 ]
               },
               "message": {
@@ -4239,7 +4996,7 @@
               "error": {
                 "type": "string",
                 "enum": [
-                  "subsagaCreateFailed"
+                  "subsaga_create_failed"
                 ]
               },
               "message": {
@@ -4328,6 +5085,19 @@
           }
         ]
       },
+      "SessionUser": {
+        "description": "Client view of currently authed user.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
       "Sled": {
         "description": "Client view of an [`Sled`]",
         "type": "object",
@@ -4349,15 +5119,15 @@
               }
             ]
           },
-          "serviceAddress": {
+          "service_address": {
             "type": "string"
           },
-          "timeCreated": {
+          "time_created": {
             "description": "timestamp when this resource was created",
             "type": "string",
             "format": "date-time"
           },
-          "timeModified": {
+          "time_modified": {
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
@@ -4367,9 +5137,9 @@
           "description",
           "id",
           "name",
-          "serviceAddress",
-          "timeCreated",
-          "timeModified"
+          "service_address",
+          "time_created",
+          "time_modified"
         ]
       },
       "SledResultsPage": {
@@ -4469,12 +5239,12 @@
               }
             ]
           },
-          "timeCreated": {
+          "time_created": {
             "description": "timestamp when this resource was created",
             "type": "string",
             "format": "date-time"
           },
-          "timeModified": {
+          "time_modified": {
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
@@ -4484,8 +5254,8 @@
           "description",
           "id",
           "name",
-          "timeCreated",
-          "timeModified"
+          "time_created",
+          "time_modified"
         ]
       },
       "UserResultsPage": {
@@ -4517,7 +5287,7 @@
             "description": "human-readable free-form text about a resource",
             "type": "string"
           },
-          "dnsName": {
+          "dns_name": {
             "description": "The name used for the VPC in DNS.",
             "allOf": [
               {
@@ -4538,22 +5308,22 @@
               }
             ]
           },
-          "projectId": {
+          "project_id": {
             "description": "id for the project containing this VPC",
             "type": "string",
             "format": "uuid"
           },
-          "systemRouterId": {
+          "system_router_id": {
             "description": "id for the system router where subnet default routes are registered",
             "type": "string",
             "format": "uuid"
           },
-          "timeCreated": {
+          "time_created": {
             "description": "timestamp when this resource was created",
             "type": "string",
             "format": "date-time"
           },
-          "timeModified": {
+          "time_modified": {
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
@@ -4561,13 +5331,13 @@
         },
         "required": [
           "description",
-          "dnsName",
+          "dns_name",
           "id",
           "name",
-          "projectId",
-          "systemRouterId",
-          "timeCreated",
-          "timeModified"
+          "project_id",
+          "system_router_id",
+          "time_created",
+          "time_modified"
         ]
       },
       "VpcCreate": {
@@ -4577,7 +5347,7 @@
           "description": {
             "type": "string"
           },
-          "dnsName": {
+          "dns_name": {
             "$ref": "#/components/schemas/Name"
           },
           "name": {
@@ -4586,7 +5356,7 @@
         },
         "required": [
           "description",
-          "dnsName",
+          "dns_name",
           "name"
         ]
       },
@@ -4601,6 +5371,10 @@
                 "$ref": "#/components/schemas/VpcFirewallRuleAction"
               }
             ]
+          },
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
           },
           "direction": {
             "description": "whether this rule is for incoming or outgoing traffic",
@@ -4618,11 +5392,16 @@
               }
             ]
           },
-          "identity": {
-            "description": "common identifying metadata",
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
             "allOf": [
               {
-                "$ref": "#/components/schemas/IdentityMetadata"
+                "$ref": "#/components/schemas/Name"
               }
             ]
           },
@@ -4646,16 +5425,30 @@
             "items": {
               "$ref": "#/components/schemas/VpcFirewallRuleTarget"
             }
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
           "action",
+          "description",
           "direction",
           "filters",
-          "identity",
+          "id",
+          "name",
           "priority",
           "status",
-          "targets"
+          "targets",
+          "time_created",
+          "time_modified"
         ]
       },
       "VpcFirewallRuleAction": {
@@ -4784,7 +5577,7 @@
               "type": {
                 "type": "string",
                 "enum": [
-                  "internetGateway"
+                  "internet_gateway"
                 ]
               },
               "value": {
@@ -4997,16 +5790,35 @@
         "description": "A VPC router defines a series of rules that indicate where traffic should be sent depending on its destination.",
         "type": "object",
         "properties": {
-          "identity": {
-            "description": "common identifying metadata",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/IdentityMetadata"
-              }
-            ]
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
           },
           "kind": {
             "$ref": "#/components/schemas/VpcRouterKind"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
           },
           "vpc_id": {
             "description": "The VPC to which the router belongs.",
@@ -5015,8 +5827,12 @@
           }
         },
         "required": [
-          "identity",
+          "description",
+          "id",
           "kind",
+          "name",
+          "time_created",
+          "time_modified",
           "vpc_id"
         ]
       },
@@ -5086,13 +5902,14 @@
         "description": "A VPC subnet represents a logical grouping for instances that allows network traffic between them, within a IPv4 subnetwork or optionall an IPv6 subnetwork.",
         "type": "object",
         "properties": {
-          "identity": {
-            "description": "common identifying metadata",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/IdentityMetadata"
-              }
-            ]
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
           },
           "ipv4_block": {
             "nullable": true,
@@ -5112,6 +5929,24 @@
               }
             ]
           },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          },
           "vpc_id": {
             "description": "The VPC to which the subnet belongs.",
             "type": "string",
@@ -5119,7 +5954,11 @@
           }
         },
         "required": [
-          "identity",
+          "description",
+          "id",
+          "name",
+          "time_created",
+          "time_modified",
           "vpc_id"
         ]
       },
@@ -5130,7 +5969,7 @@
           "description": {
             "type": "string"
           },
-          "ipv4Block": {
+          "ipv4_block": {
             "nullable": true,
             "allOf": [
               {
@@ -5138,7 +5977,7 @@
               }
             ]
           },
-          "ipv6Block": {
+          "ipv6_block": {
             "nullable": true,
             "allOf": [
               {
@@ -5184,7 +6023,7 @@
             "nullable": true,
             "type": "string"
           },
-          "ipv4Block": {
+          "ipv4_block": {
             "nullable": true,
             "allOf": [
               {
@@ -5192,7 +6031,7 @@
               }
             ]
           },
-          "ipv6Block": {
+          "ipv6_block": {
             "nullable": true,
             "allOf": [
               {
@@ -5218,7 +6057,7 @@
             "nullable": true,
             "type": "string"
           },
-          "dnsName": {
+          "dns_name": {
             "nullable": true,
             "allOf": [
               {

@@ -161,41 +161,6 @@ where
         bail!("tags not presently supported");
     }
 
-    if let Some(components) = api.components.as_ref() {
-        if !components.security_schemes.is_empty() {
-            bail!("component security schemes not supported");
-        }
-
-        if !components.responses.is_empty() {
-            bail!("component responses not supported");
-        }
-
-        if !components.parameters.is_empty() {
-            bail!("component parameters not supported");
-        }
-
-        if !components.request_bodies.is_empty() {
-            bail!("component request bodies not supported");
-        }
-
-        if !components.headers.is_empty() {
-            bail!("component headers not supported");
-        }
-
-        if !components.links.is_empty() {
-            bail!("component links not supported");
-        }
-
-        if !components.callbacks.is_empty() {
-            bail!("component callbacks not supported");
-        }
-
-        /*
-         * XXX Ignoring "examples" and "extensions" for now.
-         * Explicitly allowing "schemas" through.
-         */
-    }
-
     /*
      * XXX Ignoring "external_docs" and "extensions" for now, as they seem not
      * to immediately affect our code generation.
@@ -217,20 +182,12 @@ where
                             bail!("duplicate operation ID: {}", oid);
                         }
 
-                        if !o.tags.is_empty() {
-                            bail!("op {}: tags, unsupported", oid);
-                        }
-
                         if !o.servers.is_empty() {
                             bail!("op {}: servers, unsupported", oid);
                         }
 
                         if o.security.is_some() {
                             bail!("op {}: security, unsupported", oid);
-                        }
-
-                        if o.responses.default.is_some() {
-                            bail!("op {}: has response default", oid);
                         }
                     } else {
                         bail!("path {} is missing operation ID", p.0);

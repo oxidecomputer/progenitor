@@ -112,6 +112,10 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     })?;
 
     let output = quote! {
+        // The progenitor_client is tautologically visible from macro
+        // consumers.
+        use progenitor::progenitor_client;
+
         #code
 
         // Force a rebuild when the given file is modified.

@@ -6,31 +6,7 @@ use std::ops::Deref;
 
 use serde::de::DeserializeOwned;
 
-/// Error produced by generated client methods. The type parameter may be a
-/// struct if there's a single expected error type or an enum if there are
-/// multiple valid error types.
-pub enum Error<E> {
-    /// A server error either with the data, or with the connection.
-    CommunicationError(reqwest::Error),
-
-    /// A documented, expected error response.
-    ErrorResponse(ResponseValue<E>),
-
-    /// An expected response code whose deserialization failed.
-    // TODO we have stuff from the response; should we include it?
-    InvalidResponsePayload(reqwest::Error),
-
-    /// A response not listed in the API description. This may represent a
-    /// success or failure response; check `status().is_success()`.
-    UnexpectedResponse(reqwest::Response),
-}
-
-impl<E> From<reqwest::Error> for Error<E> {
-    fn from(e: reqwest::Error) -> Self {
-        Self::CommunicationError(e)
-    }
-}
-
+/// Success value returned by generated client methods.
 pub struct ResponseValue<T> {
     inner: T,
     status: reqwest::StatusCode,
@@ -39,7 +15,7 @@ pub struct ResponseValue<T> {
 }
 
 impl<T: DeserializeOwned> ResponseValue<T> {
-    pub async fn from_response<E>(
+    pub async fn from_response<E: std::fmt::Debug>(
         response: reqwest::Response,
     ) -> Result<Self, Error<E>> {
         let status = response.status();
@@ -79,7 +55,10 @@ impl<T> ResponseValue<T> {
         &self.headers
     }
 
-    pub fn map<U, F, E>(self, f: F) -> Result<ResponseValue<U>, E>
+    pub fn map<U: std::fmt::Debug, F, E>(
+        self,
+        f: F,
+    ) -> Result<ResponseValue<U>, E>
     where
         F: FnOnce(T) -> U,
     {
@@ -96,8 +75,8 @@ impl<T> ResponseValue<T> {
         })
     }
 
-    pub fn to_error<U>(self) -> Result<U, Error<T>> {
-        Err(Error::ErrorResponse(self))
+    pub fn into_inner(self) -> T {
+        self.inner
     }
 }
 
@@ -106,5 +85,59 @@ impl<T> Deref for ResponseValue<T> {
 
     fn deref(&self) -> &Self::Target {
         &self.inner
+    }
+}
+
+impl<T> std::ops::DerefMut for ResponseValue<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.inner.fmt(f)
+    }
+}
+
+/// Error produced by generated client methods. The type parameter may be a
+/// struct if there's a single expected error type or an enum if there are
+/// multiple valid error types. It can be the unit type if there are no
+/// structured returns expected.
+#[derive(Debug)]
+pub enum Error<E: std::fmt::Debug> {
+    /// A server error either with the data, or with the connection.
+    CommunicationError(reqwest::Error),
+
+    /// A documented, expected error response.
+    ErrorResponse(ResponseValue<E>),
+
+    /// An expected response code whose deserialization failed.
+    // TODO we have stuff from the response; should we include it?
+    InvalidResponsePayload(reqwest::Error),
+
+    /// A response not listed in the API description. This may represent a
+    /// success or failure response; check `status().is_success()`.
+    UnexpectedResponse(reqwest::Response),
+}
+
+impl<E: std::fmt::Debug> From<reqwest::Error> for Error<E> {
+    fn from(e: reqwest::Error) -> Self {
+        Self::CommunicationError(e)
+    }
+}
+
+impl<E: std::fmt::Debug> std::fmt::Display for Error<E> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        todo!()
+    }
+}
+impl<E: std::fmt::Debug> std::error::Error for Error<E> {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            Error::CommunicationError(e) => Some(e),
+            Error::InvalidResponsePayload(e) => Some(e),
+            _ => None,
+        }
     }
 }

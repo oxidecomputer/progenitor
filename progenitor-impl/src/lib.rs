@@ -231,6 +231,11 @@ impl Generator {
         });
 
         let file = quote! {
+            // Re-export ResponseValue and Error since those are used by the
+            // public interface of Client.
+            pub use progenitor_client::ResponseValue;
+            pub use progenitor_client::Error;
+
             mod progenitor_support {
                 use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
 
@@ -758,6 +763,8 @@ impl Generator {
                 matches!(
                     &response.status_code,
                     OperationResponseStatus::Code(400..=599)
+                        | OperationResponseStatus::Range(4)
+                        | OperationResponseStatus::Range(5)
                 )
             })
             .collect::<Vec<_>>();
@@ -799,17 +806,19 @@ impl Generator {
             };
 
             let decode = match &response.typ {
-                OperationResponseType::Type(_) =>  {
+                OperationResponseType::Type(_) => {
                     quote!{
-                        progenitor_client::ResponseValue::from_response(response)
-                            .await
-                            .to_error()
+                        Err(progenitor_client::Error::ErrorResponse(
+                            progenitor_client::ResponseValue::from_response(response)
+                                .await?
+                        ))
                     }
                 }
                 OperationResponseType::None => {
                     quote!{
-                        progenitor_client::ResponseValue::empty(response)
-                            .to_error()
+                        Err(progenitor_client::Error::ErrorResponse(
+                            progenitor_client::ResponseValue::empty(response)?
+                        ))
                     }
                 }
                 // TODO not sure how to handle this...
@@ -829,24 +838,32 @@ impl Generator {
                 )
             })
             .map_or_else(||
+                // With no default response, unexpected status codes produce
+                // and Error::UnexpectedResponse()
                 quote!{
                         _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
-                }, |response| {
+                },
+                // If we have a structured default response, we decode it and
+                // return Error::ErrorResponse()
+                |response| {
                 let decode = match &response.typ {
                     OperationResponseType::Type(_) => {
                         quote!{
-                            progenitor_client::ResponseValue::from_response(response)
-                                .await
-                                .to_error()
+                            Err(progenitor_client::Error::ErrorResponse(
+                                progenitor_client::ResponseValue::from_response(response)
+                                    .await?
+                            ))
                         }
                     }
                     OperationResponseType::None => {
                         quote!{
-                            progenitor_client::ResponseValue::empty(response)
-                                .to_error()
+                            Err(progenitor_client::Error::ErrorResponse(
+                                progenitor_client::ResponseValue::empty(response)?
+                            ))
                         }
                     }
-                    // TODO not sure how to handle this...
+                    // TODO not sure how to handle this... maybe as a
+                    // ResponseValue<Bytes>
                     OperationResponseType::Raw => todo!(),
                 };
 
@@ -906,23 +923,38 @@ impl Generator {
                 let response = result?;
 
                 match response.status().as_u16() {
-                    #(#success_response_matches)*
-                    #(#error_response_matches)*
-                    #default_response
-
-                    // // TODO: expected error response
-                    // 404 => ResponseValue::from_response(response).to_error(),
-
-                    // // TODO: expected error response with multiple types
-                    // 555 => {
-                    //     ResponseValue::from_response(response)?
-                    //         .map(ErrorResponseTypeXXX::ErrorAAA)
-                    //         .to_error()
+                    // These will be of the form...
+                    // 201 => ResponseValue::from_response(response).await,
+                    // 200..299 => ResponseValue::empty(response),
+                    // TODO this isn't implemented
+                    // ... or in the case of an operation with multiple
+                    // successful response types...
+                    // 200 => {
+                    //     ResponseValue::from_response()
+                    //         .await?
+                    //         .map(OperationXResponse::ResponseTypeA)
                     // }
+                    // 201 => {
+                    //     ResponseValue::from_response()
+                    //         .await?
+                    //         .map(OperationXResponse::ResponseTypeB)
+                    // }
+                    #(#success_response_matches)*
 
-                    // // TODO if there's a default it will look like the cases
-                    // // above; if not:
-                    //_ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+                    // This is almost identical to the success types except
+                    // they are wrapped in Error::ErrorResponse...
+                    // 400 => {
+                    //     Err(Error::ErrorResponse(
+                    //         ResponseValue::from_response(response.await?)
+                    //     ))
+                    // }
+                    #(#error_response_matches)*
+
+                    // The default response is either an Error with a known
+                    // type if the operation defines a default (as above) or
+                    // an Error::UnexpectedResponse...
+                    // _ => Err(Error::UnexpectedResponse(response)),
+                    #default_response
                 }
             }
         };
@@ -1000,7 +1032,10 @@ impl Generator {
                 pub fn #stream_id #bounds (
                     &'a self,
                     #(#stream_params),*
-                ) -> impl futures::Stream<Item = Result<#item_type>> + Unpin + '_ {
+                ) -> impl futures::Stream<Item = Result<
+                    #item_type,
+                    progenitor_client::Error<#error_type>,
+                >> + Unpin + '_ {
                     use futures::StreamExt;
                     use futures::TryFutureExt;
                     use futures::TryStreamExt;
@@ -1011,6 +1046,7 @@ impl Generator {
                         #(#first_params,)*
                     )
                     .map_ok(move |page| {
+                        let page = page.into_inner();
                         // The first page is just an iter
                         let first = futures::stream::iter(
                             page.items.into_iter().map(Ok)
@@ -1035,6 +1071,7 @@ impl Generator {
                                         #(#step_params,)*
                                     )
                                     .map_ok(|page| {
+                                        let page = page.into_inner();
                                         Some((
                                             futures::stream::iter(
                                                 page
