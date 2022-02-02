@@ -1,4 +1,5 @@
-use anyhow::Result;
+pub use progenitor_client::Error;
+pub use progenitor_client::ResponseValue;
 mod progenitor_support {
     use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
     #[allow(dead_code)]
@@ -65,26 +66,18 @@ pub mod types {
     pub struct Disk {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
-        #[serde(rename = "devicePath")]
         pub device_path: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
         pub name: Name,
-        #[serde(rename = "projectId")]
         pub project_id: uuid::Uuid,
         pub size: ByteCount,
-        #[serde(
-            rename = "snapshotId",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
         pub snapshot_id: Option<uuid::Uuid>,
         pub state: DiskState,
         #[doc = "timestamp when this resource was created"]
-        #[serde(rename = "timeCreated")]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
-        #[serde(rename = "timeModified")]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -95,11 +88,7 @@ pub mod types {
         pub name: Name,
         pub size: ByteCount,
         #[doc = "id for snapshot from which the Disk should be created, if any"]
-        #[serde(
-            rename = "snapshotId",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
         pub snapshot_id: Option<uuid::Uuid>,
     }
 
@@ -136,6 +125,15 @@ pub mod types {
         Destroyed,
         #[serde(rename = "faulted")]
         Faulted,
+    }
+
+    #[doc = "Body of an HTTP response for an `HttpError`.  This type can be used to deserialize an HTTP response corresponding to an error in order to access the error code, message, etc."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Error {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub error_code: Option<String>,
+        pub message: String,
+        pub request_id: String,
     }
 
     #[doc = "The name and type information for a field of a timeseries schema."]
@@ -199,22 +197,6 @@ pub mod types {
         }
     }
 
-    #[doc = "Identity-related metadata that's included in nearly all public API objects"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct IdentityMetadata {
-        #[doc = "human-readable free-form text about a resource"]
-        pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
-        pub id: uuid::Uuid,
-        pub name: Name,
-        #[doc = "timestamp when this resource was created"]
-        #[serde(rename = "timeCreated")]
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
-        #[serde(rename = "timeModified")]
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-    }
-
     #[doc = "Client view of an [`Instance`]"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Instance {
@@ -228,17 +210,12 @@ pub mod types {
         pub name: Name,
         pub ncpus: InstanceCpuCount,
         #[doc = "id for the project containing this Instance"]
-        #[serde(rename = "projectId")]
         pub project_id: uuid::Uuid,
-        #[serde(rename = "runState")]
         pub run_state: InstanceState,
         #[doc = "timestamp when this resource was created"]
-        #[serde(rename = "timeCreated")]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
-        #[serde(rename = "timeModified")]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        #[serde(rename = "timeRunStateUpdated")]
         pub time_run_state_updated: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -260,6 +237,12 @@ pub mod types {
         pub memory: ByteCount,
         pub name: Name,
         pub ncpus: InstanceCpuCount,
+    }
+
+    #[doc = "Migration parameters for an [`Instance`]"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct InstanceMigrate {
+        pub dst_sled_uuid: uuid::Uuid,
     }
 
     #[doc = "A single page of results"]
@@ -287,6 +270,8 @@ pub mod types {
         Stopped,
         #[serde(rename = "rebooting")]
         Rebooting,
+        #[serde(rename = "migrating")]
+        Migrating,
         #[serde(rename = "repairing")]
         Repairing,
         #[serde(rename = "failed")]
@@ -304,6 +289,7 @@ pub mod types {
                 InstanceState::Stopping => "stopping".to_string(),
                 InstanceState::Stopped => "stopped".to_string(),
                 InstanceState::Rebooting => "rebooting".to_string(),
+                InstanceState::Migrating => "migrating".to_string(),
                 InstanceState::Repairing => "repairing".to_string(),
                 InstanceState::Failed => "failed".to_string(),
                 InstanceState::Destroyed => "destroyed".to_string(),
@@ -405,14 +391,22 @@ pub mod types {
     #[doc = "A `NetworkInterface` represents a virtual network interface device."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct NetworkInterface {
-        pub identity: IdentityMetadata,
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
         #[doc = "The Instance to which the interface belongs."]
         pub instance_id: uuid::Uuid,
         #[doc = "The IP address assigned to this interface."]
         pub ip: String,
         pub mac: MacAddr,
+        pub name: Name,
         #[doc = "The subnet to which the interface belongs."]
         pub subnet_id: uuid::Uuid,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "The VPC to which the interface belongs."]
         pub vpc_id: uuid::Uuid,
     }
@@ -436,10 +430,8 @@ pub mod types {
         pub id: uuid::Uuid,
         pub name: Name,
         #[doc = "timestamp when this resource was created"]
-        #[serde(rename = "timeCreated")]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
-        #[serde(rename = "timeModified")]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -477,13 +469,10 @@ pub mod types {
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
         pub name: Name,
-        #[serde(rename = "organizationId")]
         pub organization_id: uuid::Uuid,
         #[doc = "timestamp when this resource was created"]
-        #[serde(rename = "timeCreated")]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
-        #[serde(rename = "timeModified")]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -516,7 +505,15 @@ pub mod types {
     #[doc = "Client view of an [`Rack`]"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Rack {
-        pub identity: IdentityMetadata,
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
+        pub name: Name,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
     #[doc = "A single page of results"]
@@ -578,19 +575,27 @@ pub mod types {
         Subnet(Name),
         #[serde(rename = "instance")]
         Instance(Name),
-        #[serde(rename = "internetGateway")]
+        #[serde(rename = "internet_gateway")]
         InternetGateway(Name),
     }
 
     #[doc = "A route defines a rule that governs where traffic should be sent based on its destination."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RouterRoute {
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
         pub destination: RouteDestination,
-        pub identity: IdentityMetadata,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
         pub kind: RouterRouteKind,
+        pub name: Name,
         #[doc = "The VPC Router to which the route belongs."]
         pub router_id: uuid::Uuid,
         pub target: RouteTarget,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
     #[doc = "Create-time parameters for a [`RouterRoute`]"]
@@ -605,19 +610,23 @@ pub mod types {
     #[doc = "The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.\n\nSee [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context"]
     #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum RouterRouteKind {
+        #[serde(rename = "default")]
         Default,
+        #[serde(rename = "vpc_subnet")]
         VpcSubnet,
+        #[serde(rename = "vpc_peering")]
         VpcPeering,
+        #[serde(rename = "custom")]
         Custom,
     }
 
     impl ToString for RouterRouteKind {
         fn to_string(&self) -> String {
             match self {
-                RouterRouteKind::Default => "Default".to_string(),
-                RouterRouteKind::VpcSubnet => "VpcSubnet".to_string(),
-                RouterRouteKind::VpcPeering => "VpcPeering".to_string(),
-                RouterRouteKind::Custom => "Custom".to_string(),
+                RouterRouteKind::Default => "default".to_string(),
+                RouterRouteKind::VpcSubnet => "vpc_subnet".to_string(),
+                RouterRouteKind::VpcPeering => "vpc_peering".to_string(),
+                RouterRouteKind::Custom => "custom".to_string(),
             }
         }
     }
@@ -652,15 +661,15 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "error")]
     pub enum SagaErrorInfo {
-        #[serde(rename = "actionFailed")]
+        #[serde(rename = "action_failed")]
         ActionFailed { source_error: serde_json::Value },
-        #[serde(rename = "deserializeFailed")]
+        #[serde(rename = "deserialize_failed")]
         DeserializeFailed { message: String },
-        #[serde(rename = "injectedError")]
+        #[serde(rename = "injected_error")]
         InjectedError,
-        #[serde(rename = "serializeFailed")]
+        #[serde(rename = "serialize_failed")]
         SerializeFailed { message: String },
-        #[serde(rename = "subsagaCreateFailed")]
+        #[serde(rename = "subsaga_create_failed")]
         SubsagaCreateFailed { message: String },
     }
 
@@ -688,6 +697,12 @@ pub mod types {
         },
     }
 
+    #[doc = "Client view of currently authed user."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SessionUser {
+        pub id: uuid::Uuid,
+    }
+
     #[doc = "Client view of an [`Sled`]"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Sled {
@@ -696,13 +711,10 @@ pub mod types {
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
         pub name: Name,
-        #[serde(rename = "serviceAddress")]
         pub service_address: String,
         #[doc = "timestamp when this resource was created"]
-        #[serde(rename = "timeCreated")]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
-        #[serde(rename = "timeModified")]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -754,10 +766,8 @@ pub mod types {
         pub id: uuid::Uuid,
         pub name: Name,
         #[doc = "timestamp when this resource was created"]
-        #[serde(rename = "timeCreated")]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
-        #[serde(rename = "timeModified")]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -776,22 +786,17 @@ pub mod types {
     pub struct Vpc {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
-        #[serde(rename = "dnsName")]
         pub dns_name: Name,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
         pub name: Name,
         #[doc = "id for the project containing this VPC"]
-        #[serde(rename = "projectId")]
         pub project_id: uuid::Uuid,
         #[doc = "id for the system router where subnet default routes are registered"]
-        #[serde(rename = "systemRouterId")]
         pub system_router_id: uuid::Uuid,
         #[doc = "timestamp when this resource was created"]
-        #[serde(rename = "timeCreated")]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
-        #[serde(rename = "timeModified")]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -799,7 +804,6 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcCreate {
         pub description: String,
-        #[serde(rename = "dnsName")]
         pub dns_name: Name,
         pub name: Name,
     }
@@ -808,14 +812,22 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRule {
         pub action: VpcFirewallRuleAction,
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
         pub direction: VpcFirewallRuleDirection,
         pub filters: VpcFirewallRuleFilter,
-        pub identity: IdentityMetadata,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
+        pub name: Name,
         #[doc = "the relative priority of this rule"]
         pub priority: u16,
         pub status: VpcFirewallRuleStatus,
         #[doc = "list of sets of instances that the rule applies to"]
         pub targets: Vec<VpcFirewallRuleTarget>,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
     #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
@@ -877,7 +889,7 @@ pub mod types {
         Instance(Name),
         #[serde(rename = "ip")]
         Ip(String),
-        #[serde(rename = "internetGateway")]
+        #[serde(rename = "internet_gateway")]
         InternetGateway(Name),
     }
 
@@ -988,8 +1000,16 @@ pub mod types {
     #[doc = "A VPC router defines a series of rules that indicate where traffic should be sent depending on its destination."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouter {
-        pub identity: IdentityMetadata,
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
         pub kind: VpcRouterKind,
+        pub name: Name,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "The VPC to which the router belongs."]
         pub vpc_id: uuid::Uuid,
     }
@@ -1040,7 +1060,10 @@ pub mod types {
     #[doc = "A VPC subnet represents a logical grouping for instances that allows network traffic between them, within a IPv4 subnetwork or optionall an IPv6 subnetwork."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnet {
-        pub identity: IdentityMetadata,
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
         #[serde(
             rename = "ipv4_block",
             default,
@@ -1053,6 +1076,11 @@ pub mod types {
             skip_serializing_if = "Option::is_none"
         )]
         pub ipv_6_block: Option<Ipv6Net>,
+        pub name: Name,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "The VPC to which the subnet belongs."]
         pub vpc_id: uuid::Uuid,
     }
@@ -1061,9 +1089,17 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetCreate {
         pub description: String,
-        #[serde(rename = "ipv4Block", default, skip_serializing_if = "Option::is_none")]
+        #[serde(
+            rename = "ipv4_block",
+            default,
+            skip_serializing_if = "Option::is_none"
+        )]
         pub ipv_4_block: Option<Ipv4Net>,
-        #[serde(rename = "ipv6Block", default, skip_serializing_if = "Option::is_none")]
+        #[serde(
+            rename = "ipv6_block",
+            default,
+            skip_serializing_if = "Option::is_none"
+        )]
         pub ipv_6_block: Option<Ipv6Net>,
         pub name: Name,
     }
@@ -1083,9 +1119,17 @@ pub mod types {
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
-        #[serde(rename = "ipv4Block", default, skip_serializing_if = "Option::is_none")]
+        #[serde(
+            rename = "ipv4_block",
+            default,
+            skip_serializing_if = "Option::is_none"
+        )]
         pub ipv_4_block: Option<Ipv4Net>,
-        #[serde(rename = "ipv6Block", default, skip_serializing_if = "Option::is_none")]
+        #[serde(
+            rename = "ipv6_block",
+            default,
+            skip_serializing_if = "Option::is_none"
+        )]
         pub ipv_6_block: Option<Ipv6Net>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
@@ -1096,7 +1140,7 @@ pub mod types {
     pub struct VpcUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
-        #[serde(rename = "dnsName", default, skip_serializing_if = "Option::is_none")]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
         pub dns_name: Option<Name>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
@@ -1135,13 +1179,16 @@ impl Client {
         &self.client
     }
 
-    #[doc = "List racks in the system.\n\nhardware_racks_get: GET /hardware/racks"]
+    #[doc = "\n\nhardware_racks_get: GET /hardware/racks"]
     pub async fn hardware_racks_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
-    ) -> Result<types::RackResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::RackResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!("{}/hardware/racks", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -1158,21 +1205,33 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List racks in the system.\n\nreturns a Stream<Item = Rack> by making successive calls to hardware_racks_get"]
+    #[doc = "\n\nreturns a Stream<Item = Rack> by making successive calls to hardware_racks_get"]
     pub fn hardware_racks_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Rack>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Rack, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.hardware_racks_get(limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -1180,6 +1239,7 @@ impl Client {
                     } else {
                         self.hardware_racks_get(None, state.as_deref(), None)
                             .map_ok(|page| {
+                                let page = page.into_inner();
                                 Some((
                                     futures::stream::iter(page.items.into_iter().map(Ok)),
                                     page.next_page,
@@ -1195,11 +1255,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch information about a particular rack.\n\nhardware_racks_get_rack: GET /hardware/racks/{rack_id}"]
+    #[doc = "\n\nhardware_racks_get_rack: GET /hardware/racks/{rack_id}"]
     pub async fn hardware_racks_get_rack<'a>(
         &'a self,
         rack_id: &'a uuid::Uuid,
-    ) -> Result<types::Rack> {
+    ) -> Result<progenitor_client::ResponseValue<types::Rack>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/hardware/racks/{}",
             self.baseurl,
@@ -1207,17 +1268,29 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List sleds in the system.\n\nhardware_sleds_get: GET /hardware/sleds"]
+    #[doc = "\n\nhardware_sleds_get: GET /hardware/sleds"]
     pub async fn hardware_sleds_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
-    ) -> Result<types::SledResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::SledResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!("{}/hardware/sleds", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -1234,21 +1307,33 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List sleds in the system.\n\nreturns a Stream<Item = Sled> by making successive calls to hardware_sleds_get"]
+    #[doc = "\n\nreturns a Stream<Item = Sled> by making successive calls to hardware_sleds_get"]
     pub fn hardware_sleds_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Sled>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Sled, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.hardware_sleds_get(limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -1256,6 +1341,7 @@ impl Client {
                     } else {
                         self.hardware_sleds_get(None, state.as_deref(), None)
                             .map_ok(|page| {
+                                let page = page.into_inner();
                                 Some((
                                     futures::stream::iter(page.items.into_iter().map(Ok)),
                                     page.next_page,
@@ -1271,11 +1357,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch information about a sled in the system.\n\nhardware_sleds_get_sled: GET /hardware/sleds/{sled_id}"]
+    #[doc = "\n\nhardware_sleds_get_sled: GET /hardware/sleds/{sled_id}"]
     pub async fn hardware_sleds_get_sled<'a>(
         &'a self,
         sled_id: &'a uuid::Uuid,
-    ) -> Result<types::Sled> {
+    ) -> Result<progenitor_client::ResponseValue<types::Sled>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/hardware/sleds/{}",
             self.baseurl,
@@ -1283,38 +1370,62 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "spoof_login: POST /login"]
     pub async fn spoof_login<'a>(
         &'a self,
         body: &'a types::LoginParams,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
         let url = format!("{}/login", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(progenitor_client::ResponseValue::empty(response)),
+            _ => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::empty(response),
+            )),
+        }
     }
 
     #[doc = "logout: POST /logout"]
-    pub async fn logout<'a>(&'a self) -> Result<reqwest::Response> {
+    pub async fn logout<'a>(
+        &'a self,
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
         let url = format!("{}/logout", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(progenitor_client::ResponseValue::empty(response)),
+            _ => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::empty(response),
+            )),
+        }
     }
 
-    #[doc = "List all organizations.\n\norganizations_get: GET /organizations"]
+    #[doc = "\n\norganizations_get: GET /organizations"]
     pub async fn organizations_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> Result<types::OrganizationResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::OrganizationResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!("{}/organizations", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -1331,21 +1442,34 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List all organizations.\n\nreturns a Stream<Item = Organization> by making successive calls to organizations_get"]
+    #[doc = "\n\nreturns a Stream<Item = Organization> by making successive calls to organizations_get"]
     pub fn organizations_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Organization>> + Unpin + '_ {
+    ) -> impl futures::Stream<
+        Item = Result<types::Organization, progenitor_client::Error<types::Error>>,
+    > + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.organizations_get(limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -1353,6 +1477,7 @@ impl Client {
                     } else {
                         self.organizations_get(None, state.as_deref(), None)
                             .map_ok(|page| {
+                                let page = page.into_inner();
                                 Some((
                                     futures::stream::iter(page.items.into_iter().map(Ok)),
                                     page.next_page,
@@ -1368,23 +1493,38 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a new organization.\n\norganizations_post: POST /organizations"]
+    #[doc = "\n\norganizations_post: POST /organizations"]
     pub async fn organizations_post<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
-    ) -> Result<types::Organization> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Organization>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!("{}/organizations", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Fetch a specific organization\n\norganizations_get_organization: GET /organizations/{organization_name}"]
+    #[doc = "\n\norganizations_get_organization: GET /organizations/{organization_name}"]
     pub async fn organizations_get_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
-    ) -> Result<types::Organization> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Organization>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
@@ -1392,16 +1532,28 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Update a specific organization.\n * TODO-correctness: Is it valid for PUT to accept application/json that's a subset of what the resource actually represents?  If not, is that a problem? (HTTP may require that this be idempotent.)  If so, can we get around that having this be a slightly different content-type (e.g., \"application/json-patch\")?  We should see what other APIs do.\n\norganizations_put_organization: PUT /organizations/{organization_name}"]
+    #[doc = "\n\norganizations_put_organization: PUT /organizations/{organization_name}"]
     pub async fn organizations_put_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::OrganizationUpdate,
-    ) -> Result<types::Organization> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Organization>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
@@ -1409,15 +1561,24 @@ impl Client {
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Delete a specific organization.\n\norganizations_delete_organization: DELETE /organizations/{organization_name}"]
+    #[doc = "\n\norganizations_delete_organization: DELETE /organizations/{organization_name}"]
     pub async fn organizations_delete_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
@@ -1425,18 +1586,30 @@ impl Client {
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List all projects.\n\norganization_projects_get: GET /organizations/{organization_name}/projects"]
+    #[doc = "\n\norganization_projects_get: GET /organizations/{organization_name}/projects"]
     pub async fn organization_projects_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> Result<types::ProjectResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::ProjectResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects",
             self.baseurl,
@@ -1457,22 +1630,34 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List all projects.\n\nreturns a Stream<Item = Project> by making successive calls to organization_projects_get"]
+    #[doc = "\n\nreturns a Stream<Item = Project> by making successive calls to organization_projects_get"]
     pub fn organization_projects_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Project>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Project, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.organization_projects_get(organization_name, limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -1485,6 +1670,7 @@ impl Client {
                             None,
                         )
                         .map_ok(|page| {
+                            let page = page.into_inner();
                             Some((
                                 futures::stream::iter(page.items.into_iter().map(Ok)),
                                 page.next_page,
@@ -1500,12 +1686,15 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a new project.\n\norganization_projects_post: POST /organizations/{organization_name}/projects"]
+    #[doc = "\n\norganization_projects_post: POST /organizations/{organization_name}/projects"]
     pub async fn organization_projects_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::ProjectCreate,
-    ) -> Result<types::Project> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Project>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects",
             self.baseurl,
@@ -1513,16 +1702,28 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Fetch a specific project\n\norganization_projects_get_project: GET /organizations/{organization_name}/projects/{project_name}"]
+    #[doc = "\n\norganization_projects_get_project: GET /organizations/{organization_name}/projects/{project_name}"]
     pub async fn organization_projects_get_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-    ) -> Result<types::Project> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Project>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
@@ -1531,17 +1732,29 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Update a specific project.\n * TODO-correctness: Is it valid for PUT to accept application/json that's a subset of what the resource actually represents?  If not, is that a problem? (HTTP may require that this be idempotent.)  If so, can we get around that having this be a slightly different content-type (e.g., \"application/json-patch\")?  We should see what other APIs do.\n\norganization_projects_put_project: PUT /organizations/{organization_name}/projects/{project_name}"]
+    #[doc = "\n\norganization_projects_put_project: PUT /organizations/{organization_name}/projects/{project_name}"]
     pub async fn organization_projects_put_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         body: &'a types::ProjectUpdate,
-    ) -> Result<types::Project> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Project>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
@@ -1550,16 +1763,25 @@ impl Client {
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Delete a specific project.\n\norganization_projects_delete_project: DELETE /organizations/{organization_name}/projects/{project_name}"]
+    #[doc = "\n\norganization_projects_delete_project: DELETE /organizations/{organization_name}/projects/{project_name}"]
     pub async fn organization_projects_delete_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
@@ -1568,11 +1790,20 @@ impl Client {
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List disks in a project.\n\nproject_disks_get: GET /organizations/{organization_name}/projects/{project_name}/disks"]
+    #[doc = "\n\nproject_disks_get: GET /organizations/{organization_name}/projects/{project_name}/disks"]
     pub async fn project_disks_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1580,7 +1811,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::DiskResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::DiskResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks",
             self.baseurl,
@@ -1602,23 +1836,35 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List disks in a project.\n\nreturns a Stream<Item = Disk> by making successive calls to project_disks_get"]
+    #[doc = "\n\nreturns a Stream<Item = Disk> by making successive calls to project_disks_get"]
     pub fn project_disks_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Disk, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.project_disks_get(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -1632,6 +1878,7 @@ impl Client {
                             None,
                         )
                         .map_ok(|page| {
+                            let page = page.into_inner();
                             Some((
                                 futures::stream::iter(page.items.into_iter().map(Ok)),
                                 page.next_page,
@@ -1647,13 +1894,14 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a disk in a project.\n * TODO-correctness See note about instance create.  This should be async.\n\nproject_disks_post: POST /organizations/{organization_name}/projects/{project_name}/disks"]
+    #[doc = "\n\nproject_disks_post: POST /organizations/{organization_name}/projects/{project_name}/disks"]
     pub async fn project_disks_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         body: &'a types::DiskCreate,
-    ) -> Result<types::Disk> {
+    ) -> Result<progenitor_client::ResponseValue<types::Disk>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks",
             self.baseurl,
@@ -1662,17 +1910,27 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Fetch a single disk in a project.\n\nproject_disks_get_disk: GET /organizations/{organization_name}/projects/{project_name}/disks/{disk_name}"]
+    #[doc = "\n\nproject_disks_get_disk: GET /organizations/{organization_name}/projects/{project_name}/disks/{disk_name}"]
     pub async fn project_disks_get_disk<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
-    ) -> Result<types::Disk> {
+    ) -> Result<progenitor_client::ResponseValue<types::Disk>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}",
             self.baseurl,
@@ -1682,17 +1940,26 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Delete a disk from a project.\n\nproject_disks_delete_disk: DELETE /organizations/{organization_name}/projects/{project_name}/disks/{disk_name}"]
+    #[doc = "\n\nproject_disks_delete_disk: DELETE /organizations/{organization_name}/projects/{project_name}/disks/{disk_name}"]
     pub async fn project_disks_delete_disk<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}",
             self.baseurl,
@@ -1702,11 +1969,20 @@ impl Client {
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List instances in a project.\n\nproject_instances_get: GET /organizations/{organization_name}/projects/{project_name}/instances"]
+    #[doc = "\n\nproject_instances_get: GET /organizations/{organization_name}/projects/{project_name}/instances"]
     pub async fn project_instances_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1714,7 +1990,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::InstanceResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::InstanceResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances",
             self.baseurl,
@@ -1736,23 +2015,35 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List instances in a project.\n\nreturns a Stream<Item = Instance> by making successive calls to project_instances_get"]
+    #[doc = "\n\nreturns a Stream<Item = Instance> by making successive calls to project_instances_get"]
     pub fn project_instances_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Instance>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Instance, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.project_instances_get(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -1766,6 +2057,7 @@ impl Client {
                             None,
                         )
                         .map_ok(|page| {
+                            let page = page.into_inner();
                             Some((
                                 futures::stream::iter(page.items.into_iter().map(Ok)),
                                 page.next_page,
@@ -1781,13 +2073,16 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create an instance in a project.\n * TODO-correctness This is supposed to be async.  Is that right?  We can create the instance immediately -- it's just not booted yet.  Maybe the boot operation is what's a separate operation_id.  What about the response code (201 Created vs 202 Accepted)?  Is that orthogonal?  Things can return a useful response, including an operation id, with either response code.  Maybe a \"reboot\" operation would return a 202 Accepted because there's no actual resource created?\n\nproject_instances_post: POST /organizations/{organization_name}/projects/{project_name}/instances"]
+    #[doc = "\n\nproject_instances_post: POST /organizations/{organization_name}/projects/{project_name}/instances"]
     pub async fn project_instances_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         body: &'a types::InstanceCreate,
-    ) -> Result<types::Instance> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Instance>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances",
             self.baseurl,
@@ -1796,17 +2091,29 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Get an instance in a project.\n\nproject_instances_get_instance: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}"]
+    #[doc = "\n\nproject_instances_get_instance: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}"]
     pub async fn project_instances_get_instance<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<types::Instance> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Instance>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}",
             self.baseurl,
@@ -1816,17 +2123,26 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Delete an instance from a project.\n\nproject_instances_delete_instance: DELETE /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}"]
+    #[doc = "\n\nproject_instances_delete_instance: DELETE /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}"]
     pub async fn project_instances_delete_instance<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}",
             self.baseurl,
@@ -1836,11 +2152,20 @@ impl Client {
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List disks attached to this instance.\n\ninstance_disks_get: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks"]
+    #[doc = "\n\ninstance_disks_get: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks"]
     pub async fn instance_disks_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1849,7 +2174,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::DiskResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::DiskResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks",
             self.baseurl,
@@ -1872,11 +2200,20 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List disks attached to this instance.\n\nreturns a Stream<Item = Disk> by making successive calls to instance_disks_get"]
+    #[doc = "\n\nreturns a Stream<Item = Disk> by making successive calls to instance_disks_get"]
     pub fn instance_disks_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1884,7 +2221,9 @@ impl Client {
         instance_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Disk, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -1897,6 +2236,7 @@ impl Client {
             sort_by,
         )
         .map_ok(move |page| {
+            let page = page.into_inner();
             let first = futures::stream::iter(page.items.into_iter().map(Ok));
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
@@ -1911,6 +2251,7 @@ impl Client {
                         None,
                     )
                     .map_ok(|page| {
+                        let page = page.into_inner();
                         Some((
                             futures::stream::iter(page.items.into_iter().map(Ok)),
                             page.next_page,
@@ -1933,7 +2274,8 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
         body: &'a types::DiskIdentifier,
-    ) -> Result<types::Disk> {
+    ) -> Result<progenitor_client::ResponseValue<types::Disk>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
             self.baseurl,
@@ -1943,8 +2285,17 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            202u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "instance_disks_detach: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach"]
@@ -1954,7 +2305,8 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
         body: &'a types::DiskIdentifier,
-    ) -> Result<types::Disk> {
+    ) -> Result<progenitor_client::ResponseValue<types::Disk>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
             self.baseurl,
@@ -1964,17 +2316,62 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            202u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Reboot an instance.\n\nproject_instances_instance_reboot: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot"]
+    #[doc = "\n\nproject_instances_migrate_instance: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate"]
+    pub async fn project_instances_migrate_instance<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        body: &'a types::InstanceMigrate,
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Instance>,
+        progenitor_client::Error<types::Error>,
+    > {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/migrate",
+            self.baseurl,
+            progenitor_support::encode_path(&organization_name.to_string()),
+            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_support::encode_path(&instance_name.to_string()),
+        );
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "\n\nproject_instances_instance_reboot: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot"]
     pub async fn project_instances_instance_reboot<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<types::Instance> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Instance>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/reboot",
             self.baseurl,
@@ -1984,17 +2381,29 @@ impl Client {
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            202u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Boot an instance.\n\nproject_instances_instance_start: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start"]
+    #[doc = "\n\nproject_instances_instance_start: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start"]
     pub async fn project_instances_instance_start<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<types::Instance> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Instance>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/start",
             self.baseurl,
@@ -2004,17 +2413,29 @@ impl Client {
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            202u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Halt an instance.\n\nproject_instances_instance_stop: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop"]
+    #[doc = "\n\nproject_instances_instance_stop: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop"]
     pub async fn project_instances_instance_stop<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<types::Instance> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::Instance>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/stop",
             self.baseurl,
@@ -2024,11 +2445,20 @@ impl Client {
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            202u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List VPCs in a project.\n\nproject_vpcs_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs"]
+    #[doc = "\n\nproject_vpcs_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs"]
     pub async fn project_vpcs_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2036,7 +2466,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::VpcResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs",
             self.baseurl,
@@ -2058,23 +2491,35 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List VPCs in a project.\n\nreturns a Stream<Item = Vpc> by making successive calls to project_vpcs_get"]
+    #[doc = "\n\nreturns a Stream<Item = Vpc> by making successive calls to project_vpcs_get"]
     pub fn project_vpcs_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Vpc>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Vpc, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.project_vpcs_get(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -2088,6 +2533,7 @@ impl Client {
                             None,
                         )
                         .map_ok(|page| {
+                            let page = page.into_inner();
                             Some((
                                 futures::stream::iter(page.items.into_iter().map(Ok)),
                                 page.next_page,
@@ -2103,13 +2549,14 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a VPC in a project.\n\nproject_vpcs_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs"]
+    #[doc = "\n\nproject_vpcs_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs"]
     pub async fn project_vpcs_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         body: &'a types::VpcCreate,
-    ) -> Result<types::Vpc> {
+    ) -> Result<progenitor_client::ResponseValue<types::Vpc>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs",
             self.baseurl,
@@ -2118,17 +2565,27 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Get a VPC in a project.\n\nproject_vpcs_get_vpc: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
+    #[doc = "\n\nproject_vpcs_get_vpc: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
     pub async fn project_vpcs_get_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-    ) -> Result<types::Vpc> {
+    ) -> Result<progenitor_client::ResponseValue<types::Vpc>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
@@ -2138,18 +2595,27 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Update a VPC.\n\nproject_vpcs_put_vpc: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
+    #[doc = "\n\nproject_vpcs_put_vpc: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
     pub async fn project_vpcs_put_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcUpdate,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
@@ -2159,17 +2625,26 @@ impl Client {
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Delete a vpc from a project.\n\nproject_vpcs_delete_vpc: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
+    #[doc = "\n\nproject_vpcs_delete_vpc: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
     pub async fn project_vpcs_delete_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
@@ -2179,11 +2654,20 @@ impl Client {
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List firewall rules for a VPC.\n\nvpc_firewall_rules_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules"]
+    #[doc = "\n\nvpc_firewall_rules_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules"]
     pub async fn vpc_firewall_rules_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2192,7 +2676,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::VpcFirewallRuleResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcFirewallRuleResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
             self.baseurl,
@@ -2215,11 +2702,20 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List firewall rules for a VPC.\n\nreturns a Stream<Item = VpcFirewallRule> by making successive calls to vpc_firewall_rules_get"]
+    #[doc = "\n\nreturns a Stream<Item = VpcFirewallRule> by making successive calls to vpc_firewall_rules_get"]
     pub fn vpc_firewall_rules_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2227,7 +2723,10 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcFirewallRule>> + Unpin + '_ {
+    ) -> impl futures::Stream<
+        Item = Result<types::VpcFirewallRule, progenitor_client::Error<types::Error>>,
+    > + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2240,6 +2739,7 @@ impl Client {
             sort_by,
         )
         .map_ok(move |page| {
+            let page = page.into_inner();
             let first = futures::stream::iter(page.items.into_iter().map(Ok));
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
@@ -2254,6 +2754,7 @@ impl Client {
                         None,
                     )
                     .map_ok(|page| {
+                        let page = page.into_inner();
                         Some((
                             futures::stream::iter(page.items.into_iter().map(Ok)),
                             page.next_page,
@@ -2269,14 +2770,17 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Replace the firewall rules for a VPC\n\nvpc_firewall_rules_put: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules"]
+    #[doc = "\n\nvpc_firewall_rules_put: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules"]
     pub async fn vpc_firewall_rules_put<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcFirewallRuleUpdateParams,
-    ) -> Result<types::VpcFirewallRuleUpdateResult> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcFirewallRuleUpdateResult>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
             self.baseurl,
@@ -2286,11 +2790,20 @@ impl Client {
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List VPC Custom and System Routers\n\nvpc_routers_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers"]
+    #[doc = "\n\nvpc_routers_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers"]
     pub async fn vpc_routers_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2299,7 +2812,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::VpcRouterResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcRouterResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers",
             self.baseurl,
@@ -2322,11 +2838,20 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List VPC Custom and System Routers\n\nreturns a Stream<Item = VpcRouter> by making successive calls to vpc_routers_get"]
+    #[doc = "\n\nreturns a Stream<Item = VpcRouter> by making successive calls to vpc_routers_get"]
     pub fn vpc_routers_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2334,7 +2859,9 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcRouter>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::VpcRouter, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2347,6 +2874,7 @@ impl Client {
             sort_by,
         )
         .map_ok(move |page| {
+            let page = page.into_inner();
             let first = futures::stream::iter(page.items.into_iter().map(Ok));
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
@@ -2361,6 +2889,7 @@ impl Client {
                         None,
                     )
                     .map_ok(|page| {
+                        let page = page.into_inner();
                         Some((
                             futures::stream::iter(page.items.into_iter().map(Ok)),
                             page.next_page,
@@ -2376,14 +2905,17 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Create a VPC Router\n\nvpc_routers_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers"]
+    #[doc = "\n\nvpc_routers_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers"]
     pub async fn vpc_routers_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcRouterCreate,
-    ) -> Result<types::VpcRouter> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcRouter>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers",
             self.baseurl,
@@ -2393,18 +2925,30 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Get a VPC Router\n\nvpc_routers_get_router: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
+    #[doc = "\n\nvpc_routers_get_router: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
     pub async fn vpc_routers_get_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
-    ) -> Result<types::VpcRouter> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcRouter>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
@@ -2415,11 +2959,20 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Update a VPC Router\n\nvpc_routers_put_router: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
+    #[doc = "\n\nvpc_routers_put_router: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
     pub async fn vpc_routers_put_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2427,7 +2980,7 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         body: &'a types::VpcRouterUpdate,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
@@ -2438,18 +2991,27 @@ impl Client {
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Delete a router from its VPC\n\nvpc_routers_delete_router: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
+    #[doc = "\n\nvpc_routers_delete_router: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
     pub async fn vpc_routers_delete_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
@@ -2460,11 +3022,20 @@ impl Client {
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List a Router's routes\n\nrouters_routes_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes"]
+    #[doc = "\n\nrouters_routes_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes"]
     pub async fn routers_routes_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2474,7 +3045,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::RouterRouteResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::RouterRouteResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
             self.baseurl,
@@ -2498,11 +3072,20 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List a Router's routes\n\nreturns a Stream<Item = RouterRoute> by making successive calls to routers_routes_get"]
+    #[doc = "\n\nreturns a Stream<Item = RouterRoute> by making successive calls to routers_routes_get"]
     pub fn routers_routes_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2511,7 +3094,10 @@ impl Client {
         router_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::RouterRoute>> + Unpin + '_ {
+    ) -> impl futures::Stream<
+        Item = Result<types::RouterRoute, progenitor_client::Error<types::Error>>,
+    > + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2525,6 +3111,7 @@ impl Client {
             sort_by,
         )
         .map_ok(move |page| {
+            let page = page.into_inner();
             let first = futures::stream::iter(page.items.into_iter().map(Ok));
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
@@ -2540,6 +3127,7 @@ impl Client {
                         None,
                     )
                     .map_ok(|page| {
+                        let page = page.into_inner();
                         Some((
                             futures::stream::iter(page.items.into_iter().map(Ok)),
                             page.next_page,
@@ -2555,7 +3143,7 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Create a VPC Router\n\nrouters_routes_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes"]
+    #[doc = "\n\nrouters_routes_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes"]
     pub async fn routers_routes_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2563,7 +3151,10 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         body: &'a types::RouterRouteCreateParams,
-    ) -> Result<types::RouterRoute> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::RouterRoute>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
             self.baseurl,
@@ -2574,11 +3165,20 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Get a VPC Router route\n\nrouters_routes_get_route: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
+    #[doc = "\n\nrouters_routes_get_route: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
     pub async fn routers_routes_get_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2586,7 +3186,10 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         route_name: &'a types::Name,
-    ) -> Result<types::RouterRoute> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::RouterRoute>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
@@ -2598,11 +3201,20 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Update a Router route\n\nrouters_routes_put_route: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
+    #[doc = "\n\nrouters_routes_put_route: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
     pub async fn routers_routes_put_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2611,7 +3223,7 @@ impl Client {
         router_name: &'a types::Name,
         route_name: &'a types::Name,
         body: &'a types::RouterRouteUpdateParams,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
@@ -2623,11 +3235,20 @@ impl Client {
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Delete a route from its router\n\nrouters_routes_delete_route: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
+    #[doc = "\n\nrouters_routes_delete_route: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
     pub async fn routers_routes_delete_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2635,7 +3256,7 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         route_name: &'a types::Name,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
@@ -2647,11 +3268,20 @@ impl Client {
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List subnets in a VPC.\n\nvpc_subnets_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets"]
+    #[doc = "\n\nvpc_subnets_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets"]
     pub async fn vpc_subnets_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2660,7 +3290,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::VpcSubnetResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcSubnetResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
             self.baseurl,
@@ -2683,11 +3316,20 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List subnets in a VPC.\n\nreturns a Stream<Item = VpcSubnet> by making successive calls to vpc_subnets_get"]
+    #[doc = "\n\nreturns a Stream<Item = VpcSubnet> by making successive calls to vpc_subnets_get"]
     pub fn vpc_subnets_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2695,7 +3337,9 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcSubnet>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::VpcSubnet, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2708,6 +3352,7 @@ impl Client {
             sort_by,
         )
         .map_ok(move |page| {
+            let page = page.into_inner();
             let first = futures::stream::iter(page.items.into_iter().map(Ok));
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
@@ -2722,6 +3367,7 @@ impl Client {
                         None,
                     )
                     .map_ok(|page| {
+                        let page = page.into_inner();
                         Some((
                             futures::stream::iter(page.items.into_iter().map(Ok)),
                             page.next_page,
@@ -2737,14 +3383,17 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Create a subnet in a VPC.\n\nvpc_subnets_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets"]
+    #[doc = "\n\nvpc_subnets_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets"]
     pub async fn vpc_subnets_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcSubnetCreate,
-    ) -> Result<types::VpcSubnet> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcSubnet>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
             self.baseurl,
@@ -2754,18 +3403,30 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Get subnet in a VPC.\n\nvpc_subnets_get_subnet: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
+    #[doc = "\n\nvpc_subnets_get_subnet: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
     pub async fn vpc_subnets_get_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
-    ) -> Result<types::VpcSubnet> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::VpcSubnet>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
@@ -2776,11 +3437,20 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Update a VPC Subnet.\n\nvpc_subnets_put_subnet: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
+    #[doc = "\n\nvpc_subnets_put_subnet: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
     pub async fn vpc_subnets_put_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2788,7 +3458,7 @@ impl Client {
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
         body: &'a types::VpcSubnetUpdate,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
@@ -2799,18 +3469,27 @@ impl Client {
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "Delete a subnet from a VPC.\n\nvpc_subnets_delete_subnet: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
+    #[doc = "\n\nvpc_subnets_delete_subnet: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
     pub async fn vpc_subnets_delete_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
@@ -2821,11 +3500,20 @@ impl Client {
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List IP addresses on a VPC subnet.\n\nsubnets_ips_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/ips"]
+    #[doc = "\n\nsubnets_ips_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/ips"]
     pub async fn subnets_ips_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2835,7 +3523,10 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::NetworkInterfaceResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::NetworkInterfaceResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/ips",
             self.baseurl,
@@ -2859,11 +3550,20 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List IP addresses on a VPC subnet.\n\nreturns a Stream<Item = NetworkInterface> by making successive calls to subnets_ips_get"]
+    #[doc = "\n\nreturns a Stream<Item = NetworkInterface> by making successive calls to subnets_ips_get"]
     pub fn subnets_ips_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2872,7 +3572,10 @@ impl Client {
         subnet_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::NetworkInterface>> + Unpin + '_ {
+    ) -> impl futures::Stream<
+        Item = Result<types::NetworkInterface, progenitor_client::Error<types::Error>>,
+    > + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2886,6 +3589,7 @@ impl Client {
             sort_by,
         )
         .map_ok(move |page| {
+            let page = page.into_inner();
             let first = futures::stream::iter(page.items.into_iter().map(Ok));
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
@@ -2901,6 +3605,7 @@ impl Client {
                         None,
                     )
                     .map_ok(|page| {
+                        let page = page.into_inner();
                         Some((
                             futures::stream::iter(page.items.into_iter().map(Ok)),
                             page.next_page,
@@ -2916,12 +3621,15 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "List the built-in roles\n\nroles_get: GET /roles"]
+    #[doc = "\n\nroles_get: GET /roles"]
     pub async fn roles_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
-    ) -> Result<types::RoleResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::RoleResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!("{}/roles", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2934,20 +3642,32 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List the built-in roles\n\nreturns a Stream<Item = Role> by making successive calls to roles_get"]
+    #[doc = "\n\nreturns a Stream<Item = Role> by making successive calls to roles_get"]
     pub fn roles_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::Role>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Role, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.roles_get(limit, None)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -2955,6 +3675,7 @@ impl Client {
                     } else {
                         self.roles_get(None, state.as_deref())
                             .map_ok(|page| {
+                                let page = page.into_inner();
                                 Some((
                                     futures::stream::iter(page.items.into_iter().map(Ok)),
                                     page.next_page,
@@ -2970,8 +3691,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch a specific built-in role\n\nroles_get_role: GET /roles/{role_name}"]
-    pub async fn roles_get_role<'a>(&'a self, role_name: &'a str) -> Result<types::Role> {
+    #[doc = "\n\nroles_get_role: GET /roles/{role_name}"]
+    pub async fn roles_get_role<'a>(
+        &'a self,
+        role_name: &'a str,
+    ) -> Result<progenitor_client::ResponseValue<types::Role>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/roles/{}",
             self.baseurl,
@@ -2979,17 +3704,29 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List all sagas (for debugging)\n\nsagas_get: GET /sagas"]
+    #[doc = "\n\nsagas_get: GET /sagas"]
     pub async fn sagas_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
-    ) -> Result<types::SagaResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::SagaResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!("{}/sagas", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3006,21 +3743,33 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List all sagas (for debugging)\n\nreturns a Stream<Item = Saga> by making successive calls to sagas_get"]
+    #[doc = "\n\nreturns a Stream<Item = Saga> by making successive calls to sagas_get"]
     pub fn sagas_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Saga>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Saga, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.sagas_get(limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -3028,6 +3777,7 @@ impl Client {
                     } else {
                         self.sagas_get(None, state.as_deref(), None)
                             .map_ok(|page| {
+                                let page = page.into_inner();
                                 Some((
                                     futures::stream::iter(page.items.into_iter().map(Ok)),
                                     page.next_page,
@@ -3043,8 +3793,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch information about a single saga (for debugging)\n\nsagas_get_saga: GET /sagas/{saga_id}"]
-    pub async fn sagas_get_saga<'a>(&'a self, saga_id: &'a uuid::Uuid) -> Result<types::Saga> {
+    #[doc = "\n\nsagas_get_saga: GET /sagas/{saga_id}"]
+    pub async fn sagas_get_saga<'a>(
+        &'a self,
+        saga_id: &'a uuid::Uuid,
+    ) -> Result<progenitor_client::ResponseValue<types::Saga>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/sagas/{}",
             self.baseurl,
@@ -3052,16 +3806,51 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List all timeseries schema\n\ntimeseries_schema_get: GET /timeseries/schema"]
+    #[doc = "session_me: GET /session/me"]
+    pub async fn session_me<'a>(
+        &'a self,
+    ) -> Result<
+        progenitor_client::ResponseValue<types::SessionUser>,
+        progenitor_client::Error<types::Error>,
+    > {
+        let url = format!("{}/session/me", self.baseurl,);
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "\n\ntimeseries_schema_get: GET /timeseries/schema"]
     pub async fn timeseries_schema_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
-    ) -> Result<types::TimeseriesSchemaResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::TimeseriesSchemaResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!("{}/timeseries/schema", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3074,20 +3863,33 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List all timeseries schema\n\nreturns a Stream<Item = TimeseriesSchema> by making successive calls to timeseries_schema_get"]
+    #[doc = "\n\nreturns a Stream<Item = TimeseriesSchema> by making successive calls to timeseries_schema_get"]
     pub fn timeseries_schema_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema>> + Unpin + '_ {
+    ) -> impl futures::Stream<
+        Item = Result<types::TimeseriesSchema, progenitor_client::Error<types::Error>>,
+    > + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.timeseries_schema_get(limit, None)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -3095,6 +3897,7 @@ impl Client {
                     } else {
                         self.timeseries_schema_get(None, state.as_deref())
                             .map_ok(|page| {
+                                let page = page.into_inner();
                                 Some((
                                     futures::stream::iter(page.items.into_iter().map(Ok)),
                                     page.next_page,
@@ -3110,13 +3913,16 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "List the built-in system users\n\nusers_get: GET /users"]
+    #[doc = "\n\nusers_get: GET /users"]
     pub async fn users_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<types::UserResultsPage> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::UserResultsPage>,
+        progenitor_client::Error<types::Error>,
+    > {
         let url = format!("{}/users", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3133,21 +3939,33 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
-    #[doc = "List the built-in system users\n\nreturns a Stream<Item = User> by making successive calls to users_get"]
+    #[doc = "\n\nreturns a Stream<Item = User> by making successive calls to users_get"]
     pub fn users_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::User>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::User, progenitor_client::Error<types::Error>>>
+           + Unpin
+           + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.users_get(limit, None, sort_by)
             .map_ok(move |page| {
+                let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
@@ -3155,6 +3973,7 @@ impl Client {
                     } else {
                         self.users_get(None, state.as_deref(), None)
                             .map_ok(|page| {
+                                let page = page.into_inner();
                                 Some((
                                     futures::stream::iter(page.items.into_iter().map(Ok)),
                                     page.next_page,
@@ -3170,8 +3989,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch a specific built-in system user\n\nusers_get_user: GET /users/{user_name}"]
-    pub async fn users_get_user<'a>(&'a self, user_name: &'a types::Name) -> Result<types::User> {
+    #[doc = "\n\nusers_get_user: GET /users/{user_name}"]
+    pub async fn users_get_user<'a>(
+        &'a self,
+        user_name: &'a types::Name,
+    ) -> Result<progenitor_client::ResponseValue<types::User>, progenitor_client::Error<types::Error>>
+    {
         let url = format!(
             "{}/users/{}",
             self.baseurl,
@@ -3179,7 +4002,16 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
+                progenitor_client::ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 }

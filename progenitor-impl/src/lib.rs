@@ -746,7 +746,7 @@ impl Generator {
                 }
                 OperationResponseType::None => {
                     quote!{
-                        progenitor_client::ResponseValue::empty(response)
+                        Ok(progenitor_client::ResponseValue::empty(response))
                     }
                 }
                 OperationResponseType::Raw => quote! { Ok(response) },
@@ -817,7 +817,7 @@ impl Generator {
                 OperationResponseType::None => {
                     quote!{
                         Err(progenitor_client::Error::ErrorResponse(
-                            progenitor_client::ResponseValue::empty(response)?
+                            progenitor_client::ResponseValue::empty(response)
                         ))
                     }
                 }
@@ -858,7 +858,7 @@ impl Generator {
                     OperationResponseType::None => {
                         quote!{
                             Err(progenitor_client::Error::ErrorResponse(
-                                progenitor_client::ResponseValue::empty(response)?
+                                progenitor_client::ResponseValue::empty(response)
                             ))
                         }
                     }

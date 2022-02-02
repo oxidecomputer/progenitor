@@ -1,4 +1,5 @@
-use anyhow::Result;
+pub use progenitor_client::Error;
+pub use progenitor_client::ResponseValue;
 mod progenitor_support {
     use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
     #[allow(dead_code)]
@@ -182,25 +183,38 @@ impl Client {
     }
 
     #[doc = "control_hold: POST /v1/control/hold"]
-    pub async fn control_hold<'a>(&'a self) -> Result<()> {
+    pub async fn control_hold<'a>(
+        &'a self,
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "control_resume: POST /v1/control/resume"]
-    pub async fn control_resume<'a>(&'a self) -> Result<reqwest::Response> {
+    pub async fn control_resume<'a>(
+        &'a self,
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
         let url = format!("{}/v1/control/resume", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "task_get: GET /v1/task/{task}"]
-    pub async fn task_get<'a>(&'a self, task: &'a str) -> Result<types::Task> {
+    pub async fn task_get<'a>(
+        &'a self,
+        task: &'a str,
+    ) -> Result<progenitor_client::ResponseValue<types::Task>, progenitor_client::Error<()>> {
         let url = format!(
             "{}/v1/task/{}",
             self.baseurl,
@@ -208,29 +222,44 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "tasks_get: GET /v1/tasks"]
-    pub async fn tasks_get<'a>(&'a self) -> Result<Vec<types::Task>> {
+    pub async fn tasks_get<'a>(
+        &'a self,
+    ) -> Result<progenitor_client::ResponseValue<Vec<types::Task>>, progenitor_client::Error<()>>
+    {
         let url = format!("{}/v1/tasks", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "task_submit: POST /v1/tasks"]
     pub async fn task_submit<'a>(
         &'a self,
         body: &'a types::TaskSubmit,
-    ) -> Result<types::TaskSubmitResult> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::TaskSubmitResult>,
+        progenitor_client::Error<()>,
+    > {
         let url = format!("{}/v1/tasks", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "task_events_get: GET /v1/tasks/{task}/events"]
@@ -238,7 +267,8 @@ impl Client {
         &'a self,
         task: &'a str,
         minseq: Option<u32>,
-    ) -> Result<Vec<types::TaskEvent>> {
+    ) -> Result<progenitor_client::ResponseValue<Vec<types::TaskEvent>>, progenitor_client::Error<()>>
+    {
         let url = format!(
             "{}/v1/tasks/{}/events",
             self.baseurl,
@@ -251,12 +281,21 @@ impl Client {
 
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "task_outputs_get: GET /v1/tasks/{task}/outputs"]
-    pub async fn task_outputs_get<'a>(&'a self, task: &'a str) -> Result<Vec<types::TaskOutput>> {
+    pub async fn task_outputs_get<'a>(
+        &'a self,
+        task: &'a str,
+    ) -> Result<
+        progenitor_client::ResponseValue<Vec<types::TaskOutput>>,
+        progenitor_client::Error<()>,
+    > {
         let url = format!(
             "{}/v1/tasks/{}/outputs",
             self.baseurl,
@@ -264,8 +303,11 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "task_output_download: GET /v1/tasks/{task}/outputs/{output}"]
@@ -273,7 +315,7 @@ impl Client {
         &'a self,
         task: &'a str,
         output: &'a str,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<reqwest::Response, progenitor_client::Error<()>> {
         let url = format!(
             "{}/v1/tasks/{}/outputs/{}",
             self.baseurl,
@@ -282,50 +324,79 @@ impl Client {
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(response),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "user_create: POST /v1/users"]
     pub async fn user_create<'a>(
         &'a self,
         body: &'a types::UserCreate,
-    ) -> Result<types::UserCreateResult> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::UserCreateResult>,
+        progenitor_client::Error<()>,
+    > {
         let url = format!("{}/v1/users", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "whoami: GET /v1/whoami"]
-    pub async fn whoami<'a>(&'a self) -> Result<types::WhoamiResult> {
+    pub async fn whoami<'a>(
+        &'a self,
+    ) -> Result<progenitor_client::ResponseValue<types::WhoamiResult>, progenitor_client::Error<()>>
+    {
         let url = format!("{}/v1/whoami", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "worker_bootstrap: POST /v1/worker/bootstrap"]
     pub async fn worker_bootstrap<'a>(
         &'a self,
         body: &'a types::WorkerBootstrap,
-    ) -> Result<types::WorkerBootstrapResult> {
+    ) -> Result<
+        progenitor_client::ResponseValue<types::WorkerBootstrapResult>,
+        progenitor_client::Error<()>,
+    > {
         let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "worker_ping: GET /v1/worker/ping"]
-    pub async fn worker_ping<'a>(&'a self) -> Result<types::WorkerPingResult> {
+    pub async fn worker_ping<'a>(
+        &'a self,
+    ) -> Result<
+        progenitor_client::ResponseValue<types::WorkerPingResult>,
+        progenitor_client::Error<()>,
+    > {
         let url = format!("{}/v1/worker/ping", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "worker_task_append: POST /v1/worker/task/{task}/append"]
@@ -333,7 +404,7 @@ impl Client {
         &'a self,
         task: &'a str,
         body: &'a types::WorkerAppendTask,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
         let url = format!(
             "{}/v1/worker/task/{}/append",
             self.baseurl,
@@ -341,8 +412,11 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "worker_task_upload_chunk: POST /v1/worker/task/{task}/chunk"]
@@ -350,7 +424,8 @@ impl Client {
         &'a self,
         task: &'a str,
         body: B,
-    ) -> Result<types::UploadedChunk> {
+    ) -> Result<progenitor_client::ResponseValue<types::UploadedChunk>, progenitor_client::Error<()>>
+    {
         let url = format!(
             "{}/v1/worker/task/{}/chunk",
             self.baseurl,
@@ -358,8 +433,11 @@ impl Client {
         );
         let request = self.client.post(url).body(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "worker_task_complete: POST /v1/worker/task/{task}/complete"]
@@ -367,7 +445,7 @@ impl Client {
         &'a self,
         task: &'a str,
         body: &'a types::WorkerCompleteTask,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
         let url = format!(
             "{}/v1/worker/task/{}/complete",
             self.baseurl,
@@ -375,8 +453,11 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "worker_task_add_output: POST /v1/worker/task/{task}/output"]
@@ -384,7 +465,7 @@ impl Client {
         &'a self,
         task: &'a str,
         body: &'a types::WorkerAddOutput,
-    ) -> Result<reqwest::Response> {
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
         let url = format!(
             "{}/v1/worker/task/{}/output",
             self.baseurl,
@@ -392,25 +473,39 @@ impl Client {
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "workers_list: GET /v1/workers"]
-    pub async fn workers_list<'a>(&'a self) -> Result<types::WorkersResult> {
+    pub async fn workers_list<'a>(
+        &'a self,
+    ) -> Result<progenitor_client::ResponseValue<types::WorkersResult>, progenitor_client::Error<()>>
+    {
         let url = format!("{}/v1/workers", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res.json().await?)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => progenitor_client::ResponseValue::from_response(response).await,
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 
     #[doc = "workers_recycle: POST /v1/workers/recycle"]
-    pub async fn workers_recycle<'a>(&'a self) -> Result<reqwest::Response> {
+    pub async fn workers_recycle<'a>(
+        &'a self,
+    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
         let url = format!("{}/v1/workers/recycle", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
-        let res = result?.error_for_status()?;
-        Ok(res)
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => Ok(progenitor_client::ResponseValue::empty(response)),
+            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+        }
     }
 }

@@ -34,16 +34,16 @@ impl<T: DeserializeOwned> ResponseValue<T> {
 }
 
 impl ResponseValue<()> {
-    pub fn empty<E>(response: reqwest::Response) -> Result<Self, E> {
+    pub fn empty(response: reqwest::Response) -> Self {
         let status = response.status();
         let headers = response.headers().clone();
         // TODO is there anything we want to do to confirm that there is no
         // content?
-        Ok(Self {
+        Self {
             inner: (),
             status,
             headers,
-        })
+        }
     }
 }
 
