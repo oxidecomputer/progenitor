@@ -229,7 +229,21 @@ where
                             bail!("op {}: security, unsupported", oid);
                         }
 
-                        if o.responses.default.is_some() {
+                        if match &o.responses.default {
+                            Some(openapiv3::ReferenceOr::Item(res)) => {
+                                /*
+                                 * Allow a default response that has nothing
+                                 * other than an empty "description".
+                                 */
+                                !res.description.is_empty()
+                                    || !res.headers.is_empty()
+                                    || !res.content.is_empty()
+                                    || !res.links.is_empty()
+                                    || !res.extensions.is_empty()
+                            }
+                            None => false,
+                            _ => true,
+                        } {
                             bail!("op {}: has response default", oid);
                         }
                     } else {
