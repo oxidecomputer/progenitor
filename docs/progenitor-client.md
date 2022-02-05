@@ -3,7 +3,7 @@
 The `progenitor-client` crate contains types that are exported by generated
 clients as well as functions that are used internally by generated clients.
 Depending on how `progenitor` is being used, the crate will be included in
-different ways (see XXX).
+different ways (see ["Using Progenitor"](../README.md#using_progenitor)).
 
 - For macro consumers, it comes from the `progenitor` dependency.
 

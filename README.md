@@ -7,6 +7,8 @@ futures for async API calls and `Streams` for paginated interfaces.
 It generates a type called `Client` with methods that correspond to the
 operations specified in the OpenAPI document.
 
+## Using Progenitor
+
 There are three different ways of using the `progenitor` crate. The one you
 choose will depend on your use case and preferences.
 
