@@ -1,24 +1,4 @@
-pub use progenitor_client::Error;
-pub use progenitor_client::ResponseValue;
-mod progenitor_support {
-    use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
-    #[allow(dead_code)]
-    const PATH_SET: &AsciiSet = &CONTROLS
-        .add(b' ')
-        .add(b'"')
-        .add(b'#')
-        .add(b'<')
-        .add(b'>')
-        .add(b'?')
-        .add(b'`')
-        .add(b'{')
-        .add(b'}');
-    #[allow(dead_code)]
-    pub(crate) fn encode_path(pc: &str) -> String {
-        utf8_percent_encode(pc, PATH_SET).to_string()
-    }
-}
-
+pub use progenitor_client::{Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -127,46 +107,40 @@ impl Client {
     pub async fn enrol<'a>(
         &'a self,
         body: &'a types::EnrolBody,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
+    ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/enrol", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            201u16 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     #[doc = "global_jobs: GET /global/jobs"]
     pub async fn global_jobs<'a>(
         &'a self,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::GlobalJobsResult>,
-        progenitor_client::Error<()>,
-    > {
+    ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
         let url = format!("{}/global/jobs", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            201u16 => ResponseValue::from_response(response).await,
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     #[doc = "ping: GET /ping"]
-    pub async fn ping<'a>(
-        &'a self,
-    ) -> Result<progenitor_client::ResponseValue<types::PingResult>, progenitor_client::Error<()>>
-    {
+    pub async fn ping<'a>(&'a self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
         let url = format!("{}/ping", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            201u16 => ResponseValue::from_response(response).await,
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -174,15 +148,14 @@ impl Client {
     pub async fn report_finish<'a>(
         &'a self,
         body: &'a types::ReportFinishBody,
-    ) -> Result<progenitor_client::ResponseValue<types::ReportResult>, progenitor_client::Error<()>>
-    {
+    ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/finish", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            201u16 => ResponseValue::from_response(response).await,
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -190,15 +163,14 @@ impl Client {
     pub async fn report_output<'a>(
         &'a self,
         body: &'a types::ReportOutputBody,
-    ) -> Result<progenitor_client::ResponseValue<types::ReportResult>, progenitor_client::Error<()>>
-    {
+    ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/output", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            201u16 => ResponseValue::from_response(response).await,
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -206,15 +178,14 @@ impl Client {
     pub async fn report_start<'a>(
         &'a self,
         body: &'a types::ReportStartBody,
-    ) -> Result<progenitor_client::ResponseValue<types::ReportResult>, progenitor_client::Error<()>>
-    {
+    ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/start", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            201u16 => ResponseValue::from_response(response).await,
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 }

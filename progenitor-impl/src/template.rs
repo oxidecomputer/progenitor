@@ -32,7 +32,7 @@ impl PathTemplate {
             if let Component::Parameter(n) = &component {
                 let param = format_ident!("{}", n);
                 Some(quote! {
-                    progenitor_support::encode_path(&#param.to_string())
+                    progenitor_client::encode_path(&#param.to_string())
                 })
             } else {
                 None
@@ -226,7 +226,7 @@ mod test {
         let want = quote::quote! {
             let url = format!("{}/measure/{}",
                 self.baseurl,
-                progenitor_support::encode_path(&number.to_string()),
+                progenitor_client::encode_path(&number.to_string()),
             );
         };
         assert_eq!(want.to_string(), out.to_string());

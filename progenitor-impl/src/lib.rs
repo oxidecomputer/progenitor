@@ -12,7 +12,6 @@ use openapiv3::{
     StatusCode,
 };
 use proc_macro2::TokenStream;
-
 use quote::{format_ident, quote, ToTokens};
 use template::PathTemplate;
 use thiserror::Error;
@@ -233,29 +232,7 @@ impl Generator {
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
-            pub use progenitor_client::ResponseValue;
-            pub use progenitor_client::Error;
-
-            mod progenitor_support {
-                use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
-
-                #[allow(dead_code)]
-                const PATH_SET: &AsciiSet = &CONTROLS
-                    .add(b' ')
-                    .add(b'"')
-                    .add(b'#')
-                    .add(b'<')
-                    .add(b'>')
-                    .add(b'?')
-                    .add(b'`')
-                    .add(b'{')
-                    .add(b'}');
-
-                #[allow(dead_code)]
-                pub(crate) fn encode_path(pc: &str) -> String {
-                    utf8_percent_encode(pc, PATH_SET).to_string()
-                }
-            }
+            pub use progenitor_client::{Error, ResponseValue};
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
@@ -720,40 +697,42 @@ impl Generator {
                 OperationResponseType::Type(type_id) => {
                     let type_name =
                         self.type_space.get_type(type_id).unwrap().ident();
-                    quote! { progenitor_client::ResponseValue<#type_name> }
+                    quote! { ResponseValue<#type_name> }
                 }
                 OperationResponseType::None => {
-                    quote! { progenitor_client::ResponseValue<()> }
+                    quote! { ResponseValue<()> }
                 }
                 // TODO Maybe this should be ResponseValue<Bytes>?
                 OperationResponseType::Raw => quote! { reqwest::Response },
             })
             .unwrap();
 
-        let success_response_matches = success_response_items.iter().map(|response| {
-            let pat = match &response.status_code {
-                OperationResponseStatus::Code(code) => quote! { #code },
-                OperationResponseStatus::Range(_)
-                | OperationResponseStatus::Default => quote! { 200 ..= 299 },
-            };
-
-            let decode = match &response.typ {
-                OperationResponseType::Type(_) =>  {
-                    quote!{
-                        progenitor_client::ResponseValue::from_response(response)
-                            .await
+        let success_response_matches =
+            success_response_items.iter().map(|response| {
+                let pat = match &response.status_code {
+                    OperationResponseStatus::Code(code) => quote! { #code },
+                    OperationResponseStatus::Range(_)
+                    | OperationResponseStatus::Default => {
+                        quote! { 200 ..= 299 }
                     }
-                }
-                OperationResponseType::None => {
-                    quote!{
-                        Ok(progenitor_client::ResponseValue::empty(response))
-                    }
-                }
-                OperationResponseType::Raw => quote! { Ok(response) },
-            };
+                };
 
-            quote! { #pat => { #decode } }
-        });
+                let decode = match &response.typ {
+                    OperationResponseType::Type(_) => {
+                        quote! {
+                            ResponseValue::from_response(response).await
+                        }
+                    }
+                    OperationResponseType::None => {
+                        quote! {
+                            Ok(ResponseValue::empty(response))
+                        }
+                    }
+                    OperationResponseType::Raw => quote! { Ok(response) },
+                };
+
+                quote! { #pat => { #decode } }
+            });
 
         // Errors...
         let mut error_responses = method
@@ -807,17 +786,17 @@ impl Generator {
 
             let decode = match &response.typ {
                 OperationResponseType::Type(_) => {
-                    quote!{
-                        Err(progenitor_client::Error::ErrorResponse(
-                            progenitor_client::ResponseValue::from_response(response)
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::from_response(response)
                                 .await?
                         ))
                     }
                 }
                 OperationResponseType::None => {
-                    quote!{
-                        Err(progenitor_client::Error::ErrorResponse(
-                            progenitor_client::ResponseValue::empty(response)
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::empty(response)
                         ))
                     }
                 }
@@ -828,6 +807,9 @@ impl Generator {
             quote! { #pat => { #decode } }
         });
 
+        // Generate the catch-all case for other statuses. If the operation
+        // specifies a default response, we've already handled the success
+        // status codes above, so we only need to consider error codes.
         let default_response = method
             .responses
             .iter()
@@ -837,38 +819,40 @@ impl Generator {
                     OperationResponseStatus::Default
                 )
             })
-            .map_or_else(||
+            .map_or_else(
+                ||
                 // With no default response, unexpected status codes produce
                 // and Error::UnexpectedResponse()
                 quote!{
-                        _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+                        _ => Err(Error::UnexpectedResponse(response)),
                 },
                 // If we have a structured default response, we decode it and
                 // return Error::ErrorResponse()
                 |response| {
-                let decode = match &response.typ {
-                    OperationResponseType::Type(_) => {
-                        quote!{
-                            Err(progenitor_client::Error::ErrorResponse(
-                                progenitor_client::ResponseValue::from_response(response)
-                                    .await?
-                            ))
+                    let decode = match &response.typ {
+                        OperationResponseType::Type(_) => {
+                            quote! {
+                                Err(Error::ErrorResponse(
+                                    ResponseValue::from_response(response)
+                                        .await?
+                                ))
+                            }
                         }
-                    }
-                    OperationResponseType::None => {
-                        quote!{
-                            Err(progenitor_client::Error::ErrorResponse(
-                                progenitor_client::ResponseValue::empty(response)
-                            ))
+                        OperationResponseType::None => {
+                            quote! {
+                                Err(Error::ErrorResponse(
+                                    ResponseValue::empty(response)
+                                ))
+                            }
                         }
-                    }
-                    // TODO not sure how to handle this... maybe as a
-                    // ResponseValue<Bytes>
-                    OperationResponseType::Raw => todo!(),
-                };
+                        // TODO not sure how to handle this... maybe as a
+                        // ResponseValue<Bytes>
+                        OperationResponseType::Raw => todo!(),
+                    };
 
-                quote! { _ => { #decode } }
-            });
+                    quote! { _ => { #decode } }
+                },
+            );
 
         // TODO document parameters
         let doc_comment = format!(
@@ -904,7 +888,7 @@ impl Generator {
                 #(#params),*
             ) -> Result<
                 #response_type,
-                progenitor_client::Error<#error_type>,
+                Error<#error_type>,
             > {
                 #url_path
                 #query_build
@@ -1034,7 +1018,7 @@ impl Generator {
                     #(#stream_params),*
                 ) -> impl futures::Stream<Item = Result<
                     #item_type,
-                    progenitor_client::Error<#error_type>,
+                    Error<#error_type>,
                 >> + Unpin + '_ {
                     use futures::StreamExt;
                     use futures::TryFutureExt;
@@ -1265,9 +1249,7 @@ fn last_two<T>(items: &[T]) -> (Option<&T>, Option<&T>) {
 }
 
 /// Make the schema optional if it isn't already.
-pub fn make_optional(
-    schema: schemars::schema::Schema,
-) -> schemars::schema::Schema {
+fn make_optional(schema: schemars::schema::Schema) -> schemars::schema::Schema {
     match &schema {
         // If the instance_type already includes Null then this is already
         // optional.

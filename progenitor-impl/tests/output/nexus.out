@@ -1,24 +1,4 @@
-pub use progenitor_client::Error;
-pub use progenitor_client::ResponseValue;
-mod progenitor_support {
-    use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
-    #[allow(dead_code)]
-    const PATH_SET: &AsciiSet = &CONTROLS
-        .add(b' ')
-        .add(b'"')
-        .add(b'#')
-        .add(b'<')
-        .add(b'>')
-        .add(b'?')
-        .add(b'`')
-        .add(b'{')
-        .add(b'}');
-    #[allow(dead_code)]
-    pub(crate) fn encode_path(pc: &str) -> String {
-        utf8_percent_encode(pc, PATH_SET).to_string()
-    }
-}
-
+pub use progenitor_client::{Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[doc = "A count of bytes, typically used either for memory or storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience."]
@@ -1185,10 +1165,7 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::RackResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
         let url = format!("{}/hardware/racks", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -1207,14 +1184,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1223,9 +1200,7 @@ impl Client {
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Rack, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -1259,25 +1234,24 @@ impl Client {
     pub async fn hardware_racks_get_rack<'a>(
         &'a self,
         rack_id: &'a uuid::Uuid,
-    ) -> Result<progenitor_client::ResponseValue<types::Rack>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
         let url = format!(
             "{}/hardware/racks/{}",
             self.baseurl,
-            progenitor_support::encode_path(&rack_id.to_string()),
+            progenitor_client::encode_path(&rack_id.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1287,10 +1261,7 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::SledResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
         let url = format!("{}/hardware/sleds", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -1309,14 +1280,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1325,9 +1296,7 @@ impl Client {
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Sled, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Sled, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -1361,25 +1330,24 @@ impl Client {
     pub async fn hardware_sleds_get_sled<'a>(
         &'a self,
         sled_id: &'a uuid::Uuid,
-    ) -> Result<progenitor_client::ResponseValue<types::Sled>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
         let url = format!(
             "{}/hardware/sleds/{}",
             self.baseurl,
-            progenitor_support::encode_path(&sled_id.to_string()),
+            progenitor_client::encode_path(&sled_id.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1387,32 +1355,26 @@ impl Client {
     pub async fn spoof_login<'a>(
         &'a self,
         body: &'a types::LoginParams,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
+    ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/login", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200..=299 => Ok(progenitor_client::ResponseValue::empty(response)),
-            _ => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::empty(response),
-            )),
+            200..=299 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
         }
     }
 
     #[doc = "logout: POST /logout"]
-    pub async fn logout<'a>(
-        &'a self,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<()>> {
+    pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/logout", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200..=299 => Ok(progenitor_client::ResponseValue::empty(response)),
-            _ => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::empty(response),
-            )),
+            200..=299 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
         }
     }
 
@@ -1422,10 +1384,7 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::OrganizationResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -1444,14 +1403,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1460,10 +1419,8 @@ impl Client {
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<
-        Item = Result<types::Organization, progenitor_client::Error<types::Error>>,
-    > + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + '_
+    {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -1497,23 +1454,20 @@ impl Client {
     pub async fn organizations_post<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Organization>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1521,27 +1475,24 @@ impl Client {
     pub async fn organizations_get_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Organization>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1550,27 +1501,24 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::OrganizationUpdate,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Organization>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1578,24 +1526,24 @@ impl Client {
     pub async fn organizations_delete_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1606,14 +1554,11 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::ProjectResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -1632,14 +1577,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1649,9 +1594,7 @@ impl Client {
         organization_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Project, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -1691,27 +1634,24 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::ProjectCreate,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Project>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1720,28 +1660,25 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Project>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1751,28 +1688,25 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         body: &'a types::ProjectUpdate,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Project>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1781,25 +1715,25 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1811,15 +1745,12 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::DiskResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -1838,14 +1769,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1856,9 +1787,7 @@ impl Client {
         project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -1900,26 +1829,25 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         body: &'a types::DiskCreate,
-    ) -> Result<progenitor_client::ResponseValue<types::Disk>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1929,27 +1857,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<types::Disk>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&disk_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&disk_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1959,26 +1886,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&disk_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&disk_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -1990,15 +1917,12 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::InstanceResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2017,14 +1941,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2035,9 +1959,8 @@ impl Client {
         project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Instance, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + '_
+    {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2079,28 +2002,25 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         body: &'a types::InstanceCreate,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Instance>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2110,29 +2030,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Instance>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2142,26 +2059,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2174,16 +2091,13 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::DiskResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2202,14 +2116,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2221,9 +2135,7 @@ impl Client {
         instance_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2274,27 +2186,26 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
         body: &'a types::DiskIdentifier,
-    ) -> Result<progenitor_client::ResponseValue<types::Disk>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            202u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            202u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2305,27 +2216,26 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
         body: &'a types::DiskIdentifier,
-    ) -> Result<progenitor_client::ResponseValue<types::Disk>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            202u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            202u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2336,29 +2246,26 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
         body: &'a types::InstanceMigrate,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Instance>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/migrate",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2368,29 +2275,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Instance>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/reboot",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            202u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            202u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2400,29 +2304,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Instance>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/start",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            202u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            202u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2432,29 +2333,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::Instance>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/stop",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            202u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            202u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2466,15 +2364,12 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2493,14 +2388,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2511,9 +2406,7 @@ impl Client {
         project_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Vpc, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Vpc, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2555,26 +2448,25 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         body: &'a types::VpcCreate,
-    ) -> Result<progenitor_client::ResponseValue<types::Vpc>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2584,27 +2476,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<types::Vpc>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2615,26 +2506,26 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcUpdate,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2644,26 +2535,26 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2676,16 +2567,13 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcFirewallRuleResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcFirewallRuleResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2704,14 +2592,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2723,10 +2611,8 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<
-        Item = Result<types::VpcFirewallRule, progenitor_client::Error<types::Error>>,
-    > + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::VpcFirewallRule, Error<types::Error>>> + Unpin + '_
+    {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2777,29 +2663,26 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcFirewallRuleUpdateParams,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcFirewallRuleUpdateResult>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcFirewallRuleUpdateResult>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2812,16 +2695,13 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcRouterResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2840,14 +2720,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2859,9 +2739,8 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcRouter, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::VpcRouter, Error<types::Error>>> + Unpin + '_
+    {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -2912,29 +2791,26 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcRouterCreate,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcRouter>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2945,30 +2821,27 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcRouter>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&router_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&router_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -2980,27 +2853,27 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         body: &'a types::VpcRouterUpdate,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&router_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&router_name.to_string()),
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3011,27 +2884,27 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&router_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&router_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3045,17 +2918,14 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::RouterRouteResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&router_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&router_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3074,14 +2944,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3094,10 +2964,8 @@ impl Client {
         router_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<
-        Item = Result<types::RouterRoute, progenitor_client::Error<types::Error>>,
-    > + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::RouterRoute, Error<types::Error>>> + Unpin + '_
+    {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -3151,30 +3019,27 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         body: &'a types::RouterRouteCreateParams,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::RouterRoute>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&router_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&router_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3186,31 +3051,28 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         route_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::RouterRoute>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&router_name.to_string()),
-            progenitor_support::encode_path(&route_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&router_name.to_string()),
+            progenitor_client::encode_path(&route_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3223,28 +3085,28 @@ impl Client {
         router_name: &'a types::Name,
         route_name: &'a types::Name,
         body: &'a types::RouterRouteUpdateParams,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&router_name.to_string()),
-            progenitor_support::encode_path(&route_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&router_name.to_string()),
+            progenitor_client::encode_path(&route_name.to_string()),
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3256,28 +3118,28 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         route_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&router_name.to_string()),
-            progenitor_support::encode_path(&route_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&router_name.to_string()),
+            progenitor_client::encode_path(&route_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3290,16 +3152,13 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcSubnetResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3318,14 +3177,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3337,9 +3196,8 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcSubnet, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::VpcSubnet, Error<types::Error>>> + Unpin + '_
+    {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -3390,29 +3248,26 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcSubnetCreate,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcSubnet>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
         );
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3423,30 +3278,27 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::VpcSubnet>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&subnet_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&subnet_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3458,27 +3310,27 @@ impl Client {
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
         body: &'a types::VpcSubnetUpdate,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&subnet_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&subnet_name.to_string()),
         );
         let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3489,27 +3341,27 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<()>, progenitor_client::Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&subnet_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&subnet_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(progenitor_client::ResponseValue::empty(response)),
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3523,17 +3375,14 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::NetworkInterfaceResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/ips",
             self.baseurl,
-            progenitor_support::encode_path(&organization_name.to_string()),
-            progenitor_support::encode_path(&project_name.to_string()),
-            progenitor_support::encode_path(&vpc_name.to_string()),
-            progenitor_support::encode_path(&subnet_name.to_string()),
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&vpc_name.to_string()),
+            progenitor_client::encode_path(&subnet_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3552,14 +3401,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3572,10 +3421,8 @@ impl Client {
         subnet_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<
-        Item = Result<types::NetworkInterface, progenitor_client::Error<types::Error>>,
-    > + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + '_
+    {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -3626,10 +3473,7 @@ impl Client {
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::RoleResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
         let url = format!("{}/roles", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3644,14 +3488,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3659,9 +3503,7 @@ impl Client {
     pub fn roles_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::Role, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Role, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -3695,25 +3537,24 @@ impl Client {
     pub async fn roles_get_role<'a>(
         &'a self,
         role_name: &'a str,
-    ) -> Result<progenitor_client::ResponseValue<types::Role>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
         let url = format!(
             "{}/roles/{}",
             self.baseurl,
-            progenitor_support::encode_path(&role_name.to_string()),
+            progenitor_client::encode_path(&role_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3723,10 +3564,7 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::SagaResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
         let url = format!("{}/sagas", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3745,14 +3583,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3761,9 +3599,7 @@ impl Client {
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Saga, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Saga, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -3797,48 +3633,44 @@ impl Client {
     pub async fn sagas_get_saga<'a>(
         &'a self,
         saga_id: &'a uuid::Uuid,
-    ) -> Result<progenitor_client::ResponseValue<types::Saga>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
         let url = format!(
             "{}/sagas/{}",
             self.baseurl,
-            progenitor_support::encode_path(&saga_id.to_string()),
+            progenitor_client::encode_path(&saga_id.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     #[doc = "session_me: GET /session/me"]
     pub async fn session_me<'a>(
         &'a self,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::SessionUser>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::SessionUser>, Error<types::Error>> {
         let url = format!("{}/session/me", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3847,10 +3679,7 @@ impl Client {
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::TimeseriesSchemaResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
         let url = format!("{}/timeseries/schema", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3865,14 +3694,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3880,10 +3709,8 @@ impl Client {
     pub fn timeseries_schema_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
-    ) -> impl futures::Stream<
-        Item = Result<types::TimeseriesSchema, progenitor_client::Error<types::Error>>,
-    > + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema, Error<types::Error>>> + Unpin + '_
+    {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -3919,10 +3746,7 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
-    ) -> Result<
-        progenitor_client::ResponseValue<types::UserResultsPage>,
-        progenitor_client::Error<types::Error>,
-    > {
+    ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
         let url = format!("{}/users", self.baseurl,);
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3941,14 +3765,14 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -3957,9 +3781,7 @@ impl Client {
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::User, progenitor_client::Error<types::Error>>>
-           + Unpin
-           + '_ {
+    ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -3993,25 +3815,24 @@ impl Client {
     pub async fn users_get_user<'a>(
         &'a self,
         user_name: &'a types::Name,
-    ) -> Result<progenitor_client::ResponseValue<types::User>, progenitor_client::Error<types::Error>>
-    {
+    ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!(
             "{}/users/{}",
             self.baseurl,
-            progenitor_support::encode_path(&user_name.to_string()),
+            progenitor_client::encode_path(&user_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => progenitor_client::ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            500u16..=599u16 => Err(progenitor_client::Error::ErrorResponse(
-                progenitor_client::ResponseValue::from_response(response).await?,
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(progenitor_client::Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 }

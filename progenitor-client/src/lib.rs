@@ -2,7 +2,7 @@
 
 //! Support code for generated clients.
 
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 
 use serde::de::DeserializeOwned;
 
@@ -15,6 +15,7 @@ pub struct ResponseValue<T> {
 }
 
 impl<T: DeserializeOwned> ResponseValue<T> {
+    #[doc(hidden)]
     pub async fn from_response<E: std::fmt::Debug>(
         response: reqwest::Response,
     ) -> Result<Self, Error<E>> {
@@ -34,6 +35,7 @@ impl<T: DeserializeOwned> ResponseValue<T> {
 }
 
 impl ResponseValue<()> {
+    #[doc(hidden)]
     pub fn empty(response: reqwest::Response) -> Self {
         let status = response.status();
         let headers = response.headers().clone();
@@ -88,7 +90,7 @@ impl<T> Deref for ResponseValue<T> {
     }
 }
 
-impl<T> std::ops::DerefMut for ResponseValue<T> {
+impl<T> DerefMut for ResponseValue<T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }
@@ -129,7 +131,20 @@ impl<E: std::fmt::Debug> From<reqwest::Error> for Error<E> {
 
 impl<E: std::fmt::Debug> std::fmt::Display for Error<E> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        todo!()
+        match self {
+            Error::CommunicationError(e) => {
+                write!(f, "Communication Error {}", e)
+            }
+            Error::ErrorResponse(rv) => {
+                write!(f, "Error Response {:?}", rv)
+            }
+            Error::InvalidResponsePayload(e) => {
+                write!(f, "Invalid Response Payload {}", e)
+            }
+            Error::UnexpectedResponse(r) => {
+                write!(f, "Unexpected Response {:?}", r)
+            }
+        }
     }
 }
 impl<E: std::fmt::Debug> std::error::Error for Error<E> {
@@ -140,4 +155,19 @@ impl<E: std::fmt::Debug> std::error::Error for Error<E> {
             _ => None,
         }
     }
+}
+
+const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
+    .add(b' ')
+    .add(b'"')
+    .add(b'#')
+    .add(b'<')
+    .add(b'>')
+    .add(b'?')
+    .add(b'`')
+    .add(b'{')
+    .add(b'}');
+
+pub fn encode_path(pc: &str) -> String {
+    percent_encoding::utf8_percent_encode(pc, PATH_SET).to_string()
 }
