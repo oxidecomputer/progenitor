@@ -1,6 +1,7 @@
 # Generated Methods
 
-Progenitor generates methods according to operations within an OpenAPI document. Each method takes the following general form:
+Progenitor generates methods according to operations within an OpenAPI
+document. Each method takes the following general form:
 
 ```rust
 impl Client {
