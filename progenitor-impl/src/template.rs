@@ -1,4 +1,4 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
@@ -160,10 +160,9 @@ impl ToString for PathTemplate {
 #[cfg(test)]
 mod test {
     use super::{parse, Component, PathTemplate};
-    use anyhow::{anyhow, Context, Result};
 
     #[test]
-    fn basic() -> Result<()> {
+    fn basic() {
         let trials = vec![
             (
                 "/info",
@@ -193,15 +192,15 @@ mod test {
         ];
 
         for (path, want) in trials.iter() {
-            let t = parse(path).with_context(|| anyhow!("path {}", path))?;
-            assert_eq!(&t, want);
+            match parse(path) {
+                Ok(t) => assert_eq!(&t, want),
+                Err(e) => panic!("path {} {}", path, e),
+            }
         }
-
-        Ok(())
     }
 
     #[test]
-    fn names() -> Result<()> {
+    fn names() {
         let trials = vec![
             ("/info", vec![]),
             ("/measure/{number}", vec!["number".to_string()]),
@@ -212,16 +211,16 @@ mod test {
         ];
 
         for (path, want) in trials.iter() {
-            let t = parse(path).with_context(|| anyhow!("path {}", path))?;
-            assert_eq!(&t.names(), want);
+            match parse(path) {
+                Ok(t) => assert_eq!(&t.names(), want),
+                Err(e) => panic!("path {} {}", path, e),
+            }
         }
-
-        Ok(())
     }
 
     #[test]
-    fn compile() -> Result<()> {
-        let t = parse("/measure/{number}")?;
+    fn compile() {
+        let t = parse("/measure/{number}").unwrap();
         let out = t.compile();
         let want = quote::quote! {
             let url = format!("{}/measure/{}",
@@ -230,6 +229,5 @@ mod test {
             );
         };
         assert_eq!(want.to_string(), out.to_string());
-        Ok(())
     }
 }

@@ -7,7 +7,6 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 description = "An OpenAPI client generator - core implementation"
 
 [dependencies]
-anyhow = "1.0"
 convert_case = "0.4"
 getopts = "0.2"
 indexmap = "1.7"

@@ -133,9 +133,7 @@ dependencies = [
 name = "example-macro"
 version = "0.0.1"
 dependencies = [
- "anyhow",
  "chrono",
- "percent-encoding",
  "progenitor",
  "reqwest",
  "schemars",
@@ -704,7 +702,6 @@ dependencies = [
 name = "progenitor-impl"
 version = "0.0.0"
 dependencies = [
- "anyhow",
  "convert_case",
  "expectorate",
  "getopts",

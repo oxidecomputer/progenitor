@@ -50,13 +50,21 @@ impl ResponseValue<()> {
 }
 
 impl<T> ResponseValue<T> {
+    /// Consumes the ResponseValue, returning the wrapped value.
+    pub fn into_inner(self) -> T {
+        self.inner
+    }
+
+    /// Get the status from this response.
     pub fn status(&self) -> &reqwest::StatusCode {
         &self.status
     }
+    /// Get the headers from this response.
     pub fn headers(&self) -> &reqwest::header::HeaderMap {
         &self.headers
     }
 
+    #[doc(hidden)]
     pub fn map<U: std::fmt::Debug, F, E>(
         self,
         f: F,
@@ -75,10 +83,6 @@ impl<T> ResponseValue<T> {
             status,
             headers,
         })
-    }
-
-    pub fn into_inner(self) -> T {
-        self.inner
     }
 }
 
@@ -102,10 +106,11 @@ impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> {
     }
 }
 
-/// Error produced by generated client methods. The type parameter may be a
-/// struct if there's a single expected error type or an enum if there are
-/// multiple valid error types. It can be the unit type if there are no
-/// structured returns expected.
+/// Error produced by generated client methods.
+///
+/// The type parameter may be a struct if there's a single expected error type
+/// or an enum if there are multiple valid error types. It can be the unit type
+/// if there are no structured returns expected.
 #[derive(Debug)]
 pub enum Error<E: std::fmt::Debug> {
     /// A server error either with the data, or with the connection.
@@ -168,6 +173,7 @@ const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
     .add(b'{')
     .add(b'}');
 
+#[doc(hidden)]
 pub fn encode_path(pc: &str) -> String {
     percent_encoding::utf8_percent_encode(pc, PATH_SET).to_string()
 }

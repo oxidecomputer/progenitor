@@ -1212,7 +1212,6 @@ impl Generator {
 
     pub fn dependencies(&self) -> Vec<String> {
         let mut deps = vec![
-            "anyhow = \"1.0\"",
             "percent-encoding = \"2.1\"",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
             "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
