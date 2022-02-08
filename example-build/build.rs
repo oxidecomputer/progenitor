@@ -1,4 +1,4 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 use std::{
     env,
@@ -6,12 +6,12 @@ use std::{
     path::Path,
 };
 
-use progenitor::Generator;
-
 fn main() {
-    let file = File::open("../sample_openapi/keeper.json").unwrap();
+    let src = "../sample_openapi/keeper.json";
+    println!("cargo:rerun-if-changed={}", src);
+    let file = File::open(src).unwrap();
     let spec = serde_json::from_reader(file).unwrap();
-    let mut generator = Generator::new();
+    let mut generator = progenitor::Generator::new();
 
     let content = generator.generate_text(&spec).unwrap();
 

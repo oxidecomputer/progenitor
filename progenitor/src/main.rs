@@ -53,8 +53,8 @@ fn main() -> Result<()> {
 
     let mut builder = Generator::new();
 
-    let fail = match builder.generate_text(&api) {
-        Ok(out) => {
+    match builder.generate_text(&api) {
+        Ok(api_code) => {
             let type_space = builder.get_type_space();
 
             println!("-----------------------------------------------------");
@@ -89,7 +89,9 @@ fn main() -> Result<()> {
                 edition = \"2018\"\n\
                 \n\
                 [dependencies]\n\
-                {}",
+                {}\n\
+                \n\
+                [workspace]\n",
                 name,
                 version,
                 builder.dependencies().join("\n"),
@@ -107,19 +109,25 @@ fn main() -> Result<()> {
             /*
              * Create the Rust source file containing the generated client:
              */
-            let mut librs = src;
+            let lib_code = format!("mod progenitor_client;\n\n{}", api_code);
+            let mut librs = src.clone();
             librs.push("lib.rs");
-            save(librs, out.as_str())?;
-            false
+            save(librs, lib_code.as_str())?;
+
+            /*
+             * Create the Rust source file containing the support code:
+             */
+            let progenitor_client_code =
+                include_str!("../../progenitor-client/src/lib.rs");
+            let mut clientrs = src;
+            clientrs.push("progenitor_client.rs");
+            save(clientrs, progenitor_client_code)?;
         }
+
         Err(e) => {
             println!("gen fail: {:?}", e);
-            true
+            bail!("generation experienced errors");
         }
-    };
-
-    if fail {
-        bail!("generation experienced errors");
     }
 
     Ok(())
@@ -135,6 +143,7 @@ where
     Ok(serde_json::from_reader(f)?)
 }
 
+// TODO some or all of this validation should be in progenitor-impl
 pub fn load_api<P>(p: P) -> Result<OpenAPI>
 where
     P: AsRef<Path>,
@@ -161,45 +170,6 @@ where
         bail!("tags not presently supported");
     }
 
-    if let Some(components) = api.components.as_ref() {
-        if !components.security_schemes.is_empty() {
-            bail!("component security schemes not supported");
-        }
-
-        if !components.responses.is_empty() {
-            bail!("component responses not supported");
-        }
-
-        if !components.parameters.is_empty() {
-            bail!("component parameters not supported");
-        }
-
-        if !components.request_bodies.is_empty() {
-            bail!("component request bodies not supported");
-        }
-
-        if !components.headers.is_empty() {
-            bail!("component headers not supported");
-        }
-
-        if !components.links.is_empty() {
-            bail!("component links not supported");
-        }
-
-        if !components.callbacks.is_empty() {
-            bail!("component callbacks not supported");
-        }
-
-        /*
-         * XXX Ignoring "examples" and "extensions" for now.
-         * Explicitly allowing "schemas" through.
-         */
-    }
-
-    /*
-     * XXX Ignoring "external_docs" and "extensions" for now, as they seem not
-     * to immediately affect our code generation.
-     */
     let mut opids = HashSet::new();
     for p in api.paths.paths.iter() {
         match p.1 {
@@ -217,20 +187,12 @@ where
                             bail!("duplicate operation ID: {}", oid);
                         }
 
-                        if !o.tags.is_empty() {
-                            bail!("op {}: tags, unsupported", oid);
-                        }
-
                         if !o.servers.is_empty() {
                             bail!("op {}: servers, unsupported", oid);
                         }
 
                         if o.security.is_some() {
                             bail!("op {}: security, unsupported", oid);
-                        }
-
-                        if o.responses.default.is_some() {
-                            bail!("op {}: has response default", oid);
                         }
                     } else {
                         bail!("path {} is missing operation ID", p.0);

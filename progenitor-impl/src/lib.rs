@@ -1,6 +1,9 @@
 // Copyright 2022 Oxide Computer Company
 
-use std::{cmp::Ordering, collections::HashMap};
+use std::{
+    cmp::Ordering,
+    collections::{BTreeSet, HashMap},
+};
 
 use convert_case::{Case, Casing};
 use indexmap::IndexMap;
@@ -9,7 +12,6 @@ use openapiv3::{
     StatusCode,
 };
 use proc_macro2::TokenStream;
-
 use quote::{format_ident, quote, ToTokens};
 use template::PathTemplate;
 use thiserror::Error;
@@ -78,11 +80,63 @@ enum OperationParameterType {
 }
 #[derive(Debug)]
 struct OperationResponse {
-    status_code: StatusCode,
+    status_code: OperationResponseStatus,
     typ: OperationResponseType,
 }
 
-#[derive(Debug)]
+impl Eq for OperationResponse {}
+impl PartialEq for OperationResponse {
+    fn eq(&self, other: &Self) -> bool {
+        self.status_code == other.status_code
+    }
+}
+impl Ord for OperationResponse {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.status_code.cmp(&other.status_code)
+    }
+}
+impl PartialOrd for OperationResponse {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+#[derive(Debug, Clone, Eq, PartialEq)]
+enum OperationResponseStatus {
+    Code(u16),
+    Range(u16),
+    Default,
+}
+
+impl OperationResponseStatus {
+    fn to_value(&self) -> u16 {
+        match self {
+            OperationResponseStatus::Code(code) => {
+                assert!(*code < 1000);
+                *code
+            }
+            OperationResponseStatus::Range(range) => {
+                assert!(*range < 10);
+                *range * 100
+            }
+            OperationResponseStatus::Default => 1000,
+        }
+    }
+}
+
+impl Ord for OperationResponseStatus {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.to_value().cmp(&other.to_value())
+    }
+}
+
+impl PartialOrd for OperationResponseStatus {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 enum OperationResponseType {
     Type(TypeId),
     None,
@@ -176,28 +230,9 @@ impl Generator {
         });
 
         let file = quote! {
-            use anyhow::Result;
-
-            mod progenitor_support {
-                use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
-
-                #[allow(dead_code)]
-                const PATH_SET: &AsciiSet = &CONTROLS
-                    .add(b' ')
-                    .add(b'"')
-                    .add(b'#')
-                    .add(b'<')
-                    .add(b'>')
-                    .add(b'?')
-                    .add(b'`')
-                    .add(b'{')
-                    .add(b'}');
-
-                #[allow(dead_code)]
-                pub(crate) fn encode_path(pc: &str) -> String {
-                    utf8_percent_encode(pc, PATH_SET).to_string()
-                }
-            }
+            // Re-export ResponseValue and Error since those are used by the
+            // public interface of Client.
+            pub use progenitor_client::{Error, ResponseValue};
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
@@ -415,7 +450,7 @@ impl Generator {
                         OperationParameterKind::Path,
                     ) => Ordering::Greater,
 
-                    // Body params are last and should be unique
+                    // Body params are last and should be singular.
                     (
                         OperationParameterKind::Body,
                         OperationParameterKind::Path,
@@ -438,11 +473,31 @@ impl Generator {
 
         let mut responses = operation
             .responses
-            .responses
+            .default
             .iter()
-            .map(|(status_code, response_or_ref)| {
-                let response = response_or_ref.item(components)?;
-
+            .map(|response_or_ref| {
+                Ok((
+                    OperationResponseStatus::Default,
+                    response_or_ref.item(components)?,
+                ))
+            })
+            .chain(operation.responses.responses.iter().map(
+                |(status_code, response_or_ref)| {
+                    Ok((
+                        match status_code {
+                            StatusCode::Code(code) => {
+                                OperationResponseStatus::Code(*code)
+                            }
+                            StatusCode::Range(range) => {
+                                OperationResponseStatus::Range(*range)
+                            }
+                        },
+                        response_or_ref.item(components)?,
+                    ))
+                },
+            ))
+            .map(|v: Result<(OperationResponseStatus, &Response)>| {
+                let (status_code, response) = v?;
                 let typ = if let Some(mt) =
                     response.content.get("application/json")
                 {
@@ -470,17 +525,17 @@ impl Generator {
                     OperationResponseType::None
                 };
 
+                // See if there's a status code that covers success cases.
                 if matches!(
                     status_code,
-                    StatusCode::Code(200..=299) | StatusCode::Range(2)
+                    OperationResponseStatus::Default
+                        | OperationResponseStatus::Code(200..=299)
+                        | OperationResponseStatus::Range(2)
                 ) {
                     success = true;
                 }
 
-                Ok(OperationResponse {
-                    status_code: status_code.clone(),
-                    typ,
-                })
+                Ok(OperationResponse { status_code, typ })
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -490,7 +545,7 @@ impl Generator {
         // spec.
         if !success {
             responses.push(OperationResponse {
-                status_code: StatusCode::Range(2),
+                status_code: OperationResponseStatus::Range(2),
                 typ: OperationResponseType::Raw,
             });
         }
@@ -597,31 +652,207 @@ impl Generator {
 
         assert!(body_func.clone().count() <= 1);
 
-        let mut success_response_items =
-            method.responses.iter().filter(|response| {
+        let mut success_response_items = method
+            .responses
+            .iter()
+            .filter(|response| {
                 matches!(
-                    response.status_code,
-                    StatusCode::Code(200..=299) | StatusCode::Range(2)
+                    &response.status_code,
+                    OperationResponseStatus::Default
+                        | OperationResponseStatus::Code(200..=299)
+                        | OperationResponseStatus::Range(2)
                 )
-            });
+            })
+            .collect::<Vec<_>>();
+        success_response_items.sort();
 
-        assert_eq!(success_response_items.clone().count(), 1);
+        // If we have a range and a default, we can pop off the default since it will never be hit.
+        if let (
+            Some(OperationResponse {
+                status_code: OperationResponseStatus::Range(2),
+                ..
+            }),
+            Some(OperationResponse {
+                status_code: OperationResponseStatus::Default,
+                ..
+            }),
+        ) = last_two(&success_response_items)
+        {
+            success_response_items.pop();
+        }
 
-        let (response_type, decode_response) = success_response_items
+        let success_response_types = success_response_items
+            .iter()
+            .map(|response| response.typ.clone())
+            .collect::<BTreeSet<_>>();
+
+        // TODO to deal with multiple success response types, we'll need to
+        // create an enum.
+        assert_eq!(success_response_types.len(), 1);
+
+        let response_type = success_response_types
+            .iter()
             .next()
-            .map(|response| match &response.typ {
-                OperationResponseType::Type(type_id) => (
-                    self.type_space.get_type(type_id).unwrap().ident(),
-                    quote! { res.json().await? },
-                ),
+            .map(|typ| match typ {
+                OperationResponseType::Type(type_id) => {
+                    let type_name =
+                        self.type_space.get_type(type_id).unwrap().ident();
+                    quote! { ResponseValue<#type_name> }
+                }
                 OperationResponseType::None => {
-                    (quote! { reqwest::Response }, quote! { res })
+                    quote! { ResponseValue<()> }
                 }
-                OperationResponseType::Raw => {
-                    (quote! { reqwest::Response }, quote! { res })
-                }
+                // TODO Maybe this should be ResponseValue<Bytes>?
+                OperationResponseType::Raw => quote! { reqwest::Response },
             })
             .unwrap();
+
+        let success_response_matches =
+            success_response_items.iter().map(|response| {
+                let pat = match &response.status_code {
+                    OperationResponseStatus::Code(code) => quote! { #code },
+                    OperationResponseStatus::Range(_)
+                    | OperationResponseStatus::Default => {
+                        quote! { 200 ..= 299 }
+                    }
+                };
+
+                let decode = match &response.typ {
+                    OperationResponseType::Type(_) => {
+                        quote! {
+                            ResponseValue::from_response(response).await
+                        }
+                    }
+                    OperationResponseType::None => {
+                        quote! {
+                            Ok(ResponseValue::empty(response))
+                        }
+                    }
+                    OperationResponseType::Raw => quote! { Ok(response) },
+                };
+
+                quote! { #pat => { #decode } }
+            });
+
+        // Errors...
+        let mut error_responses = method
+            .responses
+            .iter()
+            .filter(|response| {
+                matches!(
+                    &response.status_code,
+                    OperationResponseStatus::Code(400..=599)
+                        | OperationResponseStatus::Range(4)
+                        | OperationResponseStatus::Range(5)
+                )
+            })
+            .collect::<Vec<_>>();
+        error_responses.sort();
+
+        let error_response_types = error_responses
+            .iter()
+            .map(|response| response.typ.clone())
+            .collect::<BTreeSet<_>>();
+        // TODO create an enum if there are multiple error response types
+        assert!(error_response_types.len() <= 1);
+
+        let error_type = error_response_types
+            .iter()
+            .next()
+            .map(|typ| match typ {
+                OperationResponseType::Type(type_id) => {
+                    let type_name =
+                        self.type_space.get_type(type_id).unwrap().ident();
+                    quote! { #type_name }
+                }
+                OperationResponseType::None => {
+                    quote! { () }
+                }
+                // TODO Maybe this should be ResponseValue<Bytes>?
+                OperationResponseType::Raw => quote! { reqwest::Response },
+            })
+            .unwrap_or_else(|| quote! { () });
+
+        let error_response_matches = error_responses.iter().map(|response| {
+            let pat = match &response.status_code {
+                OperationResponseStatus::Code(code) => quote! { #code },
+                OperationResponseStatus::Range(r) => {
+                    let min = r * 100;
+                    let max = min + 99;
+                    quote! { #min ..= #max }
+                }
+                OperationResponseStatus::Default => unreachable!(),
+            };
+
+            let decode = match &response.typ {
+                OperationResponseType::Type(_) => {
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::from_response(response)
+                                .await?
+                        ))
+                    }
+                }
+                OperationResponseType::None => {
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::empty(response)
+                        ))
+                    }
+                }
+                // TODO not sure how to handle this...
+                OperationResponseType::Raw => todo!(),
+            };
+
+            quote! { #pat => { #decode } }
+        });
+
+        // Generate the catch-all case for other statuses. If the operation
+        // specifies a default response, we've already handled the success
+        // status codes above, so we only need to consider error codes.
+        let default_response = method
+            .responses
+            .iter()
+            .find(|response| {
+                matches!(
+                    &response.status_code,
+                    OperationResponseStatus::Default
+                )
+            })
+            .map_or_else(
+                ||
+                // With no default response, unexpected status codes produce
+                // and Error::UnexpectedResponse()
+                quote!{
+                        _ => Err(Error::UnexpectedResponse(response)),
+                },
+                // If we have a structured default response, we decode it and
+                // return Error::ErrorResponse()
+                |response| {
+                    let decode = match &response.typ {
+                        OperationResponseType::Type(_) => {
+                            quote! {
+                                Err(Error::ErrorResponse(
+                                    ResponseValue::from_response(response)
+                                        .await?
+                                ))
+                            }
+                        }
+                        OperationResponseType::None => {
+                            quote! {
+                                Err(Error::ErrorResponse(
+                                    ResponseValue::empty(response)
+                                ))
+                            }
+                        }
+                        // TODO not sure how to handle this... maybe as a
+                        // ResponseValue<Bytes>
+                        OperationResponseType::Raw => todo!(),
+                    };
+
+                    quote! { _ => { #decode } }
+                },
+            );
 
         // TODO document parameters
         let doc_comment = format!(
@@ -655,7 +886,10 @@ impl Generator {
             pub async fn #operation_id #bounds (
                 &'a self,
                 #(#params),*
-            ) -> Result<#response_type> {
+            ) -> Result<
+                #response_type,
+                Error<#error_type>,
+            > {
                 #url_path
                 #query_build
 
@@ -670,10 +904,42 @@ impl Generator {
                     .await;
                 #post_hook
 
-                // TODO we should do a match here for result?.status().as_u16()
-                let res = result?.error_for_status()?;
+                let response = result?;
 
-                Ok(#decode_response)
+                match response.status().as_u16() {
+                    // These will be of the form...
+                    // 201 => ResponseValue::from_response(response).await,
+                    // 200..299 => ResponseValue::empty(response),
+                    // TODO this isn't implemented
+                    // ... or in the case of an operation with multiple
+                    // successful response types...
+                    // 200 => {
+                    //     ResponseValue::from_response()
+                    //         .await?
+                    //         .map(OperationXResponse::ResponseTypeA)
+                    // }
+                    // 201 => {
+                    //     ResponseValue::from_response()
+                    //         .await?
+                    //         .map(OperationXResponse::ResponseTypeB)
+                    // }
+                    #(#success_response_matches)*
+
+                    // This is almost identical to the success types except
+                    // they are wrapped in Error::ErrorResponse...
+                    // 400 => {
+                    //     Err(Error::ErrorResponse(
+                    //         ResponseValue::from_response(response.await?)
+                    //     ))
+                    // }
+                    #(#error_response_matches)*
+
+                    // The default response is either an Error with a known
+                    // type if the operation defines a default (as above) or
+                    // an Error::UnexpectedResponse...
+                    // _ => Err(Error::UnexpectedResponse(response)),
+                    #default_response
+                }
             }
         };
 
@@ -750,7 +1016,10 @@ impl Generator {
                 pub fn #stream_id #bounds (
                     &'a self,
                     #(#stream_params),*
-                ) -> impl futures::Stream<Item = Result<#item_type>> + Unpin + '_ {
+                ) -> impl futures::Stream<Item = Result<
+                    #item_type,
+                    Error<#error_type>,
+                >> + Unpin + '_ {
                     use futures::StreamExt;
                     use futures::TryFutureExt;
                     use futures::TryStreamExt;
@@ -761,6 +1030,7 @@ impl Generator {
                         #(#first_params,)*
                     )
                     .map_ok(move |page| {
+                        let page = page.into_inner();
                         // The first page is just an iter
                         let first = futures::stream::iter(
                             page.items.into_iter().map(Ok)
@@ -785,6 +1055,7 @@ impl Generator {
                                         #(#step_params,)*
                                     )
                                     .map_ok(|page| {
+                                        let page = page.into_inner();
                                         Some((
                                             futures::stream::iter(
                                                 page
@@ -864,7 +1135,8 @@ impl Generator {
             responses.iter().filter_map(|response| {
                 match (&response.status_code, &response.typ) {
                     (
-                        StatusCode::Code(200..=299) | StatusCode::Range(2),
+                        OperationResponseStatus::Code(200..=299)
+                        | OperationResponseStatus::Range(2),
                         OperationResponseType::Type(type_id),
                     ) => Some(type_id),
                     _ => None,
@@ -940,7 +1212,6 @@ impl Generator {
 
     pub fn dependencies(&self) -> Vec<String> {
         let mut deps = vec![
-            "anyhow = \"1.0\"",
             "percent-encoding = \"2.1\"",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
             "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
@@ -968,10 +1239,16 @@ impl Generator {
     }
 }
 
+fn last_two<T>(items: &[T]) -> (Option<&T>, Option<&T>) {
+    match items.len() {
+        0 => (None, None),
+        1 => (Some(&items[0]), None),
+        n => (Some(&items[n - 2]), Some(&items[n - 1])),
+    }
+}
+
 /// Make the schema optional if it isn't already.
-pub fn make_optional(
-    schema: schemars::schema::Schema,
-) -> schemars::schema::Schema {
+fn make_optional(schema: schemars::schema::Schema) -> schemars::schema::Schema {
     match &schema {
         // If the instance_type already includes Null then this is already
         // optional.

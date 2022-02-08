@@ -120,10 +120,9 @@ dependencies = [
 name = "example-build"
 version = "0.0.1"
 dependencies = [
- "anyhow",
  "chrono",
- "percent-encoding",
  "progenitor",
+ "progenitor-client",
  "reqwest",
  "serde",
  "serde_json",
@@ -134,9 +133,7 @@ dependencies = [
 name = "example-macro"
 version = "0.0.1"
 dependencies = [
- "anyhow",
  "chrono",
- "percent-encoding",
  "progenitor",
  "reqwest",
  "schemars",
@@ -681,6 +678,7 @@ dependencies = [
  "getopts",
  "openapiv3",
  "percent-encoding",
+ "progenitor-client",
  "progenitor-impl",
  "progenitor-macro",
  "reqwest",
@@ -694,7 +692,9 @@ dependencies = [
 name = "progenitor-client"
 version = "0.0.0"
 dependencies = [
+ "percent-encoding",
  "reqwest",
+ "serde",
  "serde_json",
 ]
 
@@ -702,7 +702,6 @@ dependencies = [
 name = "progenitor-impl"
 version = "0.0.0"
 dependencies = [
- "anyhow",
  "convert_case",
  "expectorate",
  "getopts",

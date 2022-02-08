@@ -10,6 +10,45 @@ use serde::Deserialize;
 use serde_tokenstream::ParseWrapper;
 use syn::LitStr;
 
+/// Generates a client from the given OpenAPI document
+///
+/// `generate_api!` can be invoked in two ways. The simple form, takes a path
+/// to the OpenAPI document:
+/// ```ignore
+/// generate_api!("path/to/spec.json");
+/// ```
+///
+/// The more complex form accepts the following key-value pairs in any order:
+/// ```ignore
+/// generate_api!(
+///     spec = "path/to/spec.json"
+///     [ inner_type = path::to:Type, ]
+///     [ pre_hook = closure::or::path::to::function, ]
+///     [ post_hook = closure::or::path::to::function, ]
+///     [ derives = [ path::to::DeriveMacro ], ]
+/// );
+/// ```
+///
+/// The `spec` key is required; it is the OpenAPI document from which the
+/// client is derived.
+///
+/// The optional `inner_type` is for ancillary data, stored with the generated
+/// client that can be usd by the pre and post hooks.
+///
+/// The optional `pre_hook` is either a closure (that must be within
+/// parentheses: `(fn |inner, request| { .. })`) or a path to a function. The
+/// closure or function must take two parameters: the inner type and a
+/// `&reqwest::Request`. This allows clients to examine requests before they're
+/// sent to the server, for example to log them.
+///
+/// The optional `post_hook` is either a closure (that must be within
+/// parentheses: `(fn |inner, result| { .. })`) or a path to a function. The
+/// closure or function must take two parameters: the inner type and a
+/// `&Result<reqwest::Response, reqwest::Error>`. This allows clients to
+/// examine responses, for example to log them.
+///
+/// The optional `derives` array allows consumers to specify additional derive
+/// macros to apply to generated types.
 #[proc_macro]
 pub fn generate_api(item: TokenStream) -> TokenStream {
     match do_generate_api(item) {
@@ -112,6 +151,10 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     })?;
 
     let output = quote! {
+        // The progenitor_client is tautologically visible from macro
+        // consumers.
+        use progenitor::progenitor_client;
+
         #code
 
         // Force a rebuild when the given file is modified.

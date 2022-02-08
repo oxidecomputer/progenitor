@@ -5,9 +5,7 @@ authors = ["Adam H. Leventhal <ahl@oxidecomputer.com>"]
 edition = "2018"
 
 [dependencies]
-anyhow = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
-percent-encoding = "2.1"
 progenitor = { path = "../progenitor" }
 reqwest = { version = "0.11", features = ["json", "stream"] }
 schemars = "0.8"
