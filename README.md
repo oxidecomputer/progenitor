@@ -48,7 +48,7 @@ Similarly if there is a `format` field set to `uuid`:
 ```
 
 Note that the macro will be re-evaluated when the OpenAPI json document
-changes (when it's mtime is updated).
+changes (when its mtime is updated).
 
 ### Builder
 
