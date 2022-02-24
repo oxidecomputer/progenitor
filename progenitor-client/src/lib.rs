@@ -113,7 +113,7 @@ impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> {
 /// or an enum if there are multiple valid error types. It can be the unit type
 /// if there are no structured returns expected.
 #[derive(Debug)]
-pub enum Error<E: std::fmt::Debug> {
+pub enum Error<E: std::fmt::Debug = ()> {
     /// A server error either with the data, or with the connection.
     CommunicationError(reqwest::Error),
 
@@ -130,12 +130,34 @@ pub enum Error<E: std::fmt::Debug> {
 }
 
 impl<E: std::fmt::Debug> Error<E> {
+    /// Returns the status code, if the error was generated from a response.
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
             Error::InvalidResponsePayload(e) => e.status(),
             Error::UnexpectedResponse(r) => Some(r.status()),
+        }
+    }
+
+    /// Convert this error into one without a typed body for unified error
+    /// handling with APIs that distinguish various error response bodies.
+    pub fn into_untyped(self) -> Error {
+        match self {
+            Error::CommunicationError(e) => Error::CommunicationError(e),
+            Error::ErrorResponse(ResponseValue {
+                inner: _,
+                status,
+                headers,
+            }) => Error::ErrorResponse(ResponseValue {
+                inner: (),
+                status,
+                headers,
+            }),
+            Error::InvalidResponsePayload(e) => {
+                Error::InvalidResponsePayload(e)
+            }
+            Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
         }
     }
 }
