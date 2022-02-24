@@ -56,9 +56,10 @@ impl<T> ResponseValue<T> {
     }
 
     /// Get the status from this response.
-    pub fn status(&self) -> &reqwest::StatusCode {
-        &self.status
+    pub fn status(&self) -> reqwest::StatusCode {
+        self.status
     }
+
     /// Get the headers from this response.
     pub fn headers(&self) -> &reqwest::header::HeaderMap {
         &self.headers
@@ -126,6 +127,17 @@ pub enum Error<E: std::fmt::Debug> {
     /// A response not listed in the API description. This may represent a
     /// success or failure response; check `status().is_success()`.
     UnexpectedResponse(reqwest::Response),
+}
+
+impl<E: std::fmt::Debug> Error<E> {
+    pub fn status(&self) -> Option<reqwest::StatusCode> {
+        match self {
+            Error::CommunicationError(e) => e.status(),
+            Error::ErrorResponse(rv) => Some(rv.status()),
+            Error::InvalidResponsePayload(e) => e.status(),
+            Error::UnexpectedResponse(r) => Some(r.status()),
+        }
+    }
 }
 
 impl<E: std::fmt::Debug> From<reqwest::Error> for Error<E> {
