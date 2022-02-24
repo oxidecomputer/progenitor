@@ -23,7 +23,7 @@ impl Client {
 ```
 
 For more info on the `ResponseValue<T>` and `Error<E>` types, see
-[progenitor_client](./progenitor_client).
+[progenitor_client](./progenitor-client.md).
 
 Note that methods are `async` so must be `await`ed to get the response.
 
