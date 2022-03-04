@@ -25,3 +25,4 @@ unicode-xid = "0.2"
 
 [dev-dependencies]
 expectorate = "1.0"
+dropshot = { git = "https://github.com/oxidecomputer/dropshot" }

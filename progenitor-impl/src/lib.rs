@@ -69,7 +69,10 @@ enum OperationParameterKind {
     Body,
 }
 struct OperationParameter {
+    /// Sanitize parameter name.
     name: String,
+    /// Original parameter name provided by the API.
+    api_name: String,
     typ: OperationParameterType,
     kind: OperationParameterKind,
 }
@@ -309,11 +312,13 @@ impl Generator {
                         // Path parameters MUST be required.
                         assert!(parameter_data.required);
 
-                        let nam = parameter_data.name.clone();
                         let schema = parameter_data.schema()?.to_schema();
 
                         let name = sanitize(
-                            &format!("{}-{}", operation_id, nam),
+                            &format!(
+                                "{}-{}",
+                                operation_id, &parameter_data.name
+                            ),
                             Case::Pascal,
                         );
                         let typ = self
@@ -322,6 +327,7 @@ impl Generator {
 
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
+                            api_name: parameter_data.name.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Path,
                         })
@@ -336,13 +342,12 @@ impl Generator {
                             todo!("allow empty value is a no go");
                         }
 
-                        let nam = parameter_data.name.clone();
                         let mut schema = parameter_data.schema()?.to_schema();
                         let name = sanitize(
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                nam
+                                &parameter_data.name,
                             ),
                             Case::Pascal,
                         );
@@ -355,9 +360,13 @@ impl Generator {
                             .type_space
                             .add_type_with_name(&schema, Some(name))?;
 
-                        query.push((nam, !parameter_data.required));
+                        query.push((
+                            parameter_data.name.clone(),
+                            !parameter_data.required,
+                        ));
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
+                            api_name: parameter_data.name.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Query(
                                 parameter_data.required,
@@ -398,6 +407,7 @@ impl Generator {
 
             raw_params.push(OperationParameter {
                 name: "body".to_string(),
+                api_name: "body".to_string(),
                 typ,
                 kind: OperationParameterKind::Body,
             });
@@ -407,12 +417,12 @@ impl Generator {
         raw_params.sort_by(
             |OperationParameter {
                  kind: a_kind,
-                 name: a_name,
+                 api_name: a_name,
                  ..
              },
              OperationParameter {
                  kind: b_kind,
-                 name: b_name,
+                 api_name: b_name,
                  ..
              }| {
                 match (a_kind, b_kind) {
@@ -421,10 +431,18 @@ impl Generator {
                         OperationParameterKind::Path,
                         OperationParameterKind::Path,
                     ) => {
-                        let a_index =
-                            names.iter().position(|x| x == a_name).unwrap();
-                        let b_index =
-                            names.iter().position(|x| x == b_name).unwrap();
+                        let a_index = names
+                            .iter()
+                            .position(|x| x == a_name)
+                            .unwrap_or_else(|| {
+                                panic!("{} missing from path", a_name)
+                            });
+                        let b_index = names
+                            .iter()
+                            .position(|x| x == b_name)
+                            .unwrap_or_else(|| {
+                                panic!("{} missing from path", b_name)
+                            });
                         a_index.cmp(&b_index)
                     }
                     (
@@ -604,13 +622,13 @@ impl Generator {
             .iter()
             .filter_map(|param| match &param.kind {
                 OperationParameterKind::Query(required) => {
-                    let qn = &param.name;
+                    let qn = &param.api_name;
+                    let qn_ident = format_ident!("{}", &param.name);
                     Some(if *required {
                         quote! {
-                            query.push((#qn, #qn.to_string()));
+                            query.push((#qn, #qn_ident .to_string()));
                         }
                     } else {
-                        let qn_ident = format_ident!("{}", qn);
                         quote! {
                             if let Some(v) = & #qn_ident {
                                 query.push((#qn, v.to_string()));
@@ -953,7 +971,7 @@ impl Generator {
             // without "page_token"
             let stream_params =
                 typed_params.iter().filter_map(|(param, stream)| {
-                    if param.name.as_str() == "page_token" {
+                    if param.api_name.as_str() == "page_token" {
                         None
                     } else {
                         Some(stream)
@@ -963,7 +981,7 @@ impl Generator {
             // The values passed to get the first page are the inputs to the
             // stream method with "None" for the page_token.
             let first_params = typed_params.iter().map(|(param, _)| {
-                if param.name.as_str() == "page_token" {
+                if param.api_name.as_str() == "page_token" {
                     // The page_token is None when getting the first page.
                     quote! { None }
                 } else {
@@ -977,7 +995,7 @@ impl Generator {
             // - None for all other query parameters
             // - The method inputs for non-query parameters
             let step_params = typed_params.iter().map(|(param, _)| {
-                if param.name.as_str() == "page_token" {
+                if param.api_name.as_str() == "page_token" {
                     quote! { state.as_deref() }
                 } else if let OperationParameterKind::Query(_) = param.kind {
                     // Query parameters are None; having page_token as Some(_)
@@ -1110,7 +1128,7 @@ impl Generator {
             .iter()
             .filter(|param| {
                 matches!(
-                    (param.name.as_str(), &param.kind),
+                    (param.api_name.as_str(), &param.kind),
                     ("page_token", OperationParameterKind::Query(_))
                         | ("limit", OperationParameterKind::Query(_))
                 )
