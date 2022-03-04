@@ -309,11 +309,13 @@ impl Generator {
                         // Path parameters MUST be required.
                         assert!(parameter_data.required);
 
-                        let nam = parameter_data.name.clone();
                         let schema = parameter_data.schema()?.to_schema();
 
                         let name = sanitize(
-                            &format!("{}-{}", operation_id, nam),
+                            &format!(
+                                "{}-{}",
+                                operation_id, &parameter_data.name
+                            ),
                             Case::Pascal,
                         );
                         let typ = self
@@ -336,13 +338,12 @@ impl Generator {
                             todo!("allow empty value is a no go");
                         }
 
-                        let nam = parameter_data.name.clone();
                         let mut schema = parameter_data.schema()?.to_schema();
                         let name = sanitize(
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                nam
+                                &parameter_data.name,
                             ),
                             Case::Pascal,
                         );
@@ -355,7 +356,10 @@ impl Generator {
                             .type_space
                             .add_type_with_name(&schema, Some(name))?;
 
-                        query.push((nam, !parameter_data.required));
+                        query.push((
+                            parameter_data.name.clone(),
+                            !parameter_data.required,
+                        ));
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
                             typ: OperationParameterType::Type(typ),
@@ -421,10 +425,18 @@ impl Generator {
                         OperationParameterKind::Path,
                         OperationParameterKind::Path,
                     ) => {
-                        let a_index =
-                            names.iter().position(|x| x == a_name).unwrap();
-                        let b_index =
-                            names.iter().position(|x| x == b_name).unwrap();
+                        let a_index = names
+                            .iter()
+                            .position(|x| x == a_name)
+                            .unwrap_or_else(|| {
+                                panic!("{} missing from path", a_name)
+                            });
+                        let b_index = names
+                            .iter()
+                            .position(|x| x == b_name)
+                            .unwrap_or_else(|| {
+                                panic!("{} missing from path", b_name)
+                            });
                         a_index.cmp(&b_index)
                     }
                     (
