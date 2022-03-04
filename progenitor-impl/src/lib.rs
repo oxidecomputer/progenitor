@@ -69,7 +69,10 @@ enum OperationParameterKind {
     Body,
 }
 struct OperationParameter {
+    /// Sanitize parameter name.
     name: String,
+    /// Original parameter name provided by the API.
+    api_name: String,
     typ: OperationParameterType,
     kind: OperationParameterKind,
 }
@@ -324,6 +327,7 @@ impl Generator {
 
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
+                            api_name: parameter_data.name.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Path,
                         })
@@ -362,6 +366,7 @@ impl Generator {
                         ));
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
+                            api_name: parameter_data.name.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Query(
                                 parameter_data.required,
@@ -402,6 +407,7 @@ impl Generator {
 
             raw_params.push(OperationParameter {
                 name: "body".to_string(),
+                api_name: "body".to_string(),
                 typ,
                 kind: OperationParameterKind::Body,
             });
@@ -411,12 +417,12 @@ impl Generator {
         raw_params.sort_by(
             |OperationParameter {
                  kind: a_kind,
-                 name: a_name,
+                 api_name: a_name,
                  ..
              },
              OperationParameter {
                  kind: b_kind,
-                 name: b_name,
+                 api_name: b_name,
                  ..
              }| {
                 match (a_kind, b_kind) {
