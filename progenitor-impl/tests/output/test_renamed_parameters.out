@@ -55,9 +55,9 @@ impl Client {
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format ! ("{}/{}/{}/{}" , self . baseurl , progenitor_client :: encode_path (& ref . to_string ()) , progenitor_client :: encode_path (& type . to_string ()) , progenitor_client :: encode_path (& trait . to_string ()) ,);
         let mut query = Vec::new();
-        query.push(("if_", "if_".to_string()));
-        query.push(("in_", "in_".to_string()));
-        query.push(("use_", "use_".to_string()));
+        query.push(("if", if_.to_string()));
+        query.push(("in", in_.to_string()));
+        query.push(("use", use_.to_string()));
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;

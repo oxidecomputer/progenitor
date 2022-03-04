@@ -622,13 +622,13 @@ impl Generator {
             .iter()
             .filter_map(|param| match &param.kind {
                 OperationParameterKind::Query(required) => {
-                    let qn = &param.name;
+                    let qn = &param.api_name;
+                    let qn_ident = format_ident!("{}", &param.name);
                     Some(if *required {
                         quote! {
-                            query.push((#qn, #qn.to_string()));
+                            query.push((#qn, #qn_ident .to_string()));
                         }
                     } else {
-                        let qn_ident = format_ident!("{}", qn);
                         quote! {
                             if let Some(v) = & #qn_ident {
                                 query.push((#qn, v.to_string()));
@@ -971,7 +971,7 @@ impl Generator {
             // without "page_token"
             let stream_params =
                 typed_params.iter().filter_map(|(param, stream)| {
-                    if param.name.as_str() == "page_token" {
+                    if param.api_name.as_str() == "page_token" {
                         None
                     } else {
                         Some(stream)
@@ -981,7 +981,7 @@ impl Generator {
             // The values passed to get the first page are the inputs to the
             // stream method with "None" for the page_token.
             let first_params = typed_params.iter().map(|(param, _)| {
-                if param.name.as_str() == "page_token" {
+                if param.api_name.as_str() == "page_token" {
                     // The page_token is None when getting the first page.
                     quote! { None }
                 } else {
@@ -995,7 +995,7 @@ impl Generator {
             // - None for all other query parameters
             // - The method inputs for non-query parameters
             let step_params = typed_params.iter().map(|(param, _)| {
-                if param.name.as_str() == "page_token" {
+                if param.api_name.as_str() == "page_token" {
                     quote! { state.as_deref() }
                 } else if let OperationParameterKind::Query(_) = param.kind {
                     // Query parameters are None; having page_token as Some(_)
@@ -1128,7 +1128,7 @@ impl Generator {
             .iter()
             .filter(|param| {
                 matches!(
-                    (param.name.as_str(), &param.kind),
+                    (param.api_name.as_str(), &param.kind),
                     ("page_token", OperationParameterKind::Query(_))
                         | ("limit", OperationParameterKind::Query(_))
                 )
