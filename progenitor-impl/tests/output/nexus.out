@@ -12,7 +12,7 @@ pub mod types {
     }
 
     #[doc = "The type of an individual datum of a metric."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum DatumType {
         Bool,
         I64,
@@ -27,7 +27,7 @@ pub mod types {
 
     impl ToString for DatumType {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 DatumType::Bool => "Bool".to_string(),
                 DatumType::I64 => "I64".to_string(),
                 DatumType::F64 => "F64".to_string(),
@@ -125,7 +125,7 @@ pub mod types {
     }
 
     #[doc = "The source from which a field is derived, the target or metric."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum FieldSource {
         Target,
         Metric,
@@ -133,7 +133,7 @@ pub mod types {
 
     impl ToString for FieldSource {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 FieldSource::Target => "Target".to_string(),
                 FieldSource::Metric => "Metric".to_string(),
             }
@@ -141,7 +141,7 @@ pub mod types {
     }
 
     #[doc = "The `FieldType` identifies the data type of a target or metric field."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum FieldType {
         String,
         I64,
@@ -152,7 +152,7 @@ pub mod types {
 
     impl ToString for FieldType {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 FieldType::String => "String".to_string(),
                 FieldType::I64 => "I64".to_string(),
                 FieldType::IpAddr => "IpAddr".to_string(),
@@ -163,7 +163,7 @@ pub mod types {
     }
 
     #[doc = "Supported set of sort modes for scanning by id only.\n\nCurrently, we only support scanning in ascending order."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum IdSortMode {
         #[serde(rename = "id-ascending")]
         IdAscending,
@@ -171,7 +171,7 @@ pub mod types {
 
     impl ToString for IdSortMode {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 IdSortMode::IdAscending => "id-ascending".to_string(),
             }
         }
@@ -236,7 +236,7 @@ pub mod types {
     }
 
     #[doc = "Running state of an Instance (primarily: booted or stopped)\n\nThis typically reflects whether it's starting, running, stopping, or stopped, but also includes states related to the Instance's lifecycle"]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum InstanceState {
         #[serde(rename = "creating")]
         Creating,
@@ -262,7 +262,7 @@ pub mod types {
 
     impl ToString for InstanceState {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 InstanceState::Creating => "creating".to_string(),
                 InstanceState::Starting => "starting".to_string(),
                 InstanceState::Running => "running".to_string(),
@@ -333,7 +333,7 @@ pub mod types {
     }
 
     #[doc = "Supported set of sort modes for scanning by name or id"]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum NameOrIdSortMode {
         #[serde(rename = "name-ascending")]
         NameAscending,
@@ -345,7 +345,7 @@ pub mod types {
 
     impl ToString for NameOrIdSortMode {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 NameOrIdSortMode::NameAscending => "name-ascending".to_string(),
                 NameOrIdSortMode::NameDescending => "name-descending".to_string(),
                 NameOrIdSortMode::IdAscending => "id-ascending".to_string(),
@@ -354,7 +354,7 @@ pub mod types {
     }
 
     #[doc = "Supported set of sort modes for scanning by name only\n\nCurrently, we only support scanning in ascending order."]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum NameSortMode {
         #[serde(rename = "name-ascending")]
         NameAscending,
@@ -362,7 +362,7 @@ pub mod types {
 
     impl ToString for NameSortMode {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 NameSortMode::NameAscending => "name-ascending".to_string(),
             }
         }
@@ -588,7 +588,7 @@ pub mod types {
     }
 
     #[doc = "The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.\n\nSee [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context"]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum RouterRouteKind {
         #[serde(rename = "default")]
         Default,
@@ -602,7 +602,7 @@ pub mod types {
 
     impl ToString for RouterRouteKind {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 RouterRouteKind::Default => "default".to_string(),
                 RouterRouteKind::VpcSubnet => "vpc_subnet".to_string(),
                 RouterRouteKind::VpcPeering => "vpc_peering".to_string(),
@@ -810,7 +810,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum VpcFirewallRuleAction {
         #[serde(rename = "allow")]
         Allow,
@@ -820,14 +820,14 @@ pub mod types {
 
     impl ToString for VpcFirewallRuleAction {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 VpcFirewallRuleAction::Allow => "allow".to_string(),
                 VpcFirewallRuleAction::Deny => "deny".to_string(),
             }
         }
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum VpcFirewallRuleDirection {
         #[serde(rename = "inbound")]
         Inbound,
@@ -837,7 +837,7 @@ pub mod types {
 
     impl ToString for VpcFirewallRuleDirection {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 VpcFirewallRuleDirection::Inbound => "inbound".to_string(),
                 VpcFirewallRuleDirection::Outbound => "outbound".to_string(),
             }
@@ -874,7 +874,7 @@ pub mod types {
     }
 
     #[doc = "The protocols that may be specified in a firewall rule's filter"]
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum VpcFirewallRuleProtocol {
         #[serde(rename = "TCP")]
         Tcp,
@@ -886,7 +886,7 @@ pub mod types {
 
     impl ToString for VpcFirewallRuleProtocol {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 VpcFirewallRuleProtocol::Tcp => "TCP".to_string(),
                 VpcFirewallRuleProtocol::Udp => "UDP".to_string(),
                 VpcFirewallRuleProtocol::Icmp => "ICMP".to_string(),
@@ -904,7 +904,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum VpcFirewallRuleStatus {
         #[serde(rename = "disabled")]
         Disabled,
@@ -914,7 +914,7 @@ pub mod types {
 
     impl ToString for VpcFirewallRuleStatus {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 VpcFirewallRuleStatus::Disabled => "disabled".to_string(),
                 VpcFirewallRuleStatus::Enabled => "enabled".to_string(),
             }
@@ -1001,7 +1001,7 @@ pub mod types {
         pub name: Name,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum VpcRouterKind {
         #[serde(rename = "system")]
         System,
@@ -1011,7 +1011,7 @@ pub mod types {
 
     impl ToString for VpcRouterKind {
         fn to_string(&self) -> String {
-            match self {
+            match *self {
                 VpcRouterKind::System => "system".to_string(),
                 VpcRouterKind::Custom => "custom".to_string(),
             }
