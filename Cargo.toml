@@ -17,5 +17,5 @@ default-members = [
 	"progenitor-macro",
 ]
 
-[patch."https://github.com/oxidecomputer/typify"]
-typify = { path = "../typify/typify" }
+#[patch."https://github.com/oxidecomputer/typify"]
+#typify = { path = "../typify/typify" }
