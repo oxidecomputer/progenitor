@@ -653,7 +653,18 @@ impl Generator {
             (query_build, query_use)
         };
 
-        let url_path = method.path.compile();
+        let url_path = method.path.compile(
+            method
+                .params
+                .iter()
+                .filter_map(|param| match &param.kind {
+                    OperationParameterKind::Path => {
+                        Some((&param.api_name, &param.name))
+                    }
+                    _ => None,
+                })
+                .collect(),
+        );
 
         let body_func =
             method.params.iter().filter_map(|param| match &param.kind {

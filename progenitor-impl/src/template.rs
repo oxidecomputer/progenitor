@@ -1,5 +1,7 @@
 // Copyright 2022 Oxide Computer Company
 
+use std::collections::HashMap;
+
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
 
@@ -17,7 +19,7 @@ pub struct PathTemplate {
 }
 
 impl PathTemplate {
-    pub fn compile(&self) -> TokenStream {
+    pub fn compile(&self, rename: HashMap<&String, &String>) -> TokenStream {
         let mut fmt = String::new();
         fmt.push_str("{}");
         for c in self.components.iter() {
@@ -30,7 +32,12 @@ impl PathTemplate {
 
         let components = self.components.iter().filter_map(|component| {
             if let Component::Parameter(n) = &component {
-                let param = format_ident!("{}", n);
+                let param = format_ident!(
+                    "{}",
+                    rename
+                        .get(&n)
+                        .expect(&format!("missing path name mapping {}", n)),
+                );
                 Some(quote! {
                     progenitor_client::encode_path(&#param.to_string())
                 })
@@ -159,6 +166,8 @@ impl ToString for PathTemplate {
 
 #[cfg(test)]
 mod test {
+    use std::collections::HashMap;
+
     use super::{parse, Component, PathTemplate};
 
     #[test]
@@ -220,8 +229,11 @@ mod test {
 
     #[test]
     fn compile() {
+        let mut rename = HashMap::new();
+        let number = "number".to_string();
+        rename.insert(&number, &number);
         let t = parse("/measure/{number}").unwrap();
-        let out = t.compile();
+        let out = t.compile(rename);
         let want = quote::quote! {
             let url = format!("{}/measure/{}",
                 self.baseurl,
