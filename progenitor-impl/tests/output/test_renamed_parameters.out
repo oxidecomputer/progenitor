@@ -53,7 +53,13 @@ impl Client {
         in_: &'a str,
         use_: &'a str,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format ! ("{}/{}/{}/{}" , self . baseurl , progenitor_client :: encode_path (& ref . to_string ()) , progenitor_client :: encode_path (& type . to_string ()) , progenitor_client :: encode_path (& trait . to_string ()) ,);
+        let url = format!(
+            "{}/{}/{}/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&ref_.to_string()),
+            progenitor_client::encode_path(&type_.to_string()),
+            progenitor_client::encode_path(&trait_.to_string()),
+        );
         let mut query = Vec::new();
         query.push(("if", if_.to_string()));
         query.push(("in", in_.to_string()));
