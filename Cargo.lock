@@ -1763,6 +1763,7 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 [[package]]
 name = "typify"
 version = "0.0.6-dev"
+source = "git+https://github.com/oxidecomputer/typify#8316b7d227eeec59d854279e947b1882ae2c635a"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1771,6 +1772,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.6-dev"
+source = "git+https://github.com/oxidecomputer/typify#8316b7d227eeec59d854279e947b1882ae2c635a"
 dependencies = [
  "convert_case",
  "log",
@@ -1787,6 +1789,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.6-dev"
+source = "git+https://github.com/oxidecomputer/typify#8316b7d227eeec59d854279e947b1882ae2c635a"
 dependencies = [
  "proc-macro2",
  "quote",

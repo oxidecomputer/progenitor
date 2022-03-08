@@ -121,7 +121,7 @@ Options:
 
 For example:
 
-`cargo run --bin progenitor -- -i sample_penapi/keeper.json -o keeper -n keeper -v 0.1.0`
+`cargo run --bin progenitor -- -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0`
 
 This will produce a package in the specified directory. The output has no
 persistent dependency on Progenitor including the `progenitor-client` crate.
