@@ -43,39 +43,17 @@ impl Client {
         &self.client
     }
 
-    #[doc = "renamed_parameters: GET /{ref}/{type}/{trait}"]
-    pub async fn renamed_parameters<'a>(
+    #[doc = "freeform_response: GET "]
+    pub async fn freeform_response<'a>(
         &'a self,
-        ref_: &'a str,
-        type_: &'a str,
-        trait_: &'a str,
-        if_: &'a str,
-        in_: &'a str,
-        use_: &'a str,
-    ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/{}/{}/{}",
-            self.baseurl,
-            progenitor_client::encode_path(&ref_.to_string()),
-            progenitor_client::encode_path(&type_.to_string()),
-            progenitor_client::encode_path(&trait_.to_string()),
-        );
-        let mut query = Vec::new();
-        query.push(("if", if_.to_string()));
-        query.push(("in", in_.to_string()));
-        query.push(("use", use_.to_string()));
-        let request = self.client.get(url).query(&query).build()?;
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+        let url = format!("{}", self.baseurl,);
+        let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            _ => Err(Error::UnexpectedResponse(response)),
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
         }
     }
 }

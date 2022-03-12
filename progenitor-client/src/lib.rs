@@ -1,10 +1,16 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 //! Support code for generated clients.
 
 use std::ops::{Deref, DerefMut};
 
+use bytes::Bytes;
+use futures_core::Stream;
 use serde::de::DeserializeOwned;
+
+/// Represents a streaming, untyped byte stream for both success and error
+/// responses.
+pub type ByteStream = Box<dyn Stream<Item = reqwest::Result<Bytes>>>;
 
 /// Success value returned by generated client methods.
 pub struct ResponseValue<T> {
@@ -31,6 +37,19 @@ impl<T: DeserializeOwned> ResponseValue<T> {
             status,
             headers,
         })
+    }
+}
+
+impl ResponseValue<ByteStream> {
+    #[doc(hidden)]
+    pub fn stream(response: reqwest::Response) -> Self {
+        let status = response.status();
+        let headers = response.headers().clone();
+        Self {
+            inner: Box::new(response.bytes_stream()),
+            status,
+            headers,
+        }
     }
 }
 

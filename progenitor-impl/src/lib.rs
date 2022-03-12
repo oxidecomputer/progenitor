@@ -125,6 +125,28 @@ impl OperationResponseStatus {
             OperationResponseStatus::Default => 1000,
         }
     }
+
+    fn is_success_or_default(&self) -> bool {
+        matches!(
+            self,
+            OperationResponseStatus::Default
+                | OperationResponseStatus::Code(200..=299)
+                | OperationResponseStatus::Range(2)
+        )
+    }
+
+    fn is_error_or_default(&self) -> bool {
+        matches!(
+            self,
+            OperationResponseStatus::Default
+                | OperationResponseStatus::Code(400..=599)
+                | OperationResponseStatus::Range(4..=5)
+        )
+    }
+
+    fn is_default(&self) -> bool {
+        matches!(self, OperationResponseStatus::Default)
+    }
 }
 
 impl Ord for OperationResponseStatus {
@@ -235,7 +257,7 @@ impl Generator {
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
-            pub use progenitor_client::{Error, ResponseValue};
+            pub use progenitor_client::{ByteStream, Error, ResponseValue};
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
@@ -516,6 +538,16 @@ impl Generator {
             ))
             .map(|v: Result<(OperationResponseStatus, &Response)>| {
                 let (status_code, response) = v?;
+
+                // We categorize responses as "typed" based on the
+                // "application/json" content type, "raw" if there's any other
+                // response content type (we don't investigate further), or
+                // "none" if there is no content.
+                // TODO if there are multiple response content types we could
+                // treat those like different response types and create an
+                // enum; the generated client method would check for the
+                // content type of the response just as it currently examines
+                // the status code.
                 let typ = if let Some(mt) =
                     response.content.get("application/json")
                 {
@@ -559,7 +591,7 @@ impl Generator {
 
         // If the API has declined to specify the characteristics of a
         // successful response, we cons up a generic one. Note that this is
-        // technically permissible within OpenAPI, but advised against in the
+        // technically permissible within OpenAPI, but advised against by the
         // spec.
         if !success {
             responses.push(OperationResponse {
@@ -681,60 +713,10 @@ impl Generator {
 
         assert!(body_func.clone().count() <= 1);
 
-        let mut success_response_items = method
-            .responses
-            .iter()
-            .filter(|response| {
-                matches!(
-                    &response.status_code,
-                    OperationResponseStatus::Default
-                        | OperationResponseStatus::Code(200..=299)
-                        | OperationResponseStatus::Range(2)
-                )
-            })
-            .collect::<Vec<_>>();
-        success_response_items.sort();
-
-        // If we have a range and a default, we can pop off the default since it will never be hit.
-        if let (
-            Some(OperationResponse {
-                status_code: OperationResponseStatus::Range(2),
-                ..
-            }),
-            Some(OperationResponse {
-                status_code: OperationResponseStatus::Default,
-                ..
-            }),
-        ) = last_two(&success_response_items)
-        {
-            success_response_items.pop();
-        }
-
-        let success_response_types = success_response_items
-            .iter()
-            .map(|response| response.typ.clone())
-            .collect::<BTreeSet<_>>();
-
-        // TODO to deal with multiple success response types, we'll need to
-        // create an enum.
-        assert_eq!(success_response_types.len(), 1);
-
-        let response_type = success_response_types
-            .iter()
-            .next()
-            .map(|typ| match typ {
-                OperationResponseType::Type(type_id) => {
-                    let type_name =
-                        self.type_space.get_type(type_id).unwrap().ident();
-                    quote! { ResponseValue<#type_name> }
-                }
-                OperationResponseType::None => {
-                    quote! { ResponseValue<()> }
-                }
-                // TODO Maybe this should be ResponseValue<Bytes>?
-                OperationResponseType::Raw => quote! { reqwest::Response },
-            })
-            .unwrap();
+        let (success_response_items, response_type) = self.extract_responses(
+            method,
+            OperationResponseStatus::is_success_or_default,
+        );
 
         let success_response_matches =
             success_response_items.iter().map(|response| {
@@ -757,131 +739,77 @@ impl Generator {
                             Ok(ResponseValue::empty(response))
                         }
                     }
-                    OperationResponseType::Raw => quote! { Ok(response) },
+                    OperationResponseType::Raw => {
+                        quote! {
+                            Ok(ResponseValue::stream(response))
+                        }
+                    }
                 };
 
                 quote! { #pat => { #decode } }
             });
 
         // Errors...
-        let mut error_responses = method
-            .responses
-            .iter()
-            .filter(|response| {
-                matches!(
-                    &response.status_code,
-                    OperationResponseStatus::Code(400..=599)
-                        | OperationResponseStatus::Range(4)
-                        | OperationResponseStatus::Range(5)
-                )
-            })
-            .collect::<Vec<_>>();
-        error_responses.sort();
+        let (error_response_items, error_type) = self.extract_responses(
+            method,
+            OperationResponseStatus::is_error_or_default,
+        );
 
-        let error_response_types = error_responses
-            .iter()
-            .map(|response| response.typ.clone())
-            .collect::<BTreeSet<_>>();
-        // TODO create an enum if there are multiple error response types
-        assert!(error_response_types.len() <= 1);
-
-        let error_type = error_response_types
-            .iter()
-            .next()
-            .map(|typ| match typ {
-                OperationResponseType::Type(type_id) => {
-                    let type_name =
-                        self.type_space.get_type(type_id).unwrap().ident();
-                    quote! { #type_name }
-                }
-                OperationResponseType::None => {
-                    quote! { () }
-                }
-                // TODO Maybe this should be ResponseValue<Bytes>?
-                OperationResponseType::Raw => quote! { reqwest::Response },
-            })
-            .unwrap_or_else(|| quote! { () });
-
-        let error_response_matches = error_responses.iter().map(|response| {
-            let pat = match &response.status_code {
-                OperationResponseStatus::Code(code) => quote! { #code },
-                OperationResponseStatus::Range(r) => {
-                    let min = r * 100;
-                    let max = min + 99;
-                    quote! { #min ..= #max }
-                }
-                OperationResponseStatus::Default => unreachable!(),
-            };
-
-            let decode = match &response.typ {
-                OperationResponseType::Type(_) => {
-                    quote! {
-                        Err(Error::ErrorResponse(
-                            ResponseValue::from_response(response)
-                                .await?
-                        ))
+        let error_response_matches =
+            error_response_items.iter().map(|response| {
+                let pat = match &response.status_code {
+                    OperationResponseStatus::Code(code) => {
+                        quote! { #code }
                     }
-                }
-                OperationResponseType::None => {
-                    quote! {
-                        Err(Error::ErrorResponse(
-                            ResponseValue::empty(response)
-                        ))
+                    OperationResponseStatus::Range(r) => {
+                        let min = r * 100;
+                        let max = min + 99;
+                        quote! { #min ..= #max }
                     }
-                }
-                // TODO not sure how to handle this...
-                OperationResponseType::Raw => todo!(),
-            };
 
-            quote! { #pat => { #decode } }
-        });
+                    OperationResponseStatus::Default => {
+                        quote! { _ }
+                    }
+                };
+
+                let decode = match &response.typ {
+                    OperationResponseType::Type(_) => {
+                        quote! {
+                            Err(Error::ErrorResponse(
+                                ResponseValue::from_response(response)
+                                    .await?
+                            ))
+                        }
+                    }
+                    OperationResponseType::None => {
+                        quote! {
+                            Err(Error::ErrorResponse(
+                                ResponseValue::empty(response)
+                            ))
+                        }
+                    }
+                    OperationResponseType::Raw => {
+                        quote! {
+                            Err(Error::ErrorResponse(
+                                ResponseValue::stream(response)
+                            ))
+                        }
+                    }
+                };
+
+                quote! { #pat => { #decode } }
+            });
 
         // Generate the catch-all case for other statuses. If the operation
-        // specifies a default response, we've already handled the success
-        // status codes above, so we only need to consider error codes.
-        let default_response = method
-            .responses
-            .iter()
-            .find(|response| {
-                matches!(
-                    &response.status_code,
-                    OperationResponseStatus::Default
-                )
-            })
-            .map_or_else(
-                ||
-                // With no default response, unexpected status codes produce
-                // and Error::UnexpectedResponse()
-                quote!{
-                        _ => Err(Error::UnexpectedResponse(response)),
-                },
-                // If we have a structured default response, we decode it and
-                // return Error::ErrorResponse()
-                |response| {
-                    let decode = match &response.typ {
-                        OperationResponseType::Type(_) => {
-                            quote! {
-                                Err(Error::ErrorResponse(
-                                    ResponseValue::from_response(response)
-                                        .await?
-                                ))
-                            }
-                        }
-                        OperationResponseType::None => {
-                            quote! {
-                                Err(Error::ErrorResponse(
-                                    ResponseValue::empty(response)
-                                ))
-                            }
-                        }
-                        // TODO not sure how to handle this... maybe as a
-                        // ResponseValue<Bytes>
-                        OperationResponseType::Raw => todo!(),
-                    };
-
-                    quote! { _ => { #decode } }
-                },
-            );
+        // specifies a default response, we've already generated a default
+        // match as part of error response code handling. (And we've handled
+        // the default as a success response as well.) Otherwise the catch-all
+        // produces an error corresponding to a response not specified in the
+        // API description.
+        let default_response = match method.responses.iter().last() {
+            Some(response) if response.status_code.is_default() => quote! {},
+            _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
+        };
 
         // TODO document parameters
         let doc_comment = format!(
@@ -916,7 +844,7 @@ impl Generator {
                 &'a self,
                 #(#params),*
             ) -> Result<
-                #response_type,
+                ResponseValue<#response_type>,
                 Error<#error_type>,
             > {
                 #url_path
@@ -1117,6 +1045,64 @@ impl Generator {
         Ok(all)
     }
 
+    fn extract_responses<'a>(
+        &self,
+        method: &'a OperationMethod,
+        filter: fn(&OperationResponseStatus) -> bool,
+    ) -> (Vec<&'a OperationResponse>, TokenStream) {
+        let mut response_items = method
+            .responses
+            .iter()
+            .filter(|response| filter(&response.status_code))
+            .collect::<Vec<_>>();
+        response_items.sort();
+
+        // If we have a success range and a default, we can pop off the default
+        // since it will never be hit. Note that this is a no-op for error
+        // responses.
+        if let (
+            Some(OperationResponse {
+                status_code: OperationResponseStatus::Range(2),
+                ..
+            }),
+            Some(OperationResponse {
+                status_code: OperationResponseStatus::Default,
+                ..
+            }),
+        ) = last_two(&response_items)
+        {
+            response_items.pop();
+        }
+
+        let response_types = response_items
+            .iter()
+            .map(|response| response.typ.clone())
+            .collect::<BTreeSet<_>>();
+
+        // TODO to deal with multiple response types, we'll need to create an
+        // enum type with variants for each of the response types.
+        assert!(response_types.len() <= 1);
+        let response_type = response_types
+            .iter()
+            .next()
+            .map(|typ| match typ {
+                OperationResponseType::Type(type_id) => {
+                    let type_name =
+                        self.type_space.get_type(type_id).unwrap().ident();
+                    quote! { #type_name }
+                }
+                OperationResponseType::None => {
+                    quote! { () }
+                }
+                OperationResponseType::Raw => {
+                    quote! { ByteStream }
+                }
+            })
+            // TODO should this be a bytestream?
+            .unwrap_or_else(|| quote! { () });
+        (response_items, response_type)
+    }
+
     // Validates all the necessary conditions for Dropshot pagination. Returns
     // the paginated item type data if all conditions are met.
     fn dropshot_pagination_data(
@@ -1241,6 +1227,8 @@ impl Generator {
 
     pub fn dependencies(&self) -> Vec<String> {
         let mut deps = vec![
+            "bytes = \"1.1.0\"",
+            "futures-core = \"0.3.21\"",
             "percent-encoding = \"2.1\"",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
             "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
@@ -1330,87 +1318,6 @@ impl ParameterDataExt for openapiv3::ParameterData {
 trait ExtractJsonMediaType {
     fn is_binary(&self, components: &Option<Components>) -> Result<bool>;
     fn content_json(&self) -> Result<openapiv3::MediaType>;
-}
-
-impl ExtractJsonMediaType for openapiv3::Response {
-    fn content_json(&self) -> Result<openapiv3::MediaType> {
-        if self.content.len() != 1 {
-            todo!("expected one content entry, found {}", self.content.len());
-        }
-
-        if let Some(mt) = self.content.get("application/json") {
-            Ok(mt.clone())
-        } else {
-            todo!(
-                "could not find application/json, only found {}",
-                self.content.keys().next().unwrap()
-            );
-        }
-    }
-
-    fn is_binary(&self, _components: &Option<Components>) -> Result<bool> {
-        if self.content.is_empty() {
-            /*
-             * XXX If there are no content types, I guess it is not binary?
-             */
-            return Ok(false);
-        }
-
-        if self.content.len() != 1 {
-            todo!("expected one content entry, found {}", self.content.len());
-        }
-
-        if let Some(mt) = self.content.get("application/octet-stream") {
-            if !mt.encoding.is_empty() {
-                todo!("XXX encoding");
-            }
-
-            if let Some(s) = &mt.schema {
-                use openapiv3::{
-                    SchemaKind, StringFormat, Type,
-                    VariantOrUnknownOrEmpty::Item,
-                };
-
-                let s = s.item(&None)?;
-                if s.schema_data.nullable {
-                    todo!("XXX nullable binary?");
-                }
-                if s.schema_data.default.is_some() {
-                    todo!("XXX default binary?");
-                }
-                if s.schema_data.discriminator.is_some() {
-                    todo!("XXX binary discriminator?");
-                }
-                match &s.schema_kind {
-                    SchemaKind::Type(Type::String(st)) => {
-                        if st.min_length.is_some() || st.max_length.is_some() {
-                            todo!("binary min/max length");
-                        }
-                        if !matches!(st.format, Item(StringFormat::Binary)) {
-                            todo!(
-                                "expected binary format string, got {:?}",
-                                st.format
-                            );
-                        }
-                        if st.pattern.is_some() {
-                            todo!("XXX pattern");
-                        }
-                        if !st.enumeration.is_empty() {
-                            todo!("XXX enumeration");
-                        }
-                        return Ok(true);
-                    }
-                    x => {
-                        todo!("XXX schemakind type {:?}", x);
-                    }
-                }
-            } else {
-                todo!("binary thing had no schema?");
-            }
-        }
-
-        Ok(false)
-    }
 }
 
 impl ExtractJsonMediaType for openapiv3::RequestBody {
