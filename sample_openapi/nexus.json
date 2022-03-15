@@ -232,7 +232,12 @@
         },
         "responses": {
           "default": {
-            "description": ""
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
           }
         }
       }

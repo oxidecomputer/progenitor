@@ -19,3 +19,5 @@ default-members = [
 
 #[patch."https://github.com/oxidecomputer/typify"]
 #typify = { path = "../typify/typify" }
+#[patch."https://github.com/oxidecomputer/dropshot"]
+#dropshot = { path = "../dropshot/dropshot" }

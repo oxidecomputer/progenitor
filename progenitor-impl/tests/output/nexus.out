@@ -1,4 +1,4 @@
-pub use progenitor_client::{Error, ResponseValue};
+pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[doc = "A count of bytes, typically used either for memory or storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience."]
@@ -1355,14 +1355,14 @@ impl Client {
     pub async fn spoof_login<'a>(
         &'a self,
         body: &'a types::LoginParams,
-    ) -> Result<ResponseValue<()>, Error<()>> {
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/login", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200..=299 => Ok(ResponseValue::empty(response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
         }
     }
 

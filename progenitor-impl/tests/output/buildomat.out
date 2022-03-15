@@ -1,4 +1,4 @@
-pub use progenitor_client::{Error, ResponseValue};
+pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -281,7 +281,7 @@ impl Client {
         &'a self,
         task: &'a str,
         output: &'a str,
-    ) -> Result<reqwest::Response, Error<()>> {
+    ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!(
             "{}/v1/tasks/{}/outputs/{}",
             self.baseurl,
@@ -292,7 +292,7 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200..=299 => Ok(response),
+            200..=299 => Ok(ResponseValue::stream(response)),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }

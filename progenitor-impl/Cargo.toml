@@ -24,5 +24,7 @@ typify = { git = "https://github.com/oxidecomputer/typify" }
 unicode-xid = "0.2"
 
 [dev-dependencies]
-expectorate = "1.0"
 dropshot = { git = "https://github.com/oxidecomputer/dropshot" }
+expectorate = "1.0"
+http = "0.2.6"
+hyper = "0.14.17"

@@ -1,4 +1,4 @@
-pub use progenitor_client::{Error, ResponseValue};
+pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[derive(Serialize, Deserialize, Debug, Clone)]
