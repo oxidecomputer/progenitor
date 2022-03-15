@@ -131,8 +131,7 @@ impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> {
 /// The type parameter may be a struct if there's a single expected error type
 /// or an enum if there are multiple valid error types. It can be the unit type
 /// if there are no structured returns expected.
-#[derive(Debug)]
-pub enum Error<E: std::fmt::Debug = ()> {
+pub enum Error<E = ()> {
     /// A server error either with the data, or with the connection.
     CommunicationError(reqwest::Error),
 
@@ -148,7 +147,7 @@ pub enum Error<E: std::fmt::Debug = ()> {
     UnexpectedResponse(reqwest::Response),
 }
 
-impl<E: std::fmt::Debug> Error<E> {
+impl<E> Error<E> {
     /// Returns the status code, if the error was generated from a response.
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
@@ -181,20 +180,20 @@ impl<E: std::fmt::Debug> Error<E> {
     }
 }
 
-impl<E: std::fmt::Debug> From<reqwest::Error> for Error<E> {
+impl<E> From<reqwest::Error> for Error<E> {
     fn from(e: reqwest::Error) -> Self {
         Self::CommunicationError(e)
     }
 }
 
-impl<E: std::fmt::Debug> std::fmt::Display for Error<E> {
+impl<E> std::fmt::Display for Error<E> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Error::CommunicationError(e) => {
                 write!(f, "Communication Error {}", e)
             }
-            Error::ErrorResponse(rv) => {
-                write!(f, "Error Response {:?}", rv)
+            Error::ErrorResponse(_) => {
+                write!(f, "Error Response")
             }
             Error::InvalidResponsePayload(e) => {
                 write!(f, "Invalid Response Payload {}", e)
@@ -205,7 +204,12 @@ impl<E: std::fmt::Debug> std::fmt::Display for Error<E> {
         }
     }
 }
-impl<E: std::fmt::Debug> std::error::Error for Error<E> {
+impl<E> std::fmt::Debug for Error<E> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        std::fmt::Display::fmt(self, f)
+    }
+}
+impl<E> std::error::Error for Error<E> {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Error::CommunicationError(e) => Some(e),

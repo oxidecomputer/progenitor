@@ -1355,14 +1355,14 @@ impl Client {
     pub async fn spoof_login<'a>(
         &'a self,
         body: &'a types::LoginParams,
-    ) -> Result<ResponseValue<()>, Error<()>> {
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/login", self.baseurl,);
         let request = self.client.post(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200..=299 => Ok(ResponseValue::empty(response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
         }
     }
 
