@@ -13,7 +13,8 @@ use serde::de::DeserializeOwned;
 
 /// Represents a streaming, untyped byte stream for both success and error
 /// responses.
-pub type ByteStream = Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>>>>;
+pub type ByteStream =
+    Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send>>;
 
 /// Success value returned by generated client methods.
 pub struct ResponseValue<T> {
