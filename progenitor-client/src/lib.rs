@@ -2,7 +2,10 @@
 
 //! Support code for generated clients.
 
-use std::ops::{Deref, DerefMut};
+use std::{
+    ops::{Deref, DerefMut},
+    pin::Pin,
+};
 
 use bytes::Bytes;
 use futures_core::Stream;
@@ -10,7 +13,8 @@ use serde::de::DeserializeOwned;
 
 /// Represents a streaming, untyped byte stream for both success and error
 /// responses.
-pub type ByteStream = Box<dyn Stream<Item = reqwest::Result<Bytes>>>;
+pub type ByteStream =
+    Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send>>;
 
 /// Success value returned by generated client methods.
 pub struct ResponseValue<T> {
@@ -46,7 +50,7 @@ impl ResponseValue<ByteStream> {
         let status = response.status();
         let headers = response.headers().clone();
         Self {
-            inner: Box::new(response.bytes_stream()),
+            inner: Box::pin(response.bytes_stream()),
             status,
             headers,
         }
