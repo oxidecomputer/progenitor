@@ -16,15 +16,14 @@
           "racks"
         ],
         "summary": "List racks in the system.",
-        "description": "",
         "operationId": "hardware_racks_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -34,9 +33,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -77,15 +76,14 @@
           "racks"
         ],
         "summary": "Fetch information about a particular rack.",
-        "description": "",
         "operationId": "hardware_racks_get_rack",
         "parameters": [
           {
             "in": "path",
             "name": "rack_id",
+            "description": "The rack's unique ID.",
             "required": true,
             "schema": {
-              "description": "The rack's unique ID.",
               "type": "string",
               "format": "uuid"
             },
@@ -118,15 +116,14 @@
           "sleds"
         ],
         "summary": "List sleds in the system.",
-        "description": "",
         "operationId": "hardware_sleds_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -136,9 +133,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -179,15 +176,14 @@
           "sleds"
         ],
         "summary": "Fetch information about a sled in the system.",
-        "description": "",
         "operationId": "hardware_sleds_get_sled",
         "parameters": [
           {
             "in": "path",
             "name": "sled_id",
+            "description": "The sled's unique ID.",
             "required": true,
             "schema": {
-              "description": "The sled's unique ID.",
               "type": "string",
               "format": "uuid"
             },
@@ -250,7 +246,12 @@
         "operationId": "logout",
         "responses": {
           "default": {
-            "description": ""
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
           }
         }
       }
@@ -261,15 +262,14 @@
           "organizations"
         ],
         "summary": "List all organizations.",
-        "description": "",
         "operationId": "organizations_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -279,9 +279,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -320,7 +320,6 @@
           "organizations"
         ],
         "summary": "Create a new organization.",
-        "description": "",
         "operationId": "organizations_post",
         "requestBody": {
           "content": {
@@ -358,12 +357,12 @@
           "organizations"
         ],
         "summary": "Fetch a specific organization",
-        "description": "",
         "operationId": "organizations_get_organization",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -395,12 +394,12 @@
           "organizations"
         ],
         "summary": "Update a specific organization.",
-        "description": "",
         "operationId": "organizations_put_organization",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -442,12 +441,12 @@
           "organizations"
         ],
         "summary": "Delete a specific organization.",
-        "description": "",
         "operationId": "organizations_delete_organization",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -474,15 +473,14 @@
           "projects"
         ],
         "summary": "List all projects.",
-        "description": "",
         "operationId": "organization_projects_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -492,9 +490,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -510,6 +508,7 @@
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -542,12 +541,12 @@
           "projects"
         ],
         "summary": "Create a new project.",
-        "description": "",
         "operationId": "organization_projects_post",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -591,12 +590,12 @@
           "projects"
         ],
         "summary": "Fetch a specific project",
-        "description": "",
         "operationId": "organization_projects_get_project",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -606,6 +605,7 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -637,12 +637,12 @@
           "projects"
         ],
         "summary": "Update a specific project.",
-        "description": "",
         "operationId": "organization_projects_put_project",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -652,6 +652,7 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -693,12 +694,12 @@
           "projects"
         ],
         "summary": "Delete a specific project.",
-        "description": "",
         "operationId": "organization_projects_delete_project",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -708,6 +709,7 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -734,15 +736,14 @@
           "disks"
         ],
         "summary": "List disks in a project.",
-        "description": "",
         "operationId": "project_disks_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -752,9 +753,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -770,6 +771,7 @@
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -779,6 +781,7 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -811,12 +814,12 @@
           "disks"
         ],
         "summary": "Create a disk in a project.",
-        "description": "",
         "operationId": "project_disks_post",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -826,6 +829,7 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -869,7 +873,6 @@
           "disks"
         ],
         "summary": "Fetch a single disk in a project.",
-        "description": "",
         "operationId": "project_disks_get_disk",
         "parameters": [
           {
@@ -924,7 +927,6 @@
           "disks"
         ],
         "summary": "Delete a disk from a project.",
-        "description": "",
         "operationId": "project_disks_delete_disk",
         "parameters": [
           {
@@ -974,15 +976,14 @@
           "instances"
         ],
         "summary": "List instances in a project.",
-        "description": "",
         "operationId": "project_instances_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -992,9 +993,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -1010,6 +1011,7 @@
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1019,6 +1021,7 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1051,12 +1054,12 @@
           "instances"
         ],
         "summary": "Create an instance in a project.",
-        "description": "",
         "operationId": "project_instances_post",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1066,6 +1069,7 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1109,7 +1113,6 @@
           "instances"
         ],
         "summary": "Get an instance in a project.",
-        "description": "",
         "operationId": "project_instances_get_instance",
         "parameters": [
           {
@@ -1164,7 +1167,6 @@
           "instances"
         ],
         "summary": "Delete an instance from a project.",
-        "description": "",
         "operationId": "project_instances_delete_instance",
         "parameters": [
           {
@@ -1214,15 +1216,14 @@
           "instances"
         ],
         "summary": "List disks attached to this instance.",
-        "description": "",
         "operationId": "instance_disks_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -1232,9 +1233,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -1432,7 +1433,6 @@
           "instances"
         ],
         "summary": "Migrate an instance to a different propolis-server, possibly on a different sled.",
-        "description": "",
         "operationId": "project_instances_migrate_instance",
         "parameters": [
           {
@@ -1493,13 +1493,284 @@
         }
       }
     },
+    "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces": {
+      "get": {
+        "tags": [
+          "instances"
+        ],
+        "summary": "List network interfaces attached to this instance.",
+        "operationId": "instance_network_interfaces_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          },
+          {
+            "in": "path",
+            "name": "instance_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkInterfaceResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      },
+      "post": {
+        "tags": [
+          "instances"
+        ],
+        "summary": "Create a network interface for an instance.",
+        "operationId": "instance_network_interfaces_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetworkInterfaceCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkInterface"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}": {
+      "get": {
+        "tags": [
+          "instances"
+        ],
+        "summary": "Get an interface attached to an instance.",
+        "operationId": "instance_network_interfaces_get_interface",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "interface_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkInterface"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "instances"
+        ],
+        "summary": "Detach a network interface from an instance.",
+        "operationId": "instance_network_interfaces_delete_interface",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "interface_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot": {
       "post": {
         "tags": [
           "instances"
         ],
         "summary": "Reboot an instance.",
-        "description": "",
         "operationId": "project_instances_instance_reboot",
         "parameters": [
           {
@@ -1556,7 +1827,6 @@
           "instances"
         ],
         "summary": "Boot an instance.",
-        "description": "",
         "operationId": "project_instances_instance_start",
         "parameters": [
           {
@@ -1613,7 +1883,6 @@
           "instances"
         ],
         "summary": "Halt an instance.",
-        "description": "",
         "operationId": "project_instances_instance_stop",
         "parameters": [
           {
@@ -1664,21 +1933,20 @@
         }
       }
     },
-    "/organizations/{organization_name}/projects/{project_name}/vpcs": {
+    "/organizations/{organization_name}/projects/{project_name}/snapshots": {
       "get": {
         "tags": [
-          "vpcs"
+          "snapshots"
         ],
-        "summary": "List VPCs in a project.",
-        "description": "",
-        "operationId": "project_vpcs_get",
+        "summary": "List snapshots in a project.",
+        "operationId": "project_snapshots_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -1688,9 +1956,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -1706,6 +1974,7 @@
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1715,6 +1984,247 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SnapshotResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      },
+      "post": {
+        "tags": [
+          "snapshots"
+        ],
+        "summary": "Create a snapshot of a disk.",
+        "operationId": "project_snapshots_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_name",
+            "description": "The organization's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "description": "The project's unique name within the organization.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SnapshotCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}": {
+      "get": {
+        "tags": [
+          "snapshots"
+        ],
+        "summary": "Get a snapshot in a project.",
+        "operationId": "project_snapshots_get_snapshot",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "snapshot_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "snapshots"
+        ],
+        "summary": "Delete a snapshot from a project.",
+        "operationId": "project_snapshots_delete_snapshot",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "snapshot_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/vpcs": {
+      "get": {
+        "tags": [
+          "vpcs"
+        ],
+        "summary": "List VPCs in a project.",
+        "operationId": "project_vpcs_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "description": "The organization's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1747,12 +2257,12 @@
           "vpcs"
         ],
         "summary": "Create a VPC in a project.",
-        "description": "",
         "operationId": "project_vpcs_post",
         "parameters": [
           {
             "in": "path",
             "name": "organization_name",
+            "description": "The organization's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1762,6 +2272,7 @@
           {
             "in": "path",
             "name": "project_name",
+            "description": "The project's unique name within the organization.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1805,7 +2316,6 @@
           "vpcs"
         ],
         "summary": "Get a VPC in a project.",
-        "description": "",
         "operationId": "project_vpcs_get_vpc",
         "parameters": [
           {
@@ -1860,7 +2370,6 @@
           "vpcs"
         ],
         "summary": "Update a VPC.",
-        "description": "",
         "operationId": "project_vpcs_put_vpc",
         "parameters": [
           {
@@ -1902,8 +2411,15 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "resource updated"
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vpc"
+                }
+              }
+            }
           },
           "4XX": {
             "$ref": "#/components/responses/Error"
@@ -1918,7 +2434,6 @@
           "vpcs"
         ],
         "summary": "Delete a vpc from a project.",
-        "description": "",
         "operationId": "project_vpcs_delete_vpc",
         "parameters": [
           {
@@ -1968,39 +2483,8 @@
           "firewall"
         ],
         "summary": "List firewall rules for a VPC.",
-        "description": "",
         "operationId": "vpc_firewall_rules_get",
         "parameters": [
-          {
-            "in": "query",
-            "name": "limit",
-            "schema": {
-              "nullable": true,
-              "description": "Maximum number of items returned by a single call",
-              "type": "integer",
-              "format": "uint32",
-              "minimum": 1
-            },
-            "style": "form"
-          },
-          {
-            "in": "query",
-            "name": "page_token",
-            "schema": {
-              "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
-              "type": "string"
-            },
-            "style": "form"
-          },
-          {
-            "in": "query",
-            "name": "sort_by",
-            "schema": {
-              "$ref": "#/components/schemas/NameSortMode"
-            },
-            "style": "form"
-          },
           {
             "in": "path",
             "name": "organization_name",
@@ -2035,7 +2519,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VpcFirewallRuleResultsPage"
+                  "$ref": "#/components/schemas/VpcFirewallRules"
                 }
               }
             }
@@ -2046,15 +2530,13 @@
           "5XX": {
             "$ref": "#/components/responses/Error"
           }
-        },
-        "x-dropshot-pagination": true
+        }
       },
       "put": {
         "tags": [
           "firewall"
         ],
         "summary": "Replace the firewall rules for a VPC",
-        "description": "",
         "operationId": "vpc_firewall_rules_put",
         "parameters": [
           {
@@ -2101,7 +2583,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VpcFirewallRuleUpdateResult"
+                  "$ref": "#/components/schemas/VpcFirewallRules"
                 }
               }
             }
@@ -2121,15 +2603,14 @@
           "routers"
         ],
         "summary": "List VPC Custom and System Routers",
-        "description": "",
         "operationId": "vpc_routers_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -2139,9 +2620,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -2207,7 +2688,6 @@
           "routers"
         ],
         "summary": "Create a VPC Router",
-        "description": "",
         "operationId": "vpc_routers_post",
         "parameters": [
           {
@@ -2274,7 +2754,6 @@
           "routers"
         ],
         "summary": "Get a VPC Router",
-        "description": "",
         "operationId": "vpc_routers_get_router",
         "parameters": [
           {
@@ -2338,7 +2817,6 @@
           "routers"
         ],
         "summary": "Update a VPC Router",
-        "description": "",
         "operationId": "vpc_routers_put_router",
         "parameters": [
           {
@@ -2389,8 +2867,15 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "resource updated"
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VpcRouter"
+                }
+              }
+            }
           },
           "4XX": {
             "$ref": "#/components/responses/Error"
@@ -2405,7 +2890,6 @@
           "routers"
         ],
         "summary": "Delete a router from its VPC",
-        "description": "",
         "operationId": "vpc_routers_delete_router",
         "parameters": [
           {
@@ -2464,15 +2948,14 @@
           "routes"
         ],
         "summary": "List a Router's routes",
-        "description": "",
         "operationId": "routers_routes_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -2482,9 +2965,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -2559,7 +3042,6 @@
           "routes"
         ],
         "summary": "Create a VPC Router",
-        "description": "",
         "operationId": "routers_routes_post",
         "parameters": [
           {
@@ -2635,7 +3117,6 @@
           "routes"
         ],
         "summary": "Get a VPC Router route",
-        "description": "",
         "operationId": "routers_routes_get_route",
         "parameters": [
           {
@@ -2708,7 +3189,6 @@
           "routes"
         ],
         "summary": "Update a Router route",
-        "description": "",
         "operationId": "routers_routes_put_route",
         "parameters": [
           {
@@ -2768,8 +3248,15 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "resource updated"
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouterRoute"
+                }
+              }
+            }
           },
           "4XX": {
             "$ref": "#/components/responses/Error"
@@ -2784,7 +3271,6 @@
           "routes"
         ],
         "summary": "Delete a route from its router",
-        "description": "",
         "operationId": "routers_routes_delete_route",
         "parameters": [
           {
@@ -2852,15 +3338,14 @@
           "subnets"
         ],
         "summary": "List subnets in a VPC.",
-        "description": "",
         "operationId": "vpc_subnets_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -2870,9 +3355,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -2938,7 +3423,6 @@
           "subnets"
         ],
         "summary": "Create a subnet in a VPC.",
-        "description": "",
         "operationId": "vpc_subnets_post",
         "parameters": [
           {
@@ -3005,7 +3489,6 @@
           "subnets"
         ],
         "summary": "Get subnet in a VPC.",
-        "description": "",
         "operationId": "vpc_subnets_get_subnet",
         "parameters": [
           {
@@ -3069,7 +3552,6 @@
           "subnets"
         ],
         "summary": "Update a VPC Subnet.",
-        "description": "",
         "operationId": "vpc_subnets_put_subnet",
         "parameters": [
           {
@@ -3120,8 +3602,15 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "resource updated"
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VpcSubnet"
+                }
+              }
+            }
           },
           "4XX": {
             "$ref": "#/components/responses/Error"
@@ -3136,7 +3625,6 @@
           "subnets"
         ],
         "summary": "Delete a subnet from a VPC.",
-        "description": "",
         "operationId": "vpc_subnets_delete_subnet",
         "parameters": [
           {
@@ -3189,21 +3677,20 @@
         }
       }
     },
-    "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/ips": {
+    "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces": {
       "get": {
         "tags": [
           "subnets"
         ],
-        "summary": "List IP addresses on a VPC subnet.",
-        "description": "",
-        "operationId": "subnets_ips_get",
+        "summary": "List network interfaces in a VPC subnet.",
+        "operationId": "subnet_network_interfaces_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -3213,9 +3700,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -3292,15 +3779,14 @@
           "roles"
         ],
         "summary": "List the built-in roles",
-        "description": "",
         "operationId": "roles_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -3310,9 +3796,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -3345,15 +3831,14 @@
           "roles"
         ],
         "summary": "Fetch a specific built-in role",
-        "description": "",
         "operationId": "roles_get_role",
         "parameters": [
           {
             "in": "path",
             "name": "role_name",
+            "description": "The built-in role's unique name.",
             "required": true,
             "schema": {
-              "description": "The built-in role's unique name.",
               "type": "string"
             },
             "style": "simple"
@@ -3385,15 +3870,14 @@
           "sagas"
         ],
         "summary": "List all sagas (for debugging)",
-        "description": "",
         "operationId": "sagas_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -3403,9 +3887,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -3446,7 +3930,6 @@
           "sagas"
         ],
         "summary": "Fetch information about a single saga (for debugging)",
-        "description": "",
         "operationId": "sagas_get_saga",
         "parameters": [
           {
@@ -3513,15 +3996,14 @@
           "metrics"
         ],
         "summary": "List all timeseries schema",
-        "description": "",
         "operationId": "timeseries_schema_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -3531,9 +4013,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -3560,21 +4042,40 @@
         "x-dropshot-pagination": true
       }
     },
+    "/updates/refresh": {
+      "post": {
+        "tags": [
+          "updates"
+        ],
+        "summary": "Refresh update metadata",
+        "operationId": "updates_refresh",
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "tags": [
           "users"
         ],
         "summary": "List the built-in system users",
-        "description": "",
         "operationId": "users_get",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
+            "description": "Maximum number of items returned by a single call",
             "schema": {
               "nullable": true,
-              "description": "Maximum number of items returned by a single call",
               "type": "integer",
               "format": "uint32",
               "minimum": 1
@@ -3584,9 +4085,9 @@
           {
             "in": "query",
             "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
             "schema": {
               "nullable": true,
-              "description": "Token returned by previous call to retreive the subsequent page",
               "type": "string"
             },
             "style": "form"
@@ -3627,12 +4128,12 @@
           "users"
         ],
         "summary": "Fetch a specific built-in system user",
-        "description": "",
         "operationId": "users_get_user",
         "parameters": [
           {
             "in": "path",
             "name": "user_name",
+            "description": "The built-in user's unique name.",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -3759,7 +4260,7 @@
         ]
       },
       "DiskCreate": {
-        "description": "Create-time parameters for a [`Disk`]",
+        "description": "Create-time parameters for a [`Disk`](omicron_common::api::external::Disk)",
         "type": "object",
         "properties": {
           "description": {
@@ -3790,7 +4291,7 @@
         ]
       },
       "DiskIdentifier": {
-        "description": "Parameters for the [`Disk`] to be attached or detached to an instance",
+        "description": "Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance",
         "type": "object",
         "properties": {
           "disk": {
@@ -3948,7 +4449,7 @@
         ]
       },
       "Error": {
-        "description": "Body of an HTTP response for an `HttpError`.  This type can be used to deserialize an HTTP response corresponding to an error in order to access the error code, message, etc.",
+        "description": "Error information from a response.",
         "type": "object",
         "properties": {
           "error_code": {
@@ -4090,7 +4591,7 @@
         "minimum": 0
       },
       "InstanceCreate": {
-        "description": "Create-time parameters for an [`Instance`]",
+        "description": "Create-time parameters for an [`Instance`](omicron_common::api::external::Instance)",
         "type": "object",
         "properties": {
           "description": {
@@ -4107,6 +4608,14 @@
           },
           "ncpus": {
             "$ref": "#/components/schemas/InstanceCpuCount"
+          },
+          "network_interfaces": {
+            "description": "The network interfaces to be created for this instance.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/InstanceNetworkInterfaceAttachment"
+              }
+            ]
           }
         },
         "required": [
@@ -4118,7 +4627,7 @@
         ]
       },
       "InstanceMigrate": {
-        "description": "Migration parameters for an [`Instance`]",
+        "description": "Migration parameters for an [`Instance`](omicron_common::api::external::Instance)",
         "type": "object",
         "properties": {
           "dst_sled_uuid": {
@@ -4128,6 +4637,74 @@
         },
         "required": [
           "dst_sled_uuid"
+        ]
+      },
+      "InstanceNetworkInterfaceAttachment": {
+        "description": "Describes an attachment of a `NetworkInterface` to an `Instance`, at the time the instance is created.",
+        "oneOf": [
+          {
+            "description": "Create one or more `NetworkInterface`s for the `Instance`",
+            "type": "object",
+            "properties": {
+              "params": {
+                "$ref": "#/components/schemas/InstanceNetworkInterfaceCreate"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Create"
+                ]
+              }
+            },
+            "required": [
+              "params",
+              "type"
+            ]
+          },
+          {
+            "description": "Default networking setup, which creates a single interface with an auto-assigned IP address from project's \"default\" VPC and \"default\" VPC Subnet.",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Default"
+                ]
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          {
+            "description": "No network interfaces at all will be created for the instance.",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "None"
+                ]
+              }
+            },
+            "required": [
+              "type"
+            ]
+          }
+        ]
+      },
+      "InstanceNetworkInterfaceCreate": {
+        "type": "object",
+        "properties": {
+          "params": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NetworkInterfaceCreate"
+            }
+          }
+        },
+        "required": [
+          "params"
         ]
       },
       "InstanceResultsPage": {
@@ -4167,18 +4744,47 @@
           "destroyed"
         ]
       },
+      "IpNet": {
+        "description": "An `IpNet` represents an IP network, either IPv4 or IPv6.",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "V4": {
+                "$ref": "#/components/schemas/Ipv4Net"
+              }
+            },
+            "required": [
+              "V4"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "V6": {
+                "$ref": "#/components/schemas/Ipv6Net"
+              }
+            },
+            "required": [
+              "V6"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
       "Ipv4Net": {
         "title": "An IPv4 subnet",
         "description": "An IPv4 subnet, including prefix and subnet mask",
         "type": "string",
-        "pattern": "^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$",
+        "pattern": "(^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$)|(^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$)|(^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$)",
         "maxLength": 18
       },
       "Ipv6Net": {
         "title": "An IPv6 subnet",
         "description": "An IPv6 subnet, including prefix and subnet mask",
         "type": "string",
-        "pattern": "^(fd|FD)00:((([0-9a-fA-F]{1,4}\\:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$",
+        "pattern": "^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}\\:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$",
         "maxLength": 43
       },
       "L4PortRange": {
@@ -4288,6 +4894,46 @@
           "vpc_id"
         ]
       },
+      "NetworkInterfaceCreate": {
+        "description": "Create-time parameters for a [`NetworkInterface`](omicron_common::api::external::NetworkInterface)",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "ip": {
+            "nullable": true,
+            "description": "The IP address for the interface. One will be auto-assigned if not provided.",
+            "type": "string",
+            "format": "ip"
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
+          "subnet_name": {
+            "description": "The VPC Subnet in which to create the interface.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "vpc_name": {
+            "description": "The VPC in which to create the interface.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          }
+        },
+        "required": [
+          "description",
+          "name",
+          "subnet_name",
+          "vpc_name"
+        ]
+      },
       "NetworkInterfaceResultsPage": {
         "description": "A single page of results",
         "type": "object",
@@ -4350,7 +4996,7 @@
         ]
       },
       "OrganizationCreate": {
-        "description": "Create-time parameters for an [`Organization`]",
+        "description": "Create-time parameters for an [`Organization`](crate::external_api::views::Organization)",
         "type": "object",
         "properties": {
           "description": {
@@ -4387,7 +5033,7 @@
         ]
       },
       "OrganizationUpdate": {
-        "description": "Updateable properties of an [`Organization`]",
+        "description": "Updateable properties of an [`Organization`](crate::external_api::views::Organization)",
         "type": "object",
         "properties": {
           "description": {
@@ -4450,7 +5096,7 @@
         ]
       },
       "ProjectCreate": {
-        "description": "Create-time parameters for a [`Project`]",
+        "description": "Create-time parameters for a [`Project`](crate::external_api::views::Project)",
         "type": "object",
         "properties": {
           "description": {
@@ -4487,7 +5133,7 @@
         ]
       },
       "ProjectUpdate": {
-        "description": "Updateable properties of a [`Project`]",
+        "description": "Updateable properties of a [`Project`](crate::external_api::views::Project)",
         "type": "object",
         "properties": {
           "description": {
@@ -4610,9 +5256,10 @@
         ]
       },
       "RouteDestination": {
-        "description": "A subset of [`NetworkTarget`], `RouteDestination` specifies the kind of network traffic that will be matched to be forwarded to the [`RouteTarget`].",
+        "description": "A `RouteDestination` is used to match traffic with a routing rule, on the destination of that traffic.\n\nWhen traffic is to be sent to a destination that is within a given `RouteDestination`, the corresponding [`RouterRoute`] applies, and traffic will be forward to the [`RouteTarget`] for that rule.",
         "oneOf": [
           {
+            "description": "Route applies to traffic destined for a specific IP address",
             "type": "object",
             "properties": {
               "type": {
@@ -4632,6 +5279,26 @@
             ]
           },
           {
+            "description": "Route applies to traffic destined for a specific IP subnet",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ip_net"
+                ]
+              },
+              "value": {
+                "$ref": "#/components/schemas/IpNet"
+              }
+            },
+            "required": [
+              "type",
+              "value"
+            ]
+          },
+          {
+            "description": "Route applies to traffic destined for the given VPC.",
             "type": "object",
             "properties": {
               "type": {
@@ -4650,6 +5317,7 @@
             ]
           },
           {
+            "description": "Route applies to traffic",
             "type": "object",
             "properties": {
               "type": {
@@ -4670,9 +5338,10 @@
         ]
       },
       "RouteTarget": {
-        "description": "A subset of [`NetworkTarget`], `RouteTarget` specifies all possible targets that a route can forward to.",
+        "description": "A `RouteTarget` describes the possible locations that traffic matching a route destination can be sent.",
         "oneOf": [
           {
+            "description": "Forward traffic to a particular IP address.",
             "type": "object",
             "properties": {
               "type": {
@@ -4692,6 +5361,7 @@
             ]
           },
           {
+            "description": "Forward traffic to a VPC",
             "type": "object",
             "properties": {
               "type": {
@@ -4710,6 +5380,7 @@
             ]
           },
           {
+            "description": "Forward traffic to a VPC Subnet",
             "type": "object",
             "properties": {
               "type": {
@@ -4728,6 +5399,7 @@
             ]
           },
           {
+            "description": "Forward traffic to a specific instance",
             "type": "object",
             "properties": {
               "type": {
@@ -4746,6 +5418,7 @@
             ]
           },
           {
+            "description": "Forward traffic to an internet gateway",
             "type": "object",
             "properties": {
               "type": {
@@ -5168,6 +5841,106 @@
           "items"
         ]
       },
+      "Snapshot": {
+        "description": "Client view of a Snapshot",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "disk_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "size": {
+            "$ref": "#/components/schemas/ByteCount"
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "description",
+          "disk_id",
+          "id",
+          "name",
+          "project_id",
+          "size",
+          "time_created",
+          "time_modified"
+        ]
+      },
+      "SnapshotCreate": {
+        "description": "Create-time parameters for a [`Snapshot`](omicron_common::api::external::Snapshot)",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "disk": {
+            "description": "The name of the disk to be snapshotted",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          }
+        },
+        "required": [
+          "description",
+          "disk",
+          "name"
+        ]
+      },
+      "SnapshotResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Snapshot"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
       "TimeseriesName": {
         "title": "The name of a timeseries",
         "description": "Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words.",
@@ -5305,6 +6078,14 @@
             "type": "string",
             "format": "uuid"
           },
+          "ipv6_prefix": {
+            "description": "The unique local IPv6 address range for subnets in this VPC",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Ipv6Net"
+              }
+            ]
+          },
           "name": {
             "description": "unique, mutable, user-controlled identifier for each resource",
             "allOf": [
@@ -5338,6 +6119,7 @@
           "description",
           "dns_name",
           "id",
+          "ipv6_prefix",
           "name",
           "project_id",
           "system_router_id",
@@ -5346,7 +6128,7 @@
         ]
       },
       "VpcCreate": {
-        "description": "Create-time parameters for a [`Vpc`]",
+        "description": "Create-time parameters for a [`Vpc`](crate::external_api::views::Vpc)",
         "type": "object",
         "properties": {
           "description": {
@@ -5354,6 +6136,15 @@
           },
           "dns_name": {
             "$ref": "#/components/schemas/Name"
+          },
+          "ipv6_prefix": {
+            "nullable": true,
+            "description": "The IPv6 prefix for this VPC.\n\nAll IPv6 subnets created from this VPC must be taken from this range, which sould be a Unique Local Address in the range `fd00::/48`. The default VPC Subnet will have the first `/64` range from this prefix.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Ipv6Net"
+              }
+            ]
           },
           "name": {
             "$ref": "#/components/schemas/Name"
@@ -5440,6 +6231,11 @@
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
+          },
+          "vpc_id": {
+            "description": "the VPC to which this rule belongs",
+            "type": "string",
+            "format": "uuid"
           }
         },
         "required": [
@@ -5453,7 +6249,8 @@
           "status",
           "targets",
           "time_created",
-          "time_modified"
+          "time_modified",
+          "vpc_id"
         ]
       },
       "VpcFirewallRuleAction": {
@@ -5501,9 +6298,10 @@
         }
       },
       "VpcFirewallRuleHostFilter": {
-        "description": "A subset of [`NetworkTarget`], `VpcFirewallRuleHostFilter` specifies all possible targets that a route can forward to.",
+        "description": "The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis of its source or destination host.",
         "oneOf": [
           {
+            "description": "The rule applies to traffic from/to all instances in the VPC",
             "type": "object",
             "properties": {
               "type": {
@@ -5522,6 +6320,7 @@
             ]
           },
           {
+            "description": "The rule applies to traffic from/to all instances in the VPC Subnet",
             "type": "object",
             "properties": {
               "type": {
@@ -5540,6 +6339,7 @@
             ]
           },
           {
+            "description": "The rule applies to traffic from/to this specific instance",
             "type": "object",
             "properties": {
               "type": {
@@ -5558,6 +6358,7 @@
             ]
           },
           {
+            "description": "The rule applies to traffic from/to a specific IP address",
             "type": "object",
             "properties": {
               "type": {
@@ -5577,16 +6378,17 @@
             ]
           },
           {
+            "description": "The rule applies to traffic from/to a specific IP subnet",
             "type": "object",
             "properties": {
               "type": {
                 "type": "string",
                 "enum": [
-                  "internet_gateway"
+                  "ip_net"
                 ]
               },
               "value": {
-                "$ref": "#/components/schemas/Name"
+                "$ref": "#/components/schemas/IpNet"
               }
             },
             "required": [
@@ -5605,27 +6407,6 @@
           "ICMP"
         ]
       },
-      "VpcFirewallRuleResultsPage": {
-        "description": "A single page of results",
-        "type": "object",
-        "properties": {
-          "items": {
-            "description": "list of items on this page of results",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/VpcFirewallRule"
-            }
-          },
-          "next_page": {
-            "nullable": true,
-            "description": "token used to fetch the next page of results (if any)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "items"
-        ]
-      },
       "VpcFirewallRuleStatus": {
         "type": "string",
         "enum": [
@@ -5634,9 +6415,10 @@
         ]
       },
       "VpcFirewallRuleTarget": {
-        "description": "A subset of [`NetworkTarget`], `VpcFirewallRuleTarget` specifies all possible targets that a firewall rule can be attached to.",
+        "description": "A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to which a firewall rule applies.",
         "oneOf": [
           {
+            "description": "The rule applies to all instances in the VPC",
             "type": "object",
             "properties": {
               "type": {
@@ -5655,6 +6437,7 @@
             ]
           },
           {
+            "description": "The rule applies to all instances in the VPC Subnet",
             "type": "object",
             "properties": {
               "type": {
@@ -5673,6 +6456,7 @@
             ]
           },
           {
+            "description": "The rule applies to this specific instance",
             "type": "object",
             "properties": {
               "type": {
@@ -5683,6 +6467,45 @@
               },
               "value": {
                 "$ref": "#/components/schemas/Name"
+              }
+            },
+            "required": [
+              "type",
+              "value"
+            ]
+          },
+          {
+            "description": "The rule applies to a specific IP address",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ip"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "format": "ip"
+              }
+            },
+            "required": [
+              "type",
+              "value"
+            ]
+          },
+          {
+            "description": "The rule applies to a specific IP subnet",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ip_net"
+                ]
+              },
+              "value": {
+                "$ref": "#/components/schemas/IpNet"
               }
             },
             "required": [
@@ -5724,6 +6547,14 @@
               }
             ]
           },
+          "name": {
+            "description": "name of the rule, unique to this VPC",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
           "priority": {
             "description": "the relative priority of this rule",
             "type": "integer",
@@ -5751,24 +6582,41 @@
           "description",
           "direction",
           "filters",
+          "name",
           "priority",
           "status",
           "targets"
         ]
       },
       "VpcFirewallRuleUpdateParams": {
-        "description": "Updateable properties of a [`Vpc`]'s firewall Note that VpcFirewallRules are implicitly created along with a Vpc, so there is no explicit creation.",
+        "description": "Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules are implicitly created along with a Vpc, so there is no explicit creation.",
         "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/VpcFirewallRuleUpdate"
-        }
+        "properties": {
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VpcFirewallRuleUpdate"
+            }
+          }
+        },
+        "required": [
+          "rules"
+        ]
       },
-      "VpcFirewallRuleUpdateResult": {
-        "description": "Response to an update replacing [`Vpc`]'s firewall",
+      "VpcFirewallRules": {
+        "description": "Collection of a [`Vpc`]'s firewall rules",
         "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/VpcFirewallRule"
-        }
+        "properties": {
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VpcFirewallRule"
+            }
+          }
+        },
+        "required": [
+          "rules"
+        ]
       },
       "VpcResultsPage": {
         "description": "A single page of results",
@@ -5842,7 +6690,7 @@
         ]
       },
       "VpcRouterCreate": {
-        "description": "Create-time parameters for a [`VpcRouter`]",
+        "description": "Create-time parameters for a [`VpcRouter`](crate::external_api::views::VpcRouter)",
         "type": "object",
         "properties": {
           "description": {
@@ -5886,7 +6734,7 @@
         ]
       },
       "VpcRouterUpdate": {
-        "description": "Updateable properties of a [`VpcRouter`]",
+        "description": "Updateable properties of a [`VpcRouter`](crate::external_api::views::VpcRouter)",
         "type": "object",
         "properties": {
           "description": {
@@ -5917,7 +6765,6 @@
             "format": "uuid"
           },
           "ipv4_block": {
-            "nullable": true,
             "description": "The IPv4 subnet CIDR block.",
             "allOf": [
               {
@@ -5926,7 +6773,6 @@
             ]
           },
           "ipv6_block": {
-            "nullable": true,
             "description": "The IPv6 subnet CIDR block.",
             "allOf": [
               {
@@ -5961,6 +6807,8 @@
         "required": [
           "description",
           "id",
+          "ipv4_block",
+          "ipv6_block",
           "name",
           "time_created",
           "time_modified",
@@ -5968,14 +6816,14 @@
         ]
       },
       "VpcSubnetCreate": {
-        "description": "Create-time parameters for a [`VpcSubnet`]",
+        "description": "Create-time parameters for a [`VpcSubnet`](crate::external_api::views::VpcSubnet)",
         "type": "object",
         "properties": {
           "description": {
             "type": "string"
           },
           "ipv4_block": {
-            "nullable": true,
+            "description": "The IPv4 address range for this subnet.\n\nIt must be allocated from an RFC 1918 private address range, and must not overlap with any other existing subnet in the VPC.",
             "allOf": [
               {
                 "$ref": "#/components/schemas/Ipv4Net"
@@ -5984,6 +6832,7 @@
           },
           "ipv6_block": {
             "nullable": true,
+            "description": "The IPv6 address range for this subnet.\n\nIt must be allocated from the RFC 4193 Unique Local Address range, with the prefix equal to the parent VPC's prefix. A random `/64` block will be assigned if one is not provided. It must not overlap with any existing subnet in the VPC.",
             "allOf": [
               {
                 "$ref": "#/components/schemas/Ipv6Net"
@@ -5996,6 +6845,7 @@
         },
         "required": [
           "description",
+          "ipv4_block",
           "name"
         ]
       },
@@ -6021,7 +6871,7 @@
         ]
       },
       "VpcSubnetUpdate": {
-        "description": "Updateable properties of a [`VpcSubnet`]",
+        "description": "Updateable properties of a [`VpcSubnet`](crate::external_api::views::VpcSubnet)",
         "type": "object",
         "properties": {
           "description": {
@@ -6055,7 +6905,7 @@
         }
       },
       "VpcUpdate": {
-        "description": "Updateable properties of a [`Vpc`]",
+        "description": "Updateable properties of a [`Vpc`](crate::external_api::views::Vpc)",
         "type": "object",
         "properties": {
           "description": {
@@ -6104,5 +6954,133 @@
         ]
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "disks",
+      "description": "Virtual disks are used to store instance-local data which includes the operating system.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "firewall",
+      "description": "Firewall operation controls the flow of network data into a VPC",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "hidden",
+      "description": "TODO operations that will not ship to customers",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "instances",
+      "description": "Virtual machine instances are the basic unit of computation. These operations are used for provisioning, controlling, and destroying instances.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "metrics",
+      "description": "Metrics provide insight into the operation of the Oxide deployment. These include telemetry on hardware and software components that can be used to understand the current state as well as to diagnose issues.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "organizations",
+      "description": "Organizations represent a subset of users and projects in an Oxide deployment.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "projects",
+      "description": "Projects are a grouping of associated resources such as instances and disks within an organization for purposes of billing and access control.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "racks",
+      "description": "These operations pertain to hardware inventory and management. Racks are the unit of expansion of an Oxide deployment. Racks are in turn composed of sleds, switches, power supplies, and a cabled backplane.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "roles",
+      "description": "Roles are a component of Identity and Access Management (IAM) that allow a user or agent account access to additional permissions.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "routers",
+      "description": "Routers direct the flow of network traffic into, out of, and within a VPC via routes.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "routes",
+      "description": "Routes define router policy.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "sagas",
+      "description": "Sagas are the abstraction used to represent multi-step operations within the Oxide deployment. These operations can be used to query saga status and report errors.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "sleds",
+      "description": "This tag should be moved into hardware",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "snapshots",
+      "description": "Snapshots of Virtual Disks at a particular point in time.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "subnets",
+      "description": "This tag should be moved into a generic network tag",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "updates",
+      "description": "This tag should be moved into a operations tag",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "users",
+      "description": "This tag should be moved into an IAM tag",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "vpcs",
+      "description": "A Virtual Private Cloud (VPC) is an isolated network environment that should probaby be moved into a more generic networking tag",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    }
+  ]
 }

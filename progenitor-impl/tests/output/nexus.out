@@ -61,7 +61,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for a [`Disk`]"]
+    #[doc = "Create-time parameters for a [`Disk`](omicron_common::api::external::Disk)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskCreate {
         pub description: String,
@@ -72,7 +72,7 @@ pub mod types {
         pub snapshot_id: Option<uuid::Uuid>,
     }
 
-    #[doc = "Parameters for the [`Disk`] to be attached or detached to an instance"]
+    #[doc = "Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskIdentifier {
         pub disk: Name,
@@ -107,7 +107,7 @@ pub mod types {
         Faulted,
     }
 
-    #[doc = "Body of an HTTP response for an `HttpError`.  This type can be used to deserialize an HTTP response corresponding to an error in order to access the error code, message, etc."]
+    #[doc = "Error information from a response."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -209,7 +209,7 @@ pub mod types {
         }
     }
 
-    #[doc = "Create-time parameters for an [`Instance`]"]
+    #[doc = "Create-time parameters for an [`Instance`](omicron_common::api::external::Instance)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceCreate {
         pub description: String,
@@ -217,12 +217,27 @@ pub mod types {
         pub memory: ByteCount,
         pub name: Name,
         pub ncpus: InstanceCpuCount,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub network_interfaces: Option<InstanceNetworkInterfaceAttachment>,
     }
 
-    #[doc = "Migration parameters for an [`Instance`]"]
+    #[doc = "Migration parameters for an [`Instance`](omicron_common::api::external::Instance)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceMigrate {
         pub dst_sled_uuid: uuid::Uuid,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[serde(tag = "type", content = "params")]
+    pub enum InstanceNetworkInterfaceAttachment {
+        Create(InstanceNetworkInterfaceCreate),
+        Default,
+        None,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct InstanceNetworkInterfaceCreate {
+        pub params: Vec<NetworkInterfaceCreate>,
     }
 
     #[doc = "A single page of results"]
@@ -275,6 +290,12 @@ pub mod types {
                 InstanceState::Destroyed => "destroyed".to_string(),
             }
         }
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub enum IpNet {
+        V4(Ipv4Net),
+        V6(Ipv6Net),
     }
 
     #[doc = "An IPv4 subnet, including prefix and subnet mask"]
@@ -391,6 +412,18 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
+    #[doc = "Create-time parameters for a [`NetworkInterface`](omicron_common::api::external::NetworkInterface)"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct NetworkInterfaceCreate {
+        pub description: String,
+        #[doc = "The IP address for the interface. One will be auto-assigned if not provided."]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub ip: Option<String>,
+        pub name: Name,
+        pub subnet_name: Name,
+        pub vpc_name: Name,
+    }
+
     #[doc = "A single page of results"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct NetworkInterfaceResultsPage {
@@ -415,7 +448,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for an [`Organization`]"]
+    #[doc = "Create-time parameters for an [`Organization`](crate::external_api::views::Organization)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationCreate {
         pub description: String,
@@ -432,7 +465,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[doc = "Updateable properties of an [`Organization`]"]
+    #[doc = "Updateable properties of an [`Organization`](crate::external_api::views::Organization)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -456,7 +489,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for a [`Project`]"]
+    #[doc = "Create-time parameters for a [`Project`](crate::external_api::views::Project)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectCreate {
         pub description: String,
@@ -473,7 +506,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[doc = "Updateable properties of a [`Project`]"]
+    #[doc = "Updateable properties of a [`Project`](crate::external_api::views::Project)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -538,6 +571,8 @@ pub mod types {
     pub enum RouteDestination {
         #[serde(rename = "ip")]
         Ip(String),
+        #[serde(rename = "ip_net")]
+        IpNet(IpNet),
         #[serde(rename = "vpc")]
         Vpc(Name),
         #[serde(rename = "subnet")]
@@ -708,6 +743,41 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    #[doc = "Client view of a Snapshot"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Snapshot {
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        pub disk_id: uuid::Uuid,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
+        pub name: Name,
+        pub project_id: uuid::Uuid,
+        pub size: ByteCount,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    #[doc = "Create-time parameters for a [`Snapshot`](omicron_common::api::external::Snapshot)"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SnapshotCreate {
+        pub description: String,
+        pub disk: Name,
+        pub name: Name,
+    }
+
+    #[doc = "A single page of results"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SnapshotResultsPage {
+        #[doc = "list of items on this page of results"]
+        pub items: Vec<Snapshot>,
+        #[doc = "token used to fetch the next page of results (if any)"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
     #[doc = "Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct TimeseriesName(pub String);
@@ -769,6 +839,8 @@ pub mod types {
         pub dns_name: Name,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[serde(rename = "ipv6_prefix")]
+        pub ipv_6_prefix: Ipv6Net,
         pub name: Name,
         #[doc = "id for the project containing this VPC"]
         pub project_id: uuid::Uuid,
@@ -780,11 +852,17 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for a [`Vpc`]"]
+    #[doc = "Create-time parameters for a [`Vpc`](crate::external_api::views::Vpc)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcCreate {
         pub description: String,
         pub dns_name: Name,
+        #[serde(
+            rename = "ipv6_prefix",
+            default,
+            skip_serializing_if = "Option::is_none"
+        )]
+        pub ipv_6_prefix: Option<Ipv6Net>,
         pub name: Name,
     }
 
@@ -808,6 +886,8 @@ pub mod types {
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "the VPC to which this rule belongs"]
+        pub vpc_id: uuid::Uuid,
     }
 
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
@@ -869,8 +949,8 @@ pub mod types {
         Instance(Name),
         #[serde(rename = "ip")]
         Ip(String),
-        #[serde(rename = "internet_gateway")]
-        InternetGateway(Name),
+        #[serde(rename = "ip_net")]
+        IpNet(IpNet),
     }
 
     #[doc = "The protocols that may be specified in a firewall rule's filter"]
@@ -892,16 +972,6 @@ pub mod types {
                 VpcFirewallRuleProtocol::Icmp => "ICMP".to_string(),
             }
         }
-    }
-
-    #[doc = "A single page of results"]
-    #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct VpcFirewallRuleResultsPage {
-        #[doc = "list of items on this page of results"]
-        pub items: Vec<VpcFirewallRule>,
-        #[doc = "token used to fetch the next page of results (if any)"]
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
     }
 
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
@@ -930,6 +1000,10 @@ pub mod types {
         Subnet(Name),
         #[serde(rename = "instance")]
         Instance(Name),
+        #[serde(rename = "ip")]
+        Ip(String),
+        #[serde(rename = "ip_net")]
+        IpNet(IpNet),
     }
 
     #[doc = "A single rule in a VPC firewall"]
@@ -940,6 +1014,7 @@ pub mod types {
         pub description: String,
         pub direction: VpcFirewallRuleDirection,
         pub filters: VpcFirewallRuleFilter,
+        pub name: Name,
         #[doc = "the relative priority of this rule"]
         pub priority: u16,
         pub status: VpcFirewallRuleStatus,
@@ -947,24 +1022,16 @@ pub mod types {
         pub targets: Vec<VpcFirewallRuleTarget>,
     }
 
+    #[doc = "Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules are implicitly created along with a Vpc, so there is no explicit creation."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct VpcFirewallRuleUpdateParams(
-        pub std::collections::HashMap<String, VpcFirewallRuleUpdate>,
-    );
-    impl std::ops::Deref for VpcFirewallRuleUpdateParams {
-        type Target = std::collections::HashMap<String, VpcFirewallRuleUpdate>;
-        fn deref(&self) -> &Self::Target {
-            &self.0
-        }
+    pub struct VpcFirewallRuleUpdateParams {
+        pub rules: Vec<VpcFirewallRuleUpdate>,
     }
 
+    #[doc = "Collection of a [`Vpc`]'s firewall rules"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct VpcFirewallRuleUpdateResult(pub std::collections::HashMap<String, VpcFirewallRule>);
-    impl std::ops::Deref for VpcFirewallRuleUpdateResult {
-        type Target = std::collections::HashMap<String, VpcFirewallRule>;
-        fn deref(&self) -> &Self::Target {
-            &self.0
-        }
+    pub struct VpcFirewallRules {
+        pub rules: Vec<VpcFirewallRule>,
     }
 
     #[doc = "A single page of results"]
@@ -994,7 +1061,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    #[doc = "Create-time parameters for a [`VpcRouter`]"]
+    #[doc = "Create-time parameters for a [`VpcRouter`](crate::external_api::views::VpcRouter)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouterCreate {
         pub description: String,
@@ -1028,7 +1095,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[doc = "Updateable properties of a [`VpcRouter`]"]
+    #[doc = "Updateable properties of a [`VpcRouter`](crate::external_api::views::VpcRouter)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouterUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1044,18 +1111,10 @@ pub mod types {
         pub description: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
-        #[serde(
-            rename = "ipv4_block",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
-        pub ipv_4_block: Option<Ipv4Net>,
-        #[serde(
-            rename = "ipv6_block",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
-        pub ipv_6_block: Option<Ipv6Net>,
+        #[serde(rename = "ipv4_block")]
+        pub ipv_4_block: Ipv4Net,
+        #[serde(rename = "ipv6_block")]
+        pub ipv_6_block: Ipv6Net,
         pub name: Name,
         #[doc = "timestamp when this resource was created"]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
@@ -1065,16 +1124,12 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    #[doc = "Create-time parameters for a [`VpcSubnet`]"]
+    #[doc = "Create-time parameters for a [`VpcSubnet`](crate::external_api::views::VpcSubnet)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetCreate {
         pub description: String,
-        #[serde(
-            rename = "ipv4_block",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
-        pub ipv_4_block: Option<Ipv4Net>,
+        #[serde(rename = "ipv4_block")]
+        pub ipv_4_block: Ipv4Net,
         #[serde(
             rename = "ipv6_block",
             default,
@@ -1094,7 +1149,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[doc = "Updateable properties of a [`VpcSubnet`]"]
+    #[doc = "Updateable properties of a [`VpcSubnet`](crate::external_api::views::VpcSubnet)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1115,7 +1170,7 @@ pub mod types {
         pub name: Option<Name>,
     }
 
-    #[doc = "Updateable properties of a [`Vpc`]"]
+    #[doc = "Updateable properties of a [`Vpc`](crate::external_api::views::Vpc)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1159,7 +1214,7 @@ impl Client {
         &self.client
     }
 
-    #[doc = "\n\nhardware_racks_get: GET /hardware/racks"]
+    #[doc = "List racks in the system\n\nSends a `GET` request to `/hardware/racks`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn hardware_racks_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1195,7 +1250,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Rack> by making successive calls to hardware_racks_get"]
+    #[doc = "List racks in the system as a Stream\n\nSends repeated `GET` requests to `/hardware/racks` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn hardware_racks_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1230,7 +1285,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nhardware_racks_get_rack: GET /hardware/racks/{rack_id}"]
+    #[doc = "Fetch information about a particular rack\n\nSends a `GET` request to `/hardware/racks/{rack_id}`\n\nArguments:\n- `rack_id`: The rack's unique ID.\n"]
     pub async fn hardware_racks_get_rack<'a>(
         &'a self,
         rack_id: &'a uuid::Uuid,
@@ -1255,7 +1310,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nhardware_sleds_get: GET /hardware/sleds"]
+    #[doc = "List sleds in the system\n\nSends a `GET` request to `/hardware/sleds`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn hardware_sleds_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1291,7 +1346,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Sled> by making successive calls to hardware_sleds_get"]
+    #[doc = "List sleds in the system as a Stream\n\nSends repeated `GET` requests to `/hardware/sleds` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn hardware_sleds_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1326,7 +1381,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nhardware_sleds_get_sled: GET /hardware/sleds/{sled_id}"]
+    #[doc = "Fetch information about a sled in the system\n\nSends a `GET` request to `/hardware/sleds/{sled_id}`\n\nArguments:\n- `sled_id`: The sled's unique ID.\n"]
     pub async fn hardware_sleds_get_sled<'a>(
         &'a self,
         sled_id: &'a uuid::Uuid,
@@ -1351,7 +1406,7 @@ impl Client {
         }
     }
 
-    #[doc = "spoof_login: POST /login"]
+    #[doc = "Sends a `POST` request to `/login`"]
     pub async fn spoof_login<'a>(
         &'a self,
         body: &'a types::LoginParams,
@@ -1366,19 +1421,19 @@ impl Client {
         }
     }
 
-    #[doc = "logout: POST /logout"]
-    pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
+    #[doc = "Sends a `POST` request to `/logout`"]
+    pub async fn logout<'a>(&'a self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/logout", self.baseurl,);
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200..=299 => Ok(ResponseValue::empty(response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
         }
     }
 
-    #[doc = "\n\norganizations_get: GET /organizations"]
+    #[doc = "List all organizations\n\nSends a `GET` request to `/organizations`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn organizations_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1414,7 +1469,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Organization> by making successive calls to organizations_get"]
+    #[doc = "List all organizations as a Stream\n\nSends repeated `GET` requests to `/organizations` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn organizations_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1450,7 +1505,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\norganizations_post: POST /organizations"]
+    #[doc = "Create a new organization\n\nSends a `POST` request to `/organizations`"]
     pub async fn organizations_post<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
@@ -1471,7 +1526,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\norganizations_get_organization: GET /organizations/{organization_name}"]
+    #[doc = "Fetch a specific organization\n\nSends a `GET` request to `/organizations/{organization_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n"]
     pub async fn organizations_get_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1496,7 +1551,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\norganizations_put_organization: PUT /organizations/{organization_name}"]
+    #[doc = "Update a specific organization\n\nSends a `PUT` request to `/organizations/{organization_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `body`\n"]
     pub async fn organizations_put_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1522,7 +1577,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\norganizations_delete_organization: DELETE /organizations/{organization_name}"]
+    #[doc = "Delete a specific organization\n\nSends a `DELETE` request to `/organizations/{organization_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n"]
     pub async fn organizations_delete_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1547,7 +1602,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\norganization_projects_get: GET /organizations/{organization_name}/projects"]
+    #[doc = "List all projects\n\nSends a `GET` request to `/organizations/{organization_name}/projects`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn organization_projects_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1588,7 +1643,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Project> by making successive calls to organization_projects_get"]
+    #[doc = "List all projects as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn organization_projects_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1629,7 +1684,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\norganization_projects_post: POST /organizations/{organization_name}/projects"]
+    #[doc = "Create a new project\n\nSends a `POST` request to `/organizations/{organization_name}/projects`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `body`\n"]
     pub async fn organization_projects_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1655,7 +1710,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\norganization_projects_get_project: GET /organizations/{organization_name}/projects/{project_name}"]
+    #[doc = "Fetch a specific project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n"]
     pub async fn organization_projects_get_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1682,7 +1737,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\norganization_projects_put_project: PUT /organizations/{organization_name}/projects/{project_name}"]
+    #[doc = "Update a specific project\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
     pub async fn organization_projects_put_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1710,7 +1765,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\norganization_projects_delete_project: DELETE /organizations/{organization_name}/projects/{project_name}"]
+    #[doc = "Delete a specific project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n"]
     pub async fn organization_projects_delete_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1737,7 +1792,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_disks_get: GET /organizations/{organization_name}/projects/{project_name}/disks"]
+    #[doc = "List disks in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn project_disks_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1780,7 +1835,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Disk> by making successive calls to project_disks_get"]
+    #[doc = "List disks in a project as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/disks` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn project_disks_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1823,7 +1878,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nproject_disks_post: POST /organizations/{organization_name}/projects/{project_name}/disks"]
+    #[doc = "Create a disk in a project\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/disks`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
     pub async fn project_disks_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1851,7 +1906,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_disks_get_disk: GET /organizations/{organization_name}/projects/{project_name}/disks/{disk_name}"]
+    #[doc = "Fetch a single disk in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`"]
     pub async fn project_disks_get_disk<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1880,7 +1935,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_disks_delete_disk: DELETE /organizations/{organization_name}/projects/{project_name}/disks/{disk_name}"]
+    #[doc = "Delete a disk from a project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`"]
     pub async fn project_disks_delete_disk<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1909,7 +1964,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_instances_get: GET /organizations/{organization_name}/projects/{project_name}/instances"]
+    #[doc = "List instances in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn project_instances_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1952,7 +2007,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Instance> by making successive calls to project_instances_get"]
+    #[doc = "List instances in a project as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn project_instances_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -1996,7 +2051,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nproject_instances_post: POST /organizations/{organization_name}/projects/{project_name}/instances"]
+    #[doc = "Create an instance in a project\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
     pub async fn project_instances_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2024,7 +2079,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_instances_get_instance: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}"]
+    #[doc = "Get an instance in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`"]
     pub async fn project_instances_get_instance<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2053,7 +2108,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_instances_delete_instance: DELETE /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}"]
+    #[doc = "Delete an instance from a project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`"]
     pub async fn project_instances_delete_instance<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2082,7 +2137,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\ninstance_disks_get: GET /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks"]
+    #[doc = "List disks attached to this instance\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `instance_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn instance_disks_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2127,7 +2182,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Disk> by making successive calls to instance_disks_get"]
+    #[doc = "List disks attached to this instance as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `instance_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn instance_disks_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2179,7 +2234,7 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "instance_disks_attach: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach"]
+    #[doc = "Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach`"]
     pub async fn instance_disks_attach<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2209,7 +2264,7 @@ impl Client {
         }
     }
 
-    #[doc = "instance_disks_detach: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach"]
+    #[doc = "Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach`"]
     pub async fn instance_disks_detach<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2239,7 +2294,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_instances_migrate_instance: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate"]
+    #[doc = "Migrate an instance to a different propolis-server, possibly on a different sled\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate`"]
     pub async fn project_instances_migrate_instance<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2269,7 +2324,197 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_instances_instance_reboot: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot"]
+    #[doc = "List network interfaces attached to this instance\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `instance_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    pub async fn instance_network_interfaces_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
+        );
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List network interfaces attached to this instance as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `instance_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    pub fn instance_network_interfaces_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + '_
+    {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.instance_network_interfaces_get(
+            organization_name,
+            project_name,
+            instance_name,
+            limit,
+            None,
+            sort_by,
+        )
+        .map_ok(move |page| {
+            let page = page.into_inner();
+            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                if state.is_none() {
+                    Ok(None)
+                } else {
+                    self.instance_network_interfaces_get(
+                        organization_name,
+                        project_name,
+                        instance_name,
+                        None,
+                        state.as_deref(),
+                        None,
+                    )
+                    .map_ok(|page| {
+                        let page = page.into_inner();
+                        Some((
+                            futures::stream::iter(page.items.into_iter().map(Ok)),
+                            page.next_page,
+                        ))
+                    })
+                    .await
+                }
+            })
+            .try_flatten();
+            first.chain(rest)
+        })
+        .try_flatten_stream()
+        .boxed()
+    }
+
+    #[doc = "Create a network interface for an instance\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`"]
+    pub async fn instance_network_interfaces_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        body: &'a types::NetworkInterfaceCreate,
+    ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
+        );
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Get an interface attached to an instance\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`"]
+    pub async fn instance_network_interfaces_get_interface<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        interface_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&interface_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Detach a network interface from an instance\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`"]
+    pub async fn instance_network_interfaces_delete_interface<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        interface_name: &'a types::Name,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&instance_name.to_string()),
+            progenitor_client::encode_path(&interface_name.to_string()),
+        );
+        let request = self.client.delete(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Reboot an instance\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot`"]
     pub async fn project_instances_instance_reboot<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2298,7 +2543,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_instances_instance_start: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start"]
+    #[doc = "Boot an instance\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start`"]
     pub async fn project_instances_instance_start<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2327,7 +2572,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_instances_instance_stop: POST /organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop"]
+    #[doc = "Halt an instance\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop`"]
     pub async fn project_instances_instance_stop<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2356,7 +2601,180 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_vpcs_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs"]
+    #[doc = "List snapshots in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    pub async fn project_snapshots_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/snapshots",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+        );
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List snapshots in a project as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/snapshots` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    pub fn project_snapshots_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Snapshot, Error<types::Error>>> + Unpin + '_
+    {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.project_snapshots_get(organization_name, project_name, limit, None, sort_by)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.project_snapshots_get(
+                            organization_name,
+                            project_name,
+                            None,
+                            state.as_deref(),
+                            None,
+                        )
+                        .map_ok(|page| {
+                            let page = page.into_inner();
+                            Some((
+                                futures::stream::iter(page.items.into_iter().map(Ok)),
+                                page.next_page,
+                            ))
+                        })
+                        .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    #[doc = "Create a snapshot of a disk\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    pub async fn project_snapshots_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        body: &'a types::SnapshotCreate,
+    ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/snapshots",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+        );
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Get a snapshot in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`"]
+    pub async fn project_snapshots_get_snapshot<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        snapshot_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/snapshots/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&snapshot_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Delete a snapshot from a project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`"]
+    pub async fn project_snapshots_delete_snapshot<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        snapshot_name: &'a types::Name,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/snapshots/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&snapshot_name.to_string()),
+        );
+        let request = self.client.delete(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List VPCs in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn project_vpcs_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2399,7 +2817,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Vpc> by making successive calls to project_vpcs_get"]
+    #[doc = "List VPCs in a project as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn project_vpcs_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2442,7 +2860,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nproject_vpcs_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs"]
+    #[doc = "Create a VPC in a project\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
     pub async fn project_vpcs_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2470,7 +2888,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_vpcs_get_vpc: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
+    #[doc = "Get a VPC in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`"]
     pub async fn project_vpcs_get_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2499,14 +2917,14 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_vpcs_put_vpc: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
+    #[doc = "Update a VPC\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`"]
     pub async fn project_vpcs_put_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcUpdate,
-    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
@@ -2518,7 +2936,7 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -2529,7 +2947,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nproject_vpcs_delete_vpc: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}"]
+    #[doc = "Delete a vpc from a project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`"]
     pub async fn project_vpcs_delete_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2558,16 +2976,13 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_firewall_rules_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules"]
+    #[doc = "List firewall rules for a VPC\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`"]
     pub async fn vpc_firewall_rules_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
-        page_token: Option<&'a str>,
-        sort_by: Option<types::NameSortMode>,
-    ) -> Result<ResponseValue<types::VpcFirewallRuleResultsPage>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
             self.baseurl,
@@ -2575,20 +2990,7 @@ impl Client {
             progenitor_client::encode_path(&project_name.to_string()),
             progenitor_client::encode_path(&vpc_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2603,67 +3005,14 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = VpcFirewallRule> by making successive calls to vpc_firewall_rules_get"]
-    pub fn vpc_firewall_rules_get_stream<'a>(
-        &'a self,
-        organization_name: &'a types::Name,
-        project_name: &'a types::Name,
-        vpc_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
-        sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcFirewallRule, Error<types::Error>>> + Unpin + '_
-    {
-        use futures::StreamExt;
-        use futures::TryFutureExt;
-        use futures::TryStreamExt;
-        self.vpc_firewall_rules_get(
-            organization_name,
-            project_name,
-            vpc_name,
-            limit,
-            None,
-            sort_by,
-        )
-        .map_ok(move |page| {
-            let page = page.into_inner();
-            let first = futures::stream::iter(page.items.into_iter().map(Ok));
-            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                if state.is_none() {
-                    Ok(None)
-                } else {
-                    self.vpc_firewall_rules_get(
-                        organization_name,
-                        project_name,
-                        vpc_name,
-                        None,
-                        state.as_deref(),
-                        None,
-                    )
-                    .map_ok(|page| {
-                        let page = page.into_inner();
-                        Some((
-                            futures::stream::iter(page.items.into_iter().map(Ok)),
-                            page.next_page,
-                        ))
-                    })
-                    .await
-                }
-            })
-            .try_flatten();
-            first.chain(rest)
-        })
-        .try_flatten_stream()
-        .boxed()
-    }
-
-    #[doc = "\n\nvpc_firewall_rules_put: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules"]
+    #[doc = "Replace the firewall rules for a VPC\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`"]
     pub async fn vpc_firewall_rules_put<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         body: &'a types::VpcFirewallRuleUpdateParams,
-    ) -> Result<ResponseValue<types::VpcFirewallRuleUpdateResult>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
             self.baseurl,
@@ -2686,7 +3035,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_routers_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers"]
+    #[doc = "List VPC Custom and System Routers\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn vpc_routers_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2731,7 +3080,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = VpcRouter> by making successive calls to vpc_routers_get"]
+    #[doc = "List VPC Custom and System Routers as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn vpc_routers_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2784,7 +3133,7 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "\n\nvpc_routers_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers"]
+    #[doc = "Create a VPC Router\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`"]
     pub async fn vpc_routers_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2814,7 +3163,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_routers_get_router: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
+    #[doc = "Get a VPC Router\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`"]
     pub async fn vpc_routers_get_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2845,7 +3194,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_routers_put_router: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
+    #[doc = "Update a VPC Router\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`"]
     pub async fn vpc_routers_put_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2853,7 +3202,7 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
         body: &'a types::VpcRouterUpdate,
-    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
@@ -2866,7 +3215,7 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -2877,7 +3226,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_routers_delete_router: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}"]
+    #[doc = "Delete a router from its VPC\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`"]
     pub async fn vpc_routers_delete_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2908,7 +3257,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nrouters_routes_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes"]
+    #[doc = "List a Router's routes\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `router_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn routers_routes_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2955,7 +3304,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = RouterRoute> by making successive calls to routers_routes_get"]
+    #[doc = "List a Router's routes as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `router_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn routers_routes_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3011,7 +3360,7 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "\n\nrouters_routes_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes"]
+    #[doc = "Create a VPC Router\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`"]
     pub async fn routers_routes_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3043,7 +3392,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nrouters_routes_get_route: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
+    #[doc = "Get a VPC Router route\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`"]
     pub async fn routers_routes_get_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3076,7 +3425,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nrouters_routes_put_route: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
+    #[doc = "Update a Router route\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`"]
     pub async fn routers_routes_put_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3085,7 +3434,7 @@ impl Client {
         router_name: &'a types::Name,
         route_name: &'a types::Name,
         body: &'a types::RouterRouteUpdateParams,
-    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
@@ -3099,7 +3448,7 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -3110,7 +3459,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nrouters_routes_delete_route: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}"]
+    #[doc = "Delete a route from its router\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`"]
     pub async fn routers_routes_delete_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3143,7 +3492,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_subnets_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets"]
+    #[doc = "List subnets in a VPC\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn vpc_subnets_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3188,7 +3537,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = VpcSubnet> by making successive calls to vpc_subnets_get"]
+    #[doc = "List subnets in a VPC as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn vpc_subnets_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3241,7 +3590,7 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "\n\nvpc_subnets_post: POST /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets"]
+    #[doc = "Create a subnet in a VPC\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`"]
     pub async fn vpc_subnets_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3271,7 +3620,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_subnets_get_subnet: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
+    #[doc = "Get subnet in a VPC\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`"]
     pub async fn vpc_subnets_get_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3302,7 +3651,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_subnets_put_subnet: PUT /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
+    #[doc = "Update a VPC Subnet\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`"]
     pub async fn vpc_subnets_put_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3310,7 +3659,7 @@ impl Client {
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
         body: &'a types::VpcSubnetUpdate,
-    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
@@ -3323,7 +3672,7 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -3334,7 +3683,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nvpc_subnets_delete_subnet: DELETE /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}"]
+    #[doc = "Delete a subnet from a VPC\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`"]
     pub async fn vpc_subnets_delete_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3365,8 +3714,8 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nsubnets_ips_get: GET /organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/ips"]
-    pub async fn subnets_ips_get<'a>(
+    #[doc = "List network interfaces in a VPC subnet\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `subnet_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    pub async fn subnet_network_interfaces_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3377,7 +3726,7 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/ips",
+            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
             self.baseurl,
             progenitor_client::encode_path(&organization_name.to_string()),
             progenitor_client::encode_path(&project_name.to_string()),
@@ -3412,8 +3761,8 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = NetworkInterface> by making successive calls to subnets_ips_get"]
-    pub fn subnets_ips_get_stream<'a>(
+    #[doc = "List network interfaces in a VPC subnet as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `subnet_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    pub fn subnet_network_interfaces_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3426,7 +3775,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.subnets_ips_get(
+        self.subnet_network_interfaces_get(
             organization_name,
             project_name,
             vpc_name,
@@ -3442,7 +3791,7 @@ impl Client {
                 if state.is_none() {
                     Ok(None)
                 } else {
-                    self.subnets_ips_get(
+                    self.subnet_network_interfaces_get(
                         organization_name,
                         project_name,
                         vpc_name,
@@ -3468,7 +3817,7 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "\n\nroles_get: GET /roles"]
+    #[doc = "List the built-in roles\n\nSends a `GET` request to `/roles`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n"]
     pub async fn roles_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -3499,7 +3848,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Role> by making successive calls to roles_get"]
+    #[doc = "List the built-in roles as a Stream\n\nSends repeated `GET` requests to `/roles` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n"]
     pub fn roles_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -3533,7 +3882,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nroles_get_role: GET /roles/{role_name}"]
+    #[doc = "Fetch a specific built-in role\n\nSends a `GET` request to `/roles/{role_name}`\n\nArguments:\n- `role_name`: The built-in role's unique name.\n"]
     pub async fn roles_get_role<'a>(
         &'a self,
         role_name: &'a str,
@@ -3558,7 +3907,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nsagas_get: GET /sagas"]
+    #[doc = "List all sagas (for debugging)\n\nSends a `GET` request to `/sagas`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn sagas_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -3594,7 +3943,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = Saga> by making successive calls to sagas_get"]
+    #[doc = "List all sagas (for debugging) as a Stream\n\nSends repeated `GET` requests to `/sagas` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn sagas_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -3629,7 +3978,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nsagas_get_saga: GET /sagas/{saga_id}"]
+    #[doc = "Fetch information about a single saga (for debugging)\n\nSends a `GET` request to `/sagas/{saga_id}`"]
     pub async fn sagas_get_saga<'a>(
         &'a self,
         saga_id: &'a uuid::Uuid,
@@ -3654,7 +4003,7 @@ impl Client {
         }
     }
 
-    #[doc = "session_me: GET /session/me"]
+    #[doc = "Fetch the user associated with the current session\n\nSends a `GET` request to `/session/me`"]
     pub async fn session_me<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SessionUser>, Error<types::Error>> {
@@ -3674,7 +4023,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\ntimeseries_schema_get: GET /timeseries/schema"]
+    #[doc = "List all timeseries schema\n\nSends a `GET` request to `/timeseries/schema`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n"]
     pub async fn timeseries_schema_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -3705,7 +4054,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = TimeseriesSchema> by making successive calls to timeseries_schema_get"]
+    #[doc = "List all timeseries schema as a Stream\n\nSends repeated `GET` requests to `/timeseries/schema` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n"]
     pub fn timeseries_schema_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -3740,7 +4089,25 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nusers_get: GET /users"]
+    #[doc = "Refresh update metadata\n\nSends a `POST` request to `/updates/refresh`"]
+    pub async fn updates_refresh<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!("{}/updates/refresh", self.baseurl,);
+        let request = self.client.post(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List the built-in system users\n\nSends a `GET` request to `/users`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn users_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -3776,7 +4143,7 @@ impl Client {
         }
     }
 
-    #[doc = "\n\nreturns a Stream<Item = User> by making successive calls to users_get"]
+    #[doc = "List the built-in system users as a Stream\n\nSends repeated `GET` requests to `/users` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
     pub fn users_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -3811,7 +4178,7 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "\n\nusers_get_user: GET /users/{user_name}"]
+    #[doc = "Fetch a specific built-in system user\n\nSends a `GET` request to `/users/{user_name}`\n\nArguments:\n- `user_name`: The built-in user's unique name.\n"]
     pub async fn users_get_user<'a>(
         &'a self,
         user_name: &'a types::Name,

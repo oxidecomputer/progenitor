@@ -103,7 +103,7 @@ impl Client {
         &self.client
     }
 
-    #[doc = "enrol: POST /enrol"]
+    #[doc = "Sends a `POST` request to `/enrol`"]
     pub async fn enrol<'a>(
         &'a self,
         body: &'a types::EnrolBody,
@@ -118,7 +118,7 @@ impl Client {
         }
     }
 
-    #[doc = "global_jobs: GET /global/jobs"]
+    #[doc = "Sends a `GET` request to `/global/jobs`"]
     pub async fn global_jobs<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
@@ -132,7 +132,7 @@ impl Client {
         }
     }
 
-    #[doc = "ping: GET /ping"]
+    #[doc = "Sends a `GET` request to `/ping`"]
     pub async fn ping<'a>(&'a self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
         let url = format!("{}/ping", self.baseurl,);
         let request = self.client.get(url).build()?;
@@ -144,7 +144,7 @@ impl Client {
         }
     }
 
-    #[doc = "report_finish: POST /report/finish"]
+    #[doc = "Sends a `POST` request to `/report/finish`"]
     pub async fn report_finish<'a>(
         &'a self,
         body: &'a types::ReportFinishBody,
@@ -159,7 +159,7 @@ impl Client {
         }
     }
 
-    #[doc = "report_output: POST /report/output"]
+    #[doc = "Sends a `POST` request to `/report/output`"]
     pub async fn report_output<'a>(
         &'a self,
         body: &'a types::ReportOutputBody,
@@ -174,7 +174,7 @@ impl Client {
         }
     }
 
-    #[doc = "report_start: POST /report/start"]
+    #[doc = "Sends a `POST` request to `/report/start`"]
     pub async fn report_start<'a>(
         &'a self,
         body: &'a types::ReportStartBody,

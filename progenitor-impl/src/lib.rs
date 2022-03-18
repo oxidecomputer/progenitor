@@ -52,7 +52,8 @@ struct OperationMethod {
     operation_id: String,
     method: String,
     path: PathTemplate,
-    doc_comment: Option<String>,
+    summary: Option<String>,
+    description: Option<String>,
     params: Vec<OperationParameter>,
     responses: Vec<OperationResponse>,
     dropshot_paginated: Option<DropshotPagination>,
@@ -69,10 +70,11 @@ enum OperationParameterKind {
     Body,
 }
 struct OperationParameter {
-    /// Sanitize parameter name.
+    /// Sanitized parameter name.
     name: String,
     /// Original parameter name provided by the API.
     api_name: String,
+    description: Option<String>,
     typ: OperationParameterType,
     kind: OperationParameterKind,
 }
@@ -85,6 +87,10 @@ enum OperationParameterType {
 struct OperationResponse {
     status_code: OperationResponseStatus,
     typ: OperationResponseType,
+    // TODO this isn't currently used because dropshot doesn't give us a
+    // particularly useful message here.
+    #[allow(dead_code)]
+    description: Option<String>,
 }
 
 impl Eq for OperationResponse {}
@@ -350,6 +356,7 @@ impl Generator {
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
                             api_name: parameter_data.name.clone(),
+                            description: parameter_data.description.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Path,
                         })
@@ -389,6 +396,7 @@ impl Generator {
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
                             api_name: parameter_data.name.clone(),
+                            description: parameter_data.description.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Query(
                                 parameter_data.required,
@@ -430,6 +438,7 @@ impl Generator {
             raw_params.push(OperationParameter {
                 name: "body".to_string(),
                 api_name: "body".to_string(),
+                description: b.description.clone(),
                 typ,
                 kind: OperationParameterKind::Body,
             });
@@ -585,7 +594,17 @@ impl Generator {
                     success = true;
                 }
 
-                Ok(OperationResponse { status_code, typ })
+                let description = if response.description.is_empty() {
+                    None
+                } else {
+                    Some(response.description.clone())
+                };
+
+                Ok(OperationResponse {
+                    status_code,
+                    typ,
+                    description,
+                })
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -597,6 +616,7 @@ impl Generator {
             responses.push(OperationResponse {
                 status_code: OperationResponseStatus::Range(2),
                 typ: OperationResponseType::Raw,
+                description: None,
             });
         }
 
@@ -607,7 +627,11 @@ impl Generator {
             operation_id: sanitize(operation_id, Case::Snake),
             method: method.to_string(),
             path: tmp,
-            doc_comment: operation.description.clone(),
+            summary: operation.summary.clone().filter(|s| !s.is_empty()),
+            description: operation
+                .description
+                .clone()
+                .filter(|s| !s.is_empty()),
             params: raw_params,
             responses,
             dropshot_paginated,
@@ -811,18 +835,7 @@ impl Generator {
             _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
         };
 
-        // TODO document parameters
-        let doc_comment = format!(
-            "{}{}: {} {}",
-            method
-                .doc_comment
-                .as_ref()
-                .map(|s| format!("{}\n\n", s))
-                .unwrap_or_else(String::new),
-            method.operation_id,
-            method.method.to_ascii_uppercase(),
-            method.path.to_string(),
-        );
+        let doc_comment = make_doc_comment(method);
 
         let pre_hook = self.pre_hook.as_ref().map(|hook| {
             quote! {
@@ -956,17 +969,7 @@ impl Generator {
             let item_type = item.ident();
 
             // TODO document parameters
-            let doc_comment = format!(
-                "{}returns a Stream<Item = {}> by making successive calls to {}",
-                method
-                    .doc_comment
-                    .as_ref()
-                    .map(|s| format!("{}\n\n", s))
-                    .unwrap_or_else(String::new),
-                item.name(),
-                method.operation_id,
-            );
-
+            let doc_comment = make_stream_doc_comment(method);
 
             quote! {
                 #[doc = #doc_comment]
@@ -1254,6 +1257,89 @@ impl Generator {
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
     }
+}
+
+fn make_doc_comment(method: &OperationMethod) -> String {
+    let mut buf = String::new();
+
+    if let Some(summary) = &method.summary {
+        buf.push_str(summary.trim_end_matches(['.', ',']));
+        buf.push_str("\n\n");
+    }
+    if let Some(description) = &method.description {
+        buf.push_str(description);
+        buf.push_str("\n\n");
+    }
+
+    buf.push_str(&format!(
+        "Sends a `{}` request to `{}`",
+        method.method.to_ascii_uppercase(),
+        method.path.to_string(),
+    ));
+
+    if method
+        .params
+        .iter()
+        .filter(|param| param.description.is_some())
+        .count()
+        > 0
+    {
+        buf.push_str("\n\nArguments:\n");
+        for param in &method.params {
+            buf.push_str(&format!("- `{}`", param.name));
+            if let Some(description) = &param.description {
+                buf.push_str(": ");
+                buf.push_str(description);
+            }
+            buf.push('\n');
+        }
+    }
+
+    buf
+}
+
+fn make_stream_doc_comment(method: &OperationMethod) -> String {
+    let mut buf = String::new();
+
+    if let Some(summary) = &method.summary {
+        buf.push_str(summary.trim_end_matches(['.', ',']));
+        buf.push_str(" as a Stream\n\n");
+    }
+    if let Some(description) = &method.description {
+        buf.push_str(description);
+        buf.push_str("\n\n");
+    }
+
+    buf.push_str(&format!(
+        "Sends repeated `{}` requests to `{}` until there are no more results.",
+        method.method.to_ascii_uppercase(),
+        method.path.to_string(),
+    ));
+
+    if method
+        .params
+        .iter()
+        .filter(|param| param.api_name.as_str() != "page_token")
+        .filter(|param| param.description.is_some())
+        .count()
+        > 0
+    {
+        buf.push_str("\n\nArguments:\n");
+        for param in &method.params {
+            if param.api_name.as_str() == "page_token" {
+                continue;
+            }
+
+            buf.push_str(&format!("- `{}`", param.name));
+            if let Some(description) = &param.description {
+                buf.push_str(": ");
+                buf.push_str(description);
+            }
+            buf.push('\n');
+        }
+    }
+
+    buf
 }
 
 fn last_two<T>(items: &[T]) -> (Option<&T>, Option<&T>) {
