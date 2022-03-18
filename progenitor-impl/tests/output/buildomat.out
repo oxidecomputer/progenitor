@@ -162,7 +162,7 @@ impl Client {
         &self.client
     }
 
-    #[doc = "control_hold: POST /v1/control/hold"]
+    #[doc = "Sends a `POST` request to `/v1/control/hold`"]
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
         let request = self.client.post(url).build()?;
@@ -174,7 +174,7 @@ impl Client {
         }
     }
 
-    #[doc = "control_resume: POST /v1/control/resume"]
+    #[doc = "Sends a `POST` request to `/v1/control/resume`"]
     pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/resume", self.baseurl,);
         let request = self.client.post(url).build()?;
@@ -186,7 +186,7 @@ impl Client {
         }
     }
 
-    #[doc = "task_get: GET /v1/task/{task}"]
+    #[doc = "Sends a `GET` request to `/v1/task/{task}`"]
     pub async fn task_get<'a>(
         &'a self,
         task: &'a str,
@@ -205,7 +205,7 @@ impl Client {
         }
     }
 
-    #[doc = "tasks_get: GET /v1/tasks"]
+    #[doc = "Sends a `GET` request to `/v1/tasks`"]
     pub async fn tasks_get<'a>(&'a self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
         let request = self.client.get(url).build()?;
@@ -217,7 +217,7 @@ impl Client {
         }
     }
 
-    #[doc = "task_submit: POST /v1/tasks"]
+    #[doc = "Sends a `POST` request to `/v1/tasks`"]
     pub async fn task_submit<'a>(
         &'a self,
         body: &'a types::TaskSubmit,
@@ -232,7 +232,7 @@ impl Client {
         }
     }
 
-    #[doc = "task_events_get: GET /v1/tasks/{task}/events"]
+    #[doc = "Sends a `GET` request to `/v1/tasks/{task}/events`"]
     pub async fn task_events_get<'a>(
         &'a self,
         task: &'a str,
@@ -257,7 +257,7 @@ impl Client {
         }
     }
 
-    #[doc = "task_outputs_get: GET /v1/tasks/{task}/outputs"]
+    #[doc = "Sends a `GET` request to `/v1/tasks/{task}/outputs`"]
     pub async fn task_outputs_get<'a>(
         &'a self,
         task: &'a str,
@@ -276,7 +276,7 @@ impl Client {
         }
     }
 
-    #[doc = "task_output_download: GET /v1/tasks/{task}/outputs/{output}"]
+    #[doc = "Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`"]
     pub async fn task_output_download<'a>(
         &'a self,
         task: &'a str,
@@ -297,7 +297,7 @@ impl Client {
         }
     }
 
-    #[doc = "user_create: POST /v1/users"]
+    #[doc = "Sends a `POST` request to `/v1/users`"]
     pub async fn user_create<'a>(
         &'a self,
         body: &'a types::UserCreate,
@@ -312,7 +312,7 @@ impl Client {
         }
     }
 
-    #[doc = "whoami: GET /v1/whoami"]
+    #[doc = "Sends a `GET` request to `/v1/whoami`"]
     pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
         let url = format!("{}/v1/whoami", self.baseurl,);
         let request = self.client.get(url).build()?;
@@ -324,7 +324,7 @@ impl Client {
         }
     }
 
-    #[doc = "worker_bootstrap: POST /v1/worker/bootstrap"]
+    #[doc = "Sends a `POST` request to `/v1/worker/bootstrap`"]
     pub async fn worker_bootstrap<'a>(
         &'a self,
         body: &'a types::WorkerBootstrap,
@@ -339,7 +339,7 @@ impl Client {
         }
     }
 
-    #[doc = "worker_ping: GET /v1/worker/ping"]
+    #[doc = "Sends a `GET` request to `/v1/worker/ping`"]
     pub async fn worker_ping<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
@@ -353,7 +353,7 @@ impl Client {
         }
     }
 
-    #[doc = "worker_task_append: POST /v1/worker/task/{task}/append"]
+    #[doc = "Sends a `POST` request to `/v1/worker/task/{task}/append`"]
     pub async fn worker_task_append<'a>(
         &'a self,
         task: &'a str,
@@ -373,7 +373,7 @@ impl Client {
         }
     }
 
-    #[doc = "worker_task_upload_chunk: POST /v1/worker/task/{task}/chunk"]
+    #[doc = "Sends a `POST` request to `/v1/worker/task/{task}/chunk`"]
     pub async fn worker_task_upload_chunk<'a, B: Into<reqwest::Body>>(
         &'a self,
         task: &'a str,
@@ -393,7 +393,7 @@ impl Client {
         }
     }
 
-    #[doc = "worker_task_complete: POST /v1/worker/task/{task}/complete"]
+    #[doc = "Sends a `POST` request to `/v1/worker/task/{task}/complete`"]
     pub async fn worker_task_complete<'a>(
         &'a self,
         task: &'a str,
@@ -413,7 +413,7 @@ impl Client {
         }
     }
 
-    #[doc = "worker_task_add_output: POST /v1/worker/task/{task}/output"]
+    #[doc = "Sends a `POST` request to `/v1/worker/task/{task}/output`"]
     pub async fn worker_task_add_output<'a>(
         &'a self,
         task: &'a str,
@@ -433,7 +433,7 @@ impl Client {
         }
     }
 
-    #[doc = "workers_list: GET /v1/workers"]
+    #[doc = "Sends a `GET` request to `/v1/workers`"]
     pub async fn workers_list<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
@@ -447,7 +447,7 @@ impl Client {
         }
     }
 
-    #[doc = "workers_recycle: POST /v1/workers/recycle"]
+    #[doc = "Sends a `POST` request to `/v1/workers/recycle`"]
     pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/workers/recycle", self.baseurl,);
         let request = self.client.post(url).build()?;

@@ -43,7 +43,7 @@ impl Client {
         &self.client
     }
 
-    #[doc = "renamed_parameters: GET /{ref}/{type}/{trait}"]
+    #[doc = "Sends a `GET` request to `/{ref}/{type}/{trait}`"]
     pub async fn renamed_parameters<'a>(
         &'a self,
         ref_: &'a str,

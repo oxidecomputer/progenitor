@@ -43,7 +43,7 @@ impl Client {
         &self.client
     }
 
-    #[doc = "freeform_response: GET "]
+    #[doc = "Sends a `GET` request to ``"]
     pub async fn freeform_response<'a>(
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
