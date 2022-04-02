@@ -268,78 +268,8 @@ impl Generator {
         }
         let tmp = crate::template::parse(path)?;
         let names = tmp.names();
-        raw_params.sort_by(
-            |OperationParameter {
-                 kind: a_kind,
-                 api_name: a_name,
-                 ..
-             },
-             OperationParameter {
-                 kind: b_kind,
-                 api_name: b_name,
-                 ..
-             }| {
-                match (a_kind, b_kind) {
-                    // Path params are first and are in positional order.
-                    (
-                        OperationParameterKind::Path,
-                        OperationParameterKind::Path,
-                    ) => {
-                        let a_index = names
-                            .iter()
-                            .position(|x| x == a_name)
-                            .unwrap_or_else(|| {
-                                panic!("{} missing from path", a_name)
-                            });
-                        let b_index = names
-                            .iter()
-                            .position(|x| x == b_name)
-                            .unwrap_or_else(|| {
-                                panic!("{} missing from path", b_name)
-                            });
-                        a_index.cmp(&b_index)
-                    }
-                    (
-                        OperationParameterKind::Path,
-                        OperationParameterKind::Query(_),
-                    ) => Ordering::Less,
-                    (
-                        OperationParameterKind::Path,
-                        OperationParameterKind::Body,
-                    ) => Ordering::Less,
 
-                    // Query params are in lexicographic order.
-                    (
-                        OperationParameterKind::Query(_),
-                        OperationParameterKind::Body,
-                    ) => Ordering::Less,
-                    (
-                        OperationParameterKind::Query(_),
-                        OperationParameterKind::Query(_),
-                    ) => a_name.cmp(b_name),
-                    (
-                        OperationParameterKind::Query(_),
-                        OperationParameterKind::Path,
-                    ) => Ordering::Greater,
-
-                    // Body params are last and should be singular.
-                    (
-                        OperationParameterKind::Body,
-                        OperationParameterKind::Path,
-                    ) => Ordering::Greater,
-                    (
-                        OperationParameterKind::Body,
-                        OperationParameterKind::Query(_),
-                    ) => Ordering::Greater,
-                    (
-                        OperationParameterKind::Body,
-                        OperationParameterKind::Body,
-                    ) => {
-                        panic!("should only be one body")
-                    }
-                }
-            },
-        );
+        sort_params(&mut raw_params, &names);
 
         let mut success = false;
 
@@ -885,18 +815,23 @@ impl Generator {
         // If we have a success range and a default, we can pop off the default
         // since it will never be hit. Note that this is a no-op for error
         // responses.
-        if let (
-            Some(OperationResponse {
-                status_code: OperationResponseStatus::Range(2),
-                ..
-            }),
-            Some(OperationResponse {
-                status_code: OperationResponseStatus::Default,
-                ..
-            }),
-        ) = last_two(&response_items)
         {
-            response_items.pop();
+            let len = response_items.len();
+            if len >= 2 {
+                if let (
+                    OperationResponse {
+                        status_code: OperationResponseStatus::Range(2),
+                        ..
+                    },
+                    OperationResponse {
+                        status_code: OperationResponseStatus::Default,
+                        ..
+                    },
+                ) = (&response_items[len - 2], &response_items[len - 1])
+                {
+                    response_items.pop();
+                }
+            }
         }
 
         let response_types = response_items
@@ -1118,14 +1053,6 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
     buf
 }
 
-fn last_two<T>(items: &[T]) -> (Option<&T>, Option<&T>) {
-    match items.len() {
-        0 => (None, None),
-        1 => (Some(&items[0]), None),
-        n => (Some(&items[n - 2]), Some(&items[n - 1])),
-    }
-}
-
 /// Make the schema optional if it isn't already.
 fn make_optional(schema: schemars::schema::Schema) -> schemars::schema::Schema {
     match &schema {
@@ -1160,6 +1087,77 @@ fn make_optional(schema: schemars::schema::Schema) -> schemars::schema::Schema {
             })
         }
     }
+}
+
+fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
+    raw_params.sort_by(
+        |OperationParameter {
+             kind: a_kind,
+             api_name: a_name,
+             ..
+         },
+         OperationParameter {
+             kind: b_kind,
+             api_name: b_name,
+             ..
+         }| {
+            match (a_kind, b_kind) {
+                // Path params are first and are in positional order.
+                (
+                    OperationParameterKind::Path,
+                    OperationParameterKind::Path,
+                ) => {
+                    let a_index =
+                        names.iter().position(|x| x == a_name).unwrap_or_else(
+                            || panic!("{} missing from path", a_name),
+                        );
+                    let b_index =
+                        names.iter().position(|x| x == b_name).unwrap_or_else(
+                            || panic!("{} missing from path", b_name),
+                        );
+                    a_index.cmp(&b_index)
+                }
+                (
+                    OperationParameterKind::Path,
+                    OperationParameterKind::Query(_),
+                ) => Ordering::Less,
+                (
+                    OperationParameterKind::Path,
+                    OperationParameterKind::Body,
+                ) => Ordering::Less,
+
+                // Query params are in lexicographic order.
+                (
+                    OperationParameterKind::Query(_),
+                    OperationParameterKind::Body,
+                ) => Ordering::Less,
+                (
+                    OperationParameterKind::Query(_),
+                    OperationParameterKind::Query(_),
+                ) => a_name.cmp(b_name),
+                (
+                    OperationParameterKind::Query(_),
+                    OperationParameterKind::Path,
+                ) => Ordering::Greater,
+
+                // Body params are last and should be singular.
+                (
+                    OperationParameterKind::Body,
+                    OperationParameterKind::Path,
+                ) => Ordering::Greater,
+                (
+                    OperationParameterKind::Body,
+                    OperationParameterKind::Query(_),
+                ) => Ordering::Greater,
+                (
+                    OperationParameterKind::Body,
+                    OperationParameterKind::Body,
+                ) => {
+                    panic!("should only be one body")
+                }
+            }
+        },
+    );
 }
 
 trait ParameterDataExt {
