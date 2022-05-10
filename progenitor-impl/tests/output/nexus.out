@@ -49,6 +49,7 @@ pub mod types {
         pub device_path: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         pub project_id: uuid::Uuid,
         pub size: ByteCount,
@@ -66,6 +67,7 @@ pub mod types {
     pub struct DiskCreate {
         pub description: String,
         pub name: Name,
+        #[doc = "size of the Disk"]
         pub size: ByteCount,
         #[doc = "id for snapshot from which the Disk should be created, if any"]
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -88,6 +90,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    #[doc = "State of a Disk (primarily: attached or not)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "state", content = "instance")]
     pub enum DiskState {
@@ -186,8 +189,11 @@ pub mod types {
         pub hostname: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "memory allocated for this Instance"]
         pub memory: ByteCount,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
+        #[doc = "number of CPUs allocated for this Instance"]
         pub ncpus: InstanceCpuCount,
         #[doc = "id for the project containing this Instance"]
         pub project_id: uuid::Uuid,
@@ -217,6 +223,7 @@ pub mod types {
         pub memory: ByteCount,
         pub name: Name,
         pub ncpus: InstanceCpuCount,
+        #[doc = "The network interfaces to be created for this instance."]
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub network_interfaces: Option<InstanceNetworkInterfaceAttachment>,
     }
@@ -227,6 +234,7 @@ pub mod types {
         pub dst_sled_uuid: uuid::Uuid,
     }
 
+    #[doc = "Describes an attachment of a `NetworkInterface` to an `Instance`, at the time the instance is created."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
@@ -292,6 +300,7 @@ pub mod types {
         }
     }
 
+    #[doc = "An `IpNet` represents an IP network, either IPv4 or IPv6."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub enum IpNet {
         V4(Ipv4Net),
@@ -400,7 +409,9 @@ pub mod types {
         pub instance_id: uuid::Uuid,
         #[doc = "The IP address assigned to this interface."]
         pub ip: String,
+        #[doc = "The MAC address assigned to this interface."]
         pub mac: MacAddr,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "The subnet to which the interface belongs."]
         pub subnet_id: uuid::Uuid,
@@ -420,7 +431,9 @@ pub mod types {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ip: Option<String>,
         pub name: Name,
+        #[doc = "The VPC Subnet in which to create the interface."]
         pub subnet_name: Name,
+        #[doc = "The VPC in which to create the interface."]
         pub vpc_name: Name,
     }
 
@@ -441,6 +454,7 @@ pub mod types {
         pub description: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "timestamp when this resource was created"]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
@@ -481,6 +495,7 @@ pub mod types {
         pub description: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         pub organization_id: uuid::Uuid,
         #[doc = "timestamp when this resource was created"]
@@ -522,6 +537,7 @@ pub mod types {
         pub description: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "timestamp when this resource was created"]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
@@ -566,6 +582,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    #[doc = "A `RouteDestination` is used to match traffic with a routing rule, on the destination of that traffic.\n\nWhen traffic is to be sent to a destination that is within a given `RouteDestination`, the corresponding [`RouterRoute`] applies, and traffic will be forward to the [`RouteTarget`] for that rule."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
@@ -579,6 +596,7 @@ pub mod types {
         Subnet(Name),
     }
 
+    #[doc = "A `RouteTarget` describes the possible locations that traffic matching a route destination can be sent."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
@@ -602,7 +620,9 @@ pub mod types {
         pub destination: RouteDestination,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "Describes the kind of router. Set at creation. `read-only`"]
         pub kind: RouterRouteKind,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "The VPC Router to which the route belongs."]
         pub router_id: uuid::Uuid,
@@ -725,6 +745,7 @@ pub mod types {
         pub description: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         pub service_address: String,
         #[doc = "timestamp when this resource was created"]
@@ -751,6 +772,7 @@ pub mod types {
         pub disk_id: uuid::Uuid,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         pub project_id: uuid::Uuid,
         pub size: ByteCount,
@@ -764,6 +786,7 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SnapshotCreate {
         pub description: String,
+        #[doc = "The name of the disk to be snapshotted"]
         pub disk: Name,
         pub name: Name,
     }
@@ -814,6 +837,7 @@ pub mod types {
         pub description: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "timestamp when this resource was created"]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
@@ -836,11 +860,13 @@ pub mod types {
     pub struct Vpc {
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
+        #[doc = "The name used for the VPC in DNS."]
         pub dns_name: Name,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
-        #[serde(rename = "ipv6_prefix")]
-        pub ipv_6_prefix: Ipv6Net,
+        #[doc = "The unique local IPv6 address range for subnets in this VPC"]
+        pub ipv6_prefix: Ipv6Net,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "id for the project containing this VPC"]
         pub project_id: uuid::Uuid,
@@ -857,28 +883,30 @@ pub mod types {
     pub struct VpcCreate {
         pub description: String,
         pub dns_name: Name,
-        #[serde(
-            rename = "ipv6_prefix",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
-        pub ipv_6_prefix: Option<Ipv6Net>,
+        #[doc = "The IPv6 prefix for this VPC.\n\nAll IPv6 subnets created from this VPC must be taken from this range, which sould be a Unique Local Address in the range `fd00::/48`. The default VPC Subnet will have the first `/64` range from this prefix."]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub ipv6_prefix: Option<Ipv6Net>,
         pub name: Name,
     }
 
     #[doc = "A single rule in a VPC firewall"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRule {
+        #[doc = "whether traffic matching the rule should be allowed or dropped"]
         pub action: VpcFirewallRuleAction,
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
+        #[doc = "whether this rule is for incoming or outgoing traffic"]
         pub direction: VpcFirewallRuleDirection,
+        #[doc = "reductions on the scope of the rule"]
         pub filters: VpcFirewallRuleFilter,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "the relative priority of this rule"]
         pub priority: u16,
+        #[doc = "whether this rule is in effect"]
         pub status: VpcFirewallRuleStatus,
         #[doc = "list of sets of instances that the rule applies to"]
         pub targets: Vec<VpcFirewallRuleTarget>,
@@ -938,6 +966,7 @@ pub mod types {
         pub protocols: Option<Vec<VpcFirewallRuleProtocol>>,
     }
 
+    #[doc = "The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis of its source or destination host."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
@@ -991,6 +1020,7 @@ pub mod types {
         }
     }
 
+    #[doc = "A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to which a firewall rule applies."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
@@ -1009,14 +1039,19 @@ pub mod types {
     #[doc = "A single rule in a VPC firewall"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRuleUpdate {
+        #[doc = "whether traffic matching the rule should be allowed or dropped"]
         pub action: VpcFirewallRuleAction,
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
+        #[doc = "whether this rule is for incoming or outgoing traffic"]
         pub direction: VpcFirewallRuleDirection,
+        #[doc = "reductions on the scope of the rule"]
         pub filters: VpcFirewallRuleFilter,
+        #[doc = "name of the rule, unique to this VPC"]
         pub name: Name,
         #[doc = "the relative priority of this rule"]
         pub priority: u16,
+        #[doc = "whether this rule is in effect"]
         pub status: VpcFirewallRuleStatus,
         #[doc = "list of sets of instances that the rule applies to"]
         pub targets: Vec<VpcFirewallRuleTarget>,
@@ -1052,6 +1087,7 @@ pub mod types {
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
         pub kind: VpcRouterKind,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "timestamp when this resource was created"]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
@@ -1111,10 +1147,11 @@ pub mod types {
         pub description: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
-        #[serde(rename = "ipv4_block")]
-        pub ipv_4_block: Ipv4Net,
-        #[serde(rename = "ipv6_block")]
-        pub ipv_6_block: Ipv6Net,
+        #[doc = "The IPv4 subnet CIDR block."]
+        pub ipv4_block: Ipv4Net,
+        #[doc = "The IPv6 subnet CIDR block."]
+        pub ipv6_block: Ipv6Net,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         #[doc = "timestamp when this resource was created"]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
@@ -1128,14 +1165,11 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetCreate {
         pub description: String,
-        #[serde(rename = "ipv4_block")]
-        pub ipv_4_block: Ipv4Net,
-        #[serde(
-            rename = "ipv6_block",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
-        pub ipv_6_block: Option<Ipv6Net>,
+        #[doc = "The IPv4 address range for this subnet.\n\nIt must be allocated from an RFC 1918 private address range, and must not overlap with any other existing subnet in the VPC."]
+        pub ipv4_block: Ipv4Net,
+        #[doc = "The IPv6 address range for this subnet.\n\nIt must be allocated from the RFC 4193 Unique Local Address range, with the prefix equal to the parent VPC's prefix. A random `/64` block will be assigned if one is not provided. It must not overlap with any existing subnet in the VPC."]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub ipv6_block: Option<Ipv6Net>,
         pub name: Name,
     }
 
@@ -1154,18 +1188,10 @@ pub mod types {
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
-        #[serde(
-            rename = "ipv4_block",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
-        pub ipv_4_block: Option<Ipv4Net>,
-        #[serde(
-            rename = "ipv6_block",
-            default,
-            skip_serializing_if = "Option::is_none"
-        )]
-        pub ipv_6_block: Option<Ipv6Net>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub ipv4_block: Option<Ipv4Net>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub ipv6_block: Option<Ipv6Net>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
     }

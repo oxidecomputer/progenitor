@@ -120,6 +120,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
         };
 
         let metadata = Some(Box::new(metadata)).reduce();
+        let extensions = extensions.into_iter().collect();
 
         match &self.schema_kind {
             openapiv3::SchemaKind::Type(openapiv3::Type::String(
@@ -144,7 +145,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     pattern: pattern.clone(),
                 }))
                 .reduce(),
-                extensions: extensions.into_iter().collect(),
+                extensions,
                 ..Default::default()
             },
             openapiv3::SchemaKind::Type(openapiv3::Type::Number(
@@ -188,7 +189,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         },
                     ))
                     .reduce(),
-                    extensions: extensions.into_iter().collect(),
+                    extensions,
                     ..Default::default()
                 }
             }
@@ -236,7 +237,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         },
                     ))
                     .reduce(),
-                    extensions: extensions.into_iter().collect(),
+                    extensions,
                     ..Default::default()
                 }
             }
@@ -265,7 +266,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     property_names: None,
                 }))
                 .reduce(),
-                extensions: extensions.into_iter().collect(),
+                extensions,
                 ..Default::default()
             },
 
@@ -295,7 +296,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     contains: None,
                 }))
                 .reduce(),
-                extensions: extensions.into_iter().collect(),
+                extensions,
                 ..Default::default()
             },
 
@@ -306,59 +307,63 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         schemars::schema::InstanceType::Boolean,
                         nullable,
                     ),
-                    extensions: extensions.into_iter().collect(),
+                    extensions,
                     ..Default::default()
                 }
             }
 
             openapiv3::SchemaKind::OneOf { one_of } => {
                 schemars::schema::SchemaObject {
+                    metadata,
                     subschemas: Some(Box::new(
                         schemars::schema::SubschemaValidation {
                             one_of: Some(one_of.convert()),
                             ..Default::default()
                         },
                     )),
-                    extensions: extensions.into_iter().collect(),
+                    extensions,
                     ..Default::default()
                 }
             }
 
             openapiv3::SchemaKind::AllOf { all_of } => {
                 schemars::schema::SchemaObject {
+                    metadata,
                     subschemas: Some(Box::new(
                         schemars::schema::SubschemaValidation {
                             all_of: Some(all_of.convert()),
                             ..Default::default()
                         },
                     )),
-                    extensions: extensions.into_iter().collect(),
+                    extensions,
                     ..Default::default()
                 }
             }
 
             openapiv3::SchemaKind::AnyOf { any_of } => {
                 schemars::schema::SchemaObject {
+                    metadata,
                     subschemas: Some(Box::new(
                         schemars::schema::SubschemaValidation {
                             any_of: Some(any_of.convert()),
                             ..Default::default()
                         },
                     )),
-                    extensions: extensions.into_iter().collect(),
+                    extensions,
                     ..Default::default()
                 }
             }
 
             openapiv3::SchemaKind::Not { not } => {
                 schemars::schema::SchemaObject {
+                    metadata,
                     subschemas: Some(Box::new(
                         schemars::schema::SubschemaValidation {
                             not: Some(Box::new(not.convert())),
                             ..Default::default()
                         },
                     )),
-                    extensions: extensions.into_iter().collect(),
+                    extensions,
                     ..Default::default()
                 }
             }
@@ -396,10 +401,11 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 && all_of.is_empty()
                 && any_of.is_empty() =>
             {
-                let mut schema =
-                    schemars::schema::Schema::Bool(true).into_object();
-                schema.extensions = extensions.into_iter().collect();
-                schema
+                schemars::schema::SchemaObject {
+                    metadata,
+                    extensions,
+                    ..schemars::schema::Schema::Bool(true).into_object()
+                }
             }
 
             // A simple null value.
@@ -441,7 +447,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     instance_type: Some(
                         schemars::schema::InstanceType::Null.into(),
                     ),
-                    extensions: extensions.into_iter().collect(),
+                    extensions,
                     ..Default::default()
                 }
             }

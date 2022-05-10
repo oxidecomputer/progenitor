@@ -166,10 +166,6 @@ where
         bail!("security not presently supported");
     }
 
-    if !api.tags.is_empty() {
-        bail!("tags not presently supported");
-    }
-
     let mut opids = HashSet::new();
     for p in api.paths.paths.iter() {
         match p.1 {

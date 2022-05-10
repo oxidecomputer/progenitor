@@ -5,13 +5,16 @@ use std::{
     collections::{BTreeSet, HashMap},
 };
 
-use convert_case::Case;
 use openapiv3::{Components, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
 use typify::TypeId;
 
-use crate::{template::PathTemplate, util::sanitize, Error, Generator, Result};
+use crate::{
+    template::PathTemplate,
+    util::{sanitize, Case},
+    Error, Generator, Result,
+};
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
 pub(crate) struct OperationMethod {

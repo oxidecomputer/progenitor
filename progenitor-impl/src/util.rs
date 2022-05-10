@@ -1,6 +1,5 @@
 // Copyright 2022 Oxide Computer Company
 
-use convert_case::{Case, Casing};
 use indexmap::IndexMap;
 use openapiv3::{
     Components, Parameter, ReferenceOr, RequestBody, Response, Schema,
@@ -65,14 +64,30 @@ impl ComponentLookup for Schema {
     }
 }
 
+pub(crate) enum Case {
+    Pascal,
+    Snake,
+}
+
 pub(crate) fn sanitize(input: &str, case: Case) -> String {
-    let out = input
-        .replace("'", "")
-        .replace(|c: char| !c.is_xid_continue(), "-")
-        .to_case(case);
+    use heck::{ToPascalCase, ToSnakeCase};
+    let to_case = match case {
+        Case::Pascal => str::to_pascal_case,
+        Case::Snake => str::to_snake_case,
+    };
+    // If every case was special then none of them would be.
+    let out = match input {
+        "+1" => "plus1".to_string(),
+        "-1" => "minus1".to_string(),
+        _ => to_case(
+            &input
+                .replace("'", "")
+                .replace(|c: char| !c.is_xid_continue(), "-"),
+        ),
+    };
 
     let out = match out.chars().next() {
-        None => "x".to_case(case),
+        None => to_case("x"),
         Some(c) if c.is_xid_start() => out,
         Some(_) => format!("_{}", out),
     };
