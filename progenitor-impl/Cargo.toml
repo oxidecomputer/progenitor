@@ -9,7 +9,7 @@ description = "An OpenAPI client generator - core implementation"
 [dependencies]
 heck = "0.4.0"
 getopts = "0.2"
-indexmap = "1.7"
+indexmap = "1.8"
 openapiv3 = "1.0.0"
 proc-macro2 = "1.0"
 quote = "1.0"

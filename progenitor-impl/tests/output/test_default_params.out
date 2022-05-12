@@ -1,0 +1,79 @@
+pub use progenitor_client::{ByteStream, Error, ResponseValue};
+pub mod types {
+    use serde::{Deserialize, Serialize};
+    mod defaults {
+        pub(super) fn default_u64<T, const V: u64>() -> T
+        where
+            T: std::convert::TryFrom<u64>,
+            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
+        {
+            T::try_from(V).unwrap()
+        }
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct BodyWithDefaults {
+        #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
+        pub forty_two: u32,
+        pub s: String,
+        #[serde(default)]
+        pub yes: bool,
+    }
+
+    #[doc = "Error information from a response."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Error {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub error_code: Option<String>,
+        pub message: String,
+        pub request_id: String,
+    }
+}
+
+#[derive(Clone)]
+pub struct Client {
+    baseurl: String,
+    client: reqwest::Client,
+}
+
+impl Client {
+    pub fn new(baseurl: &str) -> Self {
+        let dur = std::time::Duration::from_secs(15);
+        let client = reqwest::ClientBuilder::new()
+            .connect_timeout(dur)
+            .timeout(dur)
+            .build()
+            .unwrap();
+        Self::new_with_client(baseurl, client)
+    }
+
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
+            baseurl: baseurl.to_string(),
+            client,
+        }
+    }
+
+    pub fn baseurl(&self) -> &String {
+        &self.baseurl
+    }
+
+    pub fn client(&self) -> &reqwest::Client {
+        &self.client
+    }
+
+    #[doc = "Sends a `POST` request to ``"]
+    pub async fn default_params<'a>(
+        &'a self,
+        body: &'a types::BodyWithDefaults,
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+        let url = format!("{}", self.baseurl,);
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+        }
+    }
+}

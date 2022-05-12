@@ -112,6 +112,7 @@ impl Generator {
             .collect::<Vec<_>>();
         types.sort_by(|(a_name, _), (b_name, _)| a_name.cmp(b_name));
         let types = types.into_iter().map(|(_, def)| def);
+        let shared = self.type_space.common_code();
 
         let inner_property = self.inner_type.as_ref().map(|inner| {
             quote! {
@@ -131,6 +132,7 @@ impl Generator {
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
+                #shared
                 #(#types)*
             }
 
