@@ -1,0 +1,16 @@
+:showtitle:
+:toc: left
+:icons: font
+:toclevels: 1
+
+= Typify Changelog
+
+// WARNING: This file is modified programmatically by `cargo release` as
+// configured in release.toml.  DO NOT change the format of the headers or the
+// list of raw commits.
+
+// cargo-release: next header goes here (do not change this line)
+
+== Unreleased changes (release date TBD)
+
+First published version

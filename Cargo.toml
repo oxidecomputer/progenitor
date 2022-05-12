@@ -8,15 +8,6 @@ members = [
 	"progenitor-macro",
 ]
 
-default-members = [
-	"example-build",
-	"example-macro",
-	"progenitor",
-	"progenitor-client",
-	"progenitor-impl",
-	"progenitor-macro",
-]
-
 #[patch."https://github.com/oxidecomputer/typify"]
 #typify = { path = "../typify/typify" }
 #[patch."https://github.com/oxidecomputer/dropshot"]
