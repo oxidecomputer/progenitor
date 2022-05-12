@@ -1,13 +1,23 @@
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
+    mod defaults {
+        pub(super) fn default_u64<T, const V: u64>() -> T
+        where
+            T: std::convert::TryFrom<u64>,
+            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
+        {
+            T::try_from(V).unwrap()
+        }
+    }
+
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct BodyWithDefaults {
-        #[serde(rename = "forty-two", default, skip_serializing_if = "Option::is_none")]
-        pub forty_two: Option<u32>,
+        #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
+        pub forty_two: u32,
         pub s: String,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub yes: Option<bool>,
+        #[serde(default)]
+        pub yes: bool,
     }
 
     #[doc = "Error information from a response."]
