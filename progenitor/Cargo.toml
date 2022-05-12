@@ -7,9 +7,9 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 description = "An OpenAPI client generator"
 
 [dependencies]
-progenitor-client = { path = "../progenitor-client" }
-progenitor-impl = { path = "../progenitor-impl" }
-progenitor-macro = { path = "../progenitor-macro" }
+progenitor-client = { version = "0.1.0", path = "../progenitor-client" }
+progenitor-impl = { version = "0.1.0", path = "../progenitor-impl" }
+progenitor-macro = { version = "0.1.0", path = "../progenitor-macro" }
 anyhow = "1.0"
 getopts = "0.2"
 openapiv3 = "1.0.0"
