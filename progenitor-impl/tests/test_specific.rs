@@ -130,7 +130,7 @@ async fn default_params(
     unreachable!();
 }
 
-/// Test freeform responses.
+/// Test default type values.
 #[test]
 fn test_default_params() {
     let mut api = ApiDescription::new();
