@@ -117,8 +117,7 @@ fn main() -> Result<()> {
             /*
              * Create the Rust source file containing the support code:
              */
-            let progenitor_client_code =
-                include_str!("../../progenitor-client/src/lib.rs");
+            let progenitor_client_code = progenitor_client::code();
             let mut clientrs = src;
             clientrs.push("progenitor_client.rs");
             save(clientrs, progenitor_client_code)?;
