@@ -13,4 +13,8 @@
 
 == Unreleased changes (release date TBD)
 
+https://github.com/oxidecomputer/progenitor/compare/v0.1.1\...HEAD[Full list of commits]
+
+== 0.1.1 (released 2022-05-13)
+
 First published version
