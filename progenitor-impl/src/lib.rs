@@ -216,6 +216,9 @@ impl Generator {
         if self.type_space.uses_chrono() {
             deps.push("chrono = { version = \"0.4\", features = [\"serde\"] }")
         }
+        if self.type_space.uses_rust_decimal() {
+            deps.push("rust_decimal = \"1.23\"")
+        }
         if self.uses_futures {
             deps.push("futures = \"0.3\"")
         }
