@@ -27,4 +27,4 @@ unicode-xid = "0.2"
 dropshot = { git = "https://github.com/oxidecomputer/dropshot" }
 expectorate = "1.0"
 http = "0.2.6"
-hyper = "0.14.17"
+hyper = "0.14.18"
