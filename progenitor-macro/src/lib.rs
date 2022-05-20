@@ -21,7 +21,7 @@ use syn::LitStr;
 /// The more complex form accepts the following key-value pairs in any order:
 /// ```ignore
 /// generate_api!(
-///     spec = "path/to/spec.json"
+///     spec = "path/to/spec.json",
 ///     [ inner_type = path::to:Type, ]
 ///     [ pre_hook = closure::or::path::to::function, ]
 ///     [ post_hook = closure::or::path::to::function, ]

@@ -44,7 +44,19 @@ Similarly if there is a `format` field set to `uuid`:
 
 ```diff
 [dependencies]
-+uuid = { version = "0.8", features = ["serde", "v4"] }
++uuid = { version = "1.0.0", features = ["serde", "v4"] }
+```
+
+The macro has some additional fancy options to control the generated code:
+
+```rust
+generate_api!(
+    spec = "path/to/openapi_document.json",       // The OpenAPI document
+    inner_type = my_client::InnerType,            // Client inner type available to pre and post hooks
+    pre_hook = closure::or::path::to::function,   // Hook invoked before issuing the HTTP request
+    post_hook = closure::or::path::to::function,  // Hook invoked prior to receiving the HTTP response
+    derives = [ schemars::JsonSchema ],           // Additional derive macros applied to generated types
+);
 ```
 
 Note that the macro will be re-evaluated when the OpenAPI json document
@@ -135,7 +147,7 @@ percent-encoding = "2.1"
 reqwest = { version = "0.11", features = ["json", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-uuid = { version = "0.8", features = ["serde", "v4"] }
+uuid = { version = ">=0.8.0, <2.0.0", features = ["serde", "v4"] }
 ```
 
 Note that there is a dependency on `percent-encoding` which macro- and
