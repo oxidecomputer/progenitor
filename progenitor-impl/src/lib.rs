@@ -210,7 +210,7 @@ impl Generator {
         ];
         if self.type_space.uses_uuid() {
             deps.push(
-                "uuid = { version = \"0.8\", features = [\"serde\", \"v4\"] }",
+                "uuid = { version = \">=0.8.0, <2.0.0\", features = [\"serde\", \"v4\"] }",
             )
         }
         if self.type_space.uses_chrono() {
