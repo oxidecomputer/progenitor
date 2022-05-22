@@ -3,6 +3,7 @@
 use std::{
     cmp::Ordering,
     collections::{BTreeSet, HashMap},
+    str::FromStr,
 };
 
 use openapiv3::{Components, Response, StatusCode};
@@ -17,15 +18,60 @@ use crate::{
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
+/// The intermediate representation of an operation that will become a method.
 pub(crate) struct OperationMethod {
     operation_id: String,
-    method: String,
+    method: HttpMethod,
     path: PathTemplate,
     summary: Option<String>,
     description: Option<String>,
     params: Vec<OperationParameter>,
+    raw_body_param: bool,
     responses: Vec<OperationResponse>,
     dropshot_paginated: Option<DropshotPagination>,
+}
+
+enum HttpMethod {
+    Get,
+    Put,
+    Post,
+    Delete,
+    Options,
+    Head,
+    Patch,
+    Trace,
+}
+
+impl std::str::FromStr for HttpMethod {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        match s {
+            "get" => Ok(Self::Get),
+            "put" => Ok(Self::Put),
+            "post" => Ok(Self::Post),
+            "delete" => Ok(Self::Delete),
+            "options" => Ok(Self::Options),
+            "head" => Ok(Self::Head),
+            "patch" => Ok(Self::Patch),
+            "trace" => Ok(Self::Trace),
+            _ => Err(Error::InternalError(format!("bad method: {}", s))),
+        }
+    }
+}
+impl HttpMethod {
+    fn as_str(&self) -> &'static str {
+        match self {
+            HttpMethod::Get => "get",
+            HttpMethod::Put => "put",
+            HttpMethod::Post => "post",
+            HttpMethod::Delete => "delete",
+            HttpMethod::Options => "options",
+            HttpMethod::Head => "head",
+            HttpMethod::Patch => "patch",
+            HttpMethod::Trace => "trace",
+        }
+    }
 }
 
 struct DropshotPagination {
@@ -154,7 +200,7 @@ impl Generator {
         let operation_id = operation.operation_id.as_ref().unwrap();
 
         let mut query: Vec<(String, bool)> = Vec::new();
-        let mut raw_params = operation
+        let mut params = operation
             .parameters
             .iter()
             .map(|parameter| {
@@ -189,14 +235,10 @@ impl Generator {
                     }
                     openapiv3::Parameter::Query {
                         parameter_data,
-                        allow_reserved: _,
+                        allow_reserved: _, // We always encode reserved chars
                         style: openapiv3::QueryStyle::Form,
-                        allow_empty_value,
+                        allow_empty_value: _, // Irrelevant for this client
                     } => {
-                        if let Some(true) = allow_empty_value {
-                            todo!("allow empty value is a no go");
-                        }
-
                         let mut schema = parameter_data.schema()?.to_schema();
                         let name = sanitize(
                             &format!(
@@ -229,13 +271,39 @@ impl Generator {
                             ),
                         })
                     }
-                    x => todo!("unhandled parameter type: {:#?}", x),
+
+                    openapiv3::Parameter::Path { style, .. } => {
+                        Err(Error::UnexpectedFormat(format!(
+                            "unsupported style of path parameter {:#?}",
+                            style,
+                        )))
+                    }
+                    openapiv3::Parameter::Query { style, .. } => {
+                        Err(Error::UnexpectedFormat(format!(
+                            "unsupported style of query parameter {:#?}",
+                            style,
+                        )))
+                    }
+                    header @ openapiv3::Parameter::Header { .. } => {
+                        Err(Error::UnexpectedFormat(format!(
+                            "header parameters are not supported {:#?}",
+                            header,
+                        )))
+                    }
+                    cookie @ openapiv3::Parameter::Cookie { .. } => {
+                        Err(Error::UnexpectedFormat(format!(
+                            "cookie parameters are not supported {:#?}",
+                            cookie,
+                        )))
+                    }
                 }
             })
             .collect::<Result<Vec<_>>>()?;
+        let mut raw_body_param = false;
         if let Some(b) = &operation.request_body {
             let b = b.item(components)?;
             let typ = if b.is_binary(components)? {
+                raw_body_param = true;
                 OperationParameterType::RawBody
             } else {
                 let mt = b.content_json()?;
@@ -261,7 +329,7 @@ impl Generator {
                 }
             };
 
-            raw_params.push(OperationParameter {
+            params.push(OperationParameter {
                 name: "body".to_string(),
                 api_name: "body".to_string(),
                 description: b.description.clone(),
@@ -272,7 +340,7 @@ impl Generator {
         let tmp = crate::template::parse(path)?;
         let names = tmp.names();
 
-        sort_params(&mut raw_params, &names);
+        sort_params(&mut params, &names);
 
         let mut success = false;
 
@@ -377,30 +445,32 @@ impl Generator {
         }
 
         let dropshot_paginated =
-            self.dropshot_pagination_data(operation, &raw_params, &responses);
+            self.dropshot_pagination_data(operation, &params, &responses);
 
         Ok(OperationMethod {
             operation_id: sanitize(operation_id, Case::Snake),
-            method: method.to_string(),
+            method: HttpMethod::from_str(method)?,
             path: tmp,
             summary: operation.summary.clone().filter(|s| !s.is_empty()),
             description: operation
                 .description
                 .clone()
                 .filter(|s| !s.is_empty()),
-            params: raw_params,
+            params,
+            raw_body_param,
             responses,
             dropshot_paginated,
         })
     }
 
-    pub(crate) fn process_method(
+    pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
     ) -> Result<TokenStream> {
         let operation_id = format_ident!("{}", method.operation_id);
-        let mut bounds_items: Vec<TokenStream> = Vec::new();
-        let typed_params = method
+
+        // Render each parameter as it will appear in the method signature.
+        let params = method
             .params
             .iter()
             .map(|param| {
@@ -412,23 +482,22 @@ impl Generator {
                         .unwrap()
                         .parameter_ident_with_lifetime("a"),
                     OperationParameterType::RawBody => {
-                        bounds_items.push(quote! { B: Into<reqwest::Body> });
                         quote! { B }
                     }
                 };
-                (
-                    param,
-                    quote! {
-                        #name: #typ
-                    },
-                )
+                quote! {
+                    #name: #typ
+                }
             })
             .collect::<Vec<_>>();
 
-        let params = typed_params.iter().map(|(_, stream)| stream);
+        let bounds = if method.raw_body_param {
+            quote! { <'a, B: Into<reqwest::Body> > }
+        } else {
+            quote! { <'a> }
+        };
 
-        let bounds = quote! { < 'a, #(#bounds_items),* > };
-
+        // Generate code for query parameters.
         let query_items = method
             .params
             .iter()
@@ -465,19 +534,21 @@ impl Generator {
             (query_build, query_use)
         };
 
-        let url_path = method.path.compile(
-            method
-                .params
-                .iter()
-                .filter_map(|param| match &param.kind {
-                    OperationParameterKind::Path => {
-                        Some((&param.api_name, &param.name))
-                    }
-                    _ => None,
-                })
-                .collect(),
-        );
+        // Generate the path rename map; then use it to generate code for
+        // assigning the path parameters to the `url` variable.
+        let url_renames = method
+            .params
+            .iter()
+            .filter_map(|param| match &param.kind {
+                OperationParameterKind::Path => {
+                    Some((&param.api_name, &param.name))
+                }
+                _ => None,
+            })
+            .collect();
+        let url_path = method.path.compile(url_renames);
 
+        // Generate code to handle the body...
         let body_func =
             method.params.iter().filter_map(|param| match &param.kind {
                 OperationParameterKind::Body => match &param.typ {
@@ -490,7 +561,7 @@ impl Generator {
                 },
                 _ => None,
             });
-
+        // ... and there can be at most one body.
         assert!(body_func.clone().count() <= 1);
 
         let (success_response_items, response_type) = self.extract_responses(
@@ -604,8 +675,7 @@ impl Generator {
             }
         });
 
-        // TODO validate that method is one of the expected methods.
-        let method_func = format_ident!("{}", method.method.to_lowercase());
+        let method_func = format_ident!("{}", method.method.as_str());
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -636,7 +706,7 @@ impl Generator {
                     // These will be of the form...
                     // 201 => ResponseValue::from_response(response).await,
                     // 200..299 => ResponseValue::empty(response),
-                    // TODO this isn't implemented
+                    // TODO this kind of enumerated response isn't implemented
                     // ... or in the case of an operation with multiple
                     // successful response types...
                     // 200 => {
@@ -677,18 +747,19 @@ impl Generator {
 
             // The parameters are the same as those to the paged method, but
             // without "page_token"
-            let stream_params =
-                typed_params.iter().filter_map(|(param, stream)| {
-                    if param.api_name.as_str() == "page_token" {
+            let stream_params = method.params.iter().zip(params).filter_map(
+                |(param, stream)| {
+                    if param.name.as_str() == "page_token" {
                         None
                     } else {
                         Some(stream)
                     }
-                });
+                },
+            );
 
             // The values passed to get the first page are the inputs to the
             // stream method with "None" for the page_token.
-            let first_params = typed_params.iter().map(|(param, _)| {
+            let first_params = method.params.iter().map(|param| {
                 if param.api_name.as_str() == "page_token" {
                     // The page_token is None when getting the first page.
                     quote! { None }
@@ -702,7 +773,7 @@ impl Generator {
             // - the state variable for the page_token
             // - None for all other query parameters
             // - The method inputs for non-query parameters
-            let step_params = typed_params.iter().map(|(param, _)| {
+            let step_params = method.params.iter().map(|param| {
                 if param.api_name.as_str() == "page_token" {
                     quote! { state.as_deref() }
                 } else if let OperationParameterKind::Query(_) = param.kind {
@@ -987,7 +1058,7 @@ fn make_doc_comment(method: &OperationMethod) -> String {
 
     buf.push_str(&format!(
         "Sends a `{}` request to `{}`",
-        method.method.to_ascii_uppercase(),
+        method.method.as_str().to_ascii_uppercase(),
         method.path.to_string(),
     ));
 
@@ -1026,7 +1097,7 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
 
     buf.push_str(&format!(
         "Sends repeated `{}` requests to `{}` until there are no more results.",
-        method.method.to_ascii_uppercase(),
+        method.method.as_str().to_ascii_uppercase(),
         method.path.to_string(),
     ));
 
@@ -1171,9 +1242,9 @@ impl ParameterDataExt for openapiv3::ParameterData {
     fn schema(&self) -> Result<&openapiv3::ReferenceOr<openapiv3::Schema>> {
         match &self.format {
             openapiv3::ParameterSchemaOrContent::Schema(s) => Ok(s),
-            x => {
-                Err(Error::BadConversion(format!("XXX param format {:#?}", x)))
-            }
+            openapiv3::ParameterSchemaOrContent::Content(c) => Err(
+                Error::UnexpectedFormat(format!("unexpected content {:#?}", c)),
+            ),
         }
     }
 }
