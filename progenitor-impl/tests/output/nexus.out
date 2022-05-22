@@ -1,6 +1,26 @@
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct BlockSize(i64);
+    impl std::ops::Deref for BlockSize {
+        type Target = i64;
+        fn deref(&self) -> &Self::Target {
+            &self.0
+        }
+    }
+
+    impl std::convert::TryFrom<i64> for BlockSize {
+        type Error = &'static str;
+        fn try_from(value: i64) -> Result<Self, Self::Error> {
+            if ![512_i64, 2048_i64, 4096_i64].contains(&value) {
+                Err("invalid value")
+            } else {
+                Ok(Self(value))
+            }
+        }
+    }
+
     #[doc = "A count of bytes, typically used either for memory or storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ByteCount(pub u64);
@@ -14,29 +34,59 @@ pub mod types {
     #[doc = "The type of an individual datum of a metric."]
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum DatumType {
+        #[serde(rename = "bool")]
         Bool,
+        #[serde(rename = "i64")]
         I64,
+        #[serde(rename = "f64")]
         F64,
+        #[serde(rename = "string")]
         String,
+        #[serde(rename = "bytes")]
         Bytes,
+        #[serde(rename = "cumulative_i64")]
         CumulativeI64,
+        #[serde(rename = "cumulative_f64")]
         CumulativeF64,
+        #[serde(rename = "histogram_i64")]
         HistogramI64,
+        #[serde(rename = "histogram_f64")]
         HistogramF64,
     }
 
     impl ToString for DatumType {
         fn to_string(&self) -> String {
             match *self {
-                DatumType::Bool => "Bool".to_string(),
-                DatumType::I64 => "I64".to_string(),
-                DatumType::F64 => "F64".to_string(),
-                DatumType::String => "String".to_string(),
-                DatumType::Bytes => "Bytes".to_string(),
-                DatumType::CumulativeI64 => "CumulativeI64".to_string(),
-                DatumType::CumulativeF64 => "CumulativeF64".to_string(),
-                DatumType::HistogramI64 => "HistogramI64".to_string(),
-                DatumType::HistogramF64 => "HistogramF64".to_string(),
+                DatumType::Bool => "bool".to_string(),
+                DatumType::I64 => "i64".to_string(),
+                DatumType::F64 => "f64".to_string(),
+                DatumType::String => "string".to_string(),
+                DatumType::Bytes => "bytes".to_string(),
+                DatumType::CumulativeI64 => "cumulative_i64".to_string(),
+                DatumType::CumulativeF64 => "cumulative_f64".to_string(),
+                DatumType::HistogramI64 => "histogram_i64".to_string(),
+                DatumType::HistogramF64 => "histogram_f64".to_string(),
+            }
+        }
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Digest {
+        #[serde(rename = "type")]
+        pub type_: DigestType,
+        pub value: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum DigestType {
+        #[serde(rename = "sha256")]
+        Sha256,
+    }
+
+    impl ToString for DigestType {
+        fn to_string(&self) -> String {
+            match *self {
+                DigestType::Sha256 => "sha256".to_string(),
             }
         }
     }
@@ -44,11 +94,14 @@ pub mod types {
     #[doc = "Client view of an [`Disk`]"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Disk {
+        pub block_size: ByteCount,
         #[doc = "human-readable free-form text about a resource"]
         pub description: String,
         pub device_path: String,
         #[doc = "unique, immutable, system-controlled identifier for each resource"]
         pub id: uuid::Uuid,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub image_id: Option<uuid::Uuid>,
         #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
         pub project_id: uuid::Uuid,
@@ -66,18 +119,17 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskCreate {
         pub description: String,
+        #[doc = "initial source for this disk"]
+        pub disk_source: DiskSource,
         pub name: Name,
-        #[doc = "size of the Disk"]
+        #[doc = "total size of the Disk in bytes"]
         pub size: ByteCount,
-        #[doc = "id for snapshot from which the Disk should be created, if any"]
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub snapshot_id: Option<uuid::Uuid>,
     }
 
     #[doc = "Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskIdentifier {
-        pub disk: Name,
+        pub name: Name,
     }
 
     #[doc = "A single page of results"]
@@ -88,6 +140,27 @@ pub mod types {
         #[doc = "token used to fetch the next page of results (if any)"]
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    #[doc = "Different sources for a disk"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[serde(tag = "type")]
+    pub enum DiskSource {
+        #[doc = "Create a blank disk"]
+        #[serde(rename = "blank")]
+        Blank {
+            #[doc = "size of blocks for this Disk. valid values are: 512, 2048, or 4096"]
+            block_size: BlockSize,
+        },
+        #[doc = "Create a disk from a disk snapshot"]
+        #[serde(rename = "snapshot")]
+        Snapshot { snapshot_id: uuid::Uuid },
+        #[doc = "Create a disk from a project image"]
+        #[serde(rename = "image")]
+        Image { image_id: uuid::Uuid },
+        #[doc = "Create a disk from a global image"]
+        #[serde(rename = "global_image")]
+        GlobalImage { image_id: uuid::Uuid },
     }
 
     #[doc = "State of a Disk (primarily: attached or not)"]
@@ -133,15 +206,17 @@ pub mod types {
     #[doc = "The source from which a field is derived, the target or metric."]
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum FieldSource {
+        #[serde(rename = "target")]
         Target,
+        #[serde(rename = "metric")]
         Metric,
     }
 
     impl ToString for FieldSource {
         fn to_string(&self) -> String {
             match *self {
-                FieldSource::Target => "Target".to_string(),
-                FieldSource::Metric => "Metric".to_string(),
+                FieldSource::Target => "target".to_string(),
+                FieldSource::Metric => "metric".to_string(),
             }
         }
     }
@@ -149,38 +224,192 @@ pub mod types {
     #[doc = "The `FieldType` identifies the data type of a target or metric field."]
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum FieldType {
+        #[serde(rename = "string")]
         String,
+        #[serde(rename = "i64")]
         I64,
+        #[serde(rename = "ip_addr")]
         IpAddr,
+        #[serde(rename = "uuid")]
         Uuid,
+        #[serde(rename = "bool")]
         Bool,
     }
 
     impl ToString for FieldType {
         fn to_string(&self) -> String {
             match *self {
-                FieldType::String => "String".to_string(),
-                FieldType::I64 => "I64".to_string(),
-                FieldType::IpAddr => "IpAddr".to_string(),
-                FieldType::Uuid => "Uuid".to_string(),
-                FieldType::Bool => "Bool".to_string(),
+                FieldType::String => "string".to_string(),
+                FieldType::I64 => "i64".to_string(),
+                FieldType::IpAddr => "ip_addr".to_string(),
+                FieldType::Uuid => "uuid".to_string(),
+                FieldType::Bool => "bool".to_string(),
             }
         }
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum FleetRoles {
+        #[serde(rename = "admin")]
+        Admin,
+        #[serde(rename = "collaborator")]
+        Collaborator,
+        #[serde(rename = "viewer")]
+        Viewer,
+    }
+
+    impl ToString for FleetRoles {
+        fn to_string(&self) -> String {
+            match *self {
+                FleetRoles::Admin => "admin".to_string(),
+                FleetRoles::Collaborator => "collaborator".to_string(),
+                FleetRoles::Viewer => "viewer".to_string(),
+            }
+        }
+    }
+
+    #[doc = "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct FleetRolesPolicy {
+        #[doc = "Roles directly assigned on this resource"]
+        pub role_assignments: Vec<FleetRolesRoleAssignment>,
+    }
+
+    #[doc = "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct FleetRolesRoleAssignment {
+        pub identity_id: uuid::Uuid,
+        pub identity_type: IdentityType,
+        pub role_name: FleetRoles,
+    }
+
+    #[doc = "Client view of global Images"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct GlobalImage {
+        #[doc = "size of blocks in bytes"]
+        pub block_size: ByteCount,
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        #[doc = "Hash of the image contents, if applicable"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub digest: Option<Digest>,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        pub name: Name,
+        #[doc = "total size in bytes"]
+        pub size: ByteCount,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "URL source of this image, if any"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub url: Option<String>,
+        #[doc = "Version of this, if any"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub version: Option<String>,
+    }
+
+    #[doc = "A single page of results"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct GlobalImageResultsPage {
+        #[doc = "list of items on this page of results"]
+        pub items: Vec<GlobalImage>,
+        #[doc = "token used to fetch the next page of results (if any)"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
     }
 
     #[doc = "Supported set of sort modes for scanning by id only.\n\nCurrently, we only support scanning in ascending order."]
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum IdSortMode {
-        #[serde(rename = "id-ascending")]
+        #[serde(rename = "id_ascending")]
         IdAscending,
     }
 
     impl ToString for IdSortMode {
         fn to_string(&self) -> String {
             match *self {
-                IdSortMode::IdAscending => "id-ascending".to_string(),
+                IdSortMode::IdAscending => "id_ascending".to_string(),
             }
         }
+    }
+
+    #[doc = "Describes what kind of identity is described by an id"]
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum IdentityType {
+        #[serde(rename = "silo_user")]
+        SiloUser,
+    }
+
+    impl ToString for IdentityType {
+        fn to_string(&self) -> String {
+            match *self {
+                IdentityType::SiloUser => "silo_user".to_string(),
+            }
+        }
+    }
+
+    #[doc = "Client view of project Images"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Image {
+        #[doc = "size of blocks in bytes"]
+        pub block_size: ByteCount,
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        #[doc = "Hash of the image contents, if applicable"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub digest: Option<Digest>,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        pub name: Name,
+        #[doc = "The project the disk belongs to"]
+        pub project_id: uuid::Uuid,
+        #[doc = "total size in bytes"]
+        pub size: ByteCount,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "URL source of this image, if any"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub url: Option<String>,
+        #[doc = "Version of this, if any"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub version: Option<String>,
+    }
+
+    #[doc = "Create-time parameters for an [`Image`](omicron_common::api::external::Image)"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ImageCreate {
+        #[doc = "block size in bytes"]
+        pub block_size: BlockSize,
+        pub description: String,
+        pub name: Name,
+        #[doc = "The source of the image's contents."]
+        pub source: ImageSource,
+    }
+
+    #[doc = "A single page of results"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ImageResultsPage {
+        #[doc = "list of items on this page of results"]
+        pub items: Vec<Image>,
+        #[doc = "token used to fetch the next page of results (if any)"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    #[doc = "The source of the underlying image."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[serde(tag = "type", content = "src")]
+    pub enum ImageSource {
+        #[serde(rename = "url")]
+        Url(String),
+        #[serde(rename = "snapshot")]
+        Snapshot(uuid::Uuid),
     }
 
     #[doc = "Client view of an [`Instance`]"]
@@ -222,13 +451,45 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceCreate {
         pub description: String,
+        #[doc = "The disks to be created or attached for this instance."]
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        pub disks: Vec<InstanceDiskAttachment>,
         pub hostname: String,
         pub memory: ByteCount,
         pub name: Name,
         pub ncpus: InstanceCpuCount,
         #[doc = "The network interfaces to be created for this instance."]
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub network_interfaces: Option<InstanceNetworkInterfaceAttachment>,
+        #[serde(default = "instance_create_network_interfaces")]
+        pub network_interfaces: InstanceNetworkInterfaceAttachment,
+        #[doc = "User data for instance initialization systems (such as cloud-init). Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded data."]
+        #[serde(default)]
+        pub user_data: String,
+    }
+
+    fn instance_create_network_interfaces() -> InstanceNetworkInterfaceAttachment {
+        InstanceNetworkInterfaceAttachment::Default
+    }
+
+    #[doc = "Describe the instance's disks at creation time"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[serde(tag = "type")]
+    pub enum InstanceDiskAttachment {
+        #[doc = "During instance creation, create and attach disks"]
+        #[serde(rename = "create")]
+        Create {
+            description: String,
+            #[doc = "initial source for this disk"]
+            disk_source: DiskSource,
+            name: Name,
+            #[doc = "total size of the Disk in bytes"]
+            size: ByteCount,
+        },
+        #[doc = "During instance creation, attach this disk"]
+        #[serde(rename = "attach")]
+        Attach {
+            #[doc = "A disk name to attach"]
+            name: Name,
+        },
     }
 
     #[doc = "Migration parameters for an [`Instance`](omicron_common::api::external::Instance)"]
@@ -242,14 +503,12 @@ pub mod types {
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
         #[doc = "Create one or more `NetworkInterface`s for the `Instance`"]
-        Create(InstanceNetworkInterfaceCreate),
+        #[serde(rename = "create")]
+        Create(Vec<NetworkInterfaceCreate>),
+        #[serde(rename = "default")]
         Default,
+        #[serde(rename = "none")]
         None,
-    }
-
-    #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct InstanceNetworkInterfaceCreate {
-        pub params: Vec<NetworkInterfaceCreate>,
     }
 
     #[doc = "A single page of results"]
@@ -304,8 +563,8 @@ pub mod types {
         }
     }
 
-    #[doc = "An `IpNet` represents an IP network, either IPv4 or IPv6."]
     #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[serde(untagged)]
     pub enum IpNet {
         V4(Ipv4Net),
         V6(Ipv6Net),
@@ -369,20 +628,20 @@ pub mod types {
     #[doc = "Supported set of sort modes for scanning by name or id"]
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum NameOrIdSortMode {
-        #[serde(rename = "name-ascending")]
+        #[serde(rename = "name_ascending")]
         NameAscending,
-        #[serde(rename = "name-descending")]
+        #[serde(rename = "name_descending")]
         NameDescending,
-        #[serde(rename = "id-ascending")]
+        #[serde(rename = "id_ascending")]
         IdAscending,
     }
 
     impl ToString for NameOrIdSortMode {
         fn to_string(&self) -> String {
             match *self {
-                NameOrIdSortMode::NameAscending => "name-ascending".to_string(),
-                NameOrIdSortMode::NameDescending => "name-descending".to_string(),
-                NameOrIdSortMode::IdAscending => "id-ascending".to_string(),
+                NameOrIdSortMode::NameAscending => "name_ascending".to_string(),
+                NameOrIdSortMode::NameDescending => "name_descending".to_string(),
+                NameOrIdSortMode::IdAscending => "id_ascending".to_string(),
             }
         }
     }
@@ -390,14 +649,14 @@ pub mod types {
     #[doc = "Supported set of sort modes for scanning by name only\n\nCurrently, we only support scanning in ascending order."]
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum NameSortMode {
-        #[serde(rename = "name-ascending")]
+        #[serde(rename = "name_ascending")]
         NameAscending,
     }
 
     impl ToString for NameSortMode {
         fn to_string(&self) -> String {
             match *self {
-                NameSortMode::NameAscending => "name-ascending".to_string(),
+                NameSortMode::NameAscending => "name_ascending".to_string(),
             }
         }
     }
@@ -483,6 +742,38 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum OrganizationRoles {
+        #[serde(rename = "admin")]
+        Admin,
+        #[serde(rename = "collaborator")]
+        Collaborator,
+    }
+
+    impl ToString for OrganizationRoles {
+        fn to_string(&self) -> String {
+            match *self {
+                OrganizationRoles::Admin => "admin".to_string(),
+                OrganizationRoles::Collaborator => "collaborator".to_string(),
+            }
+        }
+    }
+
+    #[doc = "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct OrganizationRolesPolicy {
+        #[doc = "Roles directly assigned on this resource"]
+        pub role_assignments: Vec<OrganizationRolesRoleAssignment>,
+    }
+
+    #[doc = "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct OrganizationRolesRoleAssignment {
+        pub identity_id: uuid::Uuid,
+        pub identity_type: IdentityType,
+        pub role_name: OrganizationRoles,
+    }
+
     #[doc = "Updateable properties of an [`Organization`](crate::external_api::views::Organization)"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationUpdate {
@@ -523,6 +814,41 @@ pub mod types {
         #[doc = "token used to fetch the next page of results (if any)"]
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum ProjectRoles {
+        #[serde(rename = "admin")]
+        Admin,
+        #[serde(rename = "collaborator")]
+        Collaborator,
+        #[serde(rename = "viewer")]
+        Viewer,
+    }
+
+    impl ToString for ProjectRoles {
+        fn to_string(&self) -> String {
+            match *self {
+                ProjectRoles::Admin => "admin".to_string(),
+                ProjectRoles::Collaborator => "collaborator".to_string(),
+                ProjectRoles::Viewer => "viewer".to_string(),
+            }
+        }
+    }
+
+    #[doc = "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ProjectRolesPolicy {
+        #[doc = "Roles directly assigned on this resource"]
+        pub role_assignments: Vec<ProjectRolesRoleAssignment>,
+    }
+
+    #[doc = "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ProjectRolesRoleAssignment {
+        pub identity_id: uuid::Uuid,
+        pub identity_type: IdentityType,
+        pub role_name: ProjectRoles,
     }
 
     #[doc = "Updateable properties of a [`Project`](crate::external_api::views::Project)"]
@@ -637,13 +963,13 @@ pub mod types {
         pub kind: RouterRouteKind,
         #[doc = "unique, mutable, user-controlled identifier for each resource"]
         pub name: Name,
-        #[doc = "The VPC Router to which the route belongs."]
-        pub router_id: uuid::Uuid,
         pub target: RouteTarget,
         #[doc = "timestamp when this resource was created"]
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         #[doc = "timestamp when this resource was last modified"]
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "The VPC Router to which the route belongs."]
+        pub vpc_router_id: uuid::Uuid,
     }
 
     #[doc = "Create-time parameters for a [`RouterRoute`]"]
@@ -751,6 +1077,76 @@ pub mod types {
         pub id: uuid::Uuid,
     }
 
+    #[doc = "Client view of a ['Silo']"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Silo {
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        #[doc = "A silo where discoverable is false can be retrieved only by its id - it will not be part of the \"list all silos\" output."]
+        pub discoverable: bool,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        pub name: Name,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    #[doc = "Create-time parameters for a [`Silo`](crate::external_api::views::Silo)"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SiloCreate {
+        pub description: String,
+        pub discoverable: bool,
+        pub name: Name,
+    }
+
+    #[doc = "A single page of results"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SiloResultsPage {
+        #[doc = "list of items on this page of results"]
+        pub items: Vec<Silo>,
+        #[doc = "token used to fetch the next page of results (if any)"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum SiloRoles {
+        #[serde(rename = "admin")]
+        Admin,
+        #[serde(rename = "collaborator")]
+        Collaborator,
+        #[serde(rename = "viewer")]
+        Viewer,
+    }
+
+    impl ToString for SiloRoles {
+        fn to_string(&self) -> String {
+            match *self {
+                SiloRoles::Admin => "admin".to_string(),
+                SiloRoles::Collaborator => "collaborator".to_string(),
+                SiloRoles::Viewer => "viewer".to_string(),
+            }
+        }
+    }
+
+    #[doc = "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SiloRolesPolicy {
+        #[doc = "Roles directly assigned on this resource"]
+        pub role_assignments: Vec<SiloRolesRoleAssignment>,
+    }
+
+    #[doc = "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource."]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SiloRolesRoleAssignment {
+        pub identity_id: uuid::Uuid,
+        pub identity_type: IdentityType,
+        pub role_name: SiloRoles,
+    }
+
     #[doc = "Client view of an [`Sled`]"]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Sled {
@@ -809,6 +1205,44 @@ pub mod types {
     pub struct SnapshotResultsPage {
         #[doc = "list of items on this page of results"]
         pub items: Vec<Snapshot>,
+        #[doc = "token used to fetch the next page of results (if any)"]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    #[doc = "Client view of a [`SshKey`]"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SshKey {
+        #[doc = "human-readable free-form text about a resource"]
+        pub description: String,
+        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        pub id: uuid::Uuid,
+        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        pub name: Name,
+        #[doc = "SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`"]
+        pub public_key: String,
+        #[doc = "The user to whom this key belongs"]
+        pub silo_user_id: uuid::Uuid,
+        #[doc = "timestamp when this resource was created"]
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        #[doc = "timestamp when this resource was last modified"]
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    #[doc = "Create-time parameters for an [`SshKey`](crate::external_api::views::SshKey)"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SshKeyCreate {
+        pub description: String,
+        pub name: Name,
+        #[doc = "SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`"]
+        pub public_key: String,
+    }
+
+    #[doc = "A single page of results"]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SshKeyResultsPage {
+        #[doc = "list of items on this page of results"]
+        pub items: Vec<SshKey>,
         #[doc = "token used to fetch the next page of results (if any)"]
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
@@ -1212,10 +1646,6 @@ pub mod types {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub ipv4_block: Option<Ipv4Net>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub ipv6_block: Option<Ipv6Net>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
     }
 
@@ -1455,6 +1885,149 @@ impl Client {
         }
     }
 
+    #[doc = "List global images\n\nReturns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.\n\nSends a `GET` request to `/images`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    pub async fn images_get<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
+        let url = format!("{}/images", self.baseurl,);
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List global images as a Stream\n\nReturns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.\n\nSends repeated `GET` requests to `/images` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    pub fn images_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::GlobalImage, Error<types::Error>>> + Unpin + '_
+    {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.images_get(limit, None, sort_by)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.images_get(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    #[doc = "Create a global image\n\nCreate a new global image. This image can then be used by any user as a base for instances.\n\nSends a `POST` request to `/images`"]
+    pub async fn images_post<'a>(
+        &'a self,
+        body: &'a types::ImageCreate,
+    ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+        let url = format!("{}/images", self.baseurl,);
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Get a global image\n\nReturns the details of a specific global image.\n\nSends a `GET` request to `/images/{image_name}`"]
+    pub async fn images_get_image<'a>(
+        &'a self,
+        image_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+        let url = format!(
+            "{}/images/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&image_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Delete a global image\n\nPermanently delete a global image. This operation cannot be undone. Any instances using the global image will continue to run, however new instances can not be created with this image.\n\nSends a `DELETE` request to `/images/{image_name}`"]
+    pub async fn images_delete_image<'a>(
+        &'a self,
+        image_name: &'a types::Name,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/images/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&image_name.to_string()),
+        );
+        let request = self.client.delete(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
     #[doc = "Sends a `POST` request to `/login`"]
     pub async fn spoof_login<'a>(
         &'a self,
@@ -1641,6 +2214,57 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Fetch the IAM policy for this Organization\n\nSends a `GET` request to `/organizations/{organization_name}/policy`\n\nArguments:\n- `organization_name`: The organization's unique name.\n"]
+    pub async fn organization_get_policy<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::OrganizationRolesPolicy>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/policy",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Update the IAM policy for this Organization\n\nSends a `PUT` request to `/organizations/{organization_name}/policy`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `body`\n"]
+    pub async fn organization_put_policy<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        body: &'a types::OrganizationRolesPolicy,
+    ) -> Result<ResponseValue<types::OrganizationRolesPolicy>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/policy",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+        );
+        let request = self.client.put(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -1997,6 +2621,178 @@ impl Client {
             progenitor_client::encode_path(&organization_name.to_string()),
             progenitor_client::encode_path(&project_name.to_string()),
             progenitor_client::encode_path(&disk_name.to_string()),
+        );
+        let request = self.client.delete(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List images\n\nList images in a project. The images are returned sorted by creation date, with the most recent images appearing first.\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    pub async fn project_images_get<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/images",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+        );
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List images as a Stream\n\nList images in a project. The images are returned sorted by creation date, with the most recent images appearing first.\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/images` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    pub fn project_images_get_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Image, Error<types::Error>>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.project_images_get(organization_name, project_name, limit, None, sort_by)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.project_images_get(
+                            organization_name,
+                            project_name,
+                            None,
+                            state.as_deref(),
+                            None,
+                        )
+                        .map_ok(|page| {
+                            let page = page.into_inner();
+                            Some((
+                                futures::stream::iter(page.items.into_iter().map(Ok)),
+                                page.next_page,
+                            ))
+                        })
+                        .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    #[doc = "Create an image\n\nCreate a new image in a project.\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/images`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    pub async fn project_images_post<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        body: &'a types::ImageCreate,
+    ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/images",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+        );
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Get an image\n\nGet the details of a specific image in a project.\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`"]
+    pub async fn project_images_get_image<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        image_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/images/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&image_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Delete an image\n\nPermanently delete an image from a project. This operation cannot be undone. Any instances in the project using the image will continue to run, however new instances can not be created with this image.\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`"]
+    pub async fn project_images_delete_image<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        image_name: &'a types::Name,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/images/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+            progenitor_client::encode_path(&image_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -2640,6 +3436,61 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Fetch the IAM policy for this Project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/policy`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n"]
+    pub async fn organization_projects_get_project_policy<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::ProjectRolesPolicy>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/policy",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Update the IAM policy for this Project\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/policy`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    pub async fn organization_projects_put_project_policy<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        body: &'a types::ProjectRolesPolicy,
+    ) -> Result<ResponseValue<types::ProjectRolesPolicy>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/policy",
+            self.baseurl,
+            progenitor_client::encode_path(&organization_name.to_string()),
+            progenitor_client::encode_path(&project_name.to_string()),
+        );
+        let request = self.client.put(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -3866,6 +4717,47 @@ impl Client {
         .boxed()
     }
 
+    #[doc = "Fetch the top-level IAM policy\n\nSends a `GET` request to `/policy`"]
+    pub async fn policy_get<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<types::FleetRolesPolicy>, Error<types::Error>> {
+        let url = format!("{}/policy", self.baseurl,);
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Update the top-level IAM policy\n\nSends a `PUT` request to `/policy`"]
+    pub async fn policy_put<'a>(
+        &'a self,
+        body: &'a types::FleetRolesPolicy,
+    ) -> Result<ResponseValue<types::FleetRolesPolicy>, Error<types::Error>> {
+        let url = format!("{}/policy", self.baseurl,);
+        let request = self.client.put(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
     #[doc = "List the built-in roles\n\nSends a `GET` request to `/roles`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n"]
     pub async fn roles_get<'a>(
         &'a self,
@@ -4058,6 +4950,341 @@ impl Client {
     ) -> Result<ResponseValue<types::SessionUser>, Error<types::Error>> {
         let url = format!("{}/session/me", self.baseurl,);
         let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List the current user's SSH public keys\n\nSends a `GET` request to `/session/me/sshkeys`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    pub async fn sshkeys_get<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
+        let url = format!("{}/session/me/sshkeys", self.baseurl,);
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "List the current user's SSH public keys as a Stream\n\nSends repeated `GET` requests to `/session/me/sshkeys` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    pub fn sshkeys_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::SshKey, Error<types::Error>>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.sshkeys_get(limit, None, sort_by)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.sshkeys_get(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    #[doc = "Create a new SSH public key for the current user\n\nSends a `POST` request to `/session/me/sshkeys`"]
+    pub async fn sshkeys_post<'a>(
+        &'a self,
+        body: &'a types::SshKeyCreate,
+    ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
+        let url = format!("{}/session/me/sshkeys", self.baseurl,);
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Get (by name) an SSH public key belonging to the current user\n\nSends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`"]
+    pub async fn sshkeys_get_key<'a>(
+        &'a self,
+        ssh_key_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
+        let url = format!(
+            "{}/session/me/sshkeys/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&ssh_key_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Delete (by name) an SSH public key belonging to the current user\n\nSends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`"]
+    pub async fn sshkeys_delete_key<'a>(
+        &'a self,
+        ssh_key_name: &'a types::Name,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/session/me/sshkeys/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&ssh_key_name.to_string()),
+        );
+        let request = self.client.delete(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Sends a `GET` request to `/silos`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    pub async fn silos_get<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameOrIdSortMode>,
+    ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
+        let url = format!("{}/silos", self.baseurl,);
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Sends repeated `GET` requests to `/silos` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    pub fn silos_get_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameOrIdSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::Silo, Error<types::Error>>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.silos_get(limit, None, sort_by)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.silos_get(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    #[doc = "Create a new silo\n\nSends a `POST` request to `/silos`"]
+    pub async fn silos_post<'a>(
+        &'a self,
+        body: &'a types::SiloCreate,
+    ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
+        let url = format!("{}/silos", self.baseurl,);
+        let request = self.client.post(url).json(body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Fetch a specific silo\n\nSends a `GET` request to `/silos/{silo_name}`\n\nArguments:\n- `silo_name`: The silo's unique name.\n"]
+    pub async fn silos_get_silo<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
+        let url = format!(
+            "{}/silos/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&silo_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Delete a specific silo\n\nSends a `DELETE` request to `/silos/{silo_name}`\n\nArguments:\n- `silo_name`: The silo's unique name.\n"]
+    pub async fn silos_delete_silo<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/silos/{}",
+            self.baseurl,
+            progenitor_client::encode_path(&silo_name.to_string()),
+        );
+        let request = self.client.delete(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Fetch the IAM policy for this Silo\n\nSends a `GET` request to `/silos/{silo_name}/policy`\n\nArguments:\n- `silo_name`: The silo's unique name.\n"]
+    pub async fn silos_get_silo_policy<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::SiloRolesPolicy>, Error<types::Error>> {
+        let url = format!(
+            "{}/silos/{}/policy",
+            self.baseurl,
+            progenitor_client::encode_path(&silo_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    #[doc = "Update the IAM policy for this Silo\n\nSends a `PUT` request to `/silos/{silo_name}/policy`\n\nArguments:\n- `silo_name`: The silo's unique name.\n- `body`\n"]
+    pub async fn silos_put_silo_policy<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+        body: &'a types::SiloRolesPolicy,
+    ) -> Result<ResponseValue<types::SiloRolesPolicy>, Error<types::Error>> {
+        let url = format!(
+            "{}/silos/{}/policy",
+            self.baseurl,
+            progenitor_client::encode_path(&silo_name.to_string()),
+        );
+        let request = self.client.put(url).json(body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

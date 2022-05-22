@@ -210,6 +210,172 @@
         }
       }
     },
+    "/images": {
+      "get": {
+        "tags": [
+          "images:global"
+        ],
+        "summary": "List global images.",
+        "description": "Returns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.",
+        "operationId": "images_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalImageResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      },
+      "post": {
+        "tags": [
+          "images:global"
+        ],
+        "summary": "Create a global image.",
+        "description": "Create a new global image. This image can then be used by any user as a base for instances.",
+        "operationId": "images_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalImage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/images/{image_name}": {
+      "get": {
+        "tags": [
+          "images:global"
+        ],
+        "summary": "Get a global image.",
+        "description": "Returns the details of a specific global image.",
+        "operationId": "images_get_image",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "image_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalImage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "images:global"
+        ],
+        "summary": "Delete a global image.",
+        "description": "Permanently delete a global image. This operation cannot be undone. Any instances using the global image will continue to run, however new instances can not be created with this image.",
+        "operationId": "images_delete_image",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "image_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "tags": [
@@ -457,6 +623,92 @@
         "responses": {
           "204": {
             "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/policy": {
+      "get": {
+        "tags": [
+          "organizations"
+        ],
+        "summary": "Fetch the IAM policy for this Organization",
+        "operationId": "organization_get_policy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_name",
+            "description": "The organization's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationRolesPolicy"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "organizations"
+        ],
+        "summary": "Update the IAM policy for this Organization",
+        "operationId": "organization_put_policy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_name",
+            "description": "The organization's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationRolesPolicy"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationRolesPolicy"
+                }
+              }
+            }
           },
           "4XX": {
             "$ref": "#/components/responses/Error"
@@ -932,6 +1184,250 @@
           {
             "in": "path",
             "name": "disk_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/images": {
+      "get": {
+        "tags": [
+          "images"
+        ],
+        "summary": "List images",
+        "description": "List images in a project. The images are returned sorted by creation date, with the most recent images appearing first.",
+        "operationId": "project_images_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "description": "The organization's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "description": "The project's unique name within the organization.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      },
+      "post": {
+        "tags": [
+          "images"
+        ],
+        "summary": "Create an image",
+        "description": "Create a new image in a project.",
+        "operationId": "project_images_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_name",
+            "description": "The organization's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "description": "The project's unique name within the organization.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Image"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/images/{image_name}": {
+      "get": {
+        "tags": [
+          "images"
+        ],
+        "summary": "Get an image",
+        "description": "Get the details of a specific image in a project.",
+        "operationId": "project_images_get_image",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "image_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Image"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "images"
+        ],
+        "summary": "Delete an image",
+        "description": "Permanently delete an image from a project. This operation cannot be undone. Any instances in the project using the image will continue to run, however new instances can not be created with this image.",
+        "operationId": "project_images_delete_image",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "image_name",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Name"
@@ -1920,6 +2416,112 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Instance"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization_name}/projects/{project_name}/policy": {
+      "get": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Fetch the IAM policy for this Project",
+        "operationId": "organization_projects_get_project_policy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_name",
+            "description": "The organization's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "description": "The project's unique name within the organization.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectRolesPolicy"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Update the IAM policy for this Project",
+        "operationId": "organization_projects_put_project_policy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "organization_name",
+            "description": "The organization's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "description": "The project's unique name within the organization.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRolesPolicy"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectRolesPolicy"
                 }
               }
             }
@@ -3773,6 +4375,68 @@
         "x-dropshot-pagination": true
       }
     },
+    "/policy": {
+      "get": {
+        "tags": [
+          "policy"
+        ],
+        "summary": "Fetch the top-level IAM policy",
+        "operationId": "policy_get",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FleetRolesPolicy"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "policy"
+        ],
+        "summary": "Update the top-level IAM policy",
+        "operationId": "policy_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FleetRolesPolicy"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FleetRolesPolicy"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
     "/roles": {
       "get": {
         "tags": [
@@ -3990,6 +4654,417 @@
         }
       }
     },
+    "/session/me/sshkeys": {
+      "get": {
+        "tags": [
+          "sshkeys"
+        ],
+        "summary": "List the current user's SSH public keys",
+        "operationId": "sshkeys_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SshKeyResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      },
+      "post": {
+        "tags": [
+          "sshkeys"
+        ],
+        "summary": "Create a new SSH public key for the current user",
+        "operationId": "sshkeys_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SshKeyCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SshKey"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/session/me/sshkeys/{ssh_key_name}": {
+      "get": {
+        "tags": [
+          "sshkeys"
+        ],
+        "summary": "Get (by name) an SSH public key belonging to the current user",
+        "operationId": "sshkeys_get_key",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ssh_key_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SshKey"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "sshkeys"
+        ],
+        "summary": "Delete (by name) an SSH public key belonging to the current user",
+        "operationId": "sshkeys_delete_key",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ssh_key_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/silos": {
+      "get": {
+        "tags": [
+          "silos"
+        ],
+        "operationId": "silos_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retreive the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameOrIdSortMode"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiloResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      },
+      "post": {
+        "tags": [
+          "silos"
+        ],
+        "summary": "Create a new silo.",
+        "operationId": "silos_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiloCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Silo"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/silos/{silo_name}": {
+      "get": {
+        "tags": [
+          "silos"
+        ],
+        "summary": "Fetch a specific silo",
+        "operationId": "silos_get_silo",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "silo_name",
+            "description": "The silo's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Silo"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "silos"
+        ],
+        "summary": "Delete a specific silo.",
+        "operationId": "silos_delete_silo",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "silo_name",
+            "description": "The silo's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/silos/{silo_name}/policy": {
+      "get": {
+        "tags": [
+          "silos"
+        ],
+        "summary": "Fetch the IAM policy for this Silo",
+        "operationId": "silos_get_silo_policy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "silo_name",
+            "description": "The silo's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiloRolesPolicy"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "silos"
+        ],
+        "summary": "Update the IAM policy for this Silo",
+        "operationId": "silos_put_silo_policy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "silo_name",
+            "description": "The silo's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiloRolesPolicy"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiloRolesPolicy"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
     "/timeseries/schema": {
       "get": {
         "tags": [
@@ -4176,6 +5251,15 @@
       }
     },
     "schemas": {
+      "BlockSize": {
+        "title": "disk block size in bytes",
+        "type": "integer",
+        "enum": [
+          512,
+          2048,
+          4096
+        ]
+      },
       "ByteCount": {
         "description": "A count of bytes, typically used either for memory or storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience.",
         "type": "integer",
@@ -4186,21 +5270,46 @@
         "description": "The type of an individual datum of a metric.",
         "type": "string",
         "enum": [
-          "Bool",
-          "I64",
-          "F64",
-          "String",
-          "Bytes",
-          "CumulativeI64",
-          "CumulativeF64",
-          "HistogramI64",
-          "HistogramF64"
+          "bool",
+          "i64",
+          "f64",
+          "string",
+          "bytes",
+          "cumulative_i64",
+          "cumulative_f64",
+          "histogram_i64",
+          "histogram_f64"
+        ]
+      },
+      "Digest": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "sha256"
+                ]
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "value"
+            ]
+          }
         ]
       },
       "Disk": {
         "description": "Client view of an [`Disk`]",
         "type": "object",
         "properties": {
+          "block_size": {
+            "$ref": "#/components/schemas/ByteCount"
+          },
           "description": {
             "description": "human-readable free-form text about a resource",
             "type": "string"
@@ -4210,6 +5319,11 @@
           },
           "id": {
             "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "image_id": {
+            "nullable": true,
             "type": "string",
             "format": "uuid"
           },
@@ -4248,6 +5362,7 @@
           }
         },
         "required": [
+          "block_size",
           "description",
           "device_path",
           "id",
@@ -4266,26 +5381,29 @@
           "description": {
             "type": "string"
           },
+          "disk_source": {
+            "description": "initial source for this disk",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DiskSource"
+              }
+            ]
+          },
           "name": {
             "$ref": "#/components/schemas/Name"
           },
           "size": {
-            "description": "size of the Disk",
+            "description": "total size of the Disk in bytes",
             "allOf": [
               {
                 "$ref": "#/components/schemas/ByteCount"
               }
             ]
-          },
-          "snapshot_id": {
-            "nullable": true,
-            "description": "id for snapshot from which the Disk should be created, if any",
-            "type": "string",
-            "format": "uuid"
           }
         },
         "required": [
           "description",
+          "disk_source",
           "name",
           "size"
         ]
@@ -4294,12 +5412,12 @@
         "description": "Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance",
         "type": "object",
         "properties": {
-          "disk": {
+          "name": {
             "$ref": "#/components/schemas/Name"
           }
         },
         "required": [
-          "disk"
+          "name"
         ]
       },
       "DiskResultsPage": {
@@ -4321,6 +5439,95 @@
         },
         "required": [
           "items"
+        ]
+      },
+      "DiskSource": {
+        "description": "Different sources for a disk",
+        "oneOf": [
+          {
+            "description": "Create a blank disk",
+            "type": "object",
+            "properties": {
+              "block_size": {
+                "description": "size of blocks for this Disk. valid values are: 512, 2048, or 4096",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/BlockSize"
+                  }
+                ]
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "blank"
+                ]
+              }
+            },
+            "required": [
+              "block_size",
+              "type"
+            ]
+          },
+          {
+            "description": "Create a disk from a disk snapshot",
+            "type": "object",
+            "properties": {
+              "snapshot_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "snapshot"
+                ]
+              }
+            },
+            "required": [
+              "snapshot_id",
+              "type"
+            ]
+          },
+          {
+            "description": "Create a disk from a project image",
+            "type": "object",
+            "properties": {
+              "image_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "image"
+                ]
+              }
+            },
+            "required": [
+              "image_id",
+              "type"
+            ]
+          },
+          {
+            "description": "Create a disk from a global image",
+            "type": "object",
+            "properties": {
+              "image_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "global_image"
+                ]
+              }
+            },
+            "required": [
+              "image_id",
+              "type"
+            ]
+          }
         ]
       },
       "DiskState": {
@@ -4491,19 +5698,349 @@
         "description": "The source from which a field is derived, the target or metric.",
         "type": "string",
         "enum": [
-          "Target",
-          "Metric"
+          "target",
+          "metric"
         ]
       },
       "FieldType": {
         "description": "The `FieldType` identifies the data type of a target or metric field.",
         "type": "string",
         "enum": [
-          "String",
-          "I64",
-          "IpAddr",
-          "Uuid",
-          "Bool"
+          "string",
+          "i64",
+          "ip_addr",
+          "uuid",
+          "bool"
+        ]
+      },
+      "FleetRoles": {
+        "type": "string",
+        "enum": [
+          "admin",
+          "collaborator",
+          "viewer"
+        ]
+      },
+      "FleetRolesPolicy": {
+        "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
+        "type": "object",
+        "properties": {
+          "role_assignments": {
+            "description": "Roles directly assigned on this resource",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FleetRolesRoleAssignment"
+            }
+          }
+        },
+        "required": [
+          "role_assignments"
+        ]
+      },
+      "FleetRolesRoleAssignment": {
+        "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
+        "type": "object",
+        "properties": {
+          "identity_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "identity_type": {
+            "$ref": "#/components/schemas/IdentityType"
+          },
+          "role_name": {
+            "$ref": "#/components/schemas/FleetRoles"
+          }
+        },
+        "required": [
+          "identity_id",
+          "identity_type",
+          "role_name"
+        ]
+      },
+      "GlobalImage": {
+        "description": "Client view of global Images",
+        "type": "object",
+        "properties": {
+          "block_size": {
+            "description": "size of blocks in bytes",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ByteCount"
+              }
+            ]
+          },
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "digest": {
+            "nullable": true,
+            "description": "Hash of the image contents, if applicable",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Digest"
+              }
+            ]
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "size": {
+            "description": "total size in bytes",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ByteCount"
+              }
+            ]
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          },
+          "url": {
+            "nullable": true,
+            "description": "URL source of this image, if any",
+            "type": "string"
+          },
+          "version": {
+            "nullable": true,
+            "description": "Version of this, if any",
+            "type": "string"
+          }
+        },
+        "required": [
+          "block_size",
+          "description",
+          "id",
+          "name",
+          "size",
+          "time_created",
+          "time_modified"
+        ]
+      },
+      "GlobalImageResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GlobalImage"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "IdentityType": {
+        "description": "Describes what kind of identity is described by an id",
+        "type": "string",
+        "enum": [
+          "silo_user"
+        ]
+      },
+      "Image": {
+        "description": "Client view of project Images",
+        "type": "object",
+        "properties": {
+          "block_size": {
+            "description": "size of blocks in bytes",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ByteCount"
+              }
+            ]
+          },
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "digest": {
+            "nullable": true,
+            "description": "Hash of the image contents, if applicable",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Digest"
+              }
+            ]
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "project_id": {
+            "description": "The project the disk belongs to",
+            "type": "string",
+            "format": "uuid"
+          },
+          "size": {
+            "description": "total size in bytes",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ByteCount"
+              }
+            ]
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          },
+          "url": {
+            "nullable": true,
+            "description": "URL source of this image, if any",
+            "type": "string"
+          },
+          "version": {
+            "nullable": true,
+            "description": "Version of this, if any",
+            "type": "string"
+          }
+        },
+        "required": [
+          "block_size",
+          "description",
+          "id",
+          "name",
+          "project_id",
+          "size",
+          "time_created",
+          "time_modified"
+        ]
+      },
+      "ImageCreate": {
+        "description": "Create-time parameters for an [`Image`](omicron_common::api::external::Image)",
+        "type": "object",
+        "properties": {
+          "block_size": {
+            "description": "block size in bytes",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BlockSize"
+              }
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
+          "source": {
+            "description": "The source of the image's contents.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImageSource"
+              }
+            ]
+          }
+        },
+        "required": [
+          "block_size",
+          "description",
+          "name",
+          "source"
+        ]
+      },
+      "ImageResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "ImageSource": {
+        "description": "The source of the underlying image.",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "src": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "url"
+                ]
+              }
+            },
+            "required": [
+              "src",
+              "type"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "src": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "snapshot"
+                ]
+              }
+            },
+            "required": [
+              "src",
+              "type"
+            ]
+          }
         ]
       },
       "Instance": {
@@ -4597,6 +6134,14 @@
           "description": {
             "type": "string"
           },
+          "disks": {
+            "description": "The disks to be created or attached for this instance.",
+            "default": [],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstanceDiskAttachment"
+            }
+          },
           "hostname": {
             "type": "string"
           },
@@ -4611,11 +6156,19 @@
           },
           "network_interfaces": {
             "description": "The network interfaces to be created for this instance.",
+            "default": {
+              "type": "default"
+            },
             "allOf": [
               {
                 "$ref": "#/components/schemas/InstanceNetworkInterfaceAttachment"
               }
             ]
+          },
+          "user_data": {
+            "description": "User data for instance initialization systems (such as cloud-init). Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded data.",
+            "default": "",
+            "type": "string"
           }
         },
         "required": [
@@ -4624,6 +6177,76 @@
           "memory",
           "name",
           "ncpus"
+        ]
+      },
+      "InstanceDiskAttachment": {
+        "description": "Describe the instance's disks at creation time",
+        "oneOf": [
+          {
+            "description": "During instance creation, create and attach disks",
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "disk_source": {
+                "description": "initial source for this disk",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DiskSource"
+                  }
+                ]
+              },
+              "name": {
+                "$ref": "#/components/schemas/Name"
+              },
+              "size": {
+                "description": "total size of the Disk in bytes",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ByteCount"
+                  }
+                ]
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "create"
+                ]
+              }
+            },
+            "required": [
+              "description",
+              "disk_source",
+              "name",
+              "size",
+              "type"
+            ]
+          },
+          {
+            "description": "During instance creation, attach this disk",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "A disk name to attach",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Name"
+                  }
+                ]
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "attach"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "type"
+            ]
+          }
         ]
       },
       "InstanceMigrate": {
@@ -4647,12 +6270,15 @@
             "type": "object",
             "properties": {
               "params": {
-                "$ref": "#/components/schemas/InstanceNetworkInterfaceCreate"
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/NetworkInterfaceCreate"
+                }
               },
               "type": {
                 "type": "string",
                 "enum": [
-                  "Create"
+                  "create"
                 ]
               }
             },
@@ -4668,7 +6294,7 @@
               "type": {
                 "type": "string",
                 "enum": [
-                  "Default"
+                  "default"
                 ]
               }
             },
@@ -4683,7 +6309,7 @@
               "type": {
                 "type": "string",
                 "enum": [
-                  "None"
+                  "none"
                 ]
               }
             },
@@ -4691,20 +6317,6 @@
               "type"
             ]
           }
-        ]
-      },
-      "InstanceNetworkInterfaceCreate": {
-        "type": "object",
-        "properties": {
-          "params": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/NetworkInterfaceCreate"
-            }
-          }
-        },
-        "required": [
-          "params"
         ]
       },
       "InstanceResultsPage": {
@@ -4745,35 +6357,27 @@
         ]
       },
       "IpNet": {
-        "description": "An `IpNet` represents an IP network, either IPv4 or IPv6.",
         "oneOf": [
           {
-            "type": "object",
-            "properties": {
-              "V4": {
+            "title": "v4",
+            "allOf": [
+              {
                 "$ref": "#/components/schemas/Ipv4Net"
               }
-            },
-            "required": [
-              "V4"
-            ],
-            "additionalProperties": false
+            ]
           },
           {
-            "type": "object",
-            "properties": {
-              "V6": {
+            "title": "v6",
+            "allOf": [
+              {
                 "$ref": "#/components/schemas/Ipv6Net"
               }
-            },
-            "required": [
-              "V6"
-            ],
-            "additionalProperties": false
+            ]
           }
         ]
       },
       "Ipv4Net": {
+        "example": "192.168.1.0/24",
         "title": "An IPv4 subnet",
         "description": "An IPv4 subnet, including prefix and subnet mask",
         "type": "string",
@@ -4781,6 +6385,7 @@
         "maxLength": 18
       },
       "Ipv6Net": {
+        "example": "fd12:3456::/64",
         "title": "An IPv6 subnet",
         "description": "An IPv6 subnet, including prefix and subnet mask",
         "type": "string",
@@ -4788,6 +6393,7 @@
         "maxLength": 43
       },
       "L4PortRange": {
+        "example": "22",
         "title": "A range of IP ports",
         "description": "An inclusive-inclusive range of IP ports. The second port may be omitted to represent a single port",
         "type": "string",
@@ -4807,6 +6413,7 @@
         ]
       },
       "MacAddr": {
+        "example": "ff:ff:ff:ff:ff:ff",
         "title": "A MAC address",
         "description": "A Media Access Control address, in EUI-48 format",
         "type": "string",
@@ -5032,6 +6639,50 @@
           "items"
         ]
       },
+      "OrganizationRoles": {
+        "type": "string",
+        "enum": [
+          "admin",
+          "collaborator"
+        ]
+      },
+      "OrganizationRolesPolicy": {
+        "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
+        "type": "object",
+        "properties": {
+          "role_assignments": {
+            "description": "Roles directly assigned on this resource",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationRolesRoleAssignment"
+            }
+          }
+        },
+        "required": [
+          "role_assignments"
+        ]
+      },
+      "OrganizationRolesRoleAssignment": {
+        "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
+        "type": "object",
+        "properties": {
+          "identity_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "identity_type": {
+            "$ref": "#/components/schemas/IdentityType"
+          },
+          "role_name": {
+            "$ref": "#/components/schemas/OrganizationRoles"
+          }
+        },
+        "required": [
+          "identity_id",
+          "identity_type",
+          "role_name"
+        ]
+      },
       "OrganizationUpdate": {
         "description": "Updateable properties of an [`Organization`](crate::external_api::views::Organization)",
         "type": "object",
@@ -5130,6 +6781,51 @@
         },
         "required": [
           "items"
+        ]
+      },
+      "ProjectRoles": {
+        "type": "string",
+        "enum": [
+          "admin",
+          "collaborator",
+          "viewer"
+        ]
+      },
+      "ProjectRolesPolicy": {
+        "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
+        "type": "object",
+        "properties": {
+          "role_assignments": {
+            "description": "Roles directly assigned on this resource",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectRolesRoleAssignment"
+            }
+          }
+        },
+        "required": [
+          "role_assignments"
+        ]
+      },
+      "ProjectRolesRoleAssignment": {
+        "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
+        "type": "object",
+        "properties": {
+          "identity_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "identity_type": {
+            "$ref": "#/components/schemas/IdentityType"
+          },
+          "role_name": {
+            "$ref": "#/components/schemas/ProjectRoles"
+          }
+        },
+        "required": [
+          "identity_id",
+          "identity_type",
+          "role_name"
         ]
       },
       "ProjectUpdate": {
@@ -5470,11 +7166,6 @@
               }
             ]
           },
-          "router_id": {
-            "description": "The VPC Router to which the route belongs.",
-            "type": "string",
-            "format": "uuid"
-          },
           "target": {
             "$ref": "#/components/schemas/RouteTarget"
           },
@@ -5487,6 +7178,11 @@
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
+          },
+          "vpc_router_id": {
+            "description": "The VPC Router to which the route belongs.",
+            "type": "string",
+            "format": "uuid"
           }
         },
         "required": [
@@ -5495,10 +7191,10 @@
           "id",
           "kind",
           "name",
-          "router_id",
           "target",
           "time_created",
-          "time_modified"
+          "time_modified",
+          "vpc_router_id"
         ]
       },
       "RouterRouteCreateParams": {
@@ -5776,6 +7472,137 @@
           "id"
         ]
       },
+      "Silo": {
+        "description": "Client view of a ['Silo']",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "discoverable": {
+            "description": "A silo where discoverable is false can be retrieved only by its id - it will not be part of the \"list all silos\" output.",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "description",
+          "discoverable",
+          "id",
+          "name",
+          "time_created",
+          "time_modified"
+        ]
+      },
+      "SiloCreate": {
+        "description": "Create-time parameters for a [`Silo`](crate::external_api::views::Silo)",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "discoverable": {
+            "type": "boolean"
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          }
+        },
+        "required": [
+          "description",
+          "discoverable",
+          "name"
+        ]
+      },
+      "SiloResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Silo"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "SiloRoles": {
+        "type": "string",
+        "enum": [
+          "admin",
+          "collaborator",
+          "viewer"
+        ]
+      },
+      "SiloRolesPolicy": {
+        "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
+        "type": "object",
+        "properties": {
+          "role_assignments": {
+            "description": "Roles directly assigned on this resource",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SiloRolesRoleAssignment"
+            }
+          }
+        },
+        "required": [
+          "role_assignments"
+        ]
+      },
+      "SiloRolesRoleAssignment": {
+        "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
+        "type": "object",
+        "properties": {
+          "identity_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "identity_type": {
+            "$ref": "#/components/schemas/IdentityType"
+          },
+          "role_name": {
+            "$ref": "#/components/schemas/SiloRoles"
+          }
+        },
+        "required": [
+          "identity_id",
+          "identity_type",
+          "role_name"
+        ]
+      },
       "Sled": {
         "description": "Client view of an [`Sled`]",
         "type": "object",
@@ -5929,6 +7756,99 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Snapshot"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "SshKey": {
+        "description": "Client view of a [`SshKey`]",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "public_key": {
+            "description": "SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`",
+            "type": "string"
+          },
+          "silo_user_id": {
+            "description": "The user to whom this key belongs",
+            "type": "string",
+            "format": "uuid"
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "description",
+          "id",
+          "name",
+          "public_key",
+          "silo_user_id",
+          "time_created",
+          "time_modified"
+        ]
+      },
+      "SshKeyCreate": {
+        "description": "Create-time parameters for an [`SshKey`](crate::external_api::views::SshKey)",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
+          "public_key": {
+            "description": "SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "name",
+          "public_key"
+        ]
+      },
+      "SshKeyResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SshKey"
             }
           },
           "next_page": {
@@ -6878,22 +8798,6 @@
             "nullable": true,
             "type": "string"
           },
-          "ipv4_block": {
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Ipv4Net"
-              }
-            ]
-          },
-          "ipv6_block": {
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Ipv6Net"
-              }
-            ]
-          },
           "name": {
             "nullable": true,
             "allOf": [
@@ -6934,23 +8838,23 @@
         "description": "Supported set of sort modes for scanning by id only.\n\nCurrently, we only support scanning in ascending order.",
         "type": "string",
         "enum": [
-          "id-ascending"
-        ]
-      },
-      "NameOrIdSortMode": {
-        "description": "Supported set of sort modes for scanning by name or id",
-        "type": "string",
-        "enum": [
-          "name-ascending",
-          "name-descending",
-          "id-ascending"
+          "id_ascending"
         ]
       },
       "NameSortMode": {
         "description": "Supported set of sort modes for scanning by name only\n\nCurrently, we only support scanning in ascending order.",
         "type": "string",
         "enum": [
-          "name-ascending"
+          "name_ascending"
+        ]
+      },
+      "NameOrIdSortMode": {
+        "description": "Supported set of sort modes for scanning by name or id",
+        "type": "string",
+        "enum": [
+          "name_ascending",
+          "name_descending",
+          "id_ascending"
         ]
       }
     }
@@ -6978,6 +8882,20 @@
       }
     },
     {
+      "name": "images",
+      "description": "Images are read-only Virtual Disks that may be used to boot Virtual Machines",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "images:global",
+      "description": "Images are read-only Virtual Disks that may be used to boot Virtual Machines. These images are scoped globally.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
       "name": "instances",
       "description": "Virtual machine instances are the basic unit of computation. These operations are used for provisioning, controlling, and destroying instances.",
       "externalDocs": {
@@ -6994,6 +8912,13 @@
     {
       "name": "organizations",
       "description": "Organizations represent a subset of users and projects in an Oxide deployment.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "policy",
+      "description": "System-wide IAM policy",
       "externalDocs": {
         "url": "http://oxide.computer/docs/#xxx"
       }
@@ -7041,6 +8966,13 @@
       }
     },
     {
+      "name": "silos",
+      "description": "Silos represent a logical partition of users and resources.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
       "name": "sleds",
       "description": "This tag should be moved into hardware",
       "externalDocs": {
@@ -7050,6 +8982,13 @@
     {
       "name": "snapshots",
       "description": "Snapshots of Virtual Disks at a particular point in time.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "sshkeys",
+      "description": "Public SSH keys for an individual user",
       "externalDocs": {
         "url": "http://oxide.computer/docs/#xxx"
       }
