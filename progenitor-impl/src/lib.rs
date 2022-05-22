@@ -19,12 +19,12 @@ pub enum Error {
     BadValue(String, serde_json::Value),
     #[error("type error")]
     TypeError(#[from] typify::Error),
-    #[error("XXX")]
-    BadConversion(String),
+    #[error("unexpected or unhandled format in the OpenAPI document")]
+    UnexpectedFormat(String),
     #[error("invalid operation path")]
     InvalidPath(String),
-    //#[error("unknown")]
-    //Unknown,
+    #[error("invalid operation path")]
+    InternalError(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -84,7 +84,7 @@ impl Generator {
             .flat_map(|(path, ref_or_item)| {
                 // Exclude externally defined path items.
                 let item = ref_or_item.as_item().unwrap();
-                // TODO punt on paramters that apply to all path items for now.
+                // TODO punt on parameters that apply to all path items for now.
                 assert!(item.parameters.is_empty());
                 item.iter().map(move |(method, operation)| {
                     (path.as_str(), method, operation)
@@ -102,7 +102,7 @@ impl Generator {
 
         let methods = raw_methods
             .iter()
-            .map(|method| self.process_method(method))
+            .map(|method| self.positional_method(method))
             .collect::<Result<Vec<_>>>()?;
 
         let mut types = self

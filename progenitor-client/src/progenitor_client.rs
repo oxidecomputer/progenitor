@@ -11,8 +11,7 @@ use bytes::Bytes;
 use futures_core::Stream;
 use serde::de::DeserializeOwned;
 
-/// Represents a streaming, untyped byte stream for both success and error
-/// responses.
+/// Represents an untyped byte stream for both success and error responses.
 pub type ByteStream =
     Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send>>;
 
@@ -136,6 +135,9 @@ impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> {
 /// or an enum if there are multiple valid error types. It can be the unit type
 /// if there are no structured returns expected.
 pub enum Error<E = ()> {
+    /// The request did not conform to API requirements.
+    InvalidRequest(String),
+
     /// A server error either with the data, or with the connection.
     CommunicationError(reqwest::Error),
 
@@ -155,6 +157,7 @@ impl<E> Error<E> {
     /// Returns the status code, if the error was generated from a response.
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
+            Error::InvalidRequest(_) => None,
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
             Error::InvalidResponsePayload(e) => e.status(),
@@ -166,6 +169,7 @@ impl<E> Error<E> {
     /// handling with APIs that distinguish various error response bodies.
     pub fn into_untyped(self) -> Error {
         match self {
+            Error::InvalidRequest(s) => Error::InvalidRequest(s),
             Error::CommunicationError(e) => Error::CommunicationError(e),
             Error::ErrorResponse(ResponseValue {
                 inner: _,
@@ -193,17 +197,20 @@ impl<E> From<reqwest::Error> for Error<E> {
 impl<E> std::fmt::Display for Error<E> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Error::InvalidRequest(s) => {
+                write!(f, "Invalid Request: {}", s)
+            }
             Error::CommunicationError(e) => {
-                write!(f, "Communication Error {}", e)
+                write!(f, "Communication Error: {}", e)
             }
             Error::ErrorResponse(_) => {
                 write!(f, "Error Response")
             }
             Error::InvalidResponsePayload(e) => {
-                write!(f, "Invalid Response Payload {}", e)
+                write!(f, "Invalid Response Payload: {}", e)
             }
             Error::UnexpectedResponse(r) => {
-                write!(f, "Unexpected Response {:?}", r)
+                write!(f, "Unexpected Response: {:?}", r)
             }
         }
     }
