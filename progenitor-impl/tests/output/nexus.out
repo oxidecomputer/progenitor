@@ -98,10 +98,13 @@ pub mod types {
         Creating,
         #[serde(rename = "detached")]
         Detached,
+        #[doc = "Disk is being attached to the given Instance"]
         #[serde(rename = "attaching")]
         Attaching(uuid::Uuid),
+        #[doc = "Disk is attached to the given Instance"]
         #[serde(rename = "attached")]
         Attached(uuid::Uuid),
+        #[doc = "Disk is being detached from the given Instance"]
         #[serde(rename = "detaching")]
         Detaching(uuid::Uuid),
         #[serde(rename = "destroyed")]
@@ -238,6 +241,7 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
+        #[doc = "Create one or more `NetworkInterface`s for the `Instance`"]
         Create(InstanceNetworkInterfaceCreate),
         Default,
         None,
@@ -586,12 +590,16 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
+        #[doc = "Route applies to traffic destined for a specific IP address"]
         #[serde(rename = "ip")]
         Ip(String),
+        #[doc = "Route applies to traffic destined for a specific IP subnet"]
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
+        #[doc = "Route applies to traffic destined for the given VPC."]
         #[serde(rename = "vpc")]
         Vpc(Name),
+        #[doc = "Route applies to traffic"]
         #[serde(rename = "subnet")]
         Subnet(Name),
     }
@@ -600,14 +608,19 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
+        #[doc = "Forward traffic to a particular IP address."]
         #[serde(rename = "ip")]
         Ip(String),
+        #[doc = "Forward traffic to a VPC"]
         #[serde(rename = "vpc")]
         Vpc(Name),
+        #[doc = "Forward traffic to a VPC Subnet"]
         #[serde(rename = "subnet")]
         Subnet(Name),
+        #[doc = "Forward traffic to a specific instance"]
         #[serde(rename = "instance")]
         Instance(Name),
+        #[doc = "Forward traffic to an internet gateway"]
         #[serde(rename = "internet_gateway")]
         InternetGateway(Name),
     }
@@ -970,14 +983,19 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
+        #[doc = "The rule applies to traffic from/to all instances in the VPC"]
         #[serde(rename = "vpc")]
         Vpc(Name),
+        #[doc = "The rule applies to traffic from/to all instances in the VPC Subnet"]
         #[serde(rename = "subnet")]
         Subnet(Name),
+        #[doc = "The rule applies to traffic from/to this specific instance"]
         #[serde(rename = "instance")]
         Instance(Name),
+        #[doc = "The rule applies to traffic from/to a specific IP address"]
         #[serde(rename = "ip")]
         Ip(String),
+        #[doc = "The rule applies to traffic from/to a specific IP subnet"]
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
     }
@@ -1024,14 +1042,19 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
+        #[doc = "The rule applies to all instances in the VPC"]
         #[serde(rename = "vpc")]
         Vpc(Name),
+        #[doc = "The rule applies to all instances in the VPC Subnet"]
         #[serde(rename = "subnet")]
         Subnet(Name),
+        #[doc = "The rule applies to this specific instance"]
         #[serde(rename = "instance")]
         Instance(Name),
+        #[doc = "The rule applies to a specific IP address"]
         #[serde(rename = "ip")]
         Ip(String),
+        #[doc = "The rule applies to a specific IP subnet"]
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
     }
