@@ -949,7 +949,7 @@ dependencies = [
  "syn",
  "thiserror",
  "typify",
- "unicode-xid",
+ "unicode-ident",
 ]
 
 [[package]]

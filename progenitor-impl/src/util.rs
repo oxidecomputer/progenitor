@@ -4,7 +4,7 @@ use indexmap::IndexMap;
 use openapiv3::{
     Components, Parameter, ReferenceOr, RequestBody, Response, Schema,
 };
-use unicode_xid::UnicodeXID;
+use unicode_ident::{is_xid_continue, is_xid_start};
 
 use crate::Result;
 
@@ -82,13 +82,13 @@ pub(crate) fn sanitize(input: &str, case: Case) -> String {
         _ => to_case(
             &input
                 .replace("'", "")
-                .replace(|c: char| !c.is_xid_continue(), "-"),
+                .replace(|c: char| !is_xid_continue(c), "-"),
         ),
     };
 
     let out = match out.chars().next() {
         None => to_case("x"),
-        Some(c) if c.is_xid_start() => out,
+        Some(c) if is_xid_start(c) => out,
         Some(_) => format!("_{}", out),
     };
 
