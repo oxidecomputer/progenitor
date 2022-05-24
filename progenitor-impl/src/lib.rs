@@ -100,6 +100,11 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
+        let builder_struct = raw_methods
+            .iter()
+            .map(|method| self.builder_struct(method))
+            .collect::<Result<Vec<_>>>()?;
+
         let methods = raw_methods
             .iter()
             .map(|method| self.positional_method(method))
@@ -134,6 +139,12 @@ impl Generator {
                 use serde::{Deserialize, Serialize};
                 #shared
                 #(#types)*
+            }
+
+            pub mod builder {
+                use super::types;
+
+                #(#builder_struct)*
             }
 
             #[derive(Clone)]

@@ -1042,6 +1042,101 @@ impl Generator {
             _ => None,
         }
     }
+
+    pub(crate) fn builder_struct(
+        &self,
+        method: &OperationMethod,
+    ) -> Result<TokenStream> {
+        let properties = method
+            .params
+            .iter()
+            .map(|param| {
+                let name = format_ident!("{}", param.name);
+                let typ = match &param.typ {
+                    OperationParameterType::Type(type_id) => {
+                        let ty = self.type_space.get_type(type_id)?;
+                        let x = if let typify::TypeDetails::Option(_) =
+                            &ty.details()
+                        {
+                            ty.ident()
+                        } else {
+                            let t = ty.ident();
+                            quote! {
+                                Option<#t>
+                            }
+                        };
+                        x
+                    }
+                    OperationParameterType::RawBody => {
+                        quote! { Option<reqwest::Body> }
+                    }
+                };
+
+                Ok(quote! {
+                    #name: #typ
+                })
+            })
+            .collect::<Result<Vec<_>>>()?;
+
+        let struct_name = sanitize(&method.operation_id, Case::Pascal);
+        let struct_ident = format_ident!("{}", struct_name);
+
+        let property_impls = method
+            .params
+            .iter()
+            .map(|param| {
+                let name = format_ident!("{}", param.name);
+                match &param.typ {
+                    OperationParameterType::Type(type_id) => {
+                        let ty = self.type_space.get_type(type_id)?;
+                        let typ =
+                            if let typify::TypeDetails::Option(ref opt_id) =
+                                &ty.details()
+                            {
+                                self.type_space.get_type(opt_id)?.ident()
+                            } else {
+                                ty.ident()
+                            };
+                        Ok(quote! {
+                            pub fn #name(mut self, value: #typ) -> Self {
+                                self.#name = Some(value);
+                                self
+                            }
+                        })
+                    }
+                    OperationParameterType::RawBody => {
+                        Ok(quote! {
+                            pub fn #name<B: Into<reqwest::Body>>(mut self, value: B) -> Self {
+                                self.#name = Some(value.into());
+                                self
+                            }
+                        })
+                    }
+                }
+            })
+            .collect::<Result<Vec<_>>>()?;
+
+        let ret = quote! {
+            pub struct #struct_ident<'a> {
+                client: &'a super::Client,
+                #( #properties ),*
+            }
+
+            impl<'a> #struct_ident<'a> {
+                #( #property_impls )*
+
+                pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                    // TODO check that the required values are set
+                    // TODO split up the positional argument version to extract
+                    // the core which will be this function
+                    todo!()
+                }
+
+                // TODO also generated stream() conditionally
+            }
+        };
+        Ok(ret)
+    }
 }
 
 fn make_doc_comment(method: &OperationMethod) -> String {
