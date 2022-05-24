@@ -208,9 +208,13 @@ impl F {
             (user_name,) => {
                 let missing = [(user_name.is_none(), stringify!(user_name))]
                     .into_iter()
-                    .filter_map(
-                        |(unset, name)| if unset { Some(name) } else { None },
-                    )
+                    .filter_map(|(unset, name)| {
+                        if *unset {
+                            Some(name.to_string())
+                        } else {
+                            None
+                        }
+                    })
                     .collect::<Vec<_>>()
                     .join(", ");
                 todo!();
