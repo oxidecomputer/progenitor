@@ -74,6 +74,12 @@ impl HttpMethod {
     }
 }
 
+struct MethodSigBody {
+    success: TokenStream,
+    error: TokenStream,
+    body: TokenStream,
+}
+
 struct DropshotPagination {
     item: TypeId,
 }
@@ -462,7 +468,6 @@ impl Generator {
             dropshot_paginated,
         })
     }
-
     pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
@@ -874,6 +879,248 @@ impl Generator {
         Ok(all)
     }
 
+    fn method_sig_body(
+        &mut self,
+        method: &OperationMethod,
+    ) -> Result<MethodSigBody> {
+        // Generate code for query parameters.
+        let query_items = method
+            .params
+            .iter()
+            .filter_map(|param| match &param.kind {
+                OperationParameterKind::Query(required) => {
+                    let qn = &param.api_name;
+                    let qn_ident = format_ident!("{}", &param.name);
+                    Some(if *required {
+                        quote! {
+                            query.push((#qn, #qn_ident .to_string()));
+                        }
+                    } else {
+                        quote! {
+                            if let Some(v) = & #qn_ident {
+                                query.push((#qn, v.to_string()));
+                            }
+                        }
+                    })
+                }
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        let (query_build, query_use) = if query_items.is_empty() {
+            (quote! {}, quote! {})
+        } else {
+            let query_build = quote! {
+                let mut query = Vec::new();
+                #(#query_items)*
+            };
+            let query_use = quote! {
+                .query(&query)
+            };
+
+            (query_build, query_use)
+        };
+
+        // Generate the path rename map; then use it to generate code for
+        // assigning the path parameters to the `url` variable.
+        let url_renames = method
+            .params
+            .iter()
+            .filter_map(|param| match &param.kind {
+                OperationParameterKind::Path => {
+                    Some((&param.api_name, &param.name))
+                }
+                _ => None,
+            })
+            .collect();
+        let url_path = method.path.compile(url_renames);
+
+        // Generate code to handle the body...
+        let body_func =
+            method.params.iter().filter_map(|param| match &param.kind {
+                OperationParameterKind::Body => match &param.typ {
+                    OperationParameterType::Type(_) => {
+                        Some(quote! { .json(body) })
+                    }
+                    OperationParameterType::RawBody => {
+                        Some(quote! { .body(body) })
+                    }
+                },
+                _ => None,
+            });
+        // ... and there can be at most one body.
+        assert!(body_func.clone().count() <= 1);
+
+        let (success_response_items, response_type) = self.extract_responses(
+            method,
+            OperationResponseStatus::is_success_or_default,
+        );
+
+        let success_response_matches =
+            success_response_items.iter().map(|response| {
+                let pat = match &response.status_code {
+                    OperationResponseStatus::Code(code) => quote! { #code },
+                    OperationResponseStatus::Range(_)
+                    | OperationResponseStatus::Default => {
+                        quote! { 200 ..= 299 }
+                    }
+                };
+
+                let decode = match &response.typ {
+                    OperationResponseType::Type(_) => {
+                        quote! {
+                            ResponseValue::from_response(response).await
+                        }
+                    }
+                    OperationResponseType::None => {
+                        quote! {
+                            Ok(ResponseValue::empty(response))
+                        }
+                    }
+                    OperationResponseType::Raw => {
+                        quote! {
+                            Ok(ResponseValue::stream(response))
+                        }
+                    }
+                };
+
+                quote! { #pat => { #decode } }
+            });
+
+        // Errors...
+        let (error_response_items, error_type) = self.extract_responses(
+            method,
+            OperationResponseStatus::is_error_or_default,
+        );
+
+        let error_response_matches =
+            error_response_items.iter().map(|response| {
+                let pat = match &response.status_code {
+                    OperationResponseStatus::Code(code) => {
+                        quote! { #code }
+                    }
+                    OperationResponseStatus::Range(r) => {
+                        let min = r * 100;
+                        let max = min + 99;
+                        quote! { #min ..= #max }
+                    }
+
+                    OperationResponseStatus::Default => {
+                        quote! { _ }
+                    }
+                };
+
+                let decode = match &response.typ {
+                    OperationResponseType::Type(_) => {
+                        quote! {
+                            Err(Error::ErrorResponse(
+                                ResponseValue::from_response(response)
+                                    .await?
+                            ))
+                        }
+                    }
+                    OperationResponseType::None => {
+                        quote! {
+                            Err(Error::ErrorResponse(
+                                ResponseValue::empty(response)
+                            ))
+                        }
+                    }
+                    OperationResponseType::Raw => {
+                        quote! {
+                            Err(Error::ErrorResponse(
+                                ResponseValue::stream(response)
+                            ))
+                        }
+                    }
+                };
+
+                quote! { #pat => { #decode } }
+            });
+
+        // Generate the catch-all case for other statuses. If the operation
+        // specifies a default response, we've already generated a default
+        // match as part of error response code handling. (And we've handled
+        // the default as a success response as well.) Otherwise the catch-all
+        // produces an error corresponding to a response not specified in the
+        // API description.
+        let default_response = match method.responses.iter().last() {
+            Some(response) if response.status_code.is_default() => quote! {},
+            _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
+        };
+
+        let pre_hook = self.pre_hook.as_ref().map(|hook| {
+            quote! {
+                (#hook)(&self.inner, &request);
+            }
+        });
+        let post_hook = self.post_hook.as_ref().map(|hook| {
+            quote! {
+                (#hook)(&self.inner, &result);
+            }
+        });
+
+        let method_func = format_ident!("{}", method.method.as_str());
+
+        let body_impl = quote! {
+            #url_path
+            #query_build
+
+            let request = self.client
+                . #method_func (url)
+                #(#body_func)*
+                #query_use
+                .build()?;
+            #pre_hook
+            let result = self.client
+                .execute(request)
+                .await;
+            #post_hook
+
+            let response = result?;
+
+            match response.status().as_u16() {
+                // These will be of the form...
+                // 201 => ResponseValue::from_response(response).await,
+                // 200..299 => ResponseValue::empty(response),
+                // TODO this kind of enumerated response isn't implemented
+                // ... or in the case of an operation with multiple
+                // successful response types...
+                // 200 => {
+                //     ResponseValue::from_response()
+                //         .await?
+                //         .map(OperationXResponse::ResponseTypeA)
+                // }
+                // 201 => {
+                //     ResponseValue::from_response()
+                //         .await?
+                //         .map(OperationXResponse::ResponseTypeB)
+                // }
+                #(#success_response_matches)*
+
+                // This is almost identical to the success types except
+                // they are wrapped in Error::ErrorResponse...
+                // 400 => {
+                //     Err(Error::ErrorResponse(
+                //         ResponseValue::from_response(response.await?)
+                //     ))
+                // }
+                #(#error_response_matches)*
+
+                // The default response is either an Error with a known
+                // type if the operation defines a default (as above) or
+                // an Error::UnexpectedResponse...
+                // _ => Err(Error::UnexpectedResponse(response)),
+                #default_response
+            }
+        };
+
+        Ok(MethodSigBody {
+            success: response_type,
+            error: error_type,
+            body: body_impl,
+        })
+    }
+
     fn extract_responses<'a>(
         &self,
         method: &'a OperationMethod,
@@ -1151,12 +1398,11 @@ impl Generator {
                             None
                         })
                         .collect::<Vec<_>>()
-                        .join(", ")
-                        ;
-                        // return Err(super::Error::InvalidRequest(
-                        //     format!("the following parameters are required: {}",
-                        // missing)));
-                        todo!();
+                        .join(", ");
+                        return Err(super::Error::InvalidRequest(format!(
+                            "the following parameters are required: {}",
+                            missing,
+                        )));
                     }
                 }
             }
@@ -1181,7 +1427,6 @@ impl Generator {
                     #required_extract;
 
                     // TODO undo the generation of optional types
-                    // TODO check that the required values are set
                     // TODO split up the positional argument version to extract
                     // the core which will be this function
                     todo!()
