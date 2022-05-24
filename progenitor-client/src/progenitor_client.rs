@@ -194,6 +194,32 @@ impl<E> From<reqwest::Error> for Error<E> {
     }
 }
 
+struct F {
+    client: u32,
+    user_name: Option<String>,
+}
+impl F {
+    pub async fn send(
+        self,
+    ) -> Result<super::ResponseValue<()>, super::Error<()>> {
+        let Self { client, user_name } = self;
+        let (user_name,) = match (user_name,) {
+            (Some(user_name),) => (user_name,),
+            (user_name,) => {
+                let missing = [(user_name.is_none(), stringify!(user_name))]
+                    .into_iter()
+                    .filter_map(
+                        |(unset, name)| if unset { Some(name) } else { None },
+                    )
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                todo!();
+            }
+        };
+        todo!()
+    }
+}
+
 impl<E> std::fmt::Display for Error<E> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {

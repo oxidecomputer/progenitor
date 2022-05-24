@@ -1116,7 +1116,54 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
+        let destructure = method
+            .params
+            .iter()
+            .map(|param| format_ident!("{}", param.name));
+
+        let req_names = method
+            .params
+            .iter()
+            .filter_map(|param| match param.kind {
+                OperationParameterKind::Path
+                | OperationParameterKind::Query(true)
+                | OperationParameterKind::Body => {
+                    Some(format_ident!("{}", param.name))
+                }
+                OperationParameterKind::Query(false) => None,
+            })
+            .collect::<Vec<_>>();
+
+        let required_extract = if req_names.is_empty() {
+            quote! {}
+        } else {
+            quote! {
+                let ( #( #req_names, )* ) = match ( #( #req_names, )* ) {
+                    ( #( Some(#req_names), )* ) => ( #( #req_names, )* ),
+                    ( #( #req_names, )* ) => {
+                        let missing = [
+                            #( ( #req_names.is_none(), stringify!(#req_names) ), )*
+                        ]
+                        .into_iter()
+                        .filter_map(|(unset, name)| if unset {
+                            Some(name)
+                        } else {
+                            None
+                        })
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                        ;
+                        // return Err(super::Error::InvalidRequest(
+                        //     format!("the following parameters are required: {}",
+                        // missing)));
+                        todo!();
+                    }
+                }
+            }
+        };
+
         let ret = quote! {
+            // TODO doc comment pointing to src (method or trait function)
             pub struct #struct_ident<'a> {
                 client: &'a super::Client,
                 #( #properties ),*
@@ -1125,7 +1172,15 @@ impl Generator {
             impl<'a> #struct_ident<'a> {
                 #( #property_impls )*
 
-                pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                pub async fn send(self) -> Result<super::ResponseValue<()>, super::Error<()>> {
+                    let Self {
+                        client,
+                        #( #destructure ),*
+                    } = self;
+
+                    #required_extract;
+
+                    // TODO undo the generation of optional types
                     // TODO check that the required values are set
                     // TODO split up the positional argument version to extract
                     // the core which will be this function
