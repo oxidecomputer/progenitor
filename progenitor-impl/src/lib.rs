@@ -84,19 +84,22 @@ impl Generator {
             .flat_map(|(path, ref_or_item)| {
                 // Exclude externally defined path items.
                 let item = ref_or_item.as_item().unwrap();
-                // TODO punt on parameters that apply to all path items for now.
-                assert!(item.parameters.is_empty());
                 item.iter().map(move |(method, operation)| {
-                    (path.as_str(), method, operation)
+                    (path.as_str(), method, operation, &item.parameters)
                 })
             })
-            .map(|(path, method, operation)| {
-                self.process_operation(
-                    operation,
-                    &spec.components,
-                    path,
-                    method,
-                )
+            .map(|(path, method, operation, inherited_parameters)| {
+                let new_params = operation
+                    .parameters
+                    .iter()
+                    .chain(inherited_parameters.iter())
+                    .cloned()
+                    .collect();
+                let op = openapiv3::Operation {
+                    parameters: new_params,
+                    ..operation.clone()
+                };
+                self.process_operation(&op, &spec.components, path, method)
             })
             .collect::<Result<Vec<_>>>()?;
 
