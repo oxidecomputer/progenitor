@@ -121,6 +121,11 @@ impl Generator {
 
         let inner_property = self.inner_type.as_ref().map(|inner| {
             quote! {
+                pub (crate) inner: #inner,
+            }
+        });
+        let inner_parameter = self.inner_type.as_ref().map(|inner| {
+            quote! {
                 inner: #inner,
             }
         });
@@ -134,6 +139,7 @@ impl Generator {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
+            use progenitor_client::encode_path as progenitor_client_encode_path;
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
@@ -143,21 +149,25 @@ impl Generator {
 
             pub mod builder {
                 use super::types;
+                #[allow(unused_imports)]
+                use super::{ByteStream, Error, ResponseValue};
+                #[allow(unused_imports)]
+                use super::progenitor_client_encode_path;
 
                 #(#builder_struct)*
             }
 
             #[derive(Clone)]
             pub struct Client {
-                baseurl: String,
-                client: reqwest::Client,
+                pub(crate) baseurl: String,
+                pub(crate) client: reqwest::Client,
                 #inner_property
             }
 
             impl Client {
                 pub fn new(
                     baseurl: &str,
-                    #inner_property
+                    #inner_parameter
                 ) -> Self {
                     let dur = std::time::Duration::from_secs(15);
                     let client = reqwest::ClientBuilder::new()
@@ -171,7 +181,7 @@ impl Generator {
                 pub fn new_with_client(
                     baseurl: &str,
                     client: reqwest::Client,
-                    #inner_property
+                    #inner_parameter
                 ) -> Self {
                     Self {
                         baseurl: baseurl.to_string(),

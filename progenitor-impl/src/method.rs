@@ -502,185 +502,13 @@ impl Generator {
             quote! { <'a> }
         };
 
-        // Generate code for query parameters.
-        let query_items = method
-            .params
-            .iter()
-            .filter_map(|param| match &param.kind {
-                OperationParameterKind::Query(required) => {
-                    let qn = &param.api_name;
-                    let qn_ident = format_ident!("{}", &param.name);
-                    Some(if *required {
-                        quote! {
-                            query.push((#qn, #qn_ident .to_string()));
-                        }
-                    } else {
-                        quote! {
-                            if let Some(v) = & #qn_ident {
-                                query.push((#qn, v.to_string()));
-                            }
-                        }
-                    })
-                }
-                _ => None,
-            })
-            .collect::<Vec<_>>();
-        let (query_build, query_use) = if query_items.is_empty() {
-            (quote! {}, quote! {})
-        } else {
-            let query_build = quote! {
-                let mut query = Vec::new();
-                #(#query_items)*
-            };
-            let query_use = quote! {
-                .query(&query)
-            };
-
-            (query_build, query_use)
-        };
-
-        // Generate the path rename map; then use it to generate code for
-        // assigning the path parameters to the `url` variable.
-        let url_renames = method
-            .params
-            .iter()
-            .filter_map(|param| match &param.kind {
-                OperationParameterKind::Path => {
-                    Some((&param.api_name, &param.name))
-                }
-                _ => None,
-            })
-            .collect();
-        let url_path = method.path.compile(url_renames);
-
-        // Generate code to handle the body...
-        let body_func =
-            method.params.iter().filter_map(|param| match &param.kind {
-                OperationParameterKind::Body => match &param.typ {
-                    OperationParameterType::Type(_) => {
-                        Some(quote! { .json(body) })
-                    }
-                    OperationParameterType::RawBody => {
-                        Some(quote! { .body(body) })
-                    }
-                },
-                _ => None,
-            });
-        // ... and there can be at most one body.
-        assert!(body_func.clone().count() <= 1);
-
-        let (success_response_items, response_type) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_success_or_default,
-        );
-
-        let success_response_matches =
-            success_response_items.iter().map(|response| {
-                let pat = match &response.status_code {
-                    OperationResponseStatus::Code(code) => quote! { #code },
-                    OperationResponseStatus::Range(_)
-                    | OperationResponseStatus::Default => {
-                        quote! { 200 ..= 299 }
-                    }
-                };
-
-                let decode = match &response.typ {
-                    OperationResponseType::Type(_) => {
-                        quote! {
-                            ResponseValue::from_response(response).await
-                        }
-                    }
-                    OperationResponseType::None => {
-                        quote! {
-                            Ok(ResponseValue::empty(response))
-                        }
-                    }
-                    OperationResponseType::Raw => {
-                        quote! {
-                            Ok(ResponseValue::stream(response))
-                        }
-                    }
-                };
-
-                quote! { #pat => { #decode } }
-            });
-
-        // Errors...
-        let (error_response_items, error_type) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_error_or_default,
-        );
-
-        let error_response_matches =
-            error_response_items.iter().map(|response| {
-                let pat = match &response.status_code {
-                    OperationResponseStatus::Code(code) => {
-                        quote! { #code }
-                    }
-                    OperationResponseStatus::Range(r) => {
-                        let min = r * 100;
-                        let max = min + 99;
-                        quote! { #min ..= #max }
-                    }
-
-                    OperationResponseStatus::Default => {
-                        quote! { _ }
-                    }
-                };
-
-                let decode = match &response.typ {
-                    OperationResponseType::Type(_) => {
-                        quote! {
-                            Err(Error::ErrorResponse(
-                                ResponseValue::from_response(response)
-                                    .await?
-                            ))
-                        }
-                    }
-                    OperationResponseType::None => {
-                        quote! {
-                            Err(Error::ErrorResponse(
-                                ResponseValue::empty(response)
-                            ))
-                        }
-                    }
-                    OperationResponseType::Raw => {
-                        quote! {
-                            Err(Error::ErrorResponse(
-                                ResponseValue::stream(response)
-                            ))
-                        }
-                    }
-                };
-
-                quote! { #pat => { #decode } }
-            });
-
-        // Generate the catch-all case for other statuses. If the operation
-        // specifies a default response, we've already generated a default
-        // match as part of error response code handling. (And we've handled
-        // the default as a success response as well.) Otherwise the catch-all
-        // produces an error corresponding to a response not specified in the
-        // API description.
-        let default_response = match method.responses.iter().last() {
-            Some(response) if response.status_code.is_default() => quote! {},
-            _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
-        };
-
         let doc_comment = make_doc_comment(method);
 
-        let pre_hook = self.pre_hook.as_ref().map(|hook| {
-            quote! {
-                (#hook)(&self.inner, &request);
-            }
-        });
-        let post_hook = self.post_hook.as_ref().map(|hook| {
-            quote! {
-                (#hook)(&self.inner, &result);
-            }
-        });
-
-        let method_func = format_ident!("{}", method.method.as_str());
+        let MethodSigBody {
+            success: success_type,
+            error: error_type,
+            body,
+        } = self.method_sig_body(method, quote! { self })?;
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -688,59 +516,10 @@ impl Generator {
                 &'a self,
                 #(#params),*
             ) -> Result<
-                ResponseValue<#response_type>,
+                ResponseValue<#success_type>,
                 Error<#error_type>,
             > {
-                #url_path
-                #query_build
-
-                let request = self.client
-                    . #method_func (url)
-                    #(#body_func)*
-                    #query_use
-                    .build()?;
-                #pre_hook
-                let result = self.client
-                    .execute(request)
-                    .await;
-                #post_hook
-
-                let response = result?;
-
-                match response.status().as_u16() {
-                    // These will be of the form...
-                    // 201 => ResponseValue::from_response(response).await,
-                    // 200..299 => ResponseValue::empty(response),
-                    // TODO this kind of enumerated response isn't implemented
-                    // ... or in the case of an operation with multiple
-                    // successful response types...
-                    // 200 => {
-                    //     ResponseValue::from_response()
-                    //         .await?
-                    //         .map(OperationXResponse::ResponseTypeA)
-                    // }
-                    // 201 => {
-                    //     ResponseValue::from_response()
-                    //         .await?
-                    //         .map(OperationXResponse::ResponseTypeB)
-                    // }
-                    #(#success_response_matches)*
-
-                    // This is almost identical to the success types except
-                    // they are wrapped in Error::ErrorResponse...
-                    // 400 => {
-                    //     Err(Error::ErrorResponse(
-                    //         ResponseValue::from_response(response.await?)
-                    //     ))
-                    // }
-                    #(#error_response_matches)*
-
-                    // The default response is either an Error with a known
-                    // type if the operation defines a default (as above) or
-                    // an Error::UnexpectedResponse...
-                    // _ => Err(Error::UnexpectedResponse(response)),
-                    #default_response
-                }
+                #body
             }
         };
 
@@ -880,8 +659,9 @@ impl Generator {
     }
 
     fn method_sig_body(
-        &mut self,
+        &self,
         method: &OperationMethod,
+        client: TokenStream,
     ) -> Result<MethodSigBody> {
         // Generate code for query parameters.
         let query_items = method
@@ -939,7 +719,7 @@ impl Generator {
             method.params.iter().filter_map(|param| match &param.kind {
                 OperationParameterKind::Body => match &param.typ {
                     OperationParameterType::Type(_) => {
-                        Some(quote! { .json(body) })
+                        Some(quote! { .json(&body) })
                     }
                     OperationParameterType::RawBody => {
                         Some(quote! { .body(body) })
@@ -1050,12 +830,12 @@ impl Generator {
 
         let pre_hook = self.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&self.inner, &request);
+                (#hook)(&client.inner, &request);
             }
         });
         let post_hook = self.post_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&self.inner, &result);
+                (#hook)(&client.inner, &result);
             }
         });
 
@@ -1065,13 +845,13 @@ impl Generator {
             #url_path
             #query_build
 
-            let request = self.client
+            let request = #client.client
                 . #method_func (url)
                 #(#body_func)*
                 #query_use
                 .build()?;
             #pre_hook
-            let result = self.client
+            let result = #client.client
                 .execute(request)
                 .await;
             #post_hook
@@ -1408,6 +1188,29 @@ impl Generator {
             }
         };
 
+        let MethodSigBody {
+            success,
+            error,
+            body,
+        } = self.method_sig_body(method, quote! { client})?;
+
+        let send_impl = quote! {
+            pub async fn send(self) -> Result<
+                ResponseValue<#success>,
+                Error<#error>
+            > {
+                let Self {
+                    client,
+                    #( #destructure ),*
+                } = self;
+
+                #required_extract;
+
+                // TODO undo the generation of optional types
+                #body
+            }
+        };
+
         let ret = quote! {
             // TODO doc comment pointing to src (method or trait function)
             pub struct #struct_ident<'a> {
@@ -1418,19 +1221,7 @@ impl Generator {
             impl<'a> #struct_ident<'a> {
                 #( #property_impls )*
 
-                pub async fn send(self) -> Result<super::ResponseValue<()>, super::Error<()>> {
-                    let Self {
-                        client,
-                        #( #destructure ),*
-                    } = self;
-
-                    #required_extract;
-
-                    // TODO undo the generation of optional types
-                    // TODO split up the positional argument version to extract
-                    // the core which will be this function
-                    todo!()
-                }
+                #send_impl
 
                 // TODO also generated stream() conditionally
             }

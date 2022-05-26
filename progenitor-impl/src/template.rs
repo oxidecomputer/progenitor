@@ -39,7 +39,7 @@ impl PathTemplate {
                         .expect(&format!("missing path name mapping {}", n)),
                 );
                 Some(quote! {
-                    progenitor_client::encode_path(&#param.to_string())
+                    progenitor_client_encode_path(&#param.to_string())
                 })
             } else {
                 None
@@ -47,7 +47,7 @@ impl PathTemplate {
         });
 
         quote! {
-            let url = format!(#fmt, self.baseurl, #(#components,)*);
+            let url = format!(#fmt, client.baseurl, #(#components,)*);
         }
     }
 
@@ -236,8 +236,8 @@ mod test {
         let out = t.compile(rename);
         let want = quote::quote! {
             let url = format!("{}/measure/{}",
-                self.baseurl,
-                progenitor_client::encode_path(&number.to_string()),
+                client.baseurl,
+                progenitor_client_encode_path(&number.to_string()),
             );
         };
         assert_eq!(want.to_string(), out.to_string());
