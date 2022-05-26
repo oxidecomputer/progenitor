@@ -1,6 +1,7 @@
 // Copyright 2021 Oxide Computer Company
 
 use indexmap::IndexMap;
+use openapiv3::AnySchema;
 use serde_json::Value;
 
 pub trait ToSchema {
@@ -368,7 +369,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
             }
 
             // This is the permissive schema that allows anything to match.
-            openapiv3::SchemaKind::Any(openapiv3::AnySchema {
+            openapiv3::SchemaKind::Any(AnySchema {
                 typ: None,
                 pattern: None,
                 multiple_of: None,
@@ -408,7 +409,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
             }
 
             // A simple null value.
-            openapiv3::SchemaKind::Any(openapiv3::AnySchema {
+            openapiv3::SchemaKind::Any(AnySchema {
                 typ: None,
                 pattern: None,
                 multiple_of: None,
@@ -452,7 +453,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
             }
 
             // Malformed object with 'type' not set.
-            openapiv3::SchemaKind::Any(openapiv3::AnySchema {
+            openapiv3::SchemaKind::Any(AnySchema {
                 typ: None,
                 pattern: None,
                 multiple_of: None,
@@ -499,7 +500,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
             }
 
             // Malformed array with 'type' not set.
-            openapiv3::SchemaKind::Any(openapiv3::AnySchema {
+            openapiv3::SchemaKind::Any(AnySchema {
                 typ: None,
                 pattern: None,
                 multiple_of: None,
@@ -543,102 +544,6 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     ),
                 };
                 array.convert().into()
-            }
-
-            // A simple string with an invalid enumeration
-            openapiv3::SchemaKind::Any(openapiv3::AnySchema {
-                typ: Some(typ),
-                format,
-                pattern,
-                enumeration,
-                min_length,
-                max_length,
-                multiple_of: None,
-                exclusive_minimum: None,
-                exclusive_maximum: None,
-                minimum: None,
-                maximum: None,
-                properties,
-                required,
-                additional_properties: None,
-                min_properties: None,
-                max_properties: None,
-                items: None,
-                min_items: None,
-                max_items: None,
-                unique_items: None,
-                one_of,
-                all_of,
-                any_of,
-                not: None,
-            }) if typ == "string"
-                && properties.is_empty()
-                && required.is_empty()
-                && one_of.is_empty()
-                && all_of.is_empty()
-                && any_of.is_empty()
-                && enumeration.iter().all(|value| {
-                    value.is_string() || value.is_boolean() || value.is_number()
-                }) =>
-            {
-                let schema = openapiv3::Schema {
-                    schema_data: self.schema_data.clone(),
-                    schema_kind: openapiv3::SchemaKind::Type(
-                        openapiv3::Type::String(openapiv3::StringType {
-                            format: match format {
-                                Some(s) if s == "date" => {
-                                    openapiv3::VariantOrUnknownOrEmpty::Item(
-                                        openapiv3::StringFormat::Date,
-                                    )
-                                }
-                                Some(s) if s == "date-time" => {
-                                    openapiv3::VariantOrUnknownOrEmpty::Item(
-                                        openapiv3::StringFormat::DateTime,
-                                    )
-                                }
-                                Some(s) if s == "password" => {
-                                    openapiv3::VariantOrUnknownOrEmpty::Item(
-                                        openapiv3::StringFormat::Password,
-                                    )
-                                }
-                                Some(s) if s == "byte" => {
-                                    openapiv3::VariantOrUnknownOrEmpty::Item(
-                                        openapiv3::StringFormat::Byte,
-                                    )
-                                }
-                                Some(s) if s == "binary" => {
-                                    openapiv3::VariantOrUnknownOrEmpty::Item(
-                                        openapiv3::StringFormat::Binary,
-                                    )
-                                }
-                                Some(s) => {
-                                    openapiv3::VariantOrUnknownOrEmpty::Unknown(
-                                        s.clone(),
-                                    )
-                                }
-                                None => {
-                                    openapiv3::VariantOrUnknownOrEmpty::Empty
-                                }
-                            },
-                            pattern: pattern.clone(),
-                            enumeration: enumeration
-                                .iter()
-                                .map(|value| match value {
-                                    Value::Null => None,
-                                    Value::Bool(b) => Some(format!("{}", b)),
-                                    Value::Number(n) => Some(format!("{}", n)),
-                                    Value::String(s) => Some(s.clone()),
-                                    Value::Array(_) | Value::Object(_) => {
-                                        unreachable!()
-                                    }
-                                })
-                                .collect(),
-                            min_length: *min_length,
-                            max_length: *max_length,
-                        }),
-                    ),
-                };
-                schema.convert().into()
             }
 
             openapiv3::SchemaKind::Any(_) => {
@@ -825,67 +730,5 @@ mod tests {
                 schemars::schema::InstanceType::Null
             )))
         );
-    }
-
-    // Tests support for a non-string in an enum for a string type.
-    #[test]
-    fn test_mixed_string_enum() {
-        let j = json!({
-          "type": "string",
-          "description": "Valid account subtypes for investment accounts. For a list containing                    descriptions of each subtype, see [Account schemas](https://plaid.com/docs/api/accounts/             #StandaloneAccountType-investment).",
-          "enum": [
-            529,
-            "401a",
-            "401k",
-            "403B",
-            "457b",
-            "brokerage",
-            "cash isa",
-            "education savings account",
-            "fixed annuity",
-            "gic",
-            "health reimbursement arrangement",
-            "hsa",
-            "ira",
-            "isa",
-            "keogh",
-            "lif",
-            "life insurance",
-            "lira",
-            "lrif",
-            "lrsp",
-            "mutual fund",
-            "non-taxable brokerage account",
-            "other",
-            "other annuity",
-            "other insurance",
-            "pension",
-            "prif",
-            "profit sharing plan",
-            "qshr",
-            "rdsp",
-            "resp",
-            "retirement",
-            "rlif",
-            "roth",
-            "roth 401k",
-            "rrif",
-            "rrsp",
-            "sarsep",
-            "sep ira",
-            "simple ira",
-            "sipp",
-            "stock plan",
-            "tfsa",
-            "trust",
-            "ugma",
-            "utma",
-            "variable annuity",
-            "all"
-          ]
-        });
-
-        let schema = serde_json::from_value::<openapiv3::Schema>(j).unwrap();
-        let s = schema.convert();
     }
 }
