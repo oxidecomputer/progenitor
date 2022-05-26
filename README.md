@@ -20,7 +20,7 @@ In a source file (often `main.rs`, `lib.rs`, or `mod.rs`) simply invoke the
 macro:
 
 ```rust
-generate_api("path/to/openapi_document.json");
+generate_api!("path/to/openapi_document.json");
 ```
 
 You'll need to add add the following to `Cargo.toml`:
