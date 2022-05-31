@@ -105,6 +105,11 @@ impl Generator {
             .map(|method| self.builder_struct(method))
             .collect::<Result<Vec<_>>>()?;
 
+        let builder_methods = raw_methods
+            .iter()
+            .map(|method| self.builder_impl(method))
+            .collect::<Vec<_>>();
+
         let methods = raw_methods
             .iter()
             .map(|method| self.positional_method(method))
@@ -139,7 +144,7 @@ impl Generator {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
-            use progenitor_client::encode_path as progenitor_client_encode_path;
+            use progenitor_client::encode_path;
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
@@ -152,7 +157,7 @@ impl Generator {
                 #[allow(unused_imports)]
                 use super::{ByteStream, Error, ResponseValue};
                 #[allow(unused_imports)]
-                use super::progenitor_client_encode_path;
+                use super::encode_path;
 
                 #(#builder_struct)*
             }
@@ -198,7 +203,9 @@ impl Generator {
                     &self.client
                 }
 
-                #(#methods)*
+                //#(#methods)*
+
+                #(#builder_methods)*
             }
         };
 

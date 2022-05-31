@@ -9,15 +9,15 @@ pub async fn iteration_example() {
         username: "ahl".to_string(),
     };
 
-    let mut stream = client.spoof_login(&bod).await.unwrap();
+    //let mut stream = client.spoof_login(&bod).await.unwrap();
 
-    loop {
-        use futures::TryStreamExt;
+    // loop {
+    //     use futures::TryStreamExt;
 
-        match stream.try_next().await {
-            Ok(Some(bytes)) => println!("bytes: {:?}", bytes),
-            Ok(None) => break,
-            Err(e) => panic!("{}", e),
-        }
-    }
+    //     match stream.try_next().await {
+    //         Ok(Some(bytes)) => println!("bytes: {:?}", bytes),
+    //         Ok(None) => break,
+    //         Err(e) => panic!("{}", e),
+    //     }
+    // }
 }

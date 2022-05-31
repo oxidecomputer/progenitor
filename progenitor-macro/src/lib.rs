@@ -60,11 +60,25 @@ pub fn generate_api(item: TokenStream) -> TokenStream {
 #[derive(Deserialize)]
 struct Settings {
     spec: ParseWrapper<LitStr>,
+    #[serde(default)]
+    style: GenerationStyle,
     inner_type: Option<ParseWrapper<syn::Type>>,
     pre_hook: Option<ParseWrapper<ClosureOrPath>>,
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
     #[serde(default)]
     derives: Vec<ParseWrapper<syn::Path>>,
+}
+
+#[derive(Deserialize)]
+enum GenerationStyle {
+    Positional,
+    Builder,
+}
+
+impl Default for GenerationStyle {
+    fn default() -> Self {
+        Self::Positional
+    }
 }
 
 #[derive(Debug)]
@@ -96,6 +110,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         } else {
             let Settings {
                 spec,
+                style,
                 inner_type,
                 pre_hook,
                 post_hook,
@@ -122,13 +137,13 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         serde_json::from_reader(std::fs::File::open(&path).map_err(|e| {
             syn::Error::new(
                 spec.span(),
-                format!("couldn't read file {}: {}", path_str, e.to_string()),
+                format!("couldn't read file {}: {}", path_str, e),
             )
         })?)
         .map_err(|e| {
             syn::Error::new(
                 spec.span(),
-                format!("failed to parse {}: {}", path_str, e.to_string()),
+                format!("failed to parse {}: {}", path_str, e),
             )
         })?;
 
@@ -146,7 +161,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let code = builder.generate_tokens(&oapi).map_err(|e| {
         syn::Error::new(
             spec.span(),
-            format!("generation error for {}: {}", spec.value(), e.to_string()),
+            format!("generation error for {}: {}", spec.value(), e),
         )
     })?;
 

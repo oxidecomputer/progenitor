@@ -80,6 +80,12 @@ struct MethodSigBody {
     body: TokenStream,
 }
 
+struct BuilderImpl {
+    doc: String,
+    sig: TokenStream,
+    body: TokenStream,
+}
+
 struct DropshotPagination {
     item: TypeId,
 }
@@ -468,6 +474,7 @@ impl Generator {
             dropshot_paginated,
         })
     }
+
     pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
@@ -712,7 +719,7 @@ impl Generator {
                 _ => None,
             })
             .collect();
-        let url_path = method.path.compile(url_renames);
+        let url_path = method.path.compile(url_renames, client.clone());
 
         // Generate code to handle the body...
         let body_func =
@@ -830,12 +837,12 @@ impl Generator {
 
         let pre_hook = self.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&client.inner, &request);
+                (#hook)(&#client.inner, &request);
             }
         });
         let post_hook = self.post_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&client.inner, &result);
+                (#hook)(&#client.inner, &result);
             }
         });
 
@@ -1188,6 +1195,26 @@ impl Generator {
             }
         };
 
+        let param_props = method
+            .params
+            .iter()
+            .map(|param| {
+                let name = format_ident!("{}", param.name);
+                quote! {
+                    #name: None,
+                }
+            })
+            .collect::<Vec<_>>();
+
+        let new_impl = quote! {
+            pub fn new(client: &'a super::Client) -> Self {
+                Self {
+                    client,
+                    #(#param_props)*
+                }
+            }
+        };
+
         let MethodSigBody {
             success,
             error,
@@ -1219,6 +1246,8 @@ impl Generator {
             }
 
             impl<'a> #struct_ident<'a> {
+                #new_impl
+
                 #( #property_impls )*
 
                 #send_impl
@@ -1227,6 +1256,55 @@ impl Generator {
             }
         };
         Ok(ret)
+    }
+
+    fn builder_helper(&self, method: &OperationMethod) -> BuilderImpl {
+        let operation_id = format_ident!("{}", method.operation_id);
+        let struct_name = sanitize(&method.operation_id, Case::Pascal);
+        let struct_ident = format_ident!("{}", struct_name);
+        let doc = make_doc_comment(method);
+
+        let sig = quote! {
+            fn #operation_id(&self) -> builder:: #struct_ident
+        };
+
+        let body = quote! {
+            builder:: #struct_ident ::new(self)
+        };
+        BuilderImpl { doc, sig, body }
+    }
+
+    pub(crate) fn builder_tag_impl(
+        &self,
+        method: &OperationMethod,
+    ) -> (TokenStream, TokenStream) {
+        let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+
+        let trait_sig = quote! {
+            #[doc = #doc]
+            #sig
+        };
+
+        let impl_body = quote! {
+            #sig {
+                #body
+            }
+        };
+
+        (trait_sig, impl_body)
+    }
+
+    pub(crate) fn builder_impl(&self, method: &OperationMethod) -> TokenStream {
+        let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+
+        let impl_body = quote! {
+            #[doc = #doc]
+            pub #sig {
+                #body
+            }
+        };
+
+        impl_body
     }
 }
 
