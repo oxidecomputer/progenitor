@@ -191,7 +191,7 @@ dependencies = [
 [[package]]
 name = "dropshot"
 version = "0.7.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#1da9d81a052a66bbbbb65e4bd3be1cb34d57ff2c"
+source = "git+https://github.com/oxidecomputer/dropshot#5ab8279c85640c917f5c64864e3c80e25a9cb292"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -229,7 +229,7 @@ dependencies = [
 [[package]]
 name = "dropshot_endpoint"
 version = "0.7.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#1da9d81a052a66bbbbb65e4bd3be1cb34d57ff2c"
+source = "git+https://github.com/oxidecomputer/dropshot#5ab8279c85640c917f5c64864e3c80e25a9cb292"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1728,9 +1728,9 @@ dependencies = [
 
 [[package]]
 name = "uuid"
-version = "1.0.0"
+version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cfcd319456c4d6ea10087ed423473267e1a071f3bc0aa89f80d60997843c6f0"
+checksum = "c6d5d669b51467dcf7b2f1a796ce0f955f05f01cafda6c19d6e95f730df29238"
 dependencies = [
  "getrandom",
  "serde",
