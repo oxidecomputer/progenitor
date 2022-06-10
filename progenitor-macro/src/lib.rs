@@ -4,7 +4,9 @@ use std::path::Path;
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
-use progenitor_impl::Generator;
+use progenitor_impl::{
+    GenerationSettings, Generator, InterfaceStyle, TagStyle,
+};
 use quote::{quote, ToTokens};
 use serde::Deserialize;
 use serde_tokenstream::ParseWrapper;
@@ -58,10 +60,12 @@ pub fn generate_api(item: TokenStream) -> TokenStream {
 }
 
 #[derive(Deserialize)]
-struct Settings {
+struct MacroSettings {
     spec: ParseWrapper<LitStr>,
     #[serde(default)]
-    style: GenerationStyle,
+    interface: InterfaceStyle,
+    #[serde(default)]
+    tag: TagStyle,
     inner_type: Option<ParseWrapper<syn::Type>>,
     pre_hook: Option<ParseWrapper<ClosureOrPath>>,
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
@@ -104,26 +108,35 @@ impl syn::parse::Parse for ClosureOrPath {
 }
 
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
-    let (spec, inner_type, pre_hook, post_hook, derives) =
-        if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
-            (spec, None, None, None, Vec::new())
-        } else {
-            let Settings {
-                spec,
-                style,
-                inner_type,
-                pre_hook,
-                post_hook,
-                derives,
-            } = serde_tokenstream::from_tokenstream(&item.into())?;
-            (
-                spec.into_inner(),
-                inner_type.map(|x| x.into_inner()),
-                pre_hook.map(|x| x.into_inner()),
-                post_hook.map(|x| x.into_inner()),
-                derives.into_iter().map(ParseWrapper::into_inner).collect(),
-            )
-        };
+    let (spec, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone())
+    {
+        (spec, GenerationSettings::default())
+    } else {
+        let MacroSettings {
+            spec,
+            interface,
+            tag,
+            inner_type,
+            pre_hook,
+            post_hook,
+            derives,
+        } = serde_tokenstream::from_tokenstream(&item.into())?;
+        let mut settings = GenerationSettings::default();
+        settings.with_interface(interface);
+        settings.with_tag(tag);
+        inner_type.map(|inner_type| {
+            settings.with_inner_type(inner_type.to_token_stream())
+        });
+        pre_hook
+            .map(|pre_hook| settings.with_pre_hook(pre_hook.into_inner().0));
+        post_hook
+            .map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
+
+        derives.into_iter().for_each(|derive| {
+            settings.with_derive(derive.to_token_stream());
+        });
+        (spec.into_inner(), settings)
+    };
 
     let dir = std::env::var("CARGO_MANIFEST_DIR").map_or_else(
         |_| std::env::current_dir().unwrap(),
@@ -147,16 +160,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             )
         })?;
 
-    let mut builder = Generator::new();
-    inner_type.map(|inner_type| {
-        builder.with_inner_type(inner_type.to_token_stream())
-    });
-    pre_hook.map(|pre_hook| builder.with_pre_hook(pre_hook.0));
-    post_hook.map(|post_hook| builder.with_post_hook(post_hook.0));
-
-    derives.into_iter().for_each(|derive| {
-        builder.with_derive(derive.to_token_stream());
-    });
+    let mut builder = Generator::new(&settings);
 
     let code = builder.generate_tokens(&oapi).map_err(|e| {
         syn::Error::new(

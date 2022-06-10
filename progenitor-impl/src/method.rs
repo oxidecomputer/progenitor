@@ -2,7 +2,7 @@
 
 use std::{
     cmp::Ordering,
-    collections::{BTreeSet, HashMap},
+    collections::{BTreeMap, BTreeSet},
     str::FromStr,
 };
 
@@ -21,6 +21,7 @@ use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 /// The intermediate representation of an operation that will become a method.
 pub(crate) struct OperationMethod {
     operation_id: String,
+    pub tags: Vec<String>,
     method: HttpMethod,
     path: PathTemplate,
     summary: Option<String>,
@@ -461,6 +462,7 @@ impl Generator {
 
         Ok(OperationMethod {
             operation_id: sanitize(operation_id, Case::Snake),
+            tags: operation.tags.clone(),
             method: HttpMethod::from_str(method)?,
             path: tmp,
             summary: operation.summary.clone().filter(|s| !s.is_empty()),
@@ -835,12 +837,12 @@ impl Generator {
             _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
         };
 
-        let pre_hook = self.pre_hook.as_ref().map(|hook| {
+        let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
                 (#hook)(&#client.inner, &request);
             }
         });
-        let post_hook = self.post_hook.as_ref().map(|hook| {
+        let post_hook = self.settings.post_hook.as_ref().map(|hook| {
             quote! {
                 (#hook)(&#client.inner, &result);
             }
@@ -1040,7 +1042,7 @@ impl Generator {
             _ => return None,
         };
 
-        let properties = details.properties().collect::<HashMap<_, _>>();
+        let properties = details.properties().collect::<BTreeMap<_, _>>();
 
         // There should be exactly two properties: items and next_page
         if properties.len() != 2 {
@@ -1077,10 +1079,87 @@ impl Generator {
         }
     }
 
+    /// Create the builder structs along with their impls
+    ///
+    /// Builder structs are generally of this form:
+    /// ```ignore
+    /// struct OperationId<'a> {
+    ///     client: &'a super::Client,
+    ///     param_1: Option<String>,
+    ///     param_2: Option<String>,
+    /// }
+    /// ```
+    ///
+    /// All parameters are present and all their types are Option<T>. Each
+    /// parameter also has a corresponding method:
+    /// ```ignore
+    /// impl<'a> OperationId<'a> {
+    ///     pub fn param_1(self, value: String) {
+    ///         self.param_1 = value;
+    ///     self
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// The Client's operation_id method simply invokes the builder's new
+    /// method:
+    /// ```ignore
+    /// impl<'a> OperationId<'a> {
+    ///     pub fn new(client: &'a super::Client) -> Self {
+    ///         Self {
+    ///             client,
+    ///             param_1: None,
+    ///             param_2: None,
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Finally, builders have methods to execute the method and to stream
+    /// results in the case of a paginated interface. Both take care to check
+    /// that required parameters are specified:
+    /// ```ignore
+    /// impl<'a> OperationId<'a> {
+    ///     pub fn send(self) -> Result<
+    ///         ResponseValue<SuccessType>,
+    ///         Error<ErrorType>,
+    ///     > {
+    ///         let Self {
+    ///             client,
+    ///             param_1,
+    ///             param_2,
+    ///         } = self;
+    ///
+    ///         let (param_1, param_2) = match (param_1, param_2) {
+    ///             (Some(param_1), Some(param_2)) => (param_1, param_2),
+    ///             (param_1, param_2) => {
+    ///                 let missing = [
+    ///                     (param_1.is_none(), stringify!(param_1)),
+    ///                     (param_2.is_none(), stringify!(param_2)),
+    ///                 ]
+    ///                 .into_iter()
+    ///                 .filter_map(|unset, name| if unset {
+    ///                     Some(name)
+    ///                 } else {
+    ///                     None
+    ///                 })
+    ///                 .collect::<Vec<_>>()
+    ///                 .join(", ");
+    ///                 return Err(super::Error::InvalidRequest(format!(
+    ///                     "the following parameters are required: {}",
+    ///                     missing,
+    ///                 )));
+    ///             }
+    ///         };
+    ///     }
+    /// }
+    /// ```
     pub(crate) fn builder_struct(
         &self,
         method: &OperationMethod,
     ) -> Result<TokenStream> {
+        // Generate the builder structure properties, turning each type T into
+        // an Option<T> (if it isn't already).
         let properties = method
             .params
             .iter()
@@ -1088,19 +1167,20 @@ impl Generator {
                 let name = format_ident!("{}", param.name);
                 let typ = match &param.typ {
                     OperationParameterType::Type(type_id) => {
+                        // TODO currently we explicitly turn optional paramters
+                        // into Option types; we could probably defer this to
+                        // the code generation step to avoid the special
+                        // handling here.
                         let ty = self.type_space.get_type(type_id)?;
-                        let x = if let typify::TypeDetails::Option(_) =
-                            &ty.details()
-                        {
-                            ty.ident()
+                        let t = ty.ident();
+                        let details = ty.details();
+                        if let typify::TypeDetails::Option(_) = details {
+                            t
                         } else {
-                            let t = ty.ident();
-                            quote! {
-                                Option<#t>
-                            }
-                        };
-                        x
+                            quote! { Option<#t> }
+                        }
                     }
+
                     OperationParameterType::RawBody => {
                         quote! { Option<reqwest::Body> }
                     }
@@ -1115,11 +1195,13 @@ impl Generator {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
 
+        // For each parameter, we need an impl for the builder to let consumers
+        // provide a value for the parameter.
         let property_impls = method
             .params
             .iter()
             .map(|param| {
-                let name = format_ident!("{}", param.name);
+                let param_name = format_ident!("{}", param.name);
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
@@ -1132,16 +1214,17 @@ impl Generator {
                                 ty.ident()
                             };
                         Ok(quote! {
-                            pub fn #name(mut self, value: #typ) -> Self {
-                                self.#name = Some(value);
+                            pub fn #param_name(mut self, value: #typ) -> Self {
+                                self.#param_name = Some(value);
                                 self
                             }
                         })
                     }
+
                     OperationParameterType::RawBody => {
                         Ok(quote! {
-                            pub fn #name<B: Into<reqwest::Body>>(mut self, value: B) -> Self {
-                                self.#name = Some(value.into());
+                            pub fn #param_name<B: Into<reqwest::Body>>(mut self, value: B) -> Self {
+                                self.#param_name = Some(value.into());
                                 self
                             }
                         })
@@ -1224,7 +1307,7 @@ impl Generator {
         let send_impl = quote! {
             pub async fn send(self) -> Result<
                 ResponseValue<#success>,
-                Error<#error>
+                Error<#error>,
             > {
                 let Self {
                     client,
@@ -1233,7 +1316,6 @@ impl Generator {
 
                 #required_extract;
 
-                // TODO undo the generation of optional types
                 #body
             }
         };
@@ -1274,24 +1356,75 @@ impl Generator {
         BuilderImpl { doc, sig, body }
     }
 
-    pub(crate) fn builder_tag_impl(
+    pub(crate) fn builder_tags(
         &self,
-        method: &OperationMethod,
-    ) -> (TokenStream, TokenStream) {
-        let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+        methods: &[OperationMethod],
+    ) -> TokenStream {
+        let mut base = Vec::new();
+        let mut ext = BTreeMap::new();
 
-        let trait_sig = quote! {
-            #[doc = #doc]
-            #sig
-        };
+        methods.iter().for_each(|method| {
+            let BuilderImpl { doc, sig, body } = self.builder_helper(method);
 
-        let impl_body = quote! {
-            #sig {
-                #body
+            if method.tags.is_empty() {
+                let impl_body = quote! {
+                    #[doc = #doc]
+                    pub #sig {
+                        #body
+                    }
+                };
+                base.push(impl_body);
+            } else {
+                let trait_sig = quote! {
+                    #[doc = #doc]
+                    #sig;
+                };
+
+                let impl_body = quote! {
+                    #sig {
+                        #body
+                    }
+                };
+                method.tags.iter().for_each(|tag| {
+                    ext.entry(tag.clone())
+                        .or_insert_with(Vec::new)
+                        .push((trait_sig.clone(), impl_body.clone()));
+                });
+            }
+        });
+
+        let base_impl = if base.is_empty() {
+            quote! {}
+        } else {
+            quote! {
+                impl Client {
+                    #(#base)*
+                }
             }
         };
 
-        (trait_sig, impl_body)
+        let ext_impl = ext.into_iter().map(|(tag, trait_methods)| {
+            let tr = format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));
+            let (trait_methods, trait_impls): (
+                Vec<TokenStream>,
+                Vec<TokenStream>,
+            ) = trait_methods.into_iter().unzip();
+            quote! {
+                pub trait #tr {
+                    #(#trait_methods)*
+                }
+
+                impl #tr for Client {
+                    #(#trait_impls)*
+                }
+            }
+        });
+
+        quote! {
+            #base_impl
+
+            #(#ext_impl)*
+        }
     }
 
     pub(crate) fn builder_impl(&self, method: &OperationMethod) -> TokenStream {

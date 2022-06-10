@@ -1,3 +1,4 @@
+use progenitor_client::encode_path;
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
@@ -1663,8 +1664,8 @@ pub mod types {
 
 #[derive(Clone)]
 pub struct Client {
-    baseurl: String,
-    client: reqwest::Client,
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
 }
 
 impl Client {
@@ -1692,7 +1693,9 @@ impl Client {
     pub fn client(&self) -> &reqwest::Client {
         &self.client
     }
+}
 
+impl Client {
     #[doc = "List racks in the system\n\nSends a `GET` request to `/hardware/racks`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
     pub async fn hardware_racks_get<'a>(
         &'a self,
@@ -1772,7 +1775,7 @@ impl Client {
         let url = format!(
             "{}/hardware/racks/{}",
             self.baseurl,
-            progenitor_client::encode_path(&rack_id.to_string()),
+            encode_path(&rack_id.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -1868,7 +1871,7 @@ impl Client {
         let url = format!(
             "{}/hardware/sleds/{}",
             self.baseurl,
-            progenitor_client::encode_path(&sled_id.to_string()),
+            encode_path(&sled_id.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -1963,7 +1966,7 @@ impl Client {
         body: &'a types::ImageCreate,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
         let url = format!("{}/images", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1986,7 +1989,7 @@ impl Client {
         let url = format!(
             "{}/images/{}",
             self.baseurl,
-            progenitor_client::encode_path(&image_name.to_string()),
+            encode_path(&image_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -2011,7 +2014,7 @@ impl Client {
         let url = format!(
             "{}/images/{}",
             self.baseurl,
-            progenitor_client::encode_path(&image_name.to_string()),
+            encode_path(&image_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -2034,7 +2037,7 @@ impl Client {
         body: &'a types::LoginParams,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/login", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2133,7 +2136,7 @@ impl Client {
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2156,7 +2159,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -2182,9 +2185,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2207,7 +2210,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -2232,7 +2235,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/policy",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -2258,9 +2261,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/policy",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2286,7 +2289,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2366,9 +2369,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2392,8 +2395,8 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -2420,10 +2423,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2447,8 +2450,8 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -2477,8 +2480,8 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2561,10 +2564,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2589,9 +2592,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&disk_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&disk_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -2618,9 +2621,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&disk_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&disk_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -2649,8 +2652,8 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/images",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2733,10 +2736,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/images",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2761,9 +2764,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/images/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&image_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&image_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -2790,9 +2793,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/images/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&image_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&image_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -2821,8 +2824,8 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -2906,10 +2909,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2934,9 +2937,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -2963,9 +2966,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -2995,9 +2998,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3090,11 +3093,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3120,11 +3123,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3150,11 +3153,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/migrate",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3182,9 +3185,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3278,11 +3281,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3308,10 +3311,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
-            progenitor_client::encode_path(&interface_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
+            encode_path(&interface_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -3339,10 +3342,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
-            progenitor_client::encode_path(&interface_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
+            encode_path(&interface_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -3369,9 +3372,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/reboot",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
@@ -3398,9 +3401,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/start",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
@@ -3427,9 +3430,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/stop",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&instance_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
         );
         let request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
@@ -3455,8 +3458,8 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/policy",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -3483,10 +3486,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/policy",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3513,8 +3516,8 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/snapshots",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3598,10 +3601,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/snapshots",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3626,9 +3629,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/snapshots/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&snapshot_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&snapshot_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -3655,9 +3658,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/snapshots/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&snapshot_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&snapshot_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -3686,8 +3689,8 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -3770,10 +3773,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3798,9 +3801,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -3828,11 +3831,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3857,9 +3860,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -3886,9 +3889,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -3916,11 +3919,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3948,9 +3951,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -4044,11 +4047,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4074,10 +4077,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&router_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&router_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -4106,12 +4109,12 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&router_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&router_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4137,10 +4140,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&router_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&router_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -4171,10 +4174,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&router_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&router_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -4272,12 +4275,12 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&router_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&router_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4304,11 +4307,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&router_name.to_string()),
-            progenitor_client::encode_path(&route_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&router_name.to_string()),
+            encode_path(&route_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -4338,13 +4341,13 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&router_name.to_string()),
-            progenitor_client::encode_path(&route_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&router_name.to_string()),
+            encode_path(&route_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4371,11 +4374,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&router_name.to_string()),
-            progenitor_client::encode_path(&route_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&router_name.to_string()),
+            encode_path(&route_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -4405,9 +4408,9 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -4501,11 +4504,11 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4531,10 +4534,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&subnet_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&subnet_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -4563,12 +4566,12 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&subnet_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&subnet_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4594,10 +4597,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&subnet_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&subnet_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -4628,10 +4631,10 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
             self.baseurl,
-            progenitor_client::encode_path(&organization_name.to_string()),
-            progenitor_client::encode_path(&project_name.to_string()),
-            progenitor_client::encode_path(&vpc_name.to_string()),
-            progenitor_client::encode_path(&subnet_name.to_string()),
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&vpc_name.to_string()),
+            encode_path(&subnet_name.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &limit {
@@ -4743,7 +4746,7 @@ impl Client {
         body: &'a types::FleetRolesPolicy,
     ) -> Result<ResponseValue<types::FleetRolesPolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4831,7 +4834,7 @@ impl Client {
         let url = format!(
             "{}/roles/{}",
             self.baseurl,
-            progenitor_client::encode_path(&role_name.to_string()),
+            encode_path(&role_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -4927,7 +4930,7 @@ impl Client {
         let url = format!(
             "{}/sagas/{}",
             self.baseurl,
-            progenitor_client::encode_path(&saga_id.to_string()),
+            encode_path(&saga_id.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -5041,7 +5044,7 @@ impl Client {
         body: &'a types::SshKeyCreate,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
         let url = format!("{}/session/me/sshkeys", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5064,7 +5067,7 @@ impl Client {
         let url = format!(
             "{}/session/me/sshkeys/{}",
             self.baseurl,
-            progenitor_client::encode_path(&ssh_key_name.to_string()),
+            encode_path(&ssh_key_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -5089,7 +5092,7 @@ impl Client {
         let url = format!(
             "{}/session/me/sshkeys/{}",
             self.baseurl,
-            progenitor_client::encode_path(&ssh_key_name.to_string()),
+            encode_path(&ssh_key_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -5183,7 +5186,7 @@ impl Client {
         body: &'a types::SiloCreate,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
         let url = format!("{}/silos", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5206,7 +5209,7 @@ impl Client {
         let url = format!(
             "{}/silos/{}",
             self.baseurl,
-            progenitor_client::encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -5231,7 +5234,7 @@ impl Client {
         let url = format!(
             "{}/silos/{}",
             self.baseurl,
-            progenitor_client::encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string()),
         );
         let request = self.client.delete(url).build()?;
         let result = self.client.execute(request).await;
@@ -5256,7 +5259,7 @@ impl Client {
         let url = format!(
             "{}/silos/{}/policy",
             self.baseurl,
-            progenitor_client::encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -5282,9 +5285,9 @@ impl Client {
         let url = format!(
             "{}/silos/{}/policy",
             self.baseurl,
-            progenitor_client::encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string()),
         );
-        let request = self.client.put(url).json(body).build()?;
+        let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5462,7 +5465,7 @@ impl Client {
         let url = format!(
             "{}/users/{}",
             self.baseurl,
-            progenitor_client::encode_path(&user_name.to_string()),
+            encode_path(&user_name.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;

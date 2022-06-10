@@ -3,6 +3,7 @@
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
+use serde::Deserialize;
 use thiserror::Error;
 use typify::TypeSpace;
 
@@ -32,15 +33,57 @@ pub type Result<T> = std::result::Result<T, Error>;
 #[derive(Default)]
 pub struct Generator {
     type_space: TypeSpace,
-    inner_type: Option<TokenStream>,
-    pre_hook: Option<TokenStream>,
-    post_hook: Option<TokenStream>,
+    settings: GenerationSettings,
     uses_futures: bool,
 }
 
-impl Generator {
+#[derive(Default, Clone)]
+pub struct GenerationSettings {
+    interface: InterfaceStyle,
+    tag: TagStyle,
+    inner_type: Option<TokenStream>,
+    pre_hook: Option<TokenStream>,
+    post_hook: Option<TokenStream>,
+    extra_derives: Vec<TokenStream>,
+}
+
+#[derive(Clone, Deserialize)]
+pub enum InterfaceStyle {
+    Positional,
+    Builder,
+}
+
+impl Default for InterfaceStyle {
+    fn default() -> Self {
+        Self::Positional
+    }
+}
+
+#[derive(Clone, Deserialize)]
+pub enum TagStyle {
+    Merged,
+    Separate,
+}
+
+impl Default for TagStyle {
+    fn default() -> Self {
+        Self::Merged
+    }
+}
+
+impl GenerationSettings {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
+        self.interface = interface;
+        self
+    }
+
+    pub fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
+        self.tag = tag;
+        self
     }
 
     pub fn with_inner_type(&mut self, inner_type: TokenStream) -> &mut Self {
@@ -58,12 +101,244 @@ impl Generator {
         self
     }
 
+    // TODO maybe change to a typify::Settings or something
     pub fn with_derive(&mut self, derive: TokenStream) -> &mut Self {
-        self.type_space.add_derive(derive);
+        self.extra_derives.push(derive);
         self
+    }
+}
+
+impl Generator {
+    pub fn new(settings: &GenerationSettings) -> Self {
+        Self {
+            type_space: TypeSpace::default(),
+            settings: settings.clone(),
+            uses_futures: false,
+        }
     }
 
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
+        // Convert our components dictionary to schemars
+        let schemas = spec
+            .components
+            .iter()
+            .flat_map(|components| {
+                components.schemas.iter().map(|(name, ref_or_schema)| {
+                    (name.clone(), ref_or_schema.to_schema())
+                })
+            })
+            .collect::<Vec<(String, _)>>();
+
+        self.type_space.set_type_mod("types");
+        self.type_space.add_ref_types(schemas)?;
+
+        let raw_methods = spec
+            .paths
+            .iter()
+            .flat_map(|(path, ref_or_item)| {
+                // Exclude externally defined path items.
+                let item = ref_or_item.as_item().unwrap();
+                // TODO punt on parameters that apply to all path items for now.
+                assert!(item.parameters.is_empty());
+                item.iter().map(move |(method, operation)| {
+                    (path.as_str(), method, operation)
+                })
+            })
+            .map(|(path, method, operation)| {
+                self.process_operation(
+                    operation,
+                    &spec.components,
+                    path,
+                    method,
+                )
+            })
+            .collect::<Result<Vec<_>>>()?;
+
+        let operation_code = match (
+            &self.settings.interface,
+            &self.settings.tag,
+        ) {
+            (InterfaceStyle::Positional, TagStyle::Merged) => {
+                self.generate_tokens_positional_merged(&raw_methods)
+            }
+            (InterfaceStyle::Positional, TagStyle::Separate) => {
+                unimplemented!("positional arguments with separate tags are currently unsupported")
+            }
+            (InterfaceStyle::Builder, TagStyle::Merged) => {
+                self.generate_tokens_builder_merged(&raw_methods)
+            }
+            (InterfaceStyle::Builder, TagStyle::Separate) => {
+                self.generate_tokens_builder_separate(&raw_methods)
+            }
+        }?;
+
+        let mut types = self
+            .type_space
+            .iter_types()
+            .map(|t| (t.name(), t.definition()))
+            .collect::<Vec<_>>();
+        types.sort_by(|(a_name, _), (b_name, _)| a_name.cmp(b_name));
+        let types = types.into_iter().map(|(_, def)| def);
+        let shared = self.type_space.common_code();
+
+        let inner_property = self.settings.inner_type.as_ref().map(|inner| {
+            quote! {
+                pub (crate) inner: #inner,
+            }
+        });
+        let inner_parameter = self.settings.inner_type.as_ref().map(|inner| {
+            quote! {
+                inner: #inner,
+            }
+        });
+        let inner_value = self.settings.inner_type.as_ref().map(|_| {
+            quote! {
+                inner
+            }
+        });
+
+        let file = quote! {
+            // Re-export ResponseValue and Error since those are used by the
+            // public interface of Client.
+            pub use progenitor_client::{ByteStream, Error, ResponseValue};
+            use progenitor_client::encode_path;
+
+            pub mod types {
+                use serde::{Deserialize, Serialize};
+                #shared
+                #(#types)*
+            }
+
+            #[derive(Clone)]
+            pub struct Client {
+                pub(crate) baseurl: String,
+                pub(crate) client: reqwest::Client,
+                #inner_property
+            }
+
+            impl Client {
+                pub fn new(
+                    baseurl: &str,
+                    #inner_parameter
+                ) -> Self {
+                    let dur = std::time::Duration::from_secs(15);
+                    let client = reqwest::ClientBuilder::new()
+                        .connect_timeout(dur)
+                        .timeout(dur)
+                        .build()
+                        .unwrap();
+                    Self::new_with_client(baseurl, client, #inner_value)
+                }
+
+                pub fn new_with_client(
+                    baseurl: &str,
+                    client: reqwest::Client,
+                    #inner_parameter
+                ) -> Self {
+                    Self {
+                        baseurl: baseurl.to_string(),
+                        client,
+                        #inner_value
+                    }
+                }
+
+                pub fn baseurl(&self) -> &String {
+                    &self.baseurl
+                }
+
+                pub fn client(&self) -> &reqwest::Client {
+                    &self.client
+                }
+
+            }
+
+            #operation_code
+        };
+
+        Ok(file)
+    }
+
+    fn generate_tokens_positional_merged(
+        &mut self,
+        input_methods: &[method::OperationMethod],
+    ) -> Result<TokenStream> {
+        let methods = input_methods
+            .iter()
+            .map(|method| self.positional_method(method))
+            .collect::<Result<Vec<_>>>()?;
+        let out = quote! {
+            impl Client {
+                #(#methods)*
+            }
+        };
+        Ok(out)
+    }
+
+    fn generate_tokens_builder_merged(
+        &mut self,
+        input_methods: &[method::OperationMethod],
+    ) -> Result<TokenStream> {
+        let builder_struct = input_methods
+            .iter()
+            .map(|method| self.builder_struct(method))
+            .collect::<Result<Vec<_>>>()?;
+
+        let builder_methods = input_methods
+            .iter()
+            .map(|method| self.builder_impl(method))
+            .collect::<Vec<_>>();
+
+        let out = quote! {
+            impl Client {
+                #(#builder_methods)*
+            }
+
+            pub mod builder {
+                use super::types;
+                #[allow(unused_imports)]
+                use super::{ByteStream, Error, ResponseValue};
+                #[allow(unused_imports)]
+                use super::encode_path;
+
+                #(#builder_struct)*
+            }
+        };
+
+        Ok(out)
+    }
+
+    fn generate_tokens_builder_separate(
+        &mut self,
+        input_methods: &[method::OperationMethod],
+    ) -> Result<TokenStream> {
+        let builder_struct = input_methods
+            .iter()
+            .map(|method| self.builder_struct(method))
+            .collect::<Result<Vec<_>>>()?;
+
+        let trait_and_impls = self.builder_tags(input_methods);
+
+        let out = quote! {
+            #trait_and_impls
+
+            pub mod builder {
+                use super::types;
+                #[allow(unused_imports)]
+                use super::{ByteStream, Error, ResponseValue};
+                #[allow(unused_imports)]
+                use super::encode_path;
+
+                #(#builder_struct)*
+            }
+        };
+
+        Ok(out)
+    }
+
+    fn generate_tokens_helper(
+        &mut self,
+        spec: &OpenAPI,
+    ) -> Result<TokenStream> {
         // Convert our components dictionary to schemars
         let schemas = spec
             .components
@@ -124,17 +399,17 @@ impl Generator {
         let types = types.into_iter().map(|(_, def)| def);
         let shared = self.type_space.common_code();
 
-        let inner_property = self.inner_type.as_ref().map(|inner| {
+        let inner_property = self.settings.inner_type.as_ref().map(|inner| {
             quote! {
                 pub (crate) inner: #inner,
             }
         });
-        let inner_parameter = self.inner_type.as_ref().map(|inner| {
+        let inner_parameter = self.settings.inner_type.as_ref().map(|inner| {
             quote! {
                 inner: #inner,
             }
         });
-        let inner_value = self.inner_type.as_ref().map(|_| {
+        let inner_value = self.settings.inner_type.as_ref().map(|_| {
             quote! {
                 inner
             }

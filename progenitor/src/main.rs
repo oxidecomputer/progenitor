@@ -51,7 +51,7 @@ fn main() -> Result<()> {
 
     let api = load_api(&args.opt_str("i").unwrap())?;
 
-    let mut builder = Generator::new();
+    let mut builder = Generator::default();
 
     match builder.generate_text(&api) {
         Ok(api_code) => {

@@ -1,3 +1,4 @@
+use progenitor_client::encode_path;
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
@@ -132,8 +133,8 @@ pub mod types {
 
 #[derive(Clone)]
 pub struct Client {
-    baseurl: String,
-    client: reqwest::Client,
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
 }
 
 impl Client {
@@ -161,7 +162,9 @@ impl Client {
     pub fn client(&self) -> &reqwest::Client {
         &self.client
     }
+}
 
+impl Client {
     #[doc = "Sends a `POST` request to `/v1/control/hold`"]
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
@@ -194,7 +197,7 @@ impl Client {
         let url = format!(
             "{}/v1/task/{}",
             self.baseurl,
-            progenitor_client::encode_path(&task.to_string()),
+            encode_path(&task.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -223,7 +226,7 @@ impl Client {
         body: &'a types::TaskSubmit,
     ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -241,7 +244,7 @@ impl Client {
         let url = format!(
             "{}/v1/tasks/{}/events",
             self.baseurl,
-            progenitor_client::encode_path(&task.to_string()),
+            encode_path(&task.to_string()),
         );
         let mut query = Vec::new();
         if let Some(v) = &minseq {
@@ -265,7 +268,7 @@ impl Client {
         let url = format!(
             "{}/v1/tasks/{}/outputs",
             self.baseurl,
-            progenitor_client::encode_path(&task.to_string()),
+            encode_path(&task.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -285,8 +288,8 @@ impl Client {
         let url = format!(
             "{}/v1/tasks/{}/outputs/{}",
             self.baseurl,
-            progenitor_client::encode_path(&task.to_string()),
-            progenitor_client::encode_path(&output.to_string()),
+            encode_path(&task.to_string()),
+            encode_path(&output.to_string()),
         );
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -303,7 +306,7 @@ impl Client {
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
         let url = format!("{}/v1/users", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -330,7 +333,7 @@ impl Client {
         body: &'a types::WorkerBootstrap,
     ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
         let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -362,9 +365,9 @@ impl Client {
         let url = format!(
             "{}/v1/worker/task/{}/append",
             self.baseurl,
-            progenitor_client::encode_path(&task.to_string()),
+            encode_path(&task.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -382,7 +385,7 @@ impl Client {
         let url = format!(
             "{}/v1/worker/task/{}/chunk",
             self.baseurl,
-            progenitor_client::encode_path(&task.to_string()),
+            encode_path(&task.to_string()),
         );
         let request = self.client.post(url).body(body).build()?;
         let result = self.client.execute(request).await;
@@ -402,9 +405,9 @@ impl Client {
         let url = format!(
             "{}/v1/worker/task/{}/complete",
             self.baseurl,
-            progenitor_client::encode_path(&task.to_string()),
+            encode_path(&task.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -422,9 +425,9 @@ impl Client {
         let url = format!(
             "{}/v1/worker/task/{}/output",
             self.baseurl,
-            progenitor_client::encode_path(&task.to_string()),
+            encode_path(&task.to_string()),
         );
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
