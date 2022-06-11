@@ -477,6 +477,57 @@ impl Generator {
         })
     }
 
+    // pub fn stream(
+    //     self,
+    // ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>>
+    //        + Unpin
+    //        + 'a {
+    //     use futures::StreamExt;
+    //     use futures::TryFutureExt;
+    //     use futures::TryStreamExt;
+
+    //     let next = Self {
+    //         limit: None,
+    //         page_token: None,
+    //         sort_by: None,
+    //         ..self.clone()
+    //     };
+    //     self.send()
+    //         .map_ok(move |page| {
+    //             let page = page.into_inner();
+    //             let first =
+    //                 futures::stream::iter(page.items.into_iter().map(Ok));
+    //             let rest = futures::stream::try_unfold(
+    //                 (page.next_page, next),
+    //                 |(state, next)| async {
+    //                     if state.is_none() {
+    //                         Ok(None)
+    //                     } else {
+    //                         Self {
+    //                             page_token: state,
+    //                             ..next.clone()
+    //                         }
+    //                         .send()
+    //                         .map_ok(|page| {
+    //                             let page = page.into_inner();
+    //                             Some((
+    //                                 futures::stream::iter(
+    //                                     page.items.into_iter().map(Ok),
+    //                                 ),
+    //                                 (page.next_page, next),
+    //                             ))
+    //                         })
+    //                         .await
+    //                     }
+    //                 },
+    //             )
+    //             .try_flatten();
+    //             first.chain(rest)
+    //         })
+    //         .try_flatten_stream()
+    //         .boxed()
+    // }
+
     pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
@@ -565,7 +616,7 @@ impl Generator {
             // The values passed to get subsequent pages are...
             // - the state variable for the page_token
             // - None for all other query parameters
-            // - The method inputs for non-query parameters
+            // - The initial inputs for non-query parameters
             let step_params = method.params.iter().map(|param| {
                 if param.api_name.as_str() == "page_token" {
                     quote! { state.as_deref() }
@@ -1138,7 +1189,7 @@ impl Generator {
     ///                     (param_2.is_none(), stringify!(param_2)),
     ///                 ]
     ///                 .into_iter()
-    ///                 .filter_map(|unset, name| if unset {
+    ///                 .filter_map(|unset, name| if *unset {
     ///                     Some(name)
     ///                 } else {
     ///                     None
@@ -1155,7 +1206,7 @@ impl Generator {
     /// }
     /// ```
     pub(crate) fn builder_struct(
-        &self,
+        &mut self,
         method: &OperationMethod,
     ) -> Result<TokenStream> {
         // Generate the builder structure properties, turning each type T into
@@ -1236,7 +1287,8 @@ impl Generator {
         let destructure = method
             .params
             .iter()
-            .map(|param| format_ident!("{}", param.name));
+            .map(|param| format_ident!("{}", param.name))
+            .collect::<Vec<_>>();
 
         let req_names = method
             .params
@@ -1258,23 +1310,20 @@ impl Generator {
                 let ( #( #req_names, )* ) = match ( #( #req_names, )* ) {
                     ( #( Some(#req_names), )* ) => ( #( #req_names, )* ),
                     ( #( #req_names, )* ) => {
-                        let missing = [
-                            #( ( #req_names.is_none(), stringify!(#req_names) ), )*
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset {
-                            Some(name)
-                        } else {
-                            None
-                        })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+
+                        #(
+                            if #req_names.is_none() {
+                                missing.push(stringify!(#req_names));
+                            }
+                        )*
+
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
-                }
+                };
             }
         };
 
@@ -1305,23 +1354,119 @@ impl Generator {
         } = self.method_sig_body(method, quote! { client})?;
 
         let send_impl = quote! {
+            // TODO do we want a doc comment here?
             pub async fn send(self) -> Result<
                 ResponseValue<#success>,
                 Error<#error>,
             > {
+                // Destructure the builder for convenience.
                 let Self {
                     client,
                     #( #destructure ),*
                 } = self;
 
-                #required_extract;
+                // Extract parameters into variables, returning an error if
+                // a value has not been provided for all required parameters.
+                #required_extract
 
+                // Do the work.
                 #body
             }
         };
 
+        let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
+            // We're now using futures.
+            self.uses_futures = true;
+
+            let step_params = method.params.iter().filter_map(|param| {
+                if let OperationParameterKind::Query(_) = param.kind {
+                    let name = format_ident!("{}", param.name);
+                    Some(quote! {
+                        #name: None
+                    })
+                } else {
+                    None
+                }
+            });
+            // The item type that we've saved (by picking apart the original
+            // function's return type) will be the Item type parameter for the
+            // Stream type we return.
+            let item = self.type_space.get_type(&page_data.item).unwrap();
+            let item_type = item.ident();
+
+            quote! {
+                pub fn stream(self) -> impl futures::Stream<Item = Result<
+                    #item_type,
+                    Error<#error>,
+                >> + Unpin + 'a {
+                    use futures::StreamExt;
+                    use futures::TryFutureExt;
+                    use futures::TryStreamExt;
+
+                    let next = Self {
+                        #( #step_params, )*
+                        ..self.clone()
+                    };
+
+                    self.send()
+                        .map_ok(move |page| {
+                            let page = page.into_inner();
+
+                            // The first page is just an iter
+                            let first = futures::stream::iter(
+                                page.items.into_iter().map(Ok)
+                            );
+
+                            // We unfold subsequent pages using page.next_page
+                            // as the seed value. Each iteration returns its
+                            // items and the new state which is a tuple of the
+                            // next page token and the Self template.
+                            let rest = futures::stream::try_unfold(
+                                (page.next_page, next),
+                                |(next_page, next)| async {
+                                    if next_page.is_none() {
+                                        // The page_token was None so we've reached
+                                        // the end.
+                                        Ok(None)
+                                    } else {
+                                        // Get the next page; here we set all query
+                                        // parameters to None (except for the
+                                        // page_token), and all other parameters as
+                                        // specified at the start of this method.
+                                        Self {
+                                            page_token: next_page,
+                                            ..next.clone()
+                                        }
+                                        .send()
+                                        .map_ok(|page| {
+                                            let page = page.into_inner();
+                                            Some((
+                                                futures::stream::iter(
+                                                    page
+                                                        .items
+                                                        .into_iter()
+                                                        .map(Ok),
+                                                ),
+                                                (page.next_page, next),
+                                            ))
+                                        })
+                                        .await
+                                    }
+                                },
+                            )
+                            .try_flatten();
+
+                            first.chain(rest)
+                        })
+                        .try_flatten_stream()
+                        .boxed()
+                }
+            }
+        });
+
         let ret = quote! {
             // TODO doc comment pointing to src (method or trait function)
+            #[derive(Clone)]
             pub struct #struct_ident<'a> {
                 client: &'a super::Client,
                 #( #properties ),*
@@ -1329,12 +1474,9 @@ impl Generator {
 
             impl<'a> #struct_ident<'a> {
                 #new_impl
-
                 #( #property_impls )*
-
                 #send_impl
-
-                // TODO also generated stream() conditionally
+                #stream_impl
             }
         };
         Ok(ret)

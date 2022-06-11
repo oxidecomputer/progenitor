@@ -9,7 +9,7 @@ use std::{
 
 use anyhow::{bail, Result};
 use openapiv3::OpenAPI;
-use progenitor::Generator;
+use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use serde::Deserialize;
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -51,7 +51,12 @@ fn main() -> Result<()> {
 
     let api = load_api(&args.opt_str("i").unwrap())?;
 
-    let mut builder = Generator::default();
+    //let mut builder = Generator::default();
+    let mut builder = Generator::new(
+        GenerationSettings::default()
+            .with_interface(InterfaceStyle::Builder)
+            .with_tag(TagStyle::Separate),
+    );
 
     match builder.generate_text(&api) {
         Ok(api_code) => {
