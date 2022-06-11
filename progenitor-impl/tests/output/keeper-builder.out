@@ -143,6 +143,7 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{ByteStream, Error, ResponseValue};
+    #[derive(Clone)]
     pub struct Enrol<'a> {
         client: &'a super::Client,
         body: Option<types::EnrolBody>,
@@ -163,14 +164,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -185,6 +185,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct GlobalJobs<'a> {
         client: &'a super::Client,
     }
@@ -207,6 +208,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct Ping<'a> {
         client: &'a super::Client,
     }
@@ -229,6 +231,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ReportFinish<'a> {
         client: &'a super::Client,
         body: Option<types::ReportFinishBody>,
@@ -249,14 +252,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -271,6 +273,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ReportOutput<'a> {
         client: &'a super::Client,
         body: Option<types::ReportOutputBody>,
@@ -291,14 +294,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -313,6 +315,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ReportStart<'a> {
         client: &'a super::Client,
         body: Option<types::ReportStartBody>,
@@ -333,14 +336,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };

@@ -2188,6 +2188,7 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{ByteStream, Error, ResponseValue};
+    #[derive(Clone)]
     pub struct HardwareRacksGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -2254,8 +2255,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct HardwareRacksGetRack<'a> {
         client: &'a super::Client,
         rack_id: Option<uuid::Uuid>,
@@ -2279,14 +2327,13 @@ pub mod builder {
             let (rack_id,) = match (rack_id,) {
                 (Some(rack_id),) => (rack_id,),
                 (rack_id,) => {
-                    let missing = [(rack_id.is_none(), stringify!(rack_id))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if rack_id.is_none() {
+                        missing.push(stringify!(rack_id));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2311,6 +2358,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct HardwareSledsGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -2377,8 +2425,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Sled, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct HardwareSledsGetSled<'a> {
         client: &'a super::Client,
         sled_id: Option<uuid::Uuid>,
@@ -2402,14 +2497,13 @@ pub mod builder {
             let (sled_id,) = match (sled_id,) {
                 (Some(sled_id),) => (sled_id,),
                 (sled_id,) => {
-                    let missing = [(sled_id.is_none(), stringify!(sled_id))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if sled_id.is_none() {
+                        missing.push(stringify!(sled_id));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2434,6 +2528,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ImagesGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -2500,8 +2595,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::GlobalImage, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct ImagesPost<'a> {
         client: &'a super::Client,
         body: Option<types::ImageCreate>,
@@ -2522,14 +2664,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2550,6 +2691,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ImagesGetImage<'a> {
         client: &'a super::Client,
         image_name: Option<types::Name>,
@@ -2573,14 +2715,13 @@ pub mod builder {
             let (image_name,) = match (image_name,) {
                 (Some(image_name),) => (image_name,),
                 (image_name,) => {
-                    let missing = [(image_name.is_none(), stringify!(image_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if image_name.is_none() {
+                        missing.push(stringify!(image_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2605,6 +2746,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ImagesDeleteImage<'a> {
         client: &'a super::Client,
         image_name: Option<types::Name>,
@@ -2628,14 +2770,13 @@ pub mod builder {
             let (image_name,) = match (image_name,) {
                 (Some(image_name),) => (image_name,),
                 (image_name,) => {
-                    let missing = [(image_name.is_none(), stringify!(image_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if image_name.is_none() {
+                        missing.push(stringify!(image_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2660,6 +2801,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SpoofLogin<'a> {
         client: &'a super::Client,
         body: Option<types::LoginParams>,
@@ -2680,14 +2822,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2702,6 +2843,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct Logout<'a> {
         client: &'a super::Client,
     }
@@ -2724,6 +2866,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationsGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -2790,8 +2933,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationsPost<'a> {
         client: &'a super::Client,
         body: Option<types::OrganizationCreate>,
@@ -2812,14 +3002,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2840,6 +3029,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationsGetOrganization<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -2866,14 +3056,13 @@ pub mod builder {
             let (organization_name,) = match (organization_name,) {
                 (Some(organization_name),) => (organization_name,),
                 (organization_name,) => {
-                    let missing = [(organization_name.is_none(), stringify!(organization_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2898,6 +3087,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationsPutOrganization<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -2932,17 +3122,16 @@ pub mod builder {
             let (organization_name, body) = match (organization_name, body) {
                 (Some(organization_name), Some(body)) => (organization_name, body),
                 (organization_name, body) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -2967,6 +3156,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationsDeleteOrganization<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -2993,14 +3183,13 @@ pub mod builder {
             let (organization_name,) = match (organization_name,) {
                 (Some(organization_name),) => (organization_name,),
                 (organization_name,) => {
-                    let missing = [(organization_name.is_none(), stringify!(organization_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3025,6 +3214,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationGetPolicy<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3053,14 +3243,13 @@ pub mod builder {
             let (organization_name,) = match (organization_name,) {
                 (Some(organization_name),) => (organization_name,),
                 (organization_name,) => {
-                    let missing = [(organization_name.is_none(), stringify!(organization_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3085,6 +3274,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationPutPolicy<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3121,17 +3311,16 @@ pub mod builder {
             let (organization_name, body) = match (organization_name, body) {
                 (Some(organization_name), Some(body)) => (organization_name, body),
                 (organization_name, body) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3156,6 +3345,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationProjectsGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3208,14 +3398,13 @@ pub mod builder {
             let (organization_name,) = match (organization_name,) {
                 (Some(organization_name),) => (organization_name,),
                 (organization_name,) => {
-                    let missing = [(organization_name.is_none(), stringify!(organization_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3248,8 +3437,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationProjectsPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3284,17 +3520,16 @@ pub mod builder {
             let (organization_name, body) = match (organization_name, body) {
                 (Some(organization_name), Some(body)) => (organization_name, body),
                 (organization_name, body) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3319,6 +3554,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationProjectsGetProject<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3353,17 +3589,16 @@ pub mod builder {
             let (organization_name, project_name) = match (organization_name, project_name) {
                 (Some(organization_name), Some(project_name)) => (organization_name, project_name),
                 (organization_name, project_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3389,6 +3624,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationProjectsPutProject<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3434,18 +3670,19 @@ pub mod builder {
                         (organization_name, project_name, body)
                     }
                     (organization_name, project_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -3471,6 +3708,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationProjectsDeleteProject<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3505,17 +3743,16 @@ pub mod builder {
             let (organization_name, project_name) = match (organization_name, project_name) {
                 (Some(organization_name), Some(project_name)) => (organization_name, project_name),
                 (organization_name, project_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3541,6 +3778,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectDisksGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3601,17 +3839,16 @@ pub mod builder {
             let (organization_name, project_name) = match (organization_name, project_name) {
                 (Some(organization_name), Some(project_name)) => (organization_name, project_name),
                 (organization_name, project_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3645,8 +3882,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct ProjectDisksPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3692,18 +3976,19 @@ pub mod builder {
                         (organization_name, project_name, body)
                     }
                     (organization_name, project_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -3729,6 +4014,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectDisksGetDisk<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3774,18 +4060,19 @@ pub mod builder {
                         (organization_name, project_name, disk_name)
                     }
                     (organization_name, project_name, disk_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (disk_name.is_none(), stringify!(disk_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if disk_name.is_none() {
+                            missing.push(stringify!(disk_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -3812,6 +4099,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectDisksDeleteDisk<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3857,18 +4145,19 @@ pub mod builder {
                         (organization_name, project_name, disk_name)
                     }
                     (organization_name, project_name, disk_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (disk_name.is_none(), stringify!(disk_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if disk_name.is_none() {
+                            missing.push(stringify!(disk_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -3895,6 +4184,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectImagesGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -3955,17 +4245,16 @@ pub mod builder {
             let (organization_name, project_name) = match (organization_name, project_name) {
                 (Some(organization_name), Some(project_name)) => (organization_name, project_name),
                 (organization_name, project_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -3999,8 +4288,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Image, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct ProjectImagesPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4046,18 +4382,19 @@ pub mod builder {
                         (organization_name, project_name, body)
                     }
                     (organization_name, project_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4083,6 +4420,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectImagesGetImage<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4128,18 +4466,19 @@ pub mod builder {
                         (organization_name, project_name, image_name)
                     }
                     (organization_name, project_name, image_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (image_name.is_none(), stringify!(image_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if image_name.is_none() {
+                            missing.push(stringify!(image_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4166,6 +4505,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectImagesDeleteImage<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4211,18 +4551,19 @@ pub mod builder {
                         (organization_name, project_name, image_name)
                     }
                     (organization_name, project_name, image_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (image_name.is_none(), stringify!(image_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if image_name.is_none() {
+                            missing.push(stringify!(image_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4249,6 +4590,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectInstancesGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4309,17 +4651,16 @@ pub mod builder {
             let (organization_name, project_name) = match (organization_name, project_name) {
                 (Some(organization_name), Some(project_name)) => (organization_name, project_name),
                 (organization_name, project_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -4353,8 +4694,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct ProjectInstancesPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4400,18 +4788,19 @@ pub mod builder {
                         (organization_name, project_name, body)
                     }
                     (organization_name, project_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4437,6 +4826,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectInstancesGetInstance<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4482,18 +4872,19 @@ pub mod builder {
                         (organization_name, project_name, instance_name)
                     }
                     (organization_name, project_name, instance_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4520,6 +4911,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectInstancesDeleteInstance<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4565,18 +4957,19 @@ pub mod builder {
                         (organization_name, project_name, instance_name)
                     }
                     (organization_name, project_name, instance_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4603,6 +4996,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct InstanceDisksGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4674,18 +5068,19 @@ pub mod builder {
                         (organization_name, project_name, instance_name)
                     }
                     (organization_name, project_name, instance_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4720,8 +5115,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct InstanceDisksAttach<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4778,19 +5220,22 @@ pub mod builder {
                         Some(body),
                     ) => (organization_name, project_name, instance_name, body),
                     (organization_name, project_name, instance_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4817,6 +5262,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct InstanceDisksDetach<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4873,19 +5319,22 @@ pub mod builder {
                         Some(body),
                     ) => (organization_name, project_name, instance_name, body),
                     (organization_name, project_name, instance_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -4912,6 +5361,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectInstancesMigrateInstance<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -4968,19 +5418,22 @@ pub mod builder {
                         Some(body),
                     ) => (organization_name, project_name, instance_name, body),
                     (organization_name, project_name, instance_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -5007,6 +5460,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct InstanceNetworkInterfacesGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5079,18 +5533,19 @@ pub mod builder {
                         (organization_name, project_name, instance_name)
                     }
                     (organization_name, project_name, instance_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -5125,8 +5580,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct InstanceNetworkInterfacesPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5185,19 +5687,22 @@ pub mod builder {
                         Some(body),
                     ) => (organization_name, project_name, instance_name, body),
                     (organization_name, project_name, instance_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -5224,6 +5729,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct InstanceNetworkInterfacesGetInterface<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5291,19 +5797,22 @@ pub mod builder {
                     interface_name,
                 ),
                 (organization_name, project_name, instance_name, interface_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                        (instance_name.is_none(), stringify!(instance_name)),
-                        (interface_name.is_none(), stringify!(interface_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
+                    if instance_name.is_none() {
+                        missing.push(stringify!(instance_name));
+                    }
+                    if interface_name.is_none() {
+                        missing.push(stringify!(interface_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -5331,6 +5840,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct InstanceNetworkInterfacesDeleteInterface<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5396,19 +5906,22 @@ pub mod builder {
                     interface_name,
                 ),
                 (organization_name, project_name, instance_name, interface_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                        (instance_name.is_none(), stringify!(instance_name)),
-                        (interface_name.is_none(), stringify!(interface_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
+                    if instance_name.is_none() {
+                        missing.push(stringify!(instance_name));
+                    }
+                    if interface_name.is_none() {
+                        missing.push(stringify!(interface_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -5436,6 +5949,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectInstancesInstanceReboot<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5481,18 +5995,19 @@ pub mod builder {
                         (organization_name, project_name, instance_name)
                     }
                     (organization_name, project_name, instance_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -5519,6 +6034,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectInstancesInstanceStart<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5564,18 +6080,19 @@ pub mod builder {
                         (organization_name, project_name, instance_name)
                     }
                     (organization_name, project_name, instance_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -5602,6 +6119,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectInstancesInstanceStop<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5647,18 +6165,19 @@ pub mod builder {
                         (organization_name, project_name, instance_name)
                     }
                     (organization_name, project_name, instance_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (instance_name.is_none(), stringify!(instance_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if instance_name.is_none() {
+                            missing.push(stringify!(instance_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -5685,6 +6204,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationProjectsGetProjectPolicy<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5721,17 +6241,16 @@ pub mod builder {
             let (organization_name, project_name) = match (organization_name, project_name) {
                 (Some(organization_name), Some(project_name)) => (organization_name, project_name),
                 (organization_name, project_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -5757,6 +6276,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct OrganizationProjectsPutProjectPolicy<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5804,18 +6324,19 @@ pub mod builder {
                         (organization_name, project_name, body)
                     }
                     (organization_name, project_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -5841,6 +6362,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectSnapshotsGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5901,17 +6423,16 @@ pub mod builder {
             let (organization_name, project_name) = match (organization_name, project_name) {
                 (Some(organization_name), Some(project_name)) => (organization_name, project_name),
                 (organization_name, project_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -5945,8 +6466,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Snapshot, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct ProjectSnapshotsPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -5992,18 +6560,19 @@ pub mod builder {
                         (organization_name, project_name, body)
                     }
                     (organization_name, project_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6029,6 +6598,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectSnapshotsGetSnapshot<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6074,18 +6644,19 @@ pub mod builder {
                         (organization_name, project_name, snapshot_name)
                     }
                     (organization_name, project_name, snapshot_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (snapshot_name.is_none(), stringify!(snapshot_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if snapshot_name.is_none() {
+                            missing.push(stringify!(snapshot_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6112,6 +6683,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectSnapshotsDeleteSnapshot<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6157,18 +6729,19 @@ pub mod builder {
                         (organization_name, project_name, snapshot_name)
                     }
                     (organization_name, project_name, snapshot_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (snapshot_name.is_none(), stringify!(snapshot_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if snapshot_name.is_none() {
+                            missing.push(stringify!(snapshot_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6195,6 +6768,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectVpcsGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6255,17 +6829,16 @@ pub mod builder {
             let (organization_name, project_name) = match (organization_name, project_name) {
                 (Some(organization_name), Some(project_name)) => (organization_name, project_name),
                 (organization_name, project_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -6299,8 +6872,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Vpc, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct ProjectVpcsPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6346,18 +6966,19 @@ pub mod builder {
                         (organization_name, project_name, body)
                     }
                     (organization_name, project_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6383,6 +7004,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectVpcsGetVpc<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6428,18 +7050,19 @@ pub mod builder {
                         (organization_name, project_name, vpc_name)
                     }
                     (organization_name, project_name, vpc_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6466,6 +7089,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectVpcsPutVpc<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6519,19 +7143,22 @@ pub mod builder {
                         (organization_name, project_name, vpc_name, body)
                     }
                     (organization_name, project_name, vpc_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6558,6 +7185,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ProjectVpcsDeleteVpc<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6603,18 +7231,19 @@ pub mod builder {
                         (organization_name, project_name, vpc_name)
                     }
                     (organization_name, project_name, vpc_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6641,6 +7270,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcFirewallRulesGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6688,18 +7318,19 @@ pub mod builder {
                         (organization_name, project_name, vpc_name)
                     }
                     (organization_name, project_name, vpc_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6726,6 +7357,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcFirewallRulesPut<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6781,19 +7413,22 @@ pub mod builder {
                         (organization_name, project_name, vpc_name, body)
                     }
                     (organization_name, project_name, vpc_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6820,6 +7455,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcRoutersGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6891,18 +7527,19 @@ pub mod builder {
                         (organization_name, project_name, vpc_name)
                     }
                     (organization_name, project_name, vpc_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -6937,8 +7574,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::VpcRouter, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct VpcRoutersPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -6992,19 +7676,22 @@ pub mod builder {
                         (organization_name, project_name, vpc_name, body)
                     }
                     (organization_name, project_name, vpc_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -7031,6 +7718,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcRoutersGetRouter<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -7087,19 +7775,22 @@ pub mod builder {
                         Some(router_name),
                     ) => (organization_name, project_name, vpc_name, router_name),
                     (organization_name, project_name, vpc_name, router_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (router_name.is_none(), stringify!(router_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if router_name.is_none() {
+                            missing.push(stringify!(router_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -7127,6 +7818,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcRoutersPutRouter<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -7192,20 +7884,25 @@ pub mod builder {
                         Some(body),
                     ) => (organization_name, project_name, vpc_name, router_name, body),
                     (organization_name, project_name, vpc_name, router_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (router_name.is_none(), stringify!(router_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if router_name.is_none() {
+                            missing.push(stringify!(router_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -7233,6 +7930,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcRoutersDeleteRouter<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -7289,19 +7987,22 @@ pub mod builder {
                         Some(router_name),
                     ) => (organization_name, project_name, vpc_name, router_name),
                     (organization_name, project_name, vpc_name, router_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (router_name.is_none(), stringify!(router_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if router_name.is_none() {
+                            missing.push(stringify!(router_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -7329,6 +8030,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct RoutersRoutesGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -7411,19 +8113,22 @@ pub mod builder {
                         Some(router_name),
                     ) => (organization_name, project_name, vpc_name, router_name),
                     (organization_name, project_name, vpc_name, router_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (router_name.is_none(), stringify!(router_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if router_name.is_none() {
+                            missing.push(stringify!(router_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -7459,8 +8164,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::RouterRoute, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct RoutersRoutesPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -7526,20 +8278,25 @@ pub mod builder {
                         Some(body),
                     ) => (organization_name, project_name, vpc_name, router_name, body),
                     (organization_name, project_name, vpc_name, router_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (router_name.is_none(), stringify!(router_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if router_name.is_none() {
+                            missing.push(stringify!(router_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -7567,6 +8324,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct RoutersRoutesGetRoute<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -7643,20 +8401,25 @@ pub mod builder {
                     route_name,
                 ),
                 (organization_name, project_name, vpc_name, router_name, route_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                        (vpc_name.is_none(), stringify!(vpc_name)),
-                        (router_name.is_none(), stringify!(router_name)),
-                        (route_name.is_none(), stringify!(route_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
+                    if vpc_name.is_none() {
+                        missing.push(stringify!(vpc_name));
+                    }
+                    if router_name.is_none() {
+                        missing.push(stringify!(router_name));
+                    }
+                    if route_name.is_none() {
+                        missing.push(stringify!(route_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -7685,6 +8448,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct RoutersRoutesPutRoute<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -7772,21 +8536,28 @@ pub mod builder {
                     body,
                 ),
                 (organization_name, project_name, vpc_name, router_name, route_name, body) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                        (vpc_name.is_none(), stringify!(vpc_name)),
-                        (router_name.is_none(), stringify!(router_name)),
-                        (route_name.is_none(), stringify!(route_name)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
+                    if vpc_name.is_none() {
+                        missing.push(stringify!(vpc_name));
+                    }
+                    if router_name.is_none() {
+                        missing.push(stringify!(router_name));
+                    }
+                    if route_name.is_none() {
+                        missing.push(stringify!(route_name));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -7815,6 +8586,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct RoutersRoutesDeleteRoute<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -7891,20 +8663,25 @@ pub mod builder {
                     route_name,
                 ),
                 (organization_name, project_name, vpc_name, router_name, route_name) => {
-                    let missing = [
-                        (organization_name.is_none(), stringify!(organization_name)),
-                        (project_name.is_none(), stringify!(project_name)),
-                        (vpc_name.is_none(), stringify!(vpc_name)),
-                        (router_name.is_none(), stringify!(router_name)),
-                        (route_name.is_none(), stringify!(route_name)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if organization_name.is_none() {
+                        missing.push(stringify!(organization_name));
+                    }
+                    if project_name.is_none() {
+                        missing.push(stringify!(project_name));
+                    }
+                    if vpc_name.is_none() {
+                        missing.push(stringify!(vpc_name));
+                    }
+                    if router_name.is_none() {
+                        missing.push(stringify!(router_name));
+                    }
+                    if route_name.is_none() {
+                        missing.push(stringify!(route_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -7933,6 +8710,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcSubnetsGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -8004,18 +8782,19 @@ pub mod builder {
                         (organization_name, project_name, vpc_name)
                     }
                     (organization_name, project_name, vpc_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -8050,8 +8829,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::VpcSubnet, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct VpcSubnetsPost<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -8105,19 +8931,22 @@ pub mod builder {
                         (organization_name, project_name, vpc_name, body)
                     }
                     (organization_name, project_name, vpc_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -8144,6 +8973,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcSubnetsGetSubnet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -8200,19 +9030,22 @@ pub mod builder {
                         Some(subnet_name),
                     ) => (organization_name, project_name, vpc_name, subnet_name),
                     (organization_name, project_name, vpc_name, subnet_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (subnet_name.is_none(), stringify!(subnet_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if subnet_name.is_none() {
+                            missing.push(stringify!(subnet_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -8240,6 +9073,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcSubnetsPutSubnet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -8305,20 +9139,25 @@ pub mod builder {
                         Some(body),
                     ) => (organization_name, project_name, vpc_name, subnet_name, body),
                     (organization_name, project_name, vpc_name, subnet_name, body) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (subnet_name.is_none(), stringify!(subnet_name)),
-                            (body.is_none(), stringify!(body)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if subnet_name.is_none() {
+                            missing.push(stringify!(subnet_name));
+                        }
+                        if body.is_none() {
+                            missing.push(stringify!(body));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -8346,6 +9185,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct VpcSubnetsDeleteSubnet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -8402,19 +9242,22 @@ pub mod builder {
                         Some(subnet_name),
                     ) => (organization_name, project_name, vpc_name, subnet_name),
                     (organization_name, project_name, vpc_name, subnet_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (subnet_name.is_none(), stringify!(subnet_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if subnet_name.is_none() {
+                            missing.push(stringify!(subnet_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -8442,6 +9285,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SubnetNetworkInterfacesGet<'a> {
         client: &'a super::Client,
         organization_name: Option<types::Name>,
@@ -8525,19 +9369,22 @@ pub mod builder {
                         Some(subnet_name),
                     ) => (organization_name, project_name, vpc_name, subnet_name),
                     (organization_name, project_name, vpc_name, subnet_name) => {
-                        let missing = [
-                            (organization_name.is_none(), stringify!(organization_name)),
-                            (project_name.is_none(), stringify!(project_name)),
-                            (vpc_name.is_none(), stringify!(vpc_name)),
-                            (subnet_name.is_none(), stringify!(subnet_name)),
-                        ]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                        let mut missing = Vec::new();
+                        if organization_name.is_none() {
+                            missing.push(stringify!(organization_name));
+                        }
+                        if project_name.is_none() {
+                            missing.push(stringify!(project_name));
+                        }
+                        if vpc_name.is_none() {
+                            missing.push(stringify!(vpc_name));
+                        }
+                        if subnet_name.is_none() {
+                            missing.push(stringify!(subnet_name));
+                        }
                         return Err(super::Error::InvalidRequest(format!(
                             "the following parameters are required: {}",
-                            missing,
+                            missing.join(", "),
                         )));
                     }
                 };
@@ -8573,8 +9420,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct PolicyGet<'a> {
         client: &'a super::Client,
     }
@@ -8605,6 +9499,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct PolicyPut<'a> {
         client: &'a super::Client,
         body: Option<types::FleetRolesPolicy>,
@@ -8627,14 +9522,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -8655,6 +9549,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct RolesGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -8710,8 +9605,54 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Role, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct RolesGetRole<'a> {
         client: &'a super::Client,
         role_name: Option<String>,
@@ -8735,14 +9676,13 @@ pub mod builder {
             let (role_name,) = match (role_name,) {
                 (Some(role_name),) => (role_name,),
                 (role_name,) => {
-                    let missing = [(role_name.is_none(), stringify!(role_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if role_name.is_none() {
+                        missing.push(stringify!(role_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -8767,6 +9707,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SagasGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -8833,8 +9774,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Saga, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct SagasGetSaga<'a> {
         client: &'a super::Client,
         saga_id: Option<uuid::Uuid>,
@@ -8858,14 +9846,13 @@ pub mod builder {
             let (saga_id,) = match (saga_id,) {
                 (Some(saga_id),) => (saga_id,),
                 (saga_id,) => {
-                    let missing = [(saga_id.is_none(), stringify!(saga_id))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if saga_id.is_none() {
+                        missing.push(stringify!(saga_id));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -8890,6 +9877,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SessionMe<'a> {
         client: &'a super::Client,
     }
@@ -8918,6 +9906,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SshkeysGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -8984,8 +9973,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::SshKey, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct SshkeysPost<'a> {
         client: &'a super::Client,
         body: Option<types::SshKeyCreate>,
@@ -9006,14 +10042,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -9034,6 +10069,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SshkeysGetKey<'a> {
         client: &'a super::Client,
         ssh_key_name: Option<types::Name>,
@@ -9060,14 +10096,13 @@ pub mod builder {
             let (ssh_key_name,) = match (ssh_key_name,) {
                 (Some(ssh_key_name),) => (ssh_key_name,),
                 (ssh_key_name,) => {
-                    let missing = [(ssh_key_name.is_none(), stringify!(ssh_key_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if ssh_key_name.is_none() {
+                        missing.push(stringify!(ssh_key_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -9092,6 +10127,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SshkeysDeleteKey<'a> {
         client: &'a super::Client,
         ssh_key_name: Option<types::Name>,
@@ -9118,14 +10154,13 @@ pub mod builder {
             let (ssh_key_name,) = match (ssh_key_name,) {
                 (Some(ssh_key_name),) => (ssh_key_name,),
                 (ssh_key_name,) => {
-                    let missing = [(ssh_key_name.is_none(), stringify!(ssh_key_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if ssh_key_name.is_none() {
+                        missing.push(stringify!(ssh_key_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -9150,6 +10185,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SilosGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -9216,8 +10252,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::Silo, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct SilosPost<'a> {
         client: &'a super::Client,
         body: Option<types::SiloCreate>,
@@ -9238,14 +10321,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -9266,6 +10348,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SilosGetSilo<'a> {
         client: &'a super::Client,
         silo_name: Option<types::Name>,
@@ -9289,14 +10372,13 @@ pub mod builder {
             let (silo_name,) = match (silo_name,) {
                 (Some(silo_name),) => (silo_name,),
                 (silo_name,) => {
-                    let missing = [(silo_name.is_none(), stringify!(silo_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if silo_name.is_none() {
+                        missing.push(stringify!(silo_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -9321,6 +10403,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SilosDeleteSilo<'a> {
         client: &'a super::Client,
         silo_name: Option<types::Name>,
@@ -9344,14 +10427,13 @@ pub mod builder {
             let (silo_name,) = match (silo_name,) {
                 (Some(silo_name),) => (silo_name,),
                 (silo_name,) => {
-                    let missing = [(silo_name.is_none(), stringify!(silo_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if silo_name.is_none() {
+                        missing.push(stringify!(silo_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -9376,6 +10458,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SilosGetSiloPolicy<'a> {
         client: &'a super::Client,
         silo_name: Option<types::Name>,
@@ -9401,14 +10484,13 @@ pub mod builder {
             let (silo_name,) = match (silo_name,) {
                 (Some(silo_name),) => (silo_name,),
                 (silo_name,) => {
-                    let missing = [(silo_name.is_none(), stringify!(silo_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if silo_name.is_none() {
+                        missing.push(stringify!(silo_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -9433,6 +10515,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct SilosPutSiloPolicy<'a> {
         client: &'a super::Client,
         silo_name: Option<types::Name>,
@@ -9469,17 +10552,16 @@ pub mod builder {
             let (silo_name, body) = match (silo_name, body) {
                 (Some(silo_name), Some(body)) => (silo_name, body),
                 (silo_name, body) => {
-                    let missing = [
-                        (silo_name.is_none(), stringify!(silo_name)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if silo_name.is_none() {
+                        missing.push(stringify!(silo_name));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -9504,6 +10586,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct TimeseriesSchemaGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -9560,8 +10643,54 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct UpdatesRefresh<'a> {
         client: &'a super::Client,
     }
@@ -9590,6 +10719,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct UsersGet<'a> {
         client: &'a super::Client,
         limit: Option<std::num::NonZeroU32>,
@@ -9656,8 +10786,55 @@ pub mod builder {
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
+
+        pub fn stream(
+            self,
+        ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + 'a
+        {
+            use futures::StreamExt;
+            use futures::TryFutureExt;
+            use futures::TryStreamExt;
+            let next = Self {
+                limit: None,
+                page_token: None,
+                sort_by: None,
+                ..self.clone()
+            };
+            self.send()
+                .map_ok(move |page| {
+                    let page = page.into_inner();
+                    let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                    let rest = futures::stream::try_unfold(
+                        (page.next_page, next),
+                        |(next_page, next)| async {
+                            if next_page.is_none() {
+                                Ok(None)
+                            } else {
+                                Self {
+                                    page_token: next_page,
+                                    ..next.clone()
+                                }
+                                .send()
+                                .map_ok(|page| {
+                                    let page = page.into_inner();
+                                    Some((
+                                        futures::stream::iter(page.items.into_iter().map(Ok)),
+                                        (page.next_page, next),
+                                    ))
+                                })
+                                .await
+                            }
+                        },
+                    )
+                    .try_flatten();
+                    first.chain(rest)
+                })
+                .try_flatten_stream()
+                .boxed()
+        }
     }
 
+    #[derive(Clone)]
     pub struct UsersGetUser<'a> {
         client: &'a super::Client,
         user_name: Option<types::Name>,
@@ -9681,14 +10858,13 @@ pub mod builder {
             let (user_name,) = match (user_name,) {
                 (Some(user_name),) => (user_name,),
                 (user_name,) => {
-                    let missing = [(user_name.is_none(), stringify!(user_name))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if user_name.is_none() {
+                        missing.push(stringify!(user_name));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };

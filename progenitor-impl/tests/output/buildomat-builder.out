@@ -262,6 +262,7 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{ByteStream, Error, ResponseValue};
+    #[derive(Clone)]
     pub struct ControlHold<'a> {
         client: &'a super::Client,
     }
@@ -284,6 +285,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct ControlResume<'a> {
         client: &'a super::Client,
     }
@@ -306,6 +308,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct TaskGet<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -326,14 +329,13 @@ pub mod builder {
             let (task,) = match (task,) {
                 (Some(task),) => (task,),
                 (task,) => {
-                    let missing = [(task.is_none(), stringify!(task))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -352,6 +354,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct TasksGet<'a> {
         client: &'a super::Client,
     }
@@ -374,6 +377,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct TaskSubmit<'a> {
         client: &'a super::Client,
         body: Option<types::TaskSubmit>,
@@ -394,14 +398,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -416,6 +419,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct TaskEventsGet<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -450,14 +454,13 @@ pub mod builder {
             let (task,) = match (task,) {
                 (Some(task),) => (task,),
                 (task,) => {
-                    let missing = [(task.is_none(), stringify!(task))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -480,6 +483,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct TaskOutputsGet<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -500,14 +504,13 @@ pub mod builder {
             let (task,) = match (task,) {
                 (Some(task),) => (task,),
                 (task,) => {
-                    let missing = [(task.is_none(), stringify!(task))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -526,6 +529,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct TaskOutputDownload<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -560,17 +564,16 @@ pub mod builder {
             let (task, output) = match (task, output) {
                 (Some(task), Some(output)) => (task, output),
                 (task, output) => {
-                    let missing = [
-                        (task.is_none(), stringify!(task)),
-                        (output.is_none(), stringify!(output)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if output.is_none() {
+                        missing.push(stringify!(output));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -590,6 +593,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct UserCreate<'a> {
         client: &'a super::Client,
         body: Option<types::UserCreate>,
@@ -610,14 +614,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -632,6 +635,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct Whoami<'a> {
         client: &'a super::Client,
     }
@@ -654,6 +658,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct WorkerBootstrap<'a> {
         client: &'a super::Client,
         body: Option<types::WorkerBootstrap>,
@@ -674,14 +679,13 @@ pub mod builder {
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
                 (body,) => {
-                    let missing = [(body.is_none(), stringify!(body))]
-                        .into_iter()
-                        .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                        .collect::<Vec<_>>()
-                        .join(", ");
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -696,6 +700,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct WorkerPing<'a> {
         client: &'a super::Client,
     }
@@ -718,6 +723,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct WorkerTaskAppend<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -748,17 +754,16 @@ pub mod builder {
             let (task, body) = match (task, body) {
                 (Some(task), Some(body)) => (task, body),
                 (task, body) => {
-                    let missing = [
-                        (task.is_none(), stringify!(task)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -777,6 +782,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct WorkerTaskUploadChunk<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -807,17 +813,16 @@ pub mod builder {
             let (task, body) = match (task, body) {
                 (Some(task), Some(body)) => (task, body),
                 (task, body) => {
-                    let missing = [
-                        (task.is_none(), stringify!(task)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -836,6 +841,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct WorkerTaskComplete<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -866,17 +872,16 @@ pub mod builder {
             let (task, body) = match (task, body) {
                 (Some(task), Some(body)) => (task, body),
                 (task, body) => {
-                    let missing = [
-                        (task.is_none(), stringify!(task)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -895,6 +900,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct WorkerTaskAddOutput<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -925,17 +931,16 @@ pub mod builder {
             let (task, body) = match (task, body) {
                 (Some(task), Some(body)) => (task, body),
                 (task, body) => {
-                    let missing = [
-                        (task.is_none(), stringify!(task)),
-                        (body.is_none(), stringify!(body)),
-                    ]
-                    .into_iter()
-                    .filter_map(|(unset, name)| if unset { Some(name) } else { None })
-                    .collect::<Vec<_>>()
-                    .join(", ");
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
                     return Err(super::Error::InvalidRequest(format!(
                         "the following parameters are required: {}",
-                        missing,
+                        missing.join(", "),
                     )));
                 }
             };
@@ -954,6 +959,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct WorkersList<'a> {
         client: &'a super::Client,
     }
@@ -976,6 +982,7 @@ pub mod builder {
         }
     }
 
+    #[derive(Clone)]
     pub struct WorkersRecycle<'a> {
         client: &'a super::Client,
     }
