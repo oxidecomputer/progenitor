@@ -40,9 +40,9 @@ dependencies = [
 
 [[package]]
 name = "async-trait"
-version = "0.1.53"
+version = "0.1.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed6aa3524a2dfcf9fe180c51eae2b58738348d819517ceadf95789c51fff7600"
+checksum = "96cf8829f67d2eab0b2dfa42c5d0ef737e0724e4a82b01b3e292456202b19716"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -191,7 +191,7 @@ dependencies = [
 [[package]]
 name = "dropshot"
 version = "0.7.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#5ab8279c85640c917f5c64864e3c80e25a9cb292"
+source = "git+https://github.com/oxidecomputer/dropshot#25b85d73571277ad2862904ad0be25dc00a4f86a"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -229,7 +229,7 @@ dependencies = [
 [[package]]
 name = "dropshot_endpoint"
 version = "0.7.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#5ab8279c85640c917f5c64864e3c80e25a9cb292"
+source = "git+https://github.com/oxidecomputer/dropshot#25b85d73571277ad2862904ad0be25dc00a4f86a"
 dependencies = [
  "proc-macro2",
  "quote",
