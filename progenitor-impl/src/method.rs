@@ -477,57 +477,6 @@ impl Generator {
         })
     }
 
-    // pub fn stream(
-    //     self,
-    // ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>>
-    //        + Unpin
-    //        + 'a {
-    //     use futures::StreamExt;
-    //     use futures::TryFutureExt;
-    //     use futures::TryStreamExt;
-
-    //     let next = Self {
-    //         limit: None,
-    //         page_token: None,
-    //         sort_by: None,
-    //         ..self.clone()
-    //     };
-    //     self.send()
-    //         .map_ok(move |page| {
-    //             let page = page.into_inner();
-    //             let first =
-    //                 futures::stream::iter(page.items.into_iter().map(Ok));
-    //             let rest = futures::stream::try_unfold(
-    //                 (page.next_page, next),
-    //                 |(state, next)| async {
-    //                     if state.is_none() {
-    //                         Ok(None)
-    //                     } else {
-    //                         Self {
-    //                             page_token: state,
-    //                             ..next.clone()
-    //                         }
-    //                         .send()
-    //                         .map_ok(|page| {
-    //                             let page = page.into_inner();
-    //                             Some((
-    //                                 futures::stream::iter(
-    //                                     page.items.into_iter().map(Ok),
-    //                                 ),
-    //                                 (page.next_page, next),
-    //                             ))
-    //                         })
-    //                         .await
-    //                     }
-    //                 },
-    //             )
-    //             .try_flatten();
-    //             first.chain(rest)
-    //         })
-    //         .try_flatten_stream()
-    //         .boxed()
-    // }
-
     pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
@@ -656,56 +605,56 @@ impl Generator {
 
                     // Execute the operation with the basic parameters
                     // (omitting page_token) to get the first page.
-                    self.#operation_id(
-                        #(#first_params,)*
-                    )
-                    .map_ok(move |page| {
-                        let page = page.into_inner();
-                        // The first page is just an iter
-                        let first = futures::stream::iter(
-                            page.items.into_iter().map(Ok)
-                        );
+                    self.#operation_id( #(#first_params,)* )
+                        .map_ok(move |page| {
+                            let page = page.into_inner();
 
-                        // We unfold subsequent pages using page.next_page as
-                        // the seed value. Each iteration returns its items and
-                        // the next page token.
-                        let rest = futures::stream::try_unfold(
-                            page.next_page,
-                            move |state| async move {
-                                if state.is_none() {
-                                    // The page_token was None so we've reached
-                                    // the end.
-                                    Ok(None)
-                                } else {
-                                    // Get the next page; here we set all query
-                                    // parameters to None (except for the
-                                    // page_token), and all other parameters as
-                                    // specified at the start of this method.
-                                    self.#operation_id(
-                                        #(#step_params,)*
-                                    )
-                                    .map_ok(|page| {
-                                        let page = page.into_inner();
-                                        Some((
-                                            futures::stream::iter(
-                                                page
-                                                    .items
-                                                    .into_iter()
-                                                    .map(Ok),
-                                            ),
-                                            page.next_page,
-                                        ))
-                                    })
-                                    .await
-                                }
-                            },
-                        )
-                        .try_flatten();
+                            // Create a stream from the items of the first page.
+                            let first = futures::stream::iter(
+                                page.items.into_iter().map(Ok)
+                            );
 
-                        first.chain(rest)
-                    })
-                    .try_flatten_stream()
-                    .boxed()
+                            // We unfold subsequent pages using page.next_page
+                            // as the seed value. Each iteration returns its
+                            // items and the next page token.
+                            let rest = futures::stream::try_unfold(
+                                page.next_page,
+                                move |state| async move {
+                                    if state.is_none() {
+                                        // The page_token was None so we've
+                                        // reached the end.
+                                        Ok(None)
+                                    } else {
+                                        // Get the next page; here we set all
+                                        // query parameters to None (except for
+                                        // the page_token), and all other
+                                        // parameters as specified at the start
+                                        // of this method.
+                                        self.#operation_id(
+                                            #(#step_params,)*
+                                        )
+                                        .map_ok(|page| {
+                                            let page = page.into_inner();
+                                            Some((
+                                                futures::stream::iter(
+                                                    page
+                                                        .items
+                                                        .into_iter()
+                                                        .map(Ok),
+                                                ),
+                                                page.next_page,
+                                            ))
+                                        })
+                                        .await
+                                    }
+                                },
+                            )
+                            .try_flatten();
+
+                            first.chain(rest)
+                        })
+                        .try_flatten_stream()
+                        .boxed()
                 }
             }
         });
@@ -1403,6 +1352,9 @@ impl Generator {
                     use futures::TryFutureExt;
                     use futures::TryStreamExt;
 
+                    // This is the builder template we'll use for iterative
+                    // steps past the first; it has all query params set to
+                    // None (the step will fill in page_token).
                     let next = Self {
                         #( #step_params, )*
                         ..self.clone()
@@ -1412,7 +1364,7 @@ impl Generator {
                         .map_ok(move |page| {
                             let page = page.into_inner();
 
-                            // The first page is just an iter
+                            // Create a stream from the items of the first page.
                             let first = futures::stream::iter(
                                 page.items.into_iter().map(Ok)
                             );
@@ -1425,14 +1377,13 @@ impl Generator {
                                 (page.next_page, next),
                                 |(next_page, next)| async {
                                     if next_page.is_none() {
-                                        // The page_token was None so we've reached
-                                        // the end.
+                                        // The page_token was None so we've
+                                        // reached the end.
                                         Ok(None)
                                     } else {
-                                        // Get the next page; here we set all query
-                                        // parameters to None (except for the
-                                        // page_token), and all other parameters as
-                                        // specified at the start of this method.
+                                        // Get the next page using the next
+                                        // template (with query parameters set
+                                        // to None), overriding page_token.
                                         Self {
                                             page_token: next_page,
                                             ..next.clone()

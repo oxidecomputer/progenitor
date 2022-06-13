@@ -24,7 +24,8 @@ use syn::LitStr;
 /// ```ignore
 /// generate_api!(
 ///     spec = "path/to/spec.json",
-///     [ inner_type = path::to:Type, ]
+///     [ interface = ( Positional | Builder ), ]
+///     [ tags = ( Merged | Separate ), ]
 ///     [ pre_hook = closure::or::path::to::function, ]
 ///     [ post_hook = closure::or::path::to::function, ]
 ///     [ derives = [ path::to::DeriveMacro ], ]
@@ -33,6 +34,14 @@ use syn::LitStr;
 ///
 /// The `spec` key is required; it is the OpenAPI document from which the
 /// client is derived.
+///
+/// The optional `interface` lets you specify either a `Positional` argument or
+/// `Builder` argument style; `Positional` is the default.
+///
+/// The optional `tags` may be `Merged` in which case all operations are
+/// methods on the `Client` struct or `Separate` in which case each tag is
+/// represented by an "extension trait" that `Client` implements. The default
+/// is `Merged`.
 ///
 /// The optional `inner_type` is for ancillary data, stored with the generated
 /// client that can be usd by the pre and post hooks.
@@ -65,7 +74,7 @@ struct MacroSettings {
     #[serde(default)]
     interface: InterfaceStyle,
     #[serde(default)]
-    tag: TagStyle,
+    tags: TagStyle,
     inner_type: Option<ParseWrapper<syn::Type>>,
     pre_hook: Option<ParseWrapper<ClosureOrPath>>,
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
@@ -115,7 +124,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         let MacroSettings {
             spec,
             interface,
-            tag,
+            tags,
             inner_type,
             pre_hook,
             post_hook,
@@ -123,7 +132,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         } = serde_tokenstream::from_tokenstream(&item.into())?;
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);
-        settings.with_tag(tag);
+        settings.with_tag(tags);
         inner_type.map(|inner_type| {
             settings.with_inner_type(inner_type.to_token_stream())
         });
