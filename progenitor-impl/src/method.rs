@@ -107,6 +107,7 @@ struct OperationParameter {
     kind: OperationParameterKind,
 }
 
+#[derive(Eq, PartialEq)]
 enum OperationParameterType {
     Type(TypeId),
     RawBody,
@@ -996,8 +997,8 @@ impl Generator {
             .filter(|param| {
                 matches!(
                     (param.api_name.as_str(), &param.kind),
-                    ("page_token", OperationParameterKind::Query(_))
-                        | ("limit", OperationParameterKind::Query(_))
+                    ("page_token", OperationParameterKind::Query(false))
+                        | ("limit", OperationParameterKind::Query(false))
                 )
             })
             .count()
@@ -1012,6 +1013,17 @@ impl Generator {
             OperationParameterKind::Query(required) => !required,
             _ => true,
         }) {
+            return None;
+        }
+
+        // A raw body parameter can only be passed to a single call as it may
+        // be a streaming type. We can't use a streaming type for a paginated
+        // interface because we can only stream it once rather than for the
+        // multiple calls required to collect all pages.
+        if parameters
+            .iter()
+            .any(|param| param.typ == OperationParameterType::RawBody)
+        {
             return None;
         }
 
@@ -1158,6 +1170,7 @@ impl Generator {
         &mut self,
         method: &OperationMethod,
     ) -> Result<TokenStream> {
+        let mut cloneable = true;
         // Generate the builder structure properties, turning each type T into
         // an Option<T> (if it isn't already).
         let properties = method
@@ -1182,6 +1195,7 @@ impl Generator {
                     }
 
                     OperationParameterType::RawBody => {
+                        cloneable = false;
                         quote! { Option<reqwest::Body> }
                     }
                 };
@@ -1415,9 +1429,11 @@ impl Generator {
             }
         });
 
+        let maybe_clone = cloneable.then(|| quote! { #[derive(Clone)] });
+
         let ret = quote! {
             // TODO doc comment pointing to src (method or trait function)
-            #[derive(Clone)]
+            #maybe_clone
             pub struct #struct_ident<'a> {
                 client: &'a super::Client,
                 #( #properties ),*

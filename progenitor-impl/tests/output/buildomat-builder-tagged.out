@@ -783,7 +783,6 @@ pub mod builder {
         }
     }
 
-    #[derive(Clone)]
     pub struct WorkerTaskUploadChunk<'a> {
         client: &'a super::Client,
         task: Option<String>,
