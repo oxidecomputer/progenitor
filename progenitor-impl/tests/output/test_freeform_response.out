@@ -3,7 +3,7 @@ use progenitor_client::encode_path;
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
-    #[doc = "Error information from a response."]
+    ///Error information from a response.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -47,7 +47,7 @@ impl Client {
 }
 
 impl Client {
-    #[doc = "Sends a `GET` request to ``"]
+    ///Sends a `GET` request to ``
     pub async fn freeform_response<'a>(
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {

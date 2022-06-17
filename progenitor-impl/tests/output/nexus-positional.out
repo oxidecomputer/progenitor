@@ -23,7 +23,9 @@ pub mod types {
         }
     }
 
-    #[doc = "A count of bytes, typically used either for memory or storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience."]
+    ///A count of bytes, typically used either for memory or storage capacity
+    ///
+    ///The maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ByteCount(pub u64);
     impl std::ops::Deref for ByteCount {
@@ -33,7 +35,7 @@ pub mod types {
         }
     }
 
-    #[doc = "The type of an individual datum of a metric."]
+    ///The type of an individual datum of a metric.
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum DatumType {
         #[serde(rename = "bool")]
@@ -93,79 +95,79 @@ pub mod types {
         }
     }
 
-    #[doc = "Client view of an [`Disk`]"]
+    ///Client view of an [`Disk`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Disk {
         pub block_size: ByteCount,
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
         pub device_path: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub image_id: Option<uuid::Uuid>,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         pub project_id: uuid::Uuid,
         pub size: ByteCount,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub snapshot_id: Option<uuid::Uuid>,
         pub state: DiskState,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for a [`Disk`](omicron_common::api::external::Disk)"]
+    ///Create-time parameters for a [`Disk`](omicron_common::api::external::Disk)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskCreate {
         pub description: String,
-        #[doc = "initial source for this disk"]
+        ///initial source for this disk
         pub disk_source: DiskSource,
         pub name: Name,
-        #[doc = "total size of the Disk in bytes"]
+        ///total size of the Disk in bytes
         pub size: ByteCount,
     }
 
-    #[doc = "Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance"]
+    ///Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskIdentifier {
         pub name: Name,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Disk>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Different sources for a disk"]
+    ///Different sources for a disk
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type")]
     pub enum DiskSource {
-        #[doc = "Create a blank disk"]
+        ///Create a blank disk
         #[serde(rename = "blank")]
         Blank {
-            #[doc = "size of blocks for this Disk. valid values are: 512, 2048, or 4096"]
+            ///size of blocks for this Disk. valid values are: 512, 2048, or 4096
             block_size: BlockSize,
         },
-        #[doc = "Create a disk from a disk snapshot"]
+        ///Create a disk from a disk snapshot
         #[serde(rename = "snapshot")]
         Snapshot { snapshot_id: uuid::Uuid },
-        #[doc = "Create a disk from a project image"]
+        ///Create a disk from a project image
         #[serde(rename = "image")]
         Image { image_id: uuid::Uuid },
-        #[doc = "Create a disk from a global image"]
+        ///Create a disk from a global image
         #[serde(rename = "global_image")]
         GlobalImage { image_id: uuid::Uuid },
     }
 
-    #[doc = "State of a Disk (primarily: attached or not)"]
+    ///State of a Disk (primarily: attached or not)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "state", content = "instance")]
     pub enum DiskState {
@@ -173,13 +175,13 @@ pub mod types {
         Creating,
         #[serde(rename = "detached")]
         Detached,
-        #[doc = "Disk is being attached to the given Instance"]
+        ///Disk is being attached to the given Instance
         #[serde(rename = "attaching")]
         Attaching(uuid::Uuid),
-        #[doc = "Disk is attached to the given Instance"]
+        ///Disk is attached to the given Instance
         #[serde(rename = "attached")]
         Attached(uuid::Uuid),
-        #[doc = "Disk is being detached from the given Instance"]
+        ///Disk is being detached from the given Instance
         #[serde(rename = "detaching")]
         Detaching(uuid::Uuid),
         #[serde(rename = "destroyed")]
@@ -188,7 +190,7 @@ pub mod types {
         Faulted,
     }
 
-    #[doc = "Error information from a response."]
+    ///Error information from a response.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -197,7 +199,7 @@ pub mod types {
         pub request_id: String,
     }
 
-    #[doc = "The name and type information for a field of a timeseries schema."]
+    ///The name and type information for a field of a timeseries schema.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct FieldSchema {
         pub name: String,
@@ -205,7 +207,7 @@ pub mod types {
         pub ty: FieldType,
     }
 
-    #[doc = "The source from which a field is derived, the target or metric."]
+    ///The source from which a field is derived, the target or metric.
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum FieldSource {
         #[serde(rename = "target")]
@@ -223,7 +225,7 @@ pub mod types {
         }
     }
 
-    #[doc = "The `FieldType` identifies the data type of a target or metric field."]
+    ///The `FieldType` identifies the data type of a target or metric field.
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum FieldType {
         #[serde(rename = "string")]
@@ -270,14 +272,18 @@ pub mod types {
         }
     }
 
-    #[doc = "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource."]
+    ///Client view of a [`Policy`], which describes how this resource may be accessed
+    ///
+    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct FleetRolesPolicy {
-        #[doc = "Roles directly assigned on this resource"]
+        ///Roles directly assigned on this resource
         pub role_assignments: Vec<FleetRolesRoleAssignment>,
     }
 
-    #[doc = "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource."]
+    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
+    ///
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct FleetRolesRoleAssignment {
         pub identity_id: uuid::Uuid,
@@ -285,45 +291,47 @@ pub mod types {
         pub role_name: FleetRoles,
     }
 
-    #[doc = "Client view of global Images"]
+    ///Client view of global Images
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct GlobalImage {
-        #[doc = "size of blocks in bytes"]
+        ///size of blocks in bytes
         pub block_size: ByteCount,
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "Hash of the image contents, if applicable"]
+        ///Hash of the image contents, if applicable
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub digest: Option<Digest>,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "total size in bytes"]
+        ///total size in bytes
         pub size: ByteCount,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "URL source of this image, if any"]
+        ///URL source of this image, if any
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub url: Option<String>,
-        #[doc = "Version of this, if any"]
+        ///Version of this, if any
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub version: Option<String>,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct GlobalImageResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<GlobalImage>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Supported set of sort modes for scanning by id only.\n\nCurrently, we only support scanning in ascending order."]
+    ///Supported set of sort modes for scanning by id only.
+    ///
+    ///Currently, we only support scanning in ascending order.
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum IdSortMode {
         #[serde(rename = "id_ascending")]
@@ -338,7 +346,7 @@ pub mod types {
         }
     }
 
-    #[doc = "Describes what kind of identity is described by an id"]
+    ///Describes what kind of identity is described by an id
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum IdentityType {
         #[serde(rename = "silo_user")]
@@ -353,58 +361,58 @@ pub mod types {
         }
     }
 
-    #[doc = "Client view of project Images"]
+    ///Client view of project Images
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Image {
-        #[doc = "size of blocks in bytes"]
+        ///size of blocks in bytes
         pub block_size: ByteCount,
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "Hash of the image contents, if applicable"]
+        ///Hash of the image contents, if applicable
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub digest: Option<Digest>,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "The project the disk belongs to"]
+        ///The project the disk belongs to
         pub project_id: uuid::Uuid,
-        #[doc = "total size in bytes"]
+        ///total size in bytes
         pub size: ByteCount,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "URL source of this image, if any"]
+        ///URL source of this image, if any
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub url: Option<String>,
-        #[doc = "Version of this, if any"]
+        ///Version of this, if any
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub version: Option<String>,
     }
 
-    #[doc = "Create-time parameters for an [`Image`](omicron_common::api::external::Image)"]
+    ///Create-time parameters for an [`Image`](omicron_common::api::external::Image)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ImageCreate {
-        #[doc = "block size in bytes"]
+        ///block size in bytes
         pub block_size: BlockSize,
         pub description: String,
         pub name: Name,
-        #[doc = "The source of the image's contents."]
+        ///The source of the image's contents.
         pub source: ImageSource,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ImageResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Image>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "The source of the underlying image."]
+    ///The source of the underlying image.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "src")]
     pub enum ImageSource {
@@ -414,32 +422,32 @@ pub mod types {
         Snapshot(uuid::Uuid),
     }
 
-    #[doc = "Client view of an [`Instance`]"]
+    ///Client view of an [`Instance`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Instance {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "RFC1035-compliant hostname for the Instance."]
+        ///RFC1035-compliant hostname for the Instance.
         pub hostname: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "memory allocated for this Instance"]
+        ///memory allocated for this Instance
         pub memory: ByteCount,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "number of CPUs allocated for this Instance"]
+        ///number of CPUs allocated for this Instance
         pub ncpus: InstanceCpuCount,
-        #[doc = "id for the project containing this Instance"]
+        ///id for the project containing this Instance
         pub project_id: uuid::Uuid,
         pub run_state: InstanceState,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
         pub time_run_state_updated: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "The number of CPUs in an Instance"]
+    ///The number of CPUs in an Instance
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceCpuCount(pub u16);
     impl std::ops::Deref for InstanceCpuCount {
@@ -449,21 +457,21 @@ pub mod types {
         }
     }
 
-    #[doc = "Create-time parameters for an [`Instance`](omicron_common::api::external::Instance)"]
+    ///Create-time parameters for an [`Instance`](omicron_common::api::external::Instance)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceCreate {
         pub description: String,
-        #[doc = "The disks to be created or attached for this instance."]
+        ///The disks to be created or attached for this instance.
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
         pub disks: Vec<InstanceDiskAttachment>,
         pub hostname: String,
         pub memory: ByteCount,
         pub name: Name,
         pub ncpus: InstanceCpuCount,
-        #[doc = "The network interfaces to be created for this instance."]
+        ///The network interfaces to be created for this instance.
         #[serde(default = "instance_create_network_interfaces")]
         pub network_interfaces: InstanceNetworkInterfaceAttachment,
-        #[doc = "User data for instance initialization systems (such as cloud-init). Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded data."]
+        ///User data for instance initialization systems (such as cloud-init). Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded data.
         #[serde(default)]
         pub user_data: String,
     }
@@ -472,39 +480,39 @@ pub mod types {
         InstanceNetworkInterfaceAttachment::Default
     }
 
-    #[doc = "Describe the instance's disks at creation time"]
+    ///Describe the instance's disks at creation time
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type")]
     pub enum InstanceDiskAttachment {
-        #[doc = "During instance creation, create and attach disks"]
+        ///During instance creation, create and attach disks
         #[serde(rename = "create")]
         Create {
             description: String,
-            #[doc = "initial source for this disk"]
+            ///initial source for this disk
             disk_source: DiskSource,
             name: Name,
-            #[doc = "total size of the Disk in bytes"]
+            ///total size of the Disk in bytes
             size: ByteCount,
         },
-        #[doc = "During instance creation, attach this disk"]
+        ///During instance creation, attach this disk
         #[serde(rename = "attach")]
         Attach {
-            #[doc = "A disk name to attach"]
+            ///A disk name to attach
             name: Name,
         },
     }
 
-    #[doc = "Migration parameters for an [`Instance`](omicron_common::api::external::Instance)"]
+    ///Migration parameters for an [`Instance`](omicron_common::api::external::Instance)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceMigrate {
         pub dst_sled_uuid: uuid::Uuid,
     }
 
-    #[doc = "Describes an attachment of a `NetworkInterface` to an `Instance`, at the time the instance is created."]
+    ///Describes an attachment of a `NetworkInterface` to an `Instance`, at the time the instance is created.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
-        #[doc = "Create one or more `NetworkInterface`s for the `Instance`"]
+        ///Create one or more `NetworkInterface`s for the `Instance`
         #[serde(rename = "create")]
         Create(Vec<NetworkInterfaceCreate>),
         #[serde(rename = "default")]
@@ -513,17 +521,19 @@ pub mod types {
         None,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Instance>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Running state of an Instance (primarily: booted or stopped)\n\nThis typically reflects whether it's starting, running, stopping, or stopped, but also includes states related to the Instance's lifecycle"]
+    ///Running state of an Instance (primarily: booted or stopped)
+    ///
+    ///This typically reflects whether it's starting, running, stopping, or stopped, but also includes states related to the Instance's lifecycle
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum InstanceState {
         #[serde(rename = "creating")]
@@ -572,7 +582,7 @@ pub mod types {
         V6(Ipv6Net),
     }
 
-    #[doc = "An IPv4 subnet, including prefix and subnet mask"]
+    ///An IPv4 subnet, including prefix and subnet mask
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Ipv4Net(pub String);
     impl std::ops::Deref for Ipv4Net {
@@ -582,7 +592,7 @@ pub mod types {
         }
     }
 
-    #[doc = "An IPv6 subnet, including prefix and subnet mask"]
+    ///An IPv6 subnet, including prefix and subnet mask
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Ipv6Net(pub String);
     impl std::ops::Deref for Ipv6Net {
@@ -592,7 +602,7 @@ pub mod types {
         }
     }
 
-    #[doc = "An inclusive-inclusive range of IP ports. The second port may be omitted to represent a single port"]
+    ///An inclusive-inclusive range of IP ports. The second port may be omitted to represent a single port
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct L4PortRange(pub String);
     impl std::ops::Deref for L4PortRange {
@@ -607,7 +617,7 @@ pub mod types {
         pub username: String,
     }
 
-    #[doc = "A Media Access Control address, in EUI-48 format"]
+    ///A Media Access Control address, in EUI-48 format
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct MacAddr(pub String);
     impl std::ops::Deref for MacAddr {
@@ -617,7 +627,7 @@ pub mod types {
         }
     }
 
-    #[doc = "Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'."]
+    ///Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Name(pub String);
     impl std::ops::Deref for Name {
@@ -627,7 +637,7 @@ pub mod types {
         }
     }
 
-    #[doc = "Supported set of sort modes for scanning by name or id"]
+    ///Supported set of sort modes for scanning by name or id
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum NameOrIdSortMode {
         #[serde(rename = "name_ascending")]
@@ -648,7 +658,9 @@ pub mod types {
         }
     }
 
-    #[doc = "Supported set of sort modes for scanning by name only\n\nCurrently, we only support scanning in ascending order."]
+    ///Supported set of sort modes for scanning by name only
+    ///
+    ///Currently, we only support scanning in ascending order.
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum NameSortMode {
         #[serde(rename = "name_ascending")]
@@ -663,83 +675,83 @@ pub mod types {
         }
     }
 
-    #[doc = "A `NetworkInterface` represents a virtual network interface device."]
+    ///A `NetworkInterface` represents a virtual network interface device.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct NetworkInterface {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "The Instance to which the interface belongs."]
+        ///The Instance to which the interface belongs.
         pub instance_id: uuid::Uuid,
-        #[doc = "The IP address assigned to this interface."]
+        ///The IP address assigned to this interface.
         pub ip: String,
-        #[doc = "The MAC address assigned to this interface."]
+        ///The MAC address assigned to this interface.
         pub mac: MacAddr,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "The subnet to which the interface belongs."]
+        ///The subnet to which the interface belongs.
         pub subnet_id: uuid::Uuid,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "The VPC to which the interface belongs."]
+        ///The VPC to which the interface belongs.
         pub vpc_id: uuid::Uuid,
     }
 
-    #[doc = "Create-time parameters for a [`NetworkInterface`](omicron_common::api::external::NetworkInterface)"]
+    ///Create-time parameters for a [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct NetworkInterfaceCreate {
         pub description: String,
-        #[doc = "The IP address for the interface. One will be auto-assigned if not provided."]
+        ///The IP address for the interface. One will be auto-assigned if not provided.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ip: Option<String>,
         pub name: Name,
-        #[doc = "The VPC Subnet in which to create the interface."]
+        ///The VPC Subnet in which to create the interface.
         pub subnet_name: Name,
-        #[doc = "The VPC in which to create the interface."]
+        ///The VPC in which to create the interface.
         pub vpc_name: Name,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct NetworkInterfaceResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<NetworkInterface>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Client view of an [`Organization`]"]
+    ///Client view of an [`Organization`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Organization {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for an [`Organization`](crate::external_api::views::Organization)"]
+    ///Create-time parameters for an [`Organization`](crate::external_api::views::Organization)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationCreate {
         pub description: String,
         pub name: Name,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Organization>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
@@ -761,14 +773,18 @@ pub mod types {
         }
     }
 
-    #[doc = "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource."]
+    ///Client view of a [`Policy`], which describes how this resource may be accessed
+    ///
+    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationRolesPolicy {
-        #[doc = "Roles directly assigned on this resource"]
+        ///Roles directly assigned on this resource
         pub role_assignments: Vec<OrganizationRolesRoleAssignment>,
     }
 
-    #[doc = "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource."]
+    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
+    ///
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationRolesRoleAssignment {
         pub identity_id: uuid::Uuid,
@@ -776,7 +792,7 @@ pub mod types {
         pub role_name: OrganizationRoles,
     }
 
-    #[doc = "Updateable properties of an [`Organization`](crate::external_api::views::Organization)"]
+    ///Updateable properties of an [`Organization`](crate::external_api::views::Organization)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -785,35 +801,35 @@ pub mod types {
         pub name: Option<Name>,
     }
 
-    #[doc = "Client view of a [`Project`]"]
+    ///Client view of a [`Project`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Project {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         pub organization_id: uuid::Uuid,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for a [`Project`](crate::external_api::views::Project)"]
+    ///Create-time parameters for a [`Project`](crate::external_api::views::Project)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectCreate {
         pub description: String,
         pub name: Name,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Project>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
@@ -838,14 +854,18 @@ pub mod types {
         }
     }
 
-    #[doc = "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource."]
+    ///Client view of a [`Policy`], which describes how this resource may be accessed
+    ///
+    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectRolesPolicy {
-        #[doc = "Roles directly assigned on this resource"]
+        ///Roles directly assigned on this resource
         pub role_assignments: Vec<ProjectRolesRoleAssignment>,
     }
 
-    #[doc = "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource."]
+    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
+    ///
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectRolesRoleAssignment {
         pub identity_id: uuid::Uuid,
@@ -853,7 +873,7 @@ pub mod types {
         pub role_name: ProjectRoles,
     }
 
-    #[doc = "Updateable properties of a [`Project`](crate::external_api::views::Project)"]
+    ///Updateable properties of a [`Project`](crate::external_api::views::Project)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -862,39 +882,39 @@ pub mod types {
         pub name: Option<Name>,
     }
 
-    #[doc = "Client view of an [`Rack`]"]
+    ///Client view of an [`Rack`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Rack {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RackResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Rack>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Client view of a [`Role`]"]
+    ///Client view of a [`Role`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Role {
         pub description: String,
         pub name: RoleName,
     }
 
-    #[doc = "Role names consist of two string components separated by dot (\".\")."]
+    ///Role names consist of two string components separated by dot (".").
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RoleName(pub String);
     impl std::ops::Deref for RoleName {
@@ -904,77 +924,79 @@ pub mod types {
         }
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RoleResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Role>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "A `RouteDestination` is used to match traffic with a routing rule, on the destination of that traffic.\n\nWhen traffic is to be sent to a destination that is within a given `RouteDestination`, the corresponding [`RouterRoute`] applies, and traffic will be forward to the [`RouteTarget`] for that rule."]
+    ///A `RouteDestination` is used to match traffic with a routing rule, on the destination of that traffic.
+    ///
+    ///When traffic is to be sent to a destination that is within a given `RouteDestination`, the corresponding [`RouterRoute`] applies, and traffic will be forward to the [`RouteTarget`] for that rule.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
-        #[doc = "Route applies to traffic destined for a specific IP address"]
+        ///Route applies to traffic destined for a specific IP address
         #[serde(rename = "ip")]
         Ip(String),
-        #[doc = "Route applies to traffic destined for a specific IP subnet"]
+        ///Route applies to traffic destined for a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
-        #[doc = "Route applies to traffic destined for the given VPC."]
+        ///Route applies to traffic destined for the given VPC.
         #[serde(rename = "vpc")]
         Vpc(Name),
-        #[doc = "Route applies to traffic"]
+        ///Route applies to traffic
         #[serde(rename = "subnet")]
         Subnet(Name),
     }
 
-    #[doc = "A `RouteTarget` describes the possible locations that traffic matching a route destination can be sent."]
+    ///A `RouteTarget` describes the possible locations that traffic matching a route destination can be sent.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
-        #[doc = "Forward traffic to a particular IP address."]
+        ///Forward traffic to a particular IP address.
         #[serde(rename = "ip")]
         Ip(String),
-        #[doc = "Forward traffic to a VPC"]
+        ///Forward traffic to a VPC
         #[serde(rename = "vpc")]
         Vpc(Name),
-        #[doc = "Forward traffic to a VPC Subnet"]
+        ///Forward traffic to a VPC Subnet
         #[serde(rename = "subnet")]
         Subnet(Name),
-        #[doc = "Forward traffic to a specific instance"]
+        ///Forward traffic to a specific instance
         #[serde(rename = "instance")]
         Instance(Name),
-        #[doc = "Forward traffic to an internet gateway"]
+        ///Forward traffic to an internet gateway
         #[serde(rename = "internet_gateway")]
         InternetGateway(Name),
     }
 
-    #[doc = "A route defines a rule that governs where traffic should be sent based on its destination."]
+    ///A route defines a rule that governs where traffic should be sent based on its destination.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RouterRoute {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
         pub destination: RouteDestination,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "Describes the kind of router. Set at creation. `read-only`"]
+        ///Describes the kind of router. Set at creation. `read-only`
         pub kind: RouterRouteKind,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         pub target: RouteTarget,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "The VPC Router to which the route belongs."]
+        ///The VPC Router to which the route belongs.
         pub vpc_router_id: uuid::Uuid,
     }
 
-    #[doc = "Create-time parameters for a [`RouterRoute`]"]
+    ///Create-time parameters for a [`RouterRoute`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RouterRouteCreateParams {
         pub description: String,
@@ -983,7 +1005,9 @@ pub mod types {
         pub target: RouteTarget,
     }
 
-    #[doc = "The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.\n\nSee [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context"]
+    ///The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.
+    ///
+    ///See [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum RouterRouteKind {
         #[serde(rename = "default")]
@@ -1007,17 +1031,17 @@ pub mod types {
         }
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RouterRouteResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<RouterRoute>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Updateable properties of a [`RouterRoute`]"]
+    ///Updateable properties of a [`RouterRoute`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RouterRouteUpdateParams {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1049,12 +1073,12 @@ pub mod types {
         SubsagaCreateFailed { message: String },
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SagaResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Saga>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
@@ -1073,30 +1097,30 @@ pub mod types {
         },
     }
 
-    #[doc = "Client view of currently authed user."]
+    ///Client view of currently authed user.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SessionUser {
         pub id: uuid::Uuid,
     }
 
-    #[doc = "Client view of a ['Silo']"]
+    ///Client view of a ['Silo']
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Silo {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "A silo where discoverable is false can be retrieved only by its id - it will not be part of the \"list all silos\" output."]
+        ///A silo where discoverable is false can be retrieved only by its id - it will not be part of the "list all silos" output.
         pub discoverable: bool,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for a [`Silo`](crate::external_api::views::Silo)"]
+    ///Create-time parameters for a [`Silo`](crate::external_api::views::Silo)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SiloCreate {
         pub description: String,
@@ -1104,12 +1128,12 @@ pub mod types {
         pub name: Name,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SiloResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Silo>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
@@ -1134,14 +1158,18 @@ pub mod types {
         }
     }
 
-    #[doc = "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource."]
+    ///Client view of a [`Policy`], which describes how this resource may be accessed
+    ///
+    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SiloRolesPolicy {
-        #[doc = "Roles directly assigned on this resource"]
+        ///Roles directly assigned on this resource
         pub role_assignments: Vec<SiloRolesRoleAssignment>,
     }
 
-    #[doc = "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource."]
+    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
+    ///
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SiloRolesRoleAssignment {
         pub identity_id: uuid::Uuid,
@@ -1149,108 +1177,108 @@ pub mod types {
         pub role_name: SiloRoles,
     }
 
-    #[doc = "Client view of an [`Sled`]"]
+    ///Client view of an [`Sled`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Sled {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         pub service_address: String,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SledResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Sled>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Client view of a Snapshot"]
+    ///Client view of a Snapshot
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Snapshot {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
         pub disk_id: uuid::Uuid,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         pub project_id: uuid::Uuid,
         pub size: ByteCount,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for a [`Snapshot`](omicron_common::api::external::Snapshot)"]
+    ///Create-time parameters for a [`Snapshot`](omicron_common::api::external::Snapshot)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SnapshotCreate {
         pub description: String,
-        #[doc = "The name of the disk to be snapshotted"]
+        ///The name of the disk to be snapshotted
         pub disk: Name,
         pub name: Name,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SnapshotResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Snapshot>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Client view of a [`SshKey`]"]
+    ///Client view of a [`SshKey`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SshKey {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`"]
+        ///SSH public key, e.g., `"ssh-ed25519 AAAAC3NzaC..."`
         pub public_key: String,
-        #[doc = "The user to whom this key belongs"]
+        ///The user to whom this key belongs
         pub silo_user_id: uuid::Uuid,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for an [`SshKey`](crate::external_api::views::SshKey)"]
+    ///Create-time parameters for an [`SshKey`](crate::external_api::views::SshKey)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SshKeyCreate {
         pub description: String,
         pub name: Name,
-        #[doc = "SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`"]
+        ///SSH public key, e.g., `"ssh-ed25519 AAAAC3NzaC..."`
         pub public_key: String,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SshKeyResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<SshKey>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words."]
+    ///Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct TimeseriesName(pub String);
     impl std::ops::Deref for TimeseriesName {
@@ -1260,7 +1288,9 @@ pub mod types {
         }
     }
 
-    #[doc = "The schema for a timeseries.\n\nThis includes the name of the timeseries, as well as the datum type of its metric and the schema for each field."]
+    ///The schema for a timeseries.
+    ///
+    ///This includes the name of the timeseries, as well as the datum type of its metric and the schema for each field.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct TimeseriesSchema {
         pub created: chrono::DateTime<chrono::offset::Utc>,
@@ -1269,101 +1299,103 @@ pub mod types {
         pub timeseries_name: TimeseriesName,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct TimeseriesSchemaResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<TimeseriesSchema>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Client view of a [`User`]"]
+    ///Client view of a [`User`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct User {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct UserResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<User>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Client view of a [`Vpc`]"]
+    ///Client view of a [`Vpc`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Vpc {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "The name used for the VPC in DNS."]
+        ///The name used for the VPC in DNS.
         pub dns_name: Name,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "The unique local IPv6 address range for subnets in this VPC"]
+        ///The unique local IPv6 address range for subnets in this VPC
         pub ipv6_prefix: Ipv6Net,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "id for the project containing this VPC"]
+        ///id for the project containing this VPC
         pub project_id: uuid::Uuid,
-        #[doc = "id for the system router where subnet default routes are registered"]
+        ///id for the system router where subnet default routes are registered
         pub system_router_id: uuid::Uuid,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[doc = "Create-time parameters for a [`Vpc`](crate::external_api::views::Vpc)"]
+    ///Create-time parameters for a [`Vpc`](crate::external_api::views::Vpc)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcCreate {
         pub description: String,
         pub dns_name: Name,
-        #[doc = "The IPv6 prefix for this VPC.\n\nAll IPv6 subnets created from this VPC must be taken from this range, which sould be a Unique Local Address in the range `fd00::/48`. The default VPC Subnet will have the first `/64` range from this prefix."]
+        ///The IPv6 prefix for this VPC.
+        ///
+        ///All IPv6 subnets created from this VPC must be taken from this range, which sould be a Unique Local Address in the range `fd00::/48`. The default VPC Subnet will have the first `/64` range from this prefix.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ipv6_prefix: Option<Ipv6Net>,
         pub name: Name,
     }
 
-    #[doc = "A single rule in a VPC firewall"]
+    ///A single rule in a VPC firewall
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRule {
-        #[doc = "whether traffic matching the rule should be allowed or dropped"]
+        ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "whether this rule is for incoming or outgoing traffic"]
+        ///whether this rule is for incoming or outgoing traffic
         pub direction: VpcFirewallRuleDirection,
-        #[doc = "reductions on the scope of the rule"]
+        ///reductions on the scope of the rule
         pub filters: VpcFirewallRuleFilter,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "the relative priority of this rule"]
+        ///the relative priority of this rule
         pub priority: u16,
-        #[doc = "whether this rule is in effect"]
+        ///whether this rule is in effect
         pub status: VpcFirewallRuleStatus,
-        #[doc = "list of sets of instances that the rule applies to"]
+        ///list of sets of instances that the rule applies to
         pub targets: Vec<VpcFirewallRuleTarget>,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "the VPC to which this rule belongs"]
+        ///the VPC to which this rule belongs
         pub vpc_id: uuid::Uuid,
     }
 
@@ -1401,42 +1433,42 @@ pub mod types {
         }
     }
 
-    #[doc = "Filter for a firewall rule. A given packet must match every field that is present for the rule to apply to it. A packet matches a field if any entry in that field matches the packet."]
+    ///Filter for a firewall rule. A given packet must match every field that is present for the rule to apply to it. A packet matches a field if any entry in that field matches the packet.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRuleFilter {
-        #[doc = "If present, the sources (if incoming) or destinations (if outgoing) this rule applies to."]
+        ///If present, the sources (if incoming) or destinations (if outgoing) this rule applies to.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub hosts: Option<Vec<VpcFirewallRuleHostFilter>>,
-        #[doc = "If present, the destination ports this rule applies to."]
+        ///If present, the destination ports this rule applies to.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ports: Option<Vec<L4PortRange>>,
-        #[doc = "If present, the networking protocols this rule applies to."]
+        ///If present, the networking protocols this rule applies to.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub protocols: Option<Vec<VpcFirewallRuleProtocol>>,
     }
 
-    #[doc = "The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis of its source or destination host."]
+    ///The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis of its source or destination host.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
-        #[doc = "The rule applies to traffic from/to all instances in the VPC"]
+        ///The rule applies to traffic from/to all instances in the VPC
         #[serde(rename = "vpc")]
         Vpc(Name),
-        #[doc = "The rule applies to traffic from/to all instances in the VPC Subnet"]
+        ///The rule applies to traffic from/to all instances in the VPC Subnet
         #[serde(rename = "subnet")]
         Subnet(Name),
-        #[doc = "The rule applies to traffic from/to this specific instance"]
+        ///The rule applies to traffic from/to this specific instance
         #[serde(rename = "instance")]
         Instance(Name),
-        #[doc = "The rule applies to traffic from/to a specific IP address"]
+        ///The rule applies to traffic from/to a specific IP address
         #[serde(rename = "ip")]
         Ip(String),
-        #[doc = "The rule applies to traffic from/to a specific IP subnet"]
+        ///The rule applies to traffic from/to a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
     }
 
-    #[doc = "The protocols that may be specified in a firewall rule's filter"]
+    ///The protocols that may be specified in a firewall rule's filter
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum VpcFirewallRuleProtocol {
         #[serde(rename = "TCP")]
@@ -1474,89 +1506,89 @@ pub mod types {
         }
     }
 
-    #[doc = "A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to which a firewall rule applies."]
+    ///A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to which a firewall rule applies.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
-        #[doc = "The rule applies to all instances in the VPC"]
+        ///The rule applies to all instances in the VPC
         #[serde(rename = "vpc")]
         Vpc(Name),
-        #[doc = "The rule applies to all instances in the VPC Subnet"]
+        ///The rule applies to all instances in the VPC Subnet
         #[serde(rename = "subnet")]
         Subnet(Name),
-        #[doc = "The rule applies to this specific instance"]
+        ///The rule applies to this specific instance
         #[serde(rename = "instance")]
         Instance(Name),
-        #[doc = "The rule applies to a specific IP address"]
+        ///The rule applies to a specific IP address
         #[serde(rename = "ip")]
         Ip(String),
-        #[doc = "The rule applies to a specific IP subnet"]
+        ///The rule applies to a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
     }
 
-    #[doc = "A single rule in a VPC firewall"]
+    ///A single rule in a VPC firewall
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRuleUpdate {
-        #[doc = "whether traffic matching the rule should be allowed or dropped"]
+        ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "whether this rule is for incoming or outgoing traffic"]
+        ///whether this rule is for incoming or outgoing traffic
         pub direction: VpcFirewallRuleDirection,
-        #[doc = "reductions on the scope of the rule"]
+        ///reductions on the scope of the rule
         pub filters: VpcFirewallRuleFilter,
-        #[doc = "name of the rule, unique to this VPC"]
+        ///name of the rule, unique to this VPC
         pub name: Name,
-        #[doc = "the relative priority of this rule"]
+        ///the relative priority of this rule
         pub priority: u16,
-        #[doc = "whether this rule is in effect"]
+        ///whether this rule is in effect
         pub status: VpcFirewallRuleStatus,
-        #[doc = "list of sets of instances that the rule applies to"]
+        ///list of sets of instances that the rule applies to
         pub targets: Vec<VpcFirewallRuleTarget>,
     }
 
-    #[doc = "Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules are implicitly created along with a Vpc, so there is no explicit creation."]
+    ///Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules are implicitly created along with a Vpc, so there is no explicit creation.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRuleUpdateParams {
         pub rules: Vec<VpcFirewallRuleUpdate>,
     }
 
-    #[doc = "Collection of a [`Vpc`]'s firewall rules"]
+    ///Collection of a [`Vpc`]'s firewall rules
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRules {
         pub rules: Vec<VpcFirewallRule>,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<Vpc>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "A VPC router defines a series of rules that indicate where traffic should be sent depending on its destination."]
+    ///A VPC router defines a series of rules that indicate where traffic should be sent depending on its destination.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouter {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         pub kind: VpcRouterKind,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "The VPC to which the router belongs."]
+        ///The VPC to which the router belongs.
         pub vpc_id: uuid::Uuid,
     }
 
-    #[doc = "Create-time parameters for a [`VpcRouter`](crate::external_api::views::VpcRouter)"]
+    ///Create-time parameters for a [`VpcRouter`](crate::external_api::views::VpcRouter)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouterCreate {
         pub description: String,
@@ -1580,17 +1612,17 @@ pub mod types {
         }
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouterResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<VpcRouter>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Updateable properties of a [`VpcRouter`](crate::external_api::views::VpcRouter)"]
+    ///Updateable properties of a [`VpcRouter`](crate::external_api::views::VpcRouter)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouterUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1599,50 +1631,54 @@ pub mod types {
         pub name: Option<Name>,
     }
 
-    #[doc = "A VPC subnet represents a logical grouping for instances that allows network traffic between them, within a IPv4 subnetwork or optionall an IPv6 subnetwork."]
+    ///A VPC subnet represents a logical grouping for instances that allows network traffic between them, within a IPv4 subnetwork or optionall an IPv6 subnetwork.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnet {
-        #[doc = "human-readable free-form text about a resource"]
+        ///human-readable free-form text about a resource
         pub description: String,
-        #[doc = "unique, immutable, system-controlled identifier for each resource"]
+        ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[doc = "The IPv4 subnet CIDR block."]
+        ///The IPv4 subnet CIDR block.
         pub ipv4_block: Ipv4Net,
-        #[doc = "The IPv6 subnet CIDR block."]
+        ///The IPv6 subnet CIDR block.
         pub ipv6_block: Ipv6Net,
-        #[doc = "unique, mutable, user-controlled identifier for each resource"]
+        ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        #[doc = "timestamp when this resource was created"]
+        ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "timestamp when this resource was last modified"]
+        ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        #[doc = "The VPC to which the subnet belongs."]
+        ///The VPC to which the subnet belongs.
         pub vpc_id: uuid::Uuid,
     }
 
-    #[doc = "Create-time parameters for a [`VpcSubnet`](crate::external_api::views::VpcSubnet)"]
+    ///Create-time parameters for a [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetCreate {
         pub description: String,
-        #[doc = "The IPv4 address range for this subnet.\n\nIt must be allocated from an RFC 1918 private address range, and must not overlap with any other existing subnet in the VPC."]
+        ///The IPv4 address range for this subnet.
+        ///
+        ///It must be allocated from an RFC 1918 private address range, and must not overlap with any other existing subnet in the VPC.
         pub ipv4_block: Ipv4Net,
-        #[doc = "The IPv6 address range for this subnet.\n\nIt must be allocated from the RFC 4193 Unique Local Address range, with the prefix equal to the parent VPC's prefix. A random `/64` block will be assigned if one is not provided. It must not overlap with any existing subnet in the VPC."]
+        ///The IPv6 address range for this subnet.
+        ///
+        ///It must be allocated from the RFC 4193 Unique Local Address range, with the prefix equal to the parent VPC's prefix. A random `/64` block will be assigned if one is not provided. It must not overlap with any existing subnet in the VPC.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ipv6_block: Option<Ipv6Net>,
         pub name: Name,
     }
 
-    #[doc = "A single page of results"]
+    ///A single page of results
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetResultsPage {
-        #[doc = "list of items on this page of results"]
+        ///list of items on this page of results
         pub items: Vec<VpcSubnet>,
-        #[doc = "token used to fetch the next page of results (if any)"]
+        ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
     }
 
-    #[doc = "Updateable properties of a [`VpcSubnet`](crate::external_api::views::VpcSubnet)"]
+    ///Updateable properties of a [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1651,7 +1687,7 @@ pub mod types {
         pub name: Option<Name>,
     }
 
-    #[doc = "Updateable properties of a [`Vpc`](crate::external_api::views::Vpc)"]
+    ///Updateable properties of a [`Vpc`](crate::external_api::views::Vpc)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1697,7 +1733,14 @@ impl Client {
 }
 
 impl Client {
-    #[doc = "List racks in the system\n\nSends a `GET` request to `/hardware/racks`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List racks in the system
+    ///
+    ///Sends a `GET` request to `/hardware/racks`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn hardware_racks_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1733,7 +1776,13 @@ impl Client {
         }
     }
 
-    #[doc = "List racks in the system as a Stream\n\nSends repeated `GET` requests to `/hardware/racks` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List racks in the system as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/hardware/racks` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn hardware_racks_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1768,7 +1817,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch information about a particular rack\n\nSends a `GET` request to `/hardware/racks/{rack_id}`\n\nArguments:\n- `rack_id`: The rack's unique ID.\n"]
+    ///Fetch information about a particular rack
+    ///
+    ///Sends a `GET` request to `/hardware/racks/{rack_id}`
+    ///
+    ///Arguments:
+    ///- `rack_id`: The rack's unique ID.
     pub async fn hardware_racks_get_rack<'a>(
         &'a self,
         rack_id: &'a uuid::Uuid,
@@ -1793,7 +1847,14 @@ impl Client {
         }
     }
 
-    #[doc = "List sleds in the system\n\nSends a `GET` request to `/hardware/sleds`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List sleds in the system
+    ///
+    ///Sends a `GET` request to `/hardware/sleds`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn hardware_sleds_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1829,7 +1890,13 @@ impl Client {
         }
     }
 
-    #[doc = "List sleds in the system as a Stream\n\nSends repeated `GET` requests to `/hardware/sleds` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List sleds in the system as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/hardware/sleds` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn hardware_sleds_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1864,7 +1931,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch information about a sled in the system\n\nSends a `GET` request to `/hardware/sleds/{sled_id}`\n\nArguments:\n- `sled_id`: The sled's unique ID.\n"]
+    ///Fetch information about a sled in the system
+    ///
+    ///Sends a `GET` request to `/hardware/sleds/{sled_id}`
+    ///
+    ///Arguments:
+    ///- `sled_id`: The sled's unique ID.
     pub async fn hardware_sleds_get_sled<'a>(
         &'a self,
         sled_id: &'a uuid::Uuid,
@@ -1889,7 +1961,16 @@ impl Client {
         }
     }
 
-    #[doc = "List global images\n\nReturns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.\n\nSends a `GET` request to `/images`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List global images
+    ///
+    ///Returns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.
+    ///
+    ///Sends a `GET` request to `/images`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn images_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1925,7 +2006,15 @@ impl Client {
         }
     }
 
-    #[doc = "List global images as a Stream\n\nReturns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.\n\nSends repeated `GET` requests to `/images` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List global images as a Stream
+    ///
+    ///Returns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.
+    ///
+    ///Sends repeated `GET` requests to `/images` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn images_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -1961,7 +2050,11 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a global image\n\nCreate a new global image. This image can then be used by any user as a base for instances.\n\nSends a `POST` request to `/images`"]
+    ///Create a global image
+    ///
+    ///Create a new global image. This image can then be used by any user as a base for instances.
+    ///
+    ///Sends a `POST` request to `/images`
     pub async fn images_post<'a>(
         &'a self,
         body: &'a types::ImageCreate,
@@ -1982,7 +2075,11 @@ impl Client {
         }
     }
 
-    #[doc = "Get a global image\n\nReturns the details of a specific global image.\n\nSends a `GET` request to `/images/{image_name}`"]
+    ///Get a global image
+    ///
+    ///Returns the details of a specific global image.
+    ///
+    ///Sends a `GET` request to `/images/{image_name}`
     pub async fn images_get_image<'a>(
         &'a self,
         image_name: &'a types::Name,
@@ -2007,7 +2104,11 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a global image\n\nPermanently delete a global image. This operation cannot be undone. Any instances using the global image will continue to run, however new instances can not be created with this image.\n\nSends a `DELETE` request to `/images/{image_name}`"]
+    ///Delete a global image
+    ///
+    ///Permanently delete a global image. This operation cannot be undone. Any instances using the global image will continue to run, however new instances can not be created with this image.
+    ///
+    ///Sends a `DELETE` request to `/images/{image_name}`
     pub async fn images_delete_image<'a>(
         &'a self,
         image_name: &'a types::Name,
@@ -2032,7 +2133,7 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `POST` request to `/login`"]
+    ///Sends a `POST` request to `/login`
     pub async fn spoof_login<'a>(
         &'a self,
         body: &'a types::LoginParams,
@@ -2047,7 +2148,7 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `POST` request to `/logout`"]
+    ///Sends a `POST` request to `/logout`
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/logout", self.baseurl,);
         let request = self.client.post(url).build()?;
@@ -2059,7 +2160,14 @@ impl Client {
         }
     }
 
-    #[doc = "List all organizations\n\nSends a `GET` request to `/organizations`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List all organizations
+    ///
+    ///Sends a `GET` request to `/organizations`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn organizations_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -2095,7 +2203,13 @@ impl Client {
         }
     }
 
-    #[doc = "List all organizations as a Stream\n\nSends repeated `GET` requests to `/organizations` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List all organizations as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn organizations_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -2131,7 +2245,9 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a new organization\n\nSends a `POST` request to `/organizations`"]
+    ///Create a new organization
+    ///
+    ///Sends a `POST` request to `/organizations`
     pub async fn organizations_post<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
@@ -2152,7 +2268,12 @@ impl Client {
         }
     }
 
-    #[doc = "Fetch a specific organization\n\nSends a `GET` request to `/organizations/{organization_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n"]
+    ///Fetch a specific organization
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
     pub async fn organizations_get_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2177,7 +2298,13 @@ impl Client {
         }
     }
 
-    #[doc = "Update a specific organization\n\nSends a `PUT` request to `/organizations/{organization_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `body`\n"]
+    ///Update a specific organization
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `body`
     pub async fn organizations_put_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2203,7 +2330,12 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a specific organization\n\nSends a `DELETE` request to `/organizations/{organization_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n"]
+    ///Delete a specific organization
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
     pub async fn organizations_delete_organization<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2228,7 +2360,12 @@ impl Client {
         }
     }
 
-    #[doc = "Fetch the IAM policy for this Organization\n\nSends a `GET` request to `/organizations/{organization_name}/policy`\n\nArguments:\n- `organization_name`: The organization's unique name.\n"]
+    ///Fetch the IAM policy for this Organization
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/policy`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
     pub async fn organization_get_policy<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2253,7 +2390,13 @@ impl Client {
         }
     }
 
-    #[doc = "Update the IAM policy for this Organization\n\nSends a `PUT` request to `/organizations/{organization_name}/policy`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `body`\n"]
+    ///Update the IAM policy for this Organization
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}/policy`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `body`
     pub async fn organization_put_policy<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2279,7 +2422,15 @@ impl Client {
         }
     }
 
-    #[doc = "List all projects\n\nSends a `GET` request to `/organizations/{organization_name}/projects`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List all projects
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn organization_projects_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2320,7 +2471,14 @@ impl Client {
         }
     }
 
-    #[doc = "List all projects as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List all projects as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn organization_projects_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2361,7 +2519,13 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a new project\n\nSends a `POST` request to `/organizations/{organization_name}/projects`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `body`\n"]
+    ///Create a new project
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `body`
     pub async fn organization_projects_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2387,7 +2551,13 @@ impl Client {
         }
     }
 
-    #[doc = "Fetch a specific project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n"]
+    ///Fetch a specific project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
     pub async fn organization_projects_get_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2414,7 +2584,14 @@ impl Client {
         }
     }
 
-    #[doc = "Update a specific project\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    ///Update a specific project
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
     pub async fn organization_projects_put_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2442,7 +2619,13 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a specific project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n"]
+    ///Delete a specific project
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
     pub async fn organization_projects_delete_project<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2469,7 +2652,16 @@ impl Client {
         }
     }
 
-    #[doc = "List disks in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List disks in a project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn project_disks_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2512,7 +2704,15 @@ impl Client {
         }
     }
 
-    #[doc = "List disks in a project as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/disks` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List disks in a project as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/disks` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn project_disks_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2555,7 +2755,14 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a disk in a project\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/disks`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    ///Create a disk in a project
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/disks`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
     pub async fn project_disks_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2583,7 +2790,9 @@ impl Client {
         }
     }
 
-    #[doc = "Fetch a single disk in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`"]
+    ///Fetch a single disk in a project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`
     pub async fn project_disks_get_disk<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2612,7 +2821,9 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a disk from a project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`"]
+    ///Delete a disk from a project
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`
     pub async fn project_disks_delete_disk<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2641,7 +2852,18 @@ impl Client {
         }
     }
 
-    #[doc = "List images\n\nList images in a project. The images are returned sorted by creation date, with the most recent images appearing first.\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List images
+    ///
+    ///List images in a project. The images are returned sorted by creation date, with the most recent images appearing first.
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn project_images_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2684,7 +2906,17 @@ impl Client {
         }
     }
 
-    #[doc = "List images as a Stream\n\nList images in a project. The images are returned sorted by creation date, with the most recent images appearing first.\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/images` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List images as a Stream
+    ///
+    ///List images in a project. The images are returned sorted by creation date, with the most recent images appearing first.
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/images` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn project_images_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2727,7 +2959,16 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create an image\n\nCreate a new image in a project.\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/images`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    ///Create an image
+    ///
+    ///Create a new image in a project.
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/images`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
     pub async fn project_images_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2755,7 +2996,11 @@ impl Client {
         }
     }
 
-    #[doc = "Get an image\n\nGet the details of a specific image in a project.\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`"]
+    ///Get an image
+    ///
+    ///Get the details of a specific image in a project.
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`
     pub async fn project_images_get_image<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2784,7 +3029,11 @@ impl Client {
         }
     }
 
-    #[doc = "Delete an image\n\nPermanently delete an image from a project. This operation cannot be undone. Any instances in the project using the image will continue to run, however new instances can not be created with this image.\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`"]
+    ///Delete an image
+    ///
+    ///Permanently delete an image from a project. This operation cannot be undone. Any instances in the project using the image will continue to run, however new instances can not be created with this image.
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`
     pub async fn project_images_delete_image<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2813,7 +3062,16 @@ impl Client {
         }
     }
 
-    #[doc = "List instances in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List instances in a project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn project_instances_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2856,7 +3114,15 @@ impl Client {
         }
     }
 
-    #[doc = "List instances in a project as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List instances in a project as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn project_instances_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2900,7 +3166,14 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create an instance in a project\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    ///Create an instance in a project
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
     pub async fn project_instances_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2928,7 +3201,9 @@ impl Client {
         }
     }
 
-    #[doc = "Get an instance in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`"]
+    ///Get an instance in a project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`
     pub async fn project_instances_get_instance<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2957,7 +3232,9 @@ impl Client {
         }
     }
 
-    #[doc = "Delete an instance from a project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`"]
+    ///Delete an instance from a project
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`
     pub async fn project_instances_delete_instance<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -2986,7 +3263,17 @@ impl Client {
         }
     }
 
-    #[doc = "List disks attached to this instance\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `instance_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List disks attached to this instance
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks`
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn instance_disks_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3031,7 +3318,16 @@ impl Client {
         }
     }
 
-    #[doc = "List disks attached to this instance as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `instance_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List disks attached to this instance as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn instance_disks_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3083,7 +3379,7 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach`"]
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach`
     pub async fn instance_disks_attach<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3113,7 +3409,7 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach`"]
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach`
     pub async fn instance_disks_detach<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3143,7 +3439,9 @@ impl Client {
         }
     }
 
-    #[doc = "Migrate an instance to a different propolis-server, possibly on a different sled\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate`"]
+    ///Migrate an instance to a different propolis-server, possibly on a different sled
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate`
     pub async fn project_instances_migrate_instance<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3173,7 +3471,17 @@ impl Client {
         }
     }
 
-    #[doc = "List network interfaces attached to this instance\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `instance_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List network interfaces attached to this instance
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn instance_network_interfaces_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3218,7 +3526,16 @@ impl Client {
         }
     }
 
-    #[doc = "List network interfaces attached to this instance as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `instance_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List network interfaces attached to this instance as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn instance_network_interfaces_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3271,7 +3588,9 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Create a network interface for an instance\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`"]
+    ///Create a network interface for an instance
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
     pub async fn instance_network_interfaces_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3301,7 +3620,9 @@ impl Client {
         }
     }
 
-    #[doc = "Get an interface attached to an instance\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`"]
+    ///Get an interface attached to an instance
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
     pub async fn instance_network_interfaces_get_interface<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3332,7 +3653,9 @@ impl Client {
         }
     }
 
-    #[doc = "Detach a network interface from an instance\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`"]
+    ///Detach a network interface from an instance
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
     pub async fn instance_network_interfaces_delete_interface<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3363,7 +3686,9 @@ impl Client {
         }
     }
 
-    #[doc = "Reboot an instance\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot`"]
+    ///Reboot an instance
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot`
     pub async fn project_instances_instance_reboot<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3392,7 +3717,9 @@ impl Client {
         }
     }
 
-    #[doc = "Boot an instance\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start`"]
+    ///Boot an instance
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start`
     pub async fn project_instances_instance_start<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3421,7 +3748,9 @@ impl Client {
         }
     }
 
-    #[doc = "Halt an instance\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop`"]
+    ///Halt an instance
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop`
     pub async fn project_instances_instance_stop<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3450,7 +3779,13 @@ impl Client {
         }
     }
 
-    #[doc = "Fetch the IAM policy for this Project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/policy`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n"]
+    ///Fetch the IAM policy for this Project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/policy`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
     pub async fn organization_projects_get_project_policy<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3477,7 +3812,14 @@ impl Client {
         }
     }
 
-    #[doc = "Update the IAM policy for this Project\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/policy`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    ///Update the IAM policy for this Project
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/policy`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
     pub async fn organization_projects_put_project_policy<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3505,7 +3847,16 @@ impl Client {
         }
     }
 
-    #[doc = "List snapshots in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List snapshots in a project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn project_snapshots_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3548,7 +3899,15 @@ impl Client {
         }
     }
 
-    #[doc = "List snapshots in a project as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/snapshots` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List snapshots in a project as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/snapshots` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn project_snapshots_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3592,7 +3951,14 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a snapshot of a disk\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    ///Create a snapshot of a disk
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
     pub async fn project_snapshots_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3620,7 +3986,9 @@ impl Client {
         }
     }
 
-    #[doc = "Get a snapshot in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`"]
+    ///Get a snapshot in a project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`
     pub async fn project_snapshots_get_snapshot<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3649,7 +4017,9 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a snapshot from a project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`"]
+    ///Delete a snapshot from a project
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`
     pub async fn project_snapshots_delete_snapshot<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3678,7 +4048,16 @@ impl Client {
         }
     }
 
-    #[doc = "List VPCs in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List VPCs in a project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn project_vpcs_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3721,7 +4100,15 @@ impl Client {
         }
     }
 
-    #[doc = "List VPCs in a project as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs` until there are no more results.\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List VPCs in a project as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn project_vpcs_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3764,7 +4151,14 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a VPC in a project\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`\n\nArguments:\n- `organization_name`: The organization's unique name.\n- `project_name`: The project's unique name within the organization.\n- `body`\n"]
+    ///Create a VPC in a project
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`
+    ///
+    ///Arguments:
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
     pub async fn project_vpcs_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3792,7 +4186,9 @@ impl Client {
         }
     }
 
-    #[doc = "Get a VPC in a project\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`"]
+    ///Get a VPC in a project
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
     pub async fn project_vpcs_get_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3821,7 +4217,9 @@ impl Client {
         }
     }
 
-    #[doc = "Update a VPC\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`"]
+    ///Update a VPC
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
     pub async fn project_vpcs_put_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3851,7 +4249,9 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a vpc from a project\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`"]
+    ///Delete a vpc from a project
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
     pub async fn project_vpcs_delete_vpc<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3880,7 +4280,9 @@ impl Client {
         }
     }
 
-    #[doc = "List firewall rules for a VPC\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`"]
+    ///List firewall rules for a VPC
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`
     pub async fn vpc_firewall_rules_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3909,7 +4311,9 @@ impl Client {
         }
     }
 
-    #[doc = "Replace the firewall rules for a VPC\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`"]
+    ///Replace the firewall rules for a VPC
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`
     pub async fn vpc_firewall_rules_put<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3939,7 +4343,17 @@ impl Client {
         }
     }
 
-    #[doc = "List VPC Custom and System Routers\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List VPC Custom and System Routers
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn vpc_routers_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -3984,7 +4398,16 @@ impl Client {
         }
     }
 
-    #[doc = "List VPC Custom and System Routers as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List VPC Custom and System Routers as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn vpc_routers_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4037,7 +4460,9 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Create a VPC Router\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`"]
+    ///Create a VPC Router
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
     pub async fn vpc_routers_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4067,7 +4492,9 @@ impl Client {
         }
     }
 
-    #[doc = "Get a VPC Router\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`"]
+    ///Get a VPC Router
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
     pub async fn vpc_routers_get_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4098,7 +4525,9 @@ impl Client {
         }
     }
 
-    #[doc = "Update a VPC Router\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`"]
+    ///Update a VPC Router
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
     pub async fn vpc_routers_put_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4130,7 +4559,9 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a router from its VPC\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`"]
+    ///Delete a router from its VPC
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
     pub async fn vpc_routers_delete_router<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4161,7 +4592,18 @@ impl Client {
         }
     }
 
-    #[doc = "List a Router's routes\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `router_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List a Router's routes
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `router_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn routers_routes_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4208,7 +4650,17 @@ impl Client {
         }
     }
 
-    #[doc = "List a Router's routes as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `router_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List a Router's routes as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `router_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn routers_routes_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4264,7 +4716,9 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Create a VPC Router\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`"]
+    ///Create a VPC Router
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
     pub async fn routers_routes_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4296,7 +4750,9 @@ impl Client {
         }
     }
 
-    #[doc = "Get a VPC Router route\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`"]
+    ///Get a VPC Router route
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
     pub async fn routers_routes_get_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4329,7 +4785,9 @@ impl Client {
         }
     }
 
-    #[doc = "Update a Router route\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`"]
+    ///Update a Router route
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
     pub async fn routers_routes_put_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4363,7 +4821,9 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a route from its router\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`"]
+    ///Delete a route from its router
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
     pub async fn routers_routes_delete_route<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4396,7 +4856,17 @@ impl Client {
         }
     }
 
-    #[doc = "List subnets in a VPC\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List subnets in a VPC
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn vpc_subnets_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4441,7 +4911,16 @@ impl Client {
         }
     }
 
-    #[doc = "List subnets in a VPC as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List subnets in a VPC as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn vpc_subnets_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4494,7 +4973,9 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Create a subnet in a VPC\n\nSends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`"]
+    ///Create a subnet in a VPC
+    ///
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
     pub async fn vpc_subnets_post<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4524,7 +5005,9 @@ impl Client {
         }
     }
 
-    #[doc = "Get subnet in a VPC\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`"]
+    ///Get subnet in a VPC
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
     pub async fn vpc_subnets_get_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4555,7 +5038,9 @@ impl Client {
         }
     }
 
-    #[doc = "Update a VPC Subnet\n\nSends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`"]
+    ///Update a VPC Subnet
+    ///
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
     pub async fn vpc_subnets_put_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4587,7 +5072,9 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a subnet from a VPC\n\nSends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`"]
+    ///Delete a subnet from a VPC
+    ///
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
     pub async fn vpc_subnets_delete_subnet<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4618,7 +5105,18 @@ impl Client {
         }
     }
 
-    #[doc = "List network interfaces in a VPC subnet\n\nSends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces`\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `subnet_name`\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List network interfaces in a VPC subnet
+    ///
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces`
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `subnet_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn subnet_network_interfaces_get<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4665,7 +5163,17 @@ impl Client {
         }
     }
 
-    #[doc = "List network interfaces in a VPC subnet as a Stream\n\nSends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces` until there are no more results.\n\nArguments:\n- `organization_name`\n- `project_name`\n- `vpc_name`\n- `subnet_name`\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List network interfaces in a VPC subnet as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `subnet_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn subnet_network_interfaces_get_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -4721,7 +5229,9 @@ impl Client {
         .boxed()
     }
 
-    #[doc = "Fetch the top-level IAM policy\n\nSends a `GET` request to `/policy`"]
+    ///Fetch the top-level IAM policy
+    ///
+    ///Sends a `GET` request to `/policy`
     pub async fn policy_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::FleetRolesPolicy>, Error<types::Error>> {
@@ -4741,7 +5251,9 @@ impl Client {
         }
     }
 
-    #[doc = "Update the top-level IAM policy\n\nSends a `PUT` request to `/policy`"]
+    ///Update the top-level IAM policy
+    ///
+    ///Sends a `PUT` request to `/policy`
     pub async fn policy_put<'a>(
         &'a self,
         body: &'a types::FleetRolesPolicy,
@@ -4762,7 +5274,13 @@ impl Client {
         }
     }
 
-    #[doc = "List the built-in roles\n\nSends a `GET` request to `/roles`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n"]
+    ///List the built-in roles
+    ///
+    ///Sends a `GET` request to `/roles`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
     pub async fn roles_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -4793,7 +5311,12 @@ impl Client {
         }
     }
 
-    #[doc = "List the built-in roles as a Stream\n\nSends repeated `GET` requests to `/roles` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n"]
+    ///List the built-in roles as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/roles` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
     pub fn roles_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -4827,7 +5350,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch a specific built-in role\n\nSends a `GET` request to `/roles/{role_name}`\n\nArguments:\n- `role_name`: The built-in role's unique name.\n"]
+    ///Fetch a specific built-in role
+    ///
+    ///Sends a `GET` request to `/roles/{role_name}`
+    ///
+    ///Arguments:
+    ///- `role_name`: The built-in role's unique name.
     pub async fn roles_get_role<'a>(
         &'a self,
         role_name: &'a str,
@@ -4852,7 +5380,14 @@ impl Client {
         }
     }
 
-    #[doc = "List all sagas (for debugging)\n\nSends a `GET` request to `/sagas`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List all sagas (for debugging)
+    ///
+    ///Sends a `GET` request to `/sagas`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn sagas_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -4888,7 +5423,13 @@ impl Client {
         }
     }
 
-    #[doc = "List all sagas (for debugging) as a Stream\n\nSends repeated `GET` requests to `/sagas` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List all sagas (for debugging) as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/sagas` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn sagas_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -4923,7 +5464,9 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch information about a single saga (for debugging)\n\nSends a `GET` request to `/sagas/{saga_id}`"]
+    ///Fetch information about a single saga (for debugging)
+    ///
+    ///Sends a `GET` request to `/sagas/{saga_id}`
     pub async fn sagas_get_saga<'a>(
         &'a self,
         saga_id: &'a uuid::Uuid,
@@ -4948,7 +5491,9 @@ impl Client {
         }
     }
 
-    #[doc = "Fetch the user associated with the current session\n\nSends a `GET` request to `/session/me`"]
+    ///Fetch the user associated with the current session
+    ///
+    ///Sends a `GET` request to `/session/me`
     pub async fn session_me<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SessionUser>, Error<types::Error>> {
@@ -4968,7 +5513,14 @@ impl Client {
         }
     }
 
-    #[doc = "List the current user's SSH public keys\n\nSends a `GET` request to `/session/me/sshkeys`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List the current user's SSH public keys
+    ///
+    ///Sends a `GET` request to `/session/me/sshkeys`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn sshkeys_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -5004,7 +5556,13 @@ impl Client {
         }
     }
 
-    #[doc = "List the current user's SSH public keys as a Stream\n\nSends repeated `GET` requests to `/session/me/sshkeys` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List the current user's SSH public keys as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/session/me/sshkeys` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn sshkeys_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -5039,7 +5597,9 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a new SSH public key for the current user\n\nSends a `POST` request to `/session/me/sshkeys`"]
+    ///Create a new SSH public key for the current user
+    ///
+    ///Sends a `POST` request to `/session/me/sshkeys`
     pub async fn sshkeys_post<'a>(
         &'a self,
         body: &'a types::SshKeyCreate,
@@ -5060,7 +5620,9 @@ impl Client {
         }
     }
 
-    #[doc = "Get (by name) an SSH public key belonging to the current user\n\nSends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`"]
+    ///Get (by name) an SSH public key belonging to the current user
+    ///
+    ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
     pub async fn sshkeys_get_key<'a>(
         &'a self,
         ssh_key_name: &'a types::Name,
@@ -5085,7 +5647,9 @@ impl Client {
         }
     }
 
-    #[doc = "Delete (by name) an SSH public key belonging to the current user\n\nSends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`"]
+    ///Delete (by name) an SSH public key belonging to the current user
+    ///
+    ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
     pub async fn sshkeys_delete_key<'a>(
         &'a self,
         ssh_key_name: &'a types::Name,
@@ -5110,7 +5674,12 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `GET` request to `/silos`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///Sends a `GET` request to `/silos`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn silos_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -5146,7 +5715,11 @@ impl Client {
         }
     }
 
-    #[doc = "Sends repeated `GET` requests to `/silos` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///Sends repeated `GET` requests to `/silos` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn silos_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -5181,7 +5754,9 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Create a new silo\n\nSends a `POST` request to `/silos`"]
+    ///Create a new silo
+    ///
+    ///Sends a `POST` request to `/silos`
     pub async fn silos_post<'a>(
         &'a self,
         body: &'a types::SiloCreate,
@@ -5202,7 +5777,12 @@ impl Client {
         }
     }
 
-    #[doc = "Fetch a specific silo\n\nSends a `GET` request to `/silos/{silo_name}`\n\nArguments:\n- `silo_name`: The silo's unique name.\n"]
+    ///Fetch a specific silo
+    ///
+    ///Sends a `GET` request to `/silos/{silo_name}`
+    ///
+    ///Arguments:
+    ///- `silo_name`: The silo's unique name.
     pub async fn silos_get_silo<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -5227,7 +5807,12 @@ impl Client {
         }
     }
 
-    #[doc = "Delete a specific silo\n\nSends a `DELETE` request to `/silos/{silo_name}`\n\nArguments:\n- `silo_name`: The silo's unique name.\n"]
+    ///Delete a specific silo
+    ///
+    ///Sends a `DELETE` request to `/silos/{silo_name}`
+    ///
+    ///Arguments:
+    ///- `silo_name`: The silo's unique name.
     pub async fn silos_delete_silo<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -5252,7 +5837,12 @@ impl Client {
         }
     }
 
-    #[doc = "Fetch the IAM policy for this Silo\n\nSends a `GET` request to `/silos/{silo_name}/policy`\n\nArguments:\n- `silo_name`: The silo's unique name.\n"]
+    ///Fetch the IAM policy for this Silo
+    ///
+    ///Sends a `GET` request to `/silos/{silo_name}/policy`
+    ///
+    ///Arguments:
+    ///- `silo_name`: The silo's unique name.
     pub async fn silos_get_silo_policy<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -5277,7 +5867,13 @@ impl Client {
         }
     }
 
-    #[doc = "Update the IAM policy for this Silo\n\nSends a `PUT` request to `/silos/{silo_name}/policy`\n\nArguments:\n- `silo_name`: The silo's unique name.\n- `body`\n"]
+    ///Update the IAM policy for this Silo
+    ///
+    ///Sends a `PUT` request to `/silos/{silo_name}/policy`
+    ///
+    ///Arguments:
+    ///- `silo_name`: The silo's unique name.
+    ///- `body`
     pub async fn silos_put_silo_policy<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -5303,7 +5899,13 @@ impl Client {
         }
     }
 
-    #[doc = "List all timeseries schema\n\nSends a `GET` request to `/timeseries/schema`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n"]
+    ///List all timeseries schema
+    ///
+    ///Sends a `GET` request to `/timeseries/schema`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
     pub async fn timeseries_schema_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -5334,7 +5936,12 @@ impl Client {
         }
     }
 
-    #[doc = "List all timeseries schema as a Stream\n\nSends repeated `GET` requests to `/timeseries/schema` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n"]
+    ///List all timeseries schema as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/timeseries/schema` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
     pub fn timeseries_schema_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -5369,7 +5976,9 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Refresh update metadata\n\nSends a `POST` request to `/updates/refresh`"]
+    ///Refresh update metadata
+    ///
+    ///Sends a `POST` request to `/updates/refresh`
     pub async fn updates_refresh<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/updates/refresh", self.baseurl,);
         let request = self.client.post(url).build()?;
@@ -5387,7 +5996,14 @@ impl Client {
         }
     }
 
-    #[doc = "List the built-in system users\n\nSends a `GET` request to `/users`\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `page_token`: Token returned by previous call to retreive the subsequent page\n- `sort_by`\n"]
+    ///List the built-in system users
+    ///
+    ///Sends a `GET` request to `/users`
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    ///- `sort_by`
     pub async fn users_get<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -5423,7 +6039,13 @@ impl Client {
         }
     }
 
-    #[doc = "List the built-in system users as a Stream\n\nSends repeated `GET` requests to `/users` until there are no more results.\n\nArguments:\n- `limit`: Maximum number of items returned by a single call\n- `sort_by`\n"]
+    ///List the built-in system users as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/users` until there are no more results.
+    ///
+    ///Arguments:
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
     pub fn users_get_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
@@ -5458,7 +6080,12 @@ impl Client {
             .boxed()
     }
 
-    #[doc = "Fetch a specific built-in system user\n\nSends a `GET` request to `/users/{user_name}`\n\nArguments:\n- `user_name`: The built-in user's unique name.\n"]
+    ///Fetch a specific built-in system user
+    ///
+    ///Sends a `GET` request to `/users/{user_name}`
+    ///
+    ///Arguments:
+    ///- `user_name`: The built-in user's unique name.
     pub async fn users_get_user<'a>(
         &'a self,
         user_name: &'a types::Name,

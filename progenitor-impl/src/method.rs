@@ -14,7 +14,7 @@ use typify::TypeId;
 use crate::{
     template::PathTemplate,
     util::{sanitize, Case},
-    Error, Generator, Result,
+    Error, Generator, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
@@ -1127,9 +1127,8 @@ impl Generator {
     /// }
     /// ```
     ///
-    /// Finally, builders have methods to execute the method and to stream
-    /// results in the case of a paginated interface. Both take care to check
-    /// that required parameters are specified:
+    /// Finally, builders have methods to execute the method, which takes care
+    /// to check that required parameters are specified:
     /// ```ignore
     /// impl<'a> OperationId<'a> {
     ///     pub fn send(self) -> Result<
@@ -1145,30 +1144,30 @@ impl Generator {
     ///         let (param_1, param_2) = match (param_1, param_2) {
     ///             (Some(param_1), Some(param_2)) => (param_1, param_2),
     ///             (param_1, param_2) => {
-    ///                 let missing = [
-    ///                     (param_1.is_none(), stringify!(param_1)),
-    ///                     (param_2.is_none(), stringify!(param_2)),
-    ///                 ]
-    ///                 .into_iter()
-    ///                 .filter_map(|unset, name| if *unset {
-    ///                     Some(name)
-    ///                 } else {
-    ///                     None
-    ///                 })
-    ///                 .collect::<Vec<_>>()
-    ///                 .join(", ");
+    ///                 let mut missing = Vec::new();
+    ///                 if param_1.is_none() {
+    ///                     missing.push(stringify!(param_1));
+    ///                 }
+    ///                 if param_2.is_none() {
+    ///                     missing.push(stringify!(param_2));
+    ///                 }
     ///                 return Err(super::Error::InvalidRequest(format!(
     ///                     "the following parameters are required: {}",
-    ///                     missing,
+    ///                     missing.join(", "),
     ///                 )));
     ///             }
     ///         };
     ///     }
     /// }
     /// ```
+    ///
+    /// Finally, paginated interfaces have a `stream()` method which uses the
+    /// `send()` method above to fetch each page of results to assemble the
+    /// items into a single impl Stream.
     pub(crate) fn builder_struct(
         &mut self,
         method: &OperationMethod,
+        tag_style: TagStyle,
     ) -> Result<TokenStream> {
         let mut cloneable = true;
         // Generate the builder structure properties, turning each type T into
@@ -1266,9 +1265,7 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let required_extract = if req_names.is_empty() {
-            quote! {}
-        } else {
+        let required_extract = (!req_names.is_empty()).then(|| {
             quote! {
                 let ( #( #req_names, )* ) = match ( #( #req_names, )* ) {
                     ( #( Some(#req_names), )* ) => ( #( #req_names, )* ),
@@ -1276,9 +1273,9 @@ impl Generator {
                         let mut missing = Vec::new();
 
                         #(
-                            if #req_names.is_none() {
-                                missing.push(stringify!(#req_names));
-                            }
+                        if #req_names.is_none() {
+                            missing.push(stringify!(#req_names));
+                        }
                         )*
 
                         return Err(super::Error::InvalidRequest(format!(
@@ -1288,7 +1285,7 @@ impl Generator {
                     }
                 };
             }
-        };
+        });
 
         let param_props = method
             .params
@@ -1296,7 +1293,7 @@ impl Generator {
             .map(|param| {
                 let name = format_ident!("{}", param.name);
                 quote! {
-                    #name: None,
+                    #name: None
                 }
             })
             .collect::<Vec<_>>();
@@ -1305,7 +1302,7 @@ impl Generator {
             pub fn new(client: &'a super::Client) -> Self {
                 Self {
                     client,
-                    #(#param_props)*
+                    #(#param_props,)*
                 }
             }
         };
@@ -1316,8 +1313,14 @@ impl Generator {
             body,
         } = self.method_sig_body(method, quote! { client})?;
 
+        let send_doc = format!(
+            "Sends a `{}` request to `{}`",
+            method.method.as_str().to_ascii_uppercase(),
+            method.path.to_string(),
+        );
+
         let send_impl = quote! {
-            // TODO do we want a doc comment here?
+            #[doc = #send_doc]
             pub async fn send(self) -> Result<
                 ResponseValue<#success>,
                 Error<#error>,
@@ -1351,13 +1354,21 @@ impl Generator {
                     None
                 }
             });
+
             // The item type that we've saved (by picking apart the original
             // function's return type) will be the Item type parameter for the
-            // Stream type we return.
+            // Stream impl we return.
             let item = self.type_space.get_type(&page_data.item).unwrap();
             let item_type = item.ident();
 
+            let stream_doc = format!(
+                "Streams `{}` requests to `{}`",
+                method.method.as_str().to_ascii_uppercase(),
+                method.path.to_string(),
+            );
+
             quote! {
+                #[doc = #stream_doc]
                 pub fn stream(self) -> impl futures::Stream<Item = Result<
                     #item_type,
                     Error<#error>,
@@ -1431,8 +1442,45 @@ impl Generator {
 
         let maybe_clone = cloneable.then(|| quote! { #[derive(Clone)] });
 
+        // Build a reasonable doc comment depending on whether this struct is
+        // the output from
+        // 1. A Client method
+        // 2. An extension trait method
+        // 3. Several extension trait methods
+        let struct_doc =
+            match (tag_style, method.tags.len(), method.tags.first()) {
+                (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
+                    format!("Builder for [`Client::{}`]", method.operation_id)
+                }
+                (TagStyle::Separate, 1, Some(tag)) => {
+                    format!(
+                        "Builder for [`Client{}Ext::{}`]",
+                        sanitize(tag, Case::Pascal),
+                        method.operation_id,
+                    )
+                }
+                (TagStyle::Separate, _, _) => {
+                    format!(
+                        "Builder for `{}` operation\n\nSee {}",
+                        method.operation_id,
+                        method
+                            .tags
+                            .iter()
+                            .map(|tag| {
+                                format!(
+                                    "[`Client{}Ext::{}`]",
+                                    sanitize(tag, Case::Pascal),
+                                    method.operation_id,
+                                )
+                            })
+                            .collect::<Vec<_>>()
+                            .join(", "),
+                    )
+                }
+            };
+
         let ret = quote! {
-            // TODO doc comment pointing to src (method or trait function)
+            #[doc = #struct_doc]
             #maybe_clone
             pub struct #struct_ident<'a> {
                 client: &'a super::Client,
@@ -1502,15 +1550,13 @@ impl Generator {
             }
         });
 
-        let base_impl = if base.is_empty() {
-            quote! {}
-        } else {
+        let base_impl = (!base.is_empty()).then(|| {
             quote! {
                 impl Client {
                     #(#base)*
                 }
             }
-        };
+        });
 
         let ext_impl = ext.into_iter().map(|(tag, trait_methods)| {
             let tr = format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));

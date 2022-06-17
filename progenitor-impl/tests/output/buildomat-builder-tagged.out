@@ -166,92 +166,92 @@ impl Client {
 }
 
 impl Client {
-    #[doc = "Sends a `POST` request to `/v1/control/hold`"]
+    ///Sends a `POST` request to `/v1/control/hold`
     pub fn control_hold(&self) -> builder::ControlHold {
         builder::ControlHold::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/control/resume`"]
+    ///Sends a `POST` request to `/v1/control/resume`
     pub fn control_resume(&self) -> builder::ControlResume {
         builder::ControlResume::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/v1/task/{task}`"]
+    ///Sends a `GET` request to `/v1/task/{task}`
     pub fn task_get(&self) -> builder::TaskGet {
         builder::TaskGet::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/v1/tasks`"]
+    ///Sends a `GET` request to `/v1/tasks`
     pub fn tasks_get(&self) -> builder::TasksGet {
         builder::TasksGet::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/tasks`"]
+    ///Sends a `POST` request to `/v1/tasks`
     pub fn task_submit(&self) -> builder::TaskSubmit {
         builder::TaskSubmit::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/v1/tasks/{task}/events`"]
+    ///Sends a `GET` request to `/v1/tasks/{task}/events`
     pub fn task_events_get(&self) -> builder::TaskEventsGet {
         builder::TaskEventsGet::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/v1/tasks/{task}/outputs`"]
+    ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
     pub fn task_outputs_get(&self) -> builder::TaskOutputsGet {
         builder::TaskOutputsGet::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`"]
+    ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
     pub fn task_output_download(&self) -> builder::TaskOutputDownload {
         builder::TaskOutputDownload::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/users`"]
+    ///Sends a `POST` request to `/v1/users`
     pub fn user_create(&self) -> builder::UserCreate {
         builder::UserCreate::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/v1/whoami`"]
+    ///Sends a `GET` request to `/v1/whoami`
     pub fn whoami(&self) -> builder::Whoami {
         builder::Whoami::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/worker/bootstrap`"]
+    ///Sends a `POST` request to `/v1/worker/bootstrap`
     pub fn worker_bootstrap(&self) -> builder::WorkerBootstrap {
         builder::WorkerBootstrap::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/v1/worker/ping`"]
+    ///Sends a `GET` request to `/v1/worker/ping`
     pub fn worker_ping(&self) -> builder::WorkerPing {
         builder::WorkerPing::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/worker/task/{task}/append`"]
+    ///Sends a `POST` request to `/v1/worker/task/{task}/append`
     pub fn worker_task_append(&self) -> builder::WorkerTaskAppend {
         builder::WorkerTaskAppend::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/worker/task/{task}/chunk`"]
+    ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
     pub fn worker_task_upload_chunk(&self) -> builder::WorkerTaskUploadChunk {
         builder::WorkerTaskUploadChunk::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/worker/task/{task}/complete`"]
+    ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
     pub fn worker_task_complete(&self) -> builder::WorkerTaskComplete {
         builder::WorkerTaskComplete::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/worker/task/{task}/output`"]
+    ///Sends a `POST` request to `/v1/worker/task/{task}/output`
     pub fn worker_task_add_output(&self) -> builder::WorkerTaskAddOutput {
         builder::WorkerTaskAddOutput::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/v1/workers`"]
+    ///Sends a `GET` request to `/v1/workers`
     pub fn workers_list(&self) -> builder::WorkersList {
         builder::WorkersList::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/v1/workers/recycle`"]
+    ///Sends a `POST` request to `/v1/workers/recycle`
     pub fn workers_recycle(&self) -> builder::WorkersRecycle {
         builder::WorkersRecycle::new(self)
     }
@@ -263,6 +263,7 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{ByteStream, Error, ResponseValue};
+    ///Builder for [`Client::control_hold`]
     #[derive(Clone)]
     pub struct ControlHold<'a> {
         client: &'a super::Client,
@@ -273,6 +274,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `POST` request to `/v1/control/hold`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/control/hold", client.baseurl,);
@@ -286,6 +288,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::control_resume`]
     #[derive(Clone)]
     pub struct ControlResume<'a> {
         client: &'a super::Client,
@@ -296,6 +299,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `POST` request to `/v1/control/resume`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/control/resume", client.baseurl,);
@@ -309,6 +313,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::task_get`]
     #[derive(Clone)]
     pub struct TaskGet<'a> {
         client: &'a super::Client,
@@ -325,6 +330,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `GET` request to `/v1/task/{task}`
         pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
             let Self { client, task } = self;
             let (task,) = match (task,) {
@@ -355,6 +361,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::tasks_get`]
     #[derive(Clone)]
     pub struct TasksGet<'a> {
         client: &'a super::Client,
@@ -365,6 +372,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `GET` request to `/v1/tasks`
         pub async fn send(self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/tasks", client.baseurl,);
@@ -378,6 +386,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::task_submit`]
     #[derive(Clone)]
     pub struct TaskSubmit<'a> {
         client: &'a super::Client,
@@ -394,6 +403,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/v1/tasks`
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
             let Self { client, body } = self;
             let (body,) = match (body,) {
@@ -420,6 +430,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::task_events_get`]
     #[derive(Clone)]
     pub struct TaskEventsGet<'a> {
         client: &'a super::Client,
@@ -446,6 +457,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `GET` request to `/v1/tasks/{task}/events`
         pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskEvent>>, Error<()>> {
             let Self {
                 client,
@@ -484,6 +496,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::task_outputs_get`]
     #[derive(Clone)]
     pub struct TaskOutputsGet<'a> {
         client: &'a super::Client,
@@ -500,6 +513,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
         pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskOutput>>, Error<()>> {
             let Self { client, task } = self;
             let (task,) = match (task,) {
@@ -530,6 +544,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::task_output_download`]
     #[derive(Clone)]
     pub struct TaskOutputDownload<'a> {
         client: &'a super::Client,
@@ -556,6 +571,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
             let Self {
                 client,
@@ -594,6 +610,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::user_create`]
     #[derive(Clone)]
     pub struct UserCreate<'a> {
         client: &'a super::Client,
@@ -610,6 +627,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/v1/users`
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
             let Self { client, body } = self;
             let (body,) = match (body,) {
@@ -636,6 +654,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::whoami`]
     #[derive(Clone)]
     pub struct Whoami<'a> {
         client: &'a super::Client,
@@ -646,6 +665,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `GET` request to `/v1/whoami`
         pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/whoami", client.baseurl,);
@@ -659,6 +679,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::worker_bootstrap`]
     #[derive(Clone)]
     pub struct WorkerBootstrap<'a> {
         client: &'a super::Client,
@@ -675,6 +696,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/v1/worker/bootstrap`
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
             let Self { client, body } = self;
             let (body,) = match (body,) {
@@ -701,6 +723,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::worker_ping`]
     #[derive(Clone)]
     pub struct WorkerPing<'a> {
         client: &'a super::Client,
@@ -711,6 +734,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `GET` request to `/v1/worker/ping`
         pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/worker/ping", client.baseurl,);
@@ -724,6 +748,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::worker_task_append`]
     #[derive(Clone)]
     pub struct WorkerTaskAppend<'a> {
         client: &'a super::Client,
@@ -750,6 +775,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/v1/worker/task/{task}/append`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let (task, body) = match (task, body) {
@@ -783,6 +809,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::worker_task_upload_chunk`]
     pub struct WorkerTaskUploadChunk<'a> {
         client: &'a super::Client,
         task: Option<String>,
@@ -808,6 +835,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
         pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
             let Self { client, task, body } = self;
             let (task, body) = match (task, body) {
@@ -841,6 +869,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::worker_task_complete`]
     #[derive(Clone)]
     pub struct WorkerTaskComplete<'a> {
         client: &'a super::Client,
@@ -867,6 +896,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let (task, body) = match (task, body) {
@@ -900,6 +930,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::worker_task_add_output`]
     #[derive(Clone)]
     pub struct WorkerTaskAddOutput<'a> {
         client: &'a super::Client,
@@ -926,6 +957,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/v1/worker/task/{task}/output`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let (task, body) = match (task, body) {
@@ -959,6 +991,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::workers_list`]
     #[derive(Clone)]
     pub struct WorkersList<'a> {
         client: &'a super::Client,
@@ -969,6 +1002,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `GET` request to `/v1/workers`
         pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/workers", client.baseurl,);
@@ -982,6 +1016,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::workers_recycle`]
     #[derive(Clone)]
     pub struct WorkersRecycle<'a> {
         client: &'a super::Client,
@@ -992,6 +1027,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `POST` request to `/v1/workers/recycle`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/workers/recycle", client.baseurl,);

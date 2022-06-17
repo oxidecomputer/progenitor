@@ -281,7 +281,7 @@ impl Generator {
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
             .iter()
-            .map(|method| self.builder_struct(method))
+            .map(|method| self.builder_struct(method, TagStyle::Merged))
             .collect::<Result<Vec<_>>>()?;
 
         let builder_methods = input_methods
@@ -314,13 +314,13 @@ impl Generator {
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
             .iter()
-            .map(|method| self.builder_struct(method))
+            .map(|method| self.builder_struct(method, TagStyle::Separate))
             .collect::<Result<Vec<_>>>()?;
 
-        let trait_and_impls = self.builder_tags(input_methods);
+        let traits_and_impls = self.builder_tags(input_methods);
 
         let out = quote! {
-            #trait_and_impls
+            #traits_and_impls
 
             pub mod builder {
                 use super::types;
@@ -340,7 +340,14 @@ impl Generator {
         let output = self.generate_tokens(spec)?;
 
         // Format the file with rustfmt.
-        let content = rustfmt_wrapper::rustfmt(output).unwrap();
+        let content = rustfmt_wrapper::rustfmt_config(
+            rustfmt_wrapper::config::Config {
+                normalize_doc_attributes: Some(true),
+                ..Default::default()
+            },
+            output,
+        )
+        .unwrap();
 
         // Add newlines after end-braces at <= two levels of indentation.
         Ok(if cfg!(not(windows)) {

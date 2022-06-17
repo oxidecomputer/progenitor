@@ -107,32 +107,32 @@ impl Client {
 }
 
 impl Client {
-    #[doc = "Sends a `POST` request to `/enrol`"]
+    ///Sends a `POST` request to `/enrol`
     pub fn enrol(&self) -> builder::Enrol {
         builder::Enrol::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/global/jobs`"]
+    ///Sends a `GET` request to `/global/jobs`
     pub fn global_jobs(&self) -> builder::GlobalJobs {
         builder::GlobalJobs::new(self)
     }
 
-    #[doc = "Sends a `GET` request to `/ping`"]
+    ///Sends a `GET` request to `/ping`
     pub fn ping(&self) -> builder::Ping {
         builder::Ping::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/report/finish`"]
+    ///Sends a `POST` request to `/report/finish`
     pub fn report_finish(&self) -> builder::ReportFinish {
         builder::ReportFinish::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/report/output`"]
+    ///Sends a `POST` request to `/report/output`
     pub fn report_output(&self) -> builder::ReportOutput {
         builder::ReportOutput::new(self)
     }
 
-    #[doc = "Sends a `POST` request to `/report/start`"]
+    ///Sends a `POST` request to `/report/start`
     pub fn report_start(&self) -> builder::ReportStart {
         builder::ReportStart::new(self)
     }
@@ -144,6 +144,7 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{ByteStream, Error, ResponseValue};
+    ///Builder for [`Client::enrol`]
     #[derive(Clone)]
     pub struct Enrol<'a> {
         client: &'a super::Client,
@@ -160,6 +161,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/enrol`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, body } = self;
             let (body,) = match (body,) {
@@ -186,6 +188,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::global_jobs`]
     #[derive(Clone)]
     pub struct GlobalJobs<'a> {
         client: &'a super::Client,
@@ -196,6 +199,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `GET` request to `/global/jobs`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/global/jobs", client.baseurl,);
@@ -209,6 +213,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::ping`]
     #[derive(Clone)]
     pub struct Ping<'a> {
         client: &'a super::Client,
@@ -219,6 +224,7 @@ pub mod builder {
             Self { client }
         }
 
+        ///Sends a `GET` request to `/ping`
         pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/ping", client.baseurl,);
@@ -232,6 +238,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::report_finish`]
     #[derive(Clone)]
     pub struct ReportFinish<'a> {
         client: &'a super::Client,
@@ -248,6 +255,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/report/finish`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
             let (body,) = match (body,) {
@@ -274,6 +282,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::report_output`]
     #[derive(Clone)]
     pub struct ReportOutput<'a> {
         client: &'a super::Client,
@@ -290,6 +299,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/report/output`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
             let (body,) = match (body,) {
@@ -316,6 +326,7 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::report_start`]
     #[derive(Clone)]
     pub struct ReportStart<'a> {
         client: &'a super::Client,
@@ -332,6 +343,7 @@ pub mod builder {
             self
         }
 
+        ///Sends a `POST` request to `/report/start`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
             let (body,) = match (body,) {
