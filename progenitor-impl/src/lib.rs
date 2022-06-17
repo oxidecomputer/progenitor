@@ -343,6 +343,7 @@ impl Generator {
         let content = rustfmt_wrapper::rustfmt_config(
             rustfmt_wrapper::config::Config {
                 normalize_doc_attributes: Some(true),
+                wrap_comments: Some(true),
                 ..Default::default()
             },
             output,

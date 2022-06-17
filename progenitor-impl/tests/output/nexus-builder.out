@@ -25,7 +25,11 @@ pub mod types {
 
     ///A count of bytes, typically used either for memory or storage capacity
     ///
-    ///The maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience.
+    ///The maximum supported byte count is [`i64::MAX`].  This makes it
+    /// somewhat inconvenient to define constructors: a u32 constructor can be
+    /// infallible, but an i64 constructor can fail (if the value is negative)
+    /// and a u64 constructor can fail (if the value is larger than i64::MAX).
+    /// We provide all of these for consumers' convenience.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ByteCount(pub u64);
     impl std::ops::Deref for ByteCount {
@@ -119,7 +123,8 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a [`Disk`](omicron_common::api::external::Disk)
+    ///Create-time parameters for a
+    /// [`Disk`](omicron_common::api::external::Disk)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskCreate {
         pub description: String,
@@ -130,7 +135,8 @@ pub mod types {
         pub size: ByteCount,
     }
 
-    ///Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance
+    ///Parameters for the [`Disk`](omicron_common::api::external::Disk) to be
+    /// attached or detached to an instance
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct DiskIdentifier {
         pub name: Name,
@@ -153,7 +159,8 @@ pub mod types {
         ///Create a blank disk
         #[serde(rename = "blank")]
         Blank {
-            ///size of blocks for this Disk. valid values are: 512, 2048, or 4096
+            ///size of blocks for this Disk. valid values are: 512, 2048, or
+            /// 4096
             block_size: BlockSize,
         },
         ///Create a disk from a disk snapshot
@@ -272,18 +279,24 @@ pub mod types {
         }
     }
 
-    ///Client view of a [`Policy`], which describes how this resource may be accessed
+    ///Client view of a [`Policy`], which describes how this resource may be
+    /// accessed
     ///
-    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
+    ///Note that the Policy only describes access granted explicitly for this
+    /// resource.  The policies of parent resources can also cause a user to
+    /// have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct FleetRolesPolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: Vec<FleetRolesRoleAssignment>,
     }
 
-    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
+    ///Describes the assignment of a particular role on a particular resource
+    /// to a particular identity (user, group, etc.)
     ///
-    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
+    /// are put into a [`Policy`] and that Policy is applied to a particular
+    /// resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct FleetRolesRoleAssignment {
         pub identity_id: uuid::Uuid,
@@ -391,7 +404,8 @@ pub mod types {
         pub version: Option<String>,
     }
 
-    ///Create-time parameters for an [`Image`](omicron_common::api::external::Image)
+    ///Create-time parameters for an
+    /// [`Image`](omicron_common::api::external::Image)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ImageCreate {
         ///block size in bytes
@@ -457,7 +471,8 @@ pub mod types {
         }
     }
 
-    ///Create-time parameters for an [`Instance`](omicron_common::api::external::Instance)
+    ///Create-time parameters for an
+    /// [`Instance`](omicron_common::api::external::Instance)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceCreate {
         pub description: String,
@@ -471,7 +486,9 @@ pub mod types {
         ///The network interfaces to be created for this instance.
         #[serde(default = "instance_create_network_interfaces")]
         pub network_interfaces: InstanceNetworkInterfaceAttachment,
-        ///User data for instance initialization systems (such as cloud-init). Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded data.
+        ///User data for instance initialization systems (such as cloud-init).
+        /// Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and
+        /// / characters with padding). Maximum 32 KiB unencoded data.
         #[serde(default)]
         pub user_data: String,
     }
@@ -502,13 +519,15 @@ pub mod types {
         },
     }
 
-    ///Migration parameters for an [`Instance`](omicron_common::api::external::Instance)
+    ///Migration parameters for an
+    /// [`Instance`](omicron_common::api::external::Instance)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceMigrate {
         pub dst_sled_uuid: uuid::Uuid,
     }
 
-    ///Describes an attachment of a `NetworkInterface` to an `Instance`, at the time the instance is created.
+    ///Describes an attachment of a `NetworkInterface` to an `Instance`, at the
+    /// time the instance is created.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
@@ -533,7 +552,8 @@ pub mod types {
 
     ///Running state of an Instance (primarily: booted or stopped)
     ///
-    ///This typically reflects whether it's starting, running, stopping, or stopped, but also includes states related to the Instance's lifecycle
+    ///This typically reflects whether it's starting, running, stopping, or
+    /// stopped, but also includes states related to the Instance's lifecycle
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum InstanceState {
         #[serde(rename = "creating")]
@@ -602,7 +622,8 @@ pub mod types {
         }
     }
 
-    ///An inclusive-inclusive range of IP ports. The second port may be omitted to represent a single port
+    ///An inclusive-inclusive range of IP ports. The second port may be omitted
+    /// to represent a single port
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct L4PortRange(pub String);
     impl std::ops::Deref for L4PortRange {
@@ -627,7 +648,9 @@ pub mod types {
         }
     }
 
-    ///Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'.
+    ///Names must begin with a lower case ASCII letter, be composed exclusively
+    /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
+    /// with a '-'.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Name(pub String);
     impl std::ops::Deref for Name {
@@ -700,11 +723,13 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    ///Create-time parameters for a [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
+    ///Create-time parameters for a
+    /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct NetworkInterfaceCreate {
         pub description: String,
-        ///The IP address for the interface. One will be auto-assigned if not provided.
+        ///The IP address for the interface. One will be auto-assigned if not
+        /// provided.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ip: Option<String>,
         pub name: Name,
@@ -739,7 +764,8 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for an [`Organization`](crate::external_api::views::Organization)
+    ///Create-time parameters for an
+    /// [`Organization`](crate::external_api::views::Organization)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationCreate {
         pub description: String,
@@ -773,18 +799,24 @@ pub mod types {
         }
     }
 
-    ///Client view of a [`Policy`], which describes how this resource may be accessed
+    ///Client view of a [`Policy`], which describes how this resource may be
+    /// accessed
     ///
-    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
+    ///Note that the Policy only describes access granted explicitly for this
+    /// resource.  The policies of parent resources can also cause a user to
+    /// have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationRolesPolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: Vec<OrganizationRolesRoleAssignment>,
     }
 
-    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
+    ///Describes the assignment of a particular role on a particular resource
+    /// to a particular identity (user, group, etc.)
     ///
-    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
+    /// are put into a [`Policy`] and that Policy is applied to a particular
+    /// resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationRolesRoleAssignment {
         pub identity_id: uuid::Uuid,
@@ -792,7 +824,8 @@ pub mod types {
         pub role_name: OrganizationRoles,
     }
 
-    ///Updateable properties of an [`Organization`](crate::external_api::views::Organization)
+    ///Updateable properties of an
+    /// [`Organization`](crate::external_api::views::Organization)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct OrganizationUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -817,7 +850,8 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a [`Project`](crate::external_api::views::Project)
+    ///Create-time parameters for a
+    /// [`Project`](crate::external_api::views::Project)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectCreate {
         pub description: String,
@@ -854,18 +888,24 @@ pub mod types {
         }
     }
 
-    ///Client view of a [`Policy`], which describes how this resource may be accessed
+    ///Client view of a [`Policy`], which describes how this resource may be
+    /// accessed
     ///
-    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
+    ///Note that the Policy only describes access granted explicitly for this
+    /// resource.  The policies of parent resources can also cause a user to
+    /// have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectRolesPolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: Vec<ProjectRolesRoleAssignment>,
     }
 
-    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
+    ///Describes the assignment of a particular role on a particular resource
+    /// to a particular identity (user, group, etc.)
     ///
-    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
+    /// are put into a [`Policy`] and that Policy is applied to a particular
+    /// resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectRolesRoleAssignment {
         pub identity_id: uuid::Uuid,
@@ -873,7 +913,8 @@ pub mod types {
         pub role_name: ProjectRoles,
     }
 
-    ///Updateable properties of a [`Project`](crate::external_api::views::Project)
+    ///Updateable properties of a
+    /// [`Project`](crate::external_api::views::Project)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct ProjectUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -934,9 +975,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    ///A `RouteDestination` is used to match traffic with a routing rule, on the destination of that traffic.
+    ///A `RouteDestination` is used to match traffic with a routing rule, on
+    /// the destination of that traffic.
     ///
-    ///When traffic is to be sent to a destination that is within a given `RouteDestination`, the corresponding [`RouterRoute`] applies, and traffic will be forward to the [`RouteTarget`] for that rule.
+    ///When traffic is to be sent to a destination that is within a given
+    /// `RouteDestination`, the corresponding [`RouterRoute`] applies, and
+    /// traffic will be forward to the [`RouteTarget`] for that rule.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
@@ -954,7 +998,8 @@ pub mod types {
         Subnet(Name),
     }
 
-    ///A `RouteTarget` describes the possible locations that traffic matching a route destination can be sent.
+    ///A `RouteTarget` describes the possible locations that traffic matching a
+    /// route destination can be sent.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
@@ -975,7 +1020,8 @@ pub mod types {
         InternetGateway(Name),
     }
 
-    ///A route defines a rule that governs where traffic should be sent based on its destination.
+    ///A route defines a rule that governs where traffic should be sent based
+    /// on its destination.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct RouterRoute {
         ///human-readable free-form text about a resource
@@ -1005,7 +1051,9 @@ pub mod types {
         pub target: RouteTarget,
     }
 
-    ///The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.
+    ///The classification of a [`RouterRoute`] as defined by the system. The
+    /// kind determines certain attributes such as if the route is modifiable
+    /// and describes how or where the route was created.
     ///
     ///See [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
@@ -1108,7 +1156,8 @@ pub mod types {
     pub struct Silo {
         ///human-readable free-form text about a resource
         pub description: String,
-        ///A silo where discoverable is false can be retrieved only by its id - it will not be part of the "list all silos" output.
+        ///A silo where discoverable is false can be retrieved only by its id -
+        /// it will not be part of the "list all silos" output.
         pub discoverable: bool,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
@@ -1158,18 +1207,24 @@ pub mod types {
         }
     }
 
-    ///Client view of a [`Policy`], which describes how this resource may be accessed
+    ///Client view of a [`Policy`], which describes how this resource may be
+    /// accessed
     ///
-    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
+    ///Note that the Policy only describes access granted explicitly for this
+    /// resource.  The policies of parent resources can also cause a user to
+    /// have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SiloRolesPolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: Vec<SiloRolesRoleAssignment>,
     }
 
-    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
+    ///Describes the assignment of a particular role on a particular resource
+    /// to a particular identity (user, group, etc.)
     ///
-    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
+    /// are put into a [`Policy`] and that Policy is applied to a particular
+    /// resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SiloRolesRoleAssignment {
         pub identity_id: uuid::Uuid,
@@ -1221,7 +1276,8 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a [`Snapshot`](omicron_common::api::external::Snapshot)
+    ///Create-time parameters for a
+    /// [`Snapshot`](omicron_common::api::external::Snapshot)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SnapshotCreate {
         pub description: String,
@@ -1259,7 +1315,8 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for an [`SshKey`](crate::external_api::views::SshKey)
+    ///Create-time parameters for an
+    /// [`SshKey`](crate::external_api::views::SshKey)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SshKeyCreate {
         pub description: String,
@@ -1278,7 +1335,9 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    ///Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words.
+    ///Names are constructed by concatenating the target and metric names with
+    /// ':'. Target and metric names must be lowercase alphanumeric characters
+    /// with '_' separating words.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct TimeseriesName(pub String);
     impl std::ops::Deref for TimeseriesName {
@@ -1290,7 +1349,8 @@ pub mod types {
 
     ///The schema for a timeseries.
     ///
-    ///This includes the name of the timeseries, as well as the datum type of its metric and the schema for each field.
+    ///This includes the name of the timeseries, as well as the datum type of
+    /// its metric and the schema for each field.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct TimeseriesSchema {
         pub created: chrono::DateTime<chrono::offset::Utc>,
@@ -1364,7 +1424,10 @@ pub mod types {
         pub dns_name: Name,
         ///The IPv6 prefix for this VPC.
         ///
-        ///All IPv6 subnets created from this VPC must be taken from this range, which sould be a Unique Local Address in the range `fd00::/48`. The default VPC Subnet will have the first `/64` range from this prefix.
+        ///All IPv6 subnets created from this VPC must be taken from this
+        /// range, which sould be a Unique Local Address in the range
+        /// `fd00::/48`. The default VPC Subnet will have the first `/64` range
+        /// from this prefix.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ipv6_prefix: Option<Ipv6Net>,
         pub name: Name,
@@ -1433,10 +1496,13 @@ pub mod types {
         }
     }
 
-    ///Filter for a firewall rule. A given packet must match every field that is present for the rule to apply to it. A packet matches a field if any entry in that field matches the packet.
+    ///Filter for a firewall rule. A given packet must match every field that
+    /// is present for the rule to apply to it. A packet matches a field if any
+    /// entry in that field matches the packet.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRuleFilter {
-        ///If present, the sources (if incoming) or destinations (if outgoing) this rule applies to.
+        ///If present, the sources (if incoming) or destinations (if outgoing)
+        /// this rule applies to.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub hosts: Option<Vec<VpcFirewallRuleHostFilter>>,
         ///If present, the destination ports this rule applies to.
@@ -1447,7 +1513,8 @@ pub mod types {
         pub protocols: Option<Vec<VpcFirewallRuleProtocol>>,
     }
 
-    ///The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis of its source or destination host.
+    ///The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis
+    /// of its source or destination host.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
@@ -1506,7 +1573,8 @@ pub mod types {
         }
     }
 
-    ///A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to which a firewall rule applies.
+    ///A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to
+    /// which a firewall rule applies.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
@@ -1548,7 +1616,9 @@ pub mod types {
         pub targets: Vec<VpcFirewallRuleTarget>,
     }
 
-    ///Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules are implicitly created along with a Vpc, so there is no explicit creation.
+    ///Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules
+    /// are implicitly created along with a Vpc, so there is no explicit
+    /// creation.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcFirewallRuleUpdateParams {
         pub rules: Vec<VpcFirewallRuleUpdate>,
@@ -1570,7 +1640,8 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    ///A VPC router defines a series of rules that indicate where traffic should be sent depending on its destination.
+    ///A VPC router defines a series of rules that indicate where traffic
+    /// should be sent depending on its destination.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouter {
         ///human-readable free-form text about a resource
@@ -1588,7 +1659,8 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    ///Create-time parameters for a [`VpcRouter`](crate::external_api::views::VpcRouter)
+    ///Create-time parameters for a
+    /// [`VpcRouter`](crate::external_api::views::VpcRouter)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouterCreate {
         pub description: String,
@@ -1622,7 +1694,8 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    ///Updateable properties of a [`VpcRouter`](crate::external_api::views::VpcRouter)
+    ///Updateable properties of a
+    /// [`VpcRouter`](crate::external_api::views::VpcRouter)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcRouterUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1631,7 +1704,9 @@ pub mod types {
         pub name: Option<Name>,
     }
 
-    ///A VPC subnet represents a logical grouping for instances that allows network traffic between them, within a IPv4 subnetwork or optionall an IPv6 subnetwork.
+    ///A VPC subnet represents a logical grouping for instances that allows
+    /// network traffic between them, within a IPv4 subnetwork or optionall an
+    /// IPv6 subnetwork.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnet {
         ///human-readable free-form text about a resource
@@ -1652,17 +1727,22 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    ///Create-time parameters for a [`VpcSubnet`](crate::external_api::views::VpcSubnet)
+    ///Create-time parameters for a
+    /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetCreate {
         pub description: String,
         ///The IPv4 address range for this subnet.
         ///
-        ///It must be allocated from an RFC 1918 private address range, and must not overlap with any other existing subnet in the VPC.
+        ///It must be allocated from an RFC 1918 private address range, and
+        /// must not overlap with any other existing subnet in the VPC.
         pub ipv4_block: Ipv4Net,
         ///The IPv6 address range for this subnet.
         ///
-        ///It must be allocated from the RFC 4193 Unique Local Address range, with the prefix equal to the parent VPC's prefix. A random `/64` block will be assigned if one is not provided. It must not overlap with any existing subnet in the VPC.
+        ///It must be allocated from the RFC 4193 Unique Local Address range,
+        /// with the prefix equal to the parent VPC's prefix. A random `/64`
+        /// block will be assigned if one is not provided. It must not overlap
+        /// with any existing subnet in the VPC.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ipv6_block: Option<Ipv6Net>,
         pub name: Name,
@@ -1678,7 +1758,8 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    ///Updateable properties of a [`VpcSubnet`](crate::external_api::views::VpcSubnet)
+    ///Updateable properties of a
+    /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1738,9 +1819,10 @@ impl Client {
     ///Sends a `GET` request to `/hardware/racks`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn hardware_racks_get(&self) -> builder::HardwareRacksGet {
         builder::HardwareRacksGet::new(self)
     }
@@ -1750,7 +1832,7 @@ impl Client {
     ///Sends a `GET` request to `/hardware/racks/{rack_id}`
     ///
     ///Arguments:
-    ///- `rack_id`: The rack's unique ID.
+    /// - `rack_id`: The rack's unique ID.
     pub fn hardware_racks_get_rack(&self) -> builder::HardwareRacksGetRack {
         builder::HardwareRacksGetRack::new(self)
     }
@@ -1760,9 +1842,10 @@ impl Client {
     ///Sends a `GET` request to `/hardware/sleds`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn hardware_sleds_get(&self) -> builder::HardwareSledsGet {
         builder::HardwareSledsGet::new(self)
     }
@@ -1772,28 +1855,31 @@ impl Client {
     ///Sends a `GET` request to `/hardware/sleds/{sled_id}`
     ///
     ///Arguments:
-    ///- `sled_id`: The sled's unique ID.
+    /// - `sled_id`: The sled's unique ID.
     pub fn hardware_sleds_get_sled(&self) -> builder::HardwareSledsGetSled {
         builder::HardwareSledsGetSled::new(self)
     }
 
     ///List global images
     ///
-    ///Returns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.
+    ///Returns a list of all the global images. Global images are returned
+    /// sorted by creation date, with the most recent images appearing first.
     ///
     ///Sends a `GET` request to `/images`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn images_get(&self) -> builder::ImagesGet {
         builder::ImagesGet::new(self)
     }
 
     ///Create a global image
     ///
-    ///Create a new global image. This image can then be used by any user as a base for instances.
+    ///Create a new global image. This image can then be used by any user as a
+    /// base for instances.
     ///
     ///Sends a `POST` request to `/images`
     pub fn images_post(&self) -> builder::ImagesPost {
@@ -1811,7 +1897,9 @@ impl Client {
 
     ///Delete a global image
     ///
-    ///Permanently delete a global image. This operation cannot be undone. Any instances using the global image will continue to run, however new instances can not be created with this image.
+    ///Permanently delete a global image. This operation cannot be undone. Any
+    /// instances using the global image will continue to run, however new
+    /// instances can not be created with this image.
     ///
     ///Sends a `DELETE` request to `/images/{image_name}`
     pub fn images_delete_image(&self) -> builder::ImagesDeleteImage {
@@ -1833,9 +1921,10 @@ impl Client {
     ///Sends a `GET` request to `/organizations`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn organizations_get(&self) -> builder::OrganizationsGet {
         builder::OrganizationsGet::new(self)
     }
@@ -1852,7 +1941,7 @@ impl Client {
     ///Sends a `GET` request to `/organizations/{organization_name}`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
+    /// - `organization_name`: The organization's unique name.
     pub fn organizations_get_organization(&self) -> builder::OrganizationsGetOrganization {
         builder::OrganizationsGetOrganization::new(self)
     }
@@ -1862,8 +1951,8 @@ impl Client {
     ///Sends a `PUT` request to `/organizations/{organization_name}`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `body`
     pub fn organizations_put_organization(&self) -> builder::OrganizationsPutOrganization {
         builder::OrganizationsPutOrganization::new(self)
     }
@@ -1873,7 +1962,7 @@ impl Client {
     ///Sends a `DELETE` request to `/organizations/{organization_name}`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
+    /// - `organization_name`: The organization's unique name.
     pub fn organizations_delete_organization(&self) -> builder::OrganizationsDeleteOrganization {
         builder::OrganizationsDeleteOrganization::new(self)
     }
@@ -1883,7 +1972,7 @@ impl Client {
     ///Sends a `GET` request to `/organizations/{organization_name}/policy`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
+    /// - `organization_name`: The organization's unique name.
     pub fn organization_get_policy(&self) -> builder::OrganizationGetPolicy {
         builder::OrganizationGetPolicy::new(self)
     }
@@ -1893,8 +1982,8 @@ impl Client {
     ///Sends a `PUT` request to `/organizations/{organization_name}/policy`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `body`
     pub fn organization_put_policy(&self) -> builder::OrganizationPutPolicy {
         builder::OrganizationPutPolicy::new(self)
     }
@@ -1904,10 +1993,11 @@ impl Client {
     ///Sends a `GET` request to `/organizations/{organization_name}/projects`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`: The organization's unique name.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn organization_projects_get(&self) -> builder::OrganizationProjectsGet {
         builder::OrganizationProjectsGet::new(self)
     }
@@ -1917,42 +2007,45 @@ impl Client {
     ///Sends a `POST` request to `/organizations/{organization_name}/projects`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `body`
     pub fn organization_projects_post(&self) -> builder::OrganizationProjectsPost {
         builder::OrganizationProjectsPost::new(self)
     }
 
     ///Fetch a specific project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
     pub fn organization_projects_get_project(&self) -> builder::OrganizationProjectsGetProject {
         builder::OrganizationProjectsGetProject::new(self)
     }
 
     ///Update a specific project
     ///
-    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}`
+    ///Sends a `PUT` request to
+    /// `/organizations/{organization_name}/projects/{project_name}`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `body`
     pub fn organization_projects_put_project(&self) -> builder::OrganizationProjectsPutProject {
         builder::OrganizationProjectsPutProject::new(self)
     }
 
     ///Delete a specific project
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
     pub fn organization_projects_delete_project(
         &self,
     ) -> builder::OrganizationProjectsDeleteProject {
@@ -1961,56 +2054,66 @@ impl Client {
 
     ///List disks in a project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/disks`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn project_disks_get(&self) -> builder::ProjectDisksGet {
         builder::ProjectDisksGet::new(self)
     }
 
     ///Create a disk in a project
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/disks`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/disks`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `body`
     pub fn project_disks_post(&self) -> builder::ProjectDisksPost {
         builder::ProjectDisksPost::new(self)
     }
 
     ///Fetch a single disk in a project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/disks/
+    /// {disk_name}`
     pub fn project_disks_get_disk(&self) -> builder::ProjectDisksGetDisk {
         builder::ProjectDisksGetDisk::new(self)
     }
 
     ///Delete a disk from a project
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/disks/
+    /// {disk_name}`
     pub fn project_disks_delete_disk(&self) -> builder::ProjectDisksDeleteDisk {
         builder::ProjectDisksDeleteDisk::new(self)
     }
 
     ///List images
     ///
-    ///List images in a project. The images are returned sorted by creation date, with the most recent images appearing first.
+    ///List images in a project. The images are returned sorted by creation
+    /// date, with the most recent images appearing first.
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/images`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn project_images_get(&self) -> builder::ProjectImagesGet {
         builder::ProjectImagesGet::new(self)
     }
@@ -2019,12 +2122,13 @@ impl Client {
     ///
     ///Create a new image in a project.
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/images`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/images`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `body`
     pub fn project_images_post(&self) -> builder::ProjectImagesPost {
         builder::ProjectImagesPost::new(self)
     }
@@ -2033,117 +2137,147 @@ impl Client {
     ///
     ///Get the details of a specific image in a project.
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/images/
+    /// {image_name}`
     pub fn project_images_get_image(&self) -> builder::ProjectImagesGetImage {
         builder::ProjectImagesGetImage::new(self)
     }
 
     ///Delete an image
     ///
-    ///Permanently delete an image from a project. This operation cannot be undone. Any instances in the project using the image will continue to run, however new instances can not be created with this image.
+    ///Permanently delete an image from a project. This operation cannot be
+    /// undone. Any instances in the project using the image will continue to
+    /// run, however new instances can not be created with this image.
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/images/
+    /// {image_name}`
     pub fn project_images_delete_image(&self) -> builder::ProjectImagesDeleteImage {
         builder::ProjectImagesDeleteImage::new(self)
     }
 
     ///List instances in a project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn project_instances_get(&self) -> builder::ProjectInstancesGet {
         builder::ProjectInstancesGet::new(self)
     }
 
     ///Create an instance in a project
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `body`
     pub fn project_instances_post(&self) -> builder::ProjectInstancesPost {
         builder::ProjectInstancesPost::new(self)
     }
 
     ///Get an instance in a project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}`
     pub fn project_instances_get_instance(&self) -> builder::ProjectInstancesGetInstance {
         builder::ProjectInstancesGetInstance::new(self)
     }
 
     ///Delete an instance from a project
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}`
     pub fn project_instances_delete_instance(&self) -> builder::ProjectInstancesDeleteInstance {
         builder::ProjectInstancesDeleteInstance::new(self)
     }
 
     ///List disks attached to this instance
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/disks`
     ///
     ///Arguments:
-    ///- `organization_name`
-    ///- `project_name`
-    ///- `instance_name`
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `instance_name`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn instance_disks_get(&self) -> builder::InstanceDisksGet {
         builder::InstanceDisksGet::new(self)
     }
 
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/disks/attach`
     pub fn instance_disks_attach(&self) -> builder::InstanceDisksAttach {
         builder::InstanceDisksAttach::new(self)
     }
 
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/disks/detach`
     pub fn instance_disks_detach(&self) -> builder::InstanceDisksDetach {
         builder::InstanceDisksDetach::new(self)
     }
 
-    ///Migrate an instance to a different propolis-server, possibly on a different sled
+    ///Migrate an instance to a different propolis-server, possibly on a
+    /// different sled
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/migrate`
     pub fn project_instances_migrate_instance(&self) -> builder::ProjectInstancesMigrateInstance {
         builder::ProjectInstancesMigrateInstance::new(self)
     }
 
     ///List network interfaces attached to this instance
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/network-interfaces`
     ///
     ///Arguments:
-    ///- `organization_name`
-    ///- `project_name`
-    ///- `instance_name`
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `instance_name`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn instance_network_interfaces_get(&self) -> builder::InstanceNetworkInterfacesGet {
         builder::InstanceNetworkInterfacesGet::new(self)
     }
 
     ///Create a network interface for an instance
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/network-interfaces`
     pub fn instance_network_interfaces_post(&self) -> builder::InstanceNetworkInterfacesPost {
         builder::InstanceNetworkInterfacesPost::new(self)
     }
 
     ///Get an interface attached to an instance
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/network-interfaces/{interface_name}`
     pub fn instance_network_interfaces_get_interface(
         &self,
     ) -> builder::InstanceNetworkInterfacesGetInterface {
@@ -2152,7 +2286,9 @@ impl Client {
 
     ///Detach a network interface from an instance
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/network-interfaces/{interface_name}`
     pub fn instance_network_interfaces_delete_interface(
         &self,
     ) -> builder::InstanceNetworkInterfacesDeleteInterface {
@@ -2161,32 +2297,39 @@ impl Client {
 
     ///Reboot an instance
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/reboot`
     pub fn project_instances_instance_reboot(&self) -> builder::ProjectInstancesInstanceReboot {
         builder::ProjectInstancesInstanceReboot::new(self)
     }
 
     ///Boot an instance
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/start`
     pub fn project_instances_instance_start(&self) -> builder::ProjectInstancesInstanceStart {
         builder::ProjectInstancesInstanceStart::new(self)
     }
 
     ///Halt an instance
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/stop`
     pub fn project_instances_instance_stop(&self) -> builder::ProjectInstancesInstanceStop {
         builder::ProjectInstancesInstanceStop::new(self)
     }
 
     ///Fetch the IAM policy for this Project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/policy`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/policy`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
     pub fn organization_projects_get_project_policy(
         &self,
     ) -> builder::OrganizationProjectsGetProjectPolicy {
@@ -2195,12 +2338,13 @@ impl Client {
 
     ///Update the IAM policy for this Project
     ///
-    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/policy`
+    ///Sends a `PUT` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/policy`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `body`
     pub fn organization_projects_put_project_policy(
         &self,
     ) -> builder::OrganizationProjectsPutProjectPolicy {
@@ -2209,247 +2353,303 @@ impl Client {
 
     ///List snapshots in a project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/snapshots`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn project_snapshots_get(&self) -> builder::ProjectSnapshotsGet {
         builder::ProjectSnapshotsGet::new(self)
     }
 
     ///Create a snapshot of a disk
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/snapshots`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `body`
     pub fn project_snapshots_post(&self) -> builder::ProjectSnapshotsPost {
         builder::ProjectSnapshotsPost::new(self)
     }
 
     ///Get a snapshot in a project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
+    /// {snapshot_name}`
     pub fn project_snapshots_get_snapshot(&self) -> builder::ProjectSnapshotsGetSnapshot {
         builder::ProjectSnapshotsGetSnapshot::new(self)
     }
 
     ///Delete a snapshot from a project
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
+    /// {snapshot_name}`
     pub fn project_snapshots_delete_snapshot(&self) -> builder::ProjectSnapshotsDeleteSnapshot {
         builder::ProjectSnapshotsDeleteSnapshot::new(self)
     }
 
     ///List VPCs in a project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn project_vpcs_get(&self) -> builder::ProjectVpcsGet {
         builder::ProjectVpcsGet::new(self)
     }
 
     ///Create a VPC in a project
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
     ///
     ///Arguments:
-    ///- `organization_name`: The organization's unique name.
-    ///- `project_name`: The project's unique name within the organization.
-    ///- `body`
+    /// - `organization_name`: The organization's unique name.
+    /// - `project_name`: The project's unique name within the organization.
+    /// - `body`
     pub fn project_vpcs_post(&self) -> builder::ProjectVpcsPost {
         builder::ProjectVpcsPost::new(self)
     }
 
     ///Get a VPC in a project
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}`
     pub fn project_vpcs_get_vpc(&self) -> builder::ProjectVpcsGetVpc {
         builder::ProjectVpcsGetVpc::new(self)
     }
 
     ///Update a VPC
     ///
-    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+    ///Sends a `PUT` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}`
     pub fn project_vpcs_put_vpc(&self) -> builder::ProjectVpcsPutVpc {
         builder::ProjectVpcsPutVpc::new(self)
     }
 
     ///Delete a vpc from a project
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}`
     pub fn project_vpcs_delete_vpc(&self) -> builder::ProjectVpcsDeleteVpc {
         builder::ProjectVpcsDeleteVpc::new(self)
     }
 
     ///List firewall rules for a VPC
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/firewall/rules`
     pub fn vpc_firewall_rules_get(&self) -> builder::VpcFirewallRulesGet {
         builder::VpcFirewallRulesGet::new(self)
     }
 
     ///Replace the firewall rules for a VPC
     ///
-    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`
+    ///Sends a `PUT` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/firewall/rules`
     pub fn vpc_firewall_rules_put(&self) -> builder::VpcFirewallRulesPut {
         builder::VpcFirewallRulesPut::new(self)
     }
 
     ///List VPC Custom and System Routers
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers`
     ///
     ///Arguments:
-    ///- `organization_name`
-    ///- `project_name`
-    ///- `vpc_name`
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `vpc_name`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn vpc_routers_get(&self) -> builder::VpcRoutersGet {
         builder::VpcRoutersGet::new(self)
     }
 
     ///Create a VPC Router
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers`
     pub fn vpc_routers_post(&self) -> builder::VpcRoutersPost {
         builder::VpcRoutersPost::new(self)
     }
 
     ///Get a VPC Router
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers/{router_name}`
     pub fn vpc_routers_get_router(&self) -> builder::VpcRoutersGetRouter {
         builder::VpcRoutersGetRouter::new(self)
     }
 
     ///Update a VPC Router
     ///
-    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+    ///Sends a `PUT` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers/{router_name}`
     pub fn vpc_routers_put_router(&self) -> builder::VpcRoutersPutRouter {
         builder::VpcRoutersPutRouter::new(self)
     }
 
     ///Delete a router from its VPC
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers/{router_name}`
     pub fn vpc_routers_delete_router(&self) -> builder::VpcRoutersDeleteRouter {
         builder::VpcRoutersDeleteRouter::new(self)
     }
 
     ///List a Router's routes
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers/{router_name}/routes`
     ///
     ///Arguments:
-    ///- `organization_name`
-    ///- `project_name`
-    ///- `vpc_name`
-    ///- `router_name`
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `vpc_name`
+    /// - `router_name`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn routers_routes_get(&self) -> builder::RoutersRoutesGet {
         builder::RoutersRoutesGet::new(self)
     }
 
     ///Create a VPC Router
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers/{router_name}/routes`
     pub fn routers_routes_post(&self) -> builder::RoutersRoutesPost {
         builder::RoutersRoutesPost::new(self)
     }
 
     ///Get a VPC Router route
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
     pub fn routers_routes_get_route(&self) -> builder::RoutersRoutesGetRoute {
         builder::RoutersRoutesGetRoute::new(self)
     }
 
     ///Update a Router route
     ///
-    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///Sends a `PUT` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
     pub fn routers_routes_put_route(&self) -> builder::RoutersRoutesPutRoute {
         builder::RoutersRoutesPutRoute::new(self)
     }
 
     ///Delete a route from its router
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
     pub fn routers_routes_delete_route(&self) -> builder::RoutersRoutesDeleteRoute {
         builder::RoutersRoutesDeleteRoute::new(self)
     }
 
     ///List subnets in a VPC
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/subnets`
     ///
     ///Arguments:
-    ///- `organization_name`
-    ///- `project_name`
-    ///- `vpc_name`
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `vpc_name`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn vpc_subnets_get(&self) -> builder::VpcSubnetsGet {
         builder::VpcSubnetsGet::new(self)
     }
 
     ///Create a subnet in a VPC
     ///
-    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
+    ///Sends a `POST` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/subnets`
     pub fn vpc_subnets_post(&self) -> builder::VpcSubnetsPost {
         builder::VpcSubnetsPost::new(self)
     }
 
     ///Get subnet in a VPC
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/subnets/{subnet_name}`
     pub fn vpc_subnets_get_subnet(&self) -> builder::VpcSubnetsGetSubnet {
         builder::VpcSubnetsGetSubnet::new(self)
     }
 
     ///Update a VPC Subnet
     ///
-    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+    ///Sends a `PUT` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/subnets/{subnet_name}`
     pub fn vpc_subnets_put_subnet(&self) -> builder::VpcSubnetsPutSubnet {
         builder::VpcSubnetsPutSubnet::new(self)
     }
 
     ///Delete a subnet from a VPC
     ///
-    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+    ///Sends a `DELETE` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/subnets/{subnet_name}`
     pub fn vpc_subnets_delete_subnet(&self) -> builder::VpcSubnetsDeleteSubnet {
         builder::VpcSubnetsDeleteSubnet::new(self)
     }
 
     ///List network interfaces in a VPC subnet
     ///
-    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces`
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+    /// {vpc_name}/subnets/{subnet_name}/network-interfaces`
     ///
     ///Arguments:
-    ///- `organization_name`
-    ///- `project_name`
-    ///- `vpc_name`
-    ///- `subnet_name`
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `vpc_name`
+    /// - `subnet_name`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn subnet_network_interfaces_get(&self) -> builder::SubnetNetworkInterfacesGet {
         builder::SubnetNetworkInterfacesGet::new(self)
     }
@@ -2473,8 +2673,9 @@ impl Client {
     ///Sends a `GET` request to `/roles`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
     pub fn roles_get(&self) -> builder::RolesGet {
         builder::RolesGet::new(self)
     }
@@ -2484,7 +2685,7 @@ impl Client {
     ///Sends a `GET` request to `/roles/{role_name}`
     ///
     ///Arguments:
-    ///- `role_name`: The built-in role's unique name.
+    /// - `role_name`: The built-in role's unique name.
     pub fn roles_get_role(&self) -> builder::RolesGetRole {
         builder::RolesGetRole::new(self)
     }
@@ -2494,9 +2695,10 @@ impl Client {
     ///Sends a `GET` request to `/sagas`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn sagas_get(&self) -> builder::SagasGet {
         builder::SagasGet::new(self)
     }
@@ -2520,9 +2722,10 @@ impl Client {
     ///Sends a `GET` request to `/session/me/sshkeys`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn sshkeys_get(&self) -> builder::SshkeysGet {
         builder::SshkeysGet::new(self)
     }
@@ -2551,9 +2754,10 @@ impl Client {
     ///Sends a `GET` request to `/silos`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn silos_get(&self) -> builder::SilosGet {
         builder::SilosGet::new(self)
     }
@@ -2570,7 +2774,7 @@ impl Client {
     ///Sends a `GET` request to `/silos/{silo_name}`
     ///
     ///Arguments:
-    ///- `silo_name`: The silo's unique name.
+    /// - `silo_name`: The silo's unique name.
     pub fn silos_get_silo(&self) -> builder::SilosGetSilo {
         builder::SilosGetSilo::new(self)
     }
@@ -2580,7 +2784,7 @@ impl Client {
     ///Sends a `DELETE` request to `/silos/{silo_name}`
     ///
     ///Arguments:
-    ///- `silo_name`: The silo's unique name.
+    /// - `silo_name`: The silo's unique name.
     pub fn silos_delete_silo(&self) -> builder::SilosDeleteSilo {
         builder::SilosDeleteSilo::new(self)
     }
@@ -2590,7 +2794,7 @@ impl Client {
     ///Sends a `GET` request to `/silos/{silo_name}/policy`
     ///
     ///Arguments:
-    ///- `silo_name`: The silo's unique name.
+    /// - `silo_name`: The silo's unique name.
     pub fn silos_get_silo_policy(&self) -> builder::SilosGetSiloPolicy {
         builder::SilosGetSiloPolicy::new(self)
     }
@@ -2600,8 +2804,8 @@ impl Client {
     ///Sends a `PUT` request to `/silos/{silo_name}/policy`
     ///
     ///Arguments:
-    ///- `silo_name`: The silo's unique name.
-    ///- `body`
+    /// - `silo_name`: The silo's unique name.
+    /// - `body`
     pub fn silos_put_silo_policy(&self) -> builder::SilosPutSiloPolicy {
         builder::SilosPutSiloPolicy::new(self)
     }
@@ -2611,8 +2815,9 @@ impl Client {
     ///Sends a `GET` request to `/timeseries/schema`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
     pub fn timeseries_schema_get(&self) -> builder::TimeseriesSchemaGet {
         builder::TimeseriesSchemaGet::new(self)
     }
@@ -2629,9 +2834,10 @@ impl Client {
     ///Sends a `GET` request to `/users`
     ///
     ///Arguments:
-    ///- `limit`: Maximum number of items returned by a single call
-    ///- `page_token`: Token returned by previous call to retreive the subsequent page
-    ///- `sort_by`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retreive the
+    ///   subsequent page
+    /// - `sort_by`
     pub fn users_get(&self) -> builder::UsersGet {
         builder::UsersGet::new(self)
     }
@@ -2641,7 +2847,7 @@ impl Client {
     ///Sends a `GET` request to `/users/{user_name}`
     ///
     ///Arguments:
-    ///- `user_name`: The built-in user's unique name.
+    /// - `user_name`: The built-in user's unique name.
     pub fn users_get_user(&self) -> builder::UsersGetUser {
         builder::UsersGetUser::new(self)
     }
@@ -3889,7 +4095,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
@@ -3943,7 +4150,8 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + 'a
@@ -4018,7 +4226,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -4089,7 +4298,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -4168,7 +4378,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}`
+        ///Sends a `PUT` request to
+        /// `/organizations/{organization_name}/projects/{project_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -4247,7 +4458,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -4340,7 +4552,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/disks`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
@@ -4399,7 +4612,8 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/disks`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/disks`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a
@@ -4481,7 +4695,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/disks`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/disks`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -4567,7 +4782,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/disks/
+        /// {disk_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -4654,7 +4871,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/disks/
+        /// {disk_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -4755,7 +4974,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/images`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
@@ -4814,7 +5034,8 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/images`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/images`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::Image, Error<types::Error>>> + Unpin + 'a
@@ -4896,7 +5117,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/images`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/images`
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
             let Self {
                 client,
@@ -4982,7 +5204,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/images/
+        /// {image_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
             let Self {
                 client,
@@ -5069,7 +5293,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/images/
+        /// {image_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -5170,7 +5396,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
@@ -5229,7 +5457,9 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + 'a
@@ -5311,7 +5541,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -5397,7 +5629,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -5484,7 +5718,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -5592,7 +5828,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/disks`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
@@ -5659,7 +5897,9 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/disks`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a
@@ -5748,7 +5988,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/disks/attach`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -5849,7 +6091,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/disks/detach`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -5950,7 +6194,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/migrate`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -6065,7 +6311,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/network-interfaces`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>>
@@ -6133,7 +6381,9 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/network-interfaces`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
@@ -6222,7 +6472,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/network-interfaces`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
@@ -6325,7 +6577,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/network-interfaces/{interface_name}`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
@@ -6438,7 +6692,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/network-interfaces/{interface_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -6542,7 +6798,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/reboot`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -6629,7 +6887,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/start`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -6716,7 +6976,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/stop`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -6796,7 +7058,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/policy`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/policy`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolesPolicy>, Error<types::Error>> {
@@ -6877,7 +7140,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/policy`
+        ///Sends a `PUT` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/policy`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolesPolicy>, Error<types::Error>> {
@@ -6979,7 +7243,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// snapshots`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>> {
@@ -7038,7 +7304,9 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/snapshots`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// snapshots`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::Snapshot, Error<types::Error>>> + Unpin + 'a
@@ -7120,7 +7388,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// snapshots`
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
             let Self {
                 client,
@@ -7206,7 +7476,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// snapshots/{snapshot_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
             let Self {
                 client,
@@ -7293,7 +7565,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// snapshots/{snapshot_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -7394,7 +7668,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
@@ -7453,7 +7728,8 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::Vpc, Error<types::Error>>> + Unpin + 'a
@@ -7535,7 +7811,8 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
             let Self {
                 client,
@@ -7621,7 +7898,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
             let Self {
                 client,
@@ -7715,7 +7994,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+        ///Sends a `PUT` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
             let Self {
                 client,
@@ -7806,7 +8087,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -7893,7 +8176,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/firewall/rules`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
@@ -7989,7 +8274,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`
+        ///Sends a `PUT` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/firewall/rules`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
@@ -8103,7 +8390,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>> {
@@ -8170,7 +8459,9 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::VpcRouter, Error<types::Error>>> + Unpin + 'a
@@ -8259,7 +8550,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers`
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
             let Self {
                 client,
@@ -8357,7 +8650,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
             let Self {
                 client,
@@ -8466,7 +8761,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+        ///Sends a `PUT` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
             let Self {
                 client,
@@ -8573,7 +8870,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -8696,7 +8995,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}/routes`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>> {
@@ -8771,7 +9072,9 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}/routes`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::RouterRoute, Error<types::Error>>> + Unpin + 'a
@@ -8867,7 +9170,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}/routes`
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
             let Self {
                 client,
@@ -8981,7 +9286,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}/routes/{route_name}`
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
             let Self {
                 client,
@@ -9114,7 +9421,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+        ///Sends a `PUT` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}/routes/{route_name}`
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
             let Self {
                 client,
@@ -9247,7 +9556,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/routers/{router_name}/routes/{route_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -9380,7 +9691,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/subnets`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>> {
@@ -9447,7 +9760,9 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/subnets`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::VpcSubnet, Error<types::Error>>> + Unpin + 'a
@@ -9536,7 +9851,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
+        ///Sends a `POST` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/subnets`
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
             let Self {
                 client,
@@ -9634,7 +9951,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/subnets/{subnet_name}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
             let Self {
                 client,
@@ -9743,7 +10062,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+        ///Sends a `PUT` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/subnets/{subnet_name}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
             let Self {
                 client,
@@ -9850,7 +10171,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+        ///Sends a `DELETE` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/subnets/{subnet_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -9973,7 +10296,9 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces`
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/subnets/{subnet_name}/network-interfaces`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>>
@@ -10049,7 +10374,9 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces`
+        ///Streams `GET` requests to
+        /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
+        /// {vpc_name}/subnets/{subnet_name}/network-interfaces`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
