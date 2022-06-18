@@ -1450,18 +1450,26 @@ impl Generator {
         let struct_doc =
             match (tag_style, method.tags.len(), method.tags.first()) {
                 (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
-                    format!("Builder for [`Client::{}`]", method.operation_id)
+                    let ty = format!("Client::{}", method.operation_id);
+                    format!(
+                        "Builder for [`{}`]\n\n[`{}`]: super::{}",
+                        ty, ty, ty,
+                    )
                 }
                 (TagStyle::Separate, 1, Some(tag)) => {
-                    format!(
-                        "Builder for [`Client{}Ext::{}`]",
+                    let ty = format!(
+                        "Client{}Ext::{}",
                         sanitize(tag, Case::Pascal),
-                        method.operation_id,
+                        method.operation_id
+                    );
+                    format!(
+                        "Builder for [`{}`]\n\n[`{}`]: super::{}",
+                        ty, ty, ty,
                     )
                 }
                 (TagStyle::Separate, _, _) => {
                     format!(
-                        "Builder for `{}` operation\n\nSee {}",
+                        "Builder for `{}` operation\n\nSee {}\n\n{}",
                         method.operation_id,
                         method
                             .tags
@@ -1475,6 +1483,19 @@ impl Generator {
                             })
                             .collect::<Vec<_>>()
                             .join(", "),
+                        method
+                            .tags
+                            .iter()
+                            .map(|tag| {
+                                let ty = format!(
+                                    "Client{}Ext::{}",
+                                    sanitize(tag, Case::Pascal),
+                                    method.operation_id,
+                                );
+                                format!("[`{}`]: super::{}", ty, ty)
+                            })
+                            .collect::<Vec<_>>()
+                            .join("\n"),
                     )
                 }
             };

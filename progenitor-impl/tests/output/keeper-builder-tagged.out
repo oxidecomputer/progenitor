@@ -179,6 +179,8 @@ pub mod builder {
     #[allow(unused_imports)]
     use super::{ByteStream, Error, ResponseValue};
     ///Builder for [`Client::enrol`]
+    ///
+    ///[`Client::enrol`]: super::Client::enrol
     #[derive(Clone)]
     pub struct Enrol<'a> {
         client: &'a super::Client,
@@ -223,6 +225,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::global_jobs`]
+    ///
+    ///[`Client::global_jobs`]: super::Client::global_jobs
     #[derive(Clone)]
     pub struct GlobalJobs<'a> {
         client: &'a super::Client,
@@ -248,6 +252,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::ping`]
+    ///
+    ///[`Client::ping`]: super::Client::ping
     #[derive(Clone)]
     pub struct Ping<'a> {
         client: &'a super::Client,
@@ -273,6 +279,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::report_finish`]
+    ///
+    ///[`Client::report_finish`]: super::Client::report_finish
     #[derive(Clone)]
     pub struct ReportFinish<'a> {
         client: &'a super::Client,
@@ -317,6 +325,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::report_output`]
+    ///
+    ///[`Client::report_output`]: super::Client::report_output
     #[derive(Clone)]
     pub struct ReportOutput<'a> {
         client: &'a super::Client,
@@ -361,6 +371,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::report_start`]
+    ///
+    ///[`Client::report_start`]: super::Client::report_start
     #[derive(Clone)]
     pub struct ReportStart<'a> {
         client: &'a super::Client,

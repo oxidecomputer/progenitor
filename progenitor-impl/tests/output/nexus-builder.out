@@ -3627,6 +3627,8 @@ pub mod builder {
     #[allow(unused_imports)]
     use super::{ByteStream, Error, ResponseValue};
     ///Builder for [`Client::hardware_racks_get`]
+    ///
+    ///[`Client::hardware_racks_get`]: super::Client::hardware_racks_get
     #[derive(Clone)]
     pub struct HardwareRacksGet<'a> {
         client: &'a super::Client,
@@ -3745,6 +3747,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::hardware_racks_get_rack`]
+    ///
+    ///[`Client::hardware_racks_get_rack`]: super::Client::hardware_racks_get_rack
     #[derive(Clone)]
     pub struct HardwareRacksGetRack<'a> {
         client: &'a super::Client,
@@ -3802,6 +3806,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::hardware_sleds_get`]
+    ///
+    ///[`Client::hardware_sleds_get`]: super::Client::hardware_sleds_get
     #[derive(Clone)]
     pub struct HardwareSledsGet<'a> {
         client: &'a super::Client,
@@ -3920,6 +3926,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::hardware_sleds_get_sled`]
+    ///
+    ///[`Client::hardware_sleds_get_sled`]: super::Client::hardware_sleds_get_sled
     #[derive(Clone)]
     pub struct HardwareSledsGetSled<'a> {
         client: &'a super::Client,
@@ -3977,6 +3985,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::images_get`]
+    ///
+    ///[`Client::images_get`]: super::Client::images_get
     #[derive(Clone)]
     pub struct ImagesGet<'a> {
         client: &'a super::Client,
@@ -4095,6 +4105,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::images_post`]
+    ///
+    ///[`Client::images_post`]: super::Client::images_post
     #[derive(Clone)]
     pub struct ImagesPost<'a> {
         client: &'a super::Client,
@@ -4145,6 +4157,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::images_get_image`]
+    ///
+    ///[`Client::images_get_image`]: super::Client::images_get_image
     #[derive(Clone)]
     pub struct ImagesGetImage<'a> {
         client: &'a super::Client,
@@ -4202,6 +4216,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::images_delete_image`]
+    ///
+    ///[`Client::images_delete_image`]: super::Client::images_delete_image
     #[derive(Clone)]
     pub struct ImagesDeleteImage<'a> {
         client: &'a super::Client,
@@ -4259,6 +4275,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::spoof_login`]
+    ///
+    ///[`Client::spoof_login`]: super::Client::spoof_login
     #[derive(Clone)]
     pub struct SpoofLogin<'a> {
         client: &'a super::Client,
@@ -4303,6 +4321,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::logout`]
+    ///
+    ///[`Client::logout`]: super::Client::logout
     #[derive(Clone)]
     pub struct Logout<'a> {
         client: &'a super::Client,
@@ -4328,6 +4348,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organizations_get`]
+    ///
+    ///[`Client::organizations_get`]: super::Client::organizations_get
     #[derive(Clone)]
     pub struct OrganizationsGet<'a> {
         client: &'a super::Client,
@@ -4446,6 +4468,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organizations_post`]
+    ///
+    ///[`Client::organizations_post`]: super::Client::organizations_post
     #[derive(Clone)]
     pub struct OrganizationsPost<'a> {
         client: &'a super::Client,
@@ -4496,6 +4520,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organizations_get_organization`]
+    ///
+    ///[`Client::organizations_get_organization`]: super::Client::organizations_get_organization
     #[derive(Clone)]
     pub struct OrganizationsGetOrganization<'a> {
         client: &'a super::Client,
@@ -4556,6 +4582,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organizations_put_organization`]
+    ///
+    ///[`Client::organizations_put_organization`]: super::Client::organizations_put_organization
     #[derive(Clone)]
     pub struct OrganizationsPutOrganization<'a> {
         client: &'a super::Client,
@@ -4627,6 +4655,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organizations_delete_organization`]
+    ///
+    ///[`Client::organizations_delete_organization`]: super::Client::organizations_delete_organization
     #[derive(Clone)]
     pub struct OrganizationsDeleteOrganization<'a> {
         client: &'a super::Client,
@@ -4687,6 +4717,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_get_policy`]
+    ///
+    ///[`Client::organization_get_policy`]: super::Client::organization_get_policy
     #[derive(Clone)]
     pub struct OrganizationGetPolicy<'a> {
         client: &'a super::Client,
@@ -4749,6 +4781,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_put_policy`]
+    ///
+    ///[`Client::organization_put_policy`]: super::Client::organization_put_policy
     #[derive(Clone)]
     pub struct OrganizationPutPolicy<'a> {
         client: &'a super::Client,
@@ -4822,6 +4856,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_projects_get`]
+    ///
+    ///[`Client::organization_projects_get`]: super::Client::organization_projects_get
     #[derive(Clone)]
     pub struct OrganizationProjectsGet<'a> {
         client: &'a super::Client,
@@ -4967,6 +5003,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_projects_post`]
+    ///
+    ///[`Client::organization_projects_post`]: super::Client::organization_projects_post
     #[derive(Clone)]
     pub struct OrganizationProjectsPost<'a> {
         client: &'a super::Client,
@@ -5039,6 +5077,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_projects_get_project`]
+    ///
+    ///[`Client::organization_projects_get_project`]: super::Client::organization_projects_get_project
     #[derive(Clone)]
     pub struct OrganizationProjectsGetProject<'a> {
         client: &'a super::Client,
@@ -5112,6 +5152,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_projects_put_project`]
+    ///
+    ///[`Client::organization_projects_put_project`]: super::Client::organization_projects_put_project
     #[derive(Clone)]
     pub struct OrganizationProjectsPutProject<'a> {
         client: &'a super::Client,
@@ -5199,6 +5241,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_projects_delete_project`]
+    ///
+    ///[`Client::organization_projects_delete_project`]: super::Client::organization_projects_delete_project
     #[derive(Clone)]
     pub struct OrganizationProjectsDeleteProject<'a> {
         client: &'a super::Client,
@@ -5272,6 +5316,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_disks_get`]
+    ///
+    ///[`Client::project_disks_get`]: super::Client::project_disks_get
     #[derive(Clone)]
     pub struct ProjectDisksGet<'a> {
         client: &'a super::Client,
@@ -5429,6 +5475,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_disks_post`]
+    ///
+    ///[`Client::project_disks_post`]: super::Client::project_disks_post
     #[derive(Clone)]
     pub struct ProjectDisksPost<'a> {
         client: &'a super::Client,
@@ -5516,6 +5564,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_disks_get_disk`]
+    ///
+    ///[`Client::project_disks_get_disk`]: super::Client::project_disks_get_disk
     #[derive(Clone)]
     pub struct ProjectDisksGetDisk<'a> {
         client: &'a super::Client,
@@ -5605,6 +5655,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_disks_delete_disk`]
+    ///
+    ///[`Client::project_disks_delete_disk`]: super::Client::project_disks_delete_disk
     #[derive(Clone)]
     pub struct ProjectDisksDeleteDisk<'a> {
         client: &'a super::Client,
@@ -5694,6 +5746,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_images_get`]
+    ///
+    ///[`Client::project_images_get`]: super::Client::project_images_get
     #[derive(Clone)]
     pub struct ProjectImagesGet<'a> {
         client: &'a super::Client,
@@ -5851,6 +5905,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_images_post`]
+    ///
+    ///[`Client::project_images_post`]: super::Client::project_images_post
     #[derive(Clone)]
     pub struct ProjectImagesPost<'a> {
         client: &'a super::Client,
@@ -5938,6 +5994,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_images_get_image`]
+    ///
+    ///[`Client::project_images_get_image`]: super::Client::project_images_get_image
     #[derive(Clone)]
     pub struct ProjectImagesGetImage<'a> {
         client: &'a super::Client,
@@ -6027,6 +6085,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_images_delete_image`]
+    ///
+    ///[`Client::project_images_delete_image`]: super::Client::project_images_delete_image
     #[derive(Clone)]
     pub struct ProjectImagesDeleteImage<'a> {
         client: &'a super::Client,
@@ -6116,6 +6176,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_instances_get`]
+    ///
+    ///[`Client::project_instances_get`]: super::Client::project_instances_get
     #[derive(Clone)]
     pub struct ProjectInstancesGet<'a> {
         client: &'a super::Client,
@@ -6275,6 +6337,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_instances_post`]
+    ///
+    ///[`Client::project_instances_post`]: super::Client::project_instances_post
     #[derive(Clone)]
     pub struct ProjectInstancesPost<'a> {
         client: &'a super::Client,
@@ -6363,6 +6427,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_instances_get_instance`]
+    ///
+    ///[`Client::project_instances_get_instance`]: super::Client::project_instances_get_instance
     #[derive(Clone)]
     pub struct ProjectInstancesGetInstance<'a> {
         client: &'a super::Client,
@@ -6452,6 +6518,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_instances_delete_instance`]
+    ///
+    ///[`Client::project_instances_delete_instance`]: super::Client::project_instances_delete_instance
     #[derive(Clone)]
     pub struct ProjectInstancesDeleteInstance<'a> {
         client: &'a super::Client,
@@ -6541,6 +6609,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::instance_disks_get`]
+    ///
+    ///[`Client::instance_disks_get`]: super::Client::instance_disks_get
     #[derive(Clone)]
     pub struct InstanceDisksGet<'a> {
         client: &'a super::Client,
@@ -6715,6 +6785,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::instance_disks_attach`]
+    ///
+    ///[`Client::instance_disks_attach`]: super::Client::instance_disks_attach
     #[derive(Clone)]
     pub struct InstanceDisksAttach<'a> {
         client: &'a super::Client,
@@ -6818,6 +6890,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::instance_disks_detach`]
+    ///
+    ///[`Client::instance_disks_detach`]: super::Client::instance_disks_detach
     #[derive(Clone)]
     pub struct InstanceDisksDetach<'a> {
         client: &'a super::Client,
@@ -6921,6 +6995,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_instances_migrate_instance`]
+    ///
+    ///[`Client::project_instances_migrate_instance`]: super::Client::project_instances_migrate_instance
     #[derive(Clone)]
     pub struct ProjectInstancesMigrateInstance<'a> {
         client: &'a super::Client,
@@ -7024,6 +7100,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::instance_network_interfaces_get`]
+    ///
+    ///[`Client::instance_network_interfaces_get`]: super::Client::instance_network_interfaces_get
     #[derive(Clone)]
     pub struct InstanceNetworkInterfacesGet<'a> {
         client: &'a super::Client,
@@ -7199,6 +7277,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::instance_network_interfaces_post`]
+    ///
+    ///[`Client::instance_network_interfaces_post`]: super::Client::instance_network_interfaces_post
     #[derive(Clone)]
     pub struct InstanceNetworkInterfacesPost<'a> {
         client: &'a super::Client,
@@ -7304,6 +7384,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::instance_network_interfaces_get_interface`]
+    ///
+    ///[`Client::instance_network_interfaces_get_interface`]: super::Client::instance_network_interfaces_get_interface
     #[derive(Clone)]
     pub struct InstanceNetworkInterfacesGetInterface<'a> {
         client: &'a super::Client,
@@ -7419,6 +7501,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::instance_network_interfaces_delete_interface`]
+    ///
+    ///[`Client::instance_network_interfaces_delete_interface`]: super::Client::instance_network_interfaces_delete_interface
     #[derive(Clone)]
     pub struct InstanceNetworkInterfacesDeleteInterface<'a> {
         client: &'a super::Client,
@@ -7532,6 +7616,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_instances_instance_reboot`]
+    ///
+    ///[`Client::project_instances_instance_reboot`]: super::Client::project_instances_instance_reboot
     #[derive(Clone)]
     pub struct ProjectInstancesInstanceReboot<'a> {
         client: &'a super::Client,
@@ -7621,6 +7707,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_instances_instance_start`]
+    ///
+    ///[`Client::project_instances_instance_start`]: super::Client::project_instances_instance_start
     #[derive(Clone)]
     pub struct ProjectInstancesInstanceStart<'a> {
         client: &'a super::Client,
@@ -7710,6 +7798,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_instances_instance_stop`]
+    ///
+    ///[`Client::project_instances_instance_stop`]: super::Client::project_instances_instance_stop
     #[derive(Clone)]
     pub struct ProjectInstancesInstanceStop<'a> {
         client: &'a super::Client,
@@ -7799,6 +7889,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_projects_get_project_policy`]
+    ///
+    ///[`Client::organization_projects_get_project_policy`]: super::Client::organization_projects_get_project_policy
     #[derive(Clone)]
     pub struct OrganizationProjectsGetProjectPolicy<'a> {
         client: &'a super::Client,
@@ -7874,6 +7966,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::organization_projects_put_project_policy`]
+    ///
+    ///[`Client::organization_projects_put_project_policy`]: super::Client::organization_projects_put_project_policy
     #[derive(Clone)]
     pub struct OrganizationProjectsPutProjectPolicy<'a> {
         client: &'a super::Client,
@@ -7963,6 +8057,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_snapshots_get`]
+    ///
+    ///[`Client::project_snapshots_get`]: super::Client::project_snapshots_get
     #[derive(Clone)]
     pub struct ProjectSnapshotsGet<'a> {
         client: &'a super::Client,
@@ -8122,6 +8218,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_snapshots_post`]
+    ///
+    ///[`Client::project_snapshots_post`]: super::Client::project_snapshots_post
     #[derive(Clone)]
     pub struct ProjectSnapshotsPost<'a> {
         client: &'a super::Client,
@@ -8210,6 +8308,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_snapshots_get_snapshot`]
+    ///
+    ///[`Client::project_snapshots_get_snapshot`]: super::Client::project_snapshots_get_snapshot
     #[derive(Clone)]
     pub struct ProjectSnapshotsGetSnapshot<'a> {
         client: &'a super::Client,
@@ -8299,6 +8399,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_snapshots_delete_snapshot`]
+    ///
+    ///[`Client::project_snapshots_delete_snapshot`]: super::Client::project_snapshots_delete_snapshot
     #[derive(Clone)]
     pub struct ProjectSnapshotsDeleteSnapshot<'a> {
         client: &'a super::Client,
@@ -8388,6 +8490,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_vpcs_get`]
+    ///
+    ///[`Client::project_vpcs_get`]: super::Client::project_vpcs_get
     #[derive(Clone)]
     pub struct ProjectVpcsGet<'a> {
         client: &'a super::Client,
@@ -8545,6 +8649,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_vpcs_post`]
+    ///
+    ///[`Client::project_vpcs_post`]: super::Client::project_vpcs_post
     #[derive(Clone)]
     pub struct ProjectVpcsPost<'a> {
         client: &'a super::Client,
@@ -8632,6 +8738,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_vpcs_get_vpc`]
+    ///
+    ///[`Client::project_vpcs_get_vpc`]: super::Client::project_vpcs_get_vpc
     #[derive(Clone)]
     pub struct ProjectVpcsGetVpc<'a> {
         client: &'a super::Client,
@@ -8721,6 +8829,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_vpcs_put_vpc`]
+    ///
+    ///[`Client::project_vpcs_put_vpc`]: super::Client::project_vpcs_put_vpc
     #[derive(Clone)]
     pub struct ProjectVpcsPutVpc<'a> {
         client: &'a super::Client,
@@ -8821,6 +8931,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::project_vpcs_delete_vpc`]
+    ///
+    ///[`Client::project_vpcs_delete_vpc`]: super::Client::project_vpcs_delete_vpc
     #[derive(Clone)]
     pub struct ProjectVpcsDeleteVpc<'a> {
         client: &'a super::Client,
@@ -8910,6 +9022,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_firewall_rules_get`]
+    ///
+    ///[`Client::vpc_firewall_rules_get`]: super::Client::vpc_firewall_rules_get
     #[derive(Clone)]
     pub struct VpcFirewallRulesGet<'a> {
         client: &'a super::Client,
@@ -9001,6 +9115,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_firewall_rules_put`]
+    ///
+    ///[`Client::vpc_firewall_rules_put`]: super::Client::vpc_firewall_rules_put
     #[derive(Clone)]
     pub struct VpcFirewallRulesPut<'a> {
         client: &'a super::Client,
@@ -9103,6 +9219,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_routers_get`]
+    ///
+    ///[`Client::vpc_routers_get`]: super::Client::vpc_routers_get
     #[derive(Clone)]
     pub struct VpcRoutersGet<'a> {
         client: &'a super::Client,
@@ -9277,6 +9395,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_routers_post`]
+    ///
+    ///[`Client::vpc_routers_post`]: super::Client::vpc_routers_post
     #[derive(Clone)]
     pub struct VpcRoutersPost<'a> {
         client: &'a super::Client,
@@ -9377,6 +9497,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_routers_get_router`]
+    ///
+    ///[`Client::vpc_routers_get_router`]: super::Client::vpc_routers_get_router
     #[derive(Clone)]
     pub struct VpcRoutersGetRouter<'a> {
         client: &'a super::Client,
@@ -9481,6 +9603,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_routers_put_router`]
+    ///
+    ///[`Client::vpc_routers_put_router`]: super::Client::vpc_routers_put_router
     #[derive(Clone)]
     pub struct VpcRoutersPutRouter<'a> {
         client: &'a super::Client,
@@ -9597,6 +9721,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_routers_delete_router`]
+    ///
+    ///[`Client::vpc_routers_delete_router`]: super::Client::vpc_routers_delete_router
     #[derive(Clone)]
     pub struct VpcRoutersDeleteRouter<'a> {
         client: &'a super::Client,
@@ -9701,6 +9827,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::routers_routes_get`]
+    ///
+    ///[`Client::routers_routes_get`]: super::Client::routers_routes_get
     #[derive(Clone)]
     pub struct RoutersRoutesGet<'a> {
         client: &'a super::Client,
@@ -9890,6 +10018,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::routers_routes_post`]
+    ///
+    ///[`Client::routers_routes_post`]: super::Client::routers_routes_post
     #[derive(Clone)]
     pub struct RoutersRoutesPost<'a> {
         client: &'a super::Client,
@@ -10006,6 +10136,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::routers_routes_get_route`]
+    ///
+    ///[`Client::routers_routes_get_route`]: super::Client::routers_routes_get_route
     #[derive(Clone)]
     pub struct RoutersRoutesGetRoute<'a> {
         client: &'a super::Client,
@@ -10134,6 +10266,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::routers_routes_put_route`]
+    ///
+    ///[`Client::routers_routes_put_route`]: super::Client::routers_routes_put_route
     #[derive(Clone)]
     pub struct RoutersRoutesPutRoute<'a> {
         client: &'a super::Client,
@@ -10276,6 +10410,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::routers_routes_delete_route`]
+    ///
+    ///[`Client::routers_routes_delete_route`]: super::Client::routers_routes_delete_route
     #[derive(Clone)]
     pub struct RoutersRoutesDeleteRoute<'a> {
         client: &'a super::Client,
@@ -10404,6 +10540,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_subnets_get`]
+    ///
+    ///[`Client::vpc_subnets_get`]: super::Client::vpc_subnets_get
     #[derive(Clone)]
     pub struct VpcSubnetsGet<'a> {
         client: &'a super::Client,
@@ -10578,6 +10716,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_subnets_post`]
+    ///
+    ///[`Client::vpc_subnets_post`]: super::Client::vpc_subnets_post
     #[derive(Clone)]
     pub struct VpcSubnetsPost<'a> {
         client: &'a super::Client,
@@ -10678,6 +10818,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_subnets_get_subnet`]
+    ///
+    ///[`Client::vpc_subnets_get_subnet`]: super::Client::vpc_subnets_get_subnet
     #[derive(Clone)]
     pub struct VpcSubnetsGetSubnet<'a> {
         client: &'a super::Client,
@@ -10782,6 +10924,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_subnets_put_subnet`]
+    ///
+    ///[`Client::vpc_subnets_put_subnet`]: super::Client::vpc_subnets_put_subnet
     #[derive(Clone)]
     pub struct VpcSubnetsPutSubnet<'a> {
         client: &'a super::Client,
@@ -10898,6 +11042,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::vpc_subnets_delete_subnet`]
+    ///
+    ///[`Client::vpc_subnets_delete_subnet`]: super::Client::vpc_subnets_delete_subnet
     #[derive(Clone)]
     pub struct VpcSubnetsDeleteSubnet<'a> {
         client: &'a super::Client,
@@ -11002,6 +11148,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::subnet_network_interfaces_get`]
+    ///
+    ///[`Client::subnet_network_interfaces_get`]: super::Client::subnet_network_interfaces_get
     #[derive(Clone)]
     pub struct SubnetNetworkInterfacesGet<'a> {
         client: &'a super::Client,
@@ -11192,6 +11340,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::policy_get`]
+    ///
+    ///[`Client::policy_get`]: super::Client::policy_get
     #[derive(Clone)]
     pub struct PolicyGet<'a> {
         client: &'a super::Client,
@@ -11225,6 +11375,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::policy_put`]
+    ///
+    ///[`Client::policy_put`]: super::Client::policy_put
     #[derive(Clone)]
     pub struct PolicyPut<'a> {
         client: &'a super::Client,
@@ -11277,6 +11429,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::roles_get`]
+    ///
+    ///[`Client::roles_get`]: super::Client::roles_get
     #[derive(Clone)]
     pub struct RolesGet<'a> {
         client: &'a super::Client,
@@ -11383,6 +11537,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::roles_get_role`]
+    ///
+    ///[`Client::roles_get_role`]: super::Client::roles_get_role
     #[derive(Clone)]
     pub struct RolesGetRole<'a> {
         client: &'a super::Client,
@@ -11440,6 +11596,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::sagas_get`]
+    ///
+    ///[`Client::sagas_get`]: super::Client::sagas_get
     #[derive(Clone)]
     pub struct SagasGet<'a> {
         client: &'a super::Client,
@@ -11558,6 +11716,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::sagas_get_saga`]
+    ///
+    ///[`Client::sagas_get_saga`]: super::Client::sagas_get_saga
     #[derive(Clone)]
     pub struct SagasGetSaga<'a> {
         client: &'a super::Client,
@@ -11615,6 +11775,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::session_me`]
+    ///
+    ///[`Client::session_me`]: super::Client::session_me
     #[derive(Clone)]
     pub struct SessionMe<'a> {
         client: &'a super::Client,
@@ -11646,6 +11808,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::sshkeys_get`]
+    ///
+    ///[`Client::sshkeys_get`]: super::Client::sshkeys_get
     #[derive(Clone)]
     pub struct SshkeysGet<'a> {
         client: &'a super::Client,
@@ -11764,6 +11928,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::sshkeys_post`]
+    ///
+    ///[`Client::sshkeys_post`]: super::Client::sshkeys_post
     #[derive(Clone)]
     pub struct SshkeysPost<'a> {
         client: &'a super::Client,
@@ -11814,6 +11980,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::sshkeys_get_key`]
+    ///
+    ///[`Client::sshkeys_get_key`]: super::Client::sshkeys_get_key
     #[derive(Clone)]
     pub struct SshkeysGetKey<'a> {
         client: &'a super::Client,
@@ -11874,6 +12042,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::sshkeys_delete_key`]
+    ///
+    ///[`Client::sshkeys_delete_key`]: super::Client::sshkeys_delete_key
     #[derive(Clone)]
     pub struct SshkeysDeleteKey<'a> {
         client: &'a super::Client,
@@ -11934,6 +12104,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::silos_get`]
+    ///
+    ///[`Client::silos_get`]: super::Client::silos_get
     #[derive(Clone)]
     pub struct SilosGet<'a> {
         client: &'a super::Client,
@@ -12052,6 +12224,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::silos_post`]
+    ///
+    ///[`Client::silos_post`]: super::Client::silos_post
     #[derive(Clone)]
     pub struct SilosPost<'a> {
         client: &'a super::Client,
@@ -12102,6 +12276,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::silos_get_silo`]
+    ///
+    ///[`Client::silos_get_silo`]: super::Client::silos_get_silo
     #[derive(Clone)]
     pub struct SilosGetSilo<'a> {
         client: &'a super::Client,
@@ -12159,6 +12335,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::silos_delete_silo`]
+    ///
+    ///[`Client::silos_delete_silo`]: super::Client::silos_delete_silo
     #[derive(Clone)]
     pub struct SilosDeleteSilo<'a> {
         client: &'a super::Client,
@@ -12216,6 +12394,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::silos_get_silo_policy`]
+    ///
+    ///[`Client::silos_get_silo_policy`]: super::Client::silos_get_silo_policy
     #[derive(Clone)]
     pub struct SilosGetSiloPolicy<'a> {
         client: &'a super::Client,
@@ -12275,6 +12455,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::silos_put_silo_policy`]
+    ///
+    ///[`Client::silos_put_silo_policy`]: super::Client::silos_put_silo_policy
     #[derive(Clone)]
     pub struct SilosPutSiloPolicy<'a> {
         client: &'a super::Client,
@@ -12348,6 +12530,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::timeseries_schema_get`]
+    ///
+    ///[`Client::timeseries_schema_get`]: super::Client::timeseries_schema_get
     #[derive(Clone)]
     pub struct TimeseriesSchemaGet<'a> {
         client: &'a super::Client,
@@ -12455,6 +12639,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::updates_refresh`]
+    ///
+    ///[`Client::updates_refresh`]: super::Client::updates_refresh
     #[derive(Clone)]
     pub struct UpdatesRefresh<'a> {
         client: &'a super::Client,
@@ -12486,6 +12672,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::users_get`]
+    ///
+    ///[`Client::users_get`]: super::Client::users_get
     #[derive(Clone)]
     pub struct UsersGet<'a> {
         client: &'a super::Client,
@@ -12604,6 +12792,8 @@ pub mod builder {
     }
 
     ///Builder for [`Client::users_get_user`]
+    ///
+    ///[`Client::users_get_user`]: super::Client::users_get_user
     #[derive(Clone)]
     pub struct UsersGetUser<'a> {
         client: &'a super::Client,
