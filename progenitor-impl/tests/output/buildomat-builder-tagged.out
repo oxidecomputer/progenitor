@@ -167,91 +167,198 @@ impl Client {
 
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
+    ///```ignore
+    /// let response = client.control_hold()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn control_hold(&self) -> builder::ControlHold {
         builder::ControlHold::new(self)
     }
 
     ///Sends a `POST` request to `/v1/control/resume`
+    ///```ignore
+    /// let response = client.control_resume()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn control_resume(&self) -> builder::ControlResume {
         builder::ControlResume::new(self)
     }
 
     ///Sends a `GET` request to `/v1/task/{task}`
+    ///```ignore
+    /// let response = client.task_get()
+    ///    .task(task)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn task_get(&self) -> builder::TaskGet {
         builder::TaskGet::new(self)
     }
 
     ///Sends a `GET` request to `/v1/tasks`
+    ///```ignore
+    /// let response = client.tasks_get()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn tasks_get(&self) -> builder::TasksGet {
         builder::TasksGet::new(self)
     }
 
     ///Sends a `POST` request to `/v1/tasks`
+    ///```ignore
+    /// let response = client.task_submit()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn task_submit(&self) -> builder::TaskSubmit {
         builder::TaskSubmit::new(self)
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/events`
+    ///```ignore
+    /// let response = client.task_events_get()
+    ///    .task(task)
+    ///    .minseq(minseq)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn task_events_get(&self) -> builder::TaskEventsGet {
         builder::TaskEventsGet::new(self)
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
+    ///```ignore
+    /// let response = client.task_outputs_get()
+    ///    .task(task)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn task_outputs_get(&self) -> builder::TaskOutputsGet {
         builder::TaskOutputsGet::new(self)
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
+    ///```ignore
+    /// let response = client.task_output_download()
+    ///    .task(task)
+    ///    .output(output)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn task_output_download(&self) -> builder::TaskOutputDownload {
         builder::TaskOutputDownload::new(self)
     }
 
     ///Sends a `POST` request to `/v1/users`
+    ///```ignore
+    /// let response = client.user_create()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn user_create(&self) -> builder::UserCreate {
         builder::UserCreate::new(self)
     }
 
     ///Sends a `GET` request to `/v1/whoami`
+    ///```ignore
+    /// let response = client.whoami()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn whoami(&self) -> builder::Whoami {
         builder::Whoami::new(self)
     }
 
     ///Sends a `POST` request to `/v1/worker/bootstrap`
+    ///```ignore
+    /// let response = client.worker_bootstrap()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn worker_bootstrap(&self) -> builder::WorkerBootstrap {
         builder::WorkerBootstrap::new(self)
     }
 
     ///Sends a `GET` request to `/v1/worker/ping`
+    ///```ignore
+    /// let response = client.worker_ping()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn worker_ping(&self) -> builder::WorkerPing {
         builder::WorkerPing::new(self)
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/append`
+    ///```ignore
+    /// let response = client.worker_task_append()
+    ///    .task(task)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn worker_task_append(&self) -> builder::WorkerTaskAppend {
         builder::WorkerTaskAppend::new(self)
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
+    ///```ignore
+    /// let response = client.worker_task_upload_chunk()
+    ///    .task(task)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn worker_task_upload_chunk(&self) -> builder::WorkerTaskUploadChunk {
         builder::WorkerTaskUploadChunk::new(self)
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
+    ///```ignore
+    /// let response = client.worker_task_complete()
+    ///    .task(task)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn worker_task_complete(&self) -> builder::WorkerTaskComplete {
         builder::WorkerTaskComplete::new(self)
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/output`
+    ///```ignore
+    /// let response = client.worker_task_add_output()
+    ///    .task(task)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn worker_task_add_output(&self) -> builder::WorkerTaskAddOutput {
         builder::WorkerTaskAddOutput::new(self)
     }
 
     ///Sends a `GET` request to `/v1/workers`
+    ///```ignore
+    /// let response = client.workers_list()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn workers_list(&self) -> builder::WorkersList {
         builder::WorkersList::new(self)
     }
 
     ///Sends a `POST` request to `/v1/workers/recycle`
+    ///```ignore
+    /// let response = client.workers_recycle()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn workers_recycle(&self) -> builder::WorkersRecycle {
         builder::WorkersRecycle::new(self)
     }

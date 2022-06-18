@@ -1501,7 +1501,28 @@ impl Generator {
         let operation_id = format_ident!("{}", method.operation_id);
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
-        let doc = make_doc_comment(method);
+
+        let params = method
+            .params
+            .iter()
+            .map(|param| format!("\n    .{}({})", param.name, param.name))
+            .collect::<Vec<_>>()
+            .join("");
+
+        let eg = format!(
+            "\
+            let response = client.{}(){}
+    .send()
+    .await;",
+            method.operation_id, params,
+        );
+
+        // Note that it would be nice to have a non-ignored example that could
+        // be validated by doc tests, but in order to use the Client we need
+        // to import it, and in order to import it we need to know the name of
+        // the containing crate... which we can't from this context.
+        let doc =
+            format!("{}\n```ignore\n{}\n```", make_doc_comment(method), eg);
 
         let sig = quote! {
             fn #operation_id(&self) -> builder:: #struct_ident

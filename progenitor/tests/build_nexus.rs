@@ -36,7 +36,7 @@ mod builder_untagged {
 
     use nexus_client::{types, Client};
 
-    fn _ignore() {
+    pub fn _ignore() {
         let client = Client::new("");
         let stream = client
             .instance_disks_get()

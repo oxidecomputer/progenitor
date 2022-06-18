@@ -108,31 +108,65 @@ impl Client {
 
 impl Client {
     ///Sends a `POST` request to `/enrol`
+    ///```ignore
+    /// let response = client.enrol()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn enrol(&self) -> builder::Enrol {
         builder::Enrol::new(self)
     }
 
     ///Sends a `GET` request to `/global/jobs`
+    ///```ignore
+    /// let response = client.global_jobs()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn global_jobs(&self) -> builder::GlobalJobs {
         builder::GlobalJobs::new(self)
     }
 
     ///Sends a `GET` request to `/ping`
+    ///```ignore
+    /// let response = client.ping()
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn ping(&self) -> builder::Ping {
         builder::Ping::new(self)
     }
 
     ///Sends a `POST` request to `/report/finish`
+    ///```ignore
+    /// let response = client.report_finish()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn report_finish(&self) -> builder::ReportFinish {
         builder::ReportFinish::new(self)
     }
 
     ///Sends a `POST` request to `/report/output`
+    ///```ignore
+    /// let response = client.report_output()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn report_output(&self) -> builder::ReportOutput {
         builder::ReportOutput::new(self)
     }
 
     ///Sends a `POST` request to `/report/start`
+    ///```ignore
+    /// let response = client.report_start()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     pub fn report_start(&self) -> builder::ReportStart {
         builder::ReportStart::new(self)
     }

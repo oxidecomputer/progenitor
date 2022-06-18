@@ -1826,6 +1826,17 @@ pub trait ClientDisksExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.project_disks_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_disks_get(&self) -> builder::ProjectDisksGet;
     ///Create a disk in a project
     ///
@@ -1836,18 +1847,41 @@ pub trait ClientDisksExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.project_disks_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_disks_post(&self) -> builder::ProjectDisksPost;
     ///Fetch a single disk in a project
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
-    /// {disk_name}`
+    /// {disk_name}` ```ignore
+    /// let response = client.project_disks_get_disk()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .disk_name(disk_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_disks_get_disk(&self) -> builder::ProjectDisksGetDisk;
     ///Delete a disk from a project
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
-    /// {disk_name}`
+    /// {disk_name}` ```ignore
+    /// let response = client.project_disks_delete_disk()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .disk_name(disk_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_disks_delete_disk(&self) -> builder::ProjectDisksDeleteDisk;
 }
 
@@ -1874,13 +1908,28 @@ pub trait ClientFirewallExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/firewall/rules`
+    /// {vpc_name}/firewall/rules` ```ignore
+    /// let response = client.vpc_firewall_rules_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_firewall_rules_get(&self) -> builder::VpcFirewallRulesGet;
     ///Replace the firewall rules for a VPC
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/firewall/rules`
+    /// {vpc_name}/firewall/rules` ```ignore
+    /// let response = client.vpc_firewall_rules_put()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_firewall_rules_put(&self) -> builder::VpcFirewallRulesPut;
 }
 
@@ -1896,12 +1945,28 @@ impl ClientFirewallExt for Client {
 
 pub trait ClientHiddenExt {
     ///Sends a `POST` request to `/login`
+    ///```ignore
+    /// let response = client.spoof_login()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn spoof_login(&self) -> builder::SpoofLogin;
     ///Sends a `POST` request to `/logout`
+    ///```ignore
+    /// let response = client.logout()
+    ///    .send()
+    ///    .await;
+    /// ```
     fn logout(&self) -> builder::Logout;
     ///Fetch the user associated with the current session
     ///
     ///Sends a `GET` request to `/session/me`
+    ///```ignore
+    /// let response = client.session_me()
+    ///    .send()
+    ///    .await;
+    /// ```
     fn session_me(&self) -> builder::SessionMe;
 }
 
@@ -1935,6 +2000,17 @@ pub trait ClientImagesExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.project_images_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_images_get(&self) -> builder::ProjectImagesGet;
     ///Create an image
     ///
@@ -1947,6 +2023,15 @@ pub trait ClientImagesExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.project_images_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_images_post(&self) -> builder::ProjectImagesPost;
     ///Get an image
     ///
@@ -1954,7 +2039,14 @@ pub trait ClientImagesExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/images/
-    /// {image_name}`
+    /// {image_name}` ```ignore
+    /// let response = client.project_images_get_image()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .image_name(image_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_images_get_image(&self) -> builder::ProjectImagesGetImage;
     ///Delete an image
     ///
@@ -1964,7 +2056,14 @@ pub trait ClientImagesExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/images/
-    /// {image_name}`
+    /// {image_name}` ```ignore
+    /// let response = client.project_images_delete_image()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .image_name(image_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_images_delete_image(&self) -> builder::ProjectImagesDeleteImage;
 }
 
@@ -1999,6 +2098,15 @@ pub trait ClientImagesGlobalExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.images_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn images_get(&self) -> builder::ImagesGet;
     ///Create a global image
     ///
@@ -2006,12 +2114,24 @@ pub trait ClientImagesGlobalExt {
     /// base for instances.
     ///
     ///Sends a `POST` request to `/images`
+    ///```ignore
+    /// let response = client.images_post()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn images_post(&self) -> builder::ImagesPost;
     ///Get a global image
     ///
     ///Returns the details of a specific global image.
     ///
     ///Sends a `GET` request to `/images/{image_name}`
+    ///```ignore
+    /// let response = client.images_get_image()
+    ///    .image_name(image_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn images_get_image(&self) -> builder::ImagesGetImage;
     ///Delete a global image
     ///
@@ -2020,6 +2140,12 @@ pub trait ClientImagesGlobalExt {
     /// instances can not be created with this image.
     ///
     ///Sends a `DELETE` request to `/images/{image_name}`
+    ///```ignore
+    /// let response = client.images_delete_image()
+    ///    .image_name(image_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn images_delete_image(&self) -> builder::ImagesDeleteImage;
 }
 
@@ -2054,6 +2180,17 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.project_instances_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_instances_get(&self) -> builder::ProjectInstancesGet;
     ///Create an instance in a project
     ///
@@ -2064,18 +2201,41 @@ pub trait ClientInstancesExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.project_instances_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_instances_post(&self) -> builder::ProjectInstancesPost;
     ///Get an instance in a project
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}`
+    /// {instance_name}` ```ignore
+    /// let response = client.project_instances_get_instance()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_instances_get_instance(&self) -> builder::ProjectInstancesGetInstance;
     ///Delete an instance from a project
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}`
+    /// {instance_name}` ```ignore
+    /// let response = client.project_instances_delete_instance()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_instances_delete_instance(&self) -> builder::ProjectInstancesDeleteInstance;
     ///List disks attached to this instance
     ///
@@ -2091,21 +2251,57 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.instance_disks_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn instance_disks_get(&self) -> builder::InstanceDisksGet;
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/disks/attach`
+    /// {instance_name}/disks/attach` ```ignore
+    /// let response = client.instance_disks_attach()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn instance_disks_attach(&self) -> builder::InstanceDisksAttach;
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/disks/detach`
+    /// {instance_name}/disks/detach` ```ignore
+    /// let response = client.instance_disks_detach()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn instance_disks_detach(&self) -> builder::InstanceDisksDetach;
     ///Migrate an instance to a different propolis-server, possibly on a
     /// different sled
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/migrate`
+    /// {instance_name}/migrate` ```ignore
+    /// let response = client.project_instances_migrate_instance()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_instances_migrate_instance(&self) -> builder::ProjectInstancesMigrateInstance;
     ///List network interfaces attached to this instance
     ///
@@ -2121,18 +2317,46 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.instance_network_interfaces_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn instance_network_interfaces_get(&self) -> builder::InstanceNetworkInterfacesGet;
     ///Create a network interface for an instance
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces`
+    /// {instance_name}/network-interfaces` ```ignore
+    /// let response = client.instance_network_interfaces_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn instance_network_interfaces_post(&self) -> builder::InstanceNetworkInterfacesPost;
     ///Get an interface attached to an instance
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces/{interface_name}`
+    /// {instance_name}/network-interfaces/{interface_name}` ```ignore
+    /// let response = client.instance_network_interfaces_get_interface()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .interface_name(interface_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn instance_network_interfaces_get_interface(
         &self,
     ) -> builder::InstanceNetworkInterfacesGetInterface;
@@ -2140,7 +2364,15 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces/{interface_name}`
+    /// {instance_name}/network-interfaces/{interface_name}` ```ignore
+    /// let response = client.instance_network_interfaces_delete_interface()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .interface_name(interface_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn instance_network_interfaces_delete_interface(
         &self,
     ) -> builder::InstanceNetworkInterfacesDeleteInterface;
@@ -2148,19 +2380,40 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/reboot`
+    /// {instance_name}/reboot` ```ignore
+    /// let response = client.project_instances_instance_reboot()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_instances_instance_reboot(&self) -> builder::ProjectInstancesInstanceReboot;
     ///Boot an instance
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/start`
+    /// {instance_name}/start` ```ignore
+    /// let response = client.project_instances_instance_start()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_instances_instance_start(&self) -> builder::ProjectInstancesInstanceStart;
     ///Halt an instance
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/stop`
+    /// {instance_name}/stop` ```ignore
+    /// let response = client.project_instances_instance_stop()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_instances_instance_stop(&self) -> builder::ProjectInstancesInstanceStop;
 }
 
@@ -2239,6 +2492,14 @@ pub trait ClientMetricsExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
+    ///
+    ///```ignore
+    /// let response = client.timeseries_schema_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn timeseries_schema_get(&self) -> builder::TimeseriesSchemaGet;
 }
 
@@ -2258,10 +2519,25 @@ pub trait ClientOrganizationsExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.organizations_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organizations_get(&self) -> builder::OrganizationsGet;
     ///Create a new organization
     ///
     ///Sends a `POST` request to `/organizations`
+    ///```ignore
+    /// let response = client.organizations_post()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organizations_post(&self) -> builder::OrganizationsPost;
     ///Fetch a specific organization
     ///
@@ -2269,6 +2545,13 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
+    ///
+    ///```ignore
+    /// let response = client.organizations_get_organization()
+    ///    .organization_name(organization_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organizations_get_organization(&self) -> builder::OrganizationsGetOrganization;
     ///Update a specific organization
     ///
@@ -2277,6 +2560,14 @@ pub trait ClientOrganizationsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.organizations_put_organization()
+    ///    .organization_name(organization_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organizations_put_organization(&self) -> builder::OrganizationsPutOrganization;
     ///Delete a specific organization
     ///
@@ -2284,6 +2575,13 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
+    ///
+    ///```ignore
+    /// let response = client.organizations_delete_organization()
+    ///    .organization_name(organization_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organizations_delete_organization(&self) -> builder::OrganizationsDeleteOrganization;
     ///Fetch the IAM policy for this Organization
     ///
@@ -2291,6 +2589,13 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
+    ///
+    ///```ignore
+    /// let response = client.organization_get_policy()
+    ///    .organization_name(organization_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_get_policy(&self) -> builder::OrganizationGetPolicy;
     ///Update the IAM policy for this Organization
     ///
@@ -2299,6 +2604,14 @@ pub trait ClientOrganizationsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.organization_put_policy()
+    ///    .organization_name(organization_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_put_policy(&self) -> builder::OrganizationPutPolicy;
 }
 
@@ -2336,10 +2649,21 @@ pub trait ClientPolicyExt {
     ///Fetch the top-level IAM policy
     ///
     ///Sends a `GET` request to `/policy`
+    ///```ignore
+    /// let response = client.policy_get()
+    ///    .send()
+    ///    .await;
+    /// ```
     fn policy_get(&self) -> builder::PolicyGet;
     ///Update the top-level IAM policy
     ///
     ///Sends a `PUT` request to `/policy`
+    ///```ignore
+    /// let response = client.policy_put()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn policy_put(&self) -> builder::PolicyPut;
 }
 
@@ -2364,6 +2688,16 @@ pub trait ClientProjectsExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.organization_projects_get()
+    ///    .organization_name(organization_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_projects_get(&self) -> builder::OrganizationProjectsGet;
     ///Create a new project
     ///
@@ -2372,6 +2706,14 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.organization_projects_post()
+    ///    .organization_name(organization_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_projects_post(&self) -> builder::OrganizationProjectsPost;
     ///Fetch a specific project
     ///
@@ -2381,6 +2723,14 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
+    ///
+    ///```ignore
+    /// let response = client.organization_projects_get_project()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_projects_get_project(&self) -> builder::OrganizationProjectsGetProject;
     ///Update a specific project
     ///
@@ -2391,6 +2741,15 @@ pub trait ClientProjectsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.organization_projects_put_project()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_projects_put_project(&self) -> builder::OrganizationProjectsPutProject;
     ///Delete a specific project
     ///
@@ -2400,6 +2759,14 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
+    ///
+    ///```ignore
+    /// let response = client.organization_projects_delete_project()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_projects_delete_project(&self) -> builder::OrganizationProjectsDeleteProject;
     ///Fetch the IAM policy for this Project
     ///
@@ -2409,6 +2776,14 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
+    ///
+    ///```ignore
+    /// let response = client.organization_projects_get_project_policy()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_projects_get_project_policy(
         &self,
     ) -> builder::OrganizationProjectsGetProjectPolicy;
@@ -2421,6 +2796,15 @@ pub trait ClientProjectsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.organization_projects_put_project_policy()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn organization_projects_put_project_policy(
         &self,
     ) -> builder::OrganizationProjectsPutProjectPolicy;
@@ -2470,6 +2854,15 @@ pub trait ClientRacksExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.hardware_racks_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn hardware_racks_get(&self) -> builder::HardwareRacksGet;
     ///Fetch information about a particular rack
     ///
@@ -2477,6 +2870,13 @@ pub trait ClientRacksExt {
     ///
     ///Arguments:
     /// - `rack_id`: The rack's unique ID.
+    ///
+    ///```ignore
+    /// let response = client.hardware_racks_get_rack()
+    ///    .rack_id(rack_id)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn hardware_racks_get_rack(&self) -> builder::HardwareRacksGetRack;
 }
 
@@ -2499,6 +2899,14 @@ pub trait ClientRolesExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
+    ///
+    ///```ignore
+    /// let response = client.roles_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn roles_get(&self) -> builder::RolesGet;
     ///Fetch a specific built-in role
     ///
@@ -2506,6 +2914,13 @@ pub trait ClientRolesExt {
     ///
     ///Arguments:
     /// - `role_name`: The built-in role's unique name.
+    ///
+    ///```ignore
+    /// let response = client.roles_get_role()
+    ///    .role_name(role_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn roles_get_role(&self) -> builder::RolesGetRole;
 }
 
@@ -2534,30 +2949,75 @@ pub trait ClientRoutersExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.vpc_routers_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_routers_get(&self) -> builder::VpcRoutersGet;
     ///Create a VPC Router
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers`
+    /// {vpc_name}/routers` ```ignore
+    /// let response = client.vpc_routers_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_routers_post(&self) -> builder::VpcRoutersPost;
     ///Get a VPC Router
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}`
+    /// {vpc_name}/routers/{router_name}` ```ignore
+    /// let response = client.vpc_routers_get_router()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .router_name(router_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_routers_get_router(&self) -> builder::VpcRoutersGetRouter;
     ///Update a VPC Router
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}`
+    /// {vpc_name}/routers/{router_name}` ```ignore
+    /// let response = client.vpc_routers_put_router()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .router_name(router_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_routers_put_router(&self) -> builder::VpcRoutersPutRouter;
     ///Delete a router from its VPC
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}`
+    /// {vpc_name}/routers/{router_name}` ```ignore
+    /// let response = client.vpc_routers_delete_router()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .router_name(router_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_routers_delete_router(&self) -> builder::VpcRoutersDeleteRouter;
 }
 
@@ -2599,30 +3059,80 @@ pub trait ClientRoutesExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.routers_routes_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .router_name(router_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn routers_routes_get(&self) -> builder::RoutersRoutesGet;
     ///Create a VPC Router
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes`
+    /// {vpc_name}/routers/{router_name}/routes` ```ignore
+    /// let response = client.routers_routes_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .router_name(router_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn routers_routes_post(&self) -> builder::RoutersRoutesPost;
     ///Get a VPC Router route
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}` ```ignore
+    /// let response = client.routers_routes_get_route()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .router_name(router_name)
+    ///    .route_name(route_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn routers_routes_get_route(&self) -> builder::RoutersRoutesGetRoute;
     ///Update a Router route
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}` ```ignore
+    /// let response = client.routers_routes_put_route()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .router_name(router_name)
+    ///    .route_name(route_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn routers_routes_put_route(&self) -> builder::RoutersRoutesPutRoute;
     ///Delete a route from its router
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}` ```ignore
+    /// let response = client.routers_routes_delete_route()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .router_name(router_name)
+    ///    .route_name(route_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn routers_routes_delete_route(&self) -> builder::RoutersRoutesDeleteRoute;
 }
 
@@ -2658,10 +3168,25 @@ pub trait ClientSagasExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.sagas_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn sagas_get(&self) -> builder::SagasGet;
     ///Fetch information about a single saga (for debugging)
     ///
     ///Sends a `GET` request to `/sagas/{saga_id}`
+    ///```ignore
+    /// let response = client.sagas_get_saga()
+    ///    .saga_id(saga_id)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn sagas_get_saga(&self) -> builder::SagasGetSaga;
 }
 
@@ -2683,10 +3208,25 @@ pub trait ClientSilosExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.silos_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn silos_get(&self) -> builder::SilosGet;
     ///Create a new silo
     ///
     ///Sends a `POST` request to `/silos`
+    ///```ignore
+    /// let response = client.silos_post()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn silos_post(&self) -> builder::SilosPost;
     ///Fetch a specific silo
     ///
@@ -2694,6 +3234,13 @@ pub trait ClientSilosExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
+    ///
+    ///```ignore
+    /// let response = client.silos_get_silo()
+    ///    .silo_name(silo_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn silos_get_silo(&self) -> builder::SilosGetSilo;
     ///Delete a specific silo
     ///
@@ -2701,6 +3248,13 @@ pub trait ClientSilosExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
+    ///
+    ///```ignore
+    /// let response = client.silos_delete_silo()
+    ///    .silo_name(silo_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn silos_delete_silo(&self) -> builder::SilosDeleteSilo;
     ///Fetch the IAM policy for this Silo
     ///
@@ -2708,6 +3262,13 @@ pub trait ClientSilosExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
+    ///
+    ///```ignore
+    /// let response = client.silos_get_silo_policy()
+    ///    .silo_name(silo_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn silos_get_silo_policy(&self) -> builder::SilosGetSiloPolicy;
     ///Update the IAM policy for this Silo
     ///
@@ -2716,6 +3277,14 @@ pub trait ClientSilosExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.silos_put_silo_policy()
+    ///    .silo_name(silo_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn silos_put_silo_policy(&self) -> builder::SilosPutSiloPolicy;
 }
 
@@ -2755,6 +3324,15 @@ pub trait ClientSledsExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.hardware_sleds_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn hardware_sleds_get(&self) -> builder::HardwareSledsGet;
     ///Fetch information about a sled in the system
     ///
@@ -2762,6 +3340,13 @@ pub trait ClientSledsExt {
     ///
     ///Arguments:
     /// - `sled_id`: The sled's unique ID.
+    ///
+    ///```ignore
+    /// let response = client.hardware_sleds_get_sled()
+    ///    .sled_id(sled_id)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn hardware_sleds_get_sled(&self) -> builder::HardwareSledsGetSled;
 }
 
@@ -2788,6 +3373,17 @@ pub trait ClientSnapshotsExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.project_snapshots_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_snapshots_get(&self) -> builder::ProjectSnapshotsGet;
     ///Create a snapshot of a disk
     ///
@@ -2798,18 +3394,41 @@ pub trait ClientSnapshotsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.project_snapshots_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_snapshots_post(&self) -> builder::ProjectSnapshotsPost;
     ///Get a snapshot in a project
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
-    /// {snapshot_name}`
+    /// {snapshot_name}` ```ignore
+    /// let response = client.project_snapshots_get_snapshot()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .snapshot_name(snapshot_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_snapshots_get_snapshot(&self) -> builder::ProjectSnapshotsGetSnapshot;
     ///Delete a snapshot from a project
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
-    /// {snapshot_name}`
+    /// {snapshot_name}` ```ignore
+    /// let response = client.project_snapshots_delete_snapshot()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .snapshot_name(snapshot_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_snapshots_delete_snapshot(&self) -> builder::ProjectSnapshotsDeleteSnapshot;
 }
 
@@ -2841,18 +3460,45 @@ pub trait ClientSshkeysExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.sshkeys_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn sshkeys_get(&self) -> builder::SshkeysGet;
     ///Create a new SSH public key for the current user
     ///
     ///Sends a `POST` request to `/session/me/sshkeys`
+    ///```ignore
+    /// let response = client.sshkeys_post()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn sshkeys_post(&self) -> builder::SshkeysPost;
     ///Get (by name) an SSH public key belonging to the current user
     ///
     ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
+    ///```ignore
+    /// let response = client.sshkeys_get_key()
+    ///    .ssh_key_name(ssh_key_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn sshkeys_get_key(&self) -> builder::SshkeysGetKey;
     ///Delete (by name) an SSH public key belonging to the current user
     ///
     ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
+    ///```ignore
+    /// let response = client.sshkeys_delete_key()
+    ///    .ssh_key_name(ssh_key_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn sshkeys_delete_key(&self) -> builder::SshkeysDeleteKey;
 }
 
@@ -2889,30 +3535,75 @@ pub trait ClientSubnetsExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.vpc_subnets_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_subnets_get(&self) -> builder::VpcSubnetsGet;
     ///Create a subnet in a VPC
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets`
+    /// {vpc_name}/subnets` ```ignore
+    /// let response = client.vpc_subnets_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_subnets_post(&self) -> builder::VpcSubnetsPost;
     ///Get subnet in a VPC
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}`
+    /// {vpc_name}/subnets/{subnet_name}` ```ignore
+    /// let response = client.vpc_subnets_get_subnet()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .subnet_name(subnet_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_subnets_get_subnet(&self) -> builder::VpcSubnetsGetSubnet;
     ///Update a VPC Subnet
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}`
+    /// {vpc_name}/subnets/{subnet_name}` ```ignore
+    /// let response = client.vpc_subnets_put_subnet()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .subnet_name(subnet_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_subnets_put_subnet(&self) -> builder::VpcSubnetsPutSubnet;
     ///Delete a subnet from a VPC
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}`
+    /// {vpc_name}/subnets/{subnet_name}` ```ignore
+    /// let response = client.vpc_subnets_delete_subnet()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .subnet_name(subnet_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn vpc_subnets_delete_subnet(&self) -> builder::VpcSubnetsDeleteSubnet;
     ///List network interfaces in a VPC subnet
     ///
@@ -2929,6 +3620,19 @@ pub trait ClientSubnetsExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.subnet_network_interfaces_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .subnet_name(subnet_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn subnet_network_interfaces_get(&self) -> builder::SubnetNetworkInterfacesGet;
 }
 
@@ -2962,6 +3666,11 @@ pub trait ClientUpdatesExt {
     ///Refresh update metadata
     ///
     ///Sends a `POST` request to `/updates/refresh`
+    ///```ignore
+    /// let response = client.updates_refresh()
+    ///    .send()
+    ///    .await;
+    /// ```
     fn updates_refresh(&self) -> builder::UpdatesRefresh;
 }
 
@@ -2981,6 +3690,15 @@ pub trait ClientUsersExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.users_get()
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn users_get(&self) -> builder::UsersGet;
     ///Fetch a specific built-in system user
     ///
@@ -2988,6 +3706,13 @@ pub trait ClientUsersExt {
     ///
     ///Arguments:
     /// - `user_name`: The built-in user's unique name.
+    ///
+    ///```ignore
+    /// let response = client.users_get_user()
+    ///    .user_name(user_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn users_get_user(&self) -> builder::UsersGetUser;
 }
 
@@ -3014,6 +3739,17 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retreive the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///```ignore
+    /// let response = client.project_vpcs_get()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .limit(limit)
+    ///    .page_token(page_token)
+    ///    .sort_by(sort_by)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_vpcs_get(&self) -> builder::ProjectVpcsGet;
     ///Create a VPC in a project
     ///
@@ -3024,24 +3760,55 @@ pub trait ClientVpcsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///```ignore
+    /// let response = client.project_vpcs_post()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_vpcs_post(&self) -> builder::ProjectVpcsPost;
     ///Get a VPC in a project
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}`
+    /// {vpc_name}` ```ignore
+    /// let response = client.project_vpcs_get_vpc()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_vpcs_get_vpc(&self) -> builder::ProjectVpcsGetVpc;
     ///Update a VPC
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}`
+    /// {vpc_name}` ```ignore
+    /// let response = client.project_vpcs_put_vpc()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_vpcs_put_vpc(&self) -> builder::ProjectVpcsPutVpc;
     ///Delete a vpc from a project
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}`
+    /// {vpc_name}` ```ignore
+    /// let response = client.project_vpcs_delete_vpc()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .vpc_name(vpc_name)
+    ///    .send()
+    ///    .await;
+    /// ```
     fn project_vpcs_delete_vpc(&self) -> builder::ProjectVpcsDeleteVpc;
 }
 
