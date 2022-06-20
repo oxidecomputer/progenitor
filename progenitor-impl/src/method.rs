@@ -1070,7 +1070,7 @@ impl Generator {
         {
             if !matches!(
                 self.type_space.get_type(opt_id).ok()?.details(),
-                typify::TypeDetails::Builtin("String")
+                typify::TypeDetails::String
             ) {
                 return None;
             }
@@ -1097,7 +1097,7 @@ impl Generator {
     /// ```ignore
     /// struct OperationId<'a> {
     ///     client: &'a super::Client,
-    ///     param_1: Option<String>,
+    ///     param_1: Option<SomeType>,
     ///     param_2: Option<String>,
     /// }
     /// ```
@@ -1106,9 +1106,13 @@ impl Generator {
     /// parameter also has a corresponding method:
     /// ```ignore
     /// impl<'a> OperationId<'a> {
-    ///     pub fn param_1(self, value: String) {
-    ///         self.param_1 = value;
-    ///     self
+    ///     pub fn param_1(self, value: SomeType) {
+    ///         self.param_1 = Some(value);
+    ///         self
+    ///     }
+    ///     pub fn param_2<S: Into<String>>(self, value: S) {
+    ///         self.param_2 = Some(value.into());
+    ///         self
     ///     }
     /// }
     /// ```
@@ -1218,20 +1222,35 @@ impl Generator {
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
-                        let typ =
-                            if let typify::TypeDetails::Option(ref opt_id) =
-                                &ty.details()
-                            {
-                                self.type_space.get_type(opt_id)?.ident()
-                            } else {
-                                ty.ident()
-                            };
-                        Ok(quote! {
-                            pub fn #param_name(mut self, value: #typ) -> Self {
-                                self.#param_name = Some(value);
-                                self
+                        let x = ty.details();
+                        match &x {
+                            typify::TypeDetails::String => {
+                                Ok(quote! {
+                                    pub fn #param_name<S: Into<String>>(mut self, value: S) -> Self {
+                                        self.#param_name = Some(value.into());
+                                        self
+                                    }
+                                })
                             }
-                        })
+                            typify::TypeDetails::Option(ref opt_id) => {
+                                let typ = self.type_space.get_type(opt_id)?.ident();
+                                Ok(quote!{
+                                    pub fn #param_name(mut self, value: #typ) -> Self {
+                                        self.#param_name = Some(value);
+                                        self
+                                    }
+                                })
+                            }
+                            _ =>  {
+                                let typ = ty.ident();
+                                Ok(quote! {
+                                    pub fn #param_name(mut self, value: #typ) -> Self {
+                                        self.#param_name = Some(value);
+                                        self
+                                    }
+                                })
+                            }
+                        }
                     }
 
                     OperationParameterType::RawBody => {

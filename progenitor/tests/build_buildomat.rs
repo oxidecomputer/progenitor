@@ -18,7 +18,7 @@ mod builder_untagged {
     fn _ignore() {
         let _ = Client::new("")
             .worker_task_upload_chunk()
-            .task("task".to_string())
+            .task("task")
             .body(vec![0])
             .send();
     }
@@ -34,7 +34,7 @@ mod builder_tagged {
     fn _ignore() {
         let _ = Client::new("")
             .worker_task_upload_chunk()
-            .task("task".to_string())
+            .task("task")
             .body(vec![0])
             .send();
     }

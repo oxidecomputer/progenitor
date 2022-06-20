@@ -11553,8 +11553,8 @@ pub mod builder {
             }
         }
 
-        pub fn role_name(mut self, value: String) -> Self {
-            self.role_name = Some(value);
+        pub fn role_name<S: Into<String>>(mut self, value: S) -> Self {
+            self.role_name = Some(value.into());
             self
         }
 
