@@ -336,19 +336,41 @@ impl Generator {
         Ok(out)
     }
 
+    /// Render text output.
     pub fn generate_text(&mut self, spec: &OpenAPI) -> Result<String> {
-        let output = self.generate_tokens(spec)?;
+        self.generate_text_impl(
+            spec,
+            rustfmt_wrapper::config::Config::default(),
+        )
+    }
 
-        // Format the file with rustfmt.
-        let content = rustfmt_wrapper::rustfmt_config(
+    /// Render text output and normalize doc comments
+    ///
+    /// Requires a nightly install of `rustfmt` (even if the target project is
+    /// not using nightly).
+    pub fn generate_text_normalize_comments(
+        &mut self,
+        spec: &OpenAPI,
+    ) -> Result<String> {
+        self.generate_text_impl(
+            spec,
             rustfmt_wrapper::config::Config {
                 normalize_doc_attributes: Some(true),
                 wrap_comments: Some(true),
                 ..Default::default()
             },
-            output,
         )
-        .unwrap();
+    }
+
+    fn generate_text_impl(
+        &mut self,
+        spec: &OpenAPI,
+        config: rustfmt_wrapper::config::Config,
+    ) -> Result<String> {
+        let output = self.generate_tokens(spec)?;
+
+        // Format the file with rustfmt.
+        let content = rustfmt_wrapper::rustfmt_config(config, output).unwrap();
 
         // Add newlines after end-braces at <= two levels of indentation.
         Ok(if cfg!(not(windows)) {

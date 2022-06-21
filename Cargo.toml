@@ -10,6 +10,7 @@ members = [
 
 #[patch."https://github.com/oxidecomputer/dropshot"]
 #dropshot = { path = "../dropshot/dropshot" }
-[patch.crates-io]
-typify = { path = "../typify/typify" }
-rustfmt-wrapper = { path = "../rustfmt-wrapper" }
+
+#[patch.crates-io]
+#typify = { path = "../typify/typify" }
+#rustfmt-wrapper = { path = "../rustfmt-wrapper" }

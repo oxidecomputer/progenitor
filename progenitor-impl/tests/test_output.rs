@@ -15,7 +15,7 @@ fn verify_apis(openapi_file: &str) {
     let spec = serde_json::from_reader(file).unwrap();
 
     let mut generator = Generator::default();
-    let output = generator.generate_text(&spec).unwrap();
+    let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
         format!("tests/output/{}-positional.out", openapi_file),
         &output,
@@ -26,7 +26,7 @@ fn verify_apis(openapi_file: &str) {
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Merged),
     );
-    let output = generator.generate_text(&spec).unwrap();
+    let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
         format!("tests/output/{}-builder.out", openapi_file),
         &output,
@@ -37,7 +37,7 @@ fn verify_apis(openapi_file: &str) {
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Separate),
     );
-    let output = generator.generate_text(&spec).unwrap();
+    let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
         format!("tests/output/{}-builder-tagged.out", openapi_file),
         &output,

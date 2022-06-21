@@ -942,7 +942,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "regex",
- "rustfmt-wrapper",
+ "rustfmt-wrapper 0.2.0",
  "schemars",
  "serde",
  "serde_json",
@@ -1074,7 +1074,20 @@ dependencies = [
 
 [[package]]
 name = "rustfmt-wrapper"
-version = "0.1.1"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7733577fb5b13c8b256232e7ca84aa424f915efae6ec980082d60a03f99da3f8"
+dependencies = [
+ "tempfile",
+ "thiserror",
+ "toolchain_find",
+]
+
+[[package]]
+name = "rustfmt-wrapper"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ed729e3bee08ec2befd593c27e90ca9fdd25efdc83c94c3b82eaef16e4f7406e"
 dependencies = [
  "serde",
  "tempfile",
@@ -1627,7 +1640,9 @@ checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 
 [[package]]
 name = "typify"
-version = "0.0.9-dev"
+version = "0.0.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "505f18fc847efc93b45a763f36f8099d3415dbfc6c0d6c3857a3012e20db92c7"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1635,13 +1650,15 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.0.9-dev"
+version = "0.0.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b572369a55be8402a5a7e24c721e8d895dbd58bf3d9dccb4b3619fcb926e7bde"
 dependencies = [
  "heck",
  "log",
  "proc-macro2",
  "quote",
- "rustfmt-wrapper",
+ "rustfmt-wrapper 0.1.0",
  "schemars",
  "serde_json",
  "syn",
@@ -1651,7 +1668,9 @@ dependencies = [
 
 [[package]]
 name = "typify-macro"
-version = "0.0.9-dev"
+version = "0.0.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a615bfbbcf929b1733898d2afe00c83dbf8756f8028aa42c156c3c2713b0f03b"
 dependencies = [
  "proc-macro2",
  "quote",

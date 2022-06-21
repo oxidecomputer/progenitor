@@ -14,10 +14,26 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
+    - name: Install nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        components: rustfmt
+        default: false
+    - name: Install stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        components: rustfmt
+        default: true
     - name: Report cargo version
       run: cargo --version
     - name: Report rustfmt version
       run: cargo fmt -- --version
+    - name: Report nightly cargo version
+      run: cargo +nightly --version
+    - name: Report nightly rustfmt version
+      run: cargo +nightly fmt -- --version
     - name: Check style
       run: cargo fmt -- --check
 
@@ -28,6 +44,18 @@ jobs:
         os: [ ubuntu-18.04, windows-2019, macos-10.15 ]
     steps:
     - uses: actions/checkout@v2
+    - name: Install nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        components: rustfmt
+        default: false
+    - name: Install stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        components: rustfmt
+        default: true
     - name: Build
       run: cargo build --tests --verbose
     - name: Run tests
