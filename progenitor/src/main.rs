@@ -8,9 +8,63 @@ use std::{
 };
 
 use anyhow::{bail, Result};
+use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use serde::Deserialize;
+
+#[derive(Parser)]
+struct Args {
+    /// OpenAPI definition document (JSON)
+    #[clap(short = 'i', long)]
+    input: String,
+    /// Output directory for Rust crate
+    #[clap(short = 'o', long)]
+    output: String,
+    /// Target Rust crate name
+    #[clap(short = 'n', long)]
+    name: String,
+    /// Target Rust crate version
+    #[clap(short = 'v', long)]
+    version: String,
+
+    /// SDK interface style
+    #[clap(value_enum, long, default_value_t = InterfaceArg::Positional)]
+    interface: InterfaceArg,
+    /// SDK tag style
+    #[clap(value_enum, long, default_value_t = TagArg::Merged)]
+    tags: TagArg,
+}
+
+#[derive(Copy, Clone, ValueEnum)]
+enum InterfaceArg {
+    Positional,
+    Builder,
+}
+
+impl From<InterfaceArg> for InterfaceStyle {
+    fn from(arg: InterfaceArg) -> Self {
+        match arg {
+            InterfaceArg::Positional => InterfaceStyle::Positional,
+            InterfaceArg::Builder => InterfaceStyle::Builder,
+        }
+    }
+}
+
+#[derive(Copy, Clone, ValueEnum)]
+enum TagArg {
+    Merged,
+    Separate,
+}
+
+impl From<TagArg> for TagStyle {
+    fn from(arg: TagArg) -> Self {
+        match arg {
+            TagArg::Merged => TagStyle::Merged,
+            TagArg::Separate => TagStyle::Separate,
+        }
+    }
+}
 
 fn save<P>(p: P, data: &str) -> Result<()>
 where
@@ -28,34 +82,14 @@ where
 }
 
 fn main() -> Result<()> {
-    let mut opts = getopts::Options::new();
-    opts.parsing_style(getopts::ParsingStyle::StopAtFirstFree);
-    opts.reqopt("i", "", "OpenAPI definition document (JSON)", "INPUT");
-    opts.reqopt("o", "", "Generated Rust crate directory", "OUTPUT");
-    opts.reqopt("n", "", "Target Rust crate name", "CRATE");
-    opts.reqopt("v", "", "Target Rust crate version", "VERSION");
-
-    let args = match opts.parse(std::env::args().skip(1)) {
-        Ok(args) => {
-            if !args.free.is_empty() {
-                eprintln!("{}", opts.usage("progenitor"));
-                bail!("unexpected positional arguments");
-            }
-            args
-        }
-        Err(e) => {
-            eprintln!("{}", opts.usage("progenitor"));
-            bail!(e);
-        }
-    };
-
-    let api = load_api(&args.opt_str("i").unwrap())?;
+    let args = Args::parse();
+    let api = load_api(&args.input)?;
 
     //let mut builder = Generator::default();
     let mut builder = Generator::new(
         GenerationSettings::default()
-            .with_interface(InterfaceStyle::Builder)
-            .with_tag(TagStyle::Separate),
+            .with_interface(args.interface.into())
+            .with_tag(args.tags.into()),
     );
 
     match builder.generate_text(&api) {
@@ -72,13 +106,13 @@ fn main() -> Result<()> {
             println!("-----------------------------------------------------");
             println!();
 
-            let name = args.opt_str("n").unwrap();
-            let version = args.opt_str("v").unwrap();
+            let name = &args.name;
+            let version = &args.version;
 
             /*
              * Create the top-level crate directory:
              */
-            let root = PathBuf::from(args.opt_str("o").unwrap());
+            let root = PathBuf::from(&args.output);
             std::fs::create_dir_all(&root)?;
 
             /*
