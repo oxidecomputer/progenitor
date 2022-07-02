@@ -1110,7 +1110,7 @@ impl Generator {
     ///         self.param_1 = Some(value);
     ///         self
     ///     }
-    ///     pub fn param_2<S: Into<String>>(self, value: S) {
+    ///     pub fn param_2<S: ToString>(self, value: S) {
     ///         self.param_2 = Some(value.into());
     ///         self
     ///     }
@@ -1226,8 +1226,8 @@ impl Generator {
                         match &x {
                             typify::TypeDetails::String => {
                                 Ok(quote! {
-                                    pub fn #param_name<S: Into<String>>(mut self, value: S) -> Self {
-                                        self.#param_name = Some(value.into());
+                                    pub fn #param_name<S: ToString>(mut self, value: S) -> Self {
+                                        self.#param_name = Some(value.to_string());
                                         self
                                     }
                                 })

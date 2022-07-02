@@ -438,8 +438,8 @@ pub mod builder {
             Self { client, task: None }
         }
 
-        pub fn task<S: Into<String>>(mut self, value: S) -> Self {
-            self.task = Some(value.into());
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
             self
         }
 
@@ -566,8 +566,8 @@ pub mod builder {
             }
         }
 
-        pub fn task<S: Into<String>>(mut self, value: S) -> Self {
-            self.task = Some(value.into());
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
             self
         }
 
@@ -629,8 +629,8 @@ pub mod builder {
             Self { client, task: None }
         }
 
-        pub fn task<S: Into<String>>(mut self, value: S) -> Self {
-            self.task = Some(value.into());
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
             self
         }
 
@@ -684,13 +684,13 @@ pub mod builder {
             }
         }
 
-        pub fn task<S: Into<String>>(mut self, value: S) -> Self {
-            self.task = Some(value.into());
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
             self
         }
 
-        pub fn output<S: Into<String>>(mut self, value: S) -> Self {
-            self.output = Some(value.into());
+        pub fn output<S: ToString>(mut self, value: S) -> Self {
+            self.output = Some(value.to_string());
             self
         }
 
@@ -898,8 +898,8 @@ pub mod builder {
             }
         }
 
-        pub fn task<S: Into<String>>(mut self, value: S) -> Self {
-            self.task = Some(value.into());
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
             self
         }
 
@@ -960,8 +960,8 @@ pub mod builder {
             }
         }
 
-        pub fn task<S: Into<String>>(mut self, value: S) -> Self {
-            self.task = Some(value.into());
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
             self
         }
 
@@ -1023,8 +1023,8 @@ pub mod builder {
             }
         }
 
-        pub fn task<S: Into<String>>(mut self, value: S) -> Self {
-            self.task = Some(value.into());
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
             self
         }
 
@@ -1086,8 +1086,8 @@ pub mod builder {
             }
         }
 
-        pub fn task<S: Into<String>>(mut self, value: S) -> Self {
-            self.task = Some(value.into());
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
             self
         }
 
