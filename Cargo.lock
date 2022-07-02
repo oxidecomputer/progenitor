@@ -1383,9 +1383,9 @@ checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
 
 [[package]]
 name = "syn"
-version = "1.0.96"
+version = "1.0.98"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0748dd251e24453cb8717f0354206b91557e4ec8703673a4b30208f2abaf1ebf"
+checksum = "c50aef8a904de4c23c788f104b7dddc7d6f79c647c7c8ce4cc8f73eb0ca773dd"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1627,9 +1627,9 @@ checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 
 [[package]]
 name = "typify"
-version = "0.0.8"
+version = "0.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d94783d3e464d8b2b8f78e826521e9f11c7df83523dafd544c5e642bf31df5a4"
+checksum = "505f18fc847efc93b45a763f36f8099d3415dbfc6c0d6c3857a3012e20db92c7"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1637,9 +1637,9 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.0.8"
+version = "0.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b27f7e4f8a3b375daabcd3721bc067920a59ea9a33c1f01b9b2b98d17c3b5497"
+checksum = "b572369a55be8402a5a7e24c721e8d895dbd58bf3d9dccb4b3619fcb926e7bde"
 dependencies = [
  "heck",
  "log",
@@ -1650,14 +1650,14 @@ dependencies = [
  "serde_json",
  "syn",
  "thiserror",
- "unicode-xid",
+ "unicode-ident",
 ]
 
 [[package]]
 name = "typify-macro"
-version = "0.0.8"
+version = "0.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4211d794d8e4e6fed99bdcd263529ee05af52d9794004cc235123216f1fef42"
+checksum = "a615bfbbcf929b1733898d2afe00c83dbf8756f8028aa42c156c3c2713b0f03b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1683,9 +1683,9 @@ checksum = "1a01404663e3db436ed2746d9fefef640d868edae3cceb81c3b8d5732fda678f"
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.0"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d22af068fba1eb5edcb4aea19d382b2a3deb4c8f9d475c589b6ada9e0fd493ee"
+checksum = "5bd2fe26506023ed7b5e1e315add59d6f584c621d037f9368fea9cfb988f368c"
 
 [[package]]
 name = "unicode-normalization"
@@ -1701,12 +1701,6 @@ name = "unicode-width"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3ed742d4ea2bd1176e236172c8429aaf54486e7ac098db29ffe6529e0ce50973"
-
-[[package]]
-name = "unicode-xid"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "957e51f3646910546462e67d5f7599b9e4fb8acdd304b087a6494730f9eebf04"
 
 [[package]]
 name = "untrusted"
