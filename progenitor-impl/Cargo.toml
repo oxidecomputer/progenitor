@@ -26,5 +26,5 @@ unicode-ident = "1.0.0"
 [dev-dependencies]
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
 expectorate = "1.0"
-http = "0.2.6"
+http = "0.2.8"
 hyper = "0.14.19"
