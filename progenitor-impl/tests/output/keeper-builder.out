@@ -1,0 +1,418 @@
+#[allow(unused_imports)]
+use progenitor_client::encode_path;
+pub use progenitor_client::{ByteStream, Error, ResponseValue};
+pub mod types {
+    use serde::{Deserialize, Serialize};
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct EnrolBody {
+        pub host: String,
+        pub key: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct GlobalJobsResult {
+        pub summary: Vec<ReportSummary>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct OutputRecord {
+        pub msg: String,
+        pub stream: String,
+        pub time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct PingResult {
+        pub host: String,
+        pub ok: bool,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ReportFinishBody {
+        pub duration_millis: i32,
+        pub end_time: chrono::DateTime<chrono::offset::Utc>,
+        pub exit_status: i32,
+        pub id: ReportId,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ReportId {
+        pub host: String,
+        pub job: String,
+        pub pid: u64,
+        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub uuid: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ReportOutputBody {
+        pub id: ReportId,
+        pub record: OutputRecord,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ReportResult {
+        pub existed_already: bool,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ReportStartBody {
+        pub id: ReportId,
+        pub script: String,
+        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct ReportSummary {
+        pub age_seconds: i32,
+        pub duration_seconds: i32,
+        pub host: String,
+        pub job: String,
+        pub status: i32,
+        pub when: chrono::DateTime<chrono::offset::Utc>,
+    }
+}
+
+#[derive(Clone)]
+pub struct Client {
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
+}
+
+impl Client {
+    pub fn new(baseurl: &str) -> Self {
+        let dur = std::time::Duration::from_secs(15);
+        let client = reqwest::ClientBuilder::new()
+            .connect_timeout(dur)
+            .timeout(dur)
+            .build()
+            .unwrap();
+        Self::new_with_client(baseurl, client)
+    }
+
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
+            baseurl: baseurl.to_string(),
+            client,
+        }
+    }
+
+    pub fn baseurl(&self) -> &String {
+        &self.baseurl
+    }
+
+    pub fn client(&self) -> &reqwest::Client {
+        &self.client
+    }
+}
+
+impl Client {
+    ///Sends a `POST` request to `/enrol`
+    ///```ignore
+    /// let response = client.enrol()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn enrol(&self) -> builder::Enrol {
+        builder::Enrol::new(self)
+    }
+
+    ///Sends a `GET` request to `/global/jobs`
+    ///```ignore
+    /// let response = client.global_jobs()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn global_jobs(&self) -> builder::GlobalJobs {
+        builder::GlobalJobs::new(self)
+    }
+
+    ///Sends a `GET` request to `/ping`
+    ///```ignore
+    /// let response = client.ping()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn ping(&self) -> builder::Ping {
+        builder::Ping::new(self)
+    }
+
+    ///Sends a `POST` request to `/report/finish`
+    ///```ignore
+    /// let response = client.report_finish()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn report_finish(&self) -> builder::ReportFinish {
+        builder::ReportFinish::new(self)
+    }
+
+    ///Sends a `POST` request to `/report/output`
+    ///```ignore
+    /// let response = client.report_output()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn report_output(&self) -> builder::ReportOutput {
+        builder::ReportOutput::new(self)
+    }
+
+    ///Sends a `POST` request to `/report/start`
+    ///```ignore
+    /// let response = client.report_start()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn report_start(&self) -> builder::ReportStart {
+        builder::ReportStart::new(self)
+    }
+}
+
+pub mod builder {
+    #[allow(unused_imports)]
+    use super::encode_path;
+    use super::types;
+    #[allow(unused_imports)]
+    use super::{ByteStream, Error, ResponseValue};
+    ///Builder for [`Client::enrol`]
+    ///
+    ///[`Client::enrol`]: super::Client::enrol
+    #[derive(Clone)]
+    pub struct Enrol<'a> {
+        client: &'a super::Client,
+        body: Option<types::EnrolBody>,
+    }
+
+    impl<'a> Enrol<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, body: None }
+        }
+
+        pub fn body(mut self, value: types::EnrolBody) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/enrol`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client, body } = self;
+            let (body,) = match (body,) {
+                (Some(body),) => (body,),
+                (body,) => {
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!("{}/enrol", client.baseurl,);
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::global_jobs`]
+    ///
+    ///[`Client::global_jobs`]: super::Client::global_jobs
+    #[derive(Clone)]
+    pub struct GlobalJobs<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> GlobalJobs<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `GET` request to `/global/jobs`
+        pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/global/jobs", client.baseurl,);
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::ping`]
+    ///
+    ///[`Client::ping`]: super::Client::ping
+    #[derive(Clone)]
+    pub struct Ping<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> Ping<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `GET` request to `/ping`
+        pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/ping", client.baseurl,);
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::report_finish`]
+    ///
+    ///[`Client::report_finish`]: super::Client::report_finish
+    #[derive(Clone)]
+    pub struct ReportFinish<'a> {
+        client: &'a super::Client,
+        body: Option<types::ReportFinishBody>,
+    }
+
+    impl<'a> ReportFinish<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, body: None }
+        }
+
+        pub fn body(mut self, value: types::ReportFinishBody) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/report/finish`
+        pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            let Self { client, body } = self;
+            let (body,) = match (body,) {
+                (Some(body),) => (body,),
+                (body,) => {
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!("{}/report/finish", client.baseurl,);
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::report_output`]
+    ///
+    ///[`Client::report_output`]: super::Client::report_output
+    #[derive(Clone)]
+    pub struct ReportOutput<'a> {
+        client: &'a super::Client,
+        body: Option<types::ReportOutputBody>,
+    }
+
+    impl<'a> ReportOutput<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, body: None }
+        }
+
+        pub fn body(mut self, value: types::ReportOutputBody) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/report/output`
+        pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            let Self { client, body } = self;
+            let (body,) = match (body,) {
+                (Some(body),) => (body,),
+                (body,) => {
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!("{}/report/output", client.baseurl,);
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::report_start`]
+    ///
+    ///[`Client::report_start`]: super::Client::report_start
+    #[derive(Clone)]
+    pub struct ReportStart<'a> {
+        client: &'a super::Client,
+        body: Option<types::ReportStartBody>,
+    }
+
+    impl<'a> ReportStart<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, body: None }
+        }
+
+        pub fn body(mut self, value: types::ReportStartBody) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/report/start`
+        pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            let Self { client, body } = self;
+            let (body,) = match (body,) {
+                (Some(body),) => (body,),
+                (body,) => {
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!("{}/report/start", client.baseurl,);
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+}

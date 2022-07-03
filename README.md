@@ -51,11 +51,13 @@ The macro has some additional fancy options to control the generated code:
 
 ```rust
 generate_api!(
-    spec = "path/to/openapi_document.json",       // The OpenAPI document
-    inner_type = my_client::InnerType,            // Client inner type available to pre and post hooks
-    pre_hook = closure::or::path::to::function,   // Hook invoked before issuing the HTTP request
-    post_hook = closure::or::path::to::function,  // Hook invoked prior to receiving the HTTP response
-    derives = [ schemars::JsonSchema ],           // Additional derive macros applied to generated types
+    spec = "path/to/openapi_document.json",      // The OpenAPI document
+    interface = Builder,                         // Choose positional (default) or builder style
+    tags = Separate,                             // Tags may be Merged or Separate (default)
+    inner_type = my_client::InnerType,           // Client inner type available to pre and post hooks
+    pre_hook = closure::or::path::to::function,  // Hook invoked before issuing the HTTP request
+    post_hook = closure::or::path::to::function, // Hook invoked prior to receiving the HTTP response
+    derives = [ schemars::JsonSchema ],          // Additional derive macros applied to generated types
 );
 ```
 
@@ -76,7 +78,7 @@ fn main() {
     println!("cargo:rerun-if-changed={}", src);
     let file = File::open(src).unwrap();
     let spec = serde_json::from_reader(file).unwrap();
-    let mut generator = progenitor::Generator::new();
+    let mut generator = progenitor::Generator::default();
 
     let content = generator.generate_text(&spec).unwrap();
 

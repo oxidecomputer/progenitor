@@ -1,5 +1,7 @@
 // Copyright 2022 Oxide Computer Company
 
+#![allow(dead_code)]
+
 //! Support code for generated clients.
 
 use std::{

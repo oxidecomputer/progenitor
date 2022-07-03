@@ -2,7 +2,7 @@
 
 use std::{
     cmp::Ordering,
-    collections::{BTreeSet, HashMap},
+    collections::{BTreeMap, BTreeSet},
     str::FromStr,
 };
 
@@ -14,13 +14,14 @@ use typify::TypeId;
 use crate::{
     template::PathTemplate,
     util::{sanitize, Case},
-    Error, Generator, Result,
+    Error, Generator, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
 /// The intermediate representation of an operation that will become a method.
 pub(crate) struct OperationMethod {
     operation_id: String,
+    pub tags: Vec<String>,
     method: HttpMethod,
     path: PathTemplate,
     summary: Option<String>,
@@ -74,6 +75,18 @@ impl HttpMethod {
     }
 }
 
+struct MethodSigBody {
+    success: TokenStream,
+    error: TokenStream,
+    body: TokenStream,
+}
+
+struct BuilderImpl {
+    doc: String,
+    sig: TokenStream,
+    body: TokenStream,
+}
+
 struct DropshotPagination {
     item: TypeId,
 }
@@ -94,6 +107,7 @@ struct OperationParameter {
     kind: OperationParameterKind,
 }
 
+#[derive(Eq, PartialEq)]
 enum OperationParameterType {
     Type(TypeId),
     RawBody,
@@ -449,6 +463,7 @@ impl Generator {
 
         Ok(OperationMethod {
             operation_id: sanitize(operation_id, Case::Snake),
+            tags: operation.tags.clone(),
             method: HttpMethod::from_str(method)?,
             path: tmp,
             summary: operation.summary.clone().filter(|s| !s.is_empty()),
@@ -497,6 +512,167 @@ impl Generator {
             quote! { <'a> }
         };
 
+        let doc_comment = make_doc_comment(method);
+
+        let MethodSigBody {
+            success: success_type,
+            error: error_type,
+            body,
+        } = self.method_sig_body(method, quote! { self })?;
+
+        let method_impl = quote! {
+            #[doc = #doc_comment]
+            pub async fn #operation_id #bounds (
+                &'a self,
+                #(#params),*
+            ) -> Result<
+                ResponseValue<#success_type>,
+                Error<#error_type>,
+            > {
+                #body
+            }
+        };
+
+        let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
+            // We're now using futures.
+            self.uses_futures = true;
+
+            let stream_id = format_ident!("{}_stream", method.operation_id);
+
+            // The parameters are the same as those to the paged method, but
+            // without "page_token"
+            let stream_params = method.params.iter().zip(params).filter_map(
+                |(param, stream)| {
+                    if param.name.as_str() == "page_token" {
+                        None
+                    } else {
+                        Some(stream)
+                    }
+                },
+            );
+
+            // The values passed to get the first page are the inputs to the
+            // stream method with "None" for the page_token.
+            let first_params = method.params.iter().map(|param| {
+                if param.api_name.as_str() == "page_token" {
+                    // The page_token is None when getting the first page.
+                    quote! { None }
+                } else {
+                    // All other parameters are passed through directly.
+                    format_ident!("{}", param.name).to_token_stream()
+                }
+            });
+
+            // The values passed to get subsequent pages are...
+            // - the state variable for the page_token
+            // - None for all other query parameters
+            // - The initial inputs for non-query parameters
+            let step_params = method.params.iter().map(|param| {
+                if param.api_name.as_str() == "page_token" {
+                    quote! { state.as_deref() }
+                } else if let OperationParameterKind::Query(_) = param.kind {
+                    // Query parameters are None; having page_token as Some(_)
+                    // is mutually exclusive with other query parameters.
+                    quote! { None }
+                } else {
+                    // Non-query parameters are passed in; this is necessary
+                    // e.g. to specify the right path. (We don't really expect
+                    // to see a body parameter here, but we pass it through
+                    // regardless.)
+                    format_ident!("{}", param.name).to_token_stream()
+                }
+            });
+
+            // The item type that we've saved (by picking apart the original
+            // function's return type) will be the Item type parameter for the
+            // Stream type we return.
+            let item = self.type_space.get_type(&page_data.item).unwrap();
+            let item_type = item.ident();
+
+            let doc_comment = make_stream_doc_comment(method);
+
+            quote! {
+                #[doc = #doc_comment]
+                pub fn #stream_id #bounds (
+                    &'a self,
+                    #(#stream_params),*
+                ) -> impl futures::Stream<Item = Result<
+                    #item_type,
+                    Error<#error_type>,
+                >> + Unpin + '_ {
+                    use futures::StreamExt;
+                    use futures::TryFutureExt;
+                    use futures::TryStreamExt;
+
+                    // Execute the operation with the basic parameters
+                    // (omitting page_token) to get the first page.
+                    self.#operation_id( #(#first_params,)* )
+                        .map_ok(move |page| {
+                            let page = page.into_inner();
+
+                            // Create a stream from the items of the first page.
+                            let first = futures::stream::iter(
+                                page.items.into_iter().map(Ok)
+                            );
+
+                            // We unfold subsequent pages using page.next_page
+                            // as the seed value. Each iteration returns its
+                            // items and the next page token.
+                            let rest = futures::stream::try_unfold(
+                                page.next_page,
+                                move |state| async move {
+                                    if state.is_none() {
+                                        // The page_token was None so we've
+                                        // reached the end.
+                                        Ok(None)
+                                    } else {
+                                        // Get the next page; here we set all
+                                        // query parameters to None (except for
+                                        // the page_token), and all other
+                                        // parameters as specified at the start
+                                        // of this method.
+                                        self.#operation_id(
+                                            #(#step_params,)*
+                                        )
+                                        .map_ok(|page| {
+                                            let page = page.into_inner();
+                                            Some((
+                                                futures::stream::iter(
+                                                    page
+                                                        .items
+                                                        .into_iter()
+                                                        .map(Ok),
+                                                ),
+                                                page.next_page,
+                                            ))
+                                        })
+                                        .await
+                                    }
+                                },
+                            )
+                            .try_flatten();
+
+                            first.chain(rest)
+                        })
+                        .try_flatten_stream()
+                        .boxed()
+                }
+            }
+        });
+
+        let all = quote! {
+            #method_impl
+            #stream_impl
+        };
+
+        Ok(all)
+    }
+
+    fn method_sig_body(
+        &self,
+        method: &OperationMethod,
+        client: TokenStream,
+    ) -> Result<MethodSigBody> {
         // Generate code for query parameters.
         let query_items = method
             .params
@@ -546,14 +722,14 @@ impl Generator {
                 _ => None,
             })
             .collect();
-        let url_path = method.path.compile(url_renames);
+        let url_path = method.path.compile(url_renames, client.clone());
 
         // Generate code to handle the body...
         let body_func =
             method.params.iter().filter_map(|param| match &param.kind {
                 OperationParameterKind::Body => match &param.typ {
                     OperationParameterType::Type(_) => {
-                        Some(quote! { .json(body) })
+                        Some(quote! { .json(&body) })
                     }
                     OperationParameterType::RawBody => {
                         Some(quote! { .body(body) })
@@ -662,216 +838,77 @@ impl Generator {
             _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
         };
 
-        let doc_comment = make_doc_comment(method);
-
-        let pre_hook = self.pre_hook.as_ref().map(|hook| {
+        let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&self.inner, &request);
+                (#hook)(&#client.inner, &request);
             }
         });
-        let post_hook = self.post_hook.as_ref().map(|hook| {
+        let post_hook = self.settings.post_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&self.inner, &result);
+                (#hook)(&#client.inner, &result);
             }
         });
 
         let method_func = format_ident!("{}", method.method.as_str());
 
-        let method_impl = quote! {
-            #[doc = #doc_comment]
-            pub async fn #operation_id #bounds (
-                &'a self,
-                #(#params),*
-            ) -> Result<
-                ResponseValue<#response_type>,
-                Error<#error_type>,
-            > {
-                #url_path
-                #query_build
+        let body_impl = quote! {
+            #url_path
+            #query_build
 
-                let request = self.client
-                    . #method_func (url)
-                    #(#body_func)*
-                    #query_use
-                    .build()?;
-                #pre_hook
-                let result = self.client
-                    .execute(request)
-                    .await;
-                #post_hook
+            let request = #client.client
+                . #method_func (url)
+                #(#body_func)*
+                #query_use
+                .build()?;
+            #pre_hook
+            let result = #client.client
+                .execute(request)
+                .await;
+            #post_hook
 
-                let response = result?;
+            let response = result?;
 
-                match response.status().as_u16() {
-                    // These will be of the form...
-                    // 201 => ResponseValue::from_response(response).await,
-                    // 200..299 => ResponseValue::empty(response),
-                    // TODO this kind of enumerated response isn't implemented
-                    // ... or in the case of an operation with multiple
-                    // successful response types...
-                    // 200 => {
-                    //     ResponseValue::from_response()
-                    //         .await?
-                    //         .map(OperationXResponse::ResponseTypeA)
-                    // }
-                    // 201 => {
-                    //     ResponseValue::from_response()
-                    //         .await?
-                    //         .map(OperationXResponse::ResponseTypeB)
-                    // }
-                    #(#success_response_matches)*
+            match response.status().as_u16() {
+                // These will be of the form...
+                // 201 => ResponseValue::from_response(response).await,
+                // 200..299 => ResponseValue::empty(response),
+                // TODO this kind of enumerated response isn't implemented
+                // ... or in the case of an operation with multiple
+                // successful response types...
+                // 200 => {
+                //     ResponseValue::from_response()
+                //         .await?
+                //         .map(OperationXResponse::ResponseTypeA)
+                // }
+                // 201 => {
+                //     ResponseValue::from_response()
+                //         .await?
+                //         .map(OperationXResponse::ResponseTypeB)
+                // }
+                #(#success_response_matches)*
 
-                    // This is almost identical to the success types except
-                    // they are wrapped in Error::ErrorResponse...
-                    // 400 => {
-                    //     Err(Error::ErrorResponse(
-                    //         ResponseValue::from_response(response.await?)
-                    //     ))
-                    // }
-                    #(#error_response_matches)*
+                // This is almost identical to the success types except
+                // they are wrapped in Error::ErrorResponse...
+                // 400 => {
+                //     Err(Error::ErrorResponse(
+                //         ResponseValue::from_response(response.await?)
+                //     ))
+                // }
+                #(#error_response_matches)*
 
-                    // The default response is either an Error with a known
-                    // type if the operation defines a default (as above) or
-                    // an Error::UnexpectedResponse...
-                    // _ => Err(Error::UnexpectedResponse(response)),
-                    #default_response
-                }
+                // The default response is either an Error with a known
+                // type if the operation defines a default (as above) or
+                // an Error::UnexpectedResponse...
+                // _ => Err(Error::UnexpectedResponse(response)),
+                #default_response
             }
         };
 
-        let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
-            // We're now using futures.
-            self.uses_futures = true;
-
-            let stream_id = format_ident!("{}_stream", method.operation_id);
-
-            // The parameters are the same as those to the paged method, but
-            // without "page_token"
-            let stream_params = method.params.iter().zip(params).filter_map(
-                |(param, stream)| {
-                    if param.name.as_str() == "page_token" {
-                        None
-                    } else {
-                        Some(stream)
-                    }
-                },
-            );
-
-            // The values passed to get the first page are the inputs to the
-            // stream method with "None" for the page_token.
-            let first_params = method.params.iter().map(|param| {
-                if param.api_name.as_str() == "page_token" {
-                    // The page_token is None when getting the first page.
-                    quote! { None }
-                } else {
-                    // All other parameters are passed through directly.
-                    format_ident!("{}", param.name).to_token_stream()
-                }
-            });
-
-            // The values passed to get subsequent pages are...
-            // - the state variable for the page_token
-            // - None for all other query parameters
-            // - The method inputs for non-query parameters
-            let step_params = method.params.iter().map(|param| {
-                if param.api_name.as_str() == "page_token" {
-                    quote! { state.as_deref() }
-                } else if let OperationParameterKind::Query(_) = param.kind {
-                    // Query parameters are None; having page_token as Some(_)
-                    // is mutually exclusive with other query parameters.
-                    quote! { None }
-                } else {
-                    // Non-query parameters are passed in; this is necessary
-                    // e.g. to specify the right path. (We don't really expect
-                    // to see a body parameter here, but we pass it through
-                    // regardless.)
-                    format_ident!("{}", param.name).to_token_stream()
-                }
-            });
-
-            // The item type that we've saved (by picking apart the original
-            // function's return type) will be the Item type parameter for the
-            // Stream type we return.
-            let item = self.type_space.get_type(&page_data.item).unwrap();
-            let item_type = item.ident();
-
-            let doc_comment = make_stream_doc_comment(method);
-
-            quote! {
-                #[doc = #doc_comment]
-                pub fn #stream_id #bounds (
-                    &'a self,
-                    #(#stream_params),*
-                ) -> impl futures::Stream<Item = Result<
-                    #item_type,
-                    Error<#error_type>,
-                >> + Unpin + '_ {
-                    use futures::StreamExt;
-                    use futures::TryFutureExt;
-                    use futures::TryStreamExt;
-
-                    // Execute the operation with the basic parameters
-                    // (omitting page_token) to get the first page.
-                    self.#operation_id(
-                        #(#first_params,)*
-                    )
-                    .map_ok(move |page| {
-                        let page = page.into_inner();
-                        // The first page is just an iter
-                        let first = futures::stream::iter(
-                            page.items.into_iter().map(Ok)
-                        );
-
-                        // We unfold subsequent pages using page.next_page as
-                        // the seed value. Each iteration returns its items and
-                        // the next page token.
-                        let rest = futures::stream::try_unfold(
-                            page.next_page,
-                            move |state| async move {
-                                if state.is_none() {
-                                    // The page_token was None so we've reached
-                                    // the end.
-                                    Ok(None)
-                                } else {
-                                    // Get the next page; here we set all query
-                                    // parameters to None (except for the
-                                    // page_token), and all other parameters as
-                                    // specified at the start of this method.
-                                    self.#operation_id(
-                                        #(#step_params,)*
-                                    )
-                                    .map_ok(|page| {
-                                        let page = page.into_inner();
-                                        Some((
-                                            futures::stream::iter(
-                                                page
-                                                    .items
-                                                    .into_iter()
-                                                    .map(Ok),
-                                            ),
-                                            page.next_page,
-                                        ))
-                                    })
-                                    .await
-                                }
-                            },
-                        )
-                        .try_flatten();
-
-                        first.chain(rest)
-                    })
-                    .try_flatten_stream()
-                    .boxed()
-                }
-            }
-        });
-
-        let all = quote! {
-            #method_impl
-            #stream_impl
-        };
-
-        Ok(all)
+        Ok(MethodSigBody {
+            success: response_type,
+            error: error_type,
+            body: body_impl,
+        })
     }
 
     fn extract_responses<'a>(
@@ -960,8 +997,8 @@ impl Generator {
             .filter(|param| {
                 matches!(
                     (param.api_name.as_str(), &param.kind),
-                    ("page_token", OperationParameterKind::Query(_))
-                        | ("limit", OperationParameterKind::Query(_))
+                    ("page_token", OperationParameterKind::Query(false))
+                        | ("limit", OperationParameterKind::Query(false))
                 )
             })
             .count()
@@ -976,6 +1013,17 @@ impl Generator {
             OperationParameterKind::Query(required) => !required,
             _ => true,
         }) {
+            return None;
+        }
+
+        // A raw body parameter can only be passed to a single call as it may
+        // be a streaming type. We can't use a streaming type for a paginated
+        // interface because we can only stream it once rather than for the
+        // multiple calls required to collect all pages.
+        if parameters
+            .iter()
+            .any(|param| param.typ == OperationParameterType::RawBody)
+        {
             return None;
         }
 
@@ -1006,7 +1054,7 @@ impl Generator {
             _ => return None,
         };
 
-        let properties = details.properties().collect::<HashMap<_, _>>();
+        let properties = details.properties().collect::<BTreeMap<_, _>>();
 
         // There should be exactly two properties: items and next_page
         if properties.len() != 2 {
@@ -1022,7 +1070,7 @@ impl Generator {
         {
             if !matches!(
                 self.type_space.get_type(opt_id).ok()?.details(),
-                typify::TypeDetails::Builtin("String")
+                typify::TypeDetails::String
             ) {
                 return None;
             }
@@ -1041,6 +1089,571 @@ impl Generator {
             }
             _ => None,
         }
+    }
+
+    /// Create the builder structs along with their impls
+    ///
+    /// Builder structs are generally of this form:
+    /// ```ignore
+    /// struct OperationId<'a> {
+    ///     client: &'a super::Client,
+    ///     param_1: Option<SomeType>,
+    ///     param_2: Option<String>,
+    /// }
+    /// ```
+    ///
+    /// All parameters are present and all their types are Option<T>. Each
+    /// parameter also has a corresponding method:
+    /// ```ignore
+    /// impl<'a> OperationId<'a> {
+    ///     pub fn param_1(self, value: SomeType) {
+    ///         self.param_1 = Some(value);
+    ///         self
+    ///     }
+    ///     pub fn param_2<S: ToString>(self, value: S) {
+    ///         self.param_2 = Some(value.into());
+    ///         self
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// The Client's operation_id method simply invokes the builder's new
+    /// method:
+    /// ```ignore
+    /// impl<'a> OperationId<'a> {
+    ///     pub fn new(client: &'a super::Client) -> Self {
+    ///         Self {
+    ///             client,
+    ///             param_1: None,
+    ///             param_2: None,
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Finally, builders have methods to execute the method, which takes care
+    /// to check that required parameters are specified:
+    /// ```ignore
+    /// impl<'a> OperationId<'a> {
+    ///     pub fn send(self) -> Result<
+    ///         ResponseValue<SuccessType>,
+    ///         Error<ErrorType>,
+    ///     > {
+    ///         let Self {
+    ///             client,
+    ///             param_1,
+    ///             param_2,
+    ///         } = self;
+    ///
+    ///         let (param_1, param_2) = match (param_1, param_2) {
+    ///             (Some(param_1), Some(param_2)) => (param_1, param_2),
+    ///             (param_1, param_2) => {
+    ///                 let mut missing = Vec::new();
+    ///                 if param_1.is_none() {
+    ///                     missing.push(stringify!(param_1));
+    ///                 }
+    ///                 if param_2.is_none() {
+    ///                     missing.push(stringify!(param_2));
+    ///                 }
+    ///                 return Err(super::Error::InvalidRequest(format!(
+    ///                     "the following parameters are required: {}",
+    ///                     missing.join(", "),
+    ///                 )));
+    ///             }
+    ///         };
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// Finally, paginated interfaces have a `stream()` method which uses the
+    /// `send()` method above to fetch each page of results to assemble the
+    /// items into a single impl Stream.
+    pub(crate) fn builder_struct(
+        &mut self,
+        method: &OperationMethod,
+        tag_style: TagStyle,
+    ) -> Result<TokenStream> {
+        let mut cloneable = true;
+        // Generate the builder structure properties, turning each type T into
+        // an Option<T> (if it isn't already).
+        let properties = method
+            .params
+            .iter()
+            .map(|param| {
+                let name = format_ident!("{}", param.name);
+                let typ = match &param.typ {
+                    OperationParameterType::Type(type_id) => {
+                        // TODO currently we explicitly turn optional paramters
+                        // into Option types; we could probably defer this to
+                        // the code generation step to avoid the special
+                        // handling here.
+                        let ty = self.type_space.get_type(type_id)?;
+                        let t = ty.ident();
+                        let details = ty.details();
+                        if let typify::TypeDetails::Option(_) = details {
+                            t
+                        } else {
+                            quote! { Option<#t> }
+                        }
+                    }
+
+                    OperationParameterType::RawBody => {
+                        cloneable = false;
+                        quote! { Option<reqwest::Body> }
+                    }
+                };
+
+                Ok(quote! {
+                    #name: #typ
+                })
+            })
+            .collect::<Result<Vec<_>>>()?;
+
+        let struct_name = sanitize(&method.operation_id, Case::Pascal);
+        let struct_ident = format_ident!("{}", struct_name);
+
+        // For each parameter, we need an impl for the builder to let consumers
+        // provide a value for the parameter.
+        let property_impls = method
+            .params
+            .iter()
+            .map(|param| {
+                let param_name = format_ident!("{}", param.name);
+                match &param.typ {
+                    OperationParameterType::Type(type_id) => {
+                        let ty = self.type_space.get_type(type_id)?;
+                        let x = ty.details();
+                        match &x {
+                            typify::TypeDetails::String => {
+                                Ok(quote! {
+                                    pub fn #param_name<S: ToString>(mut self, value: S) -> Self {
+                                        self.#param_name = Some(value.to_string());
+                                        self
+                                    }
+                                })
+                            }
+                            typify::TypeDetails::Option(ref opt_id) => {
+                                let typ = self.type_space.get_type(opt_id)?.ident();
+                                Ok(quote!{
+                                    pub fn #param_name(mut self, value: #typ) -> Self {
+                                        self.#param_name = Some(value);
+                                        self
+                                    }
+                                })
+                            }
+                            _ =>  {
+                                let typ = ty.ident();
+                                Ok(quote! {
+                                    pub fn #param_name(mut self, value: #typ) -> Self {
+                                        self.#param_name = Some(value);
+                                        self
+                                    }
+                                })
+                            }
+                        }
+                    }
+
+                    OperationParameterType::RawBody => {
+                        Ok(quote! {
+                            pub fn #param_name<B: Into<reqwest::Body>>(mut self, value: B) -> Self {
+                                self.#param_name = Some(value.into());
+                                self
+                            }
+                        })
+                    }
+                }
+            })
+            .collect::<Result<Vec<_>>>()?;
+
+        let destructure = method
+            .params
+            .iter()
+            .map(|param| format_ident!("{}", param.name))
+            .collect::<Vec<_>>();
+
+        let req_names = method
+            .params
+            .iter()
+            .filter_map(|param| match param.kind {
+                OperationParameterKind::Path
+                | OperationParameterKind::Query(true)
+                | OperationParameterKind::Body => {
+                    Some(format_ident!("{}", param.name))
+                }
+                OperationParameterKind::Query(false) => None,
+            })
+            .collect::<Vec<_>>();
+
+        let required_extract = (!req_names.is_empty()).then(|| {
+            quote! {
+                let ( #( #req_names, )* ) = match ( #( #req_names, )* ) {
+                    ( #( Some(#req_names), )* ) => ( #( #req_names, )* ),
+                    ( #( #req_names, )* ) => {
+                        let mut missing = Vec::new();
+
+                        #(
+                        if #req_names.is_none() {
+                            missing.push(stringify!(#req_names));
+                        }
+                        )*
+
+                        return Err(super::Error::InvalidRequest(format!(
+                            "the following parameters are required: {}",
+                            missing.join(", "),
+                        )));
+                    }
+                };
+            }
+        });
+
+        let param_props = method
+            .params
+            .iter()
+            .map(|param| {
+                let name = format_ident!("{}", param.name);
+                quote! {
+                    #name: None
+                }
+            })
+            .collect::<Vec<_>>();
+
+        let new_impl = quote! {
+            pub fn new(client: &'a super::Client) -> Self {
+                Self {
+                    client,
+                    #(#param_props,)*
+                }
+            }
+        };
+
+        let MethodSigBody {
+            success,
+            error,
+            body,
+        } = self.method_sig_body(method, quote! { client})?;
+
+        let send_doc = format!(
+            "Sends a `{}` request to `{}`",
+            method.method.as_str().to_ascii_uppercase(),
+            method.path.to_string(),
+        );
+
+        let send_impl = quote! {
+            #[doc = #send_doc]
+            pub async fn send(self) -> Result<
+                ResponseValue<#success>,
+                Error<#error>,
+            > {
+                // Destructure the builder for convenience.
+                let Self {
+                    client,
+                    #( #destructure ),*
+                } = self;
+
+                // Extract parameters into variables, returning an error if
+                // a value has not been provided for all required parameters.
+                #required_extract
+
+                // Do the work.
+                #body
+            }
+        };
+
+        let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
+            // We're now using futures.
+            self.uses_futures = true;
+
+            let step_params = method.params.iter().filter_map(|param| {
+                if let OperationParameterKind::Query(_) = param.kind {
+                    let name = format_ident!("{}", param.name);
+                    Some(quote! {
+                        #name: None
+                    })
+                } else {
+                    None
+                }
+            });
+
+            // The item type that we've saved (by picking apart the original
+            // function's return type) will be the Item type parameter for the
+            // Stream impl we return.
+            let item = self.type_space.get_type(&page_data.item).unwrap();
+            let item_type = item.ident();
+
+            let stream_doc = format!(
+                "Streams `{}` requests to `{}`",
+                method.method.as_str().to_ascii_uppercase(),
+                method.path.to_string(),
+            );
+
+            quote! {
+                #[doc = #stream_doc]
+                pub fn stream(self) -> impl futures::Stream<Item = Result<
+                    #item_type,
+                    Error<#error>,
+                >> + Unpin + 'a {
+                    use futures::StreamExt;
+                    use futures::TryFutureExt;
+                    use futures::TryStreamExt;
+
+                    // This is the builder template we'll use for iterative
+                    // steps past the first; it has all query params set to
+                    // None (the step will fill in page_token).
+                    let next = Self {
+                        #( #step_params, )*
+                        ..self.clone()
+                    };
+
+                    self.send()
+                        .map_ok(move |page| {
+                            let page = page.into_inner();
+
+                            // Create a stream from the items of the first page.
+                            let first = futures::stream::iter(
+                                page.items.into_iter().map(Ok)
+                            );
+
+                            // We unfold subsequent pages using page.next_page
+                            // as the seed value. Each iteration returns its
+                            // items and the new state which is a tuple of the
+                            // next page token and the Self template.
+                            let rest = futures::stream::try_unfold(
+                                (page.next_page, next),
+                                |(next_page, next)| async {
+                                    if next_page.is_none() {
+                                        // The page_token was None so we've
+                                        // reached the end.
+                                        Ok(None)
+                                    } else {
+                                        // Get the next page using the next
+                                        // template (with query parameters set
+                                        // to None), overriding page_token.
+                                        Self {
+                                            page_token: next_page,
+                                            ..next.clone()
+                                        }
+                                        .send()
+                                        .map_ok(|page| {
+                                            let page = page.into_inner();
+                                            Some((
+                                                futures::stream::iter(
+                                                    page
+                                                        .items
+                                                        .into_iter()
+                                                        .map(Ok),
+                                                ),
+                                                (page.next_page, next),
+                                            ))
+                                        })
+                                        .await
+                                    }
+                                },
+                            )
+                            .try_flatten();
+
+                            first.chain(rest)
+                        })
+                        .try_flatten_stream()
+                        .boxed()
+                }
+            }
+        });
+
+        let maybe_clone = cloneable.then(|| quote! { #[derive(Clone)] });
+
+        // Build a reasonable doc comment depending on whether this struct is
+        // the output from
+        // 1. A Client method
+        // 2. An extension trait method
+        // 3. Several extension trait methods
+        let struct_doc =
+            match (tag_style, method.tags.len(), method.tags.first()) {
+                (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
+                    let ty = format!("Client::{}", method.operation_id);
+                    format!(
+                        "Builder for [`{}`]\n\n[`{}`]: super::{}",
+                        ty, ty, ty,
+                    )
+                }
+                (TagStyle::Separate, 1, Some(tag)) => {
+                    let ty = format!(
+                        "Client{}Ext::{}",
+                        sanitize(tag, Case::Pascal),
+                        method.operation_id
+                    );
+                    format!(
+                        "Builder for [`{}`]\n\n[`{}`]: super::{}",
+                        ty, ty, ty,
+                    )
+                }
+                (TagStyle::Separate, _, _) => {
+                    format!(
+                        "Builder for `{}` operation\n\nSee {}\n\n{}",
+                        method.operation_id,
+                        method
+                            .tags
+                            .iter()
+                            .map(|tag| {
+                                format!(
+                                    "[`Client{}Ext::{}`]",
+                                    sanitize(tag, Case::Pascal),
+                                    method.operation_id,
+                                )
+                            })
+                            .collect::<Vec<_>>()
+                            .join(", "),
+                        method
+                            .tags
+                            .iter()
+                            .map(|tag| {
+                                let ty = format!(
+                                    "Client{}Ext::{}",
+                                    sanitize(tag, Case::Pascal),
+                                    method.operation_id,
+                                );
+                                format!("[`{}`]: super::{}", ty, ty)
+                            })
+                            .collect::<Vec<_>>()
+                            .join("\n"),
+                    )
+                }
+            };
+
+        let ret = quote! {
+            #[doc = #struct_doc]
+            #maybe_clone
+            pub struct #struct_ident<'a> {
+                client: &'a super::Client,
+                #( #properties ),*
+            }
+
+            impl<'a> #struct_ident<'a> {
+                #new_impl
+                #( #property_impls )*
+                #send_impl
+                #stream_impl
+            }
+        };
+        Ok(ret)
+    }
+
+    fn builder_helper(&self, method: &OperationMethod) -> BuilderImpl {
+        let operation_id = format_ident!("{}", method.operation_id);
+        let struct_name = sanitize(&method.operation_id, Case::Pascal);
+        let struct_ident = format_ident!("{}", struct_name);
+
+        let params = method
+            .params
+            .iter()
+            .map(|param| format!("\n    .{}({})", param.name, param.name))
+            .collect::<Vec<_>>()
+            .join("");
+
+        let eg = format!(
+            "\
+            let response = client.{}(){}
+    .send()
+    .await;",
+            method.operation_id, params,
+        );
+
+        // Note that it would be nice to have a non-ignored example that could
+        // be validated by doc tests, but in order to use the Client we need
+        // to import it, and in order to import it we need to know the name of
+        // the containing crate... which we can't from this context.
+        let doc =
+            format!("{}\n```ignore\n{}\n```", make_doc_comment(method), eg);
+
+        let sig = quote! {
+            fn #operation_id(&self) -> builder:: #struct_ident
+        };
+
+        let body = quote! {
+            builder:: #struct_ident ::new(self)
+        };
+        BuilderImpl { doc, sig, body }
+    }
+
+    pub(crate) fn builder_tags(
+        &self,
+        methods: &[OperationMethod],
+    ) -> TokenStream {
+        let mut base = Vec::new();
+        let mut ext = BTreeMap::new();
+
+        methods.iter().for_each(|method| {
+            let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+
+            if method.tags.is_empty() {
+                let impl_body = quote! {
+                    #[doc = #doc]
+                    pub #sig {
+                        #body
+                    }
+                };
+                base.push(impl_body);
+            } else {
+                let trait_sig = quote! {
+                    #[doc = #doc]
+                    #sig;
+                };
+
+                let impl_body = quote! {
+                    #sig {
+                        #body
+                    }
+                };
+                method.tags.iter().for_each(|tag| {
+                    ext.entry(tag.clone())
+                        .or_insert_with(Vec::new)
+                        .push((trait_sig.clone(), impl_body.clone()));
+                });
+            }
+        });
+
+        let base_impl = (!base.is_empty()).then(|| {
+            quote! {
+                impl Client {
+                    #(#base)*
+                }
+            }
+        });
+
+        let ext_impl = ext.into_iter().map(|(tag, trait_methods)| {
+            let tr = format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));
+            let (trait_methods, trait_impls): (
+                Vec<TokenStream>,
+                Vec<TokenStream>,
+            ) = trait_methods.into_iter().unzip();
+            quote! {
+                pub trait #tr {
+                    #(#trait_methods)*
+                }
+
+                impl #tr for Client {
+                    #(#trait_impls)*
+                }
+            }
+        });
+
+        quote! {
+            #base_impl
+
+            #(#ext_impl)*
+        }
+    }
+
+    pub(crate) fn builder_impl(&self, method: &OperationMethod) -> TokenStream {
+        let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+
+        let impl_body = quote! {
+            #[doc = #doc]
+            pub #sig {
+                #body
+            }
+        };
+
+        impl_body
     }
 }
 
