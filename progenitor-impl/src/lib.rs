@@ -131,6 +131,10 @@ impl Generator {
 
         self.type_space.set_type_mod("types");
         self.type_space.add_ref_types(schemas)?;
+        self.settings
+            .extra_derives
+            .iter()
+            .for_each(|derive| self.type_space.add_derive(derive.clone()));
 
         let raw_methods = spec
             .paths

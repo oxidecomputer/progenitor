@@ -14,3 +14,7 @@ members = [
 #[patch.crates-io]
 #typify = { path = "../typify/typify" }
 #rustfmt-wrapper = { path = "../rustfmt-wrapper" }
+
+# Latest typify (this can be deleted when typify is updated)
+[patch.crates-io]
+typify = { git = "https://github.com/oxidecomputer/typify" }

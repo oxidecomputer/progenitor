@@ -708,7 +708,7 @@ pub mod types {
         ///The Instance to which the interface belongs.
         pub instance_id: uuid::Uuid,
         ///The IP address assigned to this interface.
-        pub ip: String,
+        pub ip: std::net::IpAddr,
         ///The MAC address assigned to this interface.
         pub mac: MacAddr,
         ///unique, mutable, user-controlled identifier for each resource
@@ -731,7 +731,7 @@ pub mod types {
         ///The IP address for the interface. One will be auto-assigned if not
         /// provided.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub ip: Option<String>,
+        pub ip: Option<std::net::IpAddr>,
         pub name: Name,
         ///The VPC Subnet in which to create the interface.
         pub subnet_name: Name,
@@ -986,7 +986,7 @@ pub mod types {
     pub enum RouteDestination {
         ///Route applies to traffic destined for a specific IP address
         #[serde(rename = "ip")]
-        Ip(String),
+        Ip(std::net::IpAddr),
         ///Route applies to traffic destined for a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
@@ -1005,7 +1005,7 @@ pub mod types {
     pub enum RouteTarget {
         ///Forward traffic to a particular IP address.
         #[serde(rename = "ip")]
-        Ip(String),
+        Ip(std::net::IpAddr),
         ///Forward traffic to a VPC
         #[serde(rename = "vpc")]
         Vpc(Name),
@@ -1529,7 +1529,7 @@ pub mod types {
         Instance(Name),
         ///The rule applies to traffic from/to a specific IP address
         #[serde(rename = "ip")]
-        Ip(String),
+        Ip(std::net::IpAddr),
         ///The rule applies to traffic from/to a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
@@ -1589,7 +1589,7 @@ pub mod types {
         Instance(Name),
         ///The rule applies to a specific IP address
         #[serde(rename = "ip")]
-        Ip(String),
+        Ip(std::net::IpAddr),
         ///The rule applies to a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),

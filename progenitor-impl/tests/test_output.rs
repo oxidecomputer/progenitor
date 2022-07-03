@@ -24,7 +24,8 @@ fn verify_apis(openapi_file: &str) {
     let mut generator = Generator::new(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
-            .with_tag(TagStyle::Merged),
+            .with_tag(TagStyle::Merged)
+            .with_derive(quote::quote! {JsonSchema}),
     );
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
