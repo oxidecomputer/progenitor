@@ -1876,9 +1876,13 @@ impl ExtractJsonMediaType for openapiv3::RequestBody {
 
         if let Some(mt) = self.content.get("application/json") {
             Ok(mt.clone())
+        } else if let Some(mt) =
+            self.content.get("application/x-www-form-urlencoded")
+        {
+            Ok(mt.clone())
         } else {
             todo!(
-                "could not find application/json, only found {}",
+                "could not find application/json or application/x-www-form-urlencoded, only found {}",
                 self.content.keys().next().unwrap()
             );
         }
