@@ -337,20 +337,11 @@ impl Generator {
                 }
             })
             .collect::<Result<Vec<_>>>()?;
-        if let Some(b) = &operation.request_body {
-            let b = b.item(components)?;
 
-            // TODO fix this, unwrap
-            let (typ, content) = self.foobad(operation, components)?.unwrap();
-
-            params.push(OperationParameter {
-                name: "body".to_string(),
-                api_name: "body".to_string(),
-                description: b.description.clone(),
-                typ,
-                kind: OperationParameterKind::Body(content),
-            });
+        if let Some(body_param) = self.get_body_param(operation, components)? {
+            params.push(body_param);
         }
+
         let tmp = crate::template::parse(path)?;
         let names = tmp.names();
 
@@ -728,7 +719,7 @@ impl Generator {
             .collect();
         let url_path = method.path.compile(url_renames, client.clone());
 
-        // Generate code to handle the body...
+        // Generate code to handle the body param.
         let body_func = method.params.iter().filter_map(|param| {
             match (&param.kind, &param.typ) {
                 (
@@ -1685,11 +1676,11 @@ impl Generator {
         impl_body
     }
 
-    fn foobad(
+    fn get_body_param(
         &mut self,
         operation: &openapiv3::Operation,
         components: &Option<Components>,
-    ) -> Result<Option<(OperationParameterType, BodyContentType)>> {
+    ) -> Result<Option<OperationParameter>> {
         let body = match &operation.request_body {
             Some(body) => body.item(components)?,
             None => return Ok(None),
@@ -1742,7 +1733,10 @@ impl Generator {
                                 },
                             )),
                     } if enumeration.is_empty() => Ok(()),
-                    _ => Err(Error::UnexpectedFormat(format!("invalid schema for application/octet-stream content type: {:?}", schema))),
+                    _ => Err(Error::UnexpectedFormat(format!(
+                        "invalid schema for application/octet-stream: {:?}",
+                        schema
+                    ))),
                 }?;
                 OperationParameterType::RawBody
             }
@@ -1767,7 +1761,13 @@ impl Generator {
             }
         };
 
-        Ok(Some((typ, content_type)))
+        Ok(Some(OperationParameter {
+            name: "body".to_string(),
+            api_name: "body".to_string(),
+            description: body.description.clone(),
+            typ,
+            kind: OperationParameterKind::Body(content_type),
+        }))
     }
 }
 
