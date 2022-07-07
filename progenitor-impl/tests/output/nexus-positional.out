@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::encode_path;
+use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
@@ -79,6 +79,31 @@ pub mod types {
     }
 
     #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct DerEncodedKeyPair {
+        ///request signing private key (base64 encoded der file)
+        pub private_key: String,
+        ///request signing public certificate (base64 encoded der file)
+        pub public_cert: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct DeviceAccessTokenRequest {
+        pub client_id: uuid::Uuid,
+        pub device_code: String,
+        pub grant_type: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct DeviceAuthRequest {
+        pub client_id: uuid::Uuid,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct DeviceAuthVerify {
+        pub user_code: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Digest {
         #[serde(rename = "type")]
         pub type_: DigestType,
@@ -99,7 +124,7 @@ pub mod types {
         }
     }
 
-    ///Client view of an [`Disk`]
+    ///Client view of a [`Disk`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Disk {
         pub block_size: ByteCount,
@@ -197,6 +222,15 @@ pub mod types {
         Faulted,
     }
 
+    ///OS image distribution
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Distribution {
+        ///The name of the distribution (e.g. "alpine" or "ubuntu")
+        pub name: Name,
+        ///The version of the distribution (e.g. "3.10" or "18.04")
+        pub version: String,
+    }
+
     ///Error information from a response.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Error {
@@ -260,7 +294,7 @@ pub mod types {
     }
 
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
-    pub enum FleetRoles {
+    pub enum FleetRole {
         #[serde(rename = "admin")]
         Admin,
         #[serde(rename = "collaborator")]
@@ -269,12 +303,12 @@ pub mod types {
         Viewer,
     }
 
-    impl ToString for FleetRoles {
+    impl ToString for FleetRole {
         fn to_string(&self) -> String {
             match *self {
-                FleetRoles::Admin => "admin".to_string(),
-                FleetRoles::Collaborator => "collaborator".to_string(),
-                FleetRoles::Viewer => "viewer".to_string(),
+                FleetRole::Admin => "admin".to_string(),
+                FleetRole::Collaborator => "collaborator".to_string(),
+                FleetRole::Viewer => "viewer".to_string(),
             }
         }
     }
@@ -286,9 +320,9 @@ pub mod types {
     /// resource.  The policies of parent resources can also cause a user to
     /// have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct FleetRolesPolicy {
+    pub struct FleetRolePolicy {
         ///Roles directly assigned on this resource
-        pub role_assignments: Vec<FleetRolesRoleAssignment>,
+        pub role_assignments: Vec<FleetRoleRoleAssignment>,
     }
 
     ///Describes the assignment of a particular role on a particular resource
@@ -298,10 +332,10 @@ pub mod types {
     /// are put into a [`Policy`] and that Policy is applied to a particular
     /// resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct FleetRolesRoleAssignment {
+    pub struct FleetRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
-        pub role_name: FleetRoles,
+        pub role_name: FleetRole,
     }
 
     ///Client view of global Images
@@ -314,6 +348,8 @@ pub mod types {
         ///Hash of the image contents, if applicable
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub digest: Option<Digest>,
+        ///Image distribution
+        pub distribution: String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -327,9 +363,22 @@ pub mod types {
         ///URL source of this image, if any
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub url: Option<String>,
-        ///Version of this, if any
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub version: Option<String>,
+        ///Image version
+        pub version: String,
+    }
+
+    ///Create-time parameters for an
+    /// [`GlobalImage`](omicron_common::api::external::GlobalImage)
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct GlobalImageCreate {
+        ///block size in bytes
+        pub block_size: BlockSize,
+        pub description: String,
+        ///OS image distribution
+        pub distribution: Distribution,
+        pub name: Name,
+        ///The source of the image's contents.
+        pub source: ImageSource,
     }
 
     ///A single page of results
@@ -359,6 +408,47 @@ pub mod types {
         }
     }
 
+    ///Client view of an [`IdentityProvider`]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct IdentityProvider {
+        ///human-readable free-form text about a resource
+        pub description: String,
+        ///unique, immutable, system-controlled identifier for each resource
+        pub id: uuid::Uuid,
+        ///unique, mutable, user-controlled identifier for each resource
+        pub name: Name,
+        ///Identity provider type
+        pub provider_type: IdentityProviderType,
+        ///timestamp when this resource was created
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        ///timestamp when this resource was last modified
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    ///A single page of results
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct IdentityProviderResultsPage {
+        ///list of items on this page of results
+        pub items: Vec<IdentityProvider>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum IdentityProviderType {
+        #[serde(rename = "saml")]
+        Saml,
+    }
+
+    impl ToString for IdentityProviderType {
+        fn to_string(&self) -> String {
+            match *self {
+                IdentityProviderType::Saml => "saml".to_string(),
+            }
+        }
+    }
+
     ///Describes what kind of identity is described by an id
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub enum IdentityType {
@@ -372,6 +462,15 @@ pub mod types {
                 IdentityType::SiloUser => "silo_user".to_string(),
             }
         }
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[serde(tag = "type")]
+    pub enum IdpMetadataSource {
+        #[serde(rename = "url")]
+        Url { url: String },
+        #[serde(rename = "base64_encoded_xml")]
+        Base64EncodedXml { data: String },
     }
 
     ///Client view of project Images
@@ -428,12 +527,14 @@ pub mod types {
 
     ///The source of the underlying image.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    #[serde(tag = "type", content = "src")]
+    #[serde(tag = "type")]
     pub enum ImageSource {
         #[serde(rename = "url")]
-        Url(String),
+        Url { url: String },
         #[serde(rename = "snapshot")]
-        Snapshot(uuid::Uuid),
+        Snapshot { id: uuid::Uuid },
+        #[serde(rename = "you_can_boot_anything_as_long_as_its_alpine")]
+        YouCanBootAnythingAsLongAsItsAlpine,
     }
 
     ///Client view of an [`Instance`]
@@ -523,7 +624,7 @@ pub mod types {
     /// [`Instance`](omicron_common::api::external::Instance)
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct InstanceMigrate {
-        pub dst_sled_uuid: uuid::Uuid,
+        pub dst_sled_id: uuid::Uuid,
     }
 
     ///Describes an attachment of a `NetworkInterface` to an `Instance`, at the
@@ -531,7 +632,10 @@ pub mod types {
     #[derive(Serialize, Deserialize, Debug, Clone)]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
-        ///Create one or more `NetworkInterface`s for the `Instance`
+        ///Create one or more `NetworkInterface`s for the `Instance`.
+        ///
+        ///If more than one interface is provided, then the first will be
+        /// designated the primary interface for the instance.
         #[serde(rename = "create")]
         Create(Vec<NetworkInterfaceCreate>),
         #[serde(rename = "default")]
@@ -548,6 +652,18 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    ///Contents of an Instance's serial console buffer.
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct InstanceSerialConsoleData {
+        ///The bytes starting from the requested offset up to either the end of
+        /// the buffer or the request's `max_bytes`. Provided as a u8 array
+        /// rather than a string, as it may not be UTF-8.
+        pub data: Vec<u8>,
+        ///The absolute offset since boot (suitable for use as `byte_offset` in
+        /// a subsequent request) of the last byte returned in `data`.
+        pub last_byte_offset: u64,
     }
 
     ///Running state of an Instance (primarily: booted or stopped)
@@ -602,6 +718,74 @@ pub mod types {
         V6(Ipv6Net),
     }
 
+    ///Identity-related metadata that's included in nearly all public API
+    /// objects
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct IpPool {
+        ///human-readable free-form text about a resource
+        pub description: String,
+        ///unique, immutable, system-controlled identifier for each resource
+        pub id: uuid::Uuid,
+        ///unique, mutable, user-controlled identifier for each resource
+        pub name: Name,
+        ///timestamp when this resource was created
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        ///timestamp when this resource was last modified
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    ///Create-time parameters for an IP Pool.
+    ///
+    ///See [`IpPool`](omicron_nexus::external_api::views::IpPool)
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct IpPoolCreate {
+        pub description: String,
+        pub name: Name,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct IpPoolRange {
+        pub id: uuid::Uuid,
+        pub range: IpRange,
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    ///A single page of results
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct IpPoolRangeResultsPage {
+        ///list of items on this page of results
+        pub items: Vec<IpPoolRange>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    ///A single page of results
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct IpPoolResultsPage {
+        ///list of items on this page of results
+        pub items: Vec<IpPool>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    ///Parameters for updating an IP Pool
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct IpPoolUpdate {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub description: Option<String>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub name: Option<Name>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[serde(untagged)]
+    pub enum IpRange {
+        V4(Ipv4Range),
+        V6(Ipv6Range),
+    }
+
     ///An IPv4 subnet, including prefix and subnet mask
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Ipv4Net(pub String);
@@ -610,6 +794,15 @@ pub mod types {
         fn deref(&self) -> &Self::Target {
             &self.0
         }
+    }
+
+    ///A non-decreasing IPv4 address range, inclusive of both ends.
+    ///
+    ///The first address must be less than or equal to the last address.
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Ipv4Range {
+        pub first: std::net::Ipv4Addr,
+        pub last: std::net::Ipv4Addr,
     }
 
     ///An IPv6 subnet, including prefix and subnet mask
@@ -622,6 +815,15 @@ pub mod types {
         }
     }
 
+    ///A non-decreasing IPv6 address range, inclusive of both ends.
+    ///
+    ///The first address must be less than or equal to the last address.
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Ipv6Range {
+        pub first: std::net::Ipv6Addr,
+        pub last: std::net::Ipv6Addr,
+    }
+
     ///An inclusive-inclusive range of IP ports. The second port may be omitted
     /// to represent a single port
     #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -631,11 +833,6 @@ pub mod types {
         fn deref(&self) -> &Self::Target {
             &self.0
         }
-    }
-
-    #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct LoginParams {
-        pub username: String,
     }
 
     ///A Media Access Control address, in EUI-48 format
@@ -713,6 +910,9 @@ pub mod types {
         pub mac: MacAddr,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
+        ///True if this interface is the primary for the instance to which it's
+        /// attached.
+        pub primary: bool,
         ///The subnet to which the interface belongs.
         pub subnet_id: uuid::Uuid,
         ///timestamp when this resource was created
@@ -749,6 +949,41 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    ///Parameters for updating a
+    /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface).
+    ///
+    ///Note that modifying IP addresses for an interface is not yet supported,
+    /// a new interface must be created instead.
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct NetworkInterfaceUpdate {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub description: Option<String>,
+        ///Make a secondary interface the instance's primary interface.
+        ///
+        ///If applied to a secondary interface, that interface will become the
+        /// primary on the next reboot of the instance. Note that this may have
+        /// implications for routing between instances, as the new primary
+        /// interface will be on a distinct subnet from the previous primary
+        /// interface.
+        ///
+        ///Note that this can only be used to select a new primary interface
+        /// for an instance. Requests to change the primary interface into a
+        /// secondary will return an error.
+        #[serde(default)]
+        pub make_primary: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub name: Option<Name>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum Null {}
+
+    impl ToString for Null {
+        fn to_string(&self) -> String {
+            match *self {}
+        }
+    }
+
     ///Client view of an [`Organization`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Organization {
@@ -783,18 +1018,21 @@ pub mod types {
     }
 
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
-    pub enum OrganizationRoles {
+    pub enum OrganizationRole {
         #[serde(rename = "admin")]
         Admin,
         #[serde(rename = "collaborator")]
         Collaborator,
+        #[serde(rename = "viewer")]
+        Viewer,
     }
 
-    impl ToString for OrganizationRoles {
+    impl ToString for OrganizationRole {
         fn to_string(&self) -> String {
             match *self {
-                OrganizationRoles::Admin => "admin".to_string(),
-                OrganizationRoles::Collaborator => "collaborator".to_string(),
+                OrganizationRole::Admin => "admin".to_string(),
+                OrganizationRole::Collaborator => "collaborator".to_string(),
+                OrganizationRole::Viewer => "viewer".to_string(),
             }
         }
     }
@@ -806,9 +1044,9 @@ pub mod types {
     /// resource.  The policies of parent resources can also cause a user to
     /// have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct OrganizationRolesPolicy {
+    pub struct OrganizationRolePolicy {
         ///Roles directly assigned on this resource
-        pub role_assignments: Vec<OrganizationRolesRoleAssignment>,
+        pub role_assignments: Vec<OrganizationRoleRoleAssignment>,
     }
 
     ///Describes the assignment of a particular role on a particular resource
@@ -818,10 +1056,10 @@ pub mod types {
     /// are put into a [`Policy`] and that Policy is applied to a particular
     /// resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct OrganizationRolesRoleAssignment {
+    pub struct OrganizationRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
-        pub role_name: OrganizationRoles,
+        pub role_name: OrganizationRole,
     }
 
     ///Updateable properties of an
@@ -869,7 +1107,7 @@ pub mod types {
     }
 
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
-    pub enum ProjectRoles {
+    pub enum ProjectRole {
         #[serde(rename = "admin")]
         Admin,
         #[serde(rename = "collaborator")]
@@ -878,12 +1116,12 @@ pub mod types {
         Viewer,
     }
 
-    impl ToString for ProjectRoles {
+    impl ToString for ProjectRole {
         fn to_string(&self) -> String {
             match *self {
-                ProjectRoles::Admin => "admin".to_string(),
-                ProjectRoles::Collaborator => "collaborator".to_string(),
-                ProjectRoles::Viewer => "viewer".to_string(),
+                ProjectRole::Admin => "admin".to_string(),
+                ProjectRole::Collaborator => "collaborator".to_string(),
+                ProjectRole::Viewer => "viewer".to_string(),
             }
         }
     }
@@ -895,9 +1133,9 @@ pub mod types {
     /// resource.  The policies of parent resources can also cause a user to
     /// have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct ProjectRolesPolicy {
+    pub struct ProjectRolePolicy {
         ///Roles directly assigned on this resource
-        pub role_assignments: Vec<ProjectRolesRoleAssignment>,
+        pub role_assignments: Vec<ProjectRoleRoleAssignment>,
     }
 
     ///Describes the assignment of a particular role on a particular resource
@@ -907,10 +1145,10 @@ pub mod types {
     /// are put into a [`Policy`] and that Policy is applied to a particular
     /// resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct ProjectRolesRoleAssignment {
+    pub struct ProjectRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
-        pub role_name: ProjectRoles,
+        pub role_name: ProjectRole,
     }
 
     ///Updateable properties of a
@@ -926,12 +1164,8 @@ pub mod types {
     ///Client view of an [`Rack`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Rack {
-        ///human-readable free-form text about a resource
-        pub description: String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        ///unique, mutable, user-controlled identifier for each resource
-        pub name: Name,
         ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
@@ -1145,6 +1379,58 @@ pub mod types {
         },
     }
 
+    ///Identity-related metadata that's included in nearly all public API
+    /// objects
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SamlIdentityProvider {
+        ///service provider endpoint where the response will be sent
+        pub acs_url: String,
+        ///human-readable free-form text about a resource
+        pub description: String,
+        ///unique, immutable, system-controlled identifier for each resource
+        pub id: uuid::Uuid,
+        ///idp's entity id
+        pub idp_entity_id: String,
+        ///unique, mutable, user-controlled identifier for each resource
+        pub name: Name,
+        ///optional request signing public certificate (base64 encoded der
+        /// file)
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub public_cert: Option<String>,
+        ///service provider endpoint where the idp should send log out requests
+        pub slo_url: String,
+        ///sp's client id
+        pub sp_client_id: String,
+        ///customer's technical contact for saml configuration
+        pub technical_contact_email: String,
+        ///timestamp when this resource was created
+        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        ///timestamp when this resource was last modified
+        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    ///Create-time identity-related parameters
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SamlIdentityProviderCreate {
+        ///service provider endpoint where the response will be sent
+        pub acs_url: String,
+        pub description: String,
+        ///idp's entity id
+        pub idp_entity_id: String,
+        ///the source of an identity provider metadata descriptor
+        pub idp_metadata_source: IdpMetadataSource,
+        pub name: Name,
+        ///optional request signing key pair
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub signing_keypair: Option<DerEncodedKeyPair>,
+        ///service provider endpoint where the idp should send log out requests
+        pub slo_url: String,
+        ///sp's client id
+        pub sp_client_id: String,
+        ///customer's technical contact for saml configuration
+        pub technical_contact_email: String,
+    }
+
     ///Client view of currently authed user.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct SessionUser {
@@ -1167,6 +1453,8 @@ pub mod types {
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        ///User provision type
+        pub user_provision_type: UserProvisionType,
     }
 
     ///Create-time parameters for a [`Silo`](crate::external_api::views::Silo)
@@ -1175,6 +1463,7 @@ pub mod types {
         pub description: String,
         pub discoverable: bool,
         pub name: Name,
+        pub user_provision_type: UserProvisionType,
     }
 
     ///A single page of results
@@ -1188,7 +1477,7 @@ pub mod types {
     }
 
     #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
-    pub enum SiloRoles {
+    pub enum SiloRole {
         #[serde(rename = "admin")]
         Admin,
         #[serde(rename = "collaborator")]
@@ -1197,12 +1486,12 @@ pub mod types {
         Viewer,
     }
 
-    impl ToString for SiloRoles {
+    impl ToString for SiloRole {
         fn to_string(&self) -> String {
             match *self {
-                SiloRoles::Admin => "admin".to_string(),
-                SiloRoles::Collaborator => "collaborator".to_string(),
-                SiloRoles::Viewer => "viewer".to_string(),
+                SiloRole::Admin => "admin".to_string(),
+                SiloRole::Collaborator => "collaborator".to_string(),
+                SiloRole::Viewer => "viewer".to_string(),
             }
         }
     }
@@ -1214,9 +1503,9 @@ pub mod types {
     /// resource.  The policies of parent resources can also cause a user to
     /// have access to this resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct SiloRolesPolicy {
+    pub struct SiloRolePolicy {
         ///Roles directly assigned on this resource
-        pub role_assignments: Vec<SiloRolesRoleAssignment>,
+        pub role_assignments: Vec<SiloRoleRoleAssignment>,
     }
 
     ///Describes the assignment of a particular role on a particular resource
@@ -1226,21 +1515,17 @@ pub mod types {
     /// are put into a [`Policy`] and that Policy is applied to a particular
     /// resource.
     #[derive(Serialize, Deserialize, Debug, Clone)]
-    pub struct SiloRolesRoleAssignment {
+    pub struct SiloRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
-        pub role_name: SiloRoles,
+        pub role_name: SiloRole,
     }
 
     ///Client view of an [`Sled`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Sled {
-        ///human-readable free-form text about a resource
-        pub description: String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        ///unique, mutable, user-controlled identifier for each resource
-        pub name: Name,
         pub service_address: String,
         ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
@@ -1294,6 +1579,11 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct SpoofLoginBody {
+        pub username: String,
     }
 
     ///Client view of a [`SshKey`]
@@ -1372,6 +1662,14 @@ pub mod types {
     ///Client view of a [`User`]
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct User {
+        ///Human-readable name that can identify the user
+        pub display_name: String,
+        pub id: uuid::Uuid,
+    }
+
+    ///Client view of a [`UserBuiltin`]
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct UserBuiltin {
         ///human-readable free-form text about a resource
         pub description: String,
         ///unique, immutable, system-controlled identifier for each resource
@@ -1382,6 +1680,34 @@ pub mod types {
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    ///A single page of results
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct UserBuiltinResultsPage {
+        ///list of items on this page of results
+        pub items: Vec<UserBuiltin>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
+    ///How users will be provisioned in a silo during authentication.
+    #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]
+    pub enum UserProvisionType {
+        #[serde(rename = "fixed")]
+        Fixed,
+        #[serde(rename = "jit")]
+        Jit,
+    }
+
+    impl ToString for UserProvisionType {
+        fn to_string(&self) -> String {
+            match *self {
+                UserProvisionType::Fixed => "fixed".to_string(),
+                UserProvisionType::Jit => "jit".to_string(),
+            }
+        }
     }
 
     ///A single page of results
@@ -1814,16 +2140,85 @@ impl Client {
 }
 
 impl Client {
+    ///Start an OAuth 2.0 Device Authorization Grant
+    ///
+    ///This endpoint is designed to be accessed from an *unauthenticated* API
+    /// client. It generates and records a `device_code` and `user_code` which
+    /// must be verified and confirmed prior to a token being granted.
+    ///
+    ///Sends a `POST` request to `/device/auth`
+    pub async fn device_auth_request<'a>(
+        &'a self,
+        body: &'a types::DeviceAuthRequest,
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+        let url = format!("{}/device/auth", self.baseurl,);
+        let request = self.client.post(url).form_urlencoded(&body)?.build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+        }
+    }
+
+    ///Confirm an OAuth 2.0 Device Authorization Grant
+    ///
+    ///This endpoint is designed to be accessed by the user agent (browser),
+    /// not the client requesting the token. So we do not actually return the
+    /// token here; it will be returned in response to the poll on
+    /// `/device/token`.
+    ///
+    ///Sends a `POST` request to `/device/confirm`
+    pub async fn device_auth_confirm<'a>(
+        &'a self,
+        body: &'a types::DeviceAuthVerify,
+    ) -> Result<ResponseValue<Option<types::Null>>, Error<types::Error>> {
+        let url = format!("{}/device/confirm", self.baseurl,);
+        let request = self.client.post(url).json(&body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Request a device access token
+    ///
+    ///This endpoint should be polled by the client until the user code is
+    /// verified and the grant is confirmed.
+    ///
+    ///Sends a `POST` request to `/device/token`
+    pub async fn device_access_token<'a>(
+        &'a self,
+        body: &'a types::DeviceAccessTokenRequest,
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+        let url = format!("{}/device/token", self.baseurl,);
+        let request = self.client.post(url).form_urlencoded(&body)?.build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+        }
+    }
+
     ///List racks in the system
     ///
     ///Sends a `GET` request to `/hardware/racks`
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn hardware_racks_get<'a>(
+    pub async fn rack_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
@@ -1866,7 +2261,7 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn hardware_racks_get_stream<'a>(
+    pub fn rack_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
@@ -1874,7 +2269,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.hardware_racks_get(limit, None, sort_by)
+        self.rack_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -1882,7 +2277,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.hardware_racks_get(None, state.as_deref(), None)
+                        self.rack_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -1906,7 +2301,7 @@ impl Client {
     ///
     ///Arguments:
     /// - `rack_id`: The rack's unique ID.
-    pub async fn hardware_racks_get_rack<'a>(
+    pub async fn rack_view<'a>(
         &'a self,
         rack_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
@@ -1936,10 +2331,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn hardware_sleds_get<'a>(
+    pub async fn sled_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
@@ -1982,7 +2377,7 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn hardware_sleds_get_stream<'a>(
+    pub fn sled_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
@@ -1990,7 +2385,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.hardware_sleds_get(limit, None, sort_by)
+        self.sled_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -1998,7 +2393,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.hardware_sleds_get(None, state.as_deref(), None)
+                        self.sled_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -2022,7 +2417,7 @@ impl Client {
     ///
     ///Arguments:
     /// - `sled_id`: The sled's unique ID.
-    pub async fn hardware_sleds_get_sled<'a>(
+    pub async fn sled_view<'a>(
         &'a self,
         sled_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
@@ -2055,10 +2450,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn images_get<'a>(
+    pub async fn image_global_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
@@ -2104,7 +2499,7 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn images_get_stream<'a>(
+    pub fn image_global_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
@@ -2113,7 +2508,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.images_get(limit, None, sort_by)
+        self.image_global_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -2121,7 +2516,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.images_get(None, state.as_deref(), None)
+                        self.image_global_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -2145,9 +2540,9 @@ impl Client {
     /// base for instances.
     ///
     ///Sends a `POST` request to `/images`
-    pub async fn images_post<'a>(
+    pub async fn image_global_create<'a>(
         &'a self,
-        body: &'a types::ImageCreate,
+        body: &'a types::GlobalImageCreate,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
         let url = format!("{}/images", self.baseurl,);
         let request = self.client.post(url).json(&body).build()?;
@@ -2170,7 +2565,7 @@ impl Client {
     ///Returns the details of a specific global image.
     ///
     ///Sends a `GET` request to `/images/{image_name}`
-    pub async fn images_get_image<'a>(
+    pub async fn image_global_view<'a>(
         &'a self,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
@@ -2201,7 +2596,7 @@ impl Client {
     /// instances can not be created with this image.
     ///
     ///Sends a `DELETE` request to `/images/{image_name}`
-    pub async fn images_delete_image<'a>(
+    pub async fn image_global_delete<'a>(
         &'a self,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
@@ -2225,13 +2620,413 @@ impl Client {
         }
     }
 
+    ///List IP Pools
+    ///
+    ///Sends a `GET` request to `/ip-pools`
+    ///
+    ///Arguments:
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retrieve the
+    ///   subsequent page
+    /// - `sort_by`
+    pub async fn ip_pool_list<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameOrIdSortMode>,
+    ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
+        let url = format!("{}/ip-pools", self.baseurl,);
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///List IP Pools as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/ip-pools` until there are no more
+    /// results.
+    ///
+    ///Arguments:
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `sort_by`
+    pub fn ip_pool_list_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameOrIdSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::IpPool, Error<types::Error>>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.ip_pool_list(limit, None, sort_by)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.ip_pool_list(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    ///Create a new IP Pool
+    ///
+    ///Sends a `POST` request to `/ip-pools`
+    pub async fn ip_pool_create<'a>(
+        &'a self,
+        body: &'a types::IpPoolCreate,
+    ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+        let url = format!("{}/ip-pools", self.baseurl,);
+        let request = self.client.post(url).json(&body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Fetch a single IP Pool
+    ///
+    ///Sends a `GET` request to `/ip-pools/{pool_name}`
+    pub async fn ip_pool_view<'a>(
+        &'a self,
+        pool_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+        let url = format!(
+            "{}/ip-pools/{}",
+            self.baseurl,
+            encode_path(&pool_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Update an IP Pool
+    ///
+    ///Sends a `PUT` request to `/ip-pools/{pool_name}`
+    pub async fn ip_pool_update<'a>(
+        &'a self,
+        pool_name: &'a types::Name,
+        body: &'a types::IpPoolUpdate,
+    ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+        let url = format!(
+            "{}/ip-pools/{}",
+            self.baseurl,
+            encode_path(&pool_name.to_string()),
+        );
+        let request = self.client.put(url).json(&body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Delete an IP Pool
+    ///
+    ///Sends a `DELETE` request to `/ip-pools/{pool_name}`
+    pub async fn ip_pool_delete<'a>(
+        &'a self,
+        pool_name: &'a types::Name,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/ip-pools/{}",
+            self.baseurl,
+            encode_path(&pool_name.to_string()),
+        );
+        let request = self.client.delete(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///List the ranges of IP addresses within an existing IP Pool
+    ///
+    ///Note that ranges are listed sorted by their first address.
+    ///
+    ///Sends a `GET` request to `/ip-pools/{pool_name}/ranges`
+    ///
+    ///Arguments:
+    /// - `pool_name`
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retrieve the
+    ///   subsequent page
+    pub async fn ip_pool_range_list<'a>(
+        &'a self,
+        pool_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+    ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
+        let url = format!(
+            "{}/ip-pools/{}/ranges",
+            self.baseurl,
+            encode_path(&pool_name.to_string()),
+        );
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///List the ranges of IP addresses within an existing IP Pool as a Stream
+    ///
+    ///Note that ranges are listed sorted by their first address.
+    ///
+    ///Sends repeated `GET` requests to `/ip-pools/{pool_name}/ranges` until
+    /// there are no more results.
+    ///
+    ///Arguments:
+    /// - `pool_name`
+    /// - `limit`: Maximum number of items returned by a single call
+    pub fn ip_pool_range_list_stream<'a>(
+        &'a self,
+        pool_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+    ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + '_
+    {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.ip_pool_range_list(pool_name, limit, None)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.ip_pool_range_list(pool_name, None, state.as_deref())
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    ///Add a new range to an existing IP Pool
+    ///
+    ///Sends a `POST` request to `/ip-pools/{pool_name}/ranges/add`
+    pub async fn ip_pool_range_add<'a>(
+        &'a self,
+        pool_name: &'a types::Name,
+        body: &'a types::IpRange,
+    ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
+        let url = format!(
+            "{}/ip-pools/{}/ranges/add",
+            self.baseurl,
+            encode_path(&pool_name.to_string()),
+        );
+        let request = self.client.post(url).json(&body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Remove a range from an existing IP Pool
+    ///
+    ///Sends a `POST` request to `/ip-pools/{pool_name}/ranges/remove`
+    pub async fn ip_pool_range_remove<'a>(
+        &'a self,
+        pool_name: &'a types::Name,
+        body: &'a types::IpRange,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/ip-pools/{}/ranges/remove",
+            self.baseurl,
+            encode_path(&pool_name.to_string()),
+        );
+        let request = self.client.post(url).json(&body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
     ///Sends a `POST` request to `/login`
     pub async fn spoof_login<'a>(
         &'a self,
-        body: &'a types::LoginParams,
+        body: &'a types::SpoofLoginBody,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/login", self.baseurl,);
         let request = self.client.post(url).json(&body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+        }
+    }
+
+    ///Ask the user to login to their identity provider
+    ///
+    ///Either display a page asking a user for their credentials, or redirect
+    /// them to their identity provider.
+    ///
+    ///Sends a `GET` request to `/login/{silo_name}/{provider_name}`
+    pub async fn login<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+        provider_name: &'a types::Name,
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+        let url = format!(
+            "{}/login/{}/{}",
+            self.baseurl,
+            encode_path(&silo_name.to_string()),
+            encode_path(&provider_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+        }
+    }
+
+    ///Consume some sort of credentials, and authenticate a user
+    ///
+    ///Either receive a username and password, or some sort of identity
+    /// provider data (like a SAMLResponse). Use these to set the user's session
+    /// cookie.
+    ///
+    ///Sends a `POST` request to `/login/{silo_name}/{provider_name}`
+    pub async fn consume_credentials<'a, B: Into<reqwest::Body>>(
+        &'a self,
+        silo_name: &'a types::Name,
+        provider_name: &'a types::Name,
+        body: B,
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+        let url = format!(
+            "{}/login/{}/{}",
+            self.baseurl,
+            encode_path(&silo_name.to_string()),
+            encode_path(&provider_name.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::CONTENT_TYPE,
+                reqwest::header::HeaderValue::from_static("application/octet-stream"),
+            )
+            .body(body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -2258,10 +3053,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn organizations_get<'a>(
+    pub async fn organization_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
@@ -2304,7 +3099,7 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn organizations_get_stream<'a>(
+    pub fn organization_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
@@ -2313,7 +3108,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.organizations_get(limit, None, sort_by)
+        self.organization_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -2321,7 +3116,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.organizations_get(None, state.as_deref(), None)
+                        self.organization_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -2342,7 +3137,7 @@ impl Client {
     ///Create a new organization
     ///
     ///Sends a `POST` request to `/organizations`
-    pub async fn organizations_post<'a>(
+    pub async fn organization_create<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
@@ -2368,7 +3163,7 @@ impl Client {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    pub async fn organizations_get_organization<'a>(
+    pub async fn organization_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
@@ -2399,7 +3194,7 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    pub async fn organizations_put_organization<'a>(
+    pub async fn organization_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::OrganizationUpdate,
@@ -2430,7 +3225,7 @@ impl Client {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    pub async fn organizations_delete_organization<'a>(
+    pub async fn organization_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
@@ -2460,10 +3255,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    pub async fn organization_get_policy<'a>(
+    pub async fn organization_policy_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
-    ) -> Result<ResponseValue<types::OrganizationRolesPolicy>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/policy",
             self.baseurl,
@@ -2491,11 +3286,11 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    pub async fn organization_put_policy<'a>(
+    pub async fn organization_policy_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
-        body: &'a types::OrganizationRolesPolicy,
-    ) -> Result<ResponseValue<types::OrganizationRolesPolicy>, Error<types::Error>> {
+        body: &'a types::OrganizationRolePolicy,
+    ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/policy",
             self.baseurl,
@@ -2523,10 +3318,10 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn organization_projects_get<'a>(
+    pub async fn project_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
@@ -2576,7 +3371,7 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn organization_projects_get_stream<'a>(
+    pub fn project_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         limit: Option<std::num::NonZeroU32>,
@@ -2585,7 +3380,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.organization_projects_get(organization_name, limit, None, sort_by)
+        self.project_list(organization_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -2593,20 +3388,15 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.organization_projects_get(
-                            organization_name,
-                            None,
-                            state.as_deref(),
-                            None,
-                        )
-                        .map_ok(|page| {
-                            let page = page.into_inner();
-                            Some((
-                                futures::stream::iter(page.items.into_iter().map(Ok)),
-                                page.next_page,
-                            ))
-                        })
-                        .await
+                        self.project_list(organization_name, None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
                     }
                 })
                 .try_flatten();
@@ -2623,7 +3413,7 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    pub async fn organization_projects_post<'a>(
+    pub async fn project_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::ProjectCreate,
@@ -2656,7 +3446,7 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    pub async fn organization_projects_get_project<'a>(
+    pub async fn project_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -2691,7 +3481,7 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    pub async fn organization_projects_put_project<'a>(
+    pub async fn project_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -2726,7 +3516,7 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    pub async fn organization_projects_delete_project<'a>(
+    pub async fn project_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -2761,10 +3551,10 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn project_disks_get<'a>(
+    pub async fn disk_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -2817,7 +3607,7 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn project_disks_get_stream<'a>(
+    pub fn disk_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -2827,7 +3617,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.project_disks_get(organization_name, project_name, limit, None, sort_by)
+        self.disk_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -2835,7 +3625,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_disks_get(
+                        self.disk_list(
                             organization_name,
                             project_name,
                             None,
@@ -2868,7 +3658,7 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    pub async fn project_disks_post<'a>(
+    pub async fn disk_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -2900,7 +3690,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
     /// {disk_name}`
-    pub async fn project_disks_get_disk<'a>(
+    pub async fn disk_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -2933,7 +3723,7 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
     /// {disk_name}`
-    pub async fn project_disks_delete_disk<'a>(
+    pub async fn disk_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -2973,10 +3763,10 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn project_images_get<'a>(
+    pub async fn image_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3032,7 +3822,7 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn project_images_get_stream<'a>(
+    pub fn image_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3042,7 +3832,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.project_images_get(organization_name, project_name, limit, None, sort_by)
+        self.image_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -3050,7 +3840,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_images_get(
+                        self.image_list(
                             organization_name,
                             project_name,
                             None,
@@ -3085,7 +3875,7 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    pub async fn project_images_post<'a>(
+    pub async fn image_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3119,7 +3909,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/images/
     /// {image_name}`
-    pub async fn project_images_get_image<'a>(
+    pub async fn image_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3156,7 +3946,7 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/images/
     /// {image_name}`
-    pub async fn project_images_delete_image<'a>(
+    pub async fn image_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3193,10 +3983,10 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn project_instances_get<'a>(
+    pub async fn instance_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3249,7 +4039,7 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn project_instances_get_stream<'a>(
+    pub fn instance_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3260,7 +4050,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.project_instances_get(organization_name, project_name, limit, None, sort_by)
+        self.instance_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -3268,7 +4058,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_instances_get(
+                        self.instance_list(
                             organization_name,
                             project_name,
                             None,
@@ -3301,7 +4091,7 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    pub async fn project_instances_post<'a>(
+    pub async fn instance_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3333,7 +4123,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}`
-    pub async fn project_instances_get_instance<'a>(
+    pub async fn instance_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3366,7 +4156,7 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}`
-    pub async fn project_instances_delete_instance<'a>(
+    pub async fn instance_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3405,10 +4195,10 @@ impl Client {
     /// - `project_name`
     /// - `instance_name`
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn instance_disks_get<'a>(
+    pub async fn instance_disk_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3464,7 +4254,7 @@ impl Client {
     /// - `instance_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn instance_disks_get_stream<'a>(
+    pub fn instance_disk_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3475,7 +4265,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.instance_disks_get(
+        self.instance_disk_list(
             organization_name,
             project_name,
             instance_name,
@@ -3490,7 +4280,7 @@ impl Client {
                 if state.is_none() {
                     Ok(None)
                 } else {
-                    self.instance_disks_get(
+                    self.instance_disk_list(
                         organization_name,
                         project_name,
                         instance_name,
@@ -3518,7 +4308,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/disks/attach`
-    pub async fn instance_disks_attach<'a>(
+    pub async fn instance_disk_attach<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3550,7 +4340,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/disks/detach`
-    pub async fn instance_disks_detach<'a>(
+    pub async fn instance_disk_detach<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3585,7 +4375,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/migrate`
-    pub async fn project_instances_migrate_instance<'a>(
+    pub async fn instance_migrate<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3625,10 +4415,10 @@ impl Client {
     /// - `project_name`
     /// - `instance_name`
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn instance_network_interfaces_get<'a>(
+    pub async fn instance_network_interface_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3684,7 +4474,7 @@ impl Client {
     /// - `instance_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn instance_network_interfaces_get_stream<'a>(
+    pub fn instance_network_interface_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3696,7 +4486,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.instance_network_interfaces_get(
+        self.instance_network_interface_list(
             organization_name,
             project_name,
             instance_name,
@@ -3711,7 +4501,7 @@ impl Client {
                 if state.is_none() {
                     Ok(None)
                 } else {
-                    self.instance_network_interfaces_get(
+                    self.instance_network_interface_list(
                         organization_name,
                         project_name,
                         instance_name,
@@ -3741,7 +4531,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces`
-    pub async fn instance_network_interfaces_post<'a>(
+    pub async fn instance_network_interface_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3775,7 +4565,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces/{interface_name}`
-    pub async fn instance_network_interfaces_get_interface<'a>(
+    pub async fn instance_network_interface_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3805,12 +4595,53 @@ impl Client {
         }
     }
 
+    ///Update information about an instance's network interface
+    ///
+    ///Sends a `PUT` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/network-interfaces/{interface_name}`
+    pub async fn instance_network_interface_update<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        interface_name: &'a types::Name,
+        body: &'a types::NetworkInterfaceUpdate,
+    ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+            self.baseurl,
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
+            encode_path(&interface_name.to_string()),
+        );
+        let request = self.client.put(url).json(&body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
     ///Detach a network interface from an instance
+    ///
+    ///Note that the primary interface for an instance cannot be deleted if
+    /// there are any secondary interfaces. A new primary interface must be
+    /// designated first. The primary interface can be deleted if there are no
+    /// secondary interfaces.
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces/{interface_name}`
-    pub async fn instance_network_interfaces_delete_interface<'a>(
+    pub async fn instance_network_interface_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3845,7 +4676,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/reboot`
-    pub async fn project_instances_instance_reboot<'a>(
+    pub async fn instance_reboot<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3873,12 +4704,77 @@ impl Client {
         }
     }
 
+    ///Get contents of an instance's serial console
+    ///
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/serial-console`
+    ///
+    ///Arguments:
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `instance_name`
+    /// - `from_start`: Character index in the serial buffer from which to read,
+    ///   counting the bytes output since instance start. If this is not
+    ///   provided, `most_recent` must be provided, and if this *is* provided,
+    ///   `most_recent` must *not* be provided.
+    /// - `max_bytes`: Maximum number of bytes of buffered serial console
+    ///   contents to return. If the requested range runs to the end of the
+    ///   available buffer, the data returned will be shorter than `max_bytes`.
+    /// - `most_recent`: Character index in the serial buffer from which to
+    ///   read, counting *backward* from the most recently buffered data
+    ///   retrieved from the instance. (See note on `from_start` about mutual
+    ///   exclusivity)
+    pub async fn instance_serial_console<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+        from_start: Option<u64>,
+        max_bytes: Option<u64>,
+        most_recent: Option<u64>,
+    ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/serial-console",
+            self.baseurl,
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
+        );
+        let mut query = Vec::new();
+        if let Some(v) = &from_start {
+            query.push(("from_start", v.to_string()));
+        }
+
+        if let Some(v) = &max_bytes {
+            query.push(("max_bytes", v.to_string()));
+        }
+
+        if let Some(v) = &most_recent {
+            query.push(("most_recent", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
     ///Boot an instance
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/start`
-    pub async fn project_instances_instance_start<'a>(
+    pub async fn instance_start<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3911,7 +4807,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/stop`
-    pub async fn project_instances_instance_stop<'a>(
+    pub async fn instance_stop<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -3947,11 +4843,11 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    pub async fn organization_projects_get_project_policy<'a>(
+    pub async fn project_policy_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-    ) -> Result<ResponseValue<types::ProjectRolesPolicy>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/policy",
             self.baseurl,
@@ -3982,12 +4878,12 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    pub async fn organization_projects_put_project_policy<'a>(
+    pub async fn project_policy_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        body: &'a types::ProjectRolesPolicy,
-    ) -> Result<ResponseValue<types::ProjectRolesPolicy>, Error<types::Error>> {
+        body: &'a types::ProjectRolePolicy,
+    ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/policy",
             self.baseurl,
@@ -4018,10 +4914,10 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn project_snapshots_get<'a>(
+    pub async fn snapshot_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4074,7 +4970,7 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn project_snapshots_get_stream<'a>(
+    pub fn snapshot_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4085,7 +4981,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.project_snapshots_get(organization_name, project_name, limit, None, sort_by)
+        self.snapshot_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -4093,7 +4989,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_snapshots_get(
+                        self.snapshot_list(
                             organization_name,
                             project_name,
                             None,
@@ -4126,7 +5022,7 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    pub async fn project_snapshots_post<'a>(
+    pub async fn snapshot_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4158,7 +5054,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
     /// {snapshot_name}`
-    pub async fn project_snapshots_get_snapshot<'a>(
+    pub async fn snapshot_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4191,7 +5087,7 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
     /// {snapshot_name}`
-    pub async fn project_snapshots_delete_snapshot<'a>(
+    pub async fn snapshot_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4228,10 +5124,10 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn project_vpcs_get<'a>(
+    pub async fn vpc_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4284,7 +5180,7 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn project_vpcs_get_stream<'a>(
+    pub fn vpc_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4294,7 +5190,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.project_vpcs_get(organization_name, project_name, limit, None, sort_by)
+        self.vpc_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -4302,7 +5198,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_vpcs_get(
+                        self.vpc_list(
                             organization_name,
                             project_name,
                             None,
@@ -4335,7 +5231,7 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    pub async fn project_vpcs_post<'a>(
+    pub async fn vpc_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4367,7 +5263,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
-    pub async fn project_vpcs_get_vpc<'a>(
+    pub async fn vpc_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4400,7 +5296,7 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
-    pub async fn project_vpcs_put_vpc<'a>(
+    pub async fn vpc_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4434,7 +5330,7 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
-    pub async fn project_vpcs_delete_vpc<'a>(
+    pub async fn vpc_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4467,7 +5363,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/firewall/rules`
-    pub async fn vpc_firewall_rules_get<'a>(
+    pub async fn vpc_firewall_rules_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4500,7 +5396,7 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/firewall/rules`
-    pub async fn vpc_firewall_rules_put<'a>(
+    pub async fn vpc_firewall_rules_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4540,10 +5436,10 @@ impl Client {
     /// - `project_name`
     /// - `vpc_name`
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn vpc_routers_get<'a>(
+    pub async fn vpc_router_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4599,7 +5495,7 @@ impl Client {
     /// - `vpc_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn vpc_routers_get_stream<'a>(
+    pub fn vpc_router_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4611,7 +5507,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.vpc_routers_get(
+        self.vpc_router_list(
             organization_name,
             project_name,
             vpc_name,
@@ -4626,7 +5522,7 @@ impl Client {
                 if state.is_none() {
                     Ok(None)
                 } else {
-                    self.vpc_routers_get(
+                    self.vpc_router_list(
                         organization_name,
                         project_name,
                         vpc_name,
@@ -4656,7 +5552,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers`
-    pub async fn vpc_routers_post<'a>(
+    pub async fn vpc_router_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4690,7 +5586,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
-    pub async fn vpc_routers_get_router<'a>(
+    pub async fn vpc_router_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4725,7 +5621,7 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
-    pub async fn vpc_routers_put_router<'a>(
+    pub async fn vpc_router_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4761,7 +5657,7 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
-    pub async fn vpc_routers_delete_router<'a>(
+    pub async fn vpc_router_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4803,10 +5699,10 @@ impl Client {
     /// - `vpc_name`
     /// - `router_name`
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn routers_routes_get<'a>(
+    pub async fn vpc_router_route_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4866,7 +5762,7 @@ impl Client {
     /// - `router_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn routers_routes_get_stream<'a>(
+    pub fn vpc_router_route_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4879,7 +5775,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.routers_routes_get(
+        self.vpc_router_route_list(
             organization_name,
             project_name,
             vpc_name,
@@ -4895,7 +5791,7 @@ impl Client {
                 if state.is_none() {
                     Ok(None)
                 } else {
-                    self.routers_routes_get(
+                    self.vpc_router_route_list(
                         organization_name,
                         project_name,
                         vpc_name,
@@ -4926,7 +5822,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes`
-    pub async fn routers_routes_post<'a>(
+    pub async fn vpc_router_route_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4962,7 +5858,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
-    pub async fn routers_routes_get_route<'a>(
+    pub async fn vpc_router_route_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -4999,7 +5895,7 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
-    pub async fn routers_routes_put_route<'a>(
+    pub async fn vpc_router_route_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5037,7 +5933,7 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
-    pub async fn routers_routes_delete_route<'a>(
+    pub async fn vpc_router_route_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5080,10 +5976,10 @@ impl Client {
     /// - `project_name`
     /// - `vpc_name`
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn vpc_subnets_get<'a>(
+    pub async fn vpc_subnet_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5139,7 +6035,7 @@ impl Client {
     /// - `vpc_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn vpc_subnets_get_stream<'a>(
+    pub fn vpc_subnet_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5151,7 +6047,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.vpc_subnets_get(
+        self.vpc_subnet_list(
             organization_name,
             project_name,
             vpc_name,
@@ -5166,7 +6062,7 @@ impl Client {
                 if state.is_none() {
                     Ok(None)
                 } else {
-                    self.vpc_subnets_get(
+                    self.vpc_subnet_list(
                         organization_name,
                         project_name,
                         vpc_name,
@@ -5196,7 +6092,7 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets`
-    pub async fn vpc_subnets_post<'a>(
+    pub async fn vpc_subnet_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5230,7 +6126,7 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
-    pub async fn vpc_subnets_get_subnet<'a>(
+    pub async fn vpc_subnet_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5265,7 +6161,7 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
-    pub async fn vpc_subnets_put_subnet<'a>(
+    pub async fn vpc_subnet_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5301,7 +6197,7 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
-    pub async fn vpc_subnets_delete_subnet<'a>(
+    pub async fn vpc_subnet_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5343,10 +6239,10 @@ impl Client {
     /// - `vpc_name`
     /// - `subnet_name`
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn subnet_network_interfaces_get<'a>(
+    pub async fn vpc_subnet_list_network_interfaces<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5406,7 +6302,7 @@ impl Client {
     /// - `subnet_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn subnet_network_interfaces_get_stream<'a>(
+    pub fn vpc_subnet_list_network_interfaces_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
@@ -5419,7 +6315,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.subnet_network_interfaces_get(
+        self.vpc_subnet_list_network_interfaces(
             organization_name,
             project_name,
             vpc_name,
@@ -5435,7 +6331,7 @@ impl Client {
                 if state.is_none() {
                     Ok(None)
                 } else {
-                    self.subnet_network_interfaces_get(
+                    self.vpc_subnet_list_network_interfaces(
                         organization_name,
                         project_name,
                         vpc_name,
@@ -5464,9 +6360,9 @@ impl Client {
     ///Fetch the top-level IAM policy
     ///
     ///Sends a `GET` request to `/policy`
-    pub async fn policy_get<'a>(
+    pub async fn policy_view<'a>(
         &'a self,
-    ) -> Result<ResponseValue<types::FleetRolesPolicy>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -5486,10 +6382,10 @@ impl Client {
     ///Update the top-level IAM policy
     ///
     ///Sends a `PUT` request to `/policy`
-    pub async fn policy_put<'a>(
+    pub async fn policy_update<'a>(
         &'a self,
-        body: &'a types::FleetRolesPolicy,
-    ) -> Result<ResponseValue<types::FleetRolesPolicy>, Error<types::Error>> {
+        body: &'a types::FleetRolePolicy,
+    ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
         let request = self.client.put(url).json(&body).build()?;
         let result = self.client.execute(request).await;
@@ -5512,9 +6408,9 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    pub async fn roles_get<'a>(
+    pub async fn role_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
@@ -5551,14 +6447,14 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    pub fn roles_get_stream<'a>(
+    pub fn role_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
     ) -> impl futures::Stream<Item = Result<types::Role, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.roles_get(limit, None)
+        self.role_list(limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -5566,7 +6462,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.roles_get(None, state.as_deref())
+                        self.role_list(None, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -5590,7 +6486,7 @@ impl Client {
     ///
     ///Arguments:
     /// - `role_name`: The built-in role's unique name.
-    pub async fn roles_get_role<'a>(
+    pub async fn role_view<'a>(
         &'a self,
         role_name: &'a str,
     ) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
@@ -5620,10 +6516,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn sagas_get<'a>(
+    pub async fn saga_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
@@ -5666,7 +6562,7 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn sagas_get_stream<'a>(
+    pub fn saga_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
@@ -5674,7 +6570,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.sagas_get(limit, None, sort_by)
+        self.saga_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -5682,7 +6578,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.sagas_get(None, state.as_deref(), None)
+                        self.saga_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -5703,7 +6599,7 @@ impl Client {
     ///Fetch information about a single saga (for debugging)
     ///
     ///Sends a `GET` request to `/sagas/{saga_id}`
-    pub async fn sagas_get_saga<'a>(
+    pub async fn saga_view<'a>(
         &'a self,
         saga_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
@@ -5755,10 +6651,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn sshkeys_get<'a>(
+    pub async fn session_sshkey_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
@@ -5801,7 +6697,7 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn sshkeys_get_stream<'a>(
+    pub fn session_sshkey_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
@@ -5809,7 +6705,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.sshkeys_get(limit, None, sort_by)
+        self.session_sshkey_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -5817,7 +6713,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.sshkeys_get(None, state.as_deref(), None)
+                        self.session_sshkey_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -5838,7 +6734,7 @@ impl Client {
     ///Create a new SSH public key for the current user
     ///
     ///Sends a `POST` request to `/session/me/sshkeys`
-    pub async fn sshkeys_post<'a>(
+    pub async fn session_sshkey_create<'a>(
         &'a self,
         body: &'a types::SshKeyCreate,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
@@ -5861,7 +6757,7 @@ impl Client {
     ///Get (by name) an SSH public key belonging to the current user
     ///
     ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
-    pub async fn sshkeys_get_key<'a>(
+    pub async fn session_sshkey_view<'a>(
         &'a self,
         ssh_key_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
@@ -5888,7 +6784,7 @@ impl Client {
     ///Delete (by name) an SSH public key belonging to the current user
     ///
     ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
-    pub async fn sshkeys_delete_key<'a>(
+    pub async fn session_sshkey_delete<'a>(
         &'a self,
         ssh_key_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
@@ -5916,10 +6812,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn silos_get<'a>(
+    pub async fn silo_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
@@ -5960,7 +6856,7 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn silos_get_stream<'a>(
+    pub fn silo_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
@@ -5968,7 +6864,7 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.silos_get(limit, None, sort_by)
+        self.silo_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -5976,7 +6872,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.silos_get(None, state.as_deref(), None)
+                        self.silo_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -5997,7 +6893,7 @@ impl Client {
     ///Create a new silo
     ///
     ///Sends a `POST` request to `/silos`
-    pub async fn silos_post<'a>(
+    pub async fn silo_create<'a>(
         &'a self,
         body: &'a types::SiloCreate,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
@@ -6023,7 +6919,7 @@ impl Client {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    pub async fn silos_get_silo<'a>(
+    pub async fn silo_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
@@ -6053,7 +6949,7 @@ impl Client {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    pub async fn silos_delete_silo<'a>(
+    pub async fn silo_delete<'a>(
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
@@ -6077,16 +6973,111 @@ impl Client {
         }
     }
 
+    ///List Silo identity providers
+    ///
+    ///Sends a `GET` request to `/silos/{silo_name}/identity_providers`
+    ///
+    ///Arguments:
+    /// - `silo_name`: The silo's unique name.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retrieve the
+    ///   subsequent page
+    /// - `sort_by`
+    pub async fn silo_identity_provider_list<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>> {
+        let url = format!(
+            "{}/silos/{}/identity_providers",
+            self.baseurl,
+            encode_path(&silo_name.to_string()),
+        );
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///List Silo identity providers as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/silos/{silo_name}/identity_providers`
+    /// until there are no more results.
+    ///
+    ///Arguments:
+    /// - `silo_name`: The silo's unique name.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `sort_by`
+    pub fn silo_identity_provider_list_stream<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::IdentityProvider, Error<types::Error>>> + Unpin + '_
+    {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.silo_identity_provider_list(silo_name, limit, None, sort_by)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.silo_identity_provider_list(silo_name, None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
     ///Fetch the IAM policy for this Silo
     ///
     ///Sends a `GET` request to `/silos/{silo_name}/policy`
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    pub async fn silos_get_silo_policy<'a>(
+    pub async fn silo_policy_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
-    ) -> Result<ResponseValue<types::SiloRolesPolicy>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!(
             "{}/silos/{}/policy",
             self.baseurl,
@@ -6114,11 +7105,11 @@ impl Client {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
-    pub async fn silos_put_silo_policy<'a>(
+    pub async fn silo_policy_update<'a>(
         &'a self,
         silo_name: &'a types::Name,
-        body: &'a types::SiloRolesPolicy,
-    ) -> Result<ResponseValue<types::SiloRolesPolicy>, Error<types::Error>> {
+        body: &'a types::SiloRolePolicy,
+    ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!(
             "{}/silos/{}/policy",
             self.baseurl,
@@ -6139,13 +7130,196 @@ impl Client {
         }
     }
 
+    ///Create a new SAML identity provider for a silo
+    ///
+    ///Sends a `POST` request to `/silos/{silo_name}/saml_identity_providers`
+    ///
+    ///Arguments:
+    /// - `silo_name`: The silo's unique name.
+    /// - `body`
+    pub async fn silo_identity_provider_create<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+        body: &'a types::SamlIdentityProviderCreate,
+    ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
+        let url = format!(
+            "{}/silos/{}/saml_identity_providers",
+            self.baseurl,
+            encode_path(&silo_name.to_string()),
+        );
+        let request = self.client.post(url).json(&body).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///GET a silo's SAML identity provider
+    ///
+    ///Sends a `GET` request to
+    /// `/silos/{silo_name}/saml_identity_providers/{provider_name}`
+    ///
+    ///Arguments:
+    /// - `silo_name`: The silo's unique name.
+    /// - `provider_name`: The SAML identity provider's name
+    pub async fn silo_identity_provider_view<'a>(
+        &'a self,
+        silo_name: &'a types::Name,
+        provider_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
+        let url = format!(
+            "{}/silos/{}/saml_identity_providers/{}",
+            self.baseurl,
+            encode_path(&silo_name.to_string()),
+            encode_path(&provider_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///List the built-in system users
+    ///
+    ///Sends a `GET` request to `/system/user`
+    ///
+    ///Arguments:
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retrieve the
+    ///   subsequent page
+    /// - `sort_by`
+    pub async fn system_user_list<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
+        let url = format!("{}/system/user", self.baseurl,);
+        let mut query = Vec::new();
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &sort_by {
+            query.push(("sort_by", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///List the built-in system users as a Stream
+    ///
+    ///Sends repeated `GET` requests to `/system/user` until there are no more
+    /// results.
+    ///
+    ///Arguments:
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `sort_by`
+    pub fn system_user_list_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+        sort_by: Option<types::NameSortMode>,
+    ) -> impl futures::Stream<Item = Result<types::UserBuiltin, Error<types::Error>>> + Unpin + '_
+    {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.system_user_list(limit, None, sort_by)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.system_user_list(None, state.as_deref(), None)
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((
+                                    futures::stream::iter(page.items.into_iter().map(Ok)),
+                                    page.next_page,
+                                ))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+
+    ///Fetch a specific built-in system user
+    ///
+    ///Sends a `GET` request to `/system/user/{user_name}`
+    ///
+    ///Arguments:
+    /// - `user_name`: The built-in user's unique name.
+    pub async fn system_user_view<'a>(
+        &'a self,
+        user_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::UserBuiltin>, Error<types::Error>> {
+        let url = format!(
+            "{}/system/user/{}",
+            self.baseurl,
+            encode_path(&user_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
     ///List all timeseries schema
     ///
     ///Sends a `GET` request to `/timeseries/schema`
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     pub async fn timeseries_schema_get<'a>(
         &'a self,
@@ -6238,20 +7412,20 @@ impl Client {
         }
     }
 
-    ///List the built-in system users
+    ///List users
     ///
     ///Sends a `GET` request to `/users`
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retreive the
+    /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    pub async fn users_get<'a>(
+    pub async fn user_list<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
-        sort_by: Option<types::NameSortMode>,
+        sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
         let url = format!("{}/users", self.baseurl,);
         let mut query = Vec::new();
@@ -6282,7 +7456,7 @@ impl Client {
         }
     }
 
-    ///List the built-in system users as a Stream
+    ///List users as a Stream
     ///
     ///Sends repeated `GET` requests to `/users` until there are no more
     /// results.
@@ -6290,15 +7464,15 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
-    pub fn users_get_stream<'a>(
+    pub fn user_list_stream<'a>(
         &'a self,
         limit: Option<std::num::NonZeroU32>,
-        sort_by: Option<types::NameSortMode>,
+        sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        self.users_get(limit, None, sort_by)
+        self.user_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items.into_iter().map(Ok));
@@ -6306,7 +7480,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.users_get(None, state.as_deref(), None)
+                        self.user_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((
@@ -6322,35 +7496,5 @@ impl Client {
             })
             .try_flatten_stream()
             .boxed()
-    }
-
-    ///Fetch a specific built-in system user
-    ///
-    ///Sends a `GET` request to `/users/{user_name}`
-    ///
-    ///Arguments:
-    /// - `user_name`: The built-in user's unique name.
-    pub async fn users_get_user<'a>(
-        &'a self,
-        user_name: &'a types::Name,
-    ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
-        let url = format!(
-            "{}/users/{}",
-            self.baseurl,
-            encode_path(&user_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            _ => Err(Error::UnexpectedResponse(response)),
-        }
     }
 }

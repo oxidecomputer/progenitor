@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::encode_path;
+use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
@@ -388,7 +388,15 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self.client.post(url).body(body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::CONTENT_TYPE,
+                reqwest::header::HeaderValue::from_static("application/octet-stream"),
+            )
+            .body(body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

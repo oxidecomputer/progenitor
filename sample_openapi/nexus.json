@@ -10,13 +10,115 @@
     "version": "0.0.1"
   },
   "paths": {
+    "/device/auth": {
+      "post": {
+        "tags": [
+          "hidden"
+        ],
+        "summary": "Start an OAuth 2.0 Device Authorization Grant",
+        "description": "This endpoint is designed to be accessed from an *unauthenticated* API client. It generates and records a `device_code` and `user_code` which must be verified and confirmed prior to a token being granted.",
+        "operationId": "device_auth_request",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceAuthRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/device/confirm": {
+      "post": {
+        "tags": [
+          "hidden"
+        ],
+        "summary": "Confirm an OAuth 2.0 Device Authorization Grant",
+        "description": "This endpoint is designed to be accessed by the user agent (browser), not the client requesting the token. So we do not actually return the token here; it will be returned in response to the poll on `/device/token`.",
+        "operationId": "device_auth_confirm",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceAuthVerify"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Null",
+                  "type": "string",
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/device/token": {
+      "post": {
+        "tags": [
+          "hidden"
+        ],
+        "summary": "Request a device access token",
+        "description": "This endpoint should be polled by the client until the user code is verified and the grant is confirmed.",
+        "operationId": "device_access_token",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceAccessTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/hardware/racks": {
       "get": {
         "tags": [
-          "racks"
+          "hardware"
         ],
         "summary": "List racks in the system.",
-        "operationId": "hardware_racks_get",
+        "operationId": "rack_list",
         "parameters": [
           {
             "in": "query",
@@ -33,7 +135,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -73,10 +175,10 @@
     "/hardware/racks/{rack_id}": {
       "get": {
         "tags": [
-          "racks"
+          "hardware"
         ],
         "summary": "Fetch information about a particular rack.",
-        "operationId": "hardware_racks_get_rack",
+        "operationId": "rack_view",
         "parameters": [
           {
             "in": "path",
@@ -113,10 +215,10 @@
     "/hardware/sleds": {
       "get": {
         "tags": [
-          "sleds"
+          "hardware"
         ],
         "summary": "List sleds in the system.",
-        "operationId": "hardware_sleds_get",
+        "operationId": "sled_list",
         "parameters": [
           {
             "in": "query",
@@ -133,7 +235,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -173,10 +275,10 @@
     "/hardware/sleds/{sled_id}": {
       "get": {
         "tags": [
-          "sleds"
+          "hardware"
         ],
         "summary": "Fetch information about a sled in the system.",
-        "operationId": "hardware_sleds_get_sled",
+        "operationId": "sled_view",
         "parameters": [
           {
             "in": "path",
@@ -217,7 +319,7 @@
         ],
         "summary": "List global images.",
         "description": "Returns a list of all the global images. Global images are returned sorted by creation date, with the most recent images appearing first.",
-        "operationId": "images_get",
+        "operationId": "image_global_list",
         "parameters": [
           {
             "in": "query",
@@ -234,7 +336,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -276,12 +378,12 @@
         ],
         "summary": "Create a global image.",
         "description": "Create a new global image. This image can then be used by any user as a base for instances.",
-        "operationId": "images_post",
+        "operationId": "image_global_create",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ImageCreate"
+                "$ref": "#/components/schemas/GlobalImageCreate"
               }
             }
           },
@@ -314,7 +416,7 @@
         ],
         "summary": "Get a global image.",
         "description": "Returns the details of a specific global image.",
-        "operationId": "images_get_image",
+        "operationId": "image_global_view",
         "parameters": [
           {
             "in": "path",
@@ -351,7 +453,7 @@
         ],
         "summary": "Delete a global image.",
         "description": "Permanently delete a global image. This operation cannot be undone. Any instances using the global image will continue to run, however new instances can not be created with this image.",
-        "operationId": "images_delete_image",
+        "operationId": "image_global_delete",
         "parameters": [
           {
             "in": "path",
@@ -376,6 +478,365 @@
         }
       }
     },
+    "/ip-pools": {
+      "get": {
+        "tags": [
+          "ip-pools"
+        ],
+        "summary": "List IP Pools.",
+        "operationId": "ip_pool_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retrieve the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameOrIdSortMode"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IpPoolResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      },
+      "post": {
+        "tags": [
+          "ip-pools"
+        ],
+        "summary": "Create a new IP Pool.",
+        "operationId": "ip_pool_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IpPoolCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IpPool"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/ip-pools/{pool_name}": {
+      "get": {
+        "tags": [
+          "ip-pools"
+        ],
+        "summary": "Fetch a single IP Pool.",
+        "operationId": "ip_pool_view",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pool_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IpPool"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ip-pools"
+        ],
+        "summary": "Update an IP Pool.",
+        "operationId": "ip_pool_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pool_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IpPoolUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IpPool"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ip-pools"
+        ],
+        "summary": "Delete an IP Pool.",
+        "operationId": "ip_pool_delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pool_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/ip-pools/{pool_name}/ranges": {
+      "get": {
+        "tags": [
+          "ip-pools"
+        ],
+        "summary": "List the ranges of IP addresses within an existing IP Pool.",
+        "description": "Note that ranges are listed sorted by their first address.",
+        "operationId": "ip_pool_range_list",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pool_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retrieve the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IpPoolRangeResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      }
+    },
+    "/ip-pools/{pool_name}/ranges/add": {
+      "post": {
+        "tags": [
+          "ip-pools"
+        ],
+        "summary": "Add a new range to an existing IP Pool.",
+        "operationId": "ip_pool_range_add",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pool_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IpRange"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IpPoolRange"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/ip-pools/{pool_name}/ranges/remove": {
+      "post": {
+        "tags": [
+          "ip-pools"
+        ],
+        "summary": "Remove a range from an existing IP Pool.",
+        "operationId": "ip_pool_range_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pool_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IpRange"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "tags": [
@@ -386,7 +847,96 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginParams"
+                "$ref": "#/components/schemas/SpoofLoginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login/{silo_name}/{provider_name}": {
+      "get": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Ask the user to login to their identity provider",
+        "description": "Either display a page asking a user for their credentials, or redirect them to their identity provider.",
+        "operationId": "login",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "provider_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "silo_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Consume some sort of credentials, and authenticate a user.",
+        "description": "Either receive a username and password, or some sort of identity provider data (like a SAMLResponse). Use these to set the user's session cookie.",
+        "operationId": "consume_credentials",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "provider_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "silo_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
               }
             }
           },
@@ -428,7 +978,7 @@
           "organizations"
         ],
         "summary": "List all organizations.",
-        "operationId": "organizations_get",
+        "operationId": "organization_list",
         "parameters": [
           {
             "in": "query",
@@ -445,7 +995,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -486,7 +1036,7 @@
           "organizations"
         ],
         "summary": "Create a new organization.",
-        "operationId": "organizations_post",
+        "operationId": "organization_create",
         "requestBody": {
           "content": {
             "application/json": {
@@ -523,7 +1073,7 @@
           "organizations"
         ],
         "summary": "Fetch a specific organization",
-        "operationId": "organizations_get_organization",
+        "operationId": "organization_view",
         "parameters": [
           {
             "in": "path",
@@ -560,7 +1110,7 @@
           "organizations"
         ],
         "summary": "Update a specific organization.",
-        "operationId": "organizations_put_organization",
+        "operationId": "organization_update",
         "parameters": [
           {
             "in": "path",
@@ -607,7 +1157,7 @@
           "organizations"
         ],
         "summary": "Delete a specific organization.",
-        "operationId": "organizations_delete_organization",
+        "operationId": "organization_delete",
         "parameters": [
           {
             "in": "path",
@@ -639,7 +1189,7 @@
           "organizations"
         ],
         "summary": "Fetch the IAM policy for this Organization",
-        "operationId": "organization_get_policy",
+        "operationId": "organization_policy_view",
         "parameters": [
           {
             "in": "path",
@@ -658,7 +1208,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrganizationRolesPolicy"
+                  "$ref": "#/components/schemas/OrganizationRolePolicy"
                 }
               }
             }
@@ -676,7 +1226,7 @@
           "organizations"
         ],
         "summary": "Update the IAM policy for this Organization",
-        "operationId": "organization_put_policy",
+        "operationId": "organization_policy_update",
         "parameters": [
           {
             "in": "path",
@@ -693,7 +1243,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OrganizationRolesPolicy"
+                "$ref": "#/components/schemas/OrganizationRolePolicy"
               }
             }
           },
@@ -705,7 +1255,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrganizationRolesPolicy"
+                  "$ref": "#/components/schemas/OrganizationRolePolicy"
                 }
               }
             }
@@ -725,7 +1275,7 @@
           "projects"
         ],
         "summary": "List all projects.",
-        "operationId": "organization_projects_get",
+        "operationId": "project_list",
         "parameters": [
           {
             "in": "query",
@@ -742,7 +1292,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -793,7 +1343,7 @@
           "projects"
         ],
         "summary": "Create a new project.",
-        "operationId": "organization_projects_post",
+        "operationId": "project_create",
         "parameters": [
           {
             "in": "path",
@@ -842,7 +1392,7 @@
           "projects"
         ],
         "summary": "Fetch a specific project",
-        "operationId": "organization_projects_get_project",
+        "operationId": "project_view",
         "parameters": [
           {
             "in": "path",
@@ -889,7 +1439,7 @@
           "projects"
         ],
         "summary": "Update a specific project.",
-        "operationId": "organization_projects_put_project",
+        "operationId": "project_update",
         "parameters": [
           {
             "in": "path",
@@ -946,7 +1496,7 @@
           "projects"
         ],
         "summary": "Delete a specific project.",
-        "operationId": "organization_projects_delete_project",
+        "operationId": "project_delete",
         "parameters": [
           {
             "in": "path",
@@ -988,7 +1538,7 @@
           "disks"
         ],
         "summary": "List disks in a project.",
-        "operationId": "project_disks_get",
+        "operationId": "disk_list",
         "parameters": [
           {
             "in": "query",
@@ -1005,7 +1555,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -1066,7 +1616,7 @@
           "disks"
         ],
         "summary": "Create a disk in a project.",
-        "operationId": "project_disks_post",
+        "operationId": "disk_create",
         "parameters": [
           {
             "in": "path",
@@ -1125,7 +1675,7 @@
           "disks"
         ],
         "summary": "Fetch a single disk in a project.",
-        "operationId": "project_disks_get_disk",
+        "operationId": "disk_view",
         "parameters": [
           {
             "in": "path",
@@ -1179,7 +1729,7 @@
           "disks"
         ],
         "summary": "Delete a disk from a project.",
-        "operationId": "project_disks_delete_disk",
+        "operationId": "disk_delete",
         "parameters": [
           {
             "in": "path",
@@ -1229,7 +1779,7 @@
         ],
         "summary": "List images",
         "description": "List images in a project. The images are returned sorted by creation date, with the most recent images appearing first.",
-        "operationId": "project_images_get",
+        "operationId": "image_list",
         "parameters": [
           {
             "in": "query",
@@ -1246,7 +1796,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -1308,7 +1858,7 @@
         ],
         "summary": "Create an image",
         "description": "Create a new image in a project.",
-        "operationId": "project_images_post",
+        "operationId": "image_create",
         "parameters": [
           {
             "in": "path",
@@ -1368,7 +1918,7 @@
         ],
         "summary": "Get an image",
         "description": "Get the details of a specific image in a project.",
-        "operationId": "project_images_get_image",
+        "operationId": "image_view",
         "parameters": [
           {
             "in": "path",
@@ -1423,7 +1973,7 @@
         ],
         "summary": "Delete an image",
         "description": "Permanently delete an image from a project. This operation cannot be undone. Any instances in the project using the image will continue to run, however new instances can not be created with this image.",
-        "operationId": "project_images_delete_image",
+        "operationId": "image_delete",
         "parameters": [
           {
             "in": "path",
@@ -1472,7 +2022,7 @@
           "instances"
         ],
         "summary": "List instances in a project.",
-        "operationId": "project_instances_get",
+        "operationId": "instance_list",
         "parameters": [
           {
             "in": "query",
@@ -1489,7 +2039,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -1550,7 +2100,7 @@
           "instances"
         ],
         "summary": "Create an instance in a project.",
-        "operationId": "project_instances_post",
+        "operationId": "instance_create",
         "parameters": [
           {
             "in": "path",
@@ -1609,7 +2159,7 @@
           "instances"
         ],
         "summary": "Get an instance in a project.",
-        "operationId": "project_instances_get_instance",
+        "operationId": "instance_view",
         "parameters": [
           {
             "in": "path",
@@ -1663,7 +2213,7 @@
           "instances"
         ],
         "summary": "Delete an instance from a project.",
-        "operationId": "project_instances_delete_instance",
+        "operationId": "instance_delete",
         "parameters": [
           {
             "in": "path",
@@ -1712,7 +2262,7 @@
           "instances"
         ],
         "summary": "List disks attached to this instance.",
-        "operationId": "instance_disks_get",
+        "operationId": "instance_disk_list",
         "parameters": [
           {
             "in": "query",
@@ -1729,7 +2279,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -1798,7 +2348,7 @@
         "tags": [
           "instances"
         ],
-        "operationId": "instance_disks_attach",
+        "operationId": "instance_disk_attach",
         "parameters": [
           {
             "in": "path",
@@ -1863,7 +2413,7 @@
         "tags": [
           "instances"
         ],
-        "operationId": "instance_disks_detach",
+        "operationId": "instance_disk_detach",
         "parameters": [
           {
             "in": "path",
@@ -1929,7 +2479,7 @@
           "instances"
         ],
         "summary": "Migrate an instance to a different propolis-server, possibly on a different sled.",
-        "operationId": "project_instances_migrate_instance",
+        "operationId": "instance_migrate",
         "parameters": [
           {
             "in": "path",
@@ -1995,7 +2545,7 @@
           "instances"
         ],
         "summary": "List network interfaces attached to this instance.",
-        "operationId": "instance_network_interfaces_get",
+        "operationId": "instance_network_interface_list",
         "parameters": [
           {
             "in": "query",
@@ -2012,7 +2562,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -2080,7 +2630,7 @@
           "instances"
         ],
         "summary": "Create a network interface for an instance.",
-        "operationId": "instance_network_interfaces_post",
+        "operationId": "instance_network_interface_create",
         "parameters": [
           {
             "in": "path",
@@ -2146,7 +2696,7 @@
           "instances"
         ],
         "summary": "Get an interface attached to an instance.",
-        "operationId": "instance_network_interfaces_get_interface",
+        "operationId": "instance_network_interface_view",
         "parameters": [
           {
             "in": "path",
@@ -2204,12 +2754,86 @@
           }
         }
       },
+      "put": {
+        "tags": [
+          "instances"
+        ],
+        "summary": "Update information about an instance's network interface",
+        "operationId": "instance_network_interface_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "interface_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetworkInterfaceUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkInterface"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
       "delete": {
         "tags": [
           "instances"
         ],
         "summary": "Detach a network interface from an instance.",
-        "operationId": "instance_network_interfaces_delete_interface",
+        "description": "Note that the primary interface for an instance cannot be deleted if there are any secondary interfaces. A new primary interface must be designated first. The primary interface can be deleted if there are no secondary interfaces.",
+        "operationId": "instance_network_interface_delete",
         "parameters": [
           {
             "in": "path",
@@ -2267,7 +2891,7 @@
           "instances"
         ],
         "summary": "Reboot an instance.",
-        "operationId": "project_instances_instance_reboot",
+        "operationId": "instance_reboot",
         "parameters": [
           {
             "in": "path",
@@ -2317,13 +2941,105 @@
         }
       }
     },
+    "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/serial-console": {
+      "get": {
+        "tags": [
+          "instances"
+        ],
+        "summary": "Get contents of an instance's serial console.",
+        "operationId": "instance_serial_console",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "organization_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "project_name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "query",
+            "name": "from_start",
+            "description": "Character index in the serial buffer from which to read, counting the bytes output since instance start. If this is not provided, `most_recent` must be provided, and if this *is* provided, `most_recent` must *not* be provided.",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "max_bytes",
+            "description": "Maximum number of bytes of buffered serial console contents to return. If the requested range runs to the end of the available buffer, the data returned will be shorter than `max_bytes`.",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "most_recent",
+            "description": "Character index in the serial buffer from which to read, counting *backward* from the most recently buffered data retrieved from the instance. (See note on `from_start` about mutual exclusivity)",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstanceSerialConsoleData"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
     "/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start": {
       "post": {
         "tags": [
           "instances"
         ],
         "summary": "Boot an instance.",
-        "operationId": "project_instances_instance_start",
+        "operationId": "instance_start",
         "parameters": [
           {
             "in": "path",
@@ -2379,7 +3095,7 @@
           "instances"
         ],
         "summary": "Halt an instance.",
-        "operationId": "project_instances_instance_stop",
+        "operationId": "instance_stop",
         "parameters": [
           {
             "in": "path",
@@ -2435,7 +3151,7 @@
           "projects"
         ],
         "summary": "Fetch the IAM policy for this Project",
-        "operationId": "organization_projects_get_project_policy",
+        "operationId": "project_policy_view",
         "parameters": [
           {
             "in": "path",
@@ -2464,7 +3180,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectRolesPolicy"
+                  "$ref": "#/components/schemas/ProjectRolePolicy"
                 }
               }
             }
@@ -2482,7 +3198,7 @@
           "projects"
         ],
         "summary": "Update the IAM policy for this Project",
-        "operationId": "organization_projects_put_project_policy",
+        "operationId": "project_policy_update",
         "parameters": [
           {
             "in": "path",
@@ -2509,7 +3225,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectRolesPolicy"
+                "$ref": "#/components/schemas/ProjectRolePolicy"
               }
             }
           },
@@ -2521,7 +3237,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectRolesPolicy"
+                  "$ref": "#/components/schemas/ProjectRolePolicy"
                 }
               }
             }
@@ -2541,7 +3257,7 @@
           "snapshots"
         ],
         "summary": "List snapshots in a project.",
-        "operationId": "project_snapshots_get",
+        "operationId": "snapshot_list",
         "parameters": [
           {
             "in": "query",
@@ -2558,7 +3274,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -2619,7 +3335,7 @@
           "snapshots"
         ],
         "summary": "Create a snapshot of a disk.",
-        "operationId": "project_snapshots_post",
+        "operationId": "snapshot_create",
         "parameters": [
           {
             "in": "path",
@@ -2678,7 +3394,7 @@
           "snapshots"
         ],
         "summary": "Get a snapshot in a project.",
-        "operationId": "project_snapshots_get_snapshot",
+        "operationId": "snapshot_view",
         "parameters": [
           {
             "in": "path",
@@ -2732,7 +3448,7 @@
           "snapshots"
         ],
         "summary": "Delete a snapshot from a project.",
-        "operationId": "project_snapshots_delete_snapshot",
+        "operationId": "snapshot_delete",
         "parameters": [
           {
             "in": "path",
@@ -2781,7 +3497,7 @@
           "vpcs"
         ],
         "summary": "List VPCs in a project.",
-        "operationId": "project_vpcs_get",
+        "operationId": "vpc_list",
         "parameters": [
           {
             "in": "query",
@@ -2798,7 +3514,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -2859,7 +3575,7 @@
           "vpcs"
         ],
         "summary": "Create a VPC in a project.",
-        "operationId": "project_vpcs_post",
+        "operationId": "vpc_create",
         "parameters": [
           {
             "in": "path",
@@ -2918,7 +3634,7 @@
           "vpcs"
         ],
         "summary": "Get a VPC in a project.",
-        "operationId": "project_vpcs_get_vpc",
+        "operationId": "vpc_view",
         "parameters": [
           {
             "in": "path",
@@ -2972,7 +3688,7 @@
           "vpcs"
         ],
         "summary": "Update a VPC.",
-        "operationId": "project_vpcs_put_vpc",
+        "operationId": "vpc_update",
         "parameters": [
           {
             "in": "path",
@@ -3036,7 +3752,7 @@
           "vpcs"
         ],
         "summary": "Delete a vpc from a project.",
-        "operationId": "project_vpcs_delete_vpc",
+        "operationId": "vpc_delete",
         "parameters": [
           {
             "in": "path",
@@ -3082,10 +3798,10 @@
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules": {
       "get": {
         "tags": [
-          "firewall"
+          "vpcs"
         ],
         "summary": "List firewall rules for a VPC.",
-        "operationId": "vpc_firewall_rules_get",
+        "operationId": "vpc_firewall_rules_view",
         "parameters": [
           {
             "in": "path",
@@ -3136,10 +3852,10 @@
       },
       "put": {
         "tags": [
-          "firewall"
+          "vpcs"
         ],
         "summary": "Replace the firewall rules for a VPC",
-        "operationId": "vpc_firewall_rules_put",
+        "operationId": "vpc_firewall_rules_update",
         "parameters": [
           {
             "in": "path",
@@ -3202,10 +3918,10 @@
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers": {
       "get": {
         "tags": [
-          "routers"
+          "vpcs"
         ],
         "summary": "List VPC Custom and System Routers",
-        "operationId": "vpc_routers_get",
+        "operationId": "vpc_router_list",
         "parameters": [
           {
             "in": "query",
@@ -3222,7 +3938,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -3287,10 +4003,10 @@
       },
       "post": {
         "tags": [
-          "routers"
+          "vpcs"
         ],
         "summary": "Create a VPC Router",
-        "operationId": "vpc_routers_post",
+        "operationId": "vpc_router_create",
         "parameters": [
           {
             "in": "path",
@@ -3353,10 +4069,10 @@
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}": {
       "get": {
         "tags": [
-          "routers"
+          "vpcs"
         ],
         "summary": "Get a VPC Router",
-        "operationId": "vpc_routers_get_router",
+        "operationId": "vpc_router_view",
         "parameters": [
           {
             "in": "path",
@@ -3416,10 +4132,10 @@
       },
       "put": {
         "tags": [
-          "routers"
+          "vpcs"
         ],
         "summary": "Update a VPC Router",
-        "operationId": "vpc_routers_put_router",
+        "operationId": "vpc_router_update",
         "parameters": [
           {
             "in": "path",
@@ -3489,10 +4205,10 @@
       },
       "delete": {
         "tags": [
-          "routers"
+          "vpcs"
         ],
         "summary": "Delete a router from its VPC",
-        "operationId": "vpc_routers_delete_router",
+        "operationId": "vpc_router_delete",
         "parameters": [
           {
             "in": "path",
@@ -3547,10 +4263,10 @@
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes": {
       "get": {
         "tags": [
-          "routes"
+          "vpcs"
         ],
         "summary": "List a Router's routes",
-        "operationId": "routers_routes_get",
+        "operationId": "vpc_router_route_list",
         "parameters": [
           {
             "in": "query",
@@ -3567,7 +4283,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -3641,10 +4357,10 @@
       },
       "post": {
         "tags": [
-          "routes"
+          "vpcs"
         ],
         "summary": "Create a VPC Router",
-        "operationId": "routers_routes_post",
+        "operationId": "vpc_router_route_create",
         "parameters": [
           {
             "in": "path",
@@ -3716,10 +4432,10 @@
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}": {
       "get": {
         "tags": [
-          "routes"
+          "vpcs"
         ],
         "summary": "Get a VPC Router route",
-        "operationId": "routers_routes_get_route",
+        "operationId": "vpc_router_route_view",
         "parameters": [
           {
             "in": "path",
@@ -3788,10 +4504,10 @@
       },
       "put": {
         "tags": [
-          "routes"
+          "vpcs"
         ],
         "summary": "Update a Router route",
-        "operationId": "routers_routes_put_route",
+        "operationId": "vpc_router_route_update",
         "parameters": [
           {
             "in": "path",
@@ -3870,10 +4586,10 @@
       },
       "delete": {
         "tags": [
-          "routes"
+          "vpcs"
         ],
         "summary": "Delete a route from its router",
-        "operationId": "routers_routes_delete_route",
+        "operationId": "vpc_router_route_delete",
         "parameters": [
           {
             "in": "path",
@@ -3937,10 +4653,10 @@
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets": {
       "get": {
         "tags": [
-          "subnets"
+          "vpcs"
         ],
         "summary": "List subnets in a VPC.",
-        "operationId": "vpc_subnets_get",
+        "operationId": "vpc_subnet_list",
         "parameters": [
           {
             "in": "query",
@@ -3957,7 +4673,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -4022,10 +4738,10 @@
       },
       "post": {
         "tags": [
-          "subnets"
+          "vpcs"
         ],
         "summary": "Create a subnet in a VPC.",
-        "operationId": "vpc_subnets_post",
+        "operationId": "vpc_subnet_create",
         "parameters": [
           {
             "in": "path",
@@ -4088,10 +4804,10 @@
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}": {
       "get": {
         "tags": [
-          "subnets"
+          "vpcs"
         ],
         "summary": "Get subnet in a VPC.",
-        "operationId": "vpc_subnets_get_subnet",
+        "operationId": "vpc_subnet_view",
         "parameters": [
           {
             "in": "path",
@@ -4151,10 +4867,10 @@
       },
       "put": {
         "tags": [
-          "subnets"
+          "vpcs"
         ],
         "summary": "Update a VPC Subnet.",
-        "operationId": "vpc_subnets_put_subnet",
+        "operationId": "vpc_subnet_update",
         "parameters": [
           {
             "in": "path",
@@ -4224,10 +4940,10 @@
       },
       "delete": {
         "tags": [
-          "subnets"
+          "vpcs"
         ],
         "summary": "Delete a subnet from a VPC.",
-        "operationId": "vpc_subnets_delete_subnet",
+        "operationId": "vpc_subnet_delete",
         "parameters": [
           {
             "in": "path",
@@ -4282,10 +4998,10 @@
     "/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces": {
       "get": {
         "tags": [
-          "subnets"
+          "vpcs"
         ],
         "summary": "List network interfaces in a VPC subnet.",
-        "operationId": "subnet_network_interfaces_get",
+        "operationId": "vpc_subnet_list_network_interfaces",
         "parameters": [
           {
             "in": "query",
@@ -4302,7 +5018,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -4381,14 +5097,14 @@
           "policy"
         ],
         "summary": "Fetch the top-level IAM policy",
-        "operationId": "policy_get",
+        "operationId": "policy_view",
         "responses": {
           "200": {
             "description": "successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FleetRolesPolicy"
+                  "$ref": "#/components/schemas/FleetRolePolicy"
                 }
               }
             }
@@ -4406,12 +5122,12 @@
           "policy"
         ],
         "summary": "Update the top-level IAM policy",
-        "operationId": "policy_put",
+        "operationId": "policy_update",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FleetRolesPolicy"
+                "$ref": "#/components/schemas/FleetRolePolicy"
               }
             }
           },
@@ -4423,7 +5139,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FleetRolesPolicy"
+                  "$ref": "#/components/schemas/FleetRolePolicy"
                 }
               }
             }
@@ -4443,7 +5159,7 @@
           "roles"
         ],
         "summary": "List the built-in roles",
-        "operationId": "roles_get",
+        "operationId": "role_list",
         "parameters": [
           {
             "in": "query",
@@ -4460,7 +5176,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -4495,7 +5211,7 @@
           "roles"
         ],
         "summary": "Fetch a specific built-in role",
-        "operationId": "roles_get_role",
+        "operationId": "role_view",
         "parameters": [
           {
             "in": "path",
@@ -4534,7 +5250,7 @@
           "sagas"
         ],
         "summary": "List all sagas (for debugging)",
-        "operationId": "sagas_get",
+        "operationId": "saga_list",
         "parameters": [
           {
             "in": "query",
@@ -4551,7 +5267,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -4594,7 +5310,7 @@
           "sagas"
         ],
         "summary": "Fetch information about a single saga (for debugging)",
-        "operationId": "sagas_get_saga",
+        "operationId": "saga_view",
         "parameters": [
           {
             "in": "path",
@@ -4657,10 +5373,10 @@
     "/session/me/sshkeys": {
       "get": {
         "tags": [
-          "sshkeys"
+          "session"
         ],
         "summary": "List the current user's SSH public keys",
-        "operationId": "sshkeys_get",
+        "operationId": "session_sshkey_list",
         "parameters": [
           {
             "in": "query",
@@ -4677,7 +5393,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -4715,10 +5431,10 @@
       },
       "post": {
         "tags": [
-          "sshkeys"
+          "session"
         ],
         "summary": "Create a new SSH public key for the current user",
-        "operationId": "sshkeys_post",
+        "operationId": "session_sshkey_create",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4752,10 +5468,10 @@
     "/session/me/sshkeys/{ssh_key_name}": {
       "get": {
         "tags": [
-          "sshkeys"
+          "session"
         ],
         "summary": "Get (by name) an SSH public key belonging to the current user",
-        "operationId": "sshkeys_get_key",
+        "operationId": "session_sshkey_view",
         "parameters": [
           {
             "in": "path",
@@ -4788,10 +5504,10 @@
       },
       "delete": {
         "tags": [
-          "sshkeys"
+          "session"
         ],
         "summary": "Delete (by name) an SSH public key belonging to the current user",
-        "operationId": "sshkeys_delete_key",
+        "operationId": "session_sshkey_delete",
         "parameters": [
           {
             "in": "path",
@@ -4821,7 +5537,7 @@
         "tags": [
           "silos"
         ],
-        "operationId": "silos_get",
+        "operationId": "silo_list",
         "parameters": [
           {
             "in": "query",
@@ -4838,7 +5554,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -4879,7 +5595,7 @@
           "silos"
         ],
         "summary": "Create a new silo.",
-        "operationId": "silos_post",
+        "operationId": "silo_create",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4916,7 +5632,7 @@
           "silos"
         ],
         "summary": "Fetch a specific silo",
-        "operationId": "silos_get_silo",
+        "operationId": "silo_view",
         "parameters": [
           {
             "in": "path",
@@ -4953,7 +5669,7 @@
           "silos"
         ],
         "summary": "Delete a specific silo.",
-        "operationId": "silos_delete_silo",
+        "operationId": "silo_delete",
         "parameters": [
           {
             "in": "path",
@@ -4979,13 +5695,83 @@
         }
       }
     },
+    "/silos/{silo_name}/identity_providers": {
+      "get": {
+        "tags": [
+          "silos"
+        ],
+        "summary": "List Silo identity providers",
+        "operationId": "silo_identity_provider_list",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "silo_name",
+            "description": "The silo's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retrieve the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityProviderResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      }
+    },
     "/silos/{silo_name}/policy": {
       "get": {
         "tags": [
           "silos"
         ],
         "summary": "Fetch the IAM policy for this Silo",
-        "operationId": "silos_get_silo_policy",
+        "operationId": "silo_policy_view",
         "parameters": [
           {
             "in": "path",
@@ -5004,7 +5790,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SiloRolesPolicy"
+                  "$ref": "#/components/schemas/SiloRolePolicy"
                 }
               }
             }
@@ -5022,7 +5808,7 @@
           "silos"
         ],
         "summary": "Update the IAM policy for this Silo",
-        "operationId": "silos_put_silo_policy",
+        "operationId": "silo_policy_update",
         "parameters": [
           {
             "in": "path",
@@ -5039,7 +5825,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SiloRolesPolicy"
+                "$ref": "#/components/schemas/SiloRolePolicy"
               }
             }
           },
@@ -5051,7 +5837,204 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SiloRolesPolicy"
+                  "$ref": "#/components/schemas/SiloRolePolicy"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/silos/{silo_name}/saml_identity_providers": {
+      "post": {
+        "tags": [
+          "silos"
+        ],
+        "summary": "Create a new SAML identity provider for a silo.",
+        "operationId": "silo_identity_provider_create",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "silo_name",
+            "description": "The silo's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SamlIdentityProviderCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SamlIdentityProvider"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/silos/{silo_name}/saml_identity_providers/{provider_name}": {
+      "get": {
+        "tags": [
+          "silos"
+        ],
+        "summary": "GET a silo's SAML identity provider",
+        "operationId": "silo_identity_provider_view",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "provider_name",
+            "description": "The SAML identity provider's name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "silo_name",
+            "description": "The silo's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SamlIdentityProvider"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/system/user": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "List the built-in system users",
+        "operationId": "system_user_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Maximum number of items returned by a single call",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 1
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "page_token",
+            "description": "Token returned by previous call to retrieve the subsequent page",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "$ref": "#/components/schemas/NameSortMode"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBuiltinResultsPage"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "x-dropshot-pagination": true
+      }
+    },
+    "/system/user/{user_name}": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Fetch a specific built-in system user",
+        "operationId": "system_user_view",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_name",
+            "description": "The built-in user's unique name.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBuiltin"
                 }
               }
             }
@@ -5088,7 +6071,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -5140,10 +6123,10 @@
     "/users": {
       "get": {
         "tags": [
-          "users"
+          "silos"
         ],
-        "summary": "List the built-in system users",
-        "operationId": "users_get",
+        "summary": "List users",
+        "operationId": "user_list",
         "parameters": [
           {
             "in": "query",
@@ -5160,7 +6143,7 @@
           {
             "in": "query",
             "name": "page_token",
-            "description": "Token returned by previous call to retreive the subsequent page",
+            "description": "Token returned by previous call to retrieve the subsequent page",
             "schema": {
               "nullable": true,
               "type": "string"
@@ -5171,7 +6154,7 @@
             "in": "query",
             "name": "sort_by",
             "schema": {
-              "$ref": "#/components/schemas/NameSortMode"
+              "$ref": "#/components/schemas/IdSortMode"
             },
             "style": "form"
           }
@@ -5195,45 +6178,6 @@
           }
         },
         "x-dropshot-pagination": true
-      }
-    },
-    "/users/{user_name}": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Fetch a specific built-in system user",
-        "operationId": "users_get_user",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "user_name",
-            "description": "The built-in user's unique name.",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Name"
-            },
-            "style": "simple"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "4XX": {
-            "$ref": "#/components/responses/Error"
-          },
-          "5XX": {
-            "$ref": "#/components/responses/Error"
-          }
-        }
       }
     }
   },
@@ -5281,6 +6225,66 @@
           "histogram_f64"
         ]
       },
+      "DerEncodedKeyPair": {
+        "type": "object",
+        "properties": {
+          "private_key": {
+            "description": "request signing private key (base64 encoded der file)",
+            "type": "string"
+          },
+          "public_cert": {
+            "description": "request signing public certificate (base64 encoded der file)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "private_key",
+          "public_cert"
+        ]
+      },
+      "DeviceAccessTokenRequest": {
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "device_code": {
+            "type": "string"
+          },
+          "grant_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "device_code",
+          "grant_type"
+        ]
+      },
+      "DeviceAuthRequest": {
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "client_id"
+        ]
+      },
+      "DeviceAuthVerify": {
+        "type": "object",
+        "properties": {
+          "user_code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_code"
+        ]
+      },
       "Digest": {
         "oneOf": [
           {
@@ -5304,7 +6308,7 @@
         ]
       },
       "Disk": {
-        "description": "Client view of an [`Disk`]",
+        "description": "Client view of a [`Disk`]",
         "type": "object",
         "properties": {
           "block_size": {
@@ -5655,6 +6659,28 @@
           }
         ]
       },
+      "Distribution": {
+        "description": "OS image distribution",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of the distribution (e.g. \"alpine\" or \"ubuntu\")",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "version": {
+            "description": "The version of the distribution (e.g. \"3.10\" or \"18.04\")",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "version"
+        ]
+      },
       "Error": {
         "description": "Error information from a response.",
         "type": "object",
@@ -5713,7 +6739,7 @@
           "bool"
         ]
       },
-      "FleetRoles": {
+      "FleetRole": {
         "type": "string",
         "enum": [
           "admin",
@@ -5721,7 +6747,7 @@
           "viewer"
         ]
       },
-      "FleetRolesPolicy": {
+      "FleetRolePolicy": {
         "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
         "type": "object",
         "properties": {
@@ -5729,7 +6755,7 @@
             "description": "Roles directly assigned on this resource",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FleetRolesRoleAssignment"
+              "$ref": "#/components/schemas/FleetRoleRoleAssignment"
             }
           }
         },
@@ -5737,7 +6763,7 @@
           "role_assignments"
         ]
       },
-      "FleetRolesRoleAssignment": {
+      "FleetRoleRoleAssignment": {
         "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
         "type": "object",
         "properties": {
@@ -5749,7 +6775,7 @@
             "$ref": "#/components/schemas/IdentityType"
           },
           "role_name": {
-            "$ref": "#/components/schemas/FleetRoles"
+            "$ref": "#/components/schemas/FleetRole"
           }
         },
         "required": [
@@ -5782,6 +6808,10 @@
                 "$ref": "#/components/schemas/Digest"
               }
             ]
+          },
+          "distribution": {
+            "description": "Image distribution",
+            "type": "string"
           },
           "id": {
             "description": "unique, immutable, system-controlled identifier for each resource",
@@ -5820,19 +6850,63 @@
             "type": "string"
           },
           "version": {
-            "nullable": true,
-            "description": "Version of this, if any",
+            "description": "Image version",
             "type": "string"
           }
         },
         "required": [
           "block_size",
           "description",
+          "distribution",
           "id",
           "name",
           "size",
           "time_created",
-          "time_modified"
+          "time_modified",
+          "version"
+        ]
+      },
+      "GlobalImageCreate": {
+        "description": "Create-time parameters for an [`GlobalImage`](omicron_common::api::external::GlobalImage)",
+        "type": "object",
+        "properties": {
+          "block_size": {
+            "description": "block size in bytes",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BlockSize"
+              }
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "distribution": {
+            "description": "OS image distribution",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Distribution"
+              }
+            ]
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
+          "source": {
+            "description": "The source of the image's contents.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImageSource"
+              }
+            ]
+          }
+        },
+        "required": [
+          "block_size",
+          "description",
+          "distribution",
+          "name",
+          "source"
         ]
       },
       "GlobalImageResultsPage": {
@@ -5856,11 +6930,127 @@
           "items"
         ]
       },
+      "IdentityProvider": {
+        "description": "Client view of an [`IdentityProvider`]",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "provider_type": {
+            "description": "Identity provider type",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IdentityProviderType"
+              }
+            ]
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "description",
+          "id",
+          "name",
+          "provider_type",
+          "time_created",
+          "time_modified"
+        ]
+      },
+      "IdentityProviderResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdentityProvider"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "IdentityProviderType": {
+        "type": "string",
+        "enum": [
+          "saml"
+        ]
+      },
       "IdentityType": {
         "description": "Describes what kind of identity is described by an id",
         "type": "string",
         "enum": [
           "silo_user"
+        ]
+      },
+      "IdpMetadataSource": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "url"
+                ]
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "url"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "base64_encoded_xml"
+                ]
+              }
+            },
+            "required": [
+              "data",
+              "type"
+            ]
+          }
         ]
       },
       "Image": {
@@ -6007,25 +7197,25 @@
           {
             "type": "object",
             "properties": {
-              "src": {
-                "type": "string"
-              },
               "type": {
                 "type": "string",
                 "enum": [
                   "url"
                 ]
+              },
+              "url": {
+                "type": "string"
               }
             },
             "required": [
-              "src",
-              "type"
+              "type",
+              "url"
             ]
           },
           {
             "type": "object",
             "properties": {
-              "src": {
+              "id": {
                 "type": "string",
                 "format": "uuid"
               },
@@ -6037,7 +7227,22 @@
               }
             },
             "required": [
-              "src",
+              "id",
+              "type"
+            ]
+          },
+          {
+            "description": "Boot the Alpine ISO that ships with the Propolis zone. Intended for development purposes only.",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "you_can_boot_anything_as_long_as_its_alpine"
+                ]
+              }
+            },
+            "required": [
               "type"
             ]
           }
@@ -6253,20 +7458,20 @@
         "description": "Migration parameters for an [`Instance`](omicron_common::api::external::Instance)",
         "type": "object",
         "properties": {
-          "dst_sled_uuid": {
+          "dst_sled_id": {
             "type": "string",
             "format": "uuid"
           }
         },
         "required": [
-          "dst_sled_uuid"
+          "dst_sled_id"
         ]
       },
       "InstanceNetworkInterfaceAttachment": {
         "description": "Describes an attachment of a `NetworkInterface` to an `Instance`, at the time the instance is created.",
         "oneOf": [
           {
-            "description": "Create one or more `NetworkInterface`s for the `Instance`",
+            "description": "Create one or more `NetworkInterface`s for the `Instance`.\n\nIf more than one interface is provided, then the first will be designated the primary interface for the instance.",
             "type": "object",
             "properties": {
               "params": {
@@ -6288,7 +7493,7 @@
             ]
           },
           {
-            "description": "Default networking setup, which creates a single interface with an auto-assigned IP address from project's \"default\" VPC and \"default\" VPC Subnet.",
+            "description": "The default networking configuration for an instance is to create a single primary interface with an automatically-assigned IP address. The IP will be pulled from the Project's default VPC / VPC Subnet.",
             "type": "object",
             "properties": {
               "type": {
@@ -6340,6 +7545,31 @@
           "items"
         ]
       },
+      "InstanceSerialConsoleData": {
+        "description": "Contents of an Instance's serial console buffer.",
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "The bytes starting from the requested offset up to either the end of the buffer or the request's `max_bytes`. Provided as a u8 array rather than a string, as it may not be UTF-8.",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0
+            }
+          },
+          "last_byte_offset": {
+            "description": "The absolute offset since boot (suitable for use as `byte_offset` in a subsequent request) of the last byte returned in `data`.",
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "data",
+          "last_byte_offset"
+        ]
+      },
       "InstanceState": {
         "description": "Running state of an Instance (primarily: booted or stopped)\n\nThis typically reflects whether it's starting, running, stopping, or stopped, but also includes states related to the Instance's lifecycle",
         "type": "string",
@@ -6376,6 +7606,163 @@
           }
         ]
       },
+      "IpPool": {
+        "description": "Identity-related metadata that's included in nearly all public API objects",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "description",
+          "id",
+          "name",
+          "time_created",
+          "time_modified"
+        ]
+      },
+      "IpPoolCreate": {
+        "description": "Create-time parameters for an IP Pool.\n\nSee [`IpPool`](omicron_nexus::external_api::views::IpPool)",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          }
+        },
+        "required": [
+          "description",
+          "name"
+        ]
+      },
+      "IpPoolRange": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "range": {
+            "$ref": "#/components/schemas/IpRange"
+          },
+          "time_created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "range",
+          "time_created"
+        ]
+      },
+      "IpPoolRangeResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IpPoolRange"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "IpPoolResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IpPool"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "IpPoolUpdate": {
+        "description": "Parameters for updating an IP Pool",
+        "type": "object",
+        "properties": {
+          "description": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          }
+        }
+      },
+      "IpRange": {
+        "oneOf": [
+          {
+            "title": "v4",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Ipv4Range"
+              }
+            ]
+          },
+          {
+            "title": "v6",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Ipv6Range"
+              }
+            ]
+          }
+        ]
+      },
       "Ipv4Net": {
         "example": "192.168.1.0/24",
         "title": "An IPv4 subnet",
@@ -6383,6 +7770,24 @@
         "type": "string",
         "pattern": "(^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$)|(^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$)|(^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$)",
         "maxLength": 18
+      },
+      "Ipv4Range": {
+        "description": "A non-decreasing IPv4 address range, inclusive of both ends.\n\nThe first address must be less than or equal to the last address.",
+        "type": "object",
+        "properties": {
+          "first": {
+            "type": "string",
+            "format": "ipv4"
+          },
+          "last": {
+            "type": "string",
+            "format": "ipv4"
+          }
+        },
+        "required": [
+          "first",
+          "last"
+        ]
       },
       "Ipv6Net": {
         "example": "fd12:3456::/64",
@@ -6392,6 +7797,24 @@
         "pattern": "^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}\\:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$",
         "maxLength": 43
       },
+      "Ipv6Range": {
+        "description": "A non-decreasing IPv6 address range, inclusive of both ends.\n\nThe first address must be less than or equal to the last address.",
+        "type": "object",
+        "properties": {
+          "first": {
+            "type": "string",
+            "format": "ipv6"
+          },
+          "last": {
+            "type": "string",
+            "format": "ipv6"
+          }
+        },
+        "required": [
+          "first",
+          "last"
+        ]
+      },
       "L4PortRange": {
         "example": "22",
         "title": "A range of IP ports",
@@ -6400,17 +7823,6 @@
         "pattern": "^[0-9]{1,5}(-[0-9]{1,5})?$",
         "minLength": 1,
         "maxLength": 11
-      },
-      "LoginParams": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "username"
-        ]
       },
       "MacAddr": {
         "example": "ff:ff:ff:ff:ff:ff",
@@ -6467,6 +7879,10 @@
               }
             ]
           },
+          "primary": {
+            "description": "True if this interface is the primary for the instance to which it's attached.",
+            "type": "boolean"
+          },
           "subnet_id": {
             "description": "The subnet to which the interface belongs.",
             "type": "string",
@@ -6495,6 +7911,7 @@
           "ip",
           "mac",
           "name",
+          "primary",
           "subnet_id",
           "time_created",
           "time_modified",
@@ -6561,6 +7978,29 @@
         "required": [
           "items"
         ]
+      },
+      "NetworkInterfaceUpdate": {
+        "description": "Parameters for updating a [`NetworkInterface`](omicron_common::api::external::NetworkInterface).\n\nNote that modifying IP addresses for an interface is not yet supported, a new interface must be created instead.",
+        "type": "object",
+        "properties": {
+          "description": {
+            "nullable": true,
+            "type": "string"
+          },
+          "make_primary": {
+            "description": "Make a secondary interface the instance's primary interface.\n\nIf applied to a secondary interface, that interface will become the primary on the next reboot of the instance. Note that this may have implications for routing between instances, as the new primary interface will be on a distinct subnet from the previous primary interface.\n\nNote that this can only be used to select a new primary interface for an instance. Requests to change the primary interface into a secondary will return an error.",
+            "default": false,
+            "type": "boolean"
+          },
+          "name": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          }
+        }
       },
       "Organization": {
         "description": "Client view of an [`Organization`]",
@@ -6639,14 +8079,15 @@
           "items"
         ]
       },
-      "OrganizationRoles": {
+      "OrganizationRole": {
         "type": "string",
         "enum": [
           "admin",
-          "collaborator"
+          "collaborator",
+          "viewer"
         ]
       },
-      "OrganizationRolesPolicy": {
+      "OrganizationRolePolicy": {
         "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
         "type": "object",
         "properties": {
@@ -6654,7 +8095,7 @@
             "description": "Roles directly assigned on this resource",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OrganizationRolesRoleAssignment"
+              "$ref": "#/components/schemas/OrganizationRoleRoleAssignment"
             }
           }
         },
@@ -6662,7 +8103,7 @@
           "role_assignments"
         ]
       },
-      "OrganizationRolesRoleAssignment": {
+      "OrganizationRoleRoleAssignment": {
         "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
         "type": "object",
         "properties": {
@@ -6674,7 +8115,7 @@
             "$ref": "#/components/schemas/IdentityType"
           },
           "role_name": {
-            "$ref": "#/components/schemas/OrganizationRoles"
+            "$ref": "#/components/schemas/OrganizationRole"
           }
         },
         "required": [
@@ -6783,7 +8224,7 @@
           "items"
         ]
       },
-      "ProjectRoles": {
+      "ProjectRole": {
         "type": "string",
         "enum": [
           "admin",
@@ -6791,7 +8232,7 @@
           "viewer"
         ]
       },
-      "ProjectRolesPolicy": {
+      "ProjectRolePolicy": {
         "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
         "type": "object",
         "properties": {
@@ -6799,7 +8240,7 @@
             "description": "Roles directly assigned on this resource",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ProjectRolesRoleAssignment"
+              "$ref": "#/components/schemas/ProjectRoleRoleAssignment"
             }
           }
         },
@@ -6807,7 +8248,7 @@
           "role_assignments"
         ]
       },
-      "ProjectRolesRoleAssignment": {
+      "ProjectRoleRoleAssignment": {
         "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
         "type": "object",
         "properties": {
@@ -6819,7 +8260,7 @@
             "$ref": "#/components/schemas/IdentityType"
           },
           "role_name": {
-            "$ref": "#/components/schemas/ProjectRoles"
+            "$ref": "#/components/schemas/ProjectRole"
           }
         },
         "required": [
@@ -6850,22 +8291,10 @@
         "description": "Client view of an [`Rack`]",
         "type": "object",
         "properties": {
-          "description": {
-            "description": "human-readable free-form text about a resource",
-            "type": "string"
-          },
           "id": {
             "description": "unique, immutable, system-controlled identifier for each resource",
             "type": "string",
             "format": "uuid"
-          },
-          "name": {
-            "description": "unique, mutable, user-controlled identifier for each resource",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Name"
-              }
-            ]
           },
           "time_created": {
             "description": "timestamp when this resource was created",
@@ -6879,9 +8308,7 @@
           }
         },
         "required": [
-          "description",
           "id",
-          "name",
           "time_created",
           "time_modified"
         ]
@@ -7459,6 +8886,135 @@
           }
         ]
       },
+      "SamlIdentityProvider": {
+        "description": "Identity-related metadata that's included in nearly all public API objects",
+        "type": "object",
+        "properties": {
+          "acs_url": {
+            "description": "service provider endpoint where the response will be sent",
+            "type": "string"
+          },
+          "description": {
+            "description": "human-readable free-form text about a resource",
+            "type": "string"
+          },
+          "id": {
+            "description": "unique, immutable, system-controlled identifier for each resource",
+            "type": "string",
+            "format": "uuid"
+          },
+          "idp_entity_id": {
+            "description": "idp's entity id",
+            "type": "string"
+          },
+          "name": {
+            "description": "unique, mutable, user-controlled identifier for each resource",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Name"
+              }
+            ]
+          },
+          "public_cert": {
+            "nullable": true,
+            "description": "optional request signing public certificate (base64 encoded der file)",
+            "type": "string"
+          },
+          "slo_url": {
+            "description": "service provider endpoint where the idp should send log out requests",
+            "type": "string"
+          },
+          "sp_client_id": {
+            "description": "sp's client id",
+            "type": "string"
+          },
+          "technical_contact_email": {
+            "description": "customer's technical contact for saml configuration",
+            "type": "string"
+          },
+          "time_created": {
+            "description": "timestamp when this resource was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_modified": {
+            "description": "timestamp when this resource was last modified",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "acs_url",
+          "description",
+          "id",
+          "idp_entity_id",
+          "name",
+          "slo_url",
+          "sp_client_id",
+          "technical_contact_email",
+          "time_created",
+          "time_modified"
+        ]
+      },
+      "SamlIdentityProviderCreate": {
+        "description": "Create-time identity-related parameters",
+        "type": "object",
+        "properties": {
+          "acs_url": {
+            "description": "service provider endpoint where the response will be sent",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "idp_entity_id": {
+            "description": "idp's entity id",
+            "type": "string"
+          },
+          "idp_metadata_source": {
+            "description": "the source of an identity provider metadata descriptor",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IdpMetadataSource"
+              }
+            ]
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
+          "signing_keypair": {
+            "nullable": true,
+            "description": "optional request signing key pair",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DerEncodedKeyPair"
+              }
+            ]
+          },
+          "slo_url": {
+            "description": "service provider endpoint where the idp should send log out requests",
+            "type": "string"
+          },
+          "sp_client_id": {
+            "description": "sp's client id",
+            "type": "string"
+          },
+          "technical_contact_email": {
+            "description": "customer's technical contact for saml configuration",
+            "type": "string"
+          }
+        },
+        "required": [
+          "acs_url",
+          "description",
+          "idp_entity_id",
+          "idp_metadata_source",
+          "name",
+          "slo_url",
+          "sp_client_id",
+          "technical_contact_email"
+        ]
+      },
       "SessionUser": {
         "description": "Client view of currently authed user.",
         "type": "object",
@@ -7506,6 +9062,14 @@
             "description": "timestamp when this resource was last modified",
             "type": "string",
             "format": "date-time"
+          },
+          "user_provision_type": {
+            "description": "User provision type",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserProvisionType"
+              }
+            ]
           }
         },
         "required": [
@@ -7514,7 +9078,8 @@
           "id",
           "name",
           "time_created",
-          "time_modified"
+          "time_modified",
+          "user_provision_type"
         ]
       },
       "SiloCreate": {
@@ -7529,12 +9094,16 @@
           },
           "name": {
             "$ref": "#/components/schemas/Name"
+          },
+          "user_provision_type": {
+            "$ref": "#/components/schemas/UserProvisionType"
           }
         },
         "required": [
           "description",
           "discoverable",
-          "name"
+          "name",
+          "user_provision_type"
         ]
       },
       "SiloResultsPage": {
@@ -7558,7 +9127,7 @@
           "items"
         ]
       },
-      "SiloRoles": {
+      "SiloRole": {
         "type": "string",
         "enum": [
           "admin",
@@ -7566,7 +9135,7 @@
           "viewer"
         ]
       },
-      "SiloRolesPolicy": {
+      "SiloRolePolicy": {
         "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
         "type": "object",
         "properties": {
@@ -7574,7 +9143,7 @@
             "description": "Roles directly assigned on this resource",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SiloRolesRoleAssignment"
+              "$ref": "#/components/schemas/SiloRoleRoleAssignment"
             }
           }
         },
@@ -7582,7 +9151,7 @@
           "role_assignments"
         ]
       },
-      "SiloRolesRoleAssignment": {
+      "SiloRoleRoleAssignment": {
         "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
         "type": "object",
         "properties": {
@@ -7594,7 +9163,7 @@
             "$ref": "#/components/schemas/IdentityType"
           },
           "role_name": {
-            "$ref": "#/components/schemas/SiloRoles"
+            "$ref": "#/components/schemas/SiloRole"
           }
         },
         "required": [
@@ -7607,22 +9176,10 @@
         "description": "Client view of an [`Sled`]",
         "type": "object",
         "properties": {
-          "description": {
-            "description": "human-readable free-form text about a resource",
-            "type": "string"
-          },
           "id": {
             "description": "unique, immutable, system-controlled identifier for each resource",
             "type": "string",
             "format": "uuid"
-          },
-          "name": {
-            "description": "unique, mutable, user-controlled identifier for each resource",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Name"
-              }
-            ]
           },
           "service_address": {
             "type": "string"
@@ -7639,9 +9196,7 @@
           }
         },
         "required": [
-          "description",
           "id",
-          "name",
           "service_address",
           "time_created",
           "time_modified"
@@ -7766,6 +9321,17 @@
         },
         "required": [
           "items"
+        ]
+      },
+      "SpoofLoginBody": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
         ]
       },
       "SshKey": {
@@ -7920,6 +9486,24 @@
         "description": "Client view of a [`User`]",
         "type": "object",
         "properties": {
+          "display_name": {
+            "description": "Human-readable name that can identify the user",
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "display_name",
+          "id"
+        ]
+      },
+      "UserBuiltin": {
+        "description": "Client view of a [`UserBuiltin`]",
+        "type": "object",
+        "properties": {
           "description": {
             "description": "human-readable free-form text about a resource",
             "type": "string"
@@ -7954,6 +9538,35 @@
           "name",
           "time_created",
           "time_modified"
+        ]
+      },
+      "UserBuiltinResultsPage": {
+        "description": "A single page of results",
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "list of items on this page of results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserBuiltin"
+            }
+          },
+          "next_page": {
+            "nullable": true,
+            "description": "token used to fetch the next page of results (if any)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "UserProvisionType": {
+        "description": "How users will be provisioned in a silo during authentication.",
+        "type": "string",
+        "enum": [
+          "fixed",
+          "jit"
         ]
       },
       "UserResultsPage": {
@@ -8875,6 +10488,13 @@
       }
     },
     {
+      "name": "hardware",
+      "description": "These operations pertain to hardware inventory and management. Racks are the unit of expansion of an Oxide deployment. Racks are in turn composed of sleds, switches, power supplies, and a cabled backplane.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
       "name": "hidden",
       "description": "TODO operations that will not ship to customers",
       "externalDocs": {
@@ -8898,6 +10518,20 @@
     {
       "name": "instances",
       "description": "Virtual machine instances are the basic unit of computation. These operations are used for provisioning, controlling, and destroying instances.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "ip-pools",
+      "description": "IP Pools contain external IP addresses that can be assigned to virtual machine Instances.",
+      "externalDocs": {
+        "url": "http://oxide.computer/docs/#xxx"
+      }
+    },
+    {
+      "name": "login",
+      "description": "Authentication endpoints",
       "externalDocs": {
         "url": "http://oxide.computer/docs/#xxx"
       }
@@ -8931,13 +10565,6 @@
       }
     },
     {
-      "name": "racks",
-      "description": "These operations pertain to hardware inventory and management. Racks are the unit of expansion of an Oxide deployment. Racks are in turn composed of sleds, switches, power supplies, and a cabled backplane.",
-      "externalDocs": {
-        "url": "http://oxide.computer/docs/#xxx"
-      }
-    },
-    {
       "name": "roles",
       "description": "Roles are a component of Identity and Access Management (IAM) that allow a user or agent account access to additional permissions.",
       "externalDocs": {
@@ -8966,15 +10593,15 @@
       }
     },
     {
-      "name": "silos",
-      "description": "Silos represent a logical partition of users and resources.",
+      "name": "session",
+      "description": "Information pertaining to the current session.",
       "externalDocs": {
         "url": "http://oxide.computer/docs/#xxx"
       }
     },
     {
-      "name": "sleds",
-      "description": "This tag should be moved into hardware",
+      "name": "silos",
+      "description": "Silos represent a logical partition of users and resources.",
       "externalDocs": {
         "url": "http://oxide.computer/docs/#xxx"
       }
@@ -8987,13 +10614,6 @@
       }
     },
     {
-      "name": "sshkeys",
-      "description": "Public SSH keys for an individual user",
-      "externalDocs": {
-        "url": "http://oxide.computer/docs/#xxx"
-      }
-    },
-    {
       "name": "subnets",
       "description": "This tag should be moved into a generic network tag",
       "externalDocs": {
@@ -9001,15 +10621,15 @@
       }
     },
     {
-      "name": "updates",
-      "description": "This tag should be moved into a operations tag",
+      "name": "system",
+      "description": "Internal system information",
       "externalDocs": {
         "url": "http://oxide.computer/docs/#xxx"
       }
     },
     {
-      "name": "users",
-      "description": "This tag should be moved into an IAM tag",
+      "name": "updates",
+      "description": "This tag should be moved into a operations tag",
       "externalDocs": {
         "url": "http://oxide.computer/docs/#xxx"
       }
