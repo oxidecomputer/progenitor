@@ -85,7 +85,6 @@ fn main() -> Result<()> {
     let args = Args::parse();
     let api = load_api(&args.input)?;
 
-    //let mut builder = Generator::default();
     let mut builder = Generator::new(
         GenerationSettings::default()
             .with_interface(args.interface.into())
