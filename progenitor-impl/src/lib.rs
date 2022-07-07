@@ -398,9 +398,9 @@ impl Generator {
             "bytes = \"1.1.0\"",
             "futures-core = \"0.3.21\"",
             "percent-encoding = \"2.1\"",
+            "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
             "serde_urlencoded = 0.7",
-            "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
         ];
         if self.type_space.uses_uuid() {
             deps.push(
