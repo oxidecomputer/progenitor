@@ -3,6 +3,7 @@
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
+use serde::Deserialize;
 use thiserror::Error;
 use typify::TypeSpace;
 
@@ -23,7 +24,7 @@ pub enum Error {
     UnexpectedFormat(String),
     #[error("invalid operation path")]
     InvalidPath(String),
-    #[error("invalid operation path")]
+    #[error("internal error")]
     InternalError(String),
 }
 
@@ -32,15 +33,57 @@ pub type Result<T> = std::result::Result<T, Error>;
 #[derive(Default)]
 pub struct Generator {
     type_space: TypeSpace,
-    inner_type: Option<TokenStream>,
-    pre_hook: Option<TokenStream>,
-    post_hook: Option<TokenStream>,
+    settings: GenerationSettings,
     uses_futures: bool,
 }
 
-impl Generator {
+#[derive(Default, Clone)]
+pub struct GenerationSettings {
+    interface: InterfaceStyle,
+    tag: TagStyle,
+    inner_type: Option<TokenStream>,
+    pre_hook: Option<TokenStream>,
+    post_hook: Option<TokenStream>,
+    extra_derives: Vec<TokenStream>,
+}
+
+#[derive(Clone, Deserialize)]
+pub enum InterfaceStyle {
+    Positional,
+    Builder,
+}
+
+impl Default for InterfaceStyle {
+    fn default() -> Self {
+        Self::Positional
+    }
+}
+
+#[derive(Clone, Deserialize)]
+pub enum TagStyle {
+    Merged,
+    Separate,
+}
+
+impl Default for TagStyle {
+    fn default() -> Self {
+        Self::Merged
+    }
+}
+
+impl GenerationSettings {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
+        self.interface = interface;
+        self
+    }
+
+    pub fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
+        self.tag = tag;
+        self
     }
 
     pub fn with_inner_type(&mut self, inner_type: TokenStream) -> &mut Self {
@@ -58,9 +101,20 @@ impl Generator {
         self
     }
 
+    // TODO maybe change to a typify::Settings or something
     pub fn with_derive(&mut self, derive: TokenStream) -> &mut Self {
-        self.type_space.add_derive(derive);
+        self.extra_derives.push(derive);
         self
+    }
+}
+
+impl Generator {
+    pub fn new(settings: &GenerationSettings) -> Self {
+        Self {
+            type_space: TypeSpace::default(),
+            settings: settings.clone(),
+            uses_futures: false,
+        }
     }
 
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
@@ -77,6 +131,10 @@ impl Generator {
 
         self.type_space.set_type_mod("types");
         self.type_space.add_ref_types(schemas)?;
+        self.settings
+            .extra_derives
+            .iter()
+            .for_each(|derive| self.type_space.add_derive(derive.clone()));
 
         let raw_methods = spec
             .paths
@@ -103,10 +161,23 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
-        let methods = raw_methods
-            .iter()
-            .map(|method| self.positional_method(method))
-            .collect::<Result<Vec<_>>>()?;
+        let operation_code = match (
+            &self.settings.interface,
+            &self.settings.tag,
+        ) {
+            (InterfaceStyle::Positional, TagStyle::Merged) => {
+                self.generate_tokens_positional_merged(&raw_methods)
+            }
+            (InterfaceStyle::Positional, TagStyle::Separate) => {
+                unimplemented!("positional arguments with separate tags are currently unsupported")
+            }
+            (InterfaceStyle::Builder, TagStyle::Merged) => {
+                self.generate_tokens_builder_merged(&raw_methods)
+            }
+            (InterfaceStyle::Builder, TagStyle::Separate) => {
+                self.generate_tokens_builder_separate(&raw_methods)
+            }
+        }?;
 
         let mut types = self
             .type_space
@@ -117,12 +188,17 @@ impl Generator {
         let types = types.into_iter().map(|(_, def)| def);
         let shared = self.type_space.common_code();
 
-        let inner_property = self.inner_type.as_ref().map(|inner| {
+        let inner_property = self.settings.inner_type.as_ref().map(|inner| {
+            quote! {
+                pub (crate) inner: #inner,
+            }
+        });
+        let inner_parameter = self.settings.inner_type.as_ref().map(|inner| {
             quote! {
                 inner: #inner,
             }
         });
-        let inner_value = self.inner_type.as_ref().map(|_| {
+        let inner_value = self.settings.inner_type.as_ref().map(|_| {
             quote! {
                 inner
             }
@@ -132,6 +208,8 @@ impl Generator {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
+            #[allow(unused_imports)]
+            use progenitor_client::{encode_path, RequestBuilderExt};
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
@@ -141,15 +219,15 @@ impl Generator {
 
             #[derive(Clone)]
             pub struct Client {
-                baseurl: String,
-                client: reqwest::Client,
+                pub(crate) baseurl: String,
+                pub(crate) client: reqwest::Client,
                 #inner_property
             }
 
             impl Client {
                 pub fn new(
                     baseurl: &str,
-                    #inner_property
+                    #inner_parameter
                 ) -> Self {
                     let dur = std::time::Duration::from_secs(15);
                     let client = reqwest::ClientBuilder::new()
@@ -163,7 +241,7 @@ impl Generator {
                 pub fn new_with_client(
                     baseurl: &str,
                     client: reqwest::Client,
-                    #inner_property
+                    #inner_parameter
                 ) -> Self {
                     Self {
                         baseurl: baseurl.to_string(),
@@ -179,19 +257,134 @@ impl Generator {
                 pub fn client(&self) -> &reqwest::Client {
                     &self.client
                 }
-
-                #(#methods)*
             }
+
+            #operation_code
         };
 
         Ok(file)
     }
 
+    fn generate_tokens_positional_merged(
+        &mut self,
+        input_methods: &[method::OperationMethod],
+    ) -> Result<TokenStream> {
+        let methods = input_methods
+            .iter()
+            .map(|method| self.positional_method(method))
+            .collect::<Result<Vec<_>>>()?;
+        let out = quote! {
+            impl Client {
+                #(#methods)*
+            }
+        };
+        Ok(out)
+    }
+
+    fn generate_tokens_builder_merged(
+        &mut self,
+        input_methods: &[method::OperationMethod],
+    ) -> Result<TokenStream> {
+        let builder_struct = input_methods
+            .iter()
+            .map(|method| self.builder_struct(method, TagStyle::Merged))
+            .collect::<Result<Vec<_>>>()?;
+
+        let builder_methods = input_methods
+            .iter()
+            .map(|method| self.builder_impl(method))
+            .collect::<Vec<_>>();
+
+        let out = quote! {
+            impl Client {
+                #(#builder_methods)*
+            }
+
+            pub mod builder {
+                use super::types;
+                #[allow(unused_imports)]
+                use super::{
+                    encode_path,
+                    ByteStream,
+                    Error,
+                    RequestBuilderExt,
+                    ResponseValue,
+                };
+
+                #(#builder_struct)*
+            }
+        };
+
+        Ok(out)
+    }
+
+    fn generate_tokens_builder_separate(
+        &mut self,
+        input_methods: &[method::OperationMethod],
+    ) -> Result<TokenStream> {
+        let builder_struct = input_methods
+            .iter()
+            .map(|method| self.builder_struct(method, TagStyle::Separate))
+            .collect::<Result<Vec<_>>>()?;
+
+        let traits_and_impls = self.builder_tags(input_methods);
+
+        let out = quote! {
+            #traits_and_impls
+
+            pub mod builder {
+                use super::types;
+                #[allow(unused_imports)]
+                use super::{
+                    encode_path,
+                    ByteStream,
+                    Error,
+                    RequestBuilderExt,
+                    ResponseValue,
+                };
+
+                #(#builder_struct)*
+            }
+        };
+
+        Ok(out)
+    }
+
+    /// Render text output.
     pub fn generate_text(&mut self, spec: &OpenAPI) -> Result<String> {
+        self.generate_text_impl(
+            spec,
+            rustfmt_wrapper::config::Config::default(),
+        )
+    }
+
+    /// Render text output and normalize doc comments
+    ///
+    /// Requires a nightly install of `rustfmt` (even if the target project is
+    /// not using nightly).
+    pub fn generate_text_normalize_comments(
+        &mut self,
+        spec: &OpenAPI,
+    ) -> Result<String> {
+        self.generate_text_impl(
+            spec,
+            rustfmt_wrapper::config::Config {
+                normalize_doc_attributes: Some(true),
+                wrap_comments: Some(true),
+                ..Default::default()
+            },
+        )
+    }
+
+    fn generate_text_impl(
+        &mut self,
+        spec: &OpenAPI,
+        config: rustfmt_wrapper::config::Config,
+    ) -> Result<String> {
         let output = self.generate_tokens(spec)?;
 
         // Format the file with rustfmt.
-        let content = rustfmt_wrapper::rustfmt(output).unwrap();
+        let content = rustfmt_wrapper::rustfmt_config(config, output).unwrap();
 
         // Add newlines after end-braces at <= two levels of indentation.
         Ok(if cfg!(not(windows)) {
@@ -208,8 +401,9 @@ impl Generator {
             "bytes = \"1.1.0\"",
             "futures-core = \"0.3.21\"",
             "percent-encoding = \"2.1\"",
-            "serde = { version = \"1.0\", features = [\"derive\"] }",
             "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
+            "serde = { version = \"1.0\", features = [\"derive\"] }",
+            "serde_urlencoded = 0.7",
         ];
         if self.type_space.uses_uuid() {
             deps.push(

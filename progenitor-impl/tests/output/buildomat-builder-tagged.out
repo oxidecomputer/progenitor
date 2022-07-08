@@ -1,0 +1,1192 @@
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, RequestBuilderExt};
+pub use progenitor_client::{ByteStream, Error, ResponseValue};
+pub mod types {
+    use serde::{Deserialize, Serialize};
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Task {
+        pub id: String,
+        pub name: String,
+        pub output_rules: Vec<String>,
+        pub script: String,
+        pub state: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct TaskEvent {
+        pub payload: String,
+        pub seq: u32,
+        pub stream: String,
+        pub time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct TaskOutput {
+        pub id: String,
+        pub path: String,
+        pub size: u64,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct TaskSubmit {
+        pub name: String,
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        pub output_rules: Vec<String>,
+        pub script: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct TaskSubmitResult {
+        pub id: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct UploadedChunk {
+        pub id: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct UserCreate {
+        pub name: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct UserCreateResult {
+        pub id: String,
+        pub name: String,
+        pub token: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WhoamiResult {
+        pub id: String,
+        pub name: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct Worker {
+        pub deleted: bool,
+        pub id: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub instance_id: Option<String>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub lastping: Option<chrono::DateTime<chrono::offset::Utc>>,
+        pub recycle: bool,
+        pub tasks: Vec<WorkerTask>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkerAddOutput {
+        pub chunks: Vec<String>,
+        pub path: String,
+        pub size: i64,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkerAppendTask {
+        pub payload: String,
+        pub stream: String,
+        pub time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkerBootstrap {
+        pub bootstrap: String,
+        pub token: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkerBootstrapResult {
+        pub id: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkerCompleteTask {
+        pub failed: bool,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkerPingResult {
+        pub poweroff: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub task: Option<WorkerPingTask>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkerPingTask {
+        pub id: String,
+        pub output_rules: Vec<String>,
+        pub script: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkerTask {
+        pub id: String,
+        pub name: String,
+        pub owner: String,
+    }
+
+    #[derive(Serialize, Deserialize, Debug, Clone)]
+    pub struct WorkersResult {
+        pub workers: Vec<Worker>,
+    }
+}
+
+#[derive(Clone)]
+pub struct Client {
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
+}
+
+impl Client {
+    pub fn new(baseurl: &str) -> Self {
+        let dur = std::time::Duration::from_secs(15);
+        let client = reqwest::ClientBuilder::new()
+            .connect_timeout(dur)
+            .timeout(dur)
+            .build()
+            .unwrap();
+        Self::new_with_client(baseurl, client)
+    }
+
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
+            baseurl: baseurl.to_string(),
+            client,
+        }
+    }
+
+    pub fn baseurl(&self) -> &String {
+        &self.baseurl
+    }
+
+    pub fn client(&self) -> &reqwest::Client {
+        &self.client
+    }
+}
+
+impl Client {
+    ///Sends a `POST` request to `/v1/control/hold`
+    ///```ignore
+    /// let response = client.control_hold()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn control_hold(&self) -> builder::ControlHold {
+        builder::ControlHold::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/control/resume`
+    ///```ignore
+    /// let response = client.control_resume()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn control_resume(&self) -> builder::ControlResume {
+        builder::ControlResume::new(self)
+    }
+
+    ///Sends a `GET` request to `/v1/task/{task}`
+    ///```ignore
+    /// let response = client.task_get()
+    ///    .task(task)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn task_get(&self) -> builder::TaskGet {
+        builder::TaskGet::new(self)
+    }
+
+    ///Sends a `GET` request to `/v1/tasks`
+    ///```ignore
+    /// let response = client.tasks_get()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn tasks_get(&self) -> builder::TasksGet {
+        builder::TasksGet::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/tasks`
+    ///```ignore
+    /// let response = client.task_submit()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn task_submit(&self) -> builder::TaskSubmit {
+        builder::TaskSubmit::new(self)
+    }
+
+    ///Sends a `GET` request to `/v1/tasks/{task}/events`
+    ///```ignore
+    /// let response = client.task_events_get()
+    ///    .task(task)
+    ///    .minseq(minseq)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn task_events_get(&self) -> builder::TaskEventsGet {
+        builder::TaskEventsGet::new(self)
+    }
+
+    ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
+    ///```ignore
+    /// let response = client.task_outputs_get()
+    ///    .task(task)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn task_outputs_get(&self) -> builder::TaskOutputsGet {
+        builder::TaskOutputsGet::new(self)
+    }
+
+    ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
+    ///```ignore
+    /// let response = client.task_output_download()
+    ///    .task(task)
+    ///    .output(output)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn task_output_download(&self) -> builder::TaskOutputDownload {
+        builder::TaskOutputDownload::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/users`
+    ///```ignore
+    /// let response = client.user_create()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn user_create(&self) -> builder::UserCreate {
+        builder::UserCreate::new(self)
+    }
+
+    ///Sends a `GET` request to `/v1/whoami`
+    ///```ignore
+    /// let response = client.whoami()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn whoami(&self) -> builder::Whoami {
+        builder::Whoami::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/worker/bootstrap`
+    ///```ignore
+    /// let response = client.worker_bootstrap()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn worker_bootstrap(&self) -> builder::WorkerBootstrap {
+        builder::WorkerBootstrap::new(self)
+    }
+
+    ///Sends a `GET` request to `/v1/worker/ping`
+    ///```ignore
+    /// let response = client.worker_ping()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn worker_ping(&self) -> builder::WorkerPing {
+        builder::WorkerPing::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/worker/task/{task}/append`
+    ///```ignore
+    /// let response = client.worker_task_append()
+    ///    .task(task)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn worker_task_append(&self) -> builder::WorkerTaskAppend {
+        builder::WorkerTaskAppend::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
+    ///```ignore
+    /// let response = client.worker_task_upload_chunk()
+    ///    .task(task)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn worker_task_upload_chunk(&self) -> builder::WorkerTaskUploadChunk {
+        builder::WorkerTaskUploadChunk::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
+    ///```ignore
+    /// let response = client.worker_task_complete()
+    ///    .task(task)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn worker_task_complete(&self) -> builder::WorkerTaskComplete {
+        builder::WorkerTaskComplete::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/worker/task/{task}/output`
+    ///```ignore
+    /// let response = client.worker_task_add_output()
+    ///    .task(task)
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn worker_task_add_output(&self) -> builder::WorkerTaskAddOutput {
+        builder::WorkerTaskAddOutput::new(self)
+    }
+
+    ///Sends a `GET` request to `/v1/workers`
+    ///```ignore
+    /// let response = client.workers_list()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn workers_list(&self) -> builder::WorkersList {
+        builder::WorkersList::new(self)
+    }
+
+    ///Sends a `POST` request to `/v1/workers/recycle`
+    ///```ignore
+    /// let response = client.workers_recycle()
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn workers_recycle(&self) -> builder::WorkersRecycle {
+        builder::WorkersRecycle::new(self)
+    }
+}
+
+pub mod builder {
+    use super::types;
+    #[allow(unused_imports)]
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    ///Builder for [`Client::control_hold`]
+    ///
+    ///[`Client::control_hold`]: super::Client::control_hold
+    #[derive(Clone)]
+    pub struct ControlHold<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> ControlHold<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `POST` request to `/v1/control/hold`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/v1/control/hold", client.baseurl,);
+            let request = client.client.post(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::control_resume`]
+    ///
+    ///[`Client::control_resume`]: super::Client::control_resume
+    #[derive(Clone)]
+    pub struct ControlResume<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> ControlResume<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `POST` request to `/v1/control/resume`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/v1/control/resume", client.baseurl,);
+            let request = client.client.post(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::task_get`]
+    ///
+    ///[`Client::task_get`]: super::Client::task_get
+    #[derive(Clone)]
+    pub struct TaskGet<'a> {
+        client: &'a super::Client,
+        task: Option<String>,
+    }
+
+    impl<'a> TaskGet<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, task: None }
+        }
+
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
+            self
+        }
+
+        ///Sends a `GET` request to `/v1/task/{task}`
+        pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
+            let Self { client, task } = self;
+            let (task,) = match (task,) {
+                (Some(task),) => (task,),
+                (task,) => {
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/v1/task/{}",
+                client.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::tasks_get`]
+    ///
+    ///[`Client::tasks_get`]: super::Client::tasks_get
+    #[derive(Clone)]
+    pub struct TasksGet<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> TasksGet<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `GET` request to `/v1/tasks`
+        pub async fn send(self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/v1/tasks", client.baseurl,);
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::task_submit`]
+    ///
+    ///[`Client::task_submit`]: super::Client::task_submit
+    #[derive(Clone)]
+    pub struct TaskSubmit<'a> {
+        client: &'a super::Client,
+        body: Option<types::TaskSubmit>,
+    }
+
+    impl<'a> TaskSubmit<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, body: None }
+        }
+
+        pub fn body(mut self, value: types::TaskSubmit) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/v1/tasks`
+        pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
+            let Self { client, body } = self;
+            let (body,) = match (body,) {
+                (Some(body),) => (body,),
+                (body,) => {
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!("{}/v1/tasks", client.baseurl,);
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::task_events_get`]
+    ///
+    ///[`Client::task_events_get`]: super::Client::task_events_get
+    #[derive(Clone)]
+    pub struct TaskEventsGet<'a> {
+        client: &'a super::Client,
+        task: Option<String>,
+        minseq: Option<u32>,
+    }
+
+    impl<'a> TaskEventsGet<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client,
+                task: None,
+                minseq: None,
+            }
+        }
+
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
+            self
+        }
+
+        pub fn minseq(mut self, value: u32) -> Self {
+            self.minseq = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/v1/tasks/{task}/events`
+        pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskEvent>>, Error<()>> {
+            let Self {
+                client,
+                task,
+                minseq,
+            } = self;
+            let (task,) = match (task,) {
+                (Some(task),) => (task,),
+                (task,) => {
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/v1/tasks/{}/events",
+                client.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let mut query = Vec::new();
+            if let Some(v) = &minseq {
+                query.push(("minseq", v.to_string()));
+            }
+            let request = client.client.get(url).query(&query).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::task_outputs_get`]
+    ///
+    ///[`Client::task_outputs_get`]: super::Client::task_outputs_get
+    #[derive(Clone)]
+    pub struct TaskOutputsGet<'a> {
+        client: &'a super::Client,
+        task: Option<String>,
+    }
+
+    impl<'a> TaskOutputsGet<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, task: None }
+        }
+
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
+            self
+        }
+
+        ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
+        pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskOutput>>, Error<()>> {
+            let Self { client, task } = self;
+            let (task,) = match (task,) {
+                (Some(task),) => (task,),
+                (task,) => {
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/v1/tasks/{}/outputs",
+                client.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::task_output_download`]
+    ///
+    ///[`Client::task_output_download`]: super::Client::task_output_download
+    #[derive(Clone)]
+    pub struct TaskOutputDownload<'a> {
+        client: &'a super::Client,
+        task: Option<String>,
+        output: Option<String>,
+    }
+
+    impl<'a> TaskOutputDownload<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client,
+                task: None,
+                output: None,
+            }
+        }
+
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
+            self
+        }
+
+        pub fn output<S: ToString>(mut self, value: S) -> Self {
+            self.output = Some(value.to_string());
+            self
+        }
+
+        ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
+        pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
+            let Self {
+                client,
+                task,
+                output,
+            } = self;
+            let (task, output) = match (task, output) {
+                (Some(task), Some(output)) => (task, output),
+                (task, output) => {
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if output.is_none() {
+                        missing.push(stringify!(output));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/v1/tasks/{}/outputs/{}",
+                client.baseurl,
+                encode_path(&task.to_string()),
+                encode_path(&output.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200..=299 => Ok(ResponseValue::stream(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::user_create`]
+    ///
+    ///[`Client::user_create`]: super::Client::user_create
+    #[derive(Clone)]
+    pub struct UserCreate<'a> {
+        client: &'a super::Client,
+        body: Option<types::UserCreate>,
+    }
+
+    impl<'a> UserCreate<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, body: None }
+        }
+
+        pub fn body(mut self, value: types::UserCreate) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/v1/users`
+        pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
+            let Self { client, body } = self;
+            let (body,) = match (body,) {
+                (Some(body),) => (body,),
+                (body,) => {
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!("{}/v1/users", client.baseurl,);
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::whoami`]
+    ///
+    ///[`Client::whoami`]: super::Client::whoami
+    #[derive(Clone)]
+    pub struct Whoami<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> Whoami<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `GET` request to `/v1/whoami`
+        pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/v1/whoami", client.baseurl,);
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::worker_bootstrap`]
+    ///
+    ///[`Client::worker_bootstrap`]: super::Client::worker_bootstrap
+    #[derive(Clone)]
+    pub struct WorkerBootstrap<'a> {
+        client: &'a super::Client,
+        body: Option<types::WorkerBootstrap>,
+    }
+
+    impl<'a> WorkerBootstrap<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, body: None }
+        }
+
+        pub fn body(mut self, value: types::WorkerBootstrap) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/v1/worker/bootstrap`
+        pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
+            let Self { client, body } = self;
+            let (body,) = match (body,) {
+                (Some(body),) => (body,),
+                (body,) => {
+                    let mut missing = Vec::new();
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::worker_ping`]
+    ///
+    ///[`Client::worker_ping`]: super::Client::worker_ping
+    #[derive(Clone)]
+    pub struct WorkerPing<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> WorkerPing<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `GET` request to `/v1/worker/ping`
+        pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/v1/worker/ping", client.baseurl,);
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::worker_task_append`]
+    ///
+    ///[`Client::worker_task_append`]: super::Client::worker_task_append
+    #[derive(Clone)]
+    pub struct WorkerTaskAppend<'a> {
+        client: &'a super::Client,
+        task: Option<String>,
+        body: Option<types::WorkerAppendTask>,
+    }
+
+    impl<'a> WorkerTaskAppend<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client,
+                task: None,
+                body: None,
+            }
+        }
+
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
+            self
+        }
+
+        pub fn body(mut self, value: types::WorkerAppendTask) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/v1/worker/task/{task}/append`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client, task, body } = self;
+            let (task, body) = match (task, body) {
+                (Some(task), Some(body)) => (task, body),
+                (task, body) => {
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/v1/worker/task/{}/append",
+                client.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::worker_task_upload_chunk`]
+    ///
+    ///[`Client::worker_task_upload_chunk`]: super::Client::worker_task_upload_chunk
+    pub struct WorkerTaskUploadChunk<'a> {
+        client: &'a super::Client,
+        task: Option<String>,
+        body: Option<reqwest::Body>,
+    }
+
+    impl<'a> WorkerTaskUploadChunk<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client,
+                task: None,
+                body: None,
+            }
+        }
+
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
+            self
+        }
+
+        pub fn body<B: Into<reqwest::Body>>(mut self, value: B) -> Self {
+            self.body = Some(value.into());
+            self
+        }
+
+        ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
+        pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
+            let Self { client, task, body } = self;
+            let (task, body) = match (task, body) {
+                (Some(task), Some(body)) => (task, body),
+                (task, body) => {
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/v1/worker/task/{}/chunk",
+                client.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::CONTENT_TYPE,
+                    reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                )
+                .body(body)
+                .build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::worker_task_complete`]
+    ///
+    ///[`Client::worker_task_complete`]: super::Client::worker_task_complete
+    #[derive(Clone)]
+    pub struct WorkerTaskComplete<'a> {
+        client: &'a super::Client,
+        task: Option<String>,
+        body: Option<types::WorkerCompleteTask>,
+    }
+
+    impl<'a> WorkerTaskComplete<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client,
+                task: None,
+                body: None,
+            }
+        }
+
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
+            self
+        }
+
+        pub fn body(mut self, value: types::WorkerCompleteTask) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client, task, body } = self;
+            let (task, body) = match (task, body) {
+                (Some(task), Some(body)) => (task, body),
+                (task, body) => {
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/v1/worker/task/{}/complete",
+                client.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::worker_task_add_output`]
+    ///
+    ///[`Client::worker_task_add_output`]: super::Client::worker_task_add_output
+    #[derive(Clone)]
+    pub struct WorkerTaskAddOutput<'a> {
+        client: &'a super::Client,
+        task: Option<String>,
+        body: Option<types::WorkerAddOutput>,
+    }
+
+    impl<'a> WorkerTaskAddOutput<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client,
+                task: None,
+                body: None,
+            }
+        }
+
+        pub fn task<S: ToString>(mut self, value: S) -> Self {
+            self.task = Some(value.to_string());
+            self
+        }
+
+        pub fn body(mut self, value: types::WorkerAddOutput) -> Self {
+            self.body = Some(value);
+            self
+        }
+
+        ///Sends a `POST` request to `/v1/worker/task/{task}/output`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client, task, body } = self;
+            let (task, body) = match (task, body) {
+                (Some(task), Some(body)) => (task, body),
+                (task, body) => {
+                    let mut missing = Vec::new();
+                    if task.is_none() {
+                        missing.push(stringify!(task));
+                    }
+                    if body.is_none() {
+                        missing.push(stringify!(body));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/v1/worker/task/{}/output",
+                client.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::workers_list`]
+    ///
+    ///[`Client::workers_list`]: super::Client::workers_list
+    #[derive(Clone)]
+    pub struct WorkersList<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> WorkersList<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `GET` request to `/v1/workers`
+        pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/v1/workers", client.baseurl,);
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::workers_recycle`]
+    ///
+    ///[`Client::workers_recycle`]: super::Client::workers_recycle
+    #[derive(Clone)]
+    pub struct WorkersRecycle<'a> {
+        client: &'a super::Client,
+    }
+
+    impl<'a> WorkersRecycle<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client }
+        }
+
+        ///Sends a `POST` request to `/v1/workers/recycle`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client } = self;
+            let url = format!("{}/v1/workers/recycle", client.baseurl,);
+            let request = client.client.post(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+}

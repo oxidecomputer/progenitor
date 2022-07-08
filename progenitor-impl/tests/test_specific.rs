@@ -64,8 +64,8 @@ fn test_renamed_parameters() {
 
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
-    let mut generator = Generator::new();
-    let output = generator.generate_text(&spec).unwrap();
+    let mut generator = Generator::default();
+    let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
         format!("tests/output/{}.out", "test_renamed_parameters"),
         &output,
@@ -97,8 +97,8 @@ fn test_freeform_response() {
     let out = from_utf8(&out).unwrap();
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
-    let mut generator = Generator::new();
-    let output = generator.generate_text(&spec).unwrap();
+    let mut generator = Generator::default();
+    let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
         format!("tests/output/{}.out", "test_freeform_response"),
         &output,
@@ -145,8 +145,8 @@ fn test_default_params() {
     let out = from_utf8(&out).unwrap();
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
-    let mut generator = Generator::new();
-    let output = generator.generate_text(&spec).unwrap();
+    let mut generator = Generator::default();
+    let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
         format!("tests/output/{}.out", "test_default_params"),
         &output,

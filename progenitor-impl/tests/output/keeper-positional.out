@@ -1,3 +1,5 @@
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
@@ -73,8 +75,8 @@ pub mod types {
 
 #[derive(Clone)]
 pub struct Client {
-    baseurl: String,
-    client: reqwest::Client,
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
 }
 
 impl Client {
@@ -102,14 +104,16 @@ impl Client {
     pub fn client(&self) -> &reqwest::Client {
         &self.client
     }
+}
 
-    #[doc = "Sends a `POST` request to `/enrol`"]
+impl Client {
+    ///Sends a `POST` request to `/enrol`
     pub async fn enrol<'a>(
         &'a self,
         body: &'a types::EnrolBody,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/enrol", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -118,7 +122,7 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `GET` request to `/global/jobs`"]
+    ///Sends a `GET` request to `/global/jobs`
     pub async fn global_jobs<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
@@ -132,7 +136,7 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `GET` request to `/ping`"]
+    ///Sends a `GET` request to `/ping`
     pub async fn ping<'a>(&'a self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
         let url = format!("{}/ping", self.baseurl,);
         let request = self.client.get(url).build()?;
@@ -144,13 +148,13 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `POST` request to `/report/finish`"]
+    ///Sends a `POST` request to `/report/finish`
     pub async fn report_finish<'a>(
         &'a self,
         body: &'a types::ReportFinishBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/finish", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -159,13 +163,13 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `POST` request to `/report/output`"]
+    ///Sends a `POST` request to `/report/output`
     pub async fn report_output<'a>(
         &'a self,
         body: &'a types::ReportOutputBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/output", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -174,13 +178,13 @@ impl Client {
         }
     }
 
-    #[doc = "Sends a `POST` request to `/report/start`"]
+    ///Sends a `POST` request to `/report/start`
     pub async fn report_start<'a>(
         &'a self,
         body: &'a types::ReportStartBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/start", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

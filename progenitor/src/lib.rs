@@ -12,5 +12,8 @@
 
 pub use progenitor_client;
 pub use progenitor_impl::Error;
+pub use progenitor_impl::GenerationSettings;
 pub use progenitor_impl::Generator;
+pub use progenitor_impl::InterfaceStyle;
+pub use progenitor_impl::TagStyle;
 pub use progenitor_macro::generate_api;

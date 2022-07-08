@@ -19,7 +19,11 @@ pub struct PathTemplate {
 }
 
 impl PathTemplate {
-    pub fn compile(&self, rename: HashMap<&String, &String>) -> TokenStream {
+    pub fn compile(
+        &self,
+        rename: HashMap<&String, &String>,
+        client: TokenStream,
+    ) -> TokenStream {
         let mut fmt = String::new();
         fmt.push_str("{}");
         for c in self.components.iter() {
@@ -39,7 +43,7 @@ impl PathTemplate {
                         .expect(&format!("missing path name mapping {}", n)),
                 );
                 Some(quote! {
-                    progenitor_client::encode_path(&#param.to_string())
+                    encode_path(&#param.to_string())
                 })
             } else {
                 None
@@ -47,7 +51,7 @@ impl PathTemplate {
         });
 
         quote! {
-            let url = format!(#fmt, self.baseurl, #(#components,)*);
+            let url = format!(#fmt, #client.baseurl, #(#components,)*);
         }
     }
 
@@ -233,11 +237,11 @@ mod test {
         let number = "number".to_string();
         rename.insert(&number, &number);
         let t = parse("/measure/{number}").unwrap();
-        let out = t.compile(rename);
+        let out = t.compile(rename, quote::quote! { self });
         let want = quote::quote! {
             let url = format!("{}/measure/{}",
                 self.baseurl,
-                progenitor_client::encode_path(&number.to_string()),
+                encode_path(&number.to_string()),
             );
         };
         assert_eq!(want.to_string(), out.to_string());

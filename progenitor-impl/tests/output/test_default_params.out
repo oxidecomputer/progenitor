@@ -1,3 +1,5 @@
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
@@ -20,7 +22,7 @@ pub mod types {
         pub yes: bool,
     }
 
-    #[doc = "Error information from a response."]
+    ///Error information from a response.
     #[derive(Serialize, Deserialize, Debug, Clone)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -32,8 +34,8 @@ pub mod types {
 
 #[derive(Clone)]
 pub struct Client {
-    baseurl: String,
-    client: reqwest::Client,
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
 }
 
 impl Client {
@@ -61,14 +63,16 @@ impl Client {
     pub fn client(&self) -> &reqwest::Client {
         &self.client
     }
+}
 
-    #[doc = "Sends a `POST` request to ``"]
+impl Client {
+    ///Sends a `POST` request to ``
     pub async fn default_params<'a>(
         &'a self,
         body: &'a types::BodyWithDefaults,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}", self.baseurl,);
-        let request = self.client.post(url).json(body).build()?;
+        let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
