@@ -20,6 +20,11 @@ fn verify_file(openapi_file: &str) {
 }
 
 #[test]
+fn test_vault() {
+    verify_file("vault");
+}
+
+#[test]
 fn test_keeper() {
     verify_file("keeper");
 }
