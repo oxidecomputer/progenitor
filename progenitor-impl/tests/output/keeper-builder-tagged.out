@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::encode_path;
+use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
@@ -173,11 +173,9 @@ impl Client {
 }
 
 pub mod builder {
-    #[allow(unused_imports)]
-    use super::encode_path;
     use super::types;
     #[allow(unused_imports)]
-    use super::{ByteStream, Error, ResponseValue};
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`Client::enrol`]
     ///
     ///[`Client::enrol`]: super::Client::enrol

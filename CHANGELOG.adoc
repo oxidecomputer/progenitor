@@ -16,6 +16,7 @@
 https://github.com/oxidecomputer/progenitor/compare/v0.1.1\...HEAD[Full list of commits]
 
 * Add support for a builder-style generation in addition to the positional style (#86)
+* Add support for body parameters with application/x-www-form-urlencoded media type (#109)
 
 == 0.1.1 (released 2022-05-13)
 

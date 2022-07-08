@@ -11,7 +11,8 @@ use std::{
 
 use bytes::Bytes;
 use futures_core::Stream;
-use serde::de::DeserializeOwned;
+use reqwest::RequestBuilder;
+use serde::{de::DeserializeOwned, Serialize};
 
 /// Represents an untyped byte stream for both success and error responses.
 pub type ByteStream =
@@ -140,7 +141,7 @@ pub enum Error<E = ()> {
     /// The request did not conform to API requirements.
     InvalidRequest(String),
 
-    /// A server error either with the data, or with the connection.
+    /// A server error either due to the data, or with the connection.
     CommunicationError(reqwest::Error),
 
     /// A documented, expected error response.
@@ -246,4 +247,30 @@ const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
 #[doc(hidden)]
 pub fn encode_path(pc: &str) -> String {
     percent_encoding::utf8_percent_encode(pc, PATH_SET).to_string()
+}
+
+#[doc(hidden)]
+pub trait RequestBuilderExt<E> {
+    fn form_urlencoded<T: Serialize + ?Sized>(
+        self,
+        body: &T,
+    ) -> Result<RequestBuilder, Error<E>>;
+}
+
+impl<E> RequestBuilderExt<E> for RequestBuilder {
+    fn form_urlencoded<T: Serialize + ?Sized>(
+        self,
+        body: &T,
+    ) -> Result<Self, Error<E>> {
+        Ok(self
+            .header(
+                reqwest::header::CONTENT_TYPE,
+                reqwest::header::HeaderValue::from_static(
+                    "application/x-www-form-urlencoded",
+                ),
+            )
+            .body(serde_json::to_vec(&body).map_err(|_| {
+                Error::InvalidRequest("failed to serialize body".to_string())
+            })?))
+    }
 }

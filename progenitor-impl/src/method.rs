@@ -27,7 +27,6 @@ pub(crate) struct OperationMethod {
     summary: Option<String>,
     description: Option<String>,
     params: Vec<OperationParameter>,
-    raw_body_param: bool,
     responses: Vec<OperationResponse>,
     dropshot_paginated: Option<DropshotPagination>,
 }
@@ -91,12 +90,6 @@ struct DropshotPagination {
     item: TypeId,
 }
 
-#[derive(Debug, PartialEq, Eq)]
-enum OperationParameterKind {
-    Path,
-    Query(bool),
-    Body,
-}
 struct OperationParameter {
     /// Sanitized parameter name.
     name: String,
@@ -112,6 +105,37 @@ enum OperationParameterType {
     Type(TypeId),
     RawBody,
 }
+
+#[derive(Debug, PartialEq, Eq)]
+enum OperationParameterKind {
+    Path,
+    Query(bool),
+    Body(BodyContentType),
+}
+
+#[derive(Debug, PartialEq, Eq)]
+enum BodyContentType {
+    OctetStream,
+    Json,
+    FormUrlencoded,
+}
+
+impl FromStr for BodyContentType {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        match s {
+            "application/octet-stream" => Ok(Self::OctetStream),
+            "application/json" => Ok(Self::Json),
+            "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
+            _ => Err(Error::UnexpectedFormat(format!(
+                "unexpected content type: {}",
+                s
+            ))),
+        }
+    }
+}
+
 #[derive(Debug)]
 struct OperationResponse {
     status_code: OperationResponseStatus,
@@ -313,44 +337,11 @@ impl Generator {
                 }
             })
             .collect::<Result<Vec<_>>>()?;
-        let mut raw_body_param = false;
-        if let Some(b) = &operation.request_body {
-            let b = b.item(components)?;
-            let typ = if b.is_binary(components)? {
-                raw_body_param = true;
-                OperationParameterType::RawBody
-            } else {
-                let mt = b.content_json()?;
-                if !mt.encoding.is_empty() {
-                    todo!("media type encoding not empty: {:#?}", mt);
-                }
 
-                if let Some(s) = &mt.schema {
-                    let schema = s.to_schema();
-                    let name = sanitize(
-                        &format!(
-                            "{}-body",
-                            operation.operation_id.as_ref().unwrap(),
-                        ),
-                        Case::Pascal,
-                    );
-                    let typ = self
-                        .type_space
-                        .add_type_with_name(&schema, Some(name))?;
-                    OperationParameterType::Type(typ)
-                } else {
-                    todo!("media type encoding, no schema: {:#?}", mt);
-                }
-            };
-
-            params.push(OperationParameter {
-                name: "body".to_string(),
-                api_name: "body".to_string(),
-                description: b.description.clone(),
-                typ,
-                kind: OperationParameterKind::Body,
-            });
+        if let Some(body_param) = self.get_body_param(operation, components)? {
+            params.push(body_param);
         }
+
         let tmp = crate::template::parse(path)?;
         let names = tmp.names();
 
@@ -472,7 +463,6 @@ impl Generator {
                 .clone()
                 .filter(|s| !s.is_empty()),
             params,
-            raw_body_param,
             responses,
             dropshot_paginated,
         })
@@ -506,7 +496,12 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let bounds = if method.raw_body_param {
+        let raw_body_param = method
+            .params
+            .iter()
+            .any(|param| param.typ == OperationParameterType::RawBody);
+
+        let bounds = if raw_body_param {
             quote! { <'a, B: Into<reqwest::Body> > }
         } else {
             quote! { <'a> }
@@ -724,19 +719,44 @@ impl Generator {
             .collect();
         let url_path = method.path.compile(url_renames, client.clone());
 
-        // Generate code to handle the body...
-        let body_func =
-            method.params.iter().filter_map(|param| match &param.kind {
-                OperationParameterKind::Body => match &param.typ {
-                    OperationParameterType::Type(_) => {
-                        Some(quote! { .json(&body) })
-                    }
-                    OperationParameterType::RawBody => {
-                        Some(quote! { .body(body) })
-                    }
-                },
+        // Generate code to handle the body param.
+        let body_func = method.params.iter().filter_map(|param| {
+            match (&param.kind, &param.typ) {
+                (
+                    OperationParameterKind::Body(BodyContentType::OctetStream),
+                    OperationParameterType::RawBody,
+                ) => Some(quote! {
+                    // Set the content type (this is handled by helper
+                    // functions for other MIME types).
+                    .header(
+                        reqwest::header::CONTENT_TYPE,
+                        reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    )
+                    .body(body)
+                }),
+                (
+                    OperationParameterKind::Body(BodyContentType::Json),
+                    OperationParameterType::Type(_),
+                ) => Some(quote! {
+                    // Serialization errors are deferred.
+                    .json(&body)
+                }),
+                (
+                    OperationParameterKind::Body(
+                        BodyContentType::FormUrlencoded,
+                    ),
+                    OperationParameterType::Type(_),
+                ) => Some(quote! {
+                    // This uses progenitor_client::RequestBuilderExt which
+                    // returns an error in the case of a serialization failure.
+                    .form_urlencoded(&body)?
+                }),
+                (OperationParameterKind::Body(_), _) => {
+                    unreachable!("invalid body kind/type combination")
+                }
                 _ => None,
-            });
+            }
+        });
         // ... and there can be at most one body.
         assert!(body_func.clone().count() <= 1);
 
@@ -1277,7 +1297,7 @@ impl Generator {
             .filter_map(|param| match param.kind {
                 OperationParameterKind::Path
                 | OperationParameterKind::Query(true)
-                | OperationParameterKind::Body => {
+                | OperationParameterKind::Body(_) => {
                     Some(format_ident!("{}", param.name))
                 }
                 OperationParameterKind::Query(false) => None,
@@ -1655,6 +1675,100 @@ impl Generator {
 
         impl_body
     }
+
+    fn get_body_param(
+        &mut self,
+        operation: &openapiv3::Operation,
+        components: &Option<Components>,
+    ) -> Result<Option<OperationParameter>> {
+        let body = match &operation.request_body {
+            Some(body) => body.item(components)?,
+            None => return Ok(None),
+        };
+
+        let (content_str, media_type) =
+            match (body.content.first(), body.content.len()) {
+                (None, _) => return Ok(None),
+                (Some(first), 1) => first,
+                (_, n) => todo!("more media types than expected: {}", n),
+            };
+
+        let schema = media_type.schema.as_ref().ok_or_else(|| {
+            Error::UnexpectedFormat(
+                "No schema specified for request body".to_string(),
+            )
+        })?;
+
+        let content_type = BodyContentType::from_str(content_str)?;
+
+        let typ = match content_type {
+            BodyContentType::OctetStream => {
+                // For an octet stream, we expect a simple, specific schema:
+                // "schema": {
+                //     "type": "string",
+                //     "format": "binary"
+                // }
+                match schema.item(components)? {
+                    openapiv3::Schema {
+                        schema_data:
+                            openapiv3::SchemaData {
+                                nullable: false,
+                                discriminator: None,
+                                default: None,
+                                // Other fields that describe or document the
+                                // schema are fine.
+                                ..
+                            },
+                        schema_kind:
+                            openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                openapiv3::StringType {
+                                    format:
+                                        openapiv3::VariantOrUnknownOrEmpty::Item(
+                                            openapiv3::StringFormat::Binary,
+                                        ),
+                                    pattern: None,
+                                    enumeration,
+                                    min_length: None,
+                                    max_length: None,
+                                },
+                            )),
+                    } if enumeration.is_empty() => Ok(()),
+                    _ => Err(Error::UnexpectedFormat(format!(
+                        "invalid schema for application/octet-stream: {:?}",
+                        schema
+                    ))),
+                }?;
+                OperationParameterType::RawBody
+            }
+            BodyContentType::Json | BodyContentType::FormUrlencoded => {
+                // TODO it would be legal to have the encoding field set for
+                // application/x-www-form-urlencoded content, but I'm not sure
+                // how to interpret the values.
+                if !media_type.encoding.is_empty() {
+                    todo!("media type encoding not empty: {:#?}", media_type);
+                }
+                let name = sanitize(
+                    &format!(
+                        "{}-body",
+                        operation.operation_id.as_ref().unwrap(),
+                    ),
+                    Case::Pascal,
+                );
+                let typ = self
+                    .type_space
+                    .add_type_with_name(&schema.to_schema(), Some(name))?;
+                OperationParameterType::Type(typ)
+            }
+        };
+
+        Ok(Some(OperationParameter {
+            name: "body".to_string(),
+            api_name: "body".to_string(),
+            description: body.description.clone(),
+            typ,
+            kind: OperationParameterKind::Body(content_type),
+        }))
+    }
 }
 
 fn make_doc_comment(method: &OperationMethod) -> String {
@@ -1810,13 +1924,13 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                 ) => Ordering::Less,
                 (
                     OperationParameterKind::Path,
-                    OperationParameterKind::Body,
+                    OperationParameterKind::Body(_),
                 ) => Ordering::Less,
 
                 // Query params are in lexicographic order.
                 (
                     OperationParameterKind::Query(_),
-                    OperationParameterKind::Body,
+                    OperationParameterKind::Body(_),
                 ) => Ordering::Less,
                 (
                     OperationParameterKind::Query(_),
@@ -1829,16 +1943,16 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
 
                 // Body params are last and should be singular.
                 (
-                    OperationParameterKind::Body,
+                    OperationParameterKind::Body(_),
                     OperationParameterKind::Path,
                 ) => Ordering::Greater,
                 (
-                    OperationParameterKind::Body,
+                    OperationParameterKind::Body(_),
                     OperationParameterKind::Query(_),
                 ) => Ordering::Greater,
                 (
-                    OperationParameterKind::Body,
-                    OperationParameterKind::Body,
+                    OperationParameterKind::Body(_),
+                    OperationParameterKind::Body(_),
                 ) => {
                     panic!("should only be one body")
                 }
@@ -1859,92 +1973,5 @@ impl ParameterDataExt for openapiv3::ParameterData {
                 Error::UnexpectedFormat(format!("unexpected content {:#?}", c)),
             ),
         }
-    }
-}
-
-// TODO do I want/need this?
-trait ExtractJsonMediaType {
-    fn is_binary(&self, components: &Option<Components>) -> Result<bool>;
-    fn content_json(&self) -> Result<openapiv3::MediaType>;
-}
-
-impl ExtractJsonMediaType for openapiv3::RequestBody {
-    fn content_json(&self) -> Result<openapiv3::MediaType> {
-        if self.content.len() != 1 {
-            todo!("expected one content entry, found {}", self.content.len());
-        }
-
-        if let Some(mt) = self.content.get("application/json") {
-            Ok(mt.clone())
-        } else {
-            todo!(
-                "could not find application/json, only found {}",
-                self.content.keys().next().unwrap()
-            );
-        }
-    }
-
-    fn is_binary(&self, components: &Option<Components>) -> Result<bool> {
-        if self.content.is_empty() {
-            /*
-             * XXX If there are no content types, I guess it is not binary?
-             */
-            return Ok(false);
-        }
-
-        if self.content.len() != 1 {
-            todo!("expected one content entry, found {}", self.content.len());
-        }
-
-        if let Some(mt) = self.content.get("application/octet-stream") {
-            if !mt.encoding.is_empty() {
-                todo!("XXX encoding");
-            }
-
-            if let Some(s) = &mt.schema {
-                use openapiv3::{
-                    SchemaKind, StringFormat, Type,
-                    VariantOrUnknownOrEmpty::Item,
-                };
-
-                let s = s.item(components)?;
-                if s.schema_data.nullable {
-                    todo!("XXX nullable binary?");
-                }
-                if s.schema_data.default.is_some() {
-                    todo!("XXX default binary?");
-                }
-                if s.schema_data.discriminator.is_some() {
-                    todo!("XXX binary discriminator?");
-                }
-                match &s.schema_kind {
-                    SchemaKind::Type(Type::String(st)) => {
-                        if st.min_length.is_some() || st.max_length.is_some() {
-                            todo!("binary min/max length");
-                        }
-                        if !matches!(st.format, Item(StringFormat::Binary)) {
-                            todo!(
-                                "expected binary format string, got {:?}",
-                                st.format
-                            );
-                        }
-                        if st.pattern.is_some() {
-                            todo!("XXX pattern");
-                        }
-                        if !st.enumeration.is_empty() {
-                            todo!("XXX enumeration");
-                        }
-                        return Ok(true);
-                    }
-                    x => {
-                        todo!("XXX schemakind type {:?}", x);
-                    }
-                }
-            } else {
-                todo!("binary thing had no schema?");
-            }
-        }
-
-        Ok(false)
     }
 }

@@ -24,7 +24,7 @@ pub enum Error {
     UnexpectedFormat(String),
     #[error("invalid operation path")]
     InvalidPath(String),
-    #[error("invalid operation path")]
+    #[error("internal error")]
     InternalError(String),
 }
 
@@ -206,7 +206,7 @@ impl Generator {
             // public interface of Client.
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
             #[allow(unused_imports)]
-            use progenitor_client::encode_path;
+            use progenitor_client::{encode_path, RequestBuilderExt};
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
@@ -254,7 +254,6 @@ impl Generator {
                 pub fn client(&self) -> &reqwest::Client {
                     &self.client
                 }
-
             }
 
             #operation_code
@@ -301,9 +300,13 @@ impl Generator {
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
-                use super::{ByteStream, Error, ResponseValue};
-                #[allow(unused_imports)]
-                use super::encode_path;
+                use super::{
+                    encode_path,
+                    ByteStream,
+                    Error,
+                    RequestBuilderExt,
+                    ResponseValue,
+                };
 
                 #(#builder_struct)*
             }
@@ -329,9 +332,13 @@ impl Generator {
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
-                use super::{ByteStream, Error, ResponseValue};
-                #[allow(unused_imports)]
-                use super::encode_path;
+                use super::{
+                    encode_path,
+                    ByteStream,
+                    Error,
+                    RequestBuilderExt,
+                    ResponseValue,
+                };
 
                 #(#builder_struct)*
             }
@@ -391,8 +398,9 @@ impl Generator {
             "bytes = \"1.1.0\"",
             "futures-core = \"0.3.21\"",
             "percent-encoding = \"2.1\"",
-            "serde = { version = \"1.0\", features = [\"derive\"] }",
             "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
+            "serde = { version = \"1.0\", features = [\"derive\"] }",
+            "serde_urlencoded = 0.7",
         ];
         if self.type_space.uses_uuid() {
             deps.push(

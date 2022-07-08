@@ -15,7 +15,7 @@ mod positional {
             let org = types::Name("org".to_string());
             let project = types::Name("project".to_string());
             let instance = types::Name("instance".to_string());
-            let stream = client.instance_disks_get_stream(
+            let stream = client.instance_disk_list_stream(
                 &org, &project, &instance, None, None,
             );
             let _ = stream.collect::<Vec<_>>();
@@ -39,7 +39,7 @@ mod builder_untagged {
     pub fn _ignore() {
         let client = Client::new("");
         let stream = client
-            .instance_disks_get()
+            .instance_disk_list()
             .organization_name(types::Name("org".to_string()))
             .project_name(types::Name("project".to_string()))
             .instance_name(types::Name("instance".to_string()))
@@ -64,7 +64,7 @@ mod builder_tagged {
     fn _ignore() {
         let client = Client::new("");
         let stream = client
-            .instance_disks_get()
+            .instance_disk_list()
             .organization_name(types::Name("org".to_string()))
             .project_name(types::Name("project".to_string()))
             .instance_name(types::Name("instance".to_string()))
