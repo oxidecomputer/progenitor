@@ -66,12 +66,12 @@ impl Client {
 }
 
 impl Client {
-    ///Sends a `POST` request to ``
+    ///Sends a `POST` request to `/`
     pub async fn default_params<'a>(
         &'a self,
         body: &'a types::BodyWithDefaults,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}", self.baseurl,);
+        let url = format!("{}/", self.baseurl,);
         let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;

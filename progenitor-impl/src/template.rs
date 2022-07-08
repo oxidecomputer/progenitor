@@ -27,7 +27,6 @@ impl PathTemplate {
         let mut fmt = String::new();
         fmt.push_str("{}");
         for c in self.components.iter() {
-            fmt.push('/');
             match c {
                 Component::Constant(n) => fmt.push_str(n),
                 Component::Parameter(_) => fmt.push_str("{}"),
@@ -71,7 +70,6 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
         Start,
         ConstantOrParameter,
         Parameter,
-        ParameterSlash,
         Constant,
     }
 
@@ -83,7 +81,8 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
         match s {
             State::Start => {
                 if c == '/' {
-                    s = State::ConstantOrParameter;
+                    s = State::Constant;
+                    a = c.to_string();
                 } else {
                     return Err(Error::InvalidPath(
                         "path must start with a slash".to_string(),
@@ -91,50 +90,38 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
                 }
             }
             State::ConstantOrParameter => {
-                if c == '/' || c == '}' {
-                    return Err(Error::InvalidPath(
-                        "expected a constant or parameter".to_string(),
-                    ));
-                } else if c == '{' {
+                if c == '{' {
                     s = State::Parameter;
+                    a = String::new();
                 } else {
                     s = State::Constant;
-                    a.push(c);
+                    a = c.to_string();
                 }
             }
             State::Constant => {
-                if c == '/' {
+                if c == '{' {
                     components.push(Component::Constant(a));
                     a = String::new();
-                    s = State::ConstantOrParameter;
-                } else if c == '{' || c == '}' {
-                    return Err(Error::InvalidPath(
-                        "unexpected parameter".to_string(),
-                    ));
-                } else {
+                    s = State::Parameter;
+                } else if c == '}' {
+                    return Err(Error::InvalidPath("unexpected }".to_string()));
+                } else if c != '/' || a.chars().last() != Some('/') {
                     a.push(c);
                 }
             }
             State::Parameter => {
                 if c == '}' {
+                    if a.contains('/') || a.contains('{') {
+                        return Err(Error::InvalidPath(format!(
+                            "invalid parameter name {:?}",
+                            a,
+                        )));
+                    }
                     components.push(Component::Parameter(a));
                     a = String::new();
-                    s = State::ParameterSlash;
-                } else if c == '/' || c == '{' {
-                    return Err(Error::InvalidPath(
-                        "unexpected parameter".to_string(),
-                    ));
-                } else {
-                    a.push(c);
-                }
-            }
-            State::ParameterSlash => {
-                if c == '/' {
                     s = State::ConstantOrParameter;
                 } else {
-                    return Err(Error::InvalidPath(
-                        "expected a slah after parameter".to_string(),
-                    ));
+                    a.push(c);
                 }
             }
         }
@@ -144,7 +131,7 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
         State::Start => {
             return Err(Error::InvalidPath("empty path".to_string()))
         }
-        State::ConstantOrParameter | State::ParameterSlash => (),
+        State::ConstantOrParameter => (),
         State::Constant => components.push(Component::Constant(a)),
         State::Parameter => {
             return Err(Error::InvalidPath(
@@ -164,7 +151,7 @@ impl ToString for PathTemplate {
                 Component::Constant(s) => s.clone(),
                 Component::Parameter(s) => format!("{{{}}}", s),
             })
-            .fold(String::new(), |a, b| a + "/" + &b)
+            .fold(String::new(), |a, b| a + &b)
     }
 }
 
@@ -179,34 +166,89 @@ mod test {
         let trials = vec![
             (
                 "/info",
+                "/info",
                 PathTemplate {
-                    components: vec![Component::Constant("info".into())],
+                    components: vec![Component::Constant("/info".into())],
                 },
             ),
             (
                 "/measure/{number}",
+                "/measure/{number}",
                 PathTemplate {
                     components: vec![
-                        Component::Constant("measure".into()),
+                        Component::Constant("/measure/".into()),
                         Component::Parameter("number".into()),
                     ],
                 },
             ),
             (
                 "/one/{two}/three",
+                "/one/{two}/three",
                 PathTemplate {
                     components: vec![
-                        Component::Constant("one".into()),
+                        Component::Constant("/one/".into()),
                         Component::Parameter("two".into()),
-                        Component::Constant("three".into()),
+                        Component::Constant("/three".into()),
+                    ],
+                },
+            ),
+            (
+                "/{foo}-{bar}-{baz}",
+                "/{foo}-{bar}-{baz}",
+                PathTemplate {
+                    components: vec![
+                        Component::Constant("/".into()),
+                        Component::Parameter("foo".into()),
+                        Component::Constant("-".into()),
+                        Component::Parameter("bar".into()),
+                        Component::Constant("-".into()),
+                        Component::Parameter("baz".into()),
+                    ],
+                },
+            ),
+            (
+                "//normalise/////{adjacent}:x///slashes",
+                "/normalise/{adjacent}:x/slashes",
+                PathTemplate {
+                    components: vec![
+                        Component::Constant("/normalise/".into()),
+                        Component::Parameter("adjacent".into()),
+                        Component::Constant(":x/slashes".into()),
+                    ],
+                },
+            ),
+            (
+                "/v1/files/{fileId}:completeUpload",
+                "/v1/files/{fileId}:completeUpload",
+                PathTemplate {
+                    components: vec![
+                        Component::Constant("/v1/files/".into()),
+                        Component::Parameter("fileId".into()),
+                        Component::Constant(":completeUpload".into()),
+                    ],
+                },
+            ),
+            (
+                "/v1/folders/{folderId}/sessions/{sessionId}:complete",
+                "/v1/folders/{folderId}/sessions/{sessionId}:complete",
+                PathTemplate {
+                    components: vec![
+                        Component::Constant("/v1/folders/".into()),
+                        Component::Parameter("folderId".into()),
+                        Component::Constant("/sessions/".into()),
+                        Component::Parameter("sessionId".into()),
+                        Component::Constant(":complete".into()),
                     ],
                 },
             ),
         ];
 
-        for (path, want) in trials.iter() {
+        for (path, expect_string, want) in trials.iter() {
             match parse(path) {
-                Ok(t) => assert_eq!(&t, want),
+                Ok(t) => {
+                    assert_eq!(&t, want);
+                    assert_eq!(t.to_string().as_str(), *expect_string);
+                }
                 Err(e) => panic!("path {} {}", path, e),
             }
         }
@@ -242,6 +284,28 @@ mod test {
             let url = format!("{}/measure/{}",
                 self.baseurl,
                 encode_path(&number.to_string()),
+            );
+        };
+        assert_eq!(want.to_string(), out.to_string());
+    }
+
+    #[test]
+    fn compile2() {
+        let mut rename = HashMap::new();
+        let one = "one".to_string();
+        let two = "two".to_string();
+        let three = "three".to_string();
+        rename.insert(&one, &one);
+        rename.insert(&two, &two);
+        rename.insert(&three, &three);
+        let t = parse("/abc/def:{one}:jkl/{two}/a:{three}").unwrap();
+        let out = t.compile(rename, quote::quote! { self });
+        let want = quote::quote! {
+            let url = format!("{}/abc/def:{}:jkl/{}/a:{}",
+                self.baseurl,
+                encode_path(&one.to_string()),
+                encode_path(&two.to_string()),
+                encode_path(&three.to_string()),
             );
         };
         assert_eq!(want.to_string(), out.to_string());
