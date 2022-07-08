@@ -15,8 +15,23 @@ use reqwest::RequestBuilder;
 use serde::{de::DeserializeOwned, Serialize};
 
 /// Represents an untyped byte stream for both success and error responses.
-pub type ByteStream =
-    Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send>>;
+pub struct ByteStream(
+    Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send>>,
+);
+
+impl Deref for ByteStream {
+    type Target = Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send>>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl DerefMut for ByteStream {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
 
 /// Success value returned by generated client methods.
 pub struct ResponseValue<T> {
@@ -52,7 +67,7 @@ impl ResponseValue<ByteStream> {
         let status = response.status();
         let headers = response.headers().clone();
         Self {
-            inner: Box::pin(response.bytes_stream()),
+            inner: ByteStream(Box::pin(response.bytes_stream())),
             status,
             headers,
         }
@@ -75,6 +90,19 @@ impl ResponseValue<()> {
 }
 
 impl<T> ResponseValue<T> {
+    /// Create an instance for testing
+    pub fn new(
+        inner: T,
+        status: reqwest::StatusCode,
+        headers: reqwest::header::HeaderMap,
+    ) -> Self {
+        Self {
+            inner,
+            status,
+            headers,
+        }
+    }
+
     /// Consumes the ResponseValue, returning the wrapped value.
     pub fn into_inner(self) -> T {
         self.inner
@@ -197,7 +225,10 @@ impl<E> From<reqwest::Error> for Error<E> {
     }
 }
 
-impl<E> std::fmt::Display for Error<E> {
+impl<E> std::fmt::Display for Error<E>
+where
+    ResponseValue<E>: ErrorFormat,
+{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Error::InvalidRequest(s) => {
@@ -206,8 +237,9 @@ impl<E> std::fmt::Display for Error<E> {
             Error::CommunicationError(e) => {
                 write!(f, "Communication Error: {}", e)
             }
-            Error::ErrorResponse(_) => {
-                write!(f, "Error Response")
+            Error::ErrorResponse(rve) => {
+                write!(f, "Error Response: ")?;
+                rve.fmt_info(f)
             }
             Error::InvalidResponsePayload(e) => {
                 write!(f, "Invalid Response Payload: {}", e)
@@ -218,12 +250,46 @@ impl<E> std::fmt::Display for Error<E> {
         }
     }
 }
-impl<E> std::fmt::Debug for Error<E> {
+
+trait ErrorFormat {
+    fn fmt_info(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result;
+}
+
+impl<E> ErrorFormat for ResponseValue<E>
+where
+    E: std::fmt::Debug,
+{
+    fn fmt_info(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "status: {}; headers: {:?}; value: {:?}",
+            self.status, self.headers, self.inner,
+        )
+    }
+}
+
+impl ErrorFormat for ResponseValue<ByteStream> {
+    fn fmt_info(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "status: {}; headers: {:?}; value: <stream>",
+            self.status, self.headers,
+        )
+    }
+}
+
+impl<E> std::fmt::Debug for Error<E>
+where
+    ResponseValue<E>: ErrorFormat,
+{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         std::fmt::Display::fmt(self, f)
     }
 }
-impl<E> std::error::Error for Error<E> {
+impl<E> std::error::Error for Error<E>
+where
+    ResponseValue<E>: ErrorFormat,
+{
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Error::CommunicationError(e) => Some(e),
