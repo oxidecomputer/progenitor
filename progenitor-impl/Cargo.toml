@@ -13,7 +13,7 @@ indexmap = "1.9"
 openapiv3 = "1.0.0"
 proc-macro2 = "1.0"
 quote = "1.0"
-regex = "1.5"
+regex = "1.6"
 rustfmt-wrapper = "0.2.0"
 schemars = { version = "0.8.10", features = ["chrono", "uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
