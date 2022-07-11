@@ -1063,6 +1063,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3f87b73ce11b1619a3c6332f45341e0047173771e8b8b73f87bfeefb7b56244"
 
 [[package]]
+name = "regress"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0a92ff21fe8026ce3f2627faaf43606f0b67b014dbc9ccf027181a804f75d92e"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "remove_dir_all"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1717,7 +1726,7 @@ checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 [[package]]
 name = "typify"
 version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#7b5f72b1e492d3b585791f13758a9d692876b633"
+source = "git+https://github.com/oxidecomputer/typify#f58c5e23b10ccb90a69b8268d6cbedcef332e0b8"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1726,12 +1735,13 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#7b5f72b1e492d3b585791f13758a9d692876b633"
+source = "git+https://github.com/oxidecomputer/typify#f58c5e23b10ccb90a69b8268d6cbedcef332e0b8"
 dependencies = [
  "heck",
  "log",
  "proc-macro2",
  "quote",
+ "regress",
  "rustfmt-wrapper",
  "schemars",
  "serde_json",
@@ -1743,7 +1753,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#7b5f72b1e492d3b585791f13758a9d692876b633"
+source = "git+https://github.com/oxidecomputer/typify#f58c5e23b10ccb90a69b8268d6cbedcef332e0b8"
 dependencies = [
  "proc-macro2",
  "quote",
