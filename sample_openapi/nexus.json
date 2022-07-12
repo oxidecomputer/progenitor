@@ -7794,7 +7794,7 @@
         "title": "An IPv6 subnet",
         "description": "An IPv6 subnet, including prefix and subnet mask",
         "type": "string",
-        "pattern": "^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}\\:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$",
+        "pattern": "^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$",
         "maxLength": 43
       },
       "Ipv6Range": {

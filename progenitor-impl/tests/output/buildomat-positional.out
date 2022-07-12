@@ -3,7 +3,7 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Task {
         pub id: String,
         pub name: String,
@@ -12,7 +12,7 @@ pub mod types {
         pub state: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskEvent {
         pub payload: String,
         pub seq: u32,
@@ -20,14 +20,14 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskOutput {
         pub id: String,
         pub path: String,
         pub size: u64,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskSubmit {
         pub name: String,
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -35,35 +35,35 @@ pub mod types {
         pub script: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskSubmitResult {
         pub id: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct UploadedChunk {
         pub id: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct UserCreate {
         pub name: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct UserCreateResult {
         pub id: String,
         pub name: String,
         pub token: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WhoamiResult {
         pub id: String,
         pub name: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Worker {
         pub deleted: bool,
         pub id: String,
@@ -75,58 +75,58 @@ pub mod types {
         pub tasks: Vec<WorkerTask>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerAddOutput {
         pub chunks: Vec<String>,
         pub path: String,
         pub size: i64,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerAppendTask {
         pub payload: String,
         pub stream: String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerBootstrap {
         pub bootstrap: String,
         pub token: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerBootstrapResult {
         pub id: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerPingResult {
         pub poweroff: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub task: Option<WorkerPingTask>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerPingTask {
         pub id: String,
         pub output_rules: Vec<String>,
         pub script: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerTask {
         pub id: String,
         pub name: String,
         pub owner: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone)]
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkersResult {
         pub workers: Vec<Worker>,
     }

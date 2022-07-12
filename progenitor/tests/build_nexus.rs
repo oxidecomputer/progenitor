@@ -12,9 +12,9 @@ mod positional {
     fn _ignore() {
         let _ = async {
             let client = Client::new("");
-            let org = types::Name("org".to_string());
-            let project = types::Name("project".to_string());
-            let instance = types::Name("instance".to_string());
+            let org = types::Name::try_from("org").unwrap();
+            let project = types::Name::try_from("project").unwrap();
+            let instance = types::Name::try_from("instance").unwrap();
             let stream = client.instance_disk_list_stream(
                 &org, &project, &instance, None, None,
             );
@@ -40,9 +40,9 @@ mod builder_untagged {
         let client = Client::new("");
         let stream = client
             .instance_disk_list()
-            .organization_name(types::Name("org".to_string()))
-            .project_name(types::Name("project".to_string()))
-            .instance_name(types::Name("instance".to_string()))
+            .organization_name(types::Name::try_from("org").unwrap())
+            .project_name(types::Name::try_from("project").unwrap())
+            .instance_name(types::Name::try_from("instance").unwrap())
             .stream();
         let _ = stream.collect::<Vec<_>>();
     }
@@ -65,9 +65,9 @@ mod builder_tagged {
         let client = Client::new("");
         let stream = client
             .instance_disk_list()
-            .organization_name(types::Name("org".to_string()))
-            .project_name(types::Name("project".to_string()))
-            .instance_name(types::Name("instance".to_string()))
+            .organization_name(types::Name::try_from("org").unwrap())
+            .project_name(types::Name::try_from("project").unwrap())
+            .instance_name(types::Name::try_from("instance").unwrap())
             .stream();
         let _ = stream.collect::<Vec<_>>();
     }
