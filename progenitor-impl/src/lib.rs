@@ -395,13 +395,16 @@ impl Generator {
 
     pub fn dependencies(&self) -> Vec<String> {
         let mut deps = vec![
-            "bytes = \"1.1.0\"",
-            "futures-core = \"0.3.21\"",
+            "bytes = \"1.1\"",
+            "futures-core = \"0.3\"",
             "percent-encoding = \"2.1\"",
             "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
             "serde_urlencoded = 0.7",
         ];
+        if self.type_space.uses_regress() {
+            deps.push("regress = 0.4")
+        }
         if self.type_space.uses_uuid() {
             deps.push(
                 "uuid = { version = \">=0.8.0, <2.0.0\", features = [\"serde\", \"v4\"] }",

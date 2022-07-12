@@ -3,7 +3,7 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct BlockSize(i64);
     impl std::ops::Deref for BlockSize {
         type Target = i64;
@@ -30,7 +30,7 @@ pub mod types {
     /// infallible, but an i64 constructor can fail (if the value is negative)
     /// and a u64 constructor can fail (if the value is larger than i64::MAX).
     /// We provide all of these for consumers' convenience.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ByteCount(pub u64);
     impl std::ops::Deref for ByteCount {
         type Target = u64;
@@ -41,7 +41,7 @@ pub mod types {
 
     ///The type of an individual datum of a metric.
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum DatumType {
         #[serde(rename = "bool")]
@@ -67,20 +67,38 @@ pub mod types {
     impl ToString for DatumType {
         fn to_string(&self) -> String {
             match *self {
-                DatumType::Bool => "bool".to_string(),
-                DatumType::I64 => "i64".to_string(),
-                DatumType::F64 => "f64".to_string(),
-                DatumType::String => "string".to_string(),
-                DatumType::Bytes => "bytes".to_string(),
-                DatumType::CumulativeI64 => "cumulative_i64".to_string(),
-                DatumType::CumulativeF64 => "cumulative_f64".to_string(),
-                DatumType::HistogramI64 => "histogram_i64".to_string(),
-                DatumType::HistogramF64 => "histogram_f64".to_string(),
+                Self::Bool => "bool".to_string(),
+                Self::I64 => "i64".to_string(),
+                Self::F64 => "f64".to_string(),
+                Self::String => "string".to_string(),
+                Self::Bytes => "bytes".to_string(),
+                Self::CumulativeI64 => "cumulative_i64".to_string(),
+                Self::CumulativeF64 => "cumulative_f64".to_string(),
+                Self::HistogramI64 => "histogram_i64".to_string(),
+                Self::HistogramF64 => "histogram_f64".to_string(),
             }
         }
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    impl std::str::FromStr for DatumType {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "bool" => Ok(Self::Bool),
+                "i64" => Ok(Self::I64),
+                "f64" => Ok(Self::F64),
+                "string" => Ok(Self::String),
+                "bytes" => Ok(Self::Bytes),
+                "cumulative_i64" => Ok(Self::CumulativeI64),
+                "cumulative_f64" => Ok(Self::CumulativeF64),
+                "histogram_i64" => Ok(Self::HistogramI64),
+                "histogram_f64" => Ok(Self::HistogramF64),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct DerEncodedKeyPair {
         ///request signing private key (base64 encoded der file)
         pub private_key: String,
@@ -88,24 +106,24 @@ pub mod types {
         pub public_cert: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct DeviceAccessTokenRequest {
         pub client_id: uuid::Uuid,
         pub device_code: String,
         pub grant_type: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct DeviceAuthRequest {
         pub client_id: uuid::Uuid,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct DeviceAuthVerify {
         pub user_code: String,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Digest {
         #[serde(rename = "type")]
         pub type_: DigestType,
@@ -113,7 +131,7 @@ pub mod types {
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum DigestType {
         #[serde(rename = "sha256")]
@@ -123,13 +141,23 @@ pub mod types {
     impl ToString for DigestType {
         fn to_string(&self) -> String {
             match *self {
-                DigestType::Sha256 => "sha256".to_string(),
+                Self::Sha256 => "sha256".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for DigestType {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "sha256" => Ok(Self::Sha256),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///Client view of a [`Disk`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Disk {
         pub block_size: ByteCount,
         ///human-readable free-form text about a resource
@@ -154,7 +182,7 @@ pub mod types {
 
     ///Create-time parameters for a
     /// [`Disk`](omicron_common::api::external::Disk)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct DiskCreate {
         pub description: String,
         ///initial source for this disk
@@ -166,13 +194,13 @@ pub mod types {
 
     ///Parameters for the [`Disk`](omicron_common::api::external::Disk) to be
     /// attached or detached to an instance
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct DiskIdentifier {
         pub name: Name,
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct DiskResultsPage {
         ///list of items on this page of results
         pub items: Vec<Disk>,
@@ -182,7 +210,7 @@ pub mod types {
     }
 
     ///Different sources for a disk
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type")]
     pub enum DiskSource {
         ///Create a blank disk
@@ -204,7 +232,7 @@ pub mod types {
     }
 
     ///State of a Disk (primarily: attached or not)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "state", content = "instance")]
     pub enum DiskState {
         #[serde(rename = "creating")]
@@ -227,7 +255,7 @@ pub mod types {
     }
 
     ///OS image distribution
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Distribution {
         ///The name of the distribution (e.g. "alpine" or "ubuntu")
         pub name: Name,
@@ -236,7 +264,7 @@ pub mod types {
     }
 
     ///Error information from a response.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub error_code: Option<String>,
@@ -245,7 +273,7 @@ pub mod types {
     }
 
     ///The name and type information for a field of a timeseries schema.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct FieldSchema {
         pub name: String,
         pub source: FieldSource,
@@ -254,7 +282,7 @@ pub mod types {
 
     ///The source from which a field is derived, the target or metric.
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum FieldSource {
         #[serde(rename = "target")]
@@ -266,15 +294,26 @@ pub mod types {
     impl ToString for FieldSource {
         fn to_string(&self) -> String {
             match *self {
-                FieldSource::Target => "target".to_string(),
-                FieldSource::Metric => "metric".to_string(),
+                Self::Target => "target".to_string(),
+                Self::Metric => "metric".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for FieldSource {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "target" => Ok(Self::Target),
+                "metric" => Ok(Self::Metric),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///The `FieldType` identifies the data type of a target or metric field.
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum FieldType {
         #[serde(rename = "string")]
@@ -292,17 +331,31 @@ pub mod types {
     impl ToString for FieldType {
         fn to_string(&self) -> String {
             match *self {
-                FieldType::String => "string".to_string(),
-                FieldType::I64 => "i64".to_string(),
-                FieldType::IpAddr => "ip_addr".to_string(),
-                FieldType::Uuid => "uuid".to_string(),
-                FieldType::Bool => "bool".to_string(),
+                Self::String => "string".to_string(),
+                Self::I64 => "i64".to_string(),
+                Self::IpAddr => "ip_addr".to_string(),
+                Self::Uuid => "uuid".to_string(),
+                Self::Bool => "bool".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for FieldType {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "string" => Ok(Self::String),
+                "i64" => Ok(Self::I64),
+                "ip_addr" => Ok(Self::IpAddr),
+                "uuid" => Ok(Self::Uuid),
+                "bool" => Ok(Self::Bool),
+                _ => Err("invalid value"),
             }
         }
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum FleetRole {
         #[serde(rename = "admin")]
@@ -316,9 +369,21 @@ pub mod types {
     impl ToString for FleetRole {
         fn to_string(&self) -> String {
             match *self {
-                FleetRole::Admin => "admin".to_string(),
-                FleetRole::Collaborator => "collaborator".to_string(),
-                FleetRole::Viewer => "viewer".to_string(),
+                Self::Admin => "admin".to_string(),
+                Self::Collaborator => "collaborator".to_string(),
+                Self::Viewer => "viewer".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for FleetRole {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "admin" => Ok(Self::Admin),
+                "collaborator" => Ok(Self::Collaborator),
+                "viewer" => Ok(Self::Viewer),
+                _ => Err("invalid value"),
             }
         }
     }
@@ -329,7 +394,7 @@ pub mod types {
     ///Note that the Policy only describes access granted explicitly for this
     /// resource.  The policies of parent resources can also cause a user to
     /// have access to this resource.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct FleetRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: Vec<FleetRoleRoleAssignment>,
@@ -341,7 +406,7 @@ pub mod types {
     ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
     /// are put into a [`Policy`] and that Policy is applied to a particular
     /// resource.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct FleetRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
@@ -349,7 +414,7 @@ pub mod types {
     }
 
     ///Client view of global Images
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct GlobalImage {
         ///size of blocks in bytes
         pub block_size: ByteCount,
@@ -379,7 +444,7 @@ pub mod types {
 
     ///Create-time parameters for an
     /// [`GlobalImage`](omicron_common::api::external::GlobalImage)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct GlobalImageCreate {
         ///block size in bytes
         pub block_size: BlockSize,
@@ -392,7 +457,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct GlobalImageResultsPage {
         ///list of items on this page of results
         pub items: Vec<GlobalImage>,
@@ -405,7 +470,7 @@ pub mod types {
     ///
     ///Currently, we only support scanning in ascending order.
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum IdSortMode {
         #[serde(rename = "id_ascending")]
@@ -415,13 +480,23 @@ pub mod types {
     impl ToString for IdSortMode {
         fn to_string(&self) -> String {
             match *self {
-                IdSortMode::IdAscending => "id_ascending".to_string(),
+                Self::IdAscending => "id_ascending".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for IdSortMode {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "id_ascending" => Ok(Self::IdAscending),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///Client view of an [`IdentityProvider`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct IdentityProvider {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -438,7 +513,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct IdentityProviderResultsPage {
         ///list of items on this page of results
         pub items: Vec<IdentityProvider>,
@@ -448,7 +523,7 @@ pub mod types {
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum IdentityProviderType {
         #[serde(rename = "saml")]
@@ -458,14 +533,24 @@ pub mod types {
     impl ToString for IdentityProviderType {
         fn to_string(&self) -> String {
             match *self {
-                IdentityProviderType::Saml => "saml".to_string(),
+                Self::Saml => "saml".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for IdentityProviderType {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "saml" => Ok(Self::Saml),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///Describes what kind of identity is described by an id
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum IdentityType {
         #[serde(rename = "silo_user")]
@@ -475,12 +560,22 @@ pub mod types {
     impl ToString for IdentityType {
         fn to_string(&self) -> String {
             match *self {
-                IdentityType::SiloUser => "silo_user".to_string(),
+                Self::SiloUser => "silo_user".to_string(),
             }
         }
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    impl std::str::FromStr for IdentityType {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "silo_user" => Ok(Self::SiloUser),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type")]
     pub enum IdpMetadataSource {
         #[serde(rename = "url")]
@@ -490,7 +585,7 @@ pub mod types {
     }
 
     ///Client view of project Images
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Image {
         ///size of blocks in bytes
         pub block_size: ByteCount,
@@ -521,7 +616,7 @@ pub mod types {
 
     ///Create-time parameters for an
     /// [`Image`](omicron_common::api::external::Image)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ImageCreate {
         ///block size in bytes
         pub block_size: BlockSize,
@@ -532,7 +627,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ImageResultsPage {
         ///list of items on this page of results
         pub items: Vec<Image>,
@@ -542,7 +637,7 @@ pub mod types {
     }
 
     ///The source of the underlying image.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type")]
     pub enum ImageSource {
         #[serde(rename = "url")]
@@ -554,7 +649,7 @@ pub mod types {
     }
 
     ///Client view of an [`Instance`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Instance {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -579,7 +674,7 @@ pub mod types {
     }
 
     ///The number of CPUs in an Instance
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct InstanceCpuCount(pub u16);
     impl std::ops::Deref for InstanceCpuCount {
         type Target = u16;
@@ -590,7 +685,7 @@ pub mod types {
 
     ///Create-time parameters for an
     /// [`Instance`](omicron_common::api::external::Instance)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct InstanceCreate {
         pub description: String,
         ///The disks to be created or attached for this instance.
@@ -615,7 +710,7 @@ pub mod types {
     }
 
     ///Describe the instance's disks at creation time
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type")]
     pub enum InstanceDiskAttachment {
         ///During instance creation, create and attach disks
@@ -638,14 +733,14 @@ pub mod types {
 
     ///Migration parameters for an
     /// [`Instance`](omicron_common::api::external::Instance)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct InstanceMigrate {
         pub dst_sled_id: uuid::Uuid,
     }
 
     ///Describes an attachment of a `NetworkInterface` to an `Instance`, at the
     /// time the instance is created.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
         ///Create one or more `NetworkInterface`s for the `Instance`.
@@ -661,7 +756,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct InstanceResultsPage {
         ///list of items on this page of results
         pub items: Vec<Instance>,
@@ -671,7 +766,7 @@ pub mod types {
     }
 
     ///Contents of an Instance's serial console buffer.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct InstanceSerialConsoleData {
         ///The bytes starting from the requested offset up to either the end of
         /// the buffer or the request's `max_bytes`. Provided as a u8 array
@@ -687,7 +782,7 @@ pub mod types {
     ///This typically reflects whether it's starting, running, stopping, or
     /// stopped, but also includes states related to the Instance's lifecycle
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum InstanceState {
         #[serde(rename = "creating")]
@@ -715,30 +810,66 @@ pub mod types {
     impl ToString for InstanceState {
         fn to_string(&self) -> String {
             match *self {
-                InstanceState::Creating => "creating".to_string(),
-                InstanceState::Starting => "starting".to_string(),
-                InstanceState::Running => "running".to_string(),
-                InstanceState::Stopping => "stopping".to_string(),
-                InstanceState::Stopped => "stopped".to_string(),
-                InstanceState::Rebooting => "rebooting".to_string(),
-                InstanceState::Migrating => "migrating".to_string(),
-                InstanceState::Repairing => "repairing".to_string(),
-                InstanceState::Failed => "failed".to_string(),
-                InstanceState::Destroyed => "destroyed".to_string(),
+                Self::Creating => "creating".to_string(),
+                Self::Starting => "starting".to_string(),
+                Self::Running => "running".to_string(),
+                Self::Stopping => "stopping".to_string(),
+                Self::Stopped => "stopped".to_string(),
+                Self::Rebooting => "rebooting".to_string(),
+                Self::Migrating => "migrating".to_string(),
+                Self::Repairing => "repairing".to_string(),
+                Self::Failed => "failed".to_string(),
+                Self::Destroyed => "destroyed".to_string(),
             }
         }
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    impl std::str::FromStr for InstanceState {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "creating" => Ok(Self::Creating),
+                "starting" => Ok(Self::Starting),
+                "running" => Ok(Self::Running),
+                "stopping" => Ok(Self::Stopping),
+                "stopped" => Ok(Self::Stopped),
+                "rebooting" => Ok(Self::Rebooting),
+                "migrating" => Ok(Self::Migrating),
+                "repairing" => Ok(Self::Repairing),
+                "failed" => Ok(Self::Failed),
+                "destroyed" => Ok(Self::Destroyed),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(untagged)]
     pub enum IpNet {
         V4(Ipv4Net),
         V6(Ipv6Net),
     }
 
+    impl std::convert::TryFrom<&str> for IpNet {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            Err("")
+                .or_else(|_: Self::Error| Ok(Self::V4(Ipv4Net::try_from(value)?)))
+                .or_else(|_: Self::Error| Ok(Self::V6(Ipv6Net::try_from(value)?)))
+                .or_else(|_: Self::Error| Err("string conversion failed for all variants"))
+        }
+    }
+
+    impl std::convert::TryFrom<String> for IpNet {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
     ///Identity-related metadata that's included in nearly all public API
     /// objects
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct IpPool {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -755,13 +886,13 @@ pub mod types {
     ///Create-time parameters for an IP Pool.
     ///
     ///See [`IpPool`](omicron_nexus::external_api::views::IpPool)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct IpPoolCreate {
         pub description: String,
         pub name: Name,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct IpPoolRange {
         pub id: uuid::Uuid,
         pub range: IpRange,
@@ -769,7 +900,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct IpPoolRangeResultsPage {
         ///list of items on this page of results
         pub items: Vec<IpPoolRange>,
@@ -779,7 +910,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct IpPoolResultsPage {
         ///list of items on this page of results
         pub items: Vec<IpPool>,
@@ -789,7 +920,7 @@ pub mod types {
     }
 
     ///Parameters for updating an IP Pool
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct IpPoolUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -797,7 +928,7 @@ pub mod types {
         pub name: Option<Name>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(untagged)]
     pub enum IpRange {
         V4(Ipv4Range),
@@ -805,8 +936,8 @@ pub mod types {
     }
 
     ///An IPv4 subnet, including prefix and subnet mask
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
-    pub struct Ipv4Net(pub String);
+    #[derive(Clone, Debug, Serialize, JsonSchema)]
+    pub struct Ipv4Net(String);
     impl std::ops::Deref for Ipv4Net {
         type Target = String;
         fn deref(&self) -> &Self::Target {
@@ -814,18 +945,46 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&str> for Ipv4Net {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            if value.len() > 18usize {
+                return Err("longer than 18 characters");
+            }
+            if regress :: Regex :: new ("(^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$)|(^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$)|(^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$)") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"(^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$)|(^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$)|(^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$)\"") ; }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<String> for Ipv4Net {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> serde::Deserialize<'de> for Ipv4Net {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            Self::try_from(String::deserialize(deserializer)?)
+                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+        }
+    }
+
     ///A non-decreasing IPv4 address range, inclusive of both ends.
     ///
     ///The first address must be less than or equal to the last address.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Ipv4Range {
         pub first: std::net::Ipv4Addr,
         pub last: std::net::Ipv4Addr,
     }
 
     ///An IPv6 subnet, including prefix and subnet mask
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
-    pub struct Ipv6Net(pub String);
+    #[derive(Clone, Debug, Serialize, JsonSchema)]
+    pub struct Ipv6Net(String);
     impl std::ops::Deref for Ipv6Net {
         type Target = String;
         fn deref(&self) -> &Self::Target {
@@ -833,10 +992,38 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&str> for Ipv6Net {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            if value.len() > 43usize {
+                return Err("longer than 43 characters");
+            }
+            if regress :: Regex :: new ("^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$\"") ; }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<String> for Ipv6Net {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> serde::Deserialize<'de> for Ipv6Net {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            Self::try_from(String::deserialize(deserializer)?)
+                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+        }
+    }
+
     ///A non-decreasing IPv6 address range, inclusive of both ends.
     ///
     ///The first address must be less than or equal to the last address.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Ipv6Range {
         pub first: std::net::Ipv6Addr,
         pub last: std::net::Ipv6Addr,
@@ -844,8 +1031,8 @@ pub mod types {
 
     ///An inclusive-inclusive range of IP ports. The second port may be omitted
     /// to represent a single port
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
-    pub struct L4PortRange(pub String);
+    #[derive(Clone, Debug, Serialize, JsonSchema)]
+    pub struct L4PortRange(String);
     impl std::ops::Deref for L4PortRange {
         type Target = String;
         fn deref(&self) -> &Self::Target {
@@ -853,9 +1040,46 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&str> for L4PortRange {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            if value.len() > 11usize {
+                return Err("longer than 11 characters");
+            }
+            if value.len() < 1usize {
+                return Err("shorter than 1 characters");
+            }
+            if regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$")
+                .unwrap()
+                .find(value)
+                .is_none()
+            {
+                return Err("doesn't match pattern \"^[0-9]{1,5}(-[0-9]{1,5})?$\"");
+            }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<String> for L4PortRange {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> serde::Deserialize<'de> for L4PortRange {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            Self::try_from(String::deserialize(deserializer)?)
+                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+        }
+    }
+
     ///A Media Access Control address, in EUI-48 format
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
-    pub struct MacAddr(pub String);
+    #[derive(Clone, Debug, Serialize, JsonSchema)]
+    pub struct MacAddr(String);
     impl std::ops::Deref for MacAddr {
         type Target = String;
         fn deref(&self) -> &Self::Target {
@@ -863,11 +1087,48 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&str> for MacAddr {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            if value.len() > 17usize {
+                return Err("longer than 17 characters");
+            }
+            if value.len() < 17usize {
+                return Err("shorter than 17 characters");
+            }
+            if regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$")
+                .unwrap()
+                .find(value)
+                .is_none()
+            {
+                return Err("doesn't match pattern \"^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$\"");
+            }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<String> for MacAddr {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> serde::Deserialize<'de> for MacAddr {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            Self::try_from(String::deserialize(deserializer)?)
+                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+        }
+    }
+
     ///Names must begin with a lower case ASCII letter, be composed exclusively
     /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
     /// with a '-'.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
-    pub struct Name(pub String);
+    #[derive(Clone, Debug, Serialize, JsonSchema)]
+    pub struct Name(String);
     impl std::ops::Deref for Name {
         type Target = String;
         fn deref(&self) -> &Self::Target {
@@ -875,9 +1136,43 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&str> for Name {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            if value.len() > 63usize {
+                return Err("longer than 63 characters");
+            }
+            if regress::Regex::new("[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])")
+                .unwrap()
+                .find(value)
+                .is_none()
+            {
+                return Err("doesn't match pattern \"[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])\"");
+            }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<String> for Name {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> serde::Deserialize<'de> for Name {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            Self::try_from(String::deserialize(deserializer)?)
+                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+        }
+    }
+
     ///Supported set of sort modes for scanning by name or id
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum NameOrIdSortMode {
         #[serde(rename = "name_ascending")]
@@ -891,9 +1186,21 @@ pub mod types {
     impl ToString for NameOrIdSortMode {
         fn to_string(&self) -> String {
             match *self {
-                NameOrIdSortMode::NameAscending => "name_ascending".to_string(),
-                NameOrIdSortMode::NameDescending => "name_descending".to_string(),
-                NameOrIdSortMode::IdAscending => "id_ascending".to_string(),
+                Self::NameAscending => "name_ascending".to_string(),
+                Self::NameDescending => "name_descending".to_string(),
+                Self::IdAscending => "id_ascending".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for NameOrIdSortMode {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "name_ascending" => Ok(Self::NameAscending),
+                "name_descending" => Ok(Self::NameDescending),
+                "id_ascending" => Ok(Self::IdAscending),
+                _ => Err("invalid value"),
             }
         }
     }
@@ -902,7 +1209,7 @@ pub mod types {
     ///
     ///Currently, we only support scanning in ascending order.
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum NameSortMode {
         #[serde(rename = "name_ascending")]
@@ -912,13 +1219,23 @@ pub mod types {
     impl ToString for NameSortMode {
         fn to_string(&self) -> String {
             match *self {
-                NameSortMode::NameAscending => "name_ascending".to_string(),
+                Self::NameAscending => "name_ascending".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for NameSortMode {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "name_ascending" => Ok(Self::NameAscending),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///A `NetworkInterface` represents a virtual network interface device.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct NetworkInterface {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -947,7 +1264,7 @@ pub mod types {
 
     ///Create-time parameters for a
     /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct NetworkInterfaceCreate {
         pub description: String,
         ///The IP address for the interface. One will be auto-assigned if not
@@ -962,7 +1279,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct NetworkInterfaceResultsPage {
         ///list of items on this page of results
         pub items: Vec<NetworkInterface>,
@@ -976,7 +1293,7 @@ pub mod types {
     ///
     ///Note that modifying IP addresses for an interface is not yet supported,
     /// a new interface must be created instead.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct NetworkInterfaceUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -998,7 +1315,7 @@ pub mod types {
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum Null {}
 
@@ -1008,8 +1325,17 @@ pub mod types {
         }
     }
 
+    impl std::str::FromStr for Null {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
     ///Client view of an [`Organization`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Organization {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -1025,14 +1351,14 @@ pub mod types {
 
     ///Create-time parameters for an
     /// [`Organization`](crate::external_api::views::Organization)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct OrganizationCreate {
         pub description: String,
         pub name: Name,
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct OrganizationResultsPage {
         ///list of items on this page of results
         pub items: Vec<Organization>,
@@ -1042,7 +1368,7 @@ pub mod types {
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum OrganizationRole {
         #[serde(rename = "admin")]
@@ -1056,9 +1382,21 @@ pub mod types {
     impl ToString for OrganizationRole {
         fn to_string(&self) -> String {
             match *self {
-                OrganizationRole::Admin => "admin".to_string(),
-                OrganizationRole::Collaborator => "collaborator".to_string(),
-                OrganizationRole::Viewer => "viewer".to_string(),
+                Self::Admin => "admin".to_string(),
+                Self::Collaborator => "collaborator".to_string(),
+                Self::Viewer => "viewer".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for OrganizationRole {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "admin" => Ok(Self::Admin),
+                "collaborator" => Ok(Self::Collaborator),
+                "viewer" => Ok(Self::Viewer),
+                _ => Err("invalid value"),
             }
         }
     }
@@ -1069,7 +1407,7 @@ pub mod types {
     ///Note that the Policy only describes access granted explicitly for this
     /// resource.  The policies of parent resources can also cause a user to
     /// have access to this resource.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct OrganizationRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: Vec<OrganizationRoleRoleAssignment>,
@@ -1081,7 +1419,7 @@ pub mod types {
     ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
     /// are put into a [`Policy`] and that Policy is applied to a particular
     /// resource.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct OrganizationRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
@@ -1090,7 +1428,7 @@ pub mod types {
 
     ///Updateable properties of an
     /// [`Organization`](crate::external_api::views::Organization)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct OrganizationUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -1099,7 +1437,7 @@ pub mod types {
     }
 
     ///Client view of a [`Project`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Project {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -1116,14 +1454,14 @@ pub mod types {
 
     ///Create-time parameters for a
     /// [`Project`](crate::external_api::views::Project)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ProjectCreate {
         pub description: String,
         pub name: Name,
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ProjectResultsPage {
         ///list of items on this page of results
         pub items: Vec<Project>,
@@ -1133,7 +1471,7 @@ pub mod types {
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum ProjectRole {
         #[serde(rename = "admin")]
@@ -1147,9 +1485,21 @@ pub mod types {
     impl ToString for ProjectRole {
         fn to_string(&self) -> String {
             match *self {
-                ProjectRole::Admin => "admin".to_string(),
-                ProjectRole::Collaborator => "collaborator".to_string(),
-                ProjectRole::Viewer => "viewer".to_string(),
+                Self::Admin => "admin".to_string(),
+                Self::Collaborator => "collaborator".to_string(),
+                Self::Viewer => "viewer".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for ProjectRole {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "admin" => Ok(Self::Admin),
+                "collaborator" => Ok(Self::Collaborator),
+                "viewer" => Ok(Self::Viewer),
+                _ => Err("invalid value"),
             }
         }
     }
@@ -1160,7 +1510,7 @@ pub mod types {
     ///Note that the Policy only describes access granted explicitly for this
     /// resource.  The policies of parent resources can also cause a user to
     /// have access to this resource.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ProjectRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: Vec<ProjectRoleRoleAssignment>,
@@ -1172,7 +1522,7 @@ pub mod types {
     ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
     /// are put into a [`Policy`] and that Policy is applied to a particular
     /// resource.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ProjectRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
@@ -1181,7 +1531,7 @@ pub mod types {
 
     ///Updateable properties of a
     /// [`Project`](crate::external_api::views::Project)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ProjectUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -1190,7 +1540,7 @@ pub mod types {
     }
 
     ///Client view of an [`Rack`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Rack {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
@@ -1201,7 +1551,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct RackResultsPage {
         ///list of items on this page of results
         pub items: Vec<Rack>,
@@ -1211,15 +1561,15 @@ pub mod types {
     }
 
     ///Client view of a [`Role`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Role {
         pub description: String,
         pub name: RoleName,
     }
 
     ///Role names consist of two string components separated by dot (".").
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
-    pub struct RoleName(pub String);
+    #[derive(Clone, Debug, Serialize, JsonSchema)]
+    pub struct RoleName(String);
     impl std::ops::Deref for RoleName {
         type Target = String;
         fn deref(&self) -> &Self::Target {
@@ -1227,8 +1577,42 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&str> for RoleName {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            if value.len() > 63usize {
+                return Err("longer than 63 characters");
+            }
+            if regress::Regex::new("[a-z-]+\\.[a-z-]+")
+                .unwrap()
+                .find(value)
+                .is_none()
+            {
+                return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"");
+            }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<String> for RoleName {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> serde::Deserialize<'de> for RoleName {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            Self::try_from(String::deserialize(deserializer)?)
+                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+        }
+    }
+
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct RoleResultsPage {
         ///list of items on this page of results
         pub items: Vec<Role>,
@@ -1243,7 +1627,7 @@ pub mod types {
     ///When traffic is to be sent to a destination that is within a given
     /// `RouteDestination`, the corresponding [`RouterRoute`] applies, and
     /// traffic will be forward to the [`RouteTarget`] for that rule.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
         ///Route applies to traffic destined for a specific IP address
@@ -1262,7 +1646,7 @@ pub mod types {
 
     ///A `RouteTarget` describes the possible locations that traffic matching a
     /// route destination can be sent.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
         ///Forward traffic to a particular IP address.
@@ -1284,7 +1668,7 @@ pub mod types {
 
     ///A route defines a rule that governs where traffic should be sent based
     /// on its destination.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct RouterRoute {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -1305,7 +1689,7 @@ pub mod types {
     }
 
     ///Create-time parameters for a [`RouterRoute`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct RouterRouteCreateParams {
         pub description: String,
         pub destination: RouteDestination,
@@ -1319,7 +1703,7 @@ pub mod types {
     ///
     ///See [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum RouterRouteKind {
         #[serde(rename = "default")]
@@ -1335,16 +1719,29 @@ pub mod types {
     impl ToString for RouterRouteKind {
         fn to_string(&self) -> String {
             match *self {
-                RouterRouteKind::Default => "default".to_string(),
-                RouterRouteKind::VpcSubnet => "vpc_subnet".to_string(),
-                RouterRouteKind::VpcPeering => "vpc_peering".to_string(),
-                RouterRouteKind::Custom => "custom".to_string(),
+                Self::Default => "default".to_string(),
+                Self::VpcSubnet => "vpc_subnet".to_string(),
+                Self::VpcPeering => "vpc_peering".to_string(),
+                Self::Custom => "custom".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for RouterRouteKind {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "default" => Ok(Self::Default),
+                "vpc_subnet" => Ok(Self::VpcSubnet),
+                "vpc_peering" => Ok(Self::VpcPeering),
+                "custom" => Ok(Self::Custom),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct RouterRouteResultsPage {
         ///list of items on this page of results
         pub items: Vec<RouterRoute>,
@@ -1354,7 +1751,7 @@ pub mod types {
     }
 
     ///Updateable properties of a [`RouterRoute`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct RouterRouteUpdateParams {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -1364,13 +1761,13 @@ pub mod types {
         pub target: RouteTarget,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Saga {
         pub id: uuid::Uuid,
         pub state: SagaState,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "error")]
     pub enum SagaErrorInfo {
         #[serde(rename = "action_failed")]
@@ -1386,7 +1783,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SagaResultsPage {
         ///list of items on this page of results
         pub items: Vec<Saga>,
@@ -1395,7 +1792,7 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "state")]
     pub enum SagaState {
         #[serde(rename = "running")]
@@ -1411,7 +1808,7 @@ pub mod types {
 
     ///Identity-related metadata that's included in nearly all public API
     /// objects
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SamlIdentityProvider {
         ///service provider endpoint where the response will be sent
         pub acs_url: String,
@@ -1440,7 +1837,7 @@ pub mod types {
     }
 
     ///Create-time identity-related parameters
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SamlIdentityProviderCreate {
         ///service provider endpoint where the response will be sent
         pub acs_url: String,
@@ -1462,13 +1859,13 @@ pub mod types {
     }
 
     ///Client view of currently authed user.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SessionUser {
         pub id: uuid::Uuid,
     }
 
     ///Client view of a ['Silo']
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Silo {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -1488,7 +1885,7 @@ pub mod types {
     }
 
     ///Create-time parameters for a [`Silo`](crate::external_api::views::Silo)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SiloCreate {
         pub description: String,
         pub discoverable: bool,
@@ -1497,7 +1894,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SiloResultsPage {
         ///list of items on this page of results
         pub items: Vec<Silo>,
@@ -1507,7 +1904,7 @@ pub mod types {
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum SiloRole {
         #[serde(rename = "admin")]
@@ -1521,9 +1918,21 @@ pub mod types {
     impl ToString for SiloRole {
         fn to_string(&self) -> String {
             match *self {
-                SiloRole::Admin => "admin".to_string(),
-                SiloRole::Collaborator => "collaborator".to_string(),
-                SiloRole::Viewer => "viewer".to_string(),
+                Self::Admin => "admin".to_string(),
+                Self::Collaborator => "collaborator".to_string(),
+                Self::Viewer => "viewer".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for SiloRole {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "admin" => Ok(Self::Admin),
+                "collaborator" => Ok(Self::Collaborator),
+                "viewer" => Ok(Self::Viewer),
+                _ => Err("invalid value"),
             }
         }
     }
@@ -1534,7 +1943,7 @@ pub mod types {
     ///Note that the Policy only describes access granted explicitly for this
     /// resource.  The policies of parent resources can also cause a user to
     /// have access to this resource.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SiloRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: Vec<SiloRoleRoleAssignment>,
@@ -1546,7 +1955,7 @@ pub mod types {
     ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
     /// are put into a [`Policy`] and that Policy is applied to a particular
     /// resource.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SiloRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
@@ -1554,7 +1963,7 @@ pub mod types {
     }
 
     ///Client view of an [`Sled`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Sled {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
@@ -1566,7 +1975,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SledResultsPage {
         ///list of items on this page of results
         pub items: Vec<Sled>,
@@ -1576,7 +1985,7 @@ pub mod types {
     }
 
     ///Client view of a Snapshot
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Snapshot {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -1595,7 +2004,7 @@ pub mod types {
 
     ///Create-time parameters for a
     /// [`Snapshot`](omicron_common::api::external::Snapshot)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SnapshotCreate {
         pub description: String,
         ///The name of the disk to be snapshotted
@@ -1604,7 +2013,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SnapshotResultsPage {
         ///list of items on this page of results
         pub items: Vec<Snapshot>,
@@ -1613,13 +2022,13 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SpoofLoginBody {
         pub username: String,
     }
 
     ///Client view of a [`SshKey`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SshKey {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -1639,7 +2048,7 @@ pub mod types {
 
     ///Create-time parameters for an
     /// [`SshKey`](crate::external_api::views::SshKey)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SshKeyCreate {
         pub description: String,
         pub name: Name,
@@ -1648,7 +2057,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct SshKeyResultsPage {
         ///list of items on this page of results
         pub items: Vec<SshKey>,
@@ -1660,8 +2069,8 @@ pub mod types {
     ///Names are constructed by concatenating the target and metric names with
     /// ':'. Target and metric names must be lowercase alphanumeric characters
     /// with '_' separating words.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
-    pub struct TimeseriesName(pub String);
+    #[derive(Clone, Debug, Serialize, JsonSchema)]
+    pub struct TimeseriesName(String);
     impl std::ops::Deref for TimeseriesName {
         type Target = String;
         fn deref(&self) -> &Self::Target {
@@ -1669,11 +2078,44 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&str> for TimeseriesName {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            if regress::Regex::new(
+                "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)",
+            )
+            .unwrap()
+            .find(value)
+            .is_none()
+            {
+                return Err ("doesn't match pattern \"(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)\"") ;
+            }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<String> for TimeseriesName {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> serde::Deserialize<'de> for TimeseriesName {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            Self::try_from(String::deserialize(deserializer)?)
+                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+        }
+    }
+
     ///The schema for a timeseries.
     ///
     ///This includes the name of the timeseries, as well as the datum type of
     /// its metric and the schema for each field.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct TimeseriesSchema {
         pub created: chrono::DateTime<chrono::offset::Utc>,
         pub datum_type: DatumType,
@@ -1682,7 +2124,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct TimeseriesSchemaResultsPage {
         ///list of items on this page of results
         pub items: Vec<TimeseriesSchema>,
@@ -1692,7 +2134,7 @@ pub mod types {
     }
 
     ///Client view of a [`User`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct User {
         ///Human-readable name that can identify the user
         pub display_name: String,
@@ -1700,7 +2142,7 @@ pub mod types {
     }
 
     ///Client view of a [`UserBuiltin`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct UserBuiltin {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -1715,7 +2157,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct UserBuiltinResultsPage {
         ///list of items on this page of results
         pub items: Vec<UserBuiltin>,
@@ -1726,7 +2168,7 @@ pub mod types {
 
     ///How users will be provisioned in a silo during authentication.
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum UserProvisionType {
         #[serde(rename = "fixed")]
@@ -1738,14 +2180,25 @@ pub mod types {
     impl ToString for UserProvisionType {
         fn to_string(&self) -> String {
             match *self {
-                UserProvisionType::Fixed => "fixed".to_string(),
-                UserProvisionType::Jit => "jit".to_string(),
+                Self::Fixed => "fixed".to_string(),
+                Self::Jit => "jit".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for UserProvisionType {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "fixed" => Ok(Self::Fixed),
+                "jit" => Ok(Self::Jit),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct UserResultsPage {
         ///list of items on this page of results
         pub items: Vec<User>,
@@ -1755,7 +2208,7 @@ pub mod types {
     }
 
     ///Client view of a [`Vpc`]
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Vpc {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -1778,7 +2231,7 @@ pub mod types {
     }
 
     ///Create-time parameters for a [`Vpc`](crate::external_api::views::Vpc)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcCreate {
         pub description: String,
         pub dns_name: Name,
@@ -1794,7 +2247,7 @@ pub mod types {
     }
 
     ///A single rule in a VPC firewall
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcFirewallRule {
         ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
@@ -1823,7 +2276,7 @@ pub mod types {
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum VpcFirewallRuleAction {
         #[serde(rename = "allow")]
@@ -1835,14 +2288,25 @@ pub mod types {
     impl ToString for VpcFirewallRuleAction {
         fn to_string(&self) -> String {
             match *self {
-                VpcFirewallRuleAction::Allow => "allow".to_string(),
-                VpcFirewallRuleAction::Deny => "deny".to_string(),
+                Self::Allow => "allow".to_string(),
+                Self::Deny => "deny".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for VpcFirewallRuleAction {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "allow" => Ok(Self::Allow),
+                "deny" => Ok(Self::Deny),
+                _ => Err("invalid value"),
             }
         }
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum VpcFirewallRuleDirection {
         #[serde(rename = "inbound")]
@@ -1854,8 +2318,19 @@ pub mod types {
     impl ToString for VpcFirewallRuleDirection {
         fn to_string(&self) -> String {
             match *self {
-                VpcFirewallRuleDirection::Inbound => "inbound".to_string(),
-                VpcFirewallRuleDirection::Outbound => "outbound".to_string(),
+                Self::Inbound => "inbound".to_string(),
+                Self::Outbound => "outbound".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for VpcFirewallRuleDirection {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "inbound" => Ok(Self::Inbound),
+                "outbound" => Ok(Self::Outbound),
+                _ => Err("invalid value"),
             }
         }
     }
@@ -1863,7 +2338,7 @@ pub mod types {
     ///Filter for a firewall rule. A given packet must match every field that
     /// is present for the rule to apply to it. A packet matches a field if any
     /// entry in that field matches the packet.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcFirewallRuleFilter {
         ///If present, the sources (if incoming) or destinations (if outgoing)
         /// this rule applies to.
@@ -1879,7 +2354,7 @@ pub mod types {
 
     ///The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis
     /// of its source or destination host.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
         ///The rule applies to traffic from/to all instances in the VPC
@@ -1901,7 +2376,7 @@ pub mod types {
 
     ///The protocols that may be specified in a firewall rule's filter
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum VpcFirewallRuleProtocol {
         #[serde(rename = "TCP")]
@@ -1915,15 +2390,27 @@ pub mod types {
     impl ToString for VpcFirewallRuleProtocol {
         fn to_string(&self) -> String {
             match *self {
-                VpcFirewallRuleProtocol::Tcp => "TCP".to_string(),
-                VpcFirewallRuleProtocol::Udp => "UDP".to_string(),
-                VpcFirewallRuleProtocol::Icmp => "ICMP".to_string(),
+                Self::Tcp => "TCP".to_string(),
+                Self::Udp => "UDP".to_string(),
+                Self::Icmp => "ICMP".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for VpcFirewallRuleProtocol {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "TCP" => Ok(Self::Tcp),
+                "UDP" => Ok(Self::Udp),
+                "ICMP" => Ok(Self::Icmp),
+                _ => Err("invalid value"),
             }
         }
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum VpcFirewallRuleStatus {
         #[serde(rename = "disabled")]
@@ -1935,15 +2422,26 @@ pub mod types {
     impl ToString for VpcFirewallRuleStatus {
         fn to_string(&self) -> String {
             match *self {
-                VpcFirewallRuleStatus::Disabled => "disabled".to_string(),
-                VpcFirewallRuleStatus::Enabled => "enabled".to_string(),
+                Self::Disabled => "disabled".to_string(),
+                Self::Enabled => "enabled".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for VpcFirewallRuleStatus {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "disabled" => Ok(Self::Disabled),
+                "enabled" => Ok(Self::Enabled),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to
     /// which a firewall rule applies.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
         ///The rule applies to all instances in the VPC
@@ -1964,7 +2462,7 @@ pub mod types {
     }
 
     ///A single rule in a VPC firewall
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcFirewallRuleUpdate {
         ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
@@ -1987,19 +2485,19 @@ pub mod types {
     ///Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules
     /// are implicitly created along with a Vpc, so there is no explicit
     /// creation.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcFirewallRuleUpdateParams {
         pub rules: Vec<VpcFirewallRuleUpdate>,
     }
 
     ///Collection of a [`Vpc`]'s firewall rules
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcFirewallRules {
         pub rules: Vec<VpcFirewallRule>,
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcResultsPage {
         ///list of items on this page of results
         pub items: Vec<Vpc>,
@@ -2010,7 +2508,7 @@ pub mod types {
 
     ///A VPC router defines a series of rules that indicate where traffic
     /// should be sent depending on its destination.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcRouter {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -2029,14 +2527,14 @@ pub mod types {
 
     ///Create-time parameters for a
     /// [`VpcRouter`](crate::external_api::views::VpcRouter)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcRouterCreate {
         pub description: String,
         pub name: Name,
     }
 
     #[derive(
-        Serialize, Deserialize, Debug, Clone, JsonSchema, Copy, PartialOrd, Ord, PartialEq, Eq, Hash,
+        Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, JsonSchema,
     )]
     pub enum VpcRouterKind {
         #[serde(rename = "system")]
@@ -2048,14 +2546,25 @@ pub mod types {
     impl ToString for VpcRouterKind {
         fn to_string(&self) -> String {
             match *self {
-                VpcRouterKind::System => "system".to_string(),
-                VpcRouterKind::Custom => "custom".to_string(),
+                Self::System => "system".to_string(),
+                Self::Custom => "custom".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for VpcRouterKind {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "system" => Ok(Self::System),
+                "custom" => Ok(Self::Custom),
+                _ => Err("invalid value"),
             }
         }
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcRouterResultsPage {
         ///list of items on this page of results
         pub items: Vec<VpcRouter>,
@@ -2066,7 +2575,7 @@ pub mod types {
 
     ///Updateable properties of a
     /// [`VpcRouter`](crate::external_api::views::VpcRouter)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcRouterUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -2077,7 +2586,7 @@ pub mod types {
     ///A VPC subnet represents a logical grouping for instances that allows
     /// network traffic between them, within a IPv4 subnetwork or optionall an
     /// IPv6 subnetwork.
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcSubnet {
         ///human-readable free-form text about a resource
         pub description: String,
@@ -2099,7 +2608,7 @@ pub mod types {
 
     ///Create-time parameters for a
     /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcSubnetCreate {
         pub description: String,
         ///The IPv4 address range for this subnet.
@@ -2119,7 +2628,7 @@ pub mod types {
     }
 
     ///A single page of results
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcSubnetResultsPage {
         ///list of items on this page of results
         pub items: Vec<VpcSubnet>,
@@ -2130,7 +2639,7 @@ pub mod types {
 
     ///Updateable properties of a
     /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,
@@ -2139,7 +2648,7 @@ pub mod types {
     }
 
     ///Updateable properties of a [`Vpc`](crate::external_api::views::Vpc)
-    #[derive(Serialize, Deserialize, Debug, Clone, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct VpcUpdate {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub description: Option<String>,

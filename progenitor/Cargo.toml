@@ -20,6 +20,7 @@ clap = { version = "3.2.8", features = ["derive"] }
 chrono = { version = "0.4", features = ["serde"] }
 futures = "0.3.21"
 percent-encoding = "2.1"
+regress = "0.4.1"
 reqwest = { version = "0.11", features = ["json", "stream"] }
 schemars = { version = "0.8.10", features = ["uuid1"] }
 uuid = { version = "1.0", features = ["serde", "v4"] }

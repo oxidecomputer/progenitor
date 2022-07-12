@@ -958,6 +958,7 @@ dependencies = [
  "progenitor-client",
  "progenitor-impl",
  "progenitor-macro",
+ "regress",
  "reqwest",
  "schemars",
  "serde",
@@ -1726,7 +1727,7 @@ checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 [[package]]
 name = "typify"
 version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#f58c5e23b10ccb90a69b8268d6cbedcef332e0b8"
+source = "git+https://github.com/oxidecomputer/typify#77656de7b77f32ee7578ad4638dd928ee96138ad"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1735,7 +1736,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#f58c5e23b10ccb90a69b8268d6cbedcef332e0b8"
+source = "git+https://github.com/oxidecomputer/typify#77656de7b77f32ee7578ad4638dd928ee96138ad"
 dependencies = [
  "heck",
  "log",
@@ -1753,7 +1754,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#f58c5e23b10ccb90a69b8268d6cbedcef332e0b8"
+source = "git+https://github.com/oxidecomputer/typify#77656de7b77f32ee7578ad4638dd928ee96138ad"
 dependencies = [
  "proc-macro2",
  "quote",
