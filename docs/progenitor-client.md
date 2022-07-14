@@ -10,7 +10,7 @@ different ways (see ["Using Progenitor"](../README.md#using_progenitor)).
 - For builder consumers, it must be specified under `[dependencies]` (while `progenitor` is under `[build-dependencies]`).
 
 - For statically generated consumers, the code is emitted into
-`src/progenitor_client.rs`.
+  `src/progenitor_client.rs`.
 
 The two types that `progenitor-client` exports are `Error<E>` and
 `ResponseValue<T>`. A typical generated method will use these types in its
@@ -62,23 +62,27 @@ It can be used as the type `T` in most instances and extracted as a `T` using
 
 ## `Error<E>`
 
-There are four sub-categories of error covered by the error type variants:
+There are five sub-categories of error covered by the error type variants:
+
+- A request that did not conform to API requirements. This can occur when required builder or body parameters were not specified, and the error message will denote the specific failure.
+
 - A communication error
 
 - An expected error response, defined by the OpenAPI document with a 4xx or 5xx
-status code
+  status code
 
 - An expected status code (whose payload didn't deserialize as expected (this
-could be viewed as a sub-type of communication error), but it is separately
-identified as there's more information; note that this covers both success and
-error status codes
+  could be viewed as a sub-type of communication error), but it is separately
+  identified as there's more information; note that this covers both success and
+  error status codes
 
 - An unexpected status code in the response
 
 These errors are covered by the variants of the `Error<E>` type:
 
 ```rust
-pub enum Error<E> {
+pub enum Error<E = ()> {
+    InvalidRequest(String),
     CommunicationError(reqwest::Error),
     ErrorResponse(ResponseValue<E>),
     InvalidResponsePayload(reqwest::Error),
