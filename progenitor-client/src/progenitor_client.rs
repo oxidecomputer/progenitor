@@ -127,6 +127,16 @@ impl<T> ResponseValue<T> {
         &self.headers
     }
 
+    /// Get the parsed value of the Content-Length header, if present and valid.
+    pub fn content_length(&self) -> Option<u64> {
+        self.headers
+            .get(reqwest::header::CONTENT_LENGTH)?
+            .to_str()
+            .ok()?
+            .parse::<u64>()
+            .ok()
+    }
+
     #[doc(hidden)]
     pub fn map<U: std::fmt::Debug, F, E>(
         self,
