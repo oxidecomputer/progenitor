@@ -372,7 +372,7 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
                     "application/x-www-form-urlencoded",
                 ),
             )
-            .body(serde_json::to_vec(&body).map_err(|_| {
+            .body(serde_urlencoded::to_string(&body).map_err(|_| {
                 Error::InvalidRequest("failed to serialize body".to_string())
             })?))
     }
