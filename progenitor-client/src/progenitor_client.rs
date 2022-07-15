@@ -4,32 +4,35 @@
 
 //! Support code for generated clients.
 
-use std::{
-    ops::{Deref, DerefMut},
-    pin::Pin,
-};
+use std::ops::{Deref, DerefMut};
 
 use bytes::Bytes;
 use futures_core::Stream;
 use reqwest::RequestBuilder;
 use serde::{de::DeserializeOwned, Serialize};
 
-/// Represents an untyped byte stream for both success and error responses.
-pub struct ByteStream(
-    Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>,
-);
+type InnerByteStream =
+    std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
+
+/// Untyped byte stream used for both success and error responses.
+pub struct ByteStream(InnerByteStream);
 
 impl ByteStream {
-    pub fn into_inner(
-        self,
-    ) -> Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>> {
+    /// Creates a new ByteStream
+    ///
+    /// Useful for generating test fixtures.
+    pub fn new(inner: InnerByteStream) -> Self {
+        Self(inner)
+    }
+
+    /// Consumes the [`ByteStream`] and return its inner [`Stream`].
+    pub fn into_inner(self) -> InnerByteStream {
         self.0
     }
 }
 
 impl Deref for ByteStream {
-    type Target =
-        Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
+    type Target = InnerByteStream;
 
     fn deref(&self) -> &Self::Target {
         &self.0
@@ -42,7 +45,10 @@ impl DerefMut for ByteStream {
     }
 }
 
-/// Success value returned by generated client methods.
+/// Typed value returned by generated client methods.
+///
+/// This is used for successful responses and may appear in error responses
+/// generated from the server (see [`Error::ErrorResponse`])
 pub struct ResponseValue<T> {
     inner: T,
     status: reqwest::StatusCode,
@@ -99,7 +105,9 @@ impl ResponseValue<()> {
 }
 
 impl<T> ResponseValue<T> {
-    /// Create an instance for testing
+    /// Creates a [`ResponseValue`] from the inner type, status, and headers.
+    ///
+    /// Useful for generating test fixtures.
     pub fn new(
         inner: T,
         status: reqwest::StatusCode,
@@ -117,17 +125,18 @@ impl<T> ResponseValue<T> {
         self.inner
     }
 
-    /// Get the status from this response.
+    /// Gets the status from this response.
     pub fn status(&self) -> reqwest::StatusCode {
         self.status
     }
 
-    /// Get the headers from this response.
+    /// Gets the headers from this response.
     pub fn headers(&self) -> &reqwest::header::HeaderMap {
         &self.headers
     }
 
-    /// Get the parsed value of the Content-Length header, if present and valid.
+    /// Gets the parsed value of the Content-Length header, if present and
+    /// valid.
     pub fn content_length(&self) -> Option<u64> {
         self.headers
             .get(reqwest::header::CONTENT_LENGTH)?
@@ -160,10 +169,8 @@ impl<T> ResponseValue<T> {
 }
 
 impl ResponseValue<ByteStream> {
-    /// Take ownership of the stream of bytes underpinning this response
-    pub fn into_inner_stream(
-        self,
-    ) -> Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>> {
+    /// Consumes the `ResponseValue`, returning the wrapped [`Stream`].
+    pub fn into_inner_stream(self) -> InnerByteStream {
         self.into_inner().into_inner()
     }
 }
@@ -224,8 +231,10 @@ impl<E> Error<E> {
         }
     }
 
-    /// Convert this error into one without a typed body for unified error
-    /// handling with APIs that distinguish various error response bodies.
+    /// Converts this error into one without a typed body.
+    ///
+    /// This is useful for unified error handling with APIs that distinguish
+    /// various error response bodies.
     pub fn into_untyped(self) -> Error {
         match self {
             Error::InvalidRequest(s) => Error::InvalidRequest(s),
