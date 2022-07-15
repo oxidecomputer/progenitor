@@ -16,11 +16,20 @@ use serde::{de::DeserializeOwned, Serialize};
 
 /// Represents an untyped byte stream for both success and error responses.
 pub struct ByteStream(
-    Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send>>,
+    Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>,
 );
 
+impl ByteStream {
+    pub fn into_inner(
+        self,
+    ) -> Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>> {
+        self.0
+    }
+}
+
 impl Deref for ByteStream {
-    type Target = Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send>>;
+    type Target =
+        Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
@@ -137,6 +146,15 @@ impl<T> ResponseValue<T> {
             status,
             headers,
         })
+    }
+}
+
+impl ResponseValue<ByteStream> {
+    /// Take ownership of the stream of bytes underpinning this response
+    pub fn into_inner_stream(
+        self,
+    ) -> Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>> {
+        self.into_inner().into_inner()
     }
 }
 
