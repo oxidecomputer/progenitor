@@ -930,10 +930,7 @@ pub mod types {
     impl std::convert::TryFrom<&str> for Ipv4Net {
         type Error = &'static str;
         fn try_from(value: &str) -> Result<Self, Self::Error> {
-            if value.len() > 18usize {
-                return Err("longer than 18 characters");
-            }
-            if regress :: Regex :: new ("(^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$)|(^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$)|(^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$)") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"(^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$)|(^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$)|(^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$)\"") ; }
+            if regress :: Regex :: new ("^(10\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/([8-9]|1[0-9]|2[0-9]|3[0-2])|172\\.(1[6-9]|2[0-9]|3[0-1])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[2-9]|2[0-9]|3[0-2])|192\\.168\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[6-9]|2[0-9]|3[0-2]))$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(10\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/([8-9]|1[0-9]|2[0-9]|3[0-2])|172\\.(1[6-9]|2[0-9]|3[0-1])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[2-9]|2[0-9]|3[0-2])|192\\.168\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[6-9]|2[0-9]|3[0-2]))$\"") ; }
             Ok(Self(value.to_string()))
         }
     }
@@ -977,10 +974,7 @@ pub mod types {
     impl std::convert::TryFrom<&str> for Ipv6Net {
         type Error = &'static str;
         fn try_from(value: &str) -> Result<Self, Self::Error> {
-            if value.len() > 43usize {
-                return Err("longer than 43 characters");
-            }
-            if regress :: Regex :: new ("^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$\"") ; }
+            if regress :: Regex :: new ("^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$\"") ; }
             Ok(Self(value.to_string()))
         }
     }
@@ -1124,12 +1118,12 @@ pub mod types {
             if value.len() > 63usize {
                 return Err("longer than 63 characters");
             }
-            if regress::Regex::new("[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])")
+            if regress::Regex::new("^[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])$")
                 .unwrap()
                 .find(value)
                 .is_none()
             {
-                return Err("doesn't match pattern \"[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])\"");
+                return Err("doesn't match pattern \"^[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])$\"");
             }
             Ok(Self(value.to_string()))
         }
@@ -1290,24 +1284,6 @@ pub mod types {
         pub make_primary: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
-    }
-
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-    pub enum Null {}
-
-    impl ToString for Null {
-        fn to_string(&self) -> String {
-            match *self {}
-        }
-    }
-
-    impl std::str::FromStr for Null {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
-            match value {
-                _ => Err("invalid value"),
-            }
-        }
     }
 
     ///Client view of an [`Organization`]
@@ -1826,12 +1802,6 @@ pub mod types {
         pub sp_client_id: String,
         ///customer's technical contact for saml configuration
         pub technical_contact_email: String,
-    }
-
-    ///Client view of currently authed user.
-    #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct SessionUser {
-        pub id: uuid::Uuid,
     }
 
     ///Client view of a ['Silo']
@@ -2649,6 +2619,16 @@ impl Client {
 }
 
 pub trait ClientDisksExt {
+    ///Get a disk by id
+    ///
+    ///Sends a `GET` request to `/by-id/disks/{id}`
+    ///```ignore
+    /// let response = client.disk_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn disk_view_by_id(&self) -> builder::DiskViewById;
     ///List disks in a project
     ///
     ///Sends a `GET` request to
@@ -2692,7 +2672,7 @@ pub trait ClientDisksExt {
     ///    .await;
     /// ```
     fn disk_create(&self) -> builder::DiskCreate;
-    ///Fetch a single disk in a project
+    ///Get a single disk in a project
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
@@ -2721,6 +2701,10 @@ pub trait ClientDisksExt {
 }
 
 impl ClientDisksExt for Client {
+    fn disk_view_by_id(&self) -> builder::DiskViewById {
+        builder::DiskViewById::new(self)
+    }
+
     fn disk_list(&self) -> builder::DiskList {
         builder::DiskList::new(self)
     }
@@ -2921,6 +2905,16 @@ impl ClientHiddenExt for Client {
 }
 
 pub trait ClientImagesExt {
+    ///Fetch an image by id
+    ///
+    ///Sends a `GET` request to `/by-id/images/{id}`
+    ///```ignore
+    /// let response = client.image_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn image_view_by_id(&self) -> builder::ImageViewById;
     ///List images
     ///
     ///List images in a project. The images are returned sorted by creation
@@ -3004,6 +2998,10 @@ pub trait ClientImagesExt {
 }
 
 impl ClientImagesExt for Client {
+    fn image_view_by_id(&self) -> builder::ImageViewById {
+        builder::ImageViewById::new(self)
+    }
+
     fn image_list(&self) -> builder::ImageList {
         builder::ImageList::new(self)
     }
@@ -3022,6 +3020,16 @@ impl ClientImagesExt for Client {
 }
 
 pub trait ClientImagesGlobalExt {
+    ///Get a global image by id
+    ///
+    ///Sends a `GET` request to `/by-id/global-images/{id}`
+    ///```ignore
+    /// let response = client.image_global_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn image_global_view_by_id(&self) -> builder::ImageGlobalViewById;
     ///List global images
     ///
     ///Returns a list of all the global images. Global images are returned
@@ -3086,6 +3094,10 @@ pub trait ClientImagesGlobalExt {
 }
 
 impl ClientImagesGlobalExt for Client {
+    fn image_global_view_by_id(&self) -> builder::ImageGlobalViewById {
+        builder::ImageGlobalViewById::new(self)
+    }
+
     fn image_global_list(&self) -> builder::ImageGlobalList {
         builder::ImageGlobalList::new(self)
     }
@@ -3104,6 +3116,26 @@ impl ClientImagesGlobalExt for Client {
 }
 
 pub trait ClientInstancesExt {
+    ///Get an instance by id
+    ///
+    ///Sends a `GET` request to `/by-id/instances/{id}`
+    ///```ignore
+    /// let response = client.instance_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn instance_view_by_id(&self) -> builder::InstanceViewById;
+    ///Get an instance's network interface by id
+    ///
+    ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
+    ///```ignore
+    /// let response = client.instance_network_interface_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn instance_network_interface_view_by_id(&self) -> builder::InstanceNetworkInterfaceViewById;
     ///List instances in a project
     ///
     ///Sends a `GET` request to
@@ -3404,6 +3436,14 @@ pub trait ClientInstancesExt {
 }
 
 impl ClientInstancesExt for Client {
+    fn instance_view_by_id(&self) -> builder::InstanceViewById {
+        builder::InstanceViewById::new(self)
+    }
+
+    fn instance_network_interface_view_by_id(&self) -> builder::InstanceNetworkInterfaceViewById {
+        builder::InstanceNetworkInterfaceViewById::new(self)
+    }
+
     fn instance_list(&self) -> builder::InstanceList {
         builder::InstanceList::new(self)
     }
@@ -3683,6 +3723,16 @@ impl ClientMetricsExt for Client {
 }
 
 pub trait ClientOrganizationsExt {
+    ///Get an organization by id
+    ///
+    ///Sends a `GET` request to `/by-id/organizations/{id}`
+    ///```ignore
+    /// let response = client.organization_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn organization_view_by_id(&self) -> builder::OrganizationViewById;
     ///List all organizations
     ///
     ///Sends a `GET` request to `/organizations`
@@ -3789,6 +3839,10 @@ pub trait ClientOrganizationsExt {
 }
 
 impl ClientOrganizationsExt for Client {
+    fn organization_view_by_id(&self) -> builder::OrganizationViewById {
+        builder::OrganizationViewById::new(self)
+    }
+
     fn organization_list(&self) -> builder::OrganizationList {
         builder::OrganizationList::new(self)
     }
@@ -3851,6 +3905,16 @@ impl ClientPolicyExt for Client {
 }
 
 pub trait ClientProjectsExt {
+    ///Get a project by id
+    ///
+    ///Sends a `GET` request to `/by-id/projects/{id}`
+    ///```ignore
+    /// let response = client.project_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn project_view_by_id(&self) -> builder::ProjectViewById;
     ///List all projects
     ///
     ///Sends a `GET` request to `/organizations/{organization_name}/projects`
@@ -3980,6 +4044,10 @@ pub trait ClientProjectsExt {
 }
 
 impl ClientProjectsExt for Client {
+    fn project_view_by_id(&self) -> builder::ProjectViewById {
+        builder::ProjectViewById::new(self)
+    }
+
     fn project_list(&self) -> builder::ProjectList {
         builder::ProjectList::new(self)
     }
@@ -4223,7 +4291,7 @@ pub trait ClientSilosExt {
     fn silo_delete(&self) -> builder::SiloDelete;
     ///List Silo identity providers
     ///
-    ///Sends a `GET` request to `/silos/{silo_name}/identity_providers`
+    ///Sends a `GET` request to `/silos/{silo_name}/identity-providers`
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
@@ -4274,7 +4342,7 @@ pub trait ClientSilosExt {
     fn silo_policy_update(&self) -> builder::SiloPolicyUpdate;
     ///Create a new SAML identity provider for a silo
     ///
-    ///Sends a `POST` request to `/silos/{silo_name}/saml_identity_providers`
+    ///Sends a `POST` request to `/silos/{silo_name}/saml-identity-providers`
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
@@ -4291,7 +4359,7 @@ pub trait ClientSilosExt {
     ///GET a silo's SAML identity provider
     ///
     ///Sends a `GET` request to
-    /// `/silos/{silo_name}/saml_identity_providers/{provider_name}`
+    /// `/silos/{silo_name}/saml-identity-providers/{provider_name}`
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
@@ -4369,6 +4437,16 @@ impl ClientSilosExt for Client {
 }
 
 pub trait ClientSnapshotsExt {
+    ///Get a snapshot by id
+    ///
+    ///Sends a `GET` request to `/by-id/snapshots/{id}`
+    ///```ignore
+    /// let response = client.snapshot_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn snapshot_view_by_id(&self) -> builder::SnapshotViewById;
     ///List snapshots in a project
     ///
     ///Sends a `GET` request to
@@ -4441,6 +4519,10 @@ pub trait ClientSnapshotsExt {
 }
 
 impl ClientSnapshotsExt for Client {
+    fn snapshot_view_by_id(&self) -> builder::SnapshotViewById {
+        builder::SnapshotViewById::new(self)
+    }
+
     fn snapshot_list(&self) -> builder::SnapshotList {
         builder::SnapshotList::new(self)
     }
@@ -4523,6 +4605,46 @@ impl ClientUpdatesExt for Client {
 }
 
 pub trait ClientVpcsExt {
+    ///Get a vpc router route by id
+    ///
+    ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
+    ///```ignore
+    /// let response = client.vpc_router_route_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn vpc_router_route_view_by_id(&self) -> builder::VpcRouterRouteViewById;
+    ///Get a VPC Router by id
+    ///
+    ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
+    ///```ignore
+    /// let response = client.vpc_router_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn vpc_router_view_by_id(&self) -> builder::VpcRouterViewById;
+    ///Get a VPC subnet by id
+    ///
+    ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
+    ///```ignore
+    /// let response = client.vpc_subnet_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn vpc_subnet_view_by_id(&self) -> builder::VpcSubnetViewById;
+    ///Get a VPC by id
+    ///
+    ///Sends a `GET` request to `/by-id/vpcs/{id}`
+    ///```ignore
+    /// let response = client.vpc_view_by_id()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn vpc_view_by_id(&self) -> builder::VpcViewById;
     ///List VPCs in a project
     ///
     ///Sends a `GET` request to
@@ -4923,6 +5045,22 @@ pub trait ClientVpcsExt {
 }
 
 impl ClientVpcsExt for Client {
+    fn vpc_router_route_view_by_id(&self) -> builder::VpcRouterRouteViewById {
+        builder::VpcRouterRouteViewById::new(self)
+    }
+
+    fn vpc_router_view_by_id(&self) -> builder::VpcRouterViewById {
+        builder::VpcRouterViewById::new(self)
+    }
+
+    fn vpc_subnet_view_by_id(&self) -> builder::VpcSubnetViewById {
+        builder::VpcSubnetViewById::new(self)
+    }
+
+    fn vpc_view_by_id(&self) -> builder::VpcViewById {
+        builder::VpcViewById::new(self)
+    }
+
     fn vpc_list(&self) -> builder::VpcList {
         builder::VpcList::new(self)
     }
@@ -5020,6 +5158,681 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    ///Builder for [`ClientDisksExt::disk_view_by_id`]
+    ///
+    ///[`ClientDisksExt::disk_view_by_id`]: super::ClientDisksExt::disk_view_by_id
+    #[derive(Clone)]
+    pub struct DiskViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> DiskViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/disks/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/disks/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientImagesGlobalExt::image_global_view_by_id`]
+    ///
+    ///[`ClientImagesGlobalExt::image_global_view_by_id`]: super::ClientImagesGlobalExt::image_global_view_by_id
+    #[derive(Clone)]
+    pub struct ImageGlobalViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> ImageGlobalViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/global-images/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/global-images/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientImagesExt::image_view_by_id`]
+    ///
+    ///[`ClientImagesExt::image_view_by_id`]: super::ClientImagesExt::image_view_by_id
+    #[derive(Clone)]
+    pub struct ImageViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> ImageViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/images/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/images/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientInstancesExt::instance_view_by_id`]
+    ///
+    ///[`ClientInstancesExt::instance_view_by_id`]: super::ClientInstancesExt::instance_view_by_id
+    #[derive(Clone)]
+    pub struct InstanceViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> InstanceViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/instances/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/instances/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for
+    /// [`ClientInstancesExt::instance_network_interface_view_by_id`]
+    ///
+    ///[`ClientInstancesExt::instance_network_interface_view_by_id`]: super::ClientInstancesExt::instance_network_interface_view_by_id
+    #[derive(Clone)]
+    pub struct InstanceNetworkInterfaceViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> InstanceNetworkInterfaceViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/network-interfaces/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientOrganizationsExt::organization_view_by_id`]
+    ///
+    ///[`ClientOrganizationsExt::organization_view_by_id`]: super::ClientOrganizationsExt::organization_view_by_id
+    #[derive(Clone)]
+    pub struct OrganizationViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> OrganizationViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/organizations/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/organizations/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientProjectsExt::project_view_by_id`]
+    ///
+    ///[`ClientProjectsExt::project_view_by_id`]: super::ClientProjectsExt::project_view_by_id
+    #[derive(Clone)]
+    pub struct ProjectViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> ProjectViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/projects/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/projects/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientSnapshotsExt::snapshot_view_by_id`]
+    ///
+    ///[`ClientSnapshotsExt::snapshot_view_by_id`]: super::ClientSnapshotsExt::snapshot_view_by_id
+    #[derive(Clone)]
+    pub struct SnapshotViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> SnapshotViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/snapshots/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/snapshots/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientVpcsExt::vpc_router_route_view_by_id`]
+    ///
+    ///[`ClientVpcsExt::vpc_router_route_view_by_id`]: super::ClientVpcsExt::vpc_router_route_view_by_id
+    #[derive(Clone)]
+    pub struct VpcRouterRouteViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> VpcRouterRouteViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/vpc-router-routes/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientVpcsExt::vpc_router_view_by_id`]
+    ///
+    ///[`ClientVpcsExt::vpc_router_view_by_id`]: super::ClientVpcsExt::vpc_router_view_by_id
+    #[derive(Clone)]
+    pub struct VpcRouterViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> VpcRouterViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/vpc-routers/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientVpcsExt::vpc_subnet_view_by_id`]
+    ///
+    ///[`ClientVpcsExt::vpc_subnet_view_by_id`]: super::ClientVpcsExt::vpc_subnet_view_by_id
+    #[derive(Clone)]
+    pub struct VpcSubnetViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> VpcSubnetViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/vpc-subnets/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientVpcsExt::vpc_view_by_id`]
+    ///
+    ///[`ClientVpcsExt::vpc_view_by_id`]: super::ClientVpcsExt::vpc_view_by_id
+    #[derive(Clone)]
+    pub struct VpcViewById<'a> {
+        client: &'a super::Client,
+        id: Option<uuid::Uuid>,
+    }
+
+    impl<'a> VpcViewById<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self { client, id: None }
+        }
+
+        pub fn id(mut self, value: uuid::Uuid) -> Self {
+            self.id = Some(value);
+            self
+        }
+
+        ///Sends a `GET` request to `/by-id/vpcs/{id}`
+        pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+            let Self { client, id } = self;
+            let (id,) = match (id,) {
+                (Some(id),) => (id,),
+                (id,) => {
+                    let mut missing = Vec::new();
+                    if id.is_none() {
+                        missing.push(stringify!(id));
+                    }
+                    return Err(super::Error::InvalidRequest(format!(
+                        "the following parameters are required: {}",
+                        missing.join(", "),
+                    )));
+                }
+            };
+            let url = format!(
+                "{}/by-id/vpcs/{}",
+                client.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let request = client.client.get(url).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
     ///Builder for [`ClientHiddenExt::device_auth_request`]
     ///
     ///[`ClientHiddenExt::device_auth_request`]: super::ClientHiddenExt::device_auth_request
@@ -5086,7 +5899,7 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/device/confirm`
-        pub async fn send(self) -> Result<ResponseValue<Option<types::Null>>, Error<types::Error>> {
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let (body,) = match (body,) {
                 (Some(body),) => (body,),
@@ -5106,7 +5919,7 @@ pub mod builder {
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
+                204u16 => Ok(ResponseValue::empty(response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -14382,7 +15195,7 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/session/me`
-        pub async fn send(self) -> Result<ResponseValue<types::SessionUser>, Error<types::Error>> {
+        pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/session/me", client.baseurl,);
             let request = client.client.get(url).build()?;
@@ -15030,7 +15843,7 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/silos/{silo_name}/identity_providers`
+        ///Sends a `GET` request to `/silos/{silo_name}/identity-providers`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>>
@@ -15056,7 +15869,7 @@ pub mod builder {
                 }
             };
             let url = format!(
-                "{}/silos/{}/identity_providers",
+                "{}/silos/{}/identity-providers",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
@@ -15085,7 +15898,7 @@ pub mod builder {
             }
         }
 
-        ///Streams `GET` requests to `/silos/{silo_name}/identity_providers`
+        ///Streams `GET` requests to `/silos/{silo_name}/identity-providers`
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<types::IdentityProvider, Error<types::Error>>> + Unpin + 'a
@@ -15299,7 +16112,7 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to
-        /// `/silos/{silo_name}/saml_identity_providers`
+        /// `/silos/{silo_name}/saml-identity-providers`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
@@ -15325,7 +16138,7 @@ pub mod builder {
                 }
             };
             let url = format!(
-                "{}/silos/{}/saml_identity_providers",
+                "{}/silos/{}/saml-identity-providers",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
@@ -15375,7 +16188,7 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to
-        /// `/silos/{silo_name}/saml_identity_providers/{provider_name}`
+        /// `/silos/{silo_name}/saml-identity-providers/{provider_name}`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
@@ -15401,7 +16214,7 @@ pub mod builder {
                 }
             };
             let url = format!(
-                "{}/silos/{}/saml_identity_providers/{}",
+                "{}/silos/{}/saml-identity-providers/{}",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
                 encode_path(&provider_name.to_string()),

@@ -930,10 +930,7 @@ pub mod types {
     impl std::convert::TryFrom<&str> for Ipv4Net {
         type Error = &'static str;
         fn try_from(value: &str) -> Result<Self, Self::Error> {
-            if value.len() > 18usize {
-                return Err("longer than 18 characters");
-            }
-            if regress :: Regex :: new ("(^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$)|(^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$)|(^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$)") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"(^(10\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9]\\.){2}(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[0-9]|2[0-8]|[8-9]))$)|(^(172\\.16\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[2-9]|2[0-8]))$)|(^(192\\.168\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])\\.(25[0-5]|[1-2][0-4][0-9]|[1-9][0-9]|[0-9])/(1[6-9]|2[0-8]))$)\"") ; }
+            if regress :: Regex :: new ("^(10\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/([8-9]|1[0-9]|2[0-9]|3[0-2])|172\\.(1[6-9]|2[0-9]|3[0-1])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[2-9]|2[0-9]|3[0-2])|192\\.168\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[6-9]|2[0-9]|3[0-2]))$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(10\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/([8-9]|1[0-9]|2[0-9]|3[0-2])|172\\.(1[6-9]|2[0-9]|3[0-1])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[2-9]|2[0-9]|3[0-2])|192\\.168\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[6-9]|2[0-9]|3[0-2]))$\"") ; }
             Ok(Self(value.to_string()))
         }
     }
@@ -977,10 +974,7 @@ pub mod types {
     impl std::convert::TryFrom<&str> for Ipv6Net {
         type Error = &'static str;
         fn try_from(value: &str) -> Result<Self, Self::Error> {
-            if value.len() > 43usize {
-                return Err("longer than 43 characters");
-            }
-            if regress :: Regex :: new ("^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(fd|FD)[0-9a-fA-F]{2}:((([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,6}:))/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$\"") ; }
+            if regress :: Regex :: new ("^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$\"") ; }
             Ok(Self(value.to_string()))
         }
     }
@@ -1124,12 +1118,12 @@ pub mod types {
             if value.len() > 63usize {
                 return Err("longer than 63 characters");
             }
-            if regress::Regex::new("[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])")
+            if regress::Regex::new("^[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])$")
                 .unwrap()
                 .find(value)
                 .is_none()
             {
-                return Err("doesn't match pattern \"[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])\"");
+                return Err("doesn't match pattern \"^[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])$\"");
             }
             Ok(Self(value.to_string()))
         }
@@ -1290,24 +1284,6 @@ pub mod types {
         pub make_primary: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
-    }
-
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-    pub enum Null {}
-
-    impl ToString for Null {
-        fn to_string(&self) -> String {
-            match *self {}
-        }
-    }
-
-    impl std::str::FromStr for Null {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
-            match value {
-                _ => Err("invalid value"),
-            }
-        }
     }
 
     ///Client view of an [`Organization`]
@@ -1826,12 +1802,6 @@ pub mod types {
         pub sp_client_id: String,
         ///customer's technical contact for saml configuration
         pub technical_contact_email: String,
-    }
-
-    ///Client view of currently authed user.
-    #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct SessionUser {
-        pub id: uuid::Uuid,
     }
 
     ///Client view of a ['Silo']
@@ -2649,6 +2619,330 @@ impl Client {
 }
 
 impl Client {
+    ///Get a disk by id
+    ///
+    ///Sends a `GET` request to `/by-id/disks/{id}`
+    pub async fn disk_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/disks/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get a global image by id
+    ///
+    ///Sends a `GET` request to `/by-id/global-images/{id}`
+    pub async fn image_global_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/global-images/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Fetch an image by id
+    ///
+    ///Sends a `GET` request to `/by-id/images/{id}`
+    pub async fn image_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/images/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get an instance by id
+    ///
+    ///Sends a `GET` request to `/by-id/instances/{id}`
+    pub async fn instance_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/instances/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get an instance's network interface by id
+    ///
+    ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
+    pub async fn instance_network_interface_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/network-interfaces/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get an organization by id
+    ///
+    ///Sends a `GET` request to `/by-id/organizations/{id}`
+    pub async fn organization_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/organizations/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get a project by id
+    ///
+    ///Sends a `GET` request to `/by-id/projects/{id}`
+    pub async fn project_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/projects/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get a snapshot by id
+    ///
+    ///Sends a `GET` request to `/by-id/snapshots/{id}`
+    pub async fn snapshot_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/snapshots/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get a vpc router route by id
+    ///
+    ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
+    pub async fn vpc_router_route_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/vpc-router-routes/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get a VPC Router by id
+    ///
+    ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
+    pub async fn vpc_router_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/vpc-routers/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get a VPC subnet by id
+    ///
+    ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
+    pub async fn vpc_subnet_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/vpc-subnets/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Get a VPC by id
+    ///
+    ///Sends a `GET` request to `/by-id/vpcs/{id}`
+    pub async fn vpc_view_by_id<'a>(
+        &'a self,
+        id: &'a uuid::Uuid,
+    ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+        let url = format!(
+            "{}/by-id/vpcs/{}",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
     ///Start an OAuth 2.0 Device Authorization Grant
     ///
     ///This endpoint is designed to be accessed from an *unauthenticated* API
@@ -2681,13 +2975,13 @@ impl Client {
     pub async fn device_auth_confirm<'a>(
         &'a self,
         body: &'a types::DeviceAuthVerify,
-    ) -> Result<ResponseValue<Option<types::Null>>, Error<types::Error>> {
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/device/confirm", self.baseurl,);
         let request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => ResponseValue::from_response(response).await,
+            204u16 => Ok(ResponseValue::empty(response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -4194,7 +4488,7 @@ impl Client {
         }
     }
 
-    ///Fetch a single disk in a project
+    ///Get a single disk in a project
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
@@ -7137,7 +7431,7 @@ impl Client {
     ///Sends a `GET` request to `/session/me`
     pub async fn session_me<'a>(
         &'a self,
-    ) -> Result<ResponseValue<types::SessionUser>, Error<types::Error>> {
+    ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!("{}/session/me", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
@@ -7484,7 +7778,7 @@ impl Client {
 
     ///List Silo identity providers
     ///
-    ///Sends a `GET` request to `/silos/{silo_name}/identity_providers`
+    ///Sends a `GET` request to `/silos/{silo_name}/identity-providers`
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
@@ -7500,7 +7794,7 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/silos/{}/identity_providers",
+            "{}/silos/{}/identity-providers",
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
@@ -7534,7 +7828,7 @@ impl Client {
 
     ///List Silo identity providers as a Stream
     ///
-    ///Sends repeated `GET` requests to `/silos/{silo_name}/identity_providers`
+    ///Sends repeated `GET` requests to `/silos/{silo_name}/identity-providers`
     /// until there are no more results.
     ///
     ///Arguments:
@@ -7641,7 +7935,7 @@ impl Client {
 
     ///Create a new SAML identity provider for a silo
     ///
-    ///Sends a `POST` request to `/silos/{silo_name}/saml_identity_providers`
+    ///Sends a `POST` request to `/silos/{silo_name}/saml-identity-providers`
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
@@ -7652,7 +7946,7 @@ impl Client {
         body: &'a types::SamlIdentityProviderCreate,
     ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
         let url = format!(
-            "{}/silos/{}/saml_identity_providers",
+            "{}/silos/{}/saml-identity-providers",
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
@@ -7674,7 +7968,7 @@ impl Client {
     ///GET a silo's SAML identity provider
     ///
     ///Sends a `GET` request to
-    /// `/silos/{silo_name}/saml_identity_providers/{provider_name}`
+    /// `/silos/{silo_name}/saml-identity-providers/{provider_name}`
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
@@ -7685,7 +7979,7 @@ impl Client {
         provider_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
         let url = format!(
-            "{}/silos/{}/saml_identity_providers/{}",
+            "{}/silos/{}/saml-identity-providers/{}",
             self.baseurl,
             encode_path(&silo_name.to_string()),
             encode_path(&provider_name.to_string()),
