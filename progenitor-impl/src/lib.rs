@@ -16,15 +16,15 @@ mod util;
 
 #[derive(Error, Debug)]
 pub enum Error {
-    #[error("unexpected value type")]
+    #[error("unexpected value type {0}: {1}")]
     BadValue(String, serde_json::Value),
-    #[error("type error")]
+    #[error("type error {0}")]
     TypeError(#[from] typify::Error),
-    #[error("unexpected or unhandled format in the OpenAPI document")]
+    #[error("unexpected or unhandled format in the OpenAPI document {0}")]
     UnexpectedFormat(String),
-    #[error("invalid operation path")]
+    #[error("invalid operation path {0}")]
     InvalidPath(String),
-    #[error("internal error")]
+    #[error("internal error {0}")]
     InternalError(String),
 }
 
@@ -425,5 +425,44 @@ impl Generator {
 
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use crate::Error;
+
+    #[test]
+    fn test_bad_value() {
+        assert_eq!(
+            Error::BadValue("nope".to_string(), json! { "nope"},).to_string(),
+            "unexpected value type nope: \"nope\"",
+        );
+    }
+
+    #[test]
+    fn test_type_error() {
+        assert_eq!(
+            Error::UnexpectedFormat("nope".to_string()).to_string(),
+            "unexpected or unhandled format in the OpenAPI document nope",
+        );
+    }
+
+    #[test]
+    fn test_invalid_path() {
+        assert_eq!(
+            Error::InvalidPath("nope".to_string()).to_string(),
+            "invalid operation path nope",
+        );
+    }
+
+    #[test]
+    fn test_internal_error() {
+        assert_eq!(
+            Error::InternalError("nope".to_string()).to_string(),
+            "internal error nope",
+        );
     }
 }
