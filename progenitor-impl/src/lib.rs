@@ -400,7 +400,7 @@ impl Generator {
             "percent-encoding = \"2.1\"",
             "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
-            "serde_urlencoded = 0.7",
+            "serde_urlencoded = \"0.7\"",
         ];
         if self.type_space.uses_regress() {
             deps.push("regress = 0.4")
