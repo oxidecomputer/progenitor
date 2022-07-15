@@ -156,7 +156,7 @@ impl ToString for PathTemplate {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::collections::HashMap;
 
     use super::{parse, Component, PathTemplate};
