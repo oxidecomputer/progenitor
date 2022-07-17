@@ -403,7 +403,7 @@ impl Generator {
             "serde_urlencoded = \"0.7\"",
         ];
         if self.type_space.uses_regress() {
-            deps.push("regress = 0.4")
+            deps.push("regress = \"0.4\"")
         }
         if self.type_space.uses_uuid() {
             deps.push(
