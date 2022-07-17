@@ -3,6 +3,8 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
+    #[allow(unused_imports)]
+    use std::convert::TryFrom;
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct EnrolBody {
         pub host: String,

@@ -743,7 +743,7 @@ impl Generator {
                 }),
                 (
                     OperationParameterKind::Body(
-                        BodyContentType::FormUrlencoded,
+                        BodyContentType::FormUrlencoded
                     ),
                     OperationParameterType::Type(_),
                 ) => Some(quote! {
@@ -1111,27 +1111,36 @@ impl Generator {
         }
     }
 
-    /// Create the builder structs along with their impls
+    /// Create the builder structs along with their impl bodies.
     ///
-    /// Builder structs are generally of this form:
+    /// Builder structs are generally of this form for a mandatory `param_1`
+    /// and an optional `param_2`:
     /// ```ignore
     /// struct OperationId<'a> {
     ///     client: &'a super::Client,
-    ///     param_1: Option<SomeType>,
-    ///     param_2: Option<String>,
+    ///     param_1: Result<SomeType, String>,
+    ///     param_2: Result<Option<String>, String>,
     /// }
     /// ```
     ///
-    /// All parameters are present and all their types are Option<T>. Each
-    /// parameter also has a corresponding method:
+    /// All parameters are present and all their types are Result<T, String> or
+    /// Result<Option<T>, String> for optional parameters. Each parameter also
+    /// has a corresponding method:
     /// ```ignore
     /// impl<'a> OperationId<'a> {
-    ///     pub fn param_1(self, value: SomeType) {
-    ///         self.param_1 = Some(value);
+    ///     pub fn param_1<V>(self, value: V)
+    ///         where V: TryInto<SomeType>
+    ///     {
+    ///         self.param_1 = value.try_into()
+    ///             .map_err(|_| #err_msg.to_string());
     ///         self
     ///     }
-    ///     pub fn param_2<S: ToString>(self, value: S) {
-    ///         self.param_2 = Some(value.into());
+    ///     pub fn param_2<V>(self, value: V)
+    ///         where V: TryInto<SomeType>
+    ///     {
+    ///         self.param_2 = value.try_into()
+    ///             .map(Some)
+    ///             .map_err(|_| #err_msg.to_string());
     ///         self
     ///     }
     /// }
@@ -1144,15 +1153,15 @@ impl Generator {
     ///     pub fn new(client: &'a super::Client) -> Self {
     ///         Self {
     ///             client,
-    ///             param_1: None,
-    ///             param_2: None,
+    ///             param_1: Err("param_1 was not initialized".to_string()),
+    ///             param_2: Ok(None),
     ///         }
     ///     }
     /// }
     /// ```
     ///
-    /// Finally, builders have methods to execute the method, which takes care
-    /// to check that required parameters are specified:
+    /// Finally, builders have methods to execute the operation. This simply
+    /// resolves ach parameter with the ? (Try operator).
     /// ```ignore
     /// impl<'a> OperationId<'a> {
     ///     pub fn send(self) -> Result<
@@ -1164,77 +1173,78 @@ impl Generator {
     ///             param_1,
     ///             param_2,
     ///         } = self;
+    ///     
+    ///         let param_1 = param_1.map_err(Error::InvalidRequest)?;
+    ///         let param_2 = param_1.map_err(Error::InvalidRequest)?;
     ///
-    ///         let (param_1, param_2) = match (param_1, param_2) {
-    ///             (Some(param_1), Some(param_2)) => (param_1, param_2),
-    ///             (param_1, param_2) => {
-    ///                 let mut missing = Vec::new();
-    ///                 if param_1.is_none() {
-    ///                     missing.push(stringify!(param_1));
-    ///                 }
-    ///                 if param_2.is_none() {
-    ///                     missing.push(stringify!(param_2));
-    ///                 }
-    ///                 return Err(super::Error::InvalidRequest(format!(
-    ///                     "the following parameters are required: {}",
-    ///                     missing.join(", "),
-    ///                 )));
-    ///             }
-    ///         };
+    ///         // ... execute the body (see `method_sig_body`) ...
     ///     }
     /// }
     /// ```
     ///
     /// Finally, paginated interfaces have a `stream()` method which uses the
     /// `send()` method above to fetch each page of results to assemble the
-    /// items into a single impl Stream.
+    /// items into a single `impl Stream`.
     pub(crate) fn builder_struct(
         &mut self,
         method: &OperationMethod,
         tag_style: TagStyle,
     ) -> Result<TokenStream> {
-        let mut cloneable = true;
-        // Generate the builder structure properties, turning each type T into
-        // an Option<T> (if it isn't already).
-        let properties = method
-            .params
-            .iter()
-            .map(|param| {
-                let name = format_ident!("{}", param.name);
-                let typ = match &param.typ {
-                    OperationParameterType::Type(type_id) => {
-                        // TODO currently we explicitly turn optional paramters
-                        // into Option types; we could probably defer this to
-                        // the code generation step to avoid the special
-                        // handling here.
-                        let ty = self.type_space.get_type(type_id)?;
-                        let t = ty.ident();
-                        let details = ty.details();
-                        if let typify::TypeDetails::Option(_) = details {
-                            t
-                        } else {
-                            quote! { Option<#t> }
-                        }
-                    }
-
-                    OperationParameterType::RawBody => {
-                        cloneable = false;
-                        quote! { Option<reqwest::Body> }
-                    }
-                };
-
-                Ok(quote! {
-                    #name: #typ
-                })
-            })
-            .collect::<Result<Vec<_>>>()?;
-
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
 
+        // Generate an ident for each parameter.
+        let param_names = method
+            .params
+            .iter()
+            .map(|param| format_ident!("{}", param.name))
+            .collect::<Vec<_>>();
+
+        let mut cloneable = true;
+
+        // Generate the type for each parameter.
+        let param_types = method
+            .params
+            .iter()
+            .map(|param| match &param.typ {
+                OperationParameterType::Type(type_id) => {
+                    let ty = self.type_space.get_type(type_id)?;
+                    let t = ty.ident();
+                    Ok(quote! { Result<#t, String> })
+                }
+
+                OperationParameterType::RawBody => {
+                    cloneable = false;
+                    Ok(quote! { Result<reqwest::Body, String> })
+                }
+            })
+            .collect::<Result<Vec<_>>>()?;
+
+        // Generate the devalue value for each parameter.
+        let param_values = method
+            .params
+            .iter()
+            .map(|param| {
+                let opt = match &param.typ {
+                    OperationParameterType::Type(type_id) => {
+                        let ty = self.type_space.get_type(type_id)?;
+                        let details = ty.details();
+                        matches!(&details, typify::TypeDetails::Option(_))
+                    }
+                    OperationParameterType::RawBody => false,
+                };
+                if opt {
+                    Ok(quote! { Ok(None) })
+                } else {
+                    let err_msg = format!("{} was not initialized", param.name);
+                    Ok(quote! { Err(#err_msg.to_string()) })
+                }
+            })
+            .collect::<Result<Vec<_>>>()?;
+
         // For each parameter, we need an impl for the builder to let consumers
-        // provide a value for the parameter.
-        let property_impls = method
+        // provide a value.
+        let param_impls = method
             .params
             .iter()
             .map(|param| {
@@ -1242,30 +1252,35 @@ impl Generator {
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
-                        let x = ty.details();
-                        match &x {
-                            typify::TypeDetails::String => {
-                                Ok(quote! {
-                                    pub fn #param_name<S: ToString>(mut self, value: S) -> Self {
-                                        self.#param_name = Some(value.to_string());
-                                        self
-                                    }
-                                })
-                            }
+                        let details = ty.details();
+                        let err_msg = format!("conversion to `{}` for {} failed", ty.name(), param.name);
+                        match &details {
                             typify::TypeDetails::Option(ref opt_id) => {
+                                // TODO currently we explicitly turn optional
+                                // parameters into Option types; we could probably
+                                // defer this to the code generation step to avoid the
+                                // special handling here.
                                 let typ = self.type_space.get_type(opt_id)?.ident();
-                                Ok(quote!{
-                                    pub fn #param_name(mut self, value: #typ) -> Self {
-                                        self.#param_name = Some(value);
+                                Ok(quote! {
+                                    pub fn #param_name<V>(mut self, value: V)
+                                    -> Self
+                                        where V: TryInto<#typ>
+                                    {
+                                        self.#param_name = value.try_into()
+                                            .map(Some)
+                                            .map_err(|_| #err_msg.to_string());
                                         self
                                     }
                                 })
                             }
-                            _ =>  {
+                            _ => {
                                 let typ = ty.ident();
                                 Ok(quote! {
-                                    pub fn #param_name(mut self, value: #typ) -> Self {
-                                        self.#param_name = Some(value);
+                                    pub fn #param_name<V>(mut self, value: V) -> Self
+                                        where V: TryInto<#typ>,
+                                    {
+                                        self.#param_name = value.try_into()
+                                            .map_err(|_| #err_msg.to_string());
                                         self
                                     }
                                 })
@@ -1274,9 +1289,15 @@ impl Generator {
                     }
 
                     OperationParameterType::RawBody => {
+                        let err_msg =
+                            format!("conversion to `reqwest::Body` for {} failed", param.name);
+
                         Ok(quote! {
-                            pub fn #param_name<B: Into<reqwest::Body>>(mut self, value: B) -> Self {
-                                self.#param_name = Some(value.into());
+                            pub fn #param_name<B>(mut self, value: B) -> Self
+                                where B: TryInto<reqwest::Body>
+                            {
+                                self.#param_name = value.try_into()
+                                    .map_err(|_| #err_msg.to_string());
                                 self
                             }
                         })
@@ -1284,67 +1305,6 @@ impl Generator {
                 }
             })
             .collect::<Result<Vec<_>>>()?;
-
-        let destructure = method
-            .params
-            .iter()
-            .map(|param| format_ident!("{}", param.name))
-            .collect::<Vec<_>>();
-
-        let req_names = method
-            .params
-            .iter()
-            .filter_map(|param| match param.kind {
-                OperationParameterKind::Path
-                | OperationParameterKind::Query(true)
-                | OperationParameterKind::Body(_) => {
-                    Some(format_ident!("{}", param.name))
-                }
-                OperationParameterKind::Query(false) => None,
-            })
-            .collect::<Vec<_>>();
-
-        let required_extract = (!req_names.is_empty()).then(|| {
-            quote! {
-                let ( #( #req_names, )* ) = match ( #( #req_names, )* ) {
-                    ( #( Some(#req_names), )* ) => ( #( #req_names, )* ),
-                    ( #( #req_names, )* ) => {
-                        let mut missing = Vec::new();
-
-                        #(
-                        if #req_names.is_none() {
-                            missing.push(stringify!(#req_names));
-                        }
-                        )*
-
-                        return Err(super::Error::InvalidRequest(format!(
-                            "the following parameters are required: {}",
-                            missing.join(", "),
-                        )));
-                    }
-                };
-            }
-        });
-
-        let param_props = method
-            .params
-            .iter()
-            .map(|param| {
-                let name = format_ident!("{}", param.name);
-                quote! {
-                    #name: None
-                }
-            })
-            .collect::<Vec<_>>();
-
-        let new_impl = quote! {
-            pub fn new(client: &'a super::Client) -> Self {
-                Self {
-                    client,
-                    #(#param_props,)*
-                }
-            }
-        };
 
         let MethodSigBody {
             success,
@@ -1358,27 +1318,6 @@ impl Generator {
             method.path.to_string(),
         );
 
-        let send_impl = quote! {
-            #[doc = #send_doc]
-            pub async fn send(self) -> Result<
-                ResponseValue<#success>,
-                Error<#error>,
-            > {
-                // Destructure the builder for convenience.
-                let Self {
-                    client,
-                    #( #destructure ),*
-                } = self;
-
-                // Extract parameters into variables, returning an error if
-                // a value has not been provided for all required parameters.
-                #required_extract
-
-                // Do the work.
-                #body
-            }
-        };
-
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
             // We're now using futures.
             self.uses_futures = true;
@@ -1387,7 +1326,7 @@ impl Generator {
                 if let OperationParameterKind::Query(_) = param.kind {
                     let name = format_ident!("{}", param.name);
                     Some(quote! {
-                        #name: None
+                        #name: Ok(None)
                     })
                 } else {
                     None
@@ -1428,7 +1367,7 @@ impl Generator {
                         .map_ok(move |page| {
                             let page = page.into_inner();
 
-                            // Create a stream from the items of the first page.
+                            // Create a stream from the first page of items.
                             let first = futures::stream::iter(
                                 page.items.into_iter().map(Ok)
                             );
@@ -1449,7 +1388,7 @@ impl Generator {
                                         // template (with query parameters set
                                         // to None), overriding page_token.
                                         Self {
-                                            page_token: next_page,
+                                            page_token: Ok(next_page),
                                             ..next.clone()
                                         }
                                         .send()
@@ -1539,22 +1478,53 @@ impl Generator {
                 }
             };
 
-        let ret = quote! {
+        Ok(quote! {
             #[doc = #struct_doc]
             #maybe_clone
             pub struct #struct_ident<'a> {
                 client: &'a super::Client,
-                #( #properties ),*
+                #( #param_names: #param_types, )*
             }
 
             impl<'a> #struct_ident<'a> {
-                #new_impl
-                #( #property_impls )*
-                #send_impl
+                pub fn new(client: &'a super::Client) -> Self {
+                    Self {
+                        client,
+                        #( #param_names: #param_values, )*
+                    }
+                }
+
+                #( #param_impls )*
+
+                #[doc = #send_doc]
+                pub async fn send(self) -> Result<
+                    ResponseValue<#success>,
+                    Error<#error>,
+                > {
+                    // Destructure the builder for convenience.
+                    let Self {
+                        client,
+                        #( #param_names, )*
+                    } = self;
+
+                    // Extract parameters into variables, returning an error if
+                    // a value has not been provided or there was a conversion
+                    // error.
+                    //
+                    // TODO we could do something a bit nicer by collecting all
+                    // errors rather than just reporting the first one.
+                    #(
+                    let #param_names =
+                        #param_names.map_err(Error::InvalidRequest)?;
+                    )*
+
+                    // Do the work.
+                    #body
+                }
+
                 #stream_impl
             }
-        };
-        Ok(ret)
+        })
     }
 
     fn builder_helper(&self, method: &OperationMethod) -> BuilderImpl {
