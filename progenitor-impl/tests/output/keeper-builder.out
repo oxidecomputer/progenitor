@@ -3,6 +3,8 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
+    #[allow(unused_imports)]
+    use std::convert::TryFrom;
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct EnrolBody {
         pub host: String,
@@ -176,41 +178,39 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    #[allow(unused_imports)]
+    use std::convert::TryInto;
     ///Builder for [`Client::enrol`]
     ///
     ///[`Client::enrol`]: super::Client::enrol
     #[derive(Clone)]
     pub struct Enrol<'a> {
         client: &'a super::Client,
-        body: Option<types::EnrolBody>,
+        body: Result<types::EnrolBody, String>,
     }
 
     impl<'a> Enrol<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, body: None }
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
         }
 
-        pub fn body(mut self, value: types::EnrolBody) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::EnrolBody>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `EnrolBody` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/enrol`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, body } = self;
-            let (body,) = match (body,) {
-                (Some(body),) => (body,),
-                (body,) => {
-                    let mut missing = Vec::new();
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/enrol", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -282,35 +282,31 @@ pub mod builder {
     #[derive(Clone)]
     pub struct ReportFinish<'a> {
         client: &'a super::Client,
-        body: Option<types::ReportFinishBody>,
+        body: Result<types::ReportFinishBody, String>,
     }
 
     impl<'a> ReportFinish<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, body: None }
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
         }
 
-        pub fn body(mut self, value: types::ReportFinishBody) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::ReportFinishBody>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `ReportFinishBody` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/report/finish`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
-            let (body,) = match (body,) {
-                (Some(body),) => (body,),
-                (body,) => {
-                    let mut missing = Vec::new();
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/finish", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -328,35 +324,31 @@ pub mod builder {
     #[derive(Clone)]
     pub struct ReportOutput<'a> {
         client: &'a super::Client,
-        body: Option<types::ReportOutputBody>,
+        body: Result<types::ReportOutputBody, String>,
     }
 
     impl<'a> ReportOutput<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, body: None }
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
         }
 
-        pub fn body(mut self, value: types::ReportOutputBody) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::ReportOutputBody>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `ReportOutputBody` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/report/output`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
-            let (body,) = match (body,) {
-                (Some(body),) => (body,),
-                (body,) => {
-                    let mut missing = Vec::new();
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/output", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -374,35 +366,31 @@ pub mod builder {
     #[derive(Clone)]
     pub struct ReportStart<'a> {
         client: &'a super::Client,
-        body: Option<types::ReportStartBody>,
+        body: Result<types::ReportStartBody, String>,
     }
 
     impl<'a> ReportStart<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, body: None }
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
         }
 
-        pub fn body(mut self, value: types::ReportStartBody) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::ReportStartBody>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `ReportStartBody` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/report/start`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
-            let (body,) = match (body,) {
-                (Some(body),) => (body,),
-                (body,) => {
-                    let mut missing = Vec::new();
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/start", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;

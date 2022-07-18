@@ -34,15 +34,15 @@ mod builder_untagged {
         );
     }
 
-    use nexus_client::{types, Client};
+    use nexus_client::Client;
 
     pub fn _ignore() {
         let client = Client::new("");
         let stream = client
             .instance_disk_list()
-            .organization_name(types::Name::try_from("org").unwrap())
-            .project_name(types::Name::try_from("project").unwrap())
-            .instance_name(types::Name::try_from("instance").unwrap())
+            .organization_name("org")
+            .project_name("project")
+            .instance_name("instance")
             .stream();
         let _ = stream.collect::<Vec<_>>();
     }
@@ -59,15 +59,15 @@ mod builder_tagged {
         );
     }
 
-    use nexus_client::{types, Client, ClientInstancesExt};
+    use nexus_client::{Client, ClientInstancesExt};
 
     fn _ignore() {
         let client = Client::new("");
         let stream = client
             .instance_disk_list()
-            .organization_name(types::Name::try_from("org").unwrap())
-            .project_name(types::Name::try_from("project").unwrap())
-            .instance_name(types::Name::try_from("instance").unwrap())
+            .organization_name("org")
+            .project_name("project")
+            .instance_name("instance")
             .stream();
         let _ = stream.collect::<Vec<_>>();
     }

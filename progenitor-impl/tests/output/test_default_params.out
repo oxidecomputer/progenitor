@@ -3,6 +3,8 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
+    #[allow(unused_imports)]
+    use std::convert::TryFrom;
     mod defaults {
         pub(super) fn default_u64<T, const V: u64>() -> T
         where

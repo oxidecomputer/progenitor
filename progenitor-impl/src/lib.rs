@@ -208,8 +208,13 @@ impl Generator {
             #[allow(unused_imports)]
             use progenitor_client::{encode_path, RequestBuilderExt};
 
+
             pub mod types {
                 use serde::{Deserialize, Serialize};
+
+                // This may be used by some impl Deserialize, but not all.
+                #[allow(unused_imports)]
+                use std::convert::TryFrom;
                 #shared
                 #(#types)*
             }
@@ -307,6 +312,8 @@ impl Generator {
                     RequestBuilderExt,
                     ResponseValue,
                 };
+                #[allow(unused_imports)]
+                use std::convert::TryInto;
 
                 #(#builder_struct)*
             }

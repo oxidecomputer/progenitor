@@ -3,6 +3,8 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
+    #[allow(unused_imports)]
+    use std::convert::TryFrom;
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct Task {
         pub id: String,
@@ -368,6 +370,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    #[allow(unused_imports)]
+    use std::convert::TryInto;
     ///Builder for [`Client::control_hold`]
     ///
     ///[`Client::control_hold`]: super::Client::control_hold
@@ -428,35 +432,31 @@ pub mod builder {
     #[derive(Clone)]
     pub struct TaskGet<'a> {
         client: &'a super::Client,
-        task: Option<String>,
+        task: Result<String, String>,
     }
 
     impl<'a> TaskGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, task: None }
+            Self {
+                client,
+                task: Err("task was not initialized".to_string()),
+            }
         }
 
-        pub fn task<S: ToString>(mut self, value: S) -> Self {
-            self.task = Some(value.to_string());
+        pub fn task<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.task = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for task failed".to_string());
             self
         }
 
         ///Sends a `GET` request to `/v1/task/{task}`
         pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
             let Self { client, task } = self;
-            let (task,) = match (task,) {
-                (Some(task),) => (task,),
-                (task,) => {
-                    let mut missing = Vec::new();
-                    if task.is_none() {
-                        missing.push(stringify!(task));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let task = task.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/task/{}",
                 client.baseurl,
@@ -505,35 +505,31 @@ pub mod builder {
     #[derive(Clone)]
     pub struct TaskSubmit<'a> {
         client: &'a super::Client,
-        body: Option<types::TaskSubmit>,
+        body: Result<types::TaskSubmit, String>,
     }
 
     impl<'a> TaskSubmit<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, body: None }
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
         }
 
-        pub fn body(mut self, value: types::TaskSubmit) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::TaskSubmit>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `TaskSubmit` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/v1/tasks`
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
             let Self { client, body } = self;
-            let (body,) = match (body,) {
-                (Some(body),) => (body,),
-                (body,) => {
-                    let mut missing = Vec::new();
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/tasks", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -551,26 +547,37 @@ pub mod builder {
     #[derive(Clone)]
     pub struct TaskEventsGet<'a> {
         client: &'a super::Client,
-        task: Option<String>,
-        minseq: Option<u32>,
+        task: Result<String, String>,
+        minseq: Result<Option<u32>, String>,
     }
 
     impl<'a> TaskEventsGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                task: None,
-                minseq: None,
+                task: Err("task was not initialized".to_string()),
+                minseq: Ok(None),
             }
         }
 
-        pub fn task<S: ToString>(mut self, value: S) -> Self {
-            self.task = Some(value.to_string());
+        pub fn task<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.task = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for task failed".to_string());
             self
         }
 
-        pub fn minseq(mut self, value: u32) -> Self {
-            self.minseq = Some(value);
+        pub fn minseq<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<u32>,
+        {
+            self.minseq = value
+                .try_into()
+                .map(Some)
+                .map_err(|_| "conversion to `Option < u32 >` for minseq failed".to_string());
             self
         }
 
@@ -581,19 +588,8 @@ pub mod builder {
                 task,
                 minseq,
             } = self;
-            let (task,) = match (task,) {
-                (Some(task),) => (task,),
-                (task,) => {
-                    let mut missing = Vec::new();
-                    if task.is_none() {
-                        missing.push(stringify!(task));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let task = task.map_err(Error::InvalidRequest)?;
+            let minseq = minseq.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/tasks/{}/events",
                 client.baseurl,
@@ -619,35 +615,31 @@ pub mod builder {
     #[derive(Clone)]
     pub struct TaskOutputsGet<'a> {
         client: &'a super::Client,
-        task: Option<String>,
+        task: Result<String, String>,
     }
 
     impl<'a> TaskOutputsGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, task: None }
+            Self {
+                client,
+                task: Err("task was not initialized".to_string()),
+            }
         }
 
-        pub fn task<S: ToString>(mut self, value: S) -> Self {
-            self.task = Some(value.to_string());
+        pub fn task<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.task = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for task failed".to_string());
             self
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
         pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskOutput>>, Error<()>> {
             let Self { client, task } = self;
-            let (task,) = match (task,) {
-                (Some(task),) => (task,),
-                (task,) => {
-                    let mut missing = Vec::new();
-                    if task.is_none() {
-                        missing.push(stringify!(task));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let task = task.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/tasks/{}/outputs",
                 client.baseurl,
@@ -669,26 +661,36 @@ pub mod builder {
     #[derive(Clone)]
     pub struct TaskOutputDownload<'a> {
         client: &'a super::Client,
-        task: Option<String>,
-        output: Option<String>,
+        task: Result<String, String>,
+        output: Result<String, String>,
     }
 
     impl<'a> TaskOutputDownload<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                task: None,
-                output: None,
+                task: Err("task was not initialized".to_string()),
+                output: Err("output was not initialized".to_string()),
             }
         }
 
-        pub fn task<S: ToString>(mut self, value: S) -> Self {
-            self.task = Some(value.to_string());
+        pub fn task<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.task = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for task failed".to_string());
             self
         }
 
-        pub fn output<S: ToString>(mut self, value: S) -> Self {
-            self.output = Some(value.to_string());
+        pub fn output<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.output = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for output failed".to_string());
             self
         }
 
@@ -699,22 +701,8 @@ pub mod builder {
                 task,
                 output,
             } = self;
-            let (task, output) = match (task, output) {
-                (Some(task), Some(output)) => (task, output),
-                (task, output) => {
-                    let mut missing = Vec::new();
-                    if task.is_none() {
-                        missing.push(stringify!(task));
-                    }
-                    if output.is_none() {
-                        missing.push(stringify!(output));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let task = task.map_err(Error::InvalidRequest)?;
+            let output = output.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/tasks/{}/outputs/{}",
                 client.baseurl,
@@ -737,35 +725,31 @@ pub mod builder {
     #[derive(Clone)]
     pub struct UserCreate<'a> {
         client: &'a super::Client,
-        body: Option<types::UserCreate>,
+        body: Result<types::UserCreate, String>,
     }
 
     impl<'a> UserCreate<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, body: None }
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
         }
 
-        pub fn body(mut self, value: types::UserCreate) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::UserCreate>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `UserCreate` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/v1/users`
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
             let Self { client, body } = self;
-            let (body,) = match (body,) {
-                (Some(body),) => (body,),
-                (body,) => {
-                    let mut missing = Vec::new();
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/users", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -810,35 +794,31 @@ pub mod builder {
     #[derive(Clone)]
     pub struct WorkerBootstrap<'a> {
         client: &'a super::Client,
-        body: Option<types::WorkerBootstrap>,
+        body: Result<types::WorkerBootstrap, String>,
     }
 
     impl<'a> WorkerBootstrap<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client, body: None }
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
         }
 
-        pub fn body(mut self, value: types::WorkerBootstrap) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::WorkerBootstrap>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `WorkerBootstrap` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/v1/worker/bootstrap`
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
             let Self { client, body } = self;
-            let (body,) = match (body,) {
-                (Some(body),) => (body,),
-                (body,) => {
-                    let mut missing = Vec::new();
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -883,48 +863,44 @@ pub mod builder {
     #[derive(Clone)]
     pub struct WorkerTaskAppend<'a> {
         client: &'a super::Client,
-        task: Option<String>,
-        body: Option<types::WorkerAppendTask>,
+        task: Result<String, String>,
+        body: Result<types::WorkerAppendTask, String>,
     }
 
     impl<'a> WorkerTaskAppend<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                task: None,
-                body: None,
+                task: Err("task was not initialized".to_string()),
+                body: Err("body was not initialized".to_string()),
             }
         }
 
-        pub fn task<S: ToString>(mut self, value: S) -> Self {
-            self.task = Some(value.to_string());
+        pub fn task<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.task = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for task failed".to_string());
             self
         }
 
-        pub fn body(mut self, value: types::WorkerAppendTask) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::WorkerAppendTask>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `WorkerAppendTask` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/append`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
-            let (task, body) = match (task, body) {
-                (Some(task), Some(body)) => (task, body),
-                (task, body) => {
-                    let mut missing = Vec::new();
-                    if task.is_none() {
-                        missing.push(stringify!(task));
-                    }
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let task = task.map_err(Error::InvalidRequest)?;
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/append",
                 client.baseurl,
@@ -945,48 +921,44 @@ pub mod builder {
     ///[`Client::worker_task_upload_chunk`]: super::Client::worker_task_upload_chunk
     pub struct WorkerTaskUploadChunk<'a> {
         client: &'a super::Client,
-        task: Option<String>,
-        body: Option<reqwest::Body>,
+        task: Result<String, String>,
+        body: Result<reqwest::Body, String>,
     }
 
     impl<'a> WorkerTaskUploadChunk<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                task: None,
-                body: None,
+                task: Err("task was not initialized".to_string()),
+                body: Err("body was not initialized".to_string()),
             }
         }
 
-        pub fn task<S: ToString>(mut self, value: S) -> Self {
-            self.task = Some(value.to_string());
+        pub fn task<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.task = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for task failed".to_string());
             self
         }
 
-        pub fn body<B: Into<reqwest::Body>>(mut self, value: B) -> Self {
-            self.body = Some(value.into());
+        pub fn body<B>(mut self, value: B) -> Self
+        where
+            B: TryInto<reqwest::Body>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `reqwest::Body` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
         pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
             let Self { client, task, body } = self;
-            let (task, body) = match (task, body) {
-                (Some(task), Some(body)) => (task, body),
-                (task, body) => {
-                    let mut missing = Vec::new();
-                    if task.is_none() {
-                        missing.push(stringify!(task));
-                    }
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let task = task.map_err(Error::InvalidRequest)?;
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/chunk",
                 client.baseurl,
@@ -1016,48 +988,44 @@ pub mod builder {
     #[derive(Clone)]
     pub struct WorkerTaskComplete<'a> {
         client: &'a super::Client,
-        task: Option<String>,
-        body: Option<types::WorkerCompleteTask>,
+        task: Result<String, String>,
+        body: Result<types::WorkerCompleteTask, String>,
     }
 
     impl<'a> WorkerTaskComplete<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                task: None,
-                body: None,
+                task: Err("task was not initialized".to_string()),
+                body: Err("body was not initialized".to_string()),
             }
         }
 
-        pub fn task<S: ToString>(mut self, value: S) -> Self {
-            self.task = Some(value.to_string());
+        pub fn task<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.task = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for task failed".to_string());
             self
         }
 
-        pub fn body(mut self, value: types::WorkerCompleteTask) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::WorkerCompleteTask>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `WorkerCompleteTask` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
-            let (task, body) = match (task, body) {
-                (Some(task), Some(body)) => (task, body),
-                (task, body) => {
-                    let mut missing = Vec::new();
-                    if task.is_none() {
-                        missing.push(stringify!(task));
-                    }
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let task = task.map_err(Error::InvalidRequest)?;
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/complete",
                 client.baseurl,
@@ -1079,48 +1047,44 @@ pub mod builder {
     #[derive(Clone)]
     pub struct WorkerTaskAddOutput<'a> {
         client: &'a super::Client,
-        task: Option<String>,
-        body: Option<types::WorkerAddOutput>,
+        task: Result<String, String>,
+        body: Result<types::WorkerAddOutput, String>,
     }
 
     impl<'a> WorkerTaskAddOutput<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                task: None,
-                body: None,
+                task: Err("task was not initialized".to_string()),
+                body: Err("body was not initialized".to_string()),
             }
         }
 
-        pub fn task<S: ToString>(mut self, value: S) -> Self {
-            self.task = Some(value.to_string());
+        pub fn task<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<String>,
+        {
+            self.task = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for task failed".to_string());
             self
         }
 
-        pub fn body(mut self, value: types::WorkerAddOutput) -> Self {
-            self.body = Some(value);
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::WorkerAddOutput>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `WorkerAddOutput` for body failed".to_string());
             self
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/output`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
-            let (task, body) = match (task, body) {
-                (Some(task), Some(body)) => (task, body),
-                (task, body) => {
-                    let mut missing = Vec::new();
-                    if task.is_none() {
-                        missing.push(stringify!(task));
-                    }
-                    if body.is_none() {
-                        missing.push(stringify!(body));
-                    }
-                    return Err(super::Error::InvalidRequest(format!(
-                        "the following parameters are required: {}",
-                        missing.join(", "),
-                    )));
-                }
-            };
+            let task = task.map_err(Error::InvalidRequest)?;
+            let body = body.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/output",
                 client.baseurl,

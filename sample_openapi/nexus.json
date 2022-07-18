@@ -7830,7 +7830,8 @@
           "user_data": {
             "description": "User data for instance initialization systems (such as cloud-init). Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded data.",
             "default": "",
-            "type": "string"
+            "type": "string",
+            "format": "byte"
           }
         },
         "required": [
