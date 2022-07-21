@@ -1161,7 +1161,7 @@ impl Generator {
     /// ```
     ///
     /// Finally, builders have methods to execute the operation. This simply
-    /// resolves ach parameter with the ? (Try operator).
+    /// resolves each parameter with the ? (Try operator).
     /// ```ignore
     /// impl<'a> OperationId<'a> {
     ///     pub fn send(self) -> Result<
@@ -1220,7 +1220,7 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
-        // Generate the devalue value for each parameter.
+        // Generate the default value value for each parameter.
         let param_values = method
             .params
             .iter()
