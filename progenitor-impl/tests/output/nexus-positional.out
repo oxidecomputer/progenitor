@@ -5,6 +5,64 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
+    ///A type storing a range over `T`.
+    ///
+    ///This type supports ranges similar to the `RangeTo`, `Range` and
+    /// `RangeFrom` types in the standard library. Those cover `(..end)`,
+    /// `(start..end)`, and `(start..)` respectively.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[serde(tag = "type")]
+    pub enum BinRangedouble {
+        ///A range unbounded below and exclusively above, `..end`.
+        #[serde(rename = "range_to")]
+        RangeTo { end: f64 },
+        ///A range bounded inclusively below and exclusively above,
+        /// `start..end`.
+        #[serde(rename = "range")]
+        Range { end: f64, start: f64 },
+        ///A range bounded inclusively below and unbounded above, `start..`.
+        #[serde(rename = "range_from")]
+        RangeFrom { start: f64 },
+    }
+
+    ///A type storing a range over `T`.
+    ///
+    ///This type supports ranges similar to the `RangeTo`, `Range` and
+    /// `RangeFrom` types in the standard library. Those cover `(..end)`,
+    /// `(start..end)`, and `(start..)` respectively.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[serde(tag = "type")]
+    pub enum BinRangeint64 {
+        ///A range unbounded below and exclusively above, `..end`.
+        #[serde(rename = "range_to")]
+        RangeTo { end: i64 },
+        ///A range bounded inclusively below and exclusively above,
+        /// `start..end`.
+        #[serde(rename = "range")]
+        Range { end: i64, start: i64 },
+        ///A range bounded inclusively below and unbounded above, `start..`.
+        #[serde(rename = "range_from")]
+        RangeFrom { start: i64 },
+    }
+
+    ///Type storing bin edges and a count of samples within it.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Bindouble {
+        ///The total count of samples in this bin.
+        pub count: u64,
+        ///The range of the support covered by this bin.
+        pub range: BinRangedouble,
+    }
+
+    ///Type storing bin edges and a count of samples within it.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Binint64 {
+        ///The total count of samples in this bin.
+        pub count: u64,
+        ///The range of the support covered by this bin.
+        pub range: BinRangeint64,
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct BlockSize(i64);
     impl std::ops::Deref for BlockSize {
@@ -39,6 +97,44 @@ pub mod types {
         fn deref(&self) -> &Self::Target {
             &self.0
         }
+    }
+
+    ///A cumulative or counter data type.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Cumulativedouble {
+        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub value: f64,
+    }
+
+    ///A cumulative or counter data type.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Cumulativeint64 {
+        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub value: i64,
+    }
+
+    ///A `Datum` is a single sampled data point from a metric.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[serde(tag = "type", content = "datum")]
+    pub enum Datum {
+        #[serde(rename = "bool")]
+        Bool(bool),
+        #[serde(rename = "i64")]
+        I64(i64),
+        #[serde(rename = "f64")]
+        F64(f64),
+        #[serde(rename = "string")]
+        String(String),
+        #[serde(rename = "bytes")]
+        Bytes(Vec<u8>),
+        #[serde(rename = "cumulative_i64")]
+        CumulativeI64(Cumulativeint64),
+        #[serde(rename = "cumulative_f64")]
+        CumulativeF64(Cumulativedouble),
+        #[serde(rename = "histogram_i64")]
+        HistogramI64(Histogramint64),
+        #[serde(rename = "histogram_f64")]
+        HistogramF64(Histogramdouble),
     }
 
     ///The type of an individual datum of a metric.
@@ -197,6 +293,50 @@ pub mod types {
         pub name: Name,
     }
 
+    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    pub enum DiskMetricName {
+        #[serde(rename = "activated")]
+        Activated,
+        #[serde(rename = "flush")]
+        Flush,
+        #[serde(rename = "read")]
+        Read,
+        #[serde(rename = "read_bytes")]
+        ReadBytes,
+        #[serde(rename = "write")]
+        Write,
+        #[serde(rename = "write_bytes")]
+        WriteBytes,
+    }
+
+    impl ToString for DiskMetricName {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::Activated => "activated".to_string(),
+                Self::Flush => "flush".to_string(),
+                Self::Read => "read".to_string(),
+                Self::ReadBytes => "read_bytes".to_string(),
+                Self::Write => "write".to_string(),
+                Self::WriteBytes => "write_bytes".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for DiskMetricName {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "activated" => Ok(Self::Activated),
+                "flush" => Ok(Self::Flush),
+                "read" => Ok(Self::Read),
+                "read_bytes" => Ok(Self::ReadBytes),
+                "write" => Ok(Self::Write),
+                "write_bytes" => Ok(Self::WriteBytes),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
     ///A single page of results
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct DiskResultsPage {
@@ -268,6 +408,57 @@ pub mod types {
         pub error_code: Option<String>,
         pub message: String,
         pub request_id: String,
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct ExternalIp {
+        pub ip: std::net::IpAddr,
+        pub kind: IpKind,
+    }
+
+    ///An IP address providing both inbound and outbound access. The address is
+    /// automatically-assigned from the provided IP Pool, or all available pools
+    /// if not specified.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct ExternalIpCreate {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub pool_name: Option<Name>,
+        #[serde(rename = "type")]
+        pub type_: ExternalIpCreateType,
+    }
+
+    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    pub enum ExternalIpCreateType {
+        #[serde(rename = "ephemeral")]
+        Ephemeral,
+    }
+
+    impl ToString for ExternalIpCreateType {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::Ephemeral => "ephemeral".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for ExternalIpCreateType {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "ephemeral" => Ok(Self::Ephemeral),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    ///A single page of results
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct ExternalIpResultsPage {
+        ///list of items on this page of results
+        pub items: Vec<ExternalIp>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
     }
 
     ///The name and type information for a field of a timeseries schema.
@@ -456,6 +647,104 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    ///A simple type for managing a histogram metric.
+    ///
+    ///A histogram maintains the count of any number of samples, over a set of
+    /// bins. Bins are specified on construction via their _left_ edges,
+    /// inclusive. There can't be any "gaps" in the bins, and an additional bin
+    /// may be added to the left, right, or both so that the bins extend to the
+    /// entire range of the support.
+    ///
+    ///Note that any gaps, unsorted bins, or non-finite values will result in
+    /// an error.
+    ///
+    ///Example ------- ```rust use oximeter::histogram::{BinRange, Histogram};
+    ///
+    ///let edges = [0i64, 10, 20]; let mut hist =
+    /// Histogram::new(&edges).unwrap(); assert_eq!(hist.n_bins(), 4); // One
+    /// additional bin for the range (20..) assert_eq!(hist.n_samples(), 0);
+    /// hist.sample(4); hist.sample(100); assert_eq!(hist.n_samples(), 2);
+    ///
+    ///let data = hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range,
+    /// BinRange::range(i64::MIN, 0)); // An additional bin for `..0`
+    /// assert_eq!(data[0].count, 0); // Nothing is in this bin
+    ///
+    ///assert_eq!(data[1].range, BinRange::range(0, 10)); // The range `0..10`
+    /// assert_eq!(data[1].count, 1); // 4 is sampled into this bin ```
+    ///
+    ///Notes -----
+    ///
+    ///Histograms may be constructed either from their left bin edges, or from
+    /// a sequence of ranges. In either case, the left-most bin may be converted
+    /// upon construction. In particular, if the left-most value is not equal to
+    /// the minimum of the support, a new bin will be added from the minimum to
+    /// that provided value. If the left-most value _is_ the support's minimum,
+    /// because the provided bin was unbounded below, such as `(..0)`, then that
+    /// bin will be converted into one bounded below, `(MIN..0)` in this case.
+    ///
+    ///The short of this is that, most of the time, it shouldn't matter. If one
+    /// specifies the extremes of the support as their bins, be aware that the
+    /// left-most may be converted from a `BinRange::RangeTo` into a
+    /// `BinRange::Range`. In other words, the first bin of a histogram is
+    /// _always_ a `Bin::Range` or a `Bin::RangeFrom` after construction. In
+    /// fact, every bin is one of those variants, the `BinRange::RangeTo` is
+    /// only provided as a convenience during construction.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Histogramdouble {
+        pub bins: Vec<Bindouble>,
+        pub n_samples: u64,
+        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    ///A simple type for managing a histogram metric.
+    ///
+    ///A histogram maintains the count of any number of samples, over a set of
+    /// bins. Bins are specified on construction via their _left_ edges,
+    /// inclusive. There can't be any "gaps" in the bins, and an additional bin
+    /// may be added to the left, right, or both so that the bins extend to the
+    /// entire range of the support.
+    ///
+    ///Note that any gaps, unsorted bins, or non-finite values will result in
+    /// an error.
+    ///
+    ///Example ------- ```rust use oximeter::histogram::{BinRange, Histogram};
+    ///
+    ///let edges = [0i64, 10, 20]; let mut hist =
+    /// Histogram::new(&edges).unwrap(); assert_eq!(hist.n_bins(), 4); // One
+    /// additional bin for the range (20..) assert_eq!(hist.n_samples(), 0);
+    /// hist.sample(4); hist.sample(100); assert_eq!(hist.n_samples(), 2);
+    ///
+    ///let data = hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range,
+    /// BinRange::range(i64::MIN, 0)); // An additional bin for `..0`
+    /// assert_eq!(data[0].count, 0); // Nothing is in this bin
+    ///
+    ///assert_eq!(data[1].range, BinRange::range(0, 10)); // The range `0..10`
+    /// assert_eq!(data[1].count, 1); // 4 is sampled into this bin ```
+    ///
+    ///Notes -----
+    ///
+    ///Histograms may be constructed either from their left bin edges, or from
+    /// a sequence of ranges. In either case, the left-most bin may be converted
+    /// upon construction. In particular, if the left-most value is not equal to
+    /// the minimum of the support, a new bin will be added from the minimum to
+    /// that provided value. If the left-most value _is_ the support's minimum,
+    /// because the provided bin was unbounded below, such as `(..0)`, then that
+    /// bin will be converted into one bounded below, `(MIN..0)` in this case.
+    ///
+    ///The short of this is that, most of the time, it shouldn't matter. If one
+    /// specifies the extremes of the support as their bins, be aware that the
+    /// left-most may be converted from a `BinRange::RangeTo` into a
+    /// `BinRange::Range`. In other words, the first bin of a histogram is
+    /// _always_ a `Bin::Range` or a `Bin::RangeFrom` after construction. In
+    /// fact, every bin is one of those variants, the `BinRange::RangeTo` is
+    /// only provided as a convenience during construction.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Histogramint64 {
+        pub bins: Vec<Binint64>,
+        pub n_samples: u64,
+        pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
     ///Supported set of sort modes for scanning by id only.
@@ -677,6 +966,14 @@ pub mod types {
         ///The disks to be created or attached for this instance.
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
         pub disks: Vec<InstanceDiskAttachment>,
+        ///The external IP addresses provided to this instance.
+        ///
+        ///By default, all instances have outbound connectivity, but no inbound
+        /// connectivity. These external addresses can be used to provide a
+        /// fixed, known IP address for making inbound connections to the
+        /// instance.
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        pub external_ips: Vec<ExternalIpCreate>,
         pub hostname: String,
         pub memory: ByteCount,
         pub name: Name,
@@ -827,6 +1124,35 @@ pub mod types {
         }
     }
 
+    ///The kind of an external IP address for an instance
+    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    pub enum IpKind {
+        #[serde(rename = "ephemeral")]
+        Ephemeral,
+        #[serde(rename = "floating")]
+        Floating,
+    }
+
+    impl ToString for IpKind {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::Ephemeral => "ephemeral".to_string(),
+                Self::Floating => "floating".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for IpKind {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            match value {
+                "ephemeral" => Ok(Self::Ephemeral),
+                "floating" => Ok(Self::Floating),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     #[serde(untagged)]
     pub enum IpNet {
@@ -861,6 +1187,8 @@ pub mod types {
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub project_id: Option<uuid::Uuid>,
         ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
@@ -874,6 +1202,10 @@ pub mod types {
     pub struct IpPoolCreate {
         pub description: String,
         pub name: Name,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub organization: Option<Name>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub project: Option<Name>,
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -976,7 +1308,7 @@ pub mod types {
     impl std::convert::TryFrom<&str> for Ipv6Net {
         type Error = &'static str;
         fn try_from(value: &str) -> Result<Self, Self::Error> {
-            if regress :: Regex :: new ("^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-6])$\"") ; }
+            if regress :: Regex :: new ("^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\"") ; }
             Ok(Self(value.to_string()))
         }
     }
@@ -1102,9 +1434,26 @@ pub mod types {
         }
     }
 
+    ///A `Measurement` is a timestamped datum from a single metric
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Measurement {
+        pub datum: Datum,
+        pub timestamp: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    ///A single page of results
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct MeasurementResultsPage {
+        ///list of items on this page of results
+        pub items: Vec<Measurement>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub next_page: Option<String>,
+    }
+
     ///Names must begin with a lower case ASCII letter, be composed exclusively
     /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
-    /// with a '-'.
+    /// with a '-'. Names cannot be a UUID though they may contain a UUID.
     #[derive(Clone, Debug, Serialize)]
     pub struct Name(String);
     impl std::ops::Deref for Name {
@@ -1120,13 +1469,7 @@ pub mod types {
             if value.len() > 63usize {
                 return Err("longer than 63 characters");
             }
-            if regress::Regex::new("^[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])$")
-                .unwrap()
-                .find(value)
-                .is_none()
-            {
-                return Err("doesn't match pattern \"^[a-z](|[a-zA-Z0-9-]*[a-zA-Z0-9])$\"");
-            }
+            if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"") ; }
             Ok(Self(value.to_string()))
         }
     }
@@ -4556,6 +4899,145 @@ impl Client {
         }
     }
 
+    ///Fetch metrics for a disk
+    ///
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/disks/
+    /// {disk_name}/metrics/{metric_name}`
+    ///
+    ///Arguments:
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `disk_name`
+    /// - `metric_name`
+    /// - `end_time`: An exclusive end time of metrics.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retrieve the
+    ///   subsequent page
+    /// - `start_time`: An inclusive start time of metrics.
+    pub async fn disk_metrics_list<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        disk_name: &'a types::Name,
+        metric_name: types::DiskMetricName,
+        end_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+        start_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
+    ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
+            self.baseurl,
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&disk_name.to_string()),
+            encode_path(&metric_name.to_string()),
+        );
+        let mut query = Vec::new();
+        if let Some(v) = &end_time {
+            query.push(("end_time", v.to_string()));
+        }
+
+        if let Some(v) = &limit {
+            query.push(("limit", v.to_string()));
+        }
+
+        if let Some(v) = &page_token {
+            query.push(("page_token", v.to_string()));
+        }
+
+        if let Some(v) = &start_time {
+            query.push(("start_time", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Fetch metrics for a disk as a Stream
+    ///
+    ///Sends repeated `GET` requests to
+    /// `/organizations/{organization_name}/projects/{project_name}/disks/
+    /// {disk_name}/metrics/{metric_name}` until there are no more results.
+    ///
+    ///Arguments:
+    /// - `organization_name`
+    /// - `project_name`
+    /// - `disk_name`
+    /// - `metric_name`
+    /// - `end_time`: An exclusive end time of metrics.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `start_time`: An inclusive start time of metrics.
+    pub fn disk_metrics_list_stream<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        disk_name: &'a types::Name,
+        metric_name: types::DiskMetricName,
+        end_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
+        limit: Option<std::num::NonZeroU32>,
+        start_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
+    ) -> impl futures::Stream<Item = Result<types::Measurement, Error<types::Error>>> + Unpin + '_
+    {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.disk_metrics_list(
+            organization_name,
+            project_name,
+            disk_name,
+            metric_name,
+            end_time,
+            limit,
+            None,
+            start_time,
+        )
+        .map_ok(move |page| {
+            let page = page.into_inner();
+            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                if state.is_none() {
+                    Ok(None)
+                } else {
+                    self.disk_metrics_list(
+                        organization_name,
+                        project_name,
+                        disk_name,
+                        metric_name,
+                        None,
+                        None,
+                        state.as_deref(),
+                        None,
+                    )
+                    .map_ok(|page| {
+                        let page = page.into_inner();
+                        Some((
+                            futures::stream::iter(page.items.into_iter().map(Ok)),
+                            page.next_page,
+                        ))
+                    })
+                    .await
+                }
+            })
+            .try_flatten();
+            first.chain(rest)
+        })
+        .try_flatten_stream()
+        .boxed()
+    }
+
     ///List images
     ///
     ///List images in a project. The images are returned sorted by creation
@@ -5164,6 +5646,39 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///List external IP addresses associated with an instance
+    ///
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/external-ips`
+    pub async fn instance_external_ip_list<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+    ) -> Result<ResponseValue<types::ExternalIpResultsPage>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/external-ips",
+            self.baseurl,
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
