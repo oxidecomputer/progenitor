@@ -220,34 +220,10 @@ pub mod types {
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct Digest {
-        #[serde(rename = "type")]
-        pub type_: DigestType,
-        pub value: String,
-    }
-
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-    pub enum DigestType {
+    #[serde(tag = "type", content = "value")]
+    pub enum Digest {
         #[serde(rename = "sha256")]
-        Sha256,
-    }
-
-    impl ToString for DigestType {
-        fn to_string(&self) -> String {
-            match *self {
-                Self::Sha256 => "sha256".to_string(),
-            }
-        }
-    }
-
-    impl std::str::FromStr for DigestType {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
-            match value {
-                "sha256" => Ok(Self::Sha256),
-                _ => Err("invalid value"),
-            }
-        }
+        Sha256(String),
     }
 
     ///Client view of a [`Disk`]
@@ -416,39 +392,18 @@ pub mod types {
         pub kind: IpKind,
     }
 
-    ///An IP address providing both inbound and outbound access. The address is
-    /// automatically-assigned from the provided IP Pool, or all available pools
-    /// if not specified.
+    ///Parameters for creating an external IP address for instances.
     #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct ExternalIpCreate {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub pool_name: Option<Name>,
-        #[serde(rename = "type")]
-        pub type_: ExternalIpCreateType,
-    }
-
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-    pub enum ExternalIpCreateType {
+    #[serde(tag = "type")]
+    pub enum ExternalIpCreate {
+        ///An IP address providing both inbound and outbound access. The
+        /// address is automatically-assigned from the provided IP Pool, or all
+        /// available pools if not specified.
         #[serde(rename = "ephemeral")]
-        Ephemeral,
-    }
-
-    impl ToString for ExternalIpCreateType {
-        fn to_string(&self) -> String {
-            match *self {
-                Self::Ephemeral => "ephemeral".to_string(),
-            }
-        }
-    }
-
-    impl std::str::FromStr for ExternalIpCreateType {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
-            match value {
-                "ephemeral" => Ok(Self::Ephemeral),
-                _ => Err("invalid value"),
-            }
-        }
+        Ephemeral {
+            #[serde(default, skip_serializing_if = "Option::is_none")]
+            pool_name: Option<Name>,
+        },
     }
 
     ///A single page of results
