@@ -1418,7 +1418,7 @@ impl Generator {
             }
         });
 
-        let maybe_clone = cloneable.then(|| quote! { #[derive(Clone)] });
+        let maybe_clone = cloneable.then(|| quote! { #[derive(Clone, Debug)] });
 
         // Build a reasonable doc comment depending on whether this struct is
         // the output from
