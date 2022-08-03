@@ -5335,7 +5335,7 @@ pub mod builder {
     ///Builder for [`Client::disk_view_by_id`]
     ///
     ///[`Client::disk_view_by_id`]: super::Client::disk_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DiskViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5387,7 +5387,7 @@ pub mod builder {
     ///Builder for [`Client::image_global_view_by_id`]
     ///
     ///[`Client::image_global_view_by_id`]: super::Client::image_global_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageGlobalViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5439,7 +5439,7 @@ pub mod builder {
     ///Builder for [`Client::image_view_by_id`]
     ///
     ///[`Client::image_view_by_id`]: super::Client::image_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5491,7 +5491,7 @@ pub mod builder {
     ///Builder for [`Client::instance_view_by_id`]
     ///
     ///[`Client::instance_view_by_id`]: super::Client::instance_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5543,7 +5543,7 @@ pub mod builder {
     ///Builder for [`Client::instance_network_interface_view_by_id`]
     ///
     ///[`Client::instance_network_interface_view_by_id`]: super::Client::instance_network_interface_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceNetworkInterfaceViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5597,7 +5597,7 @@ pub mod builder {
     ///Builder for [`Client::organization_view_by_id`]
     ///
     ///[`Client::organization_view_by_id`]: super::Client::organization_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct OrganizationViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5649,7 +5649,7 @@ pub mod builder {
     ///Builder for [`Client::project_view_by_id`]
     ///
     ///[`Client::project_view_by_id`]: super::Client::project_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ProjectViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5701,7 +5701,7 @@ pub mod builder {
     ///Builder for [`Client::snapshot_view_by_id`]
     ///
     ///[`Client::snapshot_view_by_id`]: super::Client::snapshot_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SnapshotViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5753,7 +5753,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_route_view_by_id`]
     ///
     ///[`Client::vpc_router_route_view_by_id`]: super::Client::vpc_router_route_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterRouteViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5805,7 +5805,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_view_by_id`]
     ///
     ///[`Client::vpc_router_view_by_id`]: super::Client::vpc_router_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5857,7 +5857,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_subnet_view_by_id`]
     ///
     ///[`Client::vpc_subnet_view_by_id`]: super::Client::vpc_subnet_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcSubnetViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5909,7 +5909,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_view_by_id`]
     ///
     ///[`Client::vpc_view_by_id`]: super::Client::vpc_view_by_id
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcViewById<'a> {
         client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
@@ -5961,7 +5961,7 @@ pub mod builder {
     ///Builder for [`Client::device_auth_request`]
     ///
     ///[`Client::device_auth_request`]: super::Client::device_auth_request
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DeviceAuthRequest<'a> {
         client: &'a super::Client,
         body: Result<types::DeviceAuthRequest, String>,
@@ -6003,7 +6003,7 @@ pub mod builder {
     ///Builder for [`Client::device_auth_confirm`]
     ///
     ///[`Client::device_auth_confirm`]: super::Client::device_auth_confirm
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DeviceAuthConfirm<'a> {
         client: &'a super::Client,
         body: Result<types::DeviceAuthVerify, String>,
@@ -6051,7 +6051,7 @@ pub mod builder {
     ///Builder for [`Client::device_access_token`]
     ///
     ///[`Client::device_access_token`]: super::Client::device_access_token
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DeviceAccessToken<'a> {
         client: &'a super::Client,
         body: Result<types::DeviceAccessTokenRequest, String>,
@@ -6093,7 +6093,7 @@ pub mod builder {
     ///Builder for [`Client::rack_list`]
     ///
     ///[`Client::rack_list`]: super::Client::rack_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct RackList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -6232,7 +6232,7 @@ pub mod builder {
     ///Builder for [`Client::rack_view`]
     ///
     ///[`Client::rack_view`]: super::Client::rack_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct RackView<'a> {
         client: &'a super::Client,
         rack_id: Result<uuid::Uuid, String>,
@@ -6284,7 +6284,7 @@ pub mod builder {
     ///Builder for [`Client::sled_list`]
     ///
     ///[`Client::sled_list`]: super::Client::sled_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SledList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -6423,7 +6423,7 @@ pub mod builder {
     ///Builder for [`Client::sled_view`]
     ///
     ///[`Client::sled_view`]: super::Client::sled_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SledView<'a> {
         client: &'a super::Client,
         sled_id: Result<uuid::Uuid, String>,
@@ -6475,7 +6475,7 @@ pub mod builder {
     ///Builder for [`Client::image_global_list`]
     ///
     ///[`Client::image_global_list`]: super::Client::image_global_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageGlobalList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -6614,7 +6614,7 @@ pub mod builder {
     ///Builder for [`Client::image_global_create`]
     ///
     ///[`Client::image_global_create`]: super::Client::image_global_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageGlobalCreate<'a> {
         client: &'a super::Client,
         body: Result<types::GlobalImageCreate, String>,
@@ -6662,7 +6662,7 @@ pub mod builder {
     ///Builder for [`Client::image_global_view`]
     ///
     ///[`Client::image_global_view`]: super::Client::image_global_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageGlobalView<'a> {
         client: &'a super::Client,
         image_name: Result<types::Name, String>,
@@ -6714,7 +6714,7 @@ pub mod builder {
     ///Builder for [`Client::image_global_delete`]
     ///
     ///[`Client::image_global_delete`]: super::Client::image_global_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageGlobalDelete<'a> {
         client: &'a super::Client,
         image_name: Result<types::Name, String>,
@@ -6766,7 +6766,7 @@ pub mod builder {
     ///Builder for [`Client::ip_pool_list`]
     ///
     ///[`Client::ip_pool_list`]: super::Client::ip_pool_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct IpPoolList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -6905,7 +6905,7 @@ pub mod builder {
     ///Builder for [`Client::ip_pool_create`]
     ///
     ///[`Client::ip_pool_create`]: super::Client::ip_pool_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct IpPoolCreate<'a> {
         client: &'a super::Client,
         body: Result<types::IpPoolCreate, String>,
@@ -6953,7 +6953,7 @@ pub mod builder {
     ///Builder for [`Client::ip_pool_view`]
     ///
     ///[`Client::ip_pool_view`]: super::Client::ip_pool_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct IpPoolView<'a> {
         client: &'a super::Client,
         pool_name: Result<types::Name, String>,
@@ -7005,7 +7005,7 @@ pub mod builder {
     ///Builder for [`Client::ip_pool_update`]
     ///
     ///[`Client::ip_pool_update`]: super::Client::ip_pool_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct IpPoolUpdate<'a> {
         client: &'a super::Client,
         pool_name: Result<types::Name, String>,
@@ -7074,7 +7074,7 @@ pub mod builder {
     ///Builder for [`Client::ip_pool_delete`]
     ///
     ///[`Client::ip_pool_delete`]: super::Client::ip_pool_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct IpPoolDelete<'a> {
         client: &'a super::Client,
         pool_name: Result<types::Name, String>,
@@ -7126,7 +7126,7 @@ pub mod builder {
     ///Builder for [`Client::ip_pool_range_list`]
     ///
     ///[`Client::ip_pool_range_list`]: super::Client::ip_pool_range_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct IpPoolRangeList<'a> {
         client: &'a super::Client,
         pool_name: Result<types::Name, String>,
@@ -7265,7 +7265,7 @@ pub mod builder {
     ///Builder for [`Client::ip_pool_range_add`]
     ///
     ///[`Client::ip_pool_range_add`]: super::Client::ip_pool_range_add
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct IpPoolRangeAdd<'a> {
         client: &'a super::Client,
         pool_name: Result<types::Name, String>,
@@ -7334,7 +7334,7 @@ pub mod builder {
     ///Builder for [`Client::ip_pool_range_remove`]
     ///
     ///[`Client::ip_pool_range_remove`]: super::Client::ip_pool_range_remove
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct IpPoolRangeRemove<'a> {
         client: &'a super::Client,
         pool_name: Result<types::Name, String>,
@@ -7403,7 +7403,7 @@ pub mod builder {
     ///Builder for [`Client::spoof_login`]
     ///
     ///[`Client::spoof_login`]: super::Client::spoof_login
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SpoofLogin<'a> {
         client: &'a super::Client,
         body: Result<types::SpoofLoginBody, String>,
@@ -7445,7 +7445,7 @@ pub mod builder {
     ///Builder for [`Client::login`]
     ///
     ///[`Client::login`]: super::Client::login
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct Login<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -7509,6 +7509,7 @@ pub mod builder {
     ///Builder for [`Client::consume_credentials`]
     ///
     ///[`Client::consume_credentials`]: super::Client::consume_credentials
+    #[derive(Debug)]
     pub struct ConsumeCredentials<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -7594,7 +7595,7 @@ pub mod builder {
     ///Builder for [`Client::logout`]
     ///
     ///[`Client::logout`]: super::Client::logout
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct Logout<'a> {
         client: &'a super::Client,
     }
@@ -7621,7 +7622,7 @@ pub mod builder {
     ///Builder for [`Client::organization_list`]
     ///
     ///[`Client::organization_list`]: super::Client::organization_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct OrganizationList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -7760,7 +7761,7 @@ pub mod builder {
     ///Builder for [`Client::organization_create`]
     ///
     ///[`Client::organization_create`]: super::Client::organization_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct OrganizationCreate<'a> {
         client: &'a super::Client,
         body: Result<types::OrganizationCreate, String>,
@@ -7808,7 +7809,7 @@ pub mod builder {
     ///Builder for [`Client::organization_view`]
     ///
     ///[`Client::organization_view`]: super::Client::organization_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct OrganizationView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -7863,7 +7864,7 @@ pub mod builder {
     ///Builder for [`Client::organization_update`]
     ///
     ///[`Client::organization_update`]: super::Client::organization_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct OrganizationUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -7932,7 +7933,7 @@ pub mod builder {
     ///Builder for [`Client::organization_delete`]
     ///
     ///[`Client::organization_delete`]: super::Client::organization_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct OrganizationDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -7987,7 +7988,7 @@ pub mod builder {
     ///Builder for [`Client::organization_policy_view`]
     ///
     ///[`Client::organization_policy_view`]: super::Client::organization_policy_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct OrganizationPolicyView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8044,7 +8045,7 @@ pub mod builder {
     ///Builder for [`Client::organization_policy_update`]
     ///
     ///[`Client::organization_policy_update`]: super::Client::organization_policy_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct OrganizationPolicyUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8115,7 +8116,7 @@ pub mod builder {
     ///Builder for [`Client::project_list`]
     ///
     ///[`Client::project_list`]: super::Client::project_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ProjectList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8274,7 +8275,7 @@ pub mod builder {
     ///Builder for [`Client::project_create`]
     ///
     ///[`Client::project_create`]: super::Client::project_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ProjectCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8344,7 +8345,7 @@ pub mod builder {
     ///Builder for [`Client::project_view`]
     ///
     ///[`Client::project_view`]: super::Client::project_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ProjectView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8415,7 +8416,7 @@ pub mod builder {
     ///Builder for [`Client::project_update`]
     ///
     ///[`Client::project_update`]: super::Client::project_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ProjectUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8500,7 +8501,7 @@ pub mod builder {
     ///Builder for [`Client::project_delete`]
     ///
     ///[`Client::project_delete`]: super::Client::project_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ProjectDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8571,7 +8572,7 @@ pub mod builder {
     ///Builder for [`Client::disk_list`]
     ///
     ///[`Client::disk_list`]: super::Client::disk_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DiskList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8745,7 +8746,7 @@ pub mod builder {
     ///Builder for [`Client::disk_create`]
     ///
     ///[`Client::disk_create`]: super::Client::disk_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DiskCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8830,7 +8831,7 @@ pub mod builder {
     ///Builder for [`Client::disk_view`]
     ///
     ///[`Client::disk_view`]: super::Client::disk_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DiskView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -8917,7 +8918,7 @@ pub mod builder {
     ///Builder for [`Client::disk_delete`]
     ///
     ///[`Client::disk_delete`]: super::Client::disk_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DiskDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -9004,7 +9005,7 @@ pub mod builder {
     ///Builder for [`Client::disk_metrics_list`]
     ///
     ///[`Client::disk_metrics_list`]: super::Client::disk_metrics_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct DiskMetricsList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -9224,7 +9225,7 @@ pub mod builder {
     ///Builder for [`Client::image_list`]
     ///
     ///[`Client::image_list`]: super::Client::image_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -9398,7 +9399,7 @@ pub mod builder {
     ///Builder for [`Client::image_create`]
     ///
     ///[`Client::image_create`]: super::Client::image_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -9483,7 +9484,7 @@ pub mod builder {
     ///Builder for [`Client::image_view`]
     ///
     ///[`Client::image_view`]: super::Client::image_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -9570,7 +9571,7 @@ pub mod builder {
     ///Builder for [`Client::image_delete`]
     ///
     ///[`Client::image_delete`]: super::Client::image_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ImageDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -9657,7 +9658,7 @@ pub mod builder {
     ///Builder for [`Client::instance_list`]
     ///
     ///[`Client::instance_list`]: super::Client::instance_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -9833,7 +9834,7 @@ pub mod builder {
     ///Builder for [`Client::instance_create`]
     ///
     ///[`Client::instance_create`]: super::Client::instance_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -9919,7 +9920,7 @@ pub mod builder {
     ///Builder for [`Client::instance_view`]
     ///
     ///[`Client::instance_view`]: super::Client::instance_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10006,7 +10007,7 @@ pub mod builder {
     ///Builder for [`Client::instance_delete`]
     ///
     ///[`Client::instance_delete`]: super::Client::instance_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10093,7 +10094,7 @@ pub mod builder {
     ///Builder for [`Client::instance_disk_list`]
     ///
     ///[`Client::instance_disk_list`]: super::Client::instance_disk_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceDiskList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10284,7 +10285,7 @@ pub mod builder {
     ///Builder for [`Client::instance_disk_attach`]
     ///
     ///[`Client::instance_disk_attach`]: super::Client::instance_disk_attach
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceDiskAttach<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10385,7 +10386,7 @@ pub mod builder {
     ///Builder for [`Client::instance_disk_detach`]
     ///
     ///[`Client::instance_disk_detach`]: super::Client::instance_disk_detach
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceDiskDetach<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10486,7 +10487,7 @@ pub mod builder {
     ///Builder for [`Client::instance_external_ip_list`]
     ///
     ///[`Client::instance_external_ip_list`]: super::Client::instance_external_ip_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceExternalIpList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10575,7 +10576,7 @@ pub mod builder {
     ///Builder for [`Client::instance_migrate`]
     ///
     ///[`Client::instance_migrate`]: super::Client::instance_migrate
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceMigrate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10676,7 +10677,7 @@ pub mod builder {
     ///Builder for [`Client::instance_network_interface_list`]
     ///
     ///[`Client::instance_network_interface_list`]: super::Client::instance_network_interface_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceNetworkInterfaceList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10868,7 +10869,7 @@ pub mod builder {
     ///Builder for [`Client::instance_network_interface_create`]
     ///
     ///[`Client::instance_network_interface_create`]: super::Client::instance_network_interface_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceNetworkInterfaceCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -10971,7 +10972,7 @@ pub mod builder {
     ///Builder for [`Client::instance_network_interface_view`]
     ///
     ///[`Client::instance_network_interface_view`]: super::Client::instance_network_interface_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceNetworkInterfaceView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11075,7 +11076,7 @@ pub mod builder {
     ///Builder for [`Client::instance_network_interface_update`]
     ///
     ///[`Client::instance_network_interface_update`]: super::Client::instance_network_interface_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceNetworkInterfaceUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11193,7 +11194,7 @@ pub mod builder {
     ///Builder for [`Client::instance_network_interface_delete`]
     ///
     ///[`Client::instance_network_interface_delete`]: super::Client::instance_network_interface_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceNetworkInterfaceDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11295,7 +11296,7 @@ pub mod builder {
     ///Builder for [`Client::instance_reboot`]
     ///
     ///[`Client::instance_reboot`]: super::Client::instance_reboot
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceReboot<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11382,7 +11383,7 @@ pub mod builder {
     ///Builder for [`Client::instance_serial_console`]
     ///
     ///[`Client::instance_serial_console`]: super::Client::instance_serial_console
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceSerialConsole<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11526,7 +11527,7 @@ pub mod builder {
     ///Builder for [`Client::instance_start`]
     ///
     ///[`Client::instance_start`]: super::Client::instance_start
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceStart<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11613,7 +11614,7 @@ pub mod builder {
     ///Builder for [`Client::instance_stop`]
     ///
     ///[`Client::instance_stop`]: super::Client::instance_stop
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct InstanceStop<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11700,7 +11701,7 @@ pub mod builder {
     ///Builder for [`Client::project_policy_view`]
     ///
     ///[`Client::project_policy_view`]: super::Client::project_policy_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ProjectPolicyView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11773,7 +11774,7 @@ pub mod builder {
     ///Builder for [`Client::project_policy_update`]
     ///
     ///[`Client::project_policy_update`]: super::Client::project_policy_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct ProjectPolicyUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -11860,7 +11861,7 @@ pub mod builder {
     ///Builder for [`Client::snapshot_list`]
     ///
     ///[`Client::snapshot_list`]: super::Client::snapshot_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SnapshotList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12036,7 +12037,7 @@ pub mod builder {
     ///Builder for [`Client::snapshot_create`]
     ///
     ///[`Client::snapshot_create`]: super::Client::snapshot_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SnapshotCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12122,7 +12123,7 @@ pub mod builder {
     ///Builder for [`Client::snapshot_view`]
     ///
     ///[`Client::snapshot_view`]: super::Client::snapshot_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SnapshotView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12209,7 +12210,7 @@ pub mod builder {
     ///Builder for [`Client::snapshot_delete`]
     ///
     ///[`Client::snapshot_delete`]: super::Client::snapshot_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SnapshotDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12296,7 +12297,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_list`]
     ///
     ///[`Client::vpc_list`]: super::Client::vpc_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12470,7 +12471,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_create`]
     ///
     ///[`Client::vpc_create`]: super::Client::vpc_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12555,7 +12556,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_view`]
     ///
     ///[`Client::vpc_view`]: super::Client::vpc_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12642,7 +12643,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_update`]
     ///
     ///[`Client::vpc_update`]: super::Client::vpc_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12743,7 +12744,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_delete`]
     ///
     ///[`Client::vpc_delete`]: super::Client::vpc_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12830,7 +12831,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_firewall_rules_view`]
     ///
     ///[`Client::vpc_firewall_rules_view`]: super::Client::vpc_firewall_rules_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcFirewallRulesView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -12919,7 +12920,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_firewall_rules_update`]
     ///
     ///[`Client::vpc_firewall_rules_update`]: super::Client::vpc_firewall_rules_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcFirewallRulesUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -13022,7 +13023,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_list`]
     ///
     ///[`Client::vpc_router_list`]: super::Client::vpc_router_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -13213,7 +13214,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_create`]
     ///
     ///[`Client::vpc_router_create`]: super::Client::vpc_router_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -13314,7 +13315,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_view`]
     ///
     ///[`Client::vpc_router_view`]: super::Client::vpc_router_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -13416,7 +13417,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_update`]
     ///
     ///[`Client::vpc_router_update`]: super::Client::vpc_router_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -13532,7 +13533,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_delete`]
     ///
     ///[`Client::vpc_router_delete`]: super::Client::vpc_router_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -13634,7 +13635,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_route_list`]
     ///
     ///[`Client::vpc_router_route_list`]: super::Client::vpc_router_route_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterRouteList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -13840,7 +13841,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_route_create`]
     ///
     ///[`Client::vpc_router_route_create`]: super::Client::vpc_router_route_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterRouteCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -13956,7 +13957,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_route_view`]
     ///
     ///[`Client::vpc_router_route_view`]: super::Client::vpc_router_route_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterRouteView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -14073,7 +14074,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_route_update`]
     ///
     ///[`Client::vpc_router_route_update`]: super::Client::vpc_router_route_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterRouteUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -14204,7 +14205,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_router_route_delete`]
     ///
     ///[`Client::vpc_router_route_delete`]: super::Client::vpc_router_route_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcRouterRouteDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -14321,7 +14322,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_subnet_list`]
     ///
     ///[`Client::vpc_subnet_list`]: super::Client::vpc_subnet_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcSubnetList<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -14512,7 +14513,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_subnet_create`]
     ///
     ///[`Client::vpc_subnet_create`]: super::Client::vpc_subnet_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcSubnetCreate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -14613,7 +14614,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_subnet_view`]
     ///
     ///[`Client::vpc_subnet_view`]: super::Client::vpc_subnet_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcSubnetView<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -14715,7 +14716,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_subnet_update`]
     ///
     ///[`Client::vpc_subnet_update`]: super::Client::vpc_subnet_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcSubnetUpdate<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -14831,7 +14832,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_subnet_delete`]
     ///
     ///[`Client::vpc_subnet_delete`]: super::Client::vpc_subnet_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcSubnetDelete<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -14933,7 +14934,7 @@ pub mod builder {
     ///Builder for [`Client::vpc_subnet_list_network_interfaces`]
     ///
     ///[`Client::vpc_subnet_list_network_interfaces`]: super::Client::vpc_subnet_list_network_interfaces
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct VpcSubnetListNetworkInterfaces<'a> {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
@@ -15140,7 +15141,7 @@ pub mod builder {
     ///Builder for [`Client::policy_view`]
     ///
     ///[`Client::policy_view`]: super::Client::policy_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct PolicyView<'a> {
         client: &'a super::Client,
     }
@@ -15175,7 +15176,7 @@ pub mod builder {
     ///Builder for [`Client::policy_update`]
     ///
     ///[`Client::policy_update`]: super::Client::policy_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct PolicyUpdate<'a> {
         client: &'a super::Client,
         body: Result<types::FleetRolePolicy, String>,
@@ -15225,7 +15226,7 @@ pub mod builder {
     ///Builder for [`Client::role_list`]
     ///
     ///[`Client::role_list`]: super::Client::role_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct RoleList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -15346,7 +15347,7 @@ pub mod builder {
     ///Builder for [`Client::role_view`]
     ///
     ///[`Client::role_view`]: super::Client::role_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct RoleView<'a> {
         client: &'a super::Client,
         role_name: Result<String, String>,
@@ -15398,7 +15399,7 @@ pub mod builder {
     ///Builder for [`Client::saga_list`]
     ///
     ///[`Client::saga_list`]: super::Client::saga_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SagaList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -15537,7 +15538,7 @@ pub mod builder {
     ///Builder for [`Client::saga_view`]
     ///
     ///[`Client::saga_view`]: super::Client::saga_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SagaView<'a> {
         client: &'a super::Client,
         saga_id: Result<uuid::Uuid, String>,
@@ -15589,7 +15590,7 @@ pub mod builder {
     ///Builder for [`Client::session_me`]
     ///
     ///[`Client::session_me`]: super::Client::session_me
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SessionMe<'a> {
         client: &'a super::Client,
     }
@@ -15622,7 +15623,7 @@ pub mod builder {
     ///Builder for [`Client::session_sshkey_list`]
     ///
     ///[`Client::session_sshkey_list`]: super::Client::session_sshkey_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SessionSshkeyList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -15761,7 +15762,7 @@ pub mod builder {
     ///Builder for [`Client::session_sshkey_create`]
     ///
     ///[`Client::session_sshkey_create`]: super::Client::session_sshkey_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SessionSshkeyCreate<'a> {
         client: &'a super::Client,
         body: Result<types::SshKeyCreate, String>,
@@ -15809,7 +15810,7 @@ pub mod builder {
     ///Builder for [`Client::session_sshkey_view`]
     ///
     ///[`Client::session_sshkey_view`]: super::Client::session_sshkey_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SessionSshkeyView<'a> {
         client: &'a super::Client,
         ssh_key_name: Result<types::Name, String>,
@@ -15864,7 +15865,7 @@ pub mod builder {
     ///Builder for [`Client::session_sshkey_delete`]
     ///
     ///[`Client::session_sshkey_delete`]: super::Client::session_sshkey_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SessionSshkeyDelete<'a> {
         client: &'a super::Client,
         ssh_key_name: Result<types::Name, String>,
@@ -15919,7 +15920,7 @@ pub mod builder {
     ///Builder for [`Client::silo_list`]
     ///
     ///[`Client::silo_list`]: super::Client::silo_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -16058,7 +16059,7 @@ pub mod builder {
     ///Builder for [`Client::silo_create`]
     ///
     ///[`Client::silo_create`]: super::Client::silo_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloCreate<'a> {
         client: &'a super::Client,
         body: Result<types::SiloCreate, String>,
@@ -16106,7 +16107,7 @@ pub mod builder {
     ///Builder for [`Client::silo_view`]
     ///
     ///[`Client::silo_view`]: super::Client::silo_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloView<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -16158,7 +16159,7 @@ pub mod builder {
     ///Builder for [`Client::silo_delete`]
     ///
     ///[`Client::silo_delete`]: super::Client::silo_delete
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloDelete<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -16210,7 +16211,7 @@ pub mod builder {
     ///Builder for [`Client::silo_identity_provider_list`]
     ///
     ///[`Client::silo_identity_provider_list`]: super::Client::silo_identity_provider_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloIdentityProviderList<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -16368,7 +16369,7 @@ pub mod builder {
     ///Builder for [`Client::silo_policy_view`]
     ///
     ///[`Client::silo_policy_view`]: super::Client::silo_policy_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloPolicyView<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -16422,7 +16423,7 @@ pub mod builder {
     ///Builder for [`Client::silo_policy_update`]
     ///
     ///[`Client::silo_policy_update`]: super::Client::silo_policy_update
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloPolicyUpdate<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -16493,7 +16494,7 @@ pub mod builder {
     ///Builder for [`Client::silo_identity_provider_create`]
     ///
     ///[`Client::silo_identity_provider_create`]: super::Client::silo_identity_provider_create
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloIdentityProviderCreate<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -16565,7 +16566,7 @@ pub mod builder {
     ///Builder for [`Client::silo_identity_provider_view`]
     ///
     ///[`Client::silo_identity_provider_view`]: super::Client::silo_identity_provider_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SiloIdentityProviderView<'a> {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
@@ -16638,7 +16639,7 @@ pub mod builder {
     ///Builder for [`Client::system_user_list`]
     ///
     ///[`Client::system_user_list`]: super::Client::system_user_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SystemUserList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -16777,7 +16778,7 @@ pub mod builder {
     ///Builder for [`Client::system_user_view`]
     ///
     ///[`Client::system_user_view`]: super::Client::system_user_view
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct SystemUserView<'a> {
         client: &'a super::Client,
         user_name: Result<types::Name, String>,
@@ -16829,7 +16830,7 @@ pub mod builder {
     ///Builder for [`Client::timeseries_schema_get`]
     ///
     ///[`Client::timeseries_schema_get`]: super::Client::timeseries_schema_get
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct TimeseriesSchemaGet<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
@@ -16951,7 +16952,7 @@ pub mod builder {
     ///Builder for [`Client::updates_refresh`]
     ///
     ///[`Client::updates_refresh`]: super::Client::updates_refresh
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct UpdatesRefresh<'a> {
         client: &'a super::Client,
     }
@@ -16984,7 +16985,7 @@ pub mod builder {
     ///Builder for [`Client::user_list`]
     ///
     ///[`Client::user_list`]: super::Client::user_list
-    #[derive(Clone, Debug)]
+    #[derive(Debug, Clone)]
     pub struct UserList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
