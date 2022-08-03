@@ -1418,7 +1418,14 @@ impl Generator {
             }
         });
 
-        let maybe_clone = cloneable.then(|| quote! { #[derive(Clone)] });
+        let mut derives = vec![quote! { Debug }];
+        if cloneable {
+            derives.push(quote! { Clone });
+        }
+
+        let derive = quote! {
+            #[derive( #( #derives ),* )]
+        };
 
         // Build a reasonable doc comment depending on whether this struct is
         // the output from
@@ -1480,7 +1487,7 @@ impl Generator {
 
         Ok(quote! {
             #[doc = #struct_doc]
-            #maybe_clone
+            #derive
             pub struct #struct_ident<'a> {
                 client: &'a super::Client,
                 #( #param_names: #param_types, )*

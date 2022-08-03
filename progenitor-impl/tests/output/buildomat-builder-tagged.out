@@ -134,7 +134,7 @@ pub mod types {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Client {
     pub(crate) baseurl: String,
     pub(crate) client: reqwest::Client,
@@ -373,7 +373,7 @@ pub mod builder {
     ///Builder for [`Client::control_hold`]
     ///
     ///[`Client::control_hold`]: super::Client::control_hold
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct ControlHold<'a> {
         client: &'a super::Client,
     }
@@ -400,7 +400,7 @@ pub mod builder {
     ///Builder for [`Client::control_resume`]
     ///
     ///[`Client::control_resume`]: super::Client::control_resume
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct ControlResume<'a> {
         client: &'a super::Client,
     }
@@ -427,7 +427,7 @@ pub mod builder {
     ///Builder for [`Client::task_get`]
     ///
     ///[`Client::task_get`]: super::Client::task_get
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct TaskGet<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
@@ -473,7 +473,7 @@ pub mod builder {
     ///Builder for [`Client::tasks_get`]
     ///
     ///[`Client::tasks_get`]: super::Client::tasks_get
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct TasksGet<'a> {
         client: &'a super::Client,
     }
@@ -500,7 +500,7 @@ pub mod builder {
     ///Builder for [`Client::task_submit`]
     ///
     ///[`Client::task_submit`]: super::Client::task_submit
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct TaskSubmit<'a> {
         client: &'a super::Client,
         body: Result<types::TaskSubmit, String>,
@@ -542,7 +542,7 @@ pub mod builder {
     ///Builder for [`Client::task_events_get`]
     ///
     ///[`Client::task_events_get`]: super::Client::task_events_get
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct TaskEventsGet<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
@@ -610,7 +610,7 @@ pub mod builder {
     ///Builder for [`Client::task_outputs_get`]
     ///
     ///[`Client::task_outputs_get`]: super::Client::task_outputs_get
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct TaskOutputsGet<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
@@ -656,7 +656,7 @@ pub mod builder {
     ///Builder for [`Client::task_output_download`]
     ///
     ///[`Client::task_output_download`]: super::Client::task_output_download
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct TaskOutputDownload<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
@@ -720,7 +720,7 @@ pub mod builder {
     ///Builder for [`Client::user_create`]
     ///
     ///[`Client::user_create`]: super::Client::user_create
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct UserCreate<'a> {
         client: &'a super::Client,
         body: Result<types::UserCreate, String>,
@@ -762,7 +762,7 @@ pub mod builder {
     ///Builder for [`Client::whoami`]
     ///
     ///[`Client::whoami`]: super::Client::whoami
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct Whoami<'a> {
         client: &'a super::Client,
     }
@@ -789,7 +789,7 @@ pub mod builder {
     ///Builder for [`Client::worker_bootstrap`]
     ///
     ///[`Client::worker_bootstrap`]: super::Client::worker_bootstrap
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct WorkerBootstrap<'a> {
         client: &'a super::Client,
         body: Result<types::WorkerBootstrap, String>,
@@ -831,7 +831,7 @@ pub mod builder {
     ///Builder for [`Client::worker_ping`]
     ///
     ///[`Client::worker_ping`]: super::Client::worker_ping
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct WorkerPing<'a> {
         client: &'a super::Client,
     }
@@ -858,7 +858,7 @@ pub mod builder {
     ///Builder for [`Client::worker_task_append`]
     ///
     ///[`Client::worker_task_append`]: super::Client::worker_task_append
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct WorkerTaskAppend<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
@@ -917,6 +917,7 @@ pub mod builder {
     ///Builder for [`Client::worker_task_upload_chunk`]
     ///
     ///[`Client::worker_task_upload_chunk`]: super::Client::worker_task_upload_chunk
+    #[derive(Debug)]
     pub struct WorkerTaskUploadChunk<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
@@ -983,7 +984,7 @@ pub mod builder {
     ///Builder for [`Client::worker_task_complete`]
     ///
     ///[`Client::worker_task_complete`]: super::Client::worker_task_complete
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct WorkerTaskComplete<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
@@ -1042,7 +1043,7 @@ pub mod builder {
     ///Builder for [`Client::worker_task_add_output`]
     ///
     ///[`Client::worker_task_add_output`]: super::Client::worker_task_add_output
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct WorkerTaskAddOutput<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
@@ -1101,7 +1102,7 @@ pub mod builder {
     ///Builder for [`Client::workers_list`]
     ///
     ///[`Client::workers_list`]: super::Client::workers_list
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct WorkersList<'a> {
         client: &'a super::Client,
     }
@@ -1128,7 +1129,7 @@ pub mod builder {
     ///Builder for [`Client::workers_recycle`]
     ///
     ///[`Client::workers_recycle`]: super::Client::workers_recycle
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct WorkersRecycle<'a> {
         client: &'a super::Client,
     }

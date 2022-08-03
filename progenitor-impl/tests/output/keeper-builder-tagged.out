@@ -75,7 +75,7 @@ pub mod types {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Client {
     pub(crate) baseurl: String,
     pub(crate) client: reqwest::Client,
@@ -181,7 +181,7 @@ pub mod builder {
     ///Builder for [`Client::enrol`]
     ///
     ///[`Client::enrol`]: super::Client::enrol
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct Enrol<'a> {
         client: &'a super::Client,
         body: Result<types::EnrolBody, String>,
@@ -223,7 +223,7 @@ pub mod builder {
     ///Builder for [`Client::global_jobs`]
     ///
     ///[`Client::global_jobs`]: super::Client::global_jobs
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct GlobalJobs<'a> {
         client: &'a super::Client,
     }
@@ -250,7 +250,7 @@ pub mod builder {
     ///Builder for [`Client::ping`]
     ///
     ///[`Client::ping`]: super::Client::ping
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct Ping<'a> {
         client: &'a super::Client,
     }
@@ -277,7 +277,7 @@ pub mod builder {
     ///Builder for [`Client::report_finish`]
     ///
     ///[`Client::report_finish`]: super::Client::report_finish
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct ReportFinish<'a> {
         client: &'a super::Client,
         body: Result<types::ReportFinishBody, String>,
@@ -319,7 +319,7 @@ pub mod builder {
     ///Builder for [`Client::report_output`]
     ///
     ///[`Client::report_output`]: super::Client::report_output
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct ReportOutput<'a> {
         client: &'a super::Client,
         body: Result<types::ReportOutputBody, String>,
@@ -361,7 +361,7 @@ pub mod builder {
     ///Builder for [`Client::report_start`]
     ///
     ///[`Client::report_start`]: super::Client::report_start
-    #[derive(Clone)]
+    #[derive(Debug, Clone)]
     pub struct ReportStart<'a> {
         client: &'a super::Client,
         body: Result<types::ReportStartBody, String>,

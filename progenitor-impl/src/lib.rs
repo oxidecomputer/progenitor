@@ -219,7 +219,7 @@ impl Generator {
                 #(#types)*
             }
 
-            #[derive(Clone)]
+            #[derive(Clone, Debug)]
             pub struct Client {
                 pub(crate) baseurl: String,
                 pub(crate) client: reqwest::Client,
