@@ -11,9 +11,21 @@ pub mod types {
         pub key: String,
     }
 
+    impl EnrolBody {
+        pub fn builder() -> builder::EnrolBody {
+            builder::EnrolBody::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct GlobalJobsResult {
         pub summary: Vec<ReportSummary>,
+    }
+
+    impl GlobalJobsResult {
+        pub fn builder() -> builder::GlobalJobsResult {
+            builder::GlobalJobsResult::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -23,10 +35,22 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl OutputRecord {
+        pub fn builder() -> builder::OutputRecord {
+            builder::OutputRecord::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct PingResult {
         pub host: String,
         pub ok: bool,
+    }
+
+    impl PingResult {
+        pub fn builder() -> builder::PingResult {
+            builder::PingResult::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -35,6 +59,12 @@ pub mod types {
         pub end_time: chrono::DateTime<chrono::offset::Utc>,
         pub exit_status: i32,
         pub id: ReportId,
+    }
+
+    impl ReportFinishBody {
+        pub fn builder() -> builder::ReportFinishBody {
+            builder::ReportFinishBody::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -46,10 +76,22 @@ pub mod types {
         pub uuid: String,
     }
 
+    impl ReportId {
+        pub fn builder() -> builder::ReportId {
+            builder::ReportId::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
+    }
+
+    impl ReportOutputBody {
+        pub fn builder() -> builder::ReportOutputBody {
+            builder::ReportOutputBody::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -57,11 +99,23 @@ pub mod types {
         pub existed_already: bool,
     }
 
+    impl ReportResult {
+        pub fn builder() -> builder::ReportResult {
+            builder::ReportResult::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: String,
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl ReportStartBody {
+        pub fn builder() -> builder::ReportStartBody {
+            builder::ReportStartBody::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -72,6 +126,604 @@ pub mod types {
         pub job: String,
         pub status: i32,
         pub when: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl ReportSummary {
+        pub fn builder() -> builder::ReportSummary {
+            builder::ReportSummary::default()
+        }
+    }
+
+    mod builder {
+        pub struct EnrolBody {
+            host: Result<String, String>,
+            key: Result<String, String>,
+        }
+
+        impl Default for EnrolBody {
+            fn default() -> Self {
+                Self {
+                    host: Err("no value supplied for host".to_string()),
+                    key: Err("no value supplied for key".to_string()),
+                }
+            }
+        }
+
+        impl EnrolBody {
+            pub fn host<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.host = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for host: {}", e));
+                self
+            }
+            pub fn key<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.key = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for key: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<EnrolBody> for super::EnrolBody {
+            type Error = String;
+            fn try_from(value: EnrolBody) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    host: value.host?,
+                    key: value.key?,
+                })
+            }
+        }
+
+        pub struct GlobalJobsResult {
+            summary: Result<Vec<super::ReportSummary>, String>,
+        }
+
+        impl Default for GlobalJobsResult {
+            fn default() -> Self {
+                Self {
+                    summary: Err("no value supplied for summary".to_string()),
+                }
+            }
+        }
+
+        impl GlobalJobsResult {
+            pub fn summary<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<super::ReportSummary>>,
+                T::Error: std::fmt::Display,
+            {
+                self.summary = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for summary: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<GlobalJobsResult> for super::GlobalJobsResult {
+            type Error = String;
+            fn try_from(value: GlobalJobsResult) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    summary: value.summary?,
+                })
+            }
+        }
+
+        pub struct OutputRecord {
+            msg: Result<String, String>,
+            stream: Result<String, String>,
+            time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+        }
+
+        impl Default for OutputRecord {
+            fn default() -> Self {
+                Self {
+                    msg: Err("no value supplied for msg".to_string()),
+                    stream: Err("no value supplied for stream".to_string()),
+                    time: Err("no value supplied for time".to_string()),
+                }
+            }
+        }
+
+        impl OutputRecord {
+            pub fn msg<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.msg = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for msg: {}", e));
+                self
+            }
+            pub fn stream<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.stream = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for stream: {}", e));
+                self
+            }
+            pub fn time<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: std::fmt::Display,
+            {
+                self.time = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for time: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<OutputRecord> for super::OutputRecord {
+            type Error = String;
+            fn try_from(value: OutputRecord) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    msg: value.msg?,
+                    stream: value.stream?,
+                    time: value.time?,
+                })
+            }
+        }
+
+        pub struct PingResult {
+            host: Result<String, String>,
+            ok: Result<bool, String>,
+        }
+
+        impl Default for PingResult {
+            fn default() -> Self {
+                Self {
+                    host: Err("no value supplied for host".to_string()),
+                    ok: Err("no value supplied for ok".to_string()),
+                }
+            }
+        }
+
+        impl PingResult {
+            pub fn host<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.host = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for host: {}", e));
+                self
+            }
+            pub fn ok<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<bool>,
+                T::Error: std::fmt::Display,
+            {
+                self.ok = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for ok: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<PingResult> for super::PingResult {
+            type Error = String;
+            fn try_from(value: PingResult) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    host: value.host?,
+                    ok: value.ok?,
+                })
+            }
+        }
+
+        pub struct ReportFinishBody {
+            duration_millis: Result<i32, String>,
+            end_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            exit_status: Result<i32, String>,
+            id: Result<super::ReportId, String>,
+        }
+
+        impl Default for ReportFinishBody {
+            fn default() -> Self {
+                Self {
+                    duration_millis: Err("no value supplied for duration_millis".to_string()),
+                    end_time: Err("no value supplied for end_time".to_string()),
+                    exit_status: Err("no value supplied for exit_status".to_string()),
+                    id: Err("no value supplied for id".to_string()),
+                }
+            }
+        }
+
+        impl ReportFinishBody {
+            pub fn duration_millis<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<i32>,
+                T::Error: std::fmt::Display,
+            {
+                self.duration_millis = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for duration_millis: {}", e)
+                });
+                self
+            }
+            pub fn end_time<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: std::fmt::Display,
+            {
+                self.end_time = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for end_time: {}", e));
+                self
+            }
+            pub fn exit_status<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<i32>,
+                T::Error: std::fmt::Display,
+            {
+                self.exit_status = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for exit_status: {}", e));
+                self
+            }
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<super::ReportId>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<ReportFinishBody> for super::ReportFinishBody {
+            type Error = String;
+            fn try_from(value: ReportFinishBody) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    duration_millis: value.duration_millis?,
+                    end_time: value.end_time?,
+                    exit_status: value.exit_status?,
+                    id: value.id?,
+                })
+            }
+        }
+
+        pub struct ReportId {
+            host: Result<String, String>,
+            job: Result<String, String>,
+            pid: Result<u64, String>,
+            time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            uuid: Result<String, String>,
+        }
+
+        impl Default for ReportId {
+            fn default() -> Self {
+                Self {
+                    host: Err("no value supplied for host".to_string()),
+                    job: Err("no value supplied for job".to_string()),
+                    pid: Err("no value supplied for pid".to_string()),
+                    time: Err("no value supplied for time".to_string()),
+                    uuid: Err("no value supplied for uuid".to_string()),
+                }
+            }
+        }
+
+        impl ReportId {
+            pub fn host<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.host = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for host: {}", e));
+                self
+            }
+            pub fn job<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.job = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for job: {}", e));
+                self
+            }
+            pub fn pid<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<u64>,
+                T::Error: std::fmt::Display,
+            {
+                self.pid = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for pid: {}", e));
+                self
+            }
+            pub fn time<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: std::fmt::Display,
+            {
+                self.time = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for time: {}", e));
+                self
+            }
+            pub fn uuid<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.uuid = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for uuid: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<ReportId> for super::ReportId {
+            type Error = String;
+            fn try_from(value: ReportId) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    host: value.host?,
+                    job: value.job?,
+                    pid: value.pid?,
+                    time: value.time?,
+                    uuid: value.uuid?,
+                })
+            }
+        }
+
+        pub struct ReportOutputBody {
+            id: Result<super::ReportId, String>,
+            record: Result<super::OutputRecord, String>,
+        }
+
+        impl Default for ReportOutputBody {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                    record: Err("no value supplied for record".to_string()),
+                }
+            }
+        }
+
+        impl ReportOutputBody {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<super::ReportId>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn record<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<super::OutputRecord>,
+                T::Error: std::fmt::Display,
+            {
+                self.record = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for record: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<ReportOutputBody> for super::ReportOutputBody {
+            type Error = String;
+            fn try_from(value: ReportOutputBody) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    id: value.id?,
+                    record: value.record?,
+                })
+            }
+        }
+
+        pub struct ReportResult {
+            existed_already: Result<bool, String>,
+        }
+
+        impl Default for ReportResult {
+            fn default() -> Self {
+                Self {
+                    existed_already: Err("no value supplied for existed_already".to_string()),
+                }
+            }
+        }
+
+        impl ReportResult {
+            pub fn existed_already<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<bool>,
+                T::Error: std::fmt::Display,
+            {
+                self.existed_already = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for existed_already: {}", e)
+                });
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<ReportResult> for super::ReportResult {
+            type Error = String;
+            fn try_from(value: ReportResult) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    existed_already: value.existed_already?,
+                })
+            }
+        }
+
+        pub struct ReportStartBody {
+            id: Result<super::ReportId, String>,
+            script: Result<String, String>,
+            start_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+        }
+
+        impl Default for ReportStartBody {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                    script: Err("no value supplied for script".to_string()),
+                    start_time: Err("no value supplied for start_time".to_string()),
+                }
+            }
+        }
+
+        impl ReportStartBody {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<super::ReportId>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn script<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.script = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for script: {}", e));
+                self
+            }
+            pub fn start_time<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: std::fmt::Display,
+            {
+                self.start_time = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for start_time: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<ReportStartBody> for super::ReportStartBody {
+            type Error = String;
+            fn try_from(value: ReportStartBody) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    id: value.id?,
+                    script: value.script?,
+                    start_time: value.start_time?,
+                })
+            }
+        }
+
+        pub struct ReportSummary {
+            age_seconds: Result<i32, String>,
+            duration_seconds: Result<i32, String>,
+            host: Result<String, String>,
+            job: Result<String, String>,
+            status: Result<i32, String>,
+            when: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+        }
+
+        impl Default for ReportSummary {
+            fn default() -> Self {
+                Self {
+                    age_seconds: Err("no value supplied for age_seconds".to_string()),
+                    duration_seconds: Err("no value supplied for duration_seconds".to_string()),
+                    host: Err("no value supplied for host".to_string()),
+                    job: Err("no value supplied for job".to_string()),
+                    status: Err("no value supplied for status".to_string()),
+                    when: Err("no value supplied for when".to_string()),
+                }
+            }
+        }
+
+        impl ReportSummary {
+            pub fn age_seconds<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<i32>,
+                T::Error: std::fmt::Display,
+            {
+                self.age_seconds = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for age_seconds: {}", e));
+                self
+            }
+            pub fn duration_seconds<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<i32>,
+                T::Error: std::fmt::Display,
+            {
+                self.duration_seconds = value.try_into().map_err(|e| {
+                    format!(
+                        "error converting supplied value for duration_seconds: {}",
+                        e
+                    )
+                });
+                self
+            }
+            pub fn host<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.host = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for host: {}", e));
+                self
+            }
+            pub fn job<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.job = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for job: {}", e));
+                self
+            }
+            pub fn status<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<i32>,
+                T::Error: std::fmt::Display,
+            {
+                self.status = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for status: {}", e));
+                self
+            }
+            pub fn when<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: std::fmt::Display,
+            {
+                self.when = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for when: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<ReportSummary> for super::ReportSummary {
+            type Error = String;
+            fn try_from(value: ReportSummary) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    age_seconds: value.age_seconds?,
+                    duration_seconds: value.duration_seconds?,
+                    host: value.host?,
+                    job: value.job?,
+                    status: value.status?,
+                    when: value.when?,
+                })
+            }
+        }
     }
 }
 

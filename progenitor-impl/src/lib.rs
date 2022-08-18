@@ -5,7 +5,7 @@ use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
-use typify::TypeSpace;
+use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
@@ -30,7 +30,6 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-#[derive(Default)]
 pub struct Generator {
     type_space: TypeSpace,
     settings: GenerationSettings,
@@ -44,10 +43,10 @@ pub struct GenerationSettings {
     inner_type: Option<TokenStream>,
     pre_hook: Option<TokenStream>,
     post_hook: Option<TokenStream>,
-    extra_derives: Vec<TokenStream>,
+    extra_derives: Vec<String>,
 }
 
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Deserialize, PartialEq, Eq)]
 pub enum InterfaceStyle {
     Positional,
     Builder,
@@ -101,17 +100,35 @@ impl GenerationSettings {
         self
     }
 
-    // TODO maybe change to a typify::Settings or something
-    pub fn with_derive(&mut self, derive: TokenStream) -> &mut Self {
-        self.extra_derives.push(derive);
+    pub fn with_derive(&mut self, derive: impl ToString) -> &mut Self {
+        self.extra_derives.push(derive.to_string());
         self
+    }
+}
+
+impl Default for Generator {
+    fn default() -> Self {
+        Self {
+            type_space: TypeSpace::new(
+                TypeSpaceSettings::default().with_type_mod("types"),
+            ),
+            settings: Default::default(),
+            uses_futures: Default::default(),
+        }
     }
 }
 
 impl Generator {
     pub fn new(settings: &GenerationSettings) -> Self {
+        let mut type_settings = TypeSpaceSettings::default();
+        type_settings
+            .with_type_mod("types")
+            .with_struct_builder(settings.interface == InterfaceStyle::Builder);
+        settings.extra_derives.iter().for_each(|derive| {
+            let _ = type_settings.with_derive(derive.clone());
+        });
         Self {
-            type_space: TypeSpace::default(),
+            type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
             uses_futures: false,
         }
@@ -129,12 +146,7 @@ impl Generator {
             })
             .collect::<Vec<(String, _)>>();
 
-        self.type_space.set_type_mod("types");
         self.type_space.add_ref_types(schemas)?;
-        self.settings
-            .extra_derives
-            .iter()
-            .for_each(|derive| self.type_space.add_derive(derive.clone()));
 
         let raw_methods = spec
             .paths
@@ -176,14 +188,7 @@ impl Generator {
             }
         }?;
 
-        let mut types = self
-            .type_space
-            .iter_types()
-            .map(|t| (t.name(), t.definition()))
-            .collect::<Vec<_>>();
-        types.sort_by(|(a_name, _), (b_name, _)| a_name.cmp(b_name));
-        let types = types.into_iter().map(|(_, def)| def);
-        let shared = self.type_space.common_code();
+        let types = self.type_space.to_stream();
 
         let inner_property = self.settings.inner_type.as_ref().map(|inner| {
             quote! {
@@ -208,15 +213,14 @@ impl Generator {
             #[allow(unused_imports)]
             use progenitor_client::{encode_path, RequestBuilderExt};
 
-
             pub mod types {
                 use serde::{Deserialize, Serialize};
 
                 // This may be used by some impl Deserialize, but not all.
                 #[allow(unused_imports)]
                 use std::convert::TryFrom;
-                #shared
-                #(#types)*
+
+                #types
             }
 
             #[derive(Clone, Debug)]
@@ -430,6 +434,7 @@ impl Generator {
         deps.iter().map(ToString::to_string).collect()
     }
 
+    // TODO deprecate?
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
     }

@@ -14,6 +14,12 @@ pub mod types {
         pub state: String,
     }
 
+    impl Task {
+        pub fn builder() -> builder::Task {
+            builder::Task::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskEvent {
         pub payload: String,
@@ -22,11 +28,23 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl TaskEvent {
+        pub fn builder() -> builder::TaskEvent {
+            builder::TaskEvent::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskOutput {
         pub id: String,
         pub path: String,
         pub size: u64,
+    }
+
+    impl TaskOutput {
+        pub fn builder() -> builder::TaskOutput {
+            builder::TaskOutput::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -37,9 +55,21 @@ pub mod types {
         pub script: String,
     }
 
+    impl TaskSubmit {
+        pub fn builder() -> builder::TaskSubmit {
+            builder::TaskSubmit::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskSubmitResult {
         pub id: String,
+    }
+
+    impl TaskSubmitResult {
+        pub fn builder() -> builder::TaskSubmitResult {
+            builder::TaskSubmitResult::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -47,9 +77,21 @@ pub mod types {
         pub id: String,
     }
 
+    impl UploadedChunk {
+        pub fn builder() -> builder::UploadedChunk {
+            builder::UploadedChunk::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct UserCreate {
         pub name: String,
+    }
+
+    impl UserCreate {
+        pub fn builder() -> builder::UserCreate {
+            builder::UserCreate::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -59,10 +101,22 @@ pub mod types {
         pub token: String,
     }
 
+    impl UserCreateResult {
+        pub fn builder() -> builder::UserCreateResult {
+            builder::UserCreateResult::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WhoamiResult {
         pub id: String,
         pub name: String,
+    }
+
+    impl WhoamiResult {
+        pub fn builder() -> builder::WhoamiResult {
+            builder::WhoamiResult::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -77,11 +131,23 @@ pub mod types {
         pub tasks: Vec<WorkerTask>,
     }
 
+    impl Worker {
+        pub fn builder() -> builder::Worker {
+            builder::Worker::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerAddOutput {
         pub chunks: Vec<String>,
         pub path: String,
         pub size: i64,
+    }
+
+    impl WorkerAddOutput {
+        pub fn builder() -> builder::WorkerAddOutput {
+            builder::WorkerAddOutput::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -91,10 +157,22 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl WorkerAppendTask {
+        pub fn builder() -> builder::WorkerAppendTask {
+            builder::WorkerAppendTask::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerBootstrap {
         pub bootstrap: String,
         pub token: String,
+    }
+
+    impl WorkerBootstrap {
+        pub fn builder() -> builder::WorkerBootstrap {
+            builder::WorkerBootstrap::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -102,9 +180,21 @@ pub mod types {
         pub id: String,
     }
 
+    impl WorkerBootstrapResult {
+        pub fn builder() -> builder::WorkerBootstrapResult {
+            builder::WorkerBootstrapResult::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
+    }
+
+    impl WorkerCompleteTask {
+        pub fn builder() -> builder::WorkerCompleteTask {
+            builder::WorkerCompleteTask::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -114,11 +204,23 @@ pub mod types {
         pub task: Option<WorkerPingTask>,
     }
 
+    impl WorkerPingResult {
+        pub fn builder() -> builder::WorkerPingResult {
+            builder::WorkerPingResult::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerPingTask {
         pub id: String,
         pub output_rules: Vec<String>,
         pub script: String,
+    }
+
+    impl WorkerPingTask {
+        pub fn builder() -> builder::WorkerPingTask {
+            builder::WorkerPingTask::default()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -128,9 +230,1038 @@ pub mod types {
         pub owner: String,
     }
 
+    impl WorkerTask {
+        pub fn builder() -> builder::WorkerTask {
+            builder::WorkerTask::default()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkersResult {
         pub workers: Vec<Worker>,
+    }
+
+    impl WorkersResult {
+        pub fn builder() -> builder::WorkersResult {
+            builder::WorkersResult::default()
+        }
+    }
+
+    mod builder {
+        pub struct Task {
+            id: Result<String, String>,
+            name: Result<String, String>,
+            output_rules: Result<Vec<String>, String>,
+            script: Result<String, String>,
+            state: Result<String, String>,
+        }
+
+        impl Default for Task {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                    name: Err("no value supplied for name".to_string()),
+                    output_rules: Err("no value supplied for output_rules".to_string()),
+                    script: Err("no value supplied for script".to_string()),
+                    state: Err("no value supplied for state".to_string()),
+                }
+            }
+        }
+
+        impl Task {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn name<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.name = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                self
+            }
+            pub fn output_rules<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<String>>,
+                T::Error: std::fmt::Display,
+            {
+                self.output_rules = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for output_rules: {}", e)
+                });
+                self
+            }
+            pub fn script<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.script = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for script: {}", e));
+                self
+            }
+            pub fn state<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.state = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for state: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<Task> for super::Task {
+            type Error = String;
+            fn try_from(value: Task) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    id: value.id?,
+                    name: value.name?,
+                    output_rules: value.output_rules?,
+                    script: value.script?,
+                    state: value.state?,
+                })
+            }
+        }
+
+        pub struct TaskEvent {
+            payload: Result<String, String>,
+            seq: Result<u32, String>,
+            stream: Result<String, String>,
+            time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+        }
+
+        impl Default for TaskEvent {
+            fn default() -> Self {
+                Self {
+                    payload: Err("no value supplied for payload".to_string()),
+                    seq: Err("no value supplied for seq".to_string()),
+                    stream: Err("no value supplied for stream".to_string()),
+                    time: Err("no value supplied for time".to_string()),
+                }
+            }
+        }
+
+        impl TaskEvent {
+            pub fn payload<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.payload = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for payload: {}", e));
+                self
+            }
+            pub fn seq<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<u32>,
+                T::Error: std::fmt::Display,
+            {
+                self.seq = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for seq: {}", e));
+                self
+            }
+            pub fn stream<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.stream = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for stream: {}", e));
+                self
+            }
+            pub fn time<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: std::fmt::Display,
+            {
+                self.time = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for time: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<TaskEvent> for super::TaskEvent {
+            type Error = String;
+            fn try_from(value: TaskEvent) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    payload: value.payload?,
+                    seq: value.seq?,
+                    stream: value.stream?,
+                    time: value.time?,
+                })
+            }
+        }
+
+        pub struct TaskOutput {
+            id: Result<String, String>,
+            path: Result<String, String>,
+            size: Result<u64, String>,
+        }
+
+        impl Default for TaskOutput {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                    path: Err("no value supplied for path".to_string()),
+                    size: Err("no value supplied for size".to_string()),
+                }
+            }
+        }
+
+        impl TaskOutput {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn path<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.path = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for path: {}", e));
+                self
+            }
+            pub fn size<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<u64>,
+                T::Error: std::fmt::Display,
+            {
+                self.size = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for size: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<TaskOutput> for super::TaskOutput {
+            type Error = String;
+            fn try_from(value: TaskOutput) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    id: value.id?,
+                    path: value.path?,
+                    size: value.size?,
+                })
+            }
+        }
+
+        pub struct TaskSubmit {
+            name: Result<String, String>,
+            output_rules: Result<Vec<String>, String>,
+            script: Result<String, String>,
+        }
+
+        impl Default for TaskSubmit {
+            fn default() -> Self {
+                Self {
+                    name: Err("no value supplied for name".to_string()),
+                    output_rules: Ok(Default::default()),
+                    script: Err("no value supplied for script".to_string()),
+                }
+            }
+        }
+
+        impl TaskSubmit {
+            pub fn name<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.name = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                self
+            }
+            pub fn output_rules<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<String>>,
+                T::Error: std::fmt::Display,
+            {
+                self.output_rules = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for output_rules: {}", e)
+                });
+                self
+            }
+            pub fn script<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.script = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for script: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<TaskSubmit> for super::TaskSubmit {
+            type Error = String;
+            fn try_from(value: TaskSubmit) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    name: value.name?,
+                    output_rules: value.output_rules?,
+                    script: value.script?,
+                })
+            }
+        }
+
+        pub struct TaskSubmitResult {
+            id: Result<String, String>,
+        }
+
+        impl Default for TaskSubmitResult {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                }
+            }
+        }
+
+        impl TaskSubmitResult {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<TaskSubmitResult> for super::TaskSubmitResult {
+            type Error = String;
+            fn try_from(value: TaskSubmitResult) -> Result<Self, Self::Error> {
+                Ok(Self { id: value.id? })
+            }
+        }
+
+        pub struct UploadedChunk {
+            id: Result<String, String>,
+        }
+
+        impl Default for UploadedChunk {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                }
+            }
+        }
+
+        impl UploadedChunk {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<UploadedChunk> for super::UploadedChunk {
+            type Error = String;
+            fn try_from(value: UploadedChunk) -> Result<Self, Self::Error> {
+                Ok(Self { id: value.id? })
+            }
+        }
+
+        pub struct UserCreate {
+            name: Result<String, String>,
+        }
+
+        impl Default for UserCreate {
+            fn default() -> Self {
+                Self {
+                    name: Err("no value supplied for name".to_string()),
+                }
+            }
+        }
+
+        impl UserCreate {
+            pub fn name<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.name = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<UserCreate> for super::UserCreate {
+            type Error = String;
+            fn try_from(value: UserCreate) -> Result<Self, Self::Error> {
+                Ok(Self { name: value.name? })
+            }
+        }
+
+        pub struct UserCreateResult {
+            id: Result<String, String>,
+            name: Result<String, String>,
+            token: Result<String, String>,
+        }
+
+        impl Default for UserCreateResult {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                    name: Err("no value supplied for name".to_string()),
+                    token: Err("no value supplied for token".to_string()),
+                }
+            }
+        }
+
+        impl UserCreateResult {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn name<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.name = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                self
+            }
+            pub fn token<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.token = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for token: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<UserCreateResult> for super::UserCreateResult {
+            type Error = String;
+            fn try_from(value: UserCreateResult) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    id: value.id?,
+                    name: value.name?,
+                    token: value.token?,
+                })
+            }
+        }
+
+        pub struct WhoamiResult {
+            id: Result<String, String>,
+            name: Result<String, String>,
+        }
+
+        impl Default for WhoamiResult {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                    name: Err("no value supplied for name".to_string()),
+                }
+            }
+        }
+
+        impl WhoamiResult {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn name<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.name = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WhoamiResult> for super::WhoamiResult {
+            type Error = String;
+            fn try_from(value: WhoamiResult) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    id: value.id?,
+                    name: value.name?,
+                })
+            }
+        }
+
+        pub struct Worker {
+            deleted: Result<bool, String>,
+            id: Result<String, String>,
+            instance_id: Result<Option<String>, String>,
+            lastping: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
+            recycle: Result<bool, String>,
+            tasks: Result<Vec<super::WorkerTask>, String>,
+        }
+
+        impl Default for Worker {
+            fn default() -> Self {
+                Self {
+                    deleted: Err("no value supplied for deleted".to_string()),
+                    id: Err("no value supplied for id".to_string()),
+                    instance_id: Ok(Default::default()),
+                    lastping: Ok(Default::default()),
+                    recycle: Err("no value supplied for recycle".to_string()),
+                    tasks: Err("no value supplied for tasks".to_string()),
+                }
+            }
+        }
+
+        impl Worker {
+            pub fn deleted<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<bool>,
+                T::Error: std::fmt::Display,
+            {
+                self.deleted = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for deleted: {}", e));
+                self
+            }
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn instance_id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<String>>,
+                T::Error: std::fmt::Display,
+            {
+                self.instance_id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for instance_id: {}", e));
+                self
+            }
+            pub fn lastping<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<chrono::DateTime<chrono::offset::Utc>>>,
+                T::Error: std::fmt::Display,
+            {
+                self.lastping = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for lastping: {}", e));
+                self
+            }
+            pub fn recycle<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<bool>,
+                T::Error: std::fmt::Display,
+            {
+                self.recycle = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for recycle: {}", e));
+                self
+            }
+            pub fn tasks<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<super::WorkerTask>>,
+                T::Error: std::fmt::Display,
+            {
+                self.tasks = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for tasks: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<Worker> for super::Worker {
+            type Error = String;
+            fn try_from(value: Worker) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    deleted: value.deleted?,
+                    id: value.id?,
+                    instance_id: value.instance_id?,
+                    lastping: value.lastping?,
+                    recycle: value.recycle?,
+                    tasks: value.tasks?,
+                })
+            }
+        }
+
+        pub struct WorkerAddOutput {
+            chunks: Result<Vec<String>, String>,
+            path: Result<String, String>,
+            size: Result<i64, String>,
+        }
+
+        impl Default for WorkerAddOutput {
+            fn default() -> Self {
+                Self {
+                    chunks: Err("no value supplied for chunks".to_string()),
+                    path: Err("no value supplied for path".to_string()),
+                    size: Err("no value supplied for size".to_string()),
+                }
+            }
+        }
+
+        impl WorkerAddOutput {
+            pub fn chunks<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<String>>,
+                T::Error: std::fmt::Display,
+            {
+                self.chunks = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for chunks: {}", e));
+                self
+            }
+            pub fn path<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.path = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for path: {}", e));
+                self
+            }
+            pub fn size<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<i64>,
+                T::Error: std::fmt::Display,
+            {
+                self.size = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for size: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkerAddOutput> for super::WorkerAddOutput {
+            type Error = String;
+            fn try_from(value: WorkerAddOutput) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    chunks: value.chunks?,
+                    path: value.path?,
+                    size: value.size?,
+                })
+            }
+        }
+
+        pub struct WorkerAppendTask {
+            payload: Result<String, String>,
+            stream: Result<String, String>,
+            time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+        }
+
+        impl Default for WorkerAppendTask {
+            fn default() -> Self {
+                Self {
+                    payload: Err("no value supplied for payload".to_string()),
+                    stream: Err("no value supplied for stream".to_string()),
+                    time: Err("no value supplied for time".to_string()),
+                }
+            }
+        }
+
+        impl WorkerAppendTask {
+            pub fn payload<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.payload = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for payload: {}", e));
+                self
+            }
+            pub fn stream<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.stream = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for stream: {}", e));
+                self
+            }
+            pub fn time<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: std::fmt::Display,
+            {
+                self.time = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for time: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkerAppendTask> for super::WorkerAppendTask {
+            type Error = String;
+            fn try_from(value: WorkerAppendTask) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    payload: value.payload?,
+                    stream: value.stream?,
+                    time: value.time?,
+                })
+            }
+        }
+
+        pub struct WorkerBootstrap {
+            bootstrap: Result<String, String>,
+            token: Result<String, String>,
+        }
+
+        impl Default for WorkerBootstrap {
+            fn default() -> Self {
+                Self {
+                    bootstrap: Err("no value supplied for bootstrap".to_string()),
+                    token: Err("no value supplied for token".to_string()),
+                }
+            }
+        }
+
+        impl WorkerBootstrap {
+            pub fn bootstrap<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.bootstrap = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for bootstrap: {}", e));
+                self
+            }
+            pub fn token<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.token = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for token: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkerBootstrap> for super::WorkerBootstrap {
+            type Error = String;
+            fn try_from(value: WorkerBootstrap) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    bootstrap: value.bootstrap?,
+                    token: value.token?,
+                })
+            }
+        }
+
+        pub struct WorkerBootstrapResult {
+            id: Result<String, String>,
+        }
+
+        impl Default for WorkerBootstrapResult {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                }
+            }
+        }
+
+        impl WorkerBootstrapResult {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkerBootstrapResult> for super::WorkerBootstrapResult {
+            type Error = String;
+            fn try_from(value: WorkerBootstrapResult) -> Result<Self, Self::Error> {
+                Ok(Self { id: value.id? })
+            }
+        }
+
+        pub struct WorkerCompleteTask {
+            failed: Result<bool, String>,
+        }
+
+        impl Default for WorkerCompleteTask {
+            fn default() -> Self {
+                Self {
+                    failed: Err("no value supplied for failed".to_string()),
+                }
+            }
+        }
+
+        impl WorkerCompleteTask {
+            pub fn failed<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<bool>,
+                T::Error: std::fmt::Display,
+            {
+                self.failed = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for failed: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkerCompleteTask> for super::WorkerCompleteTask {
+            type Error = String;
+            fn try_from(value: WorkerCompleteTask) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    failed: value.failed?,
+                })
+            }
+        }
+
+        pub struct WorkerPingResult {
+            poweroff: Result<bool, String>,
+            task: Result<Option<super::WorkerPingTask>, String>,
+        }
+
+        impl Default for WorkerPingResult {
+            fn default() -> Self {
+                Self {
+                    poweroff: Err("no value supplied for poweroff".to_string()),
+                    task: Ok(Default::default()),
+                }
+            }
+        }
+
+        impl WorkerPingResult {
+            pub fn poweroff<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<bool>,
+                T::Error: std::fmt::Display,
+            {
+                self.poweroff = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for poweroff: {}", e));
+                self
+            }
+            pub fn task<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<super::WorkerPingTask>>,
+                T::Error: std::fmt::Display,
+            {
+                self.task = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for task: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkerPingResult> for super::WorkerPingResult {
+            type Error = String;
+            fn try_from(value: WorkerPingResult) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    poweroff: value.poweroff?,
+                    task: value.task?,
+                })
+            }
+        }
+
+        pub struct WorkerPingTask {
+            id: Result<String, String>,
+            output_rules: Result<Vec<String>, String>,
+            script: Result<String, String>,
+        }
+
+        impl Default for WorkerPingTask {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                    output_rules: Err("no value supplied for output_rules".to_string()),
+                    script: Err("no value supplied for script".to_string()),
+                }
+            }
+        }
+
+        impl WorkerPingTask {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn output_rules<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<String>>,
+                T::Error: std::fmt::Display,
+            {
+                self.output_rules = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for output_rules: {}", e)
+                });
+                self
+            }
+            pub fn script<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.script = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for script: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkerPingTask> for super::WorkerPingTask {
+            type Error = String;
+            fn try_from(value: WorkerPingTask) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    id: value.id?,
+                    output_rules: value.output_rules?,
+                    script: value.script?,
+                })
+            }
+        }
+
+        pub struct WorkerTask {
+            id: Result<String, String>,
+            name: Result<String, String>,
+            owner: Result<String, String>,
+        }
+
+        impl Default for WorkerTask {
+            fn default() -> Self {
+                Self {
+                    id: Err("no value supplied for id".to_string()),
+                    name: Err("no value supplied for name".to_string()),
+                    owner: Err("no value supplied for owner".to_string()),
+                }
+            }
+        }
+
+        impl WorkerTask {
+            pub fn id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                self
+            }
+            pub fn name<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.name = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                self
+            }
+            pub fn owner<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.owner = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for owner: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkerTask> for super::WorkerTask {
+            type Error = String;
+            fn try_from(value: WorkerTask) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    id: value.id?,
+                    name: value.name?,
+                    owner: value.owner?,
+                })
+            }
+        }
+
+        pub struct WorkersResult {
+            workers: Result<Vec<super::Worker>, String>,
+        }
+
+        impl Default for WorkersResult {
+            fn default() -> Self {
+                Self {
+                    workers: Err("no value supplied for workers".to_string()),
+                }
+            }
+        }
+
+        impl WorkersResult {
+            pub fn workers<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<super::Worker>>,
+                T::Error: std::fmt::Display,
+            {
+                self.workers = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for workers: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<WorkersResult> for super::WorkersResult {
+            type Error = String;
+            fn try_from(value: WorkersResult) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    workers: value.workers?,
+                })
+            }
+        }
     }
 }
 
