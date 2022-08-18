@@ -5,16 +5,6 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
-    mod defaults {
-        pub(super) fn default_u64<T, const V: u64>() -> T
-        where
-            T: std::convert::TryFrom<u64>,
-            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
-        {
-            T::try_from(V).unwrap()
-        }
-    }
-
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct BodyWithDefaults {
         #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
@@ -31,6 +21,16 @@ pub mod types {
         pub error_code: Option<String>,
         pub message: String,
         pub request_id: String,
+    }
+
+    mod defaults {
+        pub(super) fn default_u64<T, const V: u64>() -> T
+        where
+            T: std::convert::TryFrom<u64>,
+            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
+        {
+            T::try_from(V).unwrap()
+        }
     }
 }
 

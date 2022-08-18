@@ -70,5 +70,12 @@ mod builder_tagged {
             .instance_name("instance")
             .stream();
         let _ = stream.collect::<Vec<_>>();
+
+        // client
+        //     .instance_create()
+        //     .organization_name("org")
+        //     .project_name("project")
+        //     .body(types::InstanceCreate::builder())
+        //     .send();
     }
 }

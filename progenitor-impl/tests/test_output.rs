@@ -1,4 +1,4 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 use std::{fs::File, path::PathBuf};
 
@@ -25,7 +25,7 @@ fn verify_apis(openapi_file: &str) {
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Merged)
-            .with_derive(quote::quote! {JsonSchema}),
+            .with_derive("JsonSchema"),
     );
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
