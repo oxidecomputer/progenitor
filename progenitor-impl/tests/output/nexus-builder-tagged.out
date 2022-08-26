@@ -25408,3 +25408,27 @@ pub mod builder {
         }
     }
 }
+
+pub mod prelude {
+    pub use super::Client;
+    pub use super::ClientDisksExt;
+    pub use super::ClientHardwareExt;
+    pub use super::ClientHiddenExt;
+    pub use super::ClientImagesExt;
+    pub use super::ClientImagesGlobalExt;
+    pub use super::ClientInstancesExt;
+    pub use super::ClientIpPoolsExt;
+    pub use super::ClientLoginExt;
+    pub use super::ClientMetricsExt;
+    pub use super::ClientOrganizationsExt;
+    pub use super::ClientPolicyExt;
+    pub use super::ClientProjectsExt;
+    pub use super::ClientRolesExt;
+    pub use super::ClientSagasExt;
+    pub use super::ClientSessionExt;
+    pub use super::ClientSilosExt;
+    pub use super::ClientSnapshotsExt;
+    pub use super::ClientSystemExt;
+    pub use super::ClientUpdatesExt;
+    pub use super::ClientVpcsExt;
+}

@@ -8776,3 +8776,7 @@ impl Client {
             .boxed()
     }
 }
+
+pub mod prelude {
+    pub use super::Client;
+}
