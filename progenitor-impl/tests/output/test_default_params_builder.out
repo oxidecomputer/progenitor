@@ -1,0 +1,287 @@
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, RequestBuilderExt};
+pub use progenitor_client::{ByteStream, Error, ResponseValue};
+pub mod types {
+    use serde::{Deserialize, Serialize};
+    #[allow(unused_imports)]
+    use std::convert::TryFrom;
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct BodyWithDefaults {
+        #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
+        pub forty_two: u32,
+        pub s: String,
+        #[serde(default = "defaults::body_with_defaults_something")]
+        pub something: Option<bool>,
+        #[serde(default)]
+        pub yes: bool,
+    }
+
+    impl BodyWithDefaults {
+        pub fn builder() -> builder::BodyWithDefaults {
+            builder::BodyWithDefaults::default()
+        }
+    }
+
+    ///Error information from a response.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Error {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub error_code: Option<String>,
+        pub message: String,
+        pub request_id: String,
+    }
+
+    impl Error {
+        pub fn builder() -> builder::Error {
+            builder::Error::default()
+        }
+    }
+
+    mod builder {
+        pub struct BodyWithDefaults {
+            forty_two: Result<u32, String>,
+            s: Result<String, String>,
+            something: Result<Option<bool>, String>,
+            yes: Result<bool, String>,
+        }
+
+        impl Default for BodyWithDefaults {
+            fn default() -> Self {
+                Self {
+                    forty_two: Ok(super::defaults::default_u64::<u32, 42>()),
+                    s: Err("no value supplied for s".to_string()),
+                    something: Ok(super::defaults::body_with_defaults_something()),
+                    yes: Ok(Default::default()),
+                }
+            }
+        }
+
+        impl BodyWithDefaults {
+            pub fn forty_two<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<u32>,
+                T::Error: std::fmt::Display,
+            {
+                self.forty_two = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for forty_two: {}", e));
+                self
+            }
+            pub fn s<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.s = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for s: {}", e));
+                self
+            }
+            pub fn something<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<bool>>,
+                T::Error: std::fmt::Display,
+            {
+                self.something = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for something: {}", e));
+                self
+            }
+            pub fn yes<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<bool>,
+                T::Error: std::fmt::Display,
+            {
+                self.yes = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for yes: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<BodyWithDefaults> for super::BodyWithDefaults {
+            type Error = String;
+            fn try_from(value: BodyWithDefaults) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    forty_two: value.forty_two?,
+                    s: value.s?,
+                    something: value.something?,
+                    yes: value.yes?,
+                })
+            }
+        }
+
+        pub struct Error {
+            error_code: Result<Option<String>, String>,
+            message: Result<String, String>,
+            request_id: Result<String, String>,
+        }
+
+        impl Default for Error {
+            fn default() -> Self {
+                Self {
+                    error_code: Ok(Default::default()),
+                    message: Err("no value supplied for message".to_string()),
+                    request_id: Err("no value supplied for request_id".to_string()),
+                }
+            }
+        }
+
+        impl Error {
+            pub fn error_code<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<String>>,
+                T::Error: std::fmt::Display,
+            {
+                self.error_code = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for error_code: {}", e));
+                self
+            }
+            pub fn message<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.message = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for message: {}", e));
+                self
+            }
+            pub fn request_id<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.request_id = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for request_id: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<Error> for super::Error {
+            type Error = String;
+            fn try_from(value: Error) -> Result<Self, Self::Error> {
+                Ok(Self {
+                    error_code: value.error_code?,
+                    message: value.message?,
+                    request_id: value.request_id?,
+                })
+            }
+        }
+    }
+
+    mod defaults {
+        pub(super) fn default_u64<T, const V: u64>() -> T
+        where
+            T: std::convert::TryFrom<u64>,
+            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
+        {
+            T::try_from(V).unwrap()
+        }
+
+        pub(super) fn body_with_defaults_something() -> Option<bool> {
+            Some(true)
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct Client {
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
+}
+
+impl Client {
+    pub fn new(baseurl: &str) -> Self {
+        let dur = std::time::Duration::from_secs(15);
+        let client = reqwest::ClientBuilder::new()
+            .connect_timeout(dur)
+            .timeout(dur)
+            .build()
+            .unwrap();
+        Self::new_with_client(baseurl, client)
+    }
+
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
+            baseurl: baseurl.to_string(),
+            client,
+        }
+    }
+
+    pub fn baseurl(&self) -> &String {
+        &self.baseurl
+    }
+
+    pub fn client(&self) -> &reqwest::Client {
+        &self.client
+    }
+}
+
+impl Client {
+    ///Sends a `POST` request to `/`
+    ///```ignore
+    /// let response = client.default_params()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn default_params(&self) -> builder::DefaultParams {
+        builder::DefaultParams::new(self)
+    }
+}
+
+pub mod builder {
+    use super::types;
+    #[allow(unused_imports)]
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    #[allow(unused_imports)]
+    use std::convert::TryInto;
+    ///Builder for [`Client::default_params`]
+    ///
+    ///[`Client::default_params`]: super::Client::default_params
+    #[derive(Debug, Clone)]
+    pub struct DefaultParams<'a> {
+        client: &'a super::Client,
+        body: Result<types::BodyWithDefaults, String>,
+    }
+
+    impl<'a> DefaultParams<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
+        }
+
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::BodyWithDefaults>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `BodyWithDefaults` for body failed".to_string());
+            self
+        }
+
+        ///Sends a `POST` request to `/`
+        pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+            let Self { client, body } = self;
+            let body = body.map_err(Error::InvalidRequest)?;
+            let url = format!("{}/", client.baseurl,);
+            let request = client.client.post(url).json(&body).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200..=299 => Ok(ResponseValue::stream(response)),
+                _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+            }
+        }
+    }
+}
+
+pub mod prelude {
+    pub use self::super::Client;
+}

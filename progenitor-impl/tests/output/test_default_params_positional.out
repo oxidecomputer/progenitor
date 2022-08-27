@@ -10,6 +10,8 @@ pub mod types {
         #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
         pub forty_two: u32,
         pub s: String,
+        #[serde(default = "defaults::body_with_defaults_something")]
+        pub something: Option<bool>,
         #[serde(default)]
         pub yes: bool,
     }
@@ -30,6 +32,10 @@ pub mod types {
             <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
         {
             T::try_from(V).unwrap()
+        }
+
+        pub(super) fn body_with_defaults_something() -> Option<bool> {
+            Some(true)
         }
     }
 }

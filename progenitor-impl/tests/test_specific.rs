@@ -9,7 +9,7 @@ use dropshot::{
 use http::Response;
 use hyper::Body;
 use openapiv3::OpenAPI;
-use progenitor_impl::Generator;
+use progenitor_impl::{GenerationSettings, Generator, InterfaceStyle};
 use schemars::JsonSchema;
 use serde::Deserialize;
 
@@ -113,10 +113,16 @@ struct BodyWithDefaults {
     yes: bool,
     #[serde(default = "forty_two", rename = "forty-two")]
     forty_two: u32,
+    #[serde(default = "yes_yes")]
+    something: Option<bool>,
 }
 
 fn forty_two() -> u32 {
     42
+}
+
+fn yes_yes() -> Option<bool> {
+    Some(true)
 }
 
 #[endpoint {
@@ -148,7 +154,16 @@ fn test_default_params() {
     let mut generator = Generator::default();
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
-        format!("tests/output/{}.out", "test_default_params"),
+        format!("tests/output/{}.out", "test_default_params_positional"),
         &output,
-    )
+    );
+
+    let mut generator = Generator::new(
+        GenerationSettings::default().with_interface(InterfaceStyle::Builder),
+    );
+    let output = generator.generate_text_normalize_comments(&spec).unwrap();
+    expectorate::assert_contents(
+        format!("tests/output/{}.out", "test_default_params_builder"),
+        &output,
+    );
 }
