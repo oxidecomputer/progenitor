@@ -25229,3 +25229,7 @@ pub mod builder {
         }
     }
 }
+
+pub mod prelude {
+    pub use self::super::Client;
+}

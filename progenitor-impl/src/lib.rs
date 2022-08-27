@@ -283,6 +283,10 @@ impl Generator {
             impl Client {
                 #(#methods)*
             }
+
+            pub mod prelude {
+                pub use super::Client;
+            }
         };
         Ok(out)
     }
@@ -321,6 +325,10 @@ impl Generator {
 
                 #(#builder_struct)*
             }
+
+            pub mod prelude {
+                pub use self::super::Client;
+            }
         };
 
         Ok(out)
@@ -335,7 +343,8 @@ impl Generator {
             .map(|method| self.builder_struct(method, TagStyle::Separate))
             .collect::<Result<Vec<_>>>()?;
 
-        let traits_and_impls = self.builder_tags(input_methods);
+        let (traits_and_impls, trait_preludes) =
+            self.builder_tags(input_methods);
 
         let out = quote! {
             #traits_and_impls
@@ -352,6 +361,12 @@ impl Generator {
                 };
 
                 #(#builder_struct)*
+
+            }
+
+            pub mod prelude {
+                pub use super::Client;
+                #trait_preludes
             }
         };
 

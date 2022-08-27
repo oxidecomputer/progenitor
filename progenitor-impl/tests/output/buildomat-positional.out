@@ -473,3 +473,7 @@ impl Client {
         }
     }
 }
+
+pub mod prelude {
+    pub use super::Client;
+}

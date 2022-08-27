@@ -59,9 +59,9 @@ mod builder_tagged {
         );
     }
 
-    use nexus_client::{Client, ClientInstancesExt};
+    use nexus_client::prelude::*;
 
-    fn _ignore() {
+    async fn _ignore() {
         let client = Client::new("");
         let stream = client
             .instance_disk_list()
@@ -71,11 +71,12 @@ mod builder_tagged {
             .stream();
         let _ = stream.collect::<Vec<_>>();
 
-        // client
-        //     .instance_create()
-        //     .organization_name("org")
-        //     .project_name("project")
-        //     .body(types::InstanceCreate::builder())
-        //     .send();
+        let _ = client
+            .instance_create()
+            .organization_name("org")
+            .project_name("project")
+            .body(self::nexus_client::types::InstanceCreate::builder())
+            .send()
+            .await;
     }
 }

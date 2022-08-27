@@ -1571,10 +1571,30 @@ impl Generator {
         BuilderImpl { doc, sig, body }
     }
 
+    /// Generates a pair of TokenStreams.
+    ///
+    /// The first includes all the operation code; impl Client for operations
+    /// with no tags and code of this form for each tag:
+    ///
+    /// ```ignore
+    /// pub trait ClientTagExt {
+    ///     ...
+    /// }
+    ///
+    /// impl ClientTagExt for Client {
+    ///     ...
+    /// }
+    /// ```
+    ///
+    /// The second is the code for the prelude for each tag extension trait:
+    ///
+    /// ```ignore
+    /// pub use super::ClientTagExt;
+    /// ```
     pub(crate) fn builder_tags(
         &self,
         methods: &[OperationMethod],
-    ) -> TokenStream {
+    ) -> (TokenStream, TokenStream) {
         let mut base = Vec::new();
         let mut ext = BTreeMap::new();
 
@@ -1616,28 +1636,40 @@ impl Generator {
             }
         });
 
-        let ext_impl = ext.into_iter().map(|(tag, trait_methods)| {
-            let tr = format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));
-            let (trait_methods, trait_impls): (
-                Vec<TokenStream>,
-                Vec<TokenStream>,
-            ) = trait_methods.into_iter().unzip();
+        let (ext_impl, ext_use): (Vec<_>, Vec<_>) = ext
+            .into_iter()
+            .map(|(tag, trait_methods)| {
+                let tr =
+                    format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));
+                let (trait_methods, trait_impls): (
+                    Vec<TokenStream>,
+                    Vec<TokenStream>,
+                ) = trait_methods.into_iter().unzip();
+                (
+                    quote! {
+                        pub trait #tr {
+                            #(#trait_methods)*
+                        }
+
+                        impl #tr for Client {
+                            #(#trait_impls)*
+                        }
+                    },
+                    tr,
+                )
+            })
+            .unzip();
+
+        (
             quote! {
-                pub trait #tr {
-                    #(#trait_methods)*
-                }
+                #base_impl
 
-                impl #tr for Client {
-                    #(#trait_impls)*
-                }
-            }
-        });
-
-        quote! {
-            #base_impl
-
-            #(#ext_impl)*
-        }
+                #(#ext_impl)*
+            },
+            quote! {
+                #(pub use super::#ext_use;)*
+            },
+        )
     }
 
     pub(crate) fn builder_impl(&self, method: &OperationMethod) -> TokenStream {
