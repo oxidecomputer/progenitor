@@ -1667,7 +1667,11 @@ impl Generator {
             match (body.content.first(), body.content.len()) {
                 (None, _) => return Ok(None),
                 (Some(first), 1) => first,
-                (_, n) => todo!("more media types than expected: {}", n),
+                (_, n) => todo!(
+                    "more media types than expected for {}: {}",
+                    operation.operation_id.as_ref().unwrap(),
+                    n,
+                ),
             };
 
         let schema = media_type.schema.as_ref().ok_or_else(|| {
