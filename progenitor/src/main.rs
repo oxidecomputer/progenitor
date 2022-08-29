@@ -1,7 +1,6 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 use std::{
-    collections::HashSet,
     fs::{File, OpenOptions},
     io::Write,
     path::{Path, PathBuf},
@@ -11,7 +10,6 @@ use anyhow::{bail, Result};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
-use serde::Deserialize;
 
 #[derive(Parser)]
 struct Args {
@@ -124,7 +122,7 @@ fn main() -> Result<()> {
                 "[package]\n\
                 name = \"{}\"\n\
                 version = \"{}\"\n\
-                edition = \"2018\"\n\
+                edition = \"2021\"\n\
                 \n\
                 [dependencies]\n\
                 {}\n\
@@ -169,75 +167,11 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn load<P, T>(p: P) -> Result<T>
-where
-    P: AsRef<Path>,
-    for<'de> T: Deserialize<'de>,
-{
-    let p = p.as_ref();
-    let f = File::open(p)?;
-    Ok(serde_json::from_reader(f)?)
-}
-
-// TODO some or all of this validation should be in progenitor-impl
 pub fn load_api<P>(p: P) -> Result<OpenAPI>
 where
     P: AsRef<Path>,
 {
-    let api: OpenAPI = load(p)?;
-
-    if api.openapi != "3.0.3" {
-        /*
-         * XXX During development we are being very strict, but this should
-         * probably be relaxed.
-         */
-        bail!("unexpected version {}", api.openapi);
-    }
-
-    if !api.servers.is_empty() {
-        bail!("servers not presently supported");
-    }
-
-    if api.security.is_some() {
-        bail!("security not presently supported");
-    }
-
-    let mut opids = HashSet::new();
-    for p in api.paths.paths.iter() {
-        match p.1 {
-            openapiv3::ReferenceOr::Reference { reference: _ } => {
-                bail!("path {} uses reference, unsupported", p.0);
-            }
-            openapiv3::ReferenceOr::Item(item) => {
-                /*
-                 * Make sure every operation has an operation ID, and that each
-                 * operation ID is only used once in the document.
-                 */
-                item.iter().try_for_each(|(_, o)| {
-                    if let Some(oid) = o.operation_id.as_ref() {
-                        if !opids.insert(oid.to_string()) {
-                            bail!("duplicate operation ID: {}", oid);
-                        }
-
-                        if !o.servers.is_empty() {
-                            bail!("op {}: servers, unsupported", oid);
-                        }
-
-                        if o.security.is_some() {
-                            bail!("op {}: security, unsupported", oid);
-                        }
-                    } else {
-                        bail!("path {} is missing operation ID", p.0);
-                    }
-                    Ok(())
-                })?;
-
-                if !item.servers.is_empty() {
-                    bail!("path {} has servers; unsupported", p.0);
-                }
-            }
-        }
-    }
-
+    let f = File::open(p)?;
+    let api = serde_json::from_reader(f)?;
     Ok(api)
 }

@@ -1,5 +1,7 @@
 // Copyright 2022 Oxide Computer Company
 
+use std::collections::HashSet;
+
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -135,6 +137,8 @@ impl Generator {
     }
 
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
+        validate_openapi(spec)?;
+
         // Convert our components dictionary to schemars
         let schemas = spec
             .components
@@ -453,6 +457,52 @@ impl Generator {
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
     }
+}
+
+fn validate_openapi(spec: &OpenAPI) -> Result<()> {
+    match spec.openapi.as_str() {
+        "3.0.0" | "3.0.1" | "3.0.2" | "3.0.3" => (),
+        v => {
+            return Err(Error::UnexpectedFormat(format!(
+                "invalid version: {}",
+                v
+            )))
+        }
+    }
+
+    let mut opids = HashSet::new();
+    spec.paths.paths.iter().try_for_each(|p| {
+        match p.1 {
+            openapiv3::ReferenceOr::Reference { reference: _ } => {
+                Err(Error::UnexpectedFormat(format!(
+                    "path {} uses reference, unsupported",
+                    p.0,
+                )))
+            }
+            openapiv3::ReferenceOr::Item(item) => {
+                // Make sure every operation has an operation ID, and that each
+                // operation ID is only used once in the document.
+                item.iter().try_for_each(|(_, o)| {
+                    if let Some(oid) = o.operation_id.as_ref() {
+                        if !opids.insert(oid.to_string()) {
+                            return Err(Error::UnexpectedFormat(format!(
+                                "duplicate operation ID: {}",
+                                oid,
+                            )));
+                        }
+                    } else {
+                        return Err(Error::UnexpectedFormat(format!(
+                            "path {} is missing operation ID",
+                            p.0,
+                        )));
+                    }
+                    Ok(())
+                })
+            }
+        }
+    })?;
+
+    Ok(())
 }
 
 #[cfg(test)]
