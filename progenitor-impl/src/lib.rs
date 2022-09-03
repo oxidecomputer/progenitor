@@ -26,6 +26,8 @@ pub enum Error {
     UnexpectedFormat(String),
     #[error("invalid operation path {0}")]
     InvalidPath(String),
+    #[error("invalid dropshot extension use: {0}")]
+    InvalidExtension(String),
     #[error("internal error {0}")]
     InternalError(String),
 }
@@ -36,6 +38,7 @@ pub struct Generator {
     type_space: TypeSpace,
     settings: GenerationSettings,
     uses_futures: bool,
+    uses_websockets: bool,
 }
 
 #[derive(Default, Clone)]
@@ -116,6 +119,7 @@ impl Default for Generator {
             ),
             settings: Default::default(),
             uses_futures: Default::default(),
+            uses_websockets: Default::default(),
         }
     }
 }
@@ -133,6 +137,7 @@ impl Generator {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
             uses_futures: false,
+            uses_websockets: false,
         }
     }
 
@@ -426,7 +431,7 @@ impl Generator {
             "bytes = \"1.1\"",
             "futures-core = \"0.3\"",
             "percent-encoding = \"2.1\"",
-            "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
+            "reqwest = { version = \"0.11.12\", features = [\"json\", \"stream\"] }",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
             "serde_urlencoded = \"0.7\"",
         ];
@@ -443,6 +448,10 @@ impl Generator {
         }
         if self.uses_futures {
             deps.push("futures = \"0.3\"")
+        }
+        if self.uses_websockets {
+            deps.push("base64 = \"0.13\"");
+            deps.push("rand = \"0.8\"");
         }
         if self.type_space.uses_serde_json() {
             deps.push("serde_json = \"1.0\"")

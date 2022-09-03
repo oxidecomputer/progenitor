@@ -1,0 +1,850 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Oxide Propolis Server API",
+    "description": "API for interacting with the Propolis hypervisor frontend.",
+    "contact": {
+      "url": "https://oxide.computer",
+      "email": "api@oxide.computer"
+    },
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/instance": {
+      "get": {
+        "operationId": "instance_get",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstanceGetResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "put": {
+        "operationId": "instance_ensure",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstanceEnsureRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstanceEnsureResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/instance/disk/{id}/snapshot/{snapshot_id}": {
+      "post": {
+        "summary": "Issue a snapshot request to a crucible backend",
+        "operationId": "instance_issue_crucible_snapshot_request",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "style": "simple"
+          },
+          {
+            "in": "path",
+            "name": "snapshot_id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Null",
+                  "type": "string",
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/instance/migrate/status": {
+      "get": {
+        "operationId": "instance_migrate_status",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstanceMigrateStatusRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstanceMigrateStatusResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/instance/serial": {
+      "get": {
+        "operationId": "instance_serial",
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "x-dropshot-websocket": {}
+      }
+    },
+    "/instance/state": {
+      "put": {
+        "operationId": "instance_state_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstanceStateRequested"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/instance/state-monitor": {
+      "get": {
+        "operationId": "instance_state_monitor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstanceStateMonitorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstanceStateMonitorResponse"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "Error": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "CrucibleOpts": {
+        "type": "object",
+        "properties": {
+          "cert_pem": {
+            "nullable": true,
+            "type": "string"
+          },
+          "control": {
+            "nullable": true,
+            "type": "string"
+          },
+          "flush_timeout": {
+            "nullable": true,
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "key": {
+            "nullable": true,
+            "type": "string"
+          },
+          "key_pem": {
+            "nullable": true,
+            "type": "string"
+          },
+          "lossy": {
+            "type": "boolean"
+          },
+          "read_only": {
+            "type": "boolean"
+          },
+          "root_cert_pem": {
+            "nullable": true,
+            "type": "string"
+          },
+          "target": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "lossy",
+          "read_only",
+          "target"
+        ]
+      },
+      "DiskAttachment": {
+        "type": "object",
+        "properties": {
+          "disk_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "generation_id": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          },
+          "state": {
+            "$ref": "#/components/schemas/DiskAttachmentState"
+          }
+        },
+        "required": [
+          "disk_id",
+          "generation_id",
+          "state"
+        ]
+      },
+      "DiskAttachmentState": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "Detached",
+              "Destroyed",
+              "Faulted"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Attached": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "Attached"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "DiskRequest": {
+        "type": "object",
+        "properties": {
+          "device": {
+            "type": "string"
+          },
+          "gen": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "read_only": {
+            "type": "boolean"
+          },
+          "slot": {
+            "$ref": "#/components/schemas/Slot"
+          },
+          "volume_construction_request": {
+            "$ref": "#/components/schemas/VolumeConstructionRequest"
+          }
+        },
+        "required": [
+          "device",
+          "gen",
+          "name",
+          "read_only",
+          "slot",
+          "volume_construction_request"
+        ]
+      },
+      "Error": {
+        "description": "Error information from a response.",
+        "type": "object",
+        "properties": {
+          "error_code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "request_id"
+        ]
+      },
+      "Instance": {
+        "type": "object",
+        "properties": {
+          "disks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiskAttachment"
+            }
+          },
+          "nics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NetworkInterface"
+            }
+          },
+          "properties": {
+            "$ref": "#/components/schemas/InstanceProperties"
+          },
+          "state": {
+            "$ref": "#/components/schemas/InstanceState"
+          }
+        },
+        "required": [
+          "disks",
+          "nics",
+          "properties",
+          "state"
+        ]
+      },
+      "InstanceEnsureRequest": {
+        "type": "object",
+        "properties": {
+          "cloud_init_bytes": {
+            "nullable": true,
+            "type": "string"
+          },
+          "disks": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiskRequest"
+            }
+          },
+          "migrate": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/InstanceMigrateInitiateRequest"
+              }
+            ]
+          },
+          "nics": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NetworkInterfaceRequest"
+            }
+          },
+          "properties": {
+            "$ref": "#/components/schemas/InstanceProperties"
+          }
+        },
+        "required": [
+          "properties"
+        ]
+      },
+      "InstanceEnsureResponse": {
+        "type": "object",
+        "properties": {
+          "migrate": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/InstanceMigrateInitiateResponse"
+              }
+            ]
+          }
+        }
+      },
+      "InstanceGetResponse": {
+        "type": "object",
+        "properties": {
+          "instance": {
+            "$ref": "#/components/schemas/Instance"
+          }
+        },
+        "required": [
+          "instance"
+        ]
+      },
+      "InstanceMigrateInitiateRequest": {
+        "type": "object",
+        "properties": {
+          "migration_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "src_addr": {
+            "type": "string"
+          },
+          "src_uuid": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "migration_id",
+          "src_addr",
+          "src_uuid"
+        ]
+      },
+      "InstanceMigrateInitiateResponse": {
+        "type": "object",
+        "properties": {
+          "migration_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "migration_id"
+        ]
+      },
+      "InstanceMigrateStatusRequest": {
+        "type": "object",
+        "properties": {
+          "migration_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "migration_id"
+        ]
+      },
+      "InstanceMigrateStatusResponse": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/MigrationState"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "InstanceProperties": {
+        "type": "object",
+        "properties": {
+          "bootrom_id": {
+            "description": "ID of the bootrom used to initialize this Instance.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "description": "Free-form text description of an Instance.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier for this Instance.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "image_id": {
+            "description": "ID of the image used to initialize this Instance.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "memory": {
+            "description": "Size of memory allocated to the Instance, in MiB.",
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          },
+          "name": {
+            "description": "Human-readable name of the Instance.",
+            "type": "string"
+          },
+          "vcpus": {
+            "description": "Number of vCPUs to be allocated to the Instance.",
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "bootrom_id",
+          "description",
+          "id",
+          "image_id",
+          "memory",
+          "name",
+          "vcpus"
+        ]
+      },
+      "InstanceState": {
+        "description": "Current state of an Instance.",
+        "type": "string",
+        "enum": [
+          "Creating",
+          "Starting",
+          "Running",
+          "Stopping",
+          "Stopped",
+          "Rebooting",
+          "Migrating",
+          "Repairing",
+          "Failed",
+          "Destroyed"
+        ]
+      },
+      "InstanceStateMonitorRequest": {
+        "type": "object",
+        "properties": {
+          "gen": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "gen"
+        ]
+      },
+      "InstanceStateMonitorResponse": {
+        "type": "object",
+        "properties": {
+          "gen": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          },
+          "state": {
+            "$ref": "#/components/schemas/InstanceState"
+          }
+        },
+        "required": [
+          "gen",
+          "state"
+        ]
+      },
+      "InstanceStateRequested": {
+        "type": "string",
+        "enum": [
+          "Run",
+          "Stop",
+          "Reboot",
+          "MigrateStart"
+        ]
+      },
+      "MigrationState": {
+        "type": "string",
+        "enum": [
+          "Sync",
+          "RamPush",
+          "Pause",
+          "RamPushDirty",
+          "Device",
+          "Arch",
+          "Resume",
+          "RamPull",
+          "Finish",
+          "Error"
+        ]
+      },
+      "NetworkInterface": {
+        "type": "object",
+        "properties": {
+          "attachment": {
+            "$ref": "#/components/schemas/NetworkInterfaceAttachmentState"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attachment",
+          "name"
+        ]
+      },
+      "NetworkInterfaceAttachmentState": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "Detached",
+              "Faulted"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Attached": {
+                "$ref": "#/components/schemas/Slot"
+              }
+            },
+            "required": [
+              "Attached"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "NetworkInterfaceRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "slot": {
+            "$ref": "#/components/schemas/Slot"
+          }
+        },
+        "required": [
+          "name",
+          "slot"
+        ]
+      },
+      "Slot": {
+        "description": "A stable index which is translated by Propolis into a PCI BDF, visible to the guest.",
+        "type": "integer",
+        "format": "uint8",
+        "minimum": 0
+      },
+      "VolumeConstructionRequest": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "block_size": {
+                "type": "integer",
+                "format": "uint64",
+                "minimum": 0
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "read_only_parent": {
+                "nullable": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/VolumeConstructionRequest"
+                  }
+                ]
+              },
+              "sub_volumes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/VolumeConstructionRequest"
+                }
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "volume"
+                ]
+              }
+            },
+            "required": [
+              "block_size",
+              "id",
+              "sub_volumes",
+              "type"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "block_size": {
+                "type": "integer",
+                "format": "uint64",
+                "minimum": 0
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "url"
+                ]
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "block_size",
+              "id",
+              "type",
+              "url"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "block_size": {
+                "type": "integer",
+                "format": "uint64",
+                "minimum": 0
+              },
+              "gen": {
+                "type": "integer",
+                "format": "uint64",
+                "minimum": 0
+              },
+              "opts": {
+                "$ref": "#/components/schemas/CrucibleOpts"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "region"
+                ]
+              }
+            },
+            "required": [
+              "block_size",
+              "gen",
+              "opts",
+              "type"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "block_size": {
+                "type": "integer",
+                "format": "uint64",
+                "minimum": 0
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "path": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "file"
+                ]
+              }
+            },
+            "required": [
+              "block_size",
+              "id",
+              "path",
+              "type"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

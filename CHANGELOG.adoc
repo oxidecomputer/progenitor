@@ -24,6 +24,7 @@ https://github.com/oxidecomputer/progenitor/compare/v0.1.1\...v0.2.0[Full list o
 * Derive `Debug` for `Client` and builders for the various operations (#145)
 * Builders for `struct` types (#171)
 * Add a prelude that include the `Client` and any extension traits (#176)
+* Add support for upgrading connections, which requires a version bump to reqwest. (#183)
 
 == 0.1.1 (released 2022-05-13)
 

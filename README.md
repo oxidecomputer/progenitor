@@ -54,6 +54,13 @@ Similarly if there is a `format` field set to `uuid`:
 +uuid = { version = "1.0.0", features = ["serde", "v4"] }
 ```
 
+And if there are any websocket channel endpoints:
+```diff
+[dependencies]
++base64 = "0.13"
++rand = "0.8"
+```
+
 The macro has some additional fancy options to control the generated code:
 
 ```rust
@@ -116,7 +123,7 @@ You'll need to add add the following to `Cargo.toml`:
 +serde_json = "1.0"
 ```
 
-(`chrono` and `uuid` as above)
+(`chrono`, `uuid`, `base64`, and `rand` as above)
 
 Note that `progenitor` is used by `build.rs`, but the generated code required
 `progenitor-client`.
