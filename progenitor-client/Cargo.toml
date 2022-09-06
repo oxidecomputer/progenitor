@@ -8,7 +8,7 @@ description = "An OpenAPI client generator - client support"
 
 [dependencies]
 bytes = "1.2.1"
-futures-core = "0.3.23"
+futures-core = "0.3.24"
 percent-encoding = "2.1"
 reqwest = { version = "0.11", default-features = false, features = ["json", "stream"] }
 serde = "1.0"
