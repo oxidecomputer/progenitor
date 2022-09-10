@@ -10,9 +10,13 @@ pre-release-replacements = [
   {file="../CHANGELOG.adoc", search="// cargo-release: next header goes here \\(do not change this line\\)", replace="// cargo-release: next header goes here (do not change this line)\n\n== Unreleased changes (release date TBD)\n\nhttps://github.com/oxidecomputer/progenitor/compare/{{tag_name}}\\...HEAD[Full list of commits]", exactly=1},
 ]
 
-push = false
-pre-release-commit-message = "release {{crate_name}} {{version}}"
-post-release-commit-message = "starting {{crate_name}} {{next_version}} after releasing {{version}}"
+pre-release-commit-message = "release progenitor {{version}}"
+post-release-commit-message = "starting progenitor {{next_version}} after releasing {{version}}"
 tag-message = "release {{crate_name}} {{version}}"
-tag-prefix=""
+tag-prefix = ""
+dev-version = true
 dev-version-ext = "dev"
+consolidate-commits = true
+push = false
+shared-version = true
+dependent-version = "upgrade"
