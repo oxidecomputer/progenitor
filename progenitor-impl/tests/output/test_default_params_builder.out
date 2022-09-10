@@ -237,8 +237,6 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
-    #[allow(unused_imports)]
-    use std::convert::TryInto;
     ///Builder for [`Client::default_params`]
     ///
     ///[`Client::default_params`]: super::Client::default_params
@@ -258,7 +256,7 @@ pub mod builder {
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: TryInto<types::BodyWithDefaults>,
+            V: std::convert::TryInto<types::BodyWithDefaults>,
         {
             self.body = value
                 .try_into()

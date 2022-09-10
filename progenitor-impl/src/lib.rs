@@ -324,8 +324,6 @@ impl Generator {
                     RequestBuilderExt,
                     ResponseValue,
                 };
-                #[allow(unused_imports)]
-                use std::convert::TryInto;
 
                 #(#builder_struct)*
             }
