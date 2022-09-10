@@ -1345,6 +1345,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&String> for IpNet {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
     impl std::convert::TryFrom<String> for IpNet {
         type Error = &'static str;
         fn try_from(value: String) -> Result<Self, Self::Error> {
@@ -1480,6 +1487,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&String> for Ipv4Net {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
     impl std::convert::TryFrom<String> for Ipv4Net {
         type Error = &'static str;
         fn try_from(value: String) -> Result<Self, Self::Error> {
@@ -1527,6 +1541,13 @@ pub mod types {
         fn try_from(value: &str) -> Result<Self, Self::Error> {
             if regress :: Regex :: new ("^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\"") ; }
             Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for Ipv6Net {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
         }
     }
 
@@ -1593,6 +1614,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<&String> for L4PortRange {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
+        }
+    }
+
     impl std::convert::TryFrom<String> for L4PortRange {
         type Error = &'static str;
         fn try_from(value: String) -> Result<Self, Self::Error> {
@@ -1637,6 +1665,13 @@ pub mod types {
                 return Err("doesn't match pattern \"^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$\"");
             }
             Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for MacAddr {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
         }
     }
 
@@ -1706,6 +1741,13 @@ pub mod types {
             }
             if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"") ; }
             Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for Name {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
         }
     }
 
@@ -2241,6 +2283,13 @@ pub mod types {
                 return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"");
             }
             Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for RoleName {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
         }
     }
 
@@ -2873,6 +2922,13 @@ pub mod types {
                 return Err ("doesn't match pattern \"(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)\"") ;
             }
             Ok(Self(value.to_string()))
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for TimeseriesName {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            Self::try_from(value.as_str())
         }
     }
 

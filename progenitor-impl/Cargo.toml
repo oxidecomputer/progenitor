@@ -21,8 +21,8 @@ serde_json = "1.0"
 syn = { version = "1.0", features = ["parsing"] }
 thiserror = "1.0"
 # To publish, use a numbered version
-#typify = "0.0.9"
-typify = { git = "https://github.com/oxidecomputer/typify" }
+typify = "0.0.10"
+#typify = { git = "https://github.com/oxidecomputer/typify" }
 unicode-ident = "1.0.3"
 
 [dev-dependencies]

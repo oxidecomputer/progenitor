@@ -1817,8 +1817,9 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 
 [[package]]
 name = "typify"
-version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#4142db962b4c15270fe776c571bf0542f1270a47"
+version = "0.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2e8486352f3c946e69f983558cfc09b295250b01e01b381ec67a05a812d01d63"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1826,8 +1827,9 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#4142db962b4c15270fe776c571bf0542f1270a47"
+version = "0.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a7624d0b911df6e2bbf34a236f76281f93b294cdde1d4df1dbdb748e5a7fefa5"
 dependencies = [
  "heck",
  "log",
@@ -1844,8 +1846,9 @@ dependencies = [
 
 [[package]]
 name = "typify-macro"
-version = "0.0.10-dev"
-source = "git+https://github.com/oxidecomputer/typify#4142db962b4c15270fe776c571bf0542f1270a47"
+version = "0.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c42802aa033cee7650a4e1509ba7d5848a56f84be7c4b31e4385ee12445e942"
 dependencies = [
  "proc-macro2",
  "quote",
