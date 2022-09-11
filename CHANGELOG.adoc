@@ -17,18 +17,6 @@ https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...HEAD[Full list of 
 
 == 0.2.0 (released 2022-09-11)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...v0.2.0[Full list of commits]
-
-== 0.2.0 (released 2022-09-11)
-
-https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...v0.2.0[Full list of commits]
-
-== 0.2.0 (released 2022-09-11)
-
-https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...v0.2.0[Full list of commits]
-
-== 0.2.0 (released 2022-09-11)
-
 https://github.com/oxidecomputer/progenitor/compare/v0.1.1\...v0.2.0[Full list of commits]
 
 * Add support for a builder-style generation in addition to the positional style (#86)
