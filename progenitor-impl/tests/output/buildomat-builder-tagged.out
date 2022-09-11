@@ -1574,7 +1574,7 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.task = value
                 .try_into()
@@ -1647,7 +1647,7 @@ pub mod builder {
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: TryInto<types::TaskSubmit>,
+            V: std::convert::TryInto<types::TaskSubmit>,
         {
             self.body = value
                 .try_into()
@@ -1691,7 +1691,7 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.task = value
                 .try_into()
@@ -1701,7 +1701,7 @@ pub mod builder {
 
         pub fn minseq<V>(mut self, value: V) -> Self
         where
-            V: TryInto<u32>,
+            V: std::convert::TryInto<u32>,
         {
             self.minseq = value
                 .try_into()
@@ -1757,7 +1757,7 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.task = value
                 .try_into()
@@ -1805,7 +1805,7 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.task = value
                 .try_into()
@@ -1815,7 +1815,7 @@ pub mod builder {
 
         pub fn output<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.output = value
                 .try_into()
@@ -1867,7 +1867,7 @@ pub mod builder {
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: TryInto<types::UserCreate>,
+            V: std::convert::TryInto<types::UserCreate>,
         {
             self.body = value
                 .try_into()
@@ -1936,7 +1936,7 @@ pub mod builder {
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: TryInto<types::WorkerBootstrap>,
+            V: std::convert::TryInto<types::WorkerBootstrap>,
         {
             self.body = value
                 .try_into()
@@ -2007,7 +2007,7 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.task = value
                 .try_into()
@@ -2017,7 +2017,7 @@ pub mod builder {
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: TryInto<types::WorkerAppendTask>,
+            V: std::convert::TryInto<types::WorkerAppendTask>,
         {
             self.body = value
                 .try_into()
@@ -2066,7 +2066,7 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.task = value
                 .try_into()
@@ -2076,7 +2076,7 @@ pub mod builder {
 
         pub fn body<B>(mut self, value: B) -> Self
         where
-            B: TryInto<reqwest::Body>,
+            B: std::convert::TryInto<reqwest::Body>,
         {
             self.body = value
                 .try_into()
@@ -2133,7 +2133,7 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.task = value
                 .try_into()
@@ -2143,7 +2143,7 @@ pub mod builder {
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: TryInto<types::WorkerCompleteTask>,
+            V: std::convert::TryInto<types::WorkerCompleteTask>,
         {
             self.body = value
                 .try_into()
@@ -2192,7 +2192,7 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: TryInto<String>,
+            V: std::convert::TryInto<String>,
         {
             self.task = value
                 .try_into()
@@ -2202,7 +2202,7 @@ pub mod builder {
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: TryInto<types::WorkerAddOutput>,
+            V: std::convert::TryInto<types::WorkerAddOutput>,
         {
             self.body = value
                 .try_into()

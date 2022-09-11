@@ -1,11 +1,18 @@
 # Progenitor
 
 Progenitor is a Rust crate for generating opinionated clients from API
-descriptions specified in the OpenAPI 3.0.x format. It makes use of Rust
-futures for async API calls and `Streams` for paginated interfaces.
+descriptions in the OpenAPI 3.0.x specification. It makes use of Rust
+futures for `async` API calls and `Streams` for paginated interfaces.
 
 It generates a type called `Client` with methods that correspond to the
 operations specified in the OpenAPI document.
+
+The primary target is OpenAPI documents emitted by
+[Dropshot](https://github.com/oxidecomputer/dropshot)-generated APIs, but it
+can be used for many OpenAPI documents. As OpenAPI covers a wide range of APIs,
+Progenitor may fail for some OpenAPI documents. If you encounter a problem, you
+can help the project by filing an issue that includes the OpenAPI document that
+produced the problem.
 
 ## Using Progenitor
 
@@ -64,7 +71,7 @@ generate_api!(
 Note that the macro will be re-evaluated when the OpenAPI json document
 changes (when its mtime is updated).
 
-### Builder
+### `build.rs`
 
 Progenitor includes an interface appropriate for use in a
 [`build.rs`](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
@@ -154,3 +161,133 @@ uuid = { version = ">=0.8.0, <2.0.0", features = ["serde", "v4"] }
 
 Note that there is a dependency on `percent-encoding` which macro- and
 build.rs-generated clients is included from `progenitor-client`.
+
+
+## Generation Styles
+
+Progenitor can generate two distinct interface styles: positional and builder
+(described below). The choice is simply a matter of preference that many vary
+by API and taste.
+
+## Positional (current default)
+
+The "positional" style generates `Client` methods that accept parameters in
+order, for example:
+
+```rust
+impl Client {
+    pub async fn instance_create<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        body: &'a types::InstanceCreate,
+    ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+        // ...
+    }
+}
+```
+
+A caller invokes this interface by specifying parameters by position:
+
+```rust
+let result = client.instance_create(org, proj, body).await?;
+```
+
+Note that the type of each parameter must match precisely--no conversion is
+done implicitly.
+
+## Builder
+
+The "builder" style generates `Client` methods that produce a builder struct.
+API parameters are applied to that builder, and then the builder is executed
+(via a `send` method). The code is more extensive and more complex to enable
+simpler and more legible consumers:
+
+```rust
+impl Client
+    pub fn instance_create(&self) -> builder::InstanceCreate {
+        builder::InstanceCreate::new(self)
+    }
+}
+
+mod builder {
+    pub struct InstanceCreate<'a> {
+        client: &'a super::Client,
+        organization_name: Result<types::Name, String>,
+        project_name: Result<types::Name, String>,
+        body: Result<types::InstanceCreate, String>,
+    }
+
+    impl<'a> InstanceCreate<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            // ...
+        }
+
+        pub fn organization_name<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::Name>,
+        {
+            // ...
+        }
+
+        pub fn project_name<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::Name>,
+        {
+            // ...
+        }
+
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: TryInto<types::InstanceCreate>,
+        {
+            // ...
+        }
+
+        pub async fn send(self) ->
+            Result<ResponseValue<types::Instance>, Error<types::Error>>
+        {
+            // ...
+        }
+    }
+}
+```
+
+Note that, unlike positional generation, consumers can supply compatible
+(rather than invariant) parameters:
+
+```rust
+let result = client
+    .instance_create()
+    .organization_name("org")
+    .project_name("proj")
+    .body(body)
+    .send()
+    .await?;
+```
+
+The string parameters are will implicitly have `TryFrom::try_from()` invoked on
+them. Failed conversions or missing required parameters will result in an
+`Error` result from the `send()` call.
+
+Generated `struct` types also have builders so that the `body` parameter can be
+constructed inline:
+
+```rust
+let result = client
+    .instance_create()
+    .organization_name("org")
+    .project_name("proj")
+    .body(types::InstanceCreate::builder()
+        .name("...")
+        .description("...")
+        .hostname("...")
+        .ncpus(types::InstanceCpuCount(4))
+        .memory(types::ByteCount(1024 * 1024 * 1024)),
+    )
+    .send()
+    .await?;
+```
+
+Consumers do not need to specify parameters and struct properties that are not
+required or for which the API specifies defaults. Neat!

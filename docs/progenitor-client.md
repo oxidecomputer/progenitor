@@ -25,7 +25,8 @@ impl Client {
         ResponseValue<types::SuccessResponseType>,
         Error<types::ErrorResponseType>>
     {
-        ..
+        // ...
+    }
 ```
 
 ## `ResponseValue<T>`
@@ -64,7 +65,9 @@ It can be used as the type `T` in most instances and extracted as a `T` using
 
 There are five sub-categories of error covered by the error type variants:
 
-- A request that did not conform to API requirements. This can occur when required builder or body parameters were not specified, and the error message will denote the specific failure.
+- A request that did not conform to API requirements. This can occur when
+  required builder or body parameters were not specified, and the error message
+  will denote the specific failure.
 
 - A communication error
 

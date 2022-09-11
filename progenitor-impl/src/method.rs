@@ -1129,14 +1129,14 @@ impl Generator {
     /// ```ignore
     /// impl<'a> OperationId<'a> {
     ///     pub fn param_1<V>(self, value: V)
-    ///         where V: TryInto<SomeType>
+    ///         where V: std::convert::TryInto<SomeType>
     ///     {
     ///         self.param_1 = value.try_into()
     ///             .map_err(|_| #err_msg.to_string());
     ///         self
     ///     }
     ///     pub fn param_2<V>(self, value: V)
-    ///         where V: TryInto<SomeType>
+    ///         where V: std::convert::TryInto<SomeType>
     ///     {
     ///         self.param_2 = value.try_into()
     ///             .map(Some)
@@ -1264,7 +1264,7 @@ impl Generator {
                                 Ok(quote! {
                                     pub fn #param_name<V>(mut self, value: V)
                                     -> Self
-                                        where V: TryInto<#typ>
+                                        where V: std::convert::TryInto<#typ>
                                     {
                                         self.#param_name = value.try_into()
                                             .map(Some)
@@ -1277,7 +1277,7 @@ impl Generator {
                                 let typ = ty.ident();
                                 Ok(quote! {
                                     pub fn #param_name<V>(mut self, value: V) -> Self
-                                        where V: TryInto<#typ>,
+                                        where V: std::convert::TryInto<#typ>,
                                     {
                                         self.#param_name = value.try_into()
                                             .map_err(|_| #err_msg.to_string());
@@ -1294,7 +1294,7 @@ impl Generator {
 
                         Ok(quote! {
                             pub fn #param_name<B>(mut self, value: B) -> Self
-                                where B: TryInto<reqwest::Body>
+                                where B: std::convert::TryInto<reqwest::Body>
                             {
                                 self.#param_name = value.try_into()
                                     .map_err(|_| #err_msg.to_string());
