@@ -1,15 +1,15 @@
 [package]
 name = "progenitor"
-version = "0.2.0"
+version = "0.2.1-dev"
 edition = "2021"
 license = "MPL-2.0"
 repository = "https://github.com/oxidecomputer/progenitor.git"
 description = "An OpenAPI client generator"
 
 [dependencies]
-progenitor-client = { version = "0.2.0", path = "../progenitor-client" }
-progenitor-impl = { version = "0.2.0", path = "../progenitor-impl" }
-progenitor-macro = { version = "0.2.0", path = "../progenitor-macro" }
+progenitor-client = { version = "0.2.1-dev", path = "../progenitor-client" }
+progenitor-impl = { version = "0.2.1-dev", path = "../progenitor-impl" }
+progenitor-macro = { version = "0.2.1-dev", path = "../progenitor-macro" }
 anyhow = "1.0"
 openapiv3 = "1.0.0"
 serde = { version = "1.0", features = ["derive"] }
