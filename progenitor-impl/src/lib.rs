@@ -5,13 +5,15 @@ use std::collections::HashSet;
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
+use security::SecurityRequirements;
 use serde::Deserialize;
 use thiserror::Error;
 use typify::{TypeSpace, TypeSpaceSettings};
 
-use crate::to_schema::ToSchema;
+use crate::{to_schema::ToSchema, security::SecuritySchemeAuthenticator, util::ReferenceOrExt};
 
 mod method;
+mod security;
 mod template;
 mod to_schema;
 mod util;
@@ -150,6 +152,24 @@ impl Generator {
             })
             .collect::<Vec<(String, _)>>();
 
+        // Construct the list of global security requirements
+        let global_security_requirements: Option<SecurityRequirements> = spec
+            .security
+            .as_ref()
+            .map(|req| req.into());
+
+        // Construct a list of security schemes. Given a valid spec file, elements in this list are
+        // uniquely identified by their name
+        let security_schemes = spec.components.iter()
+            .flat_map(|components| {
+                components.security_schemes.iter().filter_map(|(name, ref_or_scheme)| {
+                    ref_or_scheme.item(&spec.components).ok().map(|scheme| {
+                        SecuritySchemeAuthenticator::new(name, scheme)
+                    })
+                })
+            })
+            .collect::<Vec<SecuritySchemeAuthenticator>>();
+
         self.type_space.add_ref_types(schemas)?;
 
         let raw_methods = spec
@@ -170,6 +190,7 @@ impl Generator {
                     &spec.components,
                     path,
                     method,
+                    &global_security_requirements
                 )
             })
             .collect::<Result<Vec<_>>>()?;
@@ -191,6 +212,12 @@ impl Generator {
                 self.generate_tokens_builder_separate(&raw_methods)
             }
         }?;
+
+        let security_scheme_tokens = security_schemes.iter().map(SecuritySchemeAuthenticator::generate_tokens).collect::<Result<Vec<_>>>()?;
+        let security_tokens = quote! {
+            #(#security_scheme_tokens)*
+        };
+        let client_security_tokens = SecuritySchemeAuthenticator::generate_client_impls();
 
         let types = self.type_space.to_stream();
 
@@ -227,10 +254,17 @@ impl Generator {
                 #types
             }
 
+            use std::{
+                any::TypeId,
+                collections::HashMap,
+                sync::Arc,
+            };
+
             #[derive(Clone, Debug)]
             pub struct Client {
                 pub(crate) baseurl: String,
                 pub(crate) client: reqwest::Client,
+                security_schemes: HashMap<TypeId, Arc<dyn ApplySecurity>>,
                 #inner_property
             }
 
@@ -256,6 +290,7 @@ impl Generator {
                     Self {
                         baseurl: baseurl.to_string(),
                         client,
+                        security_schemes: HashMap::default(),
                         #inner_value
                     }
                 }
@@ -268,6 +303,9 @@ impl Generator {
                     &self.client
                 }
             }
+
+            #client_security_tokens
+            #security_tokens
 
             #operation_code
         };

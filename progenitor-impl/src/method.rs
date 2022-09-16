@@ -14,7 +14,7 @@ use typify::TypeId;
 use crate::{
     template::PathTemplate,
     util::{sanitize, Case},
-    Error, Generator, Result, TagStyle,
+    Error, Generator, Result, TagStyle, security::SecurityRequirements,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
@@ -28,6 +28,7 @@ pub(crate) struct OperationMethod {
     description: Option<String>,
     params: Vec<OperationParameter>,
     responses: Vec<OperationResponse>,
+    security: Option<SecurityRequirements>,
     dropshot_paginated: Option<DropshotPagination>,
 }
 
@@ -234,6 +235,7 @@ impl Generator {
         components: &Option<Components>,
         path: &str,
         method: &str,
+        global_security_requirements: &Option<SecurityRequirements>,
     ) -> Result<OperationMethod> {
         let operation_id = operation.operation_id.as_ref().unwrap();
 
@@ -337,6 +339,15 @@ impl Generator {
                 }
             })
             .collect::<Result<Vec<_>>>()?;
+
+        // The spec allows for specifying multiple security schemes. The options are represented as
+        // a list of ORs over ANDs. When applying these to a request, the first option that has been
+        // fully configured will be applied.
+        let security_requirements: Option<SecurityRequirements> = operation
+            .security
+            .as_ref()
+            .map(|or| or.into())
+            .or_else(|| global_security_requirements.clone());
 
         if let Some(body_param) = self.get_body_param(operation, components)? {
             params.push(body_param);
@@ -464,6 +475,7 @@ impl Generator {
                 .filter(|s| !s.is_empty()),
             params,
             responses,
+            security: security_requirements,
             dropshot_paginated,
         })
     }
@@ -871,15 +883,70 @@ impl Generator {
 
         let method_func = format_ident!("{}", method.method.as_str());
 
+        // Generate conditionals that will check each security requirement set in order and apply
+        // all steps from the first set that has been fully configured by a caller. If none of the
+        // sets meet the "fully configured" condition, then no security schemes will be applied.
+        // This will result in sending an unauthenticated request. We could preempt this and return
+        // an InvalidRequest error without actually sending a request, but instead we defer to the
+        // API itself to return the appropriate error.
+        let apply_security = method.security.as_ref().map(|requirements| {
+            let apply = requirements.0
+                .iter()
+                .enumerate()
+                .map(|(index, required)| {
+
+                    // Collect the idents of the SecurityScheme structs that this set requires
+                    let idents = required.iter().map(|(ident, .. )| ident).collect::<Vec<_>>();
+
+                    // Construct the conditional checks for each scheme
+                    let checks = idents.iter().map(|ident| {
+                        quote! {
+                            #client.has_configured_security::<crate::#ident>()
+                        }
+                    }).collect::<Vec<_>>();
+
+                    // Generate the block that will be run if the checks succeed
+                    let applications = idents.iter().map(|ident| {
+                        quote! {
+                            request = #client.apply_security::<crate::#ident>(request).await.map_err(|err| {
+                                Error::InvalidRequest(format!("Failed to apply security scheme {} to request due to {:?}", stringify!(#ident), err))
+                            })?;
+                        }
+                    }).collect::<Vec<_>>();
+
+                    // Conditionally determine what tokens should appear before the condition. There
+                    // is very likely a better way to join these blocks together
+                    let control = if index == 0 { quote! { if } } else { quote! { else if } };
+
+                    quote!(
+                        #control #(#checks)&&* {
+                            #(#applications)*
+                        }
+                    )
+                })
+                .collect::<Vec<_>>();
+
+            quote! {
+                #(#apply)*
+            }
+        }).unwrap_or_else(|| quote! {});
+
+        // If there are any security requirements on this method, then the request needs to be
+        // mutable so that we can apply the necessary mechanisms
+        let req_mutability = if method.security.is_some() { quote! { mut } } else { quote! { } };
+
         let body_impl = quote! {
             #url_path
             #query_build
 
-            let request = #client.client
+            let #req_mutability request = #client.client
                 . #method_func (url)
                 #(#body_func)*
                 #query_use
                 .build()?;
+
+            #apply_security
+
             #pre_hook
             let result = #client.client
                 .execute(request)

@@ -2,7 +2,7 @@
 
 use indexmap::IndexMap;
 use openapiv3::{
-    Components, Parameter, ReferenceOr, RequestBody, Response, Schema,
+    Components, Parameter, ReferenceOr, RequestBody, Response, Schema, SecurityScheme,
 };
 use unicode_ident::{is_xid_continue, is_xid_start};
 
@@ -61,6 +61,14 @@ impl ComponentLookup for Schema {
         components: &Components,
     ) -> &IndexMap<String, ReferenceOr<Self>> {
         &components.schemas
+    }
+}
+
+impl ComponentLookup for SecurityScheme {
+    fn get_components(
+        components: &Components,
+    ) -> &IndexMap<String, ReferenceOr<Self>> {
+        &components.security_schemes
     }
 }
 
