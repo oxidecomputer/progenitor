@@ -2,7 +2,8 @@
 
 use indexmap::IndexMap;
 use openapiv3::{
-    Components, Parameter, ReferenceOr, RequestBody, Response, Schema, SecurityScheme,
+    Components, Parameter, ReferenceOr, RequestBody, Response, Schema,
+    SecurityScheme,
 };
 use unicode_ident::{is_xid_continue, is_xid_start};
 

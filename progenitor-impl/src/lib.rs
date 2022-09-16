@@ -10,7 +10,10 @@ use serde::Deserialize;
 use thiserror::Error;
 use typify::{TypeSpace, TypeSpaceSettings};
 
-use crate::{to_schema::ToSchema, security::SecuritySchemeAuthenticator, util::ReferenceOrExt};
+use crate::{
+    security::SecuritySchemeAuthenticator, to_schema::ToSchema,
+    util::ReferenceOrExt,
+};
 
 mod method;
 mod security;
@@ -153,20 +156,24 @@ impl Generator {
             .collect::<Vec<(String, _)>>();
 
         // Construct the list of global security requirements
-        let global_security_requirements: Option<SecurityRequirements> = spec
-            .security
-            .as_ref()
-            .map(|req| req.into());
+        let global_security_requirements: Option<SecurityRequirements> =
+            spec.security.as_ref().map(|req| req.into());
 
         // Construct a list of security schemes. Given a valid spec file, elements in this list are
         // uniquely identified by their name
-        let security_schemes = spec.components.iter()
+        let security_schemes = spec
+            .components
+            .iter()
             .flat_map(|components| {
-                components.security_schemes.iter().filter_map(|(name, ref_or_scheme)| {
-                    ref_or_scheme.item(&spec.components).ok().map(|scheme| {
-                        SecuritySchemeAuthenticator::new(name, scheme)
-                    })
-                })
+                components.security_schemes.iter().filter_map(
+                    |(name, ref_or_scheme)| {
+                        ref_or_scheme.item(&spec.components).ok().map(
+                            |scheme| {
+                                SecuritySchemeAuthenticator::new(name, scheme)
+                            },
+                        )
+                    },
+                )
             })
             .collect::<Vec<SecuritySchemeAuthenticator>>();
 
@@ -190,7 +197,7 @@ impl Generator {
                     &spec.components,
                     path,
                     method,
-                    &global_security_requirements
+                    &global_security_requirements,
                 )
             })
             .collect::<Result<Vec<_>>>()?;
@@ -213,11 +220,15 @@ impl Generator {
             }
         }?;
 
-        let security_scheme_tokens = security_schemes.iter().map(SecuritySchemeAuthenticator::generate_tokens).collect::<Result<Vec<_>>>()?;
+        let security_scheme_tokens = security_schemes
+            .iter()
+            .map(SecuritySchemeAuthenticator::generate_tokens)
+            .collect::<Result<Vec<_>>>()?;
         let security_tokens = quote! {
             #(#security_scheme_tokens)*
         };
-        let client_security_tokens = SecuritySchemeAuthenticator::generate_client_impls();
+        let client_security_tokens =
+            SecuritySchemeAuthenticator::generate_client_impls();
 
         let types = self.type_space.to_stream();
 

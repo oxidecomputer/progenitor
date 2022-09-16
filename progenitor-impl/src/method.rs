@@ -12,9 +12,10 @@ use quote::{format_ident, quote, ToTokens};
 use typify::TypeId;
 
 use crate::{
+    security::SecurityRequirements,
     template::PathTemplate,
     util::{sanitize, Case},
-    Error, Generator, Result, TagStyle, security::SecurityRequirements,
+    Error, Generator, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
@@ -933,7 +934,11 @@ impl Generator {
 
         // If there are any security requirements on this method, then the request needs to be
         // mutable so that we can apply the necessary mechanisms
-        let req_mutability = if method.security.is_some() { quote! { mut } } else { quote! { } };
+        let req_mutability = if method.security.is_some() {
+            quote! { mut }
+        } else {
+            quote! {}
+        };
 
         let body_impl = quote! {
             #url_path
