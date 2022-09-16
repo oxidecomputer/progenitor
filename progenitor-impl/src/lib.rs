@@ -225,8 +225,14 @@ impl Generator {
             .map(SecuritySchemeAuthenticator::generate_tokens)
             .collect::<Result<Vec<_>>>()?;
 
+        // Always generate the security trait to be able to include the security schemes map in the
+        // client. Maybe this should also be conditional so that in the case that the spec does not
+        // specify any security schemes, the client will not need to include an empty map.
         let security_trait =
             SecuritySchemeAuthenticator::generate_security_trait();
+
+        // Only generate client methods for managing security scheme implementations if the spec
+        // actually defines security schemes
         let security_schemes_impl = {
             let client_security_tokens =
                 SecuritySchemeAuthenticator::generate_client_impls();
