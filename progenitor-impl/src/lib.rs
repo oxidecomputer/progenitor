@@ -224,11 +224,22 @@ impl Generator {
             .iter()
             .map(SecuritySchemeAuthenticator::generate_tokens)
             .collect::<Result<Vec<_>>>()?;
-        let security_tokens = quote! {
-            #(#security_scheme_tokens)*
+
+        let security_trait =
+            SecuritySchemeAuthenticator::generate_security_trait();
+        let security_schemes_impl = {
+            let client_security_tokens =
+                SecuritySchemeAuthenticator::generate_client_impls();
+
+            if !security_scheme_tokens.is_empty() {
+                quote! {
+                    #client_security_tokens
+                    #(#security_scheme_tokens)*
+                }
+            } else {
+                quote! {}
+            }
         };
-        let client_security_tokens =
-            SecuritySchemeAuthenticator::generate_client_impls();
 
         let types = self.type_space.to_stream();
 
@@ -315,8 +326,8 @@ impl Generator {
                 }
             }
 
-            #client_security_tokens
-            #security_tokens
+            #security_trait
+            #security_schemes_impl
 
             #operation_code
         };

@@ -76,7 +76,7 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                 fn apply_security<'a>(
                     &'a self,
                     request: reqwest::Request
-                ) -> Pin<Box<dyn Future<Output = Result<reqwest::Request, Error>> + Send + 'a>> where Self: 'a {
+                ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<reqwest::Request, Error>> + Send + 'a>> where Self: 'a {
                     Box::pin(async {
                         self.apply(request).await
                     })
@@ -207,42 +207,41 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
         }
     }
 
-    pub fn generate_client_impls() -> TokenStream {
+    pub fn generate_security_trait() -> TokenStream {
         quote! {
-            use std::{
-                future::Future,
-                pin::Pin,
-            };
-
-            pub trait ApplySecurity: std::fmt::Debug {
+            pub trait ApplySecurity: std::fmt::Debug + Send + Sync + 'static {
                 fn apply_security<'a>(
                     &'a self,
                     request: reqwest::Request
-                ) -> Pin<Box<dyn Future<Output = Result<reqwest::Request, Error>> + Send + 'a>> where Self: 'a;
+                ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<reqwest::Request, Error>> + Send + 'a>> where Self: 'a;
             }
+        }
+    }
 
+    pub fn generate_client_impls() -> TokenStream {
+        quote! {
             impl Client {
                 pub fn get_security<T>(
                     &self
-                ) -> Option<&Arc<dyn ApplySecurity>> where T: ApplySecurity + 'static {
+                ) -> Option<&Arc<dyn ApplySecurity>> where T: ApplySecurity {
                     self.security_schemes.get(&TypeId::of::<T>())
                 }
 
                 pub fn set_security<T>(
                     &mut self,
                     scheme: T
-                ) -> Option<Arc<dyn ApplySecurity>> where T: ApplySecurity + 'static {
+                ) -> Option<Arc<dyn ApplySecurity>> where T: ApplySecurity {
                     self.security_schemes.insert(TypeId::of::<T>(), Arc::new(scheme))
                 }
 
-                fn has_configured_security<T>(&self) -> bool where T: ApplySecurity + 'static {
+                fn has_configured_security<T>(&self) -> bool where T: ApplySecurity {
                     self.get_security::<T>().is_some()
                 }
 
                 pub async fn apply_security<T>(
                     &self,
                     request: reqwest::Request
-                ) -> Result<reqwest::Request, Error> where T: ApplySecurity + 'static {
+                ) -> Result<reqwest::Request, Error> where T: ApplySecurity {
                     if let Some(scheme) = self.get_security::<T>() {
                         scheme.apply_security(request).await
                     } else {
