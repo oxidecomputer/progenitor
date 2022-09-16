@@ -225,26 +225,44 @@ impl Generator {
             .map(SecuritySchemeAuthenticator::generate_tokens)
             .collect::<Result<Vec<_>>>()?;
 
-        // Always generate the security trait to be able to include the security schemes map in the
-        // client. Maybe this should also be conditional so that in the case that the spec does not
-        // specify any security schemes, the client will not need to include an empty map.
-        let security_trait =
-            SecuritySchemeAuthenticator::generate_security_trait();
-
         // Only generate client methods for managing security scheme implementations if the spec
         // actually defines security schemes
-        let security_schemes_impl = {
+        let (
+            security_schemes_impl,
+            (client_security_property, client_security_value),
+        ) = if !security_scheme_tokens.is_empty() {
             let client_security_tokens =
                 SecuritySchemeAuthenticator::generate_client_impls();
 
-            if !security_scheme_tokens.is_empty() {
-                quote! {
+            let security_trait =
+                SecuritySchemeAuthenticator::generate_security_trait();
+
+            (
+                Some(quote! {
+                    use std::{
+                        any::TypeId,
+                        collections::HashMap,
+                        sync::Arc,
+                    };
+
+                    pub mod security {
+                        #security_trait
+                        #(#security_scheme_tokens)*
+                    }
+
                     #client_security_tokens
-                    #(#security_scheme_tokens)*
-                }
-            } else {
-                quote! {}
-            }
+                }),
+                (
+                    Some(quote! {
+                        security_schemes: HashMap<TypeId, Arc<dyn crate::security::ApplySecurity>>,
+                    }),
+                    Some(quote! {
+                        security_schemes: HashMap::default(),
+                    }),
+                ),
+            )
+        } else {
+            (None, (None, None))
         };
 
         let types = self.type_space.to_stream();
@@ -282,17 +300,13 @@ impl Generator {
                 #types
             }
 
-            use std::{
-                any::TypeId,
-                collections::HashMap,
-                sync::Arc,
-            };
+            #security_schemes_impl
 
             #[derive(Clone, Debug)]
             pub struct Client {
                 pub(crate) baseurl: String,
                 pub(crate) client: reqwest::Client,
-                security_schemes: HashMap<TypeId, Arc<dyn ApplySecurity>>,
+                #client_security_property
                 #inner_property
             }
 
@@ -318,7 +332,7 @@ impl Generator {
                     Self {
                         baseurl: baseurl.to_string(),
                         client,
-                        security_schemes: HashMap::default(),
+                        #client_security_value
                         #inner_value
                     }
                 }
@@ -331,9 +345,6 @@ impl Generator {
                     &self.client
                 }
             }
-
-            #security_trait
-            #security_schemes_impl
 
             #operation_code
         };

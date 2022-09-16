@@ -902,14 +902,14 @@ impl Generator {
                     // Construct the conditional checks for each scheme
                     let checks = idents.iter().map(|ident| {
                         quote! {
-                            #client.has_configured_security::<crate::#ident>()
+                            #client.has_configured_security::<crate::security::#ident>()
                         }
                     }).collect::<Vec<_>>();
 
                     // Generate the block that will be run if the checks succeed
                     let applications = idents.iter().map(|ident| {
                         quote! {
-                            request = #client.apply_security::<crate::#ident>(request).await.map_err(|err| {
+                            request = #client.apply_security::<crate::security::#ident>(request).await.map_err(|err| {
                                 Error::InvalidRequest(format!("Failed to apply security scheme {} to request due to {:?}", stringify!(#ident), err))
                             })?;
                         }

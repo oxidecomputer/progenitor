@@ -19,7 +19,7 @@ impl From<&Vec<IndexMap<String, Vec<String>>>> for SecurityRequirements {
                     and.iter()
                         .map(|(name, scopes)| {
                             let security_struct = format_ident!(
-                                "{}",
+                                "{}SecurityScheme",
                                 sanitize(name, Case::Pascal)
                             );
                             (security_struct, scopes.clone())
