@@ -227,6 +227,7 @@ impl Generator {
 
         // Only generate client methods for managing security scheme implementations if the spec
         // actually defines security schemes
+        // TODO: Move + cleanup all of this
         let (
             security_schemes_impl,
             (client_security_property, client_security_value),
@@ -246,15 +247,19 @@ impl Generator {
                     };
 
                     pub mod security {
+                        use crate::Error;
+
                         #security_trait
                         #(#security_scheme_tokens)*
                     }
+
+                    use security::ApplySecurity;
 
                     #client_security_tokens
                 }),
                 (
                     Some(quote! {
-                        security_schemes: HashMap<TypeId, Arc<dyn crate::security::ApplySecurity>>,
+                        security_schemes: HashMap<TypeId, Arc<dyn ApplySecurity>>,
                     }),
                     Some(quote! {
                         security_schemes: HashMap::default(),

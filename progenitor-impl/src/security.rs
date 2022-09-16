@@ -55,7 +55,7 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
 
     pub(crate) fn generate_tokens(&self) -> Result<TokenStream> {
         let struct_name = sanitize(self.name, Case::Pascal);
-        let struct_ident = format_ident!("{}", struct_name);
+        let struct_ident = format_ident!("{}SecurityScheme", struct_name);
 
         let struct_fields = self.generate_fields()?;
         let new_fn = self.generate_new_fn()?;
