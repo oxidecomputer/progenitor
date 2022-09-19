@@ -14,7 +14,7 @@ anyhow = "1.0"
 openapiv3 = "1.0.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-clap = { version = "3.2.20", features = ["derive"] }
+clap = { version = "3.2.22", features = ["derive"] }
 
 [dev-dependencies]
 chrono = { version = "0.4", features = ["serde"] }
