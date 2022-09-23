@@ -5,12 +5,12 @@ authors = ["Adam H. Leventhal <ahl@oxidecomputer.com>"]
 edition = "2021"
 
 [dependencies]
-chrono = { version = "0.4", features = ["serde"] }
-progenitor-client = { path = "../progenitor-client" }
-reqwest = { version = "0.11", features = ["json", "stream"] }
-serde = { version = "1.0", features = ["derive"] }
-uuid = { version = "1.0", features = ["serde", "v4"] }
+chrono = { workspace = true }
+progenitor-client = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+uuid = { workspace = true }
 
 [build-dependencies]
-progenitor = { path = "../progenitor" }
-serde_json = "1.0"
+progenitor = { workspace = true }
+serde_json = { workspace = true }

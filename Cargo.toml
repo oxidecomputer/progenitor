@@ -8,6 +8,22 @@ members = [
 	"progenitor-macro",
 ]
 
+[workspace.dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+openapiv3 = "1.0.0"
+proc-macro2 = "1.0"
+progenitor = { path = "progenitor" }
+progenitor-client = { version = "0.2.1-dev", path = "progenitor-client" }
+progenitor-impl = { version = "0.2.1-dev", path = "progenitor-impl" }
+quote = "1.0" 
+reqwest = { version = "0.11", features = ["json", "stream"] }
+schemars = { version = "0.8.10", features = ["uuid1"] }
+serde = "1.0"
+serde_json = "1.0"
+syn = "1.0"
+uuid = { version = "1.0", features = ["serde", "v4"] }
+
+
 #[patch."https://github.com/oxidecomputer/dropshot"]
 #dropshot = { path = "../dropshot/dropshot" }
 

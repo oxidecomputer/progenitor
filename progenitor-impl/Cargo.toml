@@ -10,15 +10,15 @@ description = "An OpenAPI client generator - core implementation"
 heck = "0.4.0"
 getopts = "0.2"
 indexmap = "1.9"
-openapiv3 = "1.0.0"
-proc-macro2 = "1.0"
-quote = "1.0"
+openapiv3 = { workspace = true }
+proc-macro2 = { workspace = true }
+quote = { workspace = true }
 regex = "1.6"
 rustfmt-wrapper = "0.2.0"
-schemars = { version = "0.8.10", features = ["chrono", "uuid1"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-syn = { version = "1.0", features = ["parsing"] }
+schemars = { workspace = true, features = ["chrono", "uuid1"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+syn = { workspace = true, features = ["parsing"] }
 thiserror = "1.0"
 # To publish, use a numbered version
 typify = "0.0.10"
