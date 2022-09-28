@@ -60,6 +60,11 @@ fn test_nexus() {
     verify_apis("nexus");
 }
 
+#[test]
+fn test_propolis_server() {
+    verify_apis("propolis-server");
+}
+
 // TODO this file is full of inconsistencies and incorrectly specified types.
 // It's an interesting test to consider whether we try to do our best to
 // interpret the intent or just fail.
