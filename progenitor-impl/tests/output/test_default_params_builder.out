@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
+#[allow(unused_imports)]
+use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -236,7 +238,9 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    use super::{
+        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
+    };
     ///Builder for [`Client::default_params`]
     ///
     ///[`Client::default_params`]: super::Client::default_params

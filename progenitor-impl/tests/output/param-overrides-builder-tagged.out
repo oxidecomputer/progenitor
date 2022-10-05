@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
+#[allow(unused_imports)]
+use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -66,7 +68,9 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    use super::{
+        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
+    };
     ///Builder for [`Client::key_get`]
     ///
     ///[`Client::key_get`]: super::Client::key_get
@@ -118,7 +122,7 @@ pub mod builder {
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
             let url = format!("{}/key", client.baseurl,);
-            let mut query = Vec::new();
+            let mut query = Vec::with_capacity(2usize);
             if let Some(v) = &key {
                 query.push(("key", v.to_string()));
             }

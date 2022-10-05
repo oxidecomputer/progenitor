@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
+#[allow(unused_imports)]
+use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -1500,7 +1502,9 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    use super::{
+        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
+    };
     ///Builder for [`Client::control_hold`]
     ///
     ///[`Client::control_hold`]: super::Client::control_hold
@@ -1724,7 +1728,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let mut query = Vec::new();
+            let mut query = Vec::with_capacity(1usize);
             if let Some(v) = &minseq {
                 query.push(("minseq", v.to_string()));
             }

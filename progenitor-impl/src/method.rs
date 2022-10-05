@@ -111,6 +111,7 @@ enum OperationParameterType {
 enum OperationParameterKind {
     Path,
     Query(bool),
+    Header(bool),
     Body(BodyContentType),
 }
 
@@ -313,6 +314,7 @@ impl Generator {
                             parameter_data.name.clone(),
                             !parameter_data.required,
                         ));
+
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
                             api_name: parameter_data.name.clone(),
@@ -323,7 +325,38 @@ impl Generator {
                             ),
                         })
                     }
+                    openapiv3::Parameter::Header {
+                        parameter_data,
+                        style: openapiv3::HeaderStyle::Simple,
+                    } => {
+                        let mut schema = parameter_data.schema()?.to_schema();
+                        let name = sanitize(
+                            &format!(
+                                "{}-{}",
+                                operation.operation_id.as_ref().unwrap(),
+                                &parameter_data.name,
+                            ),
+                            Case::Pascal,
+                        );
 
+                        if !parameter_data.required {
+                            schema = make_optional(schema);
+                        }
+
+                        let typ = self
+                            .type_space
+                            .add_type_with_name(&schema, Some(name))?;
+
+                        Ok(OperationParameter {
+                            name: sanitize(&parameter_data.name, Case::Snake),
+                            api_name: parameter_data.name.clone(),
+                            description: parameter_data.description.clone(),
+                            typ: OperationParameterType::Type(typ),
+                            kind: OperationParameterKind::Header(
+                                parameter_data.required,
+                            ),
+                        })
+                    }
                     openapiv3::Parameter::Path { style, .. } => {
                         Err(Error::UnexpectedFormat(format!(
                             "unsupported style of path parameter {:#?}",
@@ -334,12 +367,6 @@ impl Generator {
                         Err(Error::UnexpectedFormat(format!(
                             "unsupported style of query parameter {:#?}",
                             style,
-                        )))
-                    }
-                    header @ openapiv3::Parameter::Header { .. } => {
-                        Err(Error::UnexpectedFormat(format!(
-                            "header parameters are not supported {:#?}",
-                            header,
                         )))
                     }
                     cookie @ openapiv3::Parameter::Cookie { .. } => {
@@ -716,7 +743,7 @@ impl Generator {
                 OperationParameterKind::Query(required) => {
                     let qn = &param.api_name;
                     let qn_ident = format_ident!("{}", &param.name);
-                    Some(if *required {
+                    let res = if *required {
                         quote! {
                             query.push((#qn, #qn_ident .to_string()));
                         }
@@ -726,16 +753,20 @@ impl Generator {
                                 query.push((#qn, v.to_string()));
                             }
                         }
-                    })
+                    };
+
+                    Some(res)
                 }
                 _ => None,
             })
             .collect::<Vec<_>>();
+
         let (query_build, query_use) = if query_items.is_empty() {
             (quote! {}, quote! {})
         } else {
+            let size = query_items.len();
             let query_build = quote! {
-                let mut query = Vec::new();
+                let mut query = Vec::with_capacity(#size);
                 #(#query_items)*
             };
             let query_use = quote! {
@@ -743,6 +774,45 @@ impl Generator {
             };
 
             (query_build, query_use)
+        };
+
+        let headers = method
+            .params
+            .iter()
+            .filter_map(|param| match &param.kind {
+                OperationParameterKind::Header(required) => {
+                    let hn = &param.api_name;
+                    let hn_ident = format_ident!("{}", &param.name);
+                    let res = if *required {
+                        quote! {
+                            header_map.append(#hn, HeaderValue::try_from(#hn_ident)?);
+                        }
+                    } else {
+                        quote! {
+                            if let Some(v) = #hn_ident {
+                                header_map.append(#hn, HeaderValue::try_from(v)?);
+                            }
+                        }
+                    };
+                    Some(res)
+                }
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+
+        let (headers_build, headers_use) = if headers.is_empty() {
+            (quote! {}, quote! {})
+        } else {
+            let size = headers.len();
+            let headers_build = quote! {
+                let mut header_map = HeaderMap::with_capacity(#size);
+                #(#headers)*
+            };
+            let headers_use = quote! {
+                .headers(header_map)
+            };
+
+            (headers_build, headers_use)
         };
 
         let websock_hdrs = if method.dropshot_websocket {
@@ -942,12 +1012,16 @@ impl Generator {
             #url_path
             #query_build
 
+            #headers_build
+
             let request = #client.client
                 . #method_func (url)
                 #(#body_func)*
                 #query_use
+                #headers_use
                 #websock_hdrs
                 .build()?;
+
             #pre_hook
             let result = #client.client
                 .execute(request)
@@ -2010,6 +2084,10 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                     OperationParameterKind::Path,
                     OperationParameterKind::Body(_),
                 ) => Ordering::Less,
+                (
+                    OperationParameterKind::Path,
+                    OperationParameterKind::Header(_),
+                ) => Ordering::Less,
 
                 // Query params are in lexicographic order.
                 (
@@ -2024,6 +2102,10 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                     OperationParameterKind::Query(_),
                     OperationParameterKind::Path,
                 ) => Ordering::Greater,
+                (
+                    OperationParameterKind::Query(_),
+                    OperationParameterKind::Header(_),
+                ) => Ordering::Less,
 
                 // Body params are last and should be singular.
                 (
@@ -2036,10 +2118,21 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                 ) => Ordering::Greater,
                 (
                     OperationParameterKind::Body(_),
+                    OperationParameterKind::Header(_),
+                ) => Ordering::Greater,
+                (
+                    OperationParameterKind::Body(_),
                     OperationParameterKind::Body(_),
                 ) => {
                     panic!("should only be one body")
                 }
+
+                // Header params are in lexicographic order.
+                (
+                    OperationParameterKind::Header(_),
+                    OperationParameterKind::Header(_),
+                ) => a_name.cmp(b_name),
+                (OperationParameterKind::Header(_), _) => Ordering::Greater,
             }
         },
     );

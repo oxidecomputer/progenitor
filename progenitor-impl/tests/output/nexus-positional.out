@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
+#[allow(unused_imports)]
+use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -3396,7 +3398,7 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
         let url = format!("{}/hardware/racks", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -3512,7 +3514,7 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
         let url = format!("{}/hardware/sleds", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -3631,7 +3633,7 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
         let url = format!("{}/images", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -3807,7 +3809,7 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
         let url = format!("{}/ip-pools", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -4004,7 +4006,7 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(2usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -4234,7 +4236,7 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -4504,7 +4506,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -4739,7 +4741,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -4957,7 +4959,7 @@ impl Client {
             encode_path(&disk_name.to_string()),
             encode_path(&metric_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(4usize);
         if let Some(v) = &end_time {
             query.push(("end_time", v.to_string()));
         }
@@ -5090,7 +5092,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -5310,7 +5312,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -5524,7 +5526,7 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -5777,7 +5779,7 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -6084,7 +6086,7 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &from_start {
             query.push(("from_start", v.to_string()));
         }
@@ -6274,7 +6276,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -6484,7 +6486,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -6798,7 +6800,7 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -7063,7 +7065,7 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -7338,7 +7340,7 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -7603,7 +7605,7 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -7759,7 +7761,7 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
         let url = format!("{}/roles", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(2usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -7869,7 +7871,7 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
         let url = format!("{}/sagas", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -8004,7 +8006,7 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
         let url = format!("{}/session/me/sshkeys", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -8165,7 +8167,7 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
         let url = format!("{}/silos", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -8338,7 +8340,7 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -8555,7 +8557,7 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/user", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -8670,7 +8672,7 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
         let url = format!("{}/timeseries/schema", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(2usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }
@@ -8771,7 +8773,7 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
         let url = format!("{}/users", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         if let Some(v) = &limit {
             query.push(("limit", v.to_string()));
         }

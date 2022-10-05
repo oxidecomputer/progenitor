@@ -261,6 +261,8 @@ impl Generator {
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
             #[allow(unused_imports)]
             use progenitor_client::{encode_path, RequestBuilderExt};
+            #[allow(unused_imports)]
+            use reqwest::header::{HeaderMap, HeaderValue};
 
             pub mod types {
                 use serde::{Deserialize, Serialize};
@@ -366,6 +368,8 @@ impl Generator {
                     encode_path,
                     ByteStream,
                     Error,
+                    HeaderMap,
+                    HeaderValue,
                     RequestBuilderExt,
                     ResponseValue,
                 };
@@ -403,6 +407,8 @@ impl Generator {
                     encode_path,
                     ByteStream,
                     Error,
+                    HeaderMap,
+                    HeaderValue,
                     RequestBuilderExt,
                     ResponseValue,
                 };

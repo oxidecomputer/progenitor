@@ -5,8 +5,11 @@ include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 
 fn main() {
     let client = Client::new("https://foo/bar");
-    let _ = client.enrol(&types::EnrolBody {
-        host: "".to_string(),
-        key: "".to_string(),
-    });
+    let _ = client.enrol(
+        "auth-token",
+        &types::EnrolBody {
+            host: "".to_string(),
+            key: "".to_string(),
+        },
+    );
 }

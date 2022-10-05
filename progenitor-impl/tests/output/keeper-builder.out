@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
+#[allow(unused_imports)]
+use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -762,8 +764,14 @@ impl Client {
 
 impl Client {
     ///Sends a `POST` request to `/enrol`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    /// - `body`
+    ///
     ///```ignore
     /// let response = client.enrol()
+    ///    .authorization(authorization)
     ///    .body(body)
     ///    .send()
     ///    .await;
@@ -773,8 +781,13 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/global/jobs`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    ///
     ///```ignore
     /// let response = client.global_jobs()
+    ///    .authorization(authorization)
     ///    .send()
     ///    .await;
     /// ```
@@ -783,8 +796,13 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/ping`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    ///
     ///```ignore
     /// let response = client.ping()
+    ///    .authorization(authorization)
     ///    .send()
     ///    .await;
     /// ```
@@ -793,8 +811,14 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/report/finish`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    /// - `body`
+    ///
     ///```ignore
     /// let response = client.report_finish()
+    ///    .authorization(authorization)
     ///    .body(body)
     ///    .send()
     ///    .await;
@@ -804,8 +828,14 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/report/output`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    /// - `body`
+    ///
     ///```ignore
     /// let response = client.report_output()
+    ///    .authorization(authorization)
     ///    .body(body)
     ///    .send()
     ///    .await;
@@ -815,8 +845,14 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/report/start`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    /// - `body`
+    ///
     ///```ignore
     /// let response = client.report_start()
+    ///    .authorization(authorization)
     ///    .body(body)
     ///    .send()
     ///    .await;
@@ -829,13 +865,16 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
+    use super::{
+        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
+    };
     ///Builder for [`Client::enrol`]
     ///
     ///[`Client::enrol`]: super::Client::enrol
     #[derive(Debug, Clone)]
     pub struct Enrol<'a> {
         client: &'a super::Client,
+        authorization: Result<String, String>,
         body: Result<types::EnrolBody, String>,
     }
 
@@ -843,8 +882,19 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
+                authorization: Err("authorization was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
+        }
+
+        pub fn authorization<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<String>,
+        {
+            self.authorization = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
@@ -859,10 +909,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/enrol`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self { client, body } = self;
+            let Self {
+                client,
+                authorization,
+                body,
+            } = self;
+            let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/enrol", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let mut header_map = HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let request = client
+                .client
+                .post(url)
+                .json(&body)
+                .headers(header_map)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -878,18 +940,38 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct GlobalJobs<'a> {
         client: &'a super::Client,
+        authorization: Result<String, String>,
     }
 
     impl<'a> GlobalJobs<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self {
+                client,
+                authorization: Err("authorization was not initialized".to_string()),
+            }
+        }
+
+        pub fn authorization<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<String>,
+        {
+            self.authorization = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self
         }
 
         ///Sends a `GET` request to `/global/jobs`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
-            let Self { client } = self;
+            let Self {
+                client,
+                authorization,
+            } = self;
+            let authorization = authorization.map_err(Error::InvalidRequest)?;
             let url = format!("{}/global/jobs", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let mut header_map = HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let request = client.client.get(url).headers(header_map).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -905,18 +987,38 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct Ping<'a> {
         client: &'a super::Client,
+        authorization: Result<String, String>,
     }
 
     impl<'a> Ping<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self {
+                client,
+                authorization: Err("authorization was not initialized".to_string()),
+            }
+        }
+
+        pub fn authorization<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<String>,
+        {
+            self.authorization = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self
         }
 
         ///Sends a `GET` request to `/ping`
         pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
-            let Self { client } = self;
+            let Self {
+                client,
+                authorization,
+            } = self;
+            let authorization = authorization.map_err(Error::InvalidRequest)?;
             let url = format!("{}/ping", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let mut header_map = HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let request = client.client.get(url).headers(header_map).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -932,6 +1034,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct ReportFinish<'a> {
         client: &'a super::Client,
+        authorization: Result<String, String>,
         body: Result<types::ReportFinishBody, String>,
     }
 
@@ -939,8 +1042,19 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
+                authorization: Err("authorization was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
+        }
+
+        pub fn authorization<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<String>,
+        {
+            self.authorization = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
@@ -955,10 +1069,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/report/finish`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-            let Self { client, body } = self;
+            let Self {
+                client,
+                authorization,
+                body,
+            } = self;
+            let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/finish", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let mut header_map = HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let request = client
+                .client
+                .post(url)
+                .json(&body)
+                .headers(header_map)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -974,6 +1100,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct ReportOutput<'a> {
         client: &'a super::Client,
+        authorization: Result<String, String>,
         body: Result<types::ReportOutputBody, String>,
     }
 
@@ -981,8 +1108,19 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
+                authorization: Err("authorization was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
+        }
+
+        pub fn authorization<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<String>,
+        {
+            self.authorization = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
@@ -997,10 +1135,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/report/output`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-            let Self { client, body } = self;
+            let Self {
+                client,
+                authorization,
+                body,
+            } = self;
+            let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/output", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let mut header_map = HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let request = client
+                .client
+                .post(url)
+                .json(&body)
+                .headers(header_map)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1016,6 +1166,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct ReportStart<'a> {
         client: &'a super::Client,
+        authorization: Result<String, String>,
         body: Result<types::ReportStartBody, String>,
     }
 
@@ -1023,8 +1174,19 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
+                authorization: Err("authorization was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
+        }
+
+        pub fn authorization<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<String>,
+        {
+            self.authorization = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
@@ -1039,10 +1201,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/report/start`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-            let Self { client, body } = self;
+            let Self {
+                client,
+                authorization,
+                body,
+            } = self;
+            let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/start", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let mut header_map = HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let request = client
+                .client
+                .post(url)
+                .json(&body)
+                .headers(header_map)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

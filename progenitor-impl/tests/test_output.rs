@@ -51,6 +51,7 @@ fn verify_apis(openapi_file: &str) {
             .with_tag(TagStyle::Separate),
     );
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
+    println!("{output}");
     expectorate::assert_contents(
         format!("tests/output/{}-builder-tagged.out", openapi_file),
         &output,
