@@ -23,7 +23,7 @@ thiserror = "1.0"
 # To publish, use a numbered version
 typify = "0.0.10"
 #typify = { git = "https://github.com/oxidecomputer/typify" }
-unicode-ident = "1.0.4"
+unicode-ident = "1.0.5"
 
 [dev-dependencies]
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
