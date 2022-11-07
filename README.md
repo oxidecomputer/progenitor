@@ -155,6 +155,9 @@ For example:
 
 This will produce a package in the specified directory.
 
+Options `--license` and `--registry-name` may also be used to improve metadata
+before publishing the static crate.
+
 The output will use the published `progenitor-client` crate by default
 if progenitor was built from a released version.  However, when using progenitor
 built from the repository, the `progenitor-client` will be inlined into the
