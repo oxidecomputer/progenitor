@@ -1,6 +1,6 @@
 // Copyright 2022 Oxide Computer Company
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
@@ -10,6 +10,8 @@ use thiserror::Error;
 use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
+
+pub use typify::TypeAdjustment;
 
 mod method;
 mod template;
@@ -49,6 +51,7 @@ pub struct GenerationSettings {
     pre_hook: Option<TokenStream>,
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
+    type_adjustments: HashMap<String, TypeAdjustment>,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
@@ -109,6 +112,16 @@ impl GenerationSettings {
         self.extra_derives.push(derive.to_string());
         self
     }
+
+    pub fn with_type_adjustment<S: AsRef<str>>(
+        &mut self,
+        type_name: S,
+        type_adjustment: &TypeAdjustment,
+    ) -> &mut Self {
+        self.type_adjustments
+            .insert(type_name.as_ref().to_string(), type_adjustment.clone());
+        self
+    }
 }
 
 impl Default for Generator {
@@ -133,6 +146,11 @@ impl Generator {
         settings.extra_derives.iter().for_each(|derive| {
             let _ = type_settings.with_derive(derive.clone());
         });
+        settings.type_adjustments.iter().for_each(
+            |(type_name, type_adjustment)| {
+                type_settings.with_type_adjustment(type_name, type_adjustment);
+            },
+        );
         Self {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
