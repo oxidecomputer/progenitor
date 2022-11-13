@@ -29,4 +29,4 @@ unicode-ident = "1.0.5"
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
 expectorate = "1.0"
 http = "0.2.8"
-hyper = "0.14.20"
+hyper = "0.14.23"
