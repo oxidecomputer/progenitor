@@ -3,7 +3,7 @@
 use std::{fs::File, path::PathBuf};
 
 use progenitor_impl::{
-    GenerationSettings, Generator, InterfaceStyle, TagStyle,
+    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch,
 };
 
 #[track_caller]
@@ -25,7 +25,8 @@ fn verify_apis(openapi_file: &str) {
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Merged)
-            .with_derive("JsonSchema"),
+            .with_derive("JsonSchema")
+            .with_patch("Name", TypePatch::default().with_derive("Hash")),
     );
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(

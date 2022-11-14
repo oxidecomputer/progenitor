@@ -1,11 +1,11 @@
 // Copyright 2022 Oxide Computer Company
 
-use std::path::Path;
+use std::{collections::HashMap, path::Path};
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
 use progenitor_impl::{
-    GenerationSettings, Generator, InterfaceStyle, TagStyle,
+    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch,
 };
 use quote::{quote, ToTokens};
 use serde::Deserialize;
@@ -80,6 +80,29 @@ struct MacroSettings {
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
     #[serde(default)]
     derives: Vec<ParseWrapper<syn::Path>>,
+    #[serde(default)]
+    patch: HashMap<ParseWrapper<syn::Type>, MacroPatch>,
+}
+
+#[derive(Deserialize)]
+struct MacroPatch {
+    #[serde(default)]
+    rename: Option<String>,
+    #[serde(default)]
+    derives: Vec<ParseWrapper<syn::Path>>,
+}
+
+impl From<MacroPatch> for TypePatch {
+    fn from(a: MacroPatch) -> Self {
+        let mut s = Self::default();
+        a.rename.iter().for_each(|rename| {
+            s.with_rename(rename);
+        });
+        a.derives.iter().for_each(|derive| {
+            s.with_derive(derive.to_token_stream().to_string());
+        });
+        s
+    }
 }
 
 #[derive(Deserialize)]
@@ -129,6 +152,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             pre_hook,
             post_hook,
             derives,
+            patch,
         } = serde_tokenstream::from_tokenstream(&item.into())?;
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);
@@ -143,6 +167,12 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
 
         derives.into_iter().for_each(|derive| {
             settings.with_derive(derive.to_token_stream());
+        });
+        patch.into_iter().for_each(|(type_name, patch)| {
+            settings.with_patch(
+                type_name.to_token_stream().to_string(),
+                &patch.into(),
+            );
         });
         (spec.into_inner(), settings)
     };

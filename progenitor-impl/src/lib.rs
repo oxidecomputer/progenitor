@@ -1,6 +1,6 @@
 // Copyright 2022 Oxide Computer Company
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
@@ -10,6 +10,8 @@ use thiserror::Error;
 use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
+
+pub use typify::TypeSpacePatch as TypePatch;
 
 mod method;
 mod template;
@@ -49,6 +51,7 @@ pub struct GenerationSettings {
     pre_hook: Option<TokenStream>,
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
+    patch: HashMap<String, TypePatch>,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
@@ -109,6 +112,16 @@ impl GenerationSettings {
         self.extra_derives.push(derive.to_string());
         self
     }
+
+    pub fn with_patch<S: AsRef<str>>(
+        &mut self,
+        type_name: S,
+        patch: &TypePatch,
+    ) -> &mut Self {
+        self.patch
+            .insert(type_name.as_ref().to_string(), patch.clone());
+        self
+    }
 }
 
 impl Default for Generator {
@@ -132,6 +145,9 @@ impl Generator {
             .with_struct_builder(settings.interface == InterfaceStyle::Builder);
         settings.extra_derives.iter().for_each(|derive| {
             let _ = type_settings.with_derive(derive.clone());
+        });
+        settings.patch.iter().for_each(|(type_name, patch)| {
+            type_settings.with_patch(type_name, patch);
         });
         Self {
             type_space: TypeSpace::new(&type_settings),
