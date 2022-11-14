@@ -57,7 +57,6 @@ mod builder_tagged {
     use futures::StreamExt;
 
     mod nexus_client {
-
         progenitor::generate_api!(
             spec = "../sample_openapi/nexus.json",
             interface = Builder,
