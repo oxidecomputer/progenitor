@@ -11,7 +11,7 @@ use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
-pub use typify::TypeAdjustment;
+pub use typify::TypeSpacePatch as TypePatch;
 
 mod method;
 mod template;
@@ -51,7 +51,7 @@ pub struct GenerationSettings {
     pre_hook: Option<TokenStream>,
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
-    type_adjustments: HashMap<String, TypeAdjustment>,
+    patch: HashMap<String, TypePatch>,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
@@ -113,13 +113,13 @@ impl GenerationSettings {
         self
     }
 
-    pub fn with_type_adjustment<S: AsRef<str>>(
+    pub fn with_patch<S: AsRef<str>>(
         &mut self,
         type_name: S,
-        type_adjustment: &TypeAdjustment,
+        patch: &TypePatch,
     ) -> &mut Self {
-        self.type_adjustments
-            .insert(type_name.as_ref().to_string(), type_adjustment.clone());
+        self.patch
+            .insert(type_name.as_ref().to_string(), patch.clone());
         self
     }
 }
@@ -146,11 +146,9 @@ impl Generator {
         settings.extra_derives.iter().for_each(|derive| {
             let _ = type_settings.with_derive(derive.clone());
         });
-        settings.type_adjustments.iter().for_each(
-            |(type_name, type_adjustment)| {
-                type_settings.with_type_adjustment(type_name, type_adjustment);
-            },
-        );
+        settings.patch.iter().for_each(|(type_name, patch)| {
+            type_settings.with_patch(type_name, patch);
+        });
         Self {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
