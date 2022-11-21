@@ -17,6 +17,11 @@ pub mod built_info {
     include!(concat!(env!("OUT_DIR"), "/built.rs"));
 }
 
+/// Determine if current version is a pre-release or was built from a git-repo
+fn release_is_unstable() -> bool {
+    !built_info::PKG_VERSION_PRE.is_empty() || built_info::GIT_VERSION.is_some()
+}
+
 #[derive(Parser)]
 struct Args {
     /// OpenAPI definition document (JSON or YAML)
@@ -38,6 +43,9 @@ struct Args {
     /// SDK tag style
     #[clap(value_enum, long, default_value_t = TagArg::Merged)]
     tags: TagArg,
+    /// Include client
+    #[clap(default_value = match release_is_unstable() { true => "true", false => "false" }, long, action = clap::ArgAction::Set)]
+    include_client: bool,
 }
 
 #[derive(Copy, Clone, ValueEnum)]
@@ -135,7 +143,7 @@ fn main() -> Result<()> {
                 \n",
                 name,
                 version,
-                dependencies(builder).join("\n"),
+                dependencies(builder, args.include_client).join("\n"),
             );
 
             save(&toml, tomlout.as_str())?;
@@ -150,7 +158,11 @@ fn main() -> Result<()> {
             /*
              * Create the Rust source file containing the generated client:
              */
-            let lib_code = format!("mod progenitor_client;\n\n{}", api_code);
+            let lib_code = if args.include_client {
+                format!("mod progenitor_client;\n\n{}", api_code)
+            } else {
+                api_code
+            };
             let mut librs = src.clone();
             librs.push("lib.rs");
             save(librs, lib_code.as_str())?;
@@ -158,10 +170,12 @@ fn main() -> Result<()> {
             /*
              * Create the Rust source file containing the support code:
              */
-            let progenitor_client_code = progenitor_client::code();
-            let mut clientrs = src;
-            clientrs.push("progenitor_client.rs");
-            save(clientrs, progenitor_client_code)?;
+            if args.include_client {
+                let progenitor_client_code = progenitor_client::code();
+                let mut clientrs = src;
+                clientrs.push("progenitor_client.rs");
+                save(clientrs, progenitor_client_code)?;
+            }
         }
 
         Err(e) => {
@@ -173,7 +187,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-pub fn dependencies(builder: Generator) -> Vec<String> {
+pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let dependency_versions: HashMap<String, String> = built_info::DEPENDENCIES
         .iter()
         .map(|(name, version)| (name.to_string(), version.to_string()))
@@ -182,13 +196,30 @@ pub fn dependencies(builder: Generator) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", dependency_versions.get("bytes").unwrap()),
         format!("futures-core = \"{}\"", dependency_versions.get("futures-core").unwrap()),
-        format!("percent-encoding = \"{}\"", dependency_versions.get("percent-encoding").unwrap()),
         format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", dependency_versions.get("reqwest").unwrap()),
         format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", dependency_versions.get("serde").unwrap()),
         format!("serde_urlencoded = \"{}\"", dependency_versions.get("serde_urlencoded").unwrap()),
     ];
 
     let type_space = builder.get_type_space();
+
+    let client_version_dep: String;
+    if include_client {
+        // code included from progenitor-client needs extra dependencies
+        deps.push(format!(
+            "percent-encoding = \"{}\"",
+            dependency_versions.get("percent-encoding").unwrap()
+        ));
+    } else {
+        let crate_version = if release_is_unstable() {
+            "*"
+        } else {
+            built_info::PKG_VERSION
+        };
+        client_version_dep =
+            format!("progenitor-client = \"{}\"", crate_version);
+        deps.push(client_version_dep);
+    }
 
     if type_space.uses_regress() {
         deps.push(format!(

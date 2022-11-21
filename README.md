@@ -153,24 +153,35 @@ For example:
 
 `cargo run --bin progenitor -- -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0`
 
-This will produce a package in the specified directory. The output has no
-persistent dependency on Progenitor including the `progenitor-client` crate.
+This will produce a package in the specified directory.
+
+The output will use the published `progenitor-client` crate by default
+if progenitor was built from a released version.  However, when using progenitor
+built from the repository, the `progenitor-client` will be inlined into the
+static crate by default.  The command line flag `--include-client` can be used
+to override the default behaviour.
+
+To ensure the output has no persistent dependency on Progenitor, enable `--include-client`.
+
 Here is an excerpt from the emitted `Cargo.toml`:
 
 ```toml
 [dependencies]
-chrono = { version = "0.4", features = ["serde"] }
-futures = "0.3"
-percent-encoding = "2.1"
-reqwest = { version = "0.11", features = ["json", "stream"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-uuid = { version = ">=0.8.0, <2.0.0", features = ["serde", "v4"] }
+bytes = "1.3.0"
+chrono = { version = "0.4.23", default-features=false, features = ["serde"] }
+futures-core = "0.3.25"
+percent-encoding = "2.2.0"
+reqwest = { version = "0.11.13", default-features=false, features = ["json", "stream"] }
+serde = { version = "1.0.152", features = ["derive"] }
+serde_urlencoded = "0.7.1"
+
 ```
+
+The dependency versions in the generated `Cargo.toml` are the same as the
+versions that were used when progenitor was built.
 
 Note that there is a dependency on `percent-encoding` which macro- and
 build.rs-generated clients is included from `progenitor-client`.
-
 
 ## Generation Styles
 

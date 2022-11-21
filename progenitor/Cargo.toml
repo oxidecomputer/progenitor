@@ -22,8 +22,8 @@ serde_yaml = "0.9"
 clap = { version = "4.1.1", features = ["derive"] }
 
 [build-dependencies]
-built = { version = "0.5" }
-project-root = "*"
+built = { version = "0.5", features = ["git2"] }
+project-root = "0.2"
 
 [dev-dependencies]
 base64 = "0.21"
