@@ -8,6 +8,7 @@ edition = "2021"
 chrono = { version = "0.4", features = ["serde"] }
 progenitor-client = { path = "../progenitor-client" }
 reqwest = { version = "0.11.12", features = ["json", "stream"] }
+reqwest-middleware = "0.2.0"
 base64 = "0.13"
 rand = "0.8"
 serde = { version = "1.0", features = ["derive"] }

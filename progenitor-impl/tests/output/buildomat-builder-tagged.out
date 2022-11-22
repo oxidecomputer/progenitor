@@ -1268,21 +1268,27 @@ pub mod types {
 #[derive(Clone, Debug)]
 pub struct Client {
     pub(crate) baseurl: String,
-    pub(crate) client: reqwest::Client,
+    pub(crate) client: reqwest_middleware::ClientWithMiddleware,
 }
 
 impl Client {
     pub fn new(baseurl: &str) -> Self {
         let dur = std::time::Duration::from_secs(15);
-        let client = reqwest::ClientBuilder::new()
-            .connect_timeout(dur)
-            .timeout(dur)
-            .build()
-            .unwrap();
+        let client = reqwest_middleware::ClientBuilder::new(
+            reqwest::ClientBuilder::new()
+                .connect_timeout(dur)
+                .timeout(dur)
+                .build()
+                .unwrap(),
+        )
+        .build();
         Self::new_with_client(baseurl, client)
     }
 
-    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+    pub fn new_with_client(
+        baseurl: &str,
+        client: reqwest_middleware::ClientWithMiddleware,
+    ) -> Self {
         Self {
             baseurl: baseurl.to_string(),
             client,
@@ -1293,7 +1299,7 @@ impl Client {
         &self.baseurl
     }
 
-    pub fn client(&self) -> &reqwest::Client {
+    pub fn client(&self) -> &reqwest_middleware::ClientWithMiddleware {
         &self.client
     }
 }

@@ -8,7 +8,7 @@ use std::ops::{Deref, DerefMut};
 
 use bytes::Bytes;
 use futures_core::Stream;
-use reqwest::RequestBuilder;
+use reqwest_middleware::RequestBuilder;
 use serde::{de::DeserializeOwned, Serialize};
 
 type InnerByteStream =
@@ -229,7 +229,7 @@ pub enum Error<E = ()> {
     InvalidRequest(String),
 
     /// A server error either due to the data, or with the connection.
-    CommunicationError(reqwest::Error),
+    CommunicationError(reqwest_middleware::Error),
 
     /// A documented, expected error response.
     ErrorResponse(ResponseValue<E>),
@@ -248,7 +248,13 @@ impl<E> Error<E> {
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
             Error::InvalidRequest(_) => None,
-            Error::CommunicationError(e) => e.status(),
+            Error::CommunicationError(e) => {
+                if let reqwest_middleware::Error::Reqwest(e) = e {
+                    e.status()
+                } else {
+                    None
+                }
+            }
             Error::ErrorResponse(rv) => Some(rv.status()),
             Error::InvalidResponsePayload(e) => e.status(),
             Error::UnexpectedResponse(r) => Some(r.status()),
@@ -282,6 +288,12 @@ impl<E> Error<E> {
 
 impl<E> From<reqwest::Error> for Error<E> {
     fn from(e: reqwest::Error) -> Self {
+        Self::CommunicationError(reqwest_middleware::Error::middleware(e))
+    }
+}
+
+impl<E> From<reqwest_middleware::Error> for Error<E> {
+    fn from(e: reqwest_middleware::Error) -> Self {
         Self::CommunicationError(e)
     }
 }

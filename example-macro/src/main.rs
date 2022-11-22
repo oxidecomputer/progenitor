@@ -12,7 +12,7 @@ generate_api!(
     derives = [schemars::JsonSchema],
 );
 
-fn all_done(_: &(), _result: &reqwest::Result<reqwest::Response>) {}
+fn all_done(_: &(), _result: &reqwest_middleware::Result<reqwest::Response>) {}
 
 mod buildomat {
     use progenitor::generate_api;
