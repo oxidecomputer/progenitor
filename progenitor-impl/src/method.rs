@@ -6,7 +6,7 @@ use std::{
     str::FromStr,
 };
 
-use openapiv3::{Components, Response, StatusCode};
+use openapiv3::{Components, Response, StatusCode, Parameter, ReferenceOr};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
 use typify::TypeId;
@@ -237,13 +237,17 @@ impl Generator {
         components: &Option<Components>,
         path: &str,
         method: &str,
+        path_parameters: &[ReferenceOr<Parameter>],
     ) -> Result<OperationMethod> {
         let operation_id = operation.operation_id.as_ref().unwrap();
 
         let mut query: Vec<(String, bool)> = Vec::new();
-        let mut params = operation
-            .parameters
+
+            // Process path parameters before operation parameters so that operations can override
+            // shared path parameters
+            let mut params = path_parameters
             .iter()
+            .chain(operation.parameters.iter())
             .map(|parameter| {
                 match parameter.item(components)? {
                     openapiv3::Parameter::Path {
@@ -760,6 +764,7 @@ impl Generator {
                 _ => None,
             })
             .collect();
+
         let url_path = method.path.compile(url_renames, client.clone());
 
         // Generate code to handle the body param.

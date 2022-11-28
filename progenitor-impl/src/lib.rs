@@ -179,18 +179,17 @@ impl Generator {
             .flat_map(|(path, ref_or_item)| {
                 // Exclude externally defined path items.
                 let item = ref_or_item.as_item().unwrap();
-                // TODO punt on parameters that apply to all path items for now.
-                assert!(item.parameters.is_empty());
                 item.iter().map(move |(method, operation)| {
-                    (path.as_str(), method, operation)
+                    (path.as_str(), method, operation, &item.parameters)
                 })
             })
-            .map(|(path, method, operation)| {
+            .map(|(path, method, operation, path_parameters)| {
                 self.process_operation(
                     operation,
                     &spec.components,
                     path,
                     method,
+                    path_parameters,
                 )
             })
             .collect::<Result<Vec<_>>>()?;
