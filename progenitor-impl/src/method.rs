@@ -707,13 +707,11 @@ impl Generator {
                     let qn_ident = format_ident!("{}", &param.name);
                     Some(if *required {
                         quote! {
-                            req_query_args.push((#qn, #qn_ident .to_string()));
+                            (#qn, #qn_ident .to_string())
                         }
                     } else {
                         quote! {
-                            if let Some(v) = & #qn_ident {
-                                req_query_args.push((#qn, v.to_string()));
-                            }
+                            (#qn, #qn_ident.map(|v| v.to_string()))
                         }
                     })
                 }
@@ -724,11 +722,12 @@ impl Generator {
             (quote! {}, quote! {})
         } else {
             let query_build = quote! {
-                let mut req_query_args = Vec::new();
-                #(#query_items)*
+                let query = [
+                    #(#query_items,)*
+                ].into_iter().filter_map(|(name, arg)| arg.map(|value| (name, value))).collect::<Vec<_>>();
             };
             let query_use = quote! {
-                .query(&req_query_args)
+                .query(&query)
             };
 
             (query_build, query_use)
