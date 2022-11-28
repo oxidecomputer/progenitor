@@ -66,6 +66,11 @@ fn test_propolis_server() {
     verify_apis("propolis-server");
 }
 
+#[test]
+fn test_param_override() {
+    verify_apis("param-overrides");
+}
+
 // TODO this file is full of inconsistencies and incorrectly specified types.
 // It's an interesting test to consider whether we try to do our best to
 // interpret the intent or just fail.

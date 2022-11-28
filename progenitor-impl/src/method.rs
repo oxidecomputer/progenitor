@@ -13,7 +13,7 @@ use typify::TypeId;
 
 use crate::{
     template::PathTemplate,
-    util::{sanitize, Case},
+    util::{sanitize, Case, items, parameter_map},
     Error, Generator, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
@@ -243,13 +243,17 @@ impl Generator {
 
         let mut query: Vec<(String, bool)> = Vec::new();
 
-            // Process path parameters before operation parameters so that operations can override
-            // shared path parameters
-            let mut params = path_parameters
-            .iter()
-            .chain(operation.parameters.iter())
+        let mut combined_path_parameters = parameter_map(&path_parameters, &components)?;
+        for operation_param in items(&operation.parameters, &components) {
+            let parameter = operation_param?;
+            combined_path_parameters.insert(&parameter.parameter_data_ref().name, parameter);
+        }
+
+        // Filter out any path parameters that have been overridden by an operation parameter
+        let mut params = combined_path_parameters
+            .values()
             .map(|parameter| {
-                match parameter.item(components)? {
+                match parameter {
                     openapiv3::Parameter::Path {
                         parameter_data,
                         style: openapiv3::PathStyle::Simple,
