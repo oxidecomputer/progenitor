@@ -34,14 +34,23 @@ impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
     }
 }
 
-pub(crate) fn items<'a, T>(refs: &'a [ReferenceOr<T>], components: &'a Option<Components>) -> impl Iterator<Item = Result<&'a T>> where T: ComponentLookup {
+pub(crate) fn items<'a, T>(
+    refs: &'a [ReferenceOr<T>],
+    components: &'a Option<Components>,
+) -> impl Iterator<Item = Result<&'a T>>
+where
+    T: ComponentLookup,
+{
     refs.iter().map(|r| r.item(components))
 }
 
-pub(crate) fn parameter_map<'a>(refs: &'a [ReferenceOr<Parameter>], components: &'a Option<Components>) -> Result<BTreeMap<&'a String, &'a Parameter>> {
-    items(refs, components).map(|res| {
-        res.map(|param| (&param.parameter_data_ref().name, param))
-    }).collect()
+pub(crate) fn parameter_map<'a>(
+    refs: &'a [ReferenceOr<Parameter>],
+    components: &'a Option<Components>,
+) -> Result<BTreeMap<&'a String, &'a Parameter>> {
+    items(refs, components)
+        .map(|res| res.map(|param| (&param.parameter_data_ref().name, param)))
+        .collect()
 }
 
 impl ComponentLookup for Parameter {

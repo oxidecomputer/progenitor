@@ -6,14 +6,14 @@ use std::{
     str::FromStr,
 };
 
-use openapiv3::{Components, Response, StatusCode, Parameter, ReferenceOr};
+use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
 use typify::TypeId;
 
 use crate::{
     template::PathTemplate,
-    util::{sanitize, Case, items, parameter_map},
+    util::{items, parameter_map, sanitize, Case},
     Error, Generator, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
@@ -243,10 +243,12 @@ impl Generator {
 
         let mut query: Vec<(String, bool)> = Vec::new();
 
-        let mut combined_path_parameters = parameter_map(&path_parameters, &components)?;
+        let mut combined_path_parameters =
+            parameter_map(&path_parameters, &components)?;
         for operation_param in items(&operation.parameters, &components) {
             let parameter = operation_param?;
-            combined_path_parameters.insert(&parameter.parameter_data_ref().name, parameter);
+            combined_path_parameters
+                .insert(&parameter.parameter_data_ref().name, parameter);
         }
 
         // Filter out any path parameters that have been overridden by an operation parameter
