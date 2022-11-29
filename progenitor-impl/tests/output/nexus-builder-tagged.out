@@ -14499,16 +14499,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/hardware/racks", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14690,16 +14688,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/hardware/sleds", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14881,16 +14877,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/images", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15172,16 +15166,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/ip-pools", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15536,13 +15528,13 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&pool_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16028,16 +16020,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/organizations", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16541,16 +16531,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -17012,16 +17000,14 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -17486,19 +17472,15 @@ pub mod builder {
                 encode_path(&disk_name.to_string()),
                 encode_path(&metric_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &end_time {
-                query.push(("end_time", v.to_string()));
-            }
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &start_time {
-                query.push(("start_time", v.to_string()));
-            }
+            let query = [
+                ("end_time", end_time.map(|v| v.to_string())),
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("start_time", start_time.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -17665,16 +17647,14 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18099,16 +18079,14 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18550,16 +18528,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19134,16 +19110,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19841,16 +19815,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &from_start {
-                query.push(("from_start", v.to_string()));
-            }
-            if let Some(v) = &max_bytes {
-                query.push(("max_bytes", v.to_string()));
-            }
-            if let Some(v) = &most_recent {
-                query.push(("most_recent", v.to_string()));
-            }
+            let query = [
+                ("from_start", from_start.map(|v| v.to_string())),
+                ("max_bytes", max_bytes.map(|v| v.to_string())),
+                ("most_recent", most_recent.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20302,16 +20274,14 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20737,16 +20707,14 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21479,16 +21447,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -22106,16 +22072,14 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -22778,16 +22742,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23406,16 +23368,14 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&subnet_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23618,13 +23578,13 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/roles", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23805,16 +23765,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/sagas", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24029,16 +23987,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/session/me/sshkeys", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24326,16 +24282,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/silos", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24636,16 +24590,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25045,16 +24997,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/user", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25223,13 +25173,13 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/timeseries/schema", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25391,16 +25341,14 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/users", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
+            let query = [
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;

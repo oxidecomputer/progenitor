@@ -66,10 +66,14 @@ impl Client {
             encode_path(&type_.to_string()),
             encode_path(&trait_.to_string()),
         );
-        let mut query = Vec::new();
-        query.push(("if", if_.to_string()));
-        query.push(("in", in_.to_string()));
-        query.push(("use", use_.to_string()));
+        let query = [
+            ("if", if_.to_string()),
+            ("in", in_.to_string()),
+            ("use", use_.to_string()),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;

@@ -3387,19 +3387,14 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
         let url = format!("{}/hardware/racks", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3503,19 +3498,14 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
         let url = format!("{}/hardware/sleds", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3622,19 +3612,14 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
         let url = format!("{}/images", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3798,19 +3783,14 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
         let url = format!("{}/ip-pools", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3995,15 +3975,13 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4225,19 +4203,14 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4495,19 +4468,14 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4730,19 +4698,14 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4948,23 +4911,15 @@ impl Client {
             encode_path(&disk_name.to_string()),
             encode_path(&metric_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &end_time {
-            query.push(("end_time", v.to_string()));
-        }
-
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &start_time {
-            query.push(("start_time", v.to_string()));
-        }
-
+        let query = [
+            ("end_time", end_time.map(|v| v.to_string())),
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("start_time", start_time.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5081,19 +5036,14 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5301,19 +5251,14 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5515,19 +5460,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5768,19 +5708,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6075,19 +6010,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &from_start {
-            query.push(("from_start", v.to_string()));
-        }
-
-        if let Some(v) = &max_bytes {
-            query.push(("max_bytes", v.to_string()));
-        }
-
-        if let Some(v) = &most_recent {
-            query.push(("most_recent", v.to_string()));
-        }
-
+        let query = [
+            ("from_start", from_start.map(|v| v.to_string())),
+            ("max_bytes", max_bytes.map(|v| v.to_string())),
+            ("most_recent", most_recent.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6265,19 +6195,14 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6475,19 +6400,14 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6789,19 +6709,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7054,19 +6969,14 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7329,19 +7239,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7594,19 +7499,14 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7750,15 +7650,13 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
         let url = format!("{}/roles", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7860,19 +7758,14 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
         let url = format!("{}/sagas", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7995,19 +7888,14 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
         let url = format!("{}/session/me/sshkeys", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8156,19 +8044,14 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
         let url = format!("{}/silos", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8329,19 +8212,14 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8546,19 +8424,14 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/user", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8661,15 +8534,13 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
         let url = format!("{}/timeseries/schema", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8762,19 +8633,14 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
         let url = format!("{}/users", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
-        if let Some(v) = &sort_by {
-            query.push(("sort_by", v.to_string()));
-        }
-
+        let query = [
+            ("limit", limit.map(|v| v.to_string())),
+            ("page_token", page_token.map(|v| v.to_string())),
+            ("sort_by", sort_by.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
