@@ -1,7 +1,7 @@
 // Copyright 2022 Oxide Computer Company
 
 use indexmap::IndexMap;
-use openapiv3::{SecurityScheme, OAuth2Flow};
+use openapiv3::{OAuth2Flow, SecurityScheme};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
@@ -48,7 +48,8 @@ impl<'a> From<(&'a String, &'a SecurityScheme)>
 impl<'a> SecuritySchemeAuthenticator<'a> {
     pub fn new(name: &'a String, scheme: &'a SecurityScheme) -> Self {
         let base_struct_name = sanitize(name, Case::Pascal);
-        let base_struct_ident = format_ident!("{}SecurityScheme", base_struct_name);
+        let base_struct_ident =
+            format_ident!("{}SecurityScheme", base_struct_name);
 
         Self {
             scheme,
@@ -57,7 +58,9 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
     }
 
     pub(crate) fn generate_tokens(&self) -> Result<TokenStream> {
-        let Self { base_struct_ident, .. } = self;
+        let Self {
+            base_struct_ident, ..
+        } = self;
         let structs = self.generate_structs()?;
         let impls = self.generate_impls()?;
         let apply_fn = self.generate_apply()?;
@@ -83,7 +86,9 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
     }
 
     fn generate_structs(&self) -> Result<TokenStream> {
-        let Self { base_struct_ident, .. } = self;
+        let Self {
+            base_struct_ident, ..
+        } = self;
 
         match self.scheme {
             SecurityScheme::APIKey { .. } => {
@@ -96,7 +101,7 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                         bearer_token: String
                     }
                 }),
-                "basic" => Ok(quote!{
+                "basic" => Ok(quote! {
                     #[derive(Debug)]
                     pub struct #base_struct_ident {
                         basic_token: String
@@ -121,55 +126,66 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                     &flows.implicit,
                     &flows.password,
                     &flows.client_credentials,
-                    &flows.authorization_code
-                ].into_iter().filter_map(|v| v.as_ref()).map(|flow| {
-                    match flow {
-                        OAuth2Flow::Implicit { .. } => {
-                            unimplemented!("Implicit OAuth2 is not supported")
-                        },
-                        OAuth2Flow::Password { .. } => {
-                            let struct_ident = format_ident!("{}PasswordBuilder", base_struct_ident);
-                            quote! {
-                                #[derive(Debug)]
-                                pub struct #struct_ident {
-                                    client_id: ClientId,
-                                    client_secret: ClientSecret,
-                                    scopes: Vec<Scope>,
-                                    oauth_client: BasicClient,
-                                    username: ResourceOwnerUsername,
-                                    password: ResourceOwnerPassword,
-                                }
-                            }
-                        },
-                        OAuth2Flow::ClientCredentials { .. } => {
-                            let struct_ident = format_ident!("{}ClientCredentialsBuilder", base_struct_ident);
-                            quote! {
-                                #[derive(Debug)]
-                                pub struct #struct_ident {
-                                    client_id: ClientId,
-                                    client_secret: ClientSecret,
-                                    scopes: Vec<Scope>,
-                                    oauth_client: BasicClient,
-                                }
-                            }
-                        },
-                        OAuth2Flow::AuthorizationCode { .. } => {
-                            let struct_ident = format_ident!("{}AuthorizationCodeBuilder", base_struct_ident);
-                            quote! {
-                                #[derive(Debug)]
-                                pub struct #struct_ident {
-                                    client_id: ClientId,
-                                    client_secret: ClientSecret,
-                                    scopes: Vec<Scope>,
-                                    redirect_url: RedirectUrl,
-                                    oauth_client: BasicClient,
-                                    verifier: Option<PkceCodeVerifier>,
-                                    csrf: Option<CsrfToken>,
-                                }
-                            }
-                        },
+                    &flows.authorization_code,
+                ]
+                .into_iter()
+                .filter_map(|v| v.as_ref())
+                .map(|flow| match flow {
+                    OAuth2Flow::Implicit { .. } => {
+                        unimplemented!("Implicit OAuth2 is not supported")
                     }
-                }).collect::<Vec<_>>();
+                    OAuth2Flow::Password { .. } => {
+                        let struct_ident = format_ident!(
+                            "{}PasswordBuilder",
+                            base_struct_ident
+                        );
+                        quote! {
+                            #[derive(Debug)]
+                            pub struct #struct_ident {
+                                client_id: ClientId,
+                                client_secret: ClientSecret,
+                                scopes: Vec<Scope>,
+                                oauth_client: BasicClient,
+                                username: ResourceOwnerUsername,
+                                password: ResourceOwnerPassword,
+                            }
+                        }
+                    }
+                    OAuth2Flow::ClientCredentials { .. } => {
+                        let struct_ident = format_ident!(
+                            "{}ClientCredentialsBuilder",
+                            base_struct_ident
+                        );
+                        quote! {
+                            #[derive(Debug)]
+                            pub struct #struct_ident {
+                                client_id: ClientId,
+                                client_secret: ClientSecret,
+                                scopes: Vec<Scope>,
+                                oauth_client: BasicClient,
+                            }
+                        }
+                    }
+                    OAuth2Flow::AuthorizationCode { .. } => {
+                        let struct_ident = format_ident!(
+                            "{}AuthorizationCodeBuilder",
+                            base_struct_ident
+                        );
+                        quote! {
+                            #[derive(Debug)]
+                            pub struct #struct_ident {
+                                client_id: ClientId,
+                                client_secret: ClientSecret,
+                                scopes: Vec<Scope>,
+                                redirect_url: RedirectUrl,
+                                oauth_client: BasicClient,
+                                verifier: Option<PkceCodeVerifier>,
+                                csrf: Option<CsrfToken>,
+                            }
+                        }
+                    }
+                })
+                .collect::<Vec<_>>();
 
                 Ok(quote! {
                     #schema_struct
@@ -184,7 +200,9 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
     }
 
     fn generate_impls(&self) -> Result<TokenStream> {
-        let Self { base_struct_ident, .. } = self;
+        let Self {
+            base_struct_ident, ..
+        } = self;
 
         match self.scheme {
             SecurityScheme::APIKey { .. } => {
@@ -517,7 +535,9 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                 ),
             },
             SecurityScheme::OAuth2 { .. } => {
-                let Self { base_struct_ident, .. } = self;
+                let Self {
+                    base_struct_ident, ..
+                } = self;
 
                 Ok(quote! {
                     impl #base_struct_ident {
