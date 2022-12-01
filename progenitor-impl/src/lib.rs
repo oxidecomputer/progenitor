@@ -186,7 +186,7 @@ impl Generator {
                 // Exclude externally defined path items.
                 let item = ref_or_item.as_item().unwrap();
                 // TODO punt on parameters that apply to all path items for now.
-                assert!(item.parameters.is_empty());
+                // assert!(item.parameters.is_empty());
                 item.iter().map(move |(method, operation)| {
                     (path.as_str(), method, operation)
                 })
@@ -260,6 +260,7 @@ impl Generator {
                             PkceCodeChallenge,
                             PkceCodeVerifier,
                             RedirectUrl,
+                            RefreshToken,
                             RequestTokenError,
                             reqwest::async_http_client,
                             ResourceOwnerUsername,
@@ -270,11 +271,13 @@ impl Generator {
                             TokenUrl,
                             url::Url,
                         };
+                        use std::time::Instant;
 
                         use crate::Error;
 
                         struct AccessToken {
                             secret: String,
+                            refresh: Option<String>,
                             expires_at: std::time::Instant,
                         }
 
@@ -282,6 +285,7 @@ impl Generator {
                             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
                                 f.debug_struct("AccessToken")
                                     .field("secret", &"<redacted>".to_string())
+                                    .field("refresh", &"<redacted>".to_string())
                                     .field("expires_at", &self.expires_at)
                                     .finish()
                             }

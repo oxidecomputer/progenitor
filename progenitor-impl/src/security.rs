@@ -297,6 +297,7 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                                             refresh_url: #refresh_url,
                                             access_token: std::sync::Arc::new(std::sync::RwLock::new(AccessToken {
                                                 secret: token.access_token().secret().to_string(),
+                                                refresh: token.refresh_token().map(|token| token.secret().to_string()),
                                                 expires_at,
                                             })),
                                         })
@@ -362,6 +363,7 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                                             refresh_url: #refresh_url,
                                             access_token: std::sync::Arc::new(std::sync::RwLock::new(AccessToken {
                                                 secret: token.access_token().secret().to_string(),
+                                                refresh: token.refresh_token().map(|token| token.secret().to_string()),
                                                 expires_at,
                                             })),
                                         })
@@ -452,6 +454,7 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                                             refresh_url: #refresh_url,
                                             access_token: std::sync::Arc::new(std::sync::RwLock::new(AccessToken {
                                                 secret: token.access_token().secret().to_string(),
+                                                refresh: token.refresh_token().map(|token| token.secret().to_string()),
                                                 expires_at,
                                             })),
                                         })
@@ -541,10 +544,44 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
 
                 Ok(quote! {
                     impl #base_struct_ident {
+                        async fn refresh(&self) -> Result<bool, OAuthTokenError> {
+                            if let Ok(mut guard) = self.access_token.write() {
+                                if let Some(token) = guard.refresh.as_ref() {
+                                    let refresh = self.oauth_client.exchange_refresh_token(&RefreshToken::new(token.to_string())).request_async(async_http_client)
+                                        .await?;
+
+                                    guard.secret = refresh.access_token().secret().to_string();
+
+                                    if let Some(new_refresh_token) = refresh.refresh_token() {
+                                        guard.refresh = Some(new_refresh_token.secret().to_string());
+                                    }
+
+                                    Ok(true)
+                                } else {
+                                    Ok(false)
+                                }
+                            } else {
+                                Ok(false)
+                            }
+                        }
+
+                        fn token_is_expired(&self) -> bool {
+                            if let Ok(guard) = self.access_token.read() {
+                                guard.expires_at <= Instant::now()
+                            } else {
+                                // If we do not have an access token then we consider it to be expired
+                                true
+                            }
+                        }
+
                         pub(crate) async fn apply(
                             &self,
                             mut req: reqwest::Request,
                         ) -> Result<reqwest::Request, Error> {
+                            if self.token_is_expired() {
+                                self.refresh();
+                            }
+
                             if let Ok(guard) = self.access_token.read() {
                                 let headers = req.headers_mut();
                                 headers.insert(
