@@ -247,7 +247,86 @@ impl Generator {
                     };
 
                     pub mod security {
+                        use oauth2::{
+                            AuthUrl,
+                            AuthorizationCode,
+                            basic::{
+                                BasicClient,
+                                BasicErrorResponseType,
+                            },
+                            ClientId,
+                            ClientSecret,
+                            CsrfToken,
+                            PkceCodeChallenge,
+                            PkceCodeVerifier,
+                            RedirectUrl,
+                            RequestTokenError,
+                            reqwest::async_http_client,
+                            ResourceOwnerUsername,
+                            ResourceOwnerPassword,
+                            Scope,
+                            StandardErrorResponse,
+                            TokenResponse,
+                            TokenUrl,
+                            url::Url,
+                        };
+
                         use crate::Error;
+
+                        struct AccessToken {
+                            secret: String,
+                            expires_at: std::time::Instant,
+                        }
+
+                        impl std::fmt::Debug for AccessToken {
+                            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                                f.debug_struct("AccessToken")
+                                    .field("secret", &"<redacted>".to_string())
+                                    .field("expires_at", &self.expires_at)
+                                    .finish()
+                            }
+                        }
+
+                        #[derive(Debug)]
+                        pub enum OAuthClientBuildError {
+                            InvalidCsrfToken,
+                            MissingCsrfToken,
+                            MissingPkceVerifier,
+                            Token(OAuthTokenError),
+                            Url(oauth2::url::ParseError),
+                        }
+
+                        impl From<oauth2::url::ParseError> for OAuthClientBuildError {
+                            fn from(err: oauth2::url::ParseError) -> Self {
+                                OAuthClientBuildError::Url(err)
+                            }
+                        }
+
+                        type TokenClientError = RequestTokenError<oauth2::reqwest::Error<reqwest::Error>, StandardErrorResponse<BasicErrorResponseType>>;
+
+                        #[derive(Debug)]
+                        pub enum OAuthTokenError {
+                            Client(TokenClientError),
+                            ExpirationOutOfBounds,
+                        }
+
+                        impl From<OAuthTokenError> for OAuthClientBuildError {
+                            fn from(err: OAuthTokenError) -> Self {
+                                OAuthClientBuildError::Token(err)
+                            }
+                        }
+
+                        impl From<TokenClientError> for OAuthTokenError {
+                            fn from(err: TokenClientError) -> Self {
+                                OAuthTokenError::Client(err)
+                            }
+                        }
+
+                        impl From<TokenClientError> for OAuthClientBuildError {
+                            fn from(err: TokenClientError) -> Self {
+                                OAuthClientBuildError::Token(err.into())
+                            }
+                        }
 
                         #security_trait
                         #(#security_scheme_tokens)*
