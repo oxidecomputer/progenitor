@@ -181,7 +181,6 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                             #[derive(Debug)]
                             pub struct #struct_ident {
                                 scopes: Vec<Scope>,
-                                redirect_url: RedirectUrl,
                                 oauth_client: BasicClient,
                                 verifier: Option<PkceCodeVerifier>,
                                 csrf: Option<CsrfToken>,
@@ -453,13 +452,12 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                                     ) -> Result<#builder_struct, OAuthClientBuildError> {
                                         Ok(#builder_struct {
                                             scopes: scopes.into_iter().map(Scope::new).collect::<Vec<_>>(),
-                                            redirect_url: RedirectUrl::new(redirect_url)?,
                                             oauth_client: BasicClient::new(
                                                 ClientId::new(client_id),
                                                 Some(ClientSecret::new(client_secret)),
                                                 AuthUrl::new(#authorization_url.to_string())?,
                                                 Some(TokenUrl::new(#token_url.to_string())?),
-                                            ),
+                                            ).set_redirect_uri(RedirectUrl::new(redirect_url)?),
                                             verifier: None,
                                             csrf: None,
                                         })
