@@ -207,7 +207,7 @@ impl Generator {
                 // Exclude externally defined path items.
                 let item = ref_or_item.as_item().unwrap();
                 // TODO punt on parameters that apply to all path items for now.
-                // assert!(item.parameters.is_empty());
+                assert!(item.parameters.is_empty());
                 item.iter().map(move |(method, operation)| {
                     (path.as_str(), method, operation)
                 })
