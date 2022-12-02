@@ -707,7 +707,7 @@ impl Generator {
                     let qn_ident = format_ident!("{}", &param.name);
                     Some(if *required {
                         quote! {
-                            (#qn, #qn_ident .to_string())
+                            (#qn, Some(#qn_ident .to_string()))
                         }
                     } else {
                         quote! {

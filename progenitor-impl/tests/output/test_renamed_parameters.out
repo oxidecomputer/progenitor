@@ -67,9 +67,9 @@ impl Client {
             encode_path(&trait_.to_string()),
         );
         let query = [
-            ("if", if_.to_string()),
-            ("in", in_.to_string()),
-            ("use", use_.to_string()),
+            ("if", Some(if_.to_string())),
+            ("in", Some(in_.to_string())),
+            ("use", Some(use_.to_string())),
         ]
         .into_iter()
         .filter_map(|(name, arg)| arg.map(|value| (name, value)))
