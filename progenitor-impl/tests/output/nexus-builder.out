@@ -1359,6 +1359,15 @@ pub mod types {
         }
     }
 
+    impl ToString for IpNet {
+        fn to_string(&self) -> String {
+            match self {
+                Self::V4(x) => x.to_string(),
+                Self::V6(x) => x.to_string(),
+            }
+        }
+    }
+
     ///Identity-related metadata that's included in nearly all public API
     /// objects
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
