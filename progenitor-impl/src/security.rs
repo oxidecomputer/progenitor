@@ -8,7 +8,7 @@ use quote::{format_ident, quote};
 use crate::util::{sanitize, Case};
 use crate::Result;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct SecurityRequirements(pub Vec<Vec<(Ident, Vec<String>)>>);
 
 impl From<&Vec<IndexMap<String, Vec<String>>>> for SecurityRequirements {
@@ -132,7 +132,17 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                 .filter_map(|v| v.as_ref())
                 .map(|flow| match flow {
                     OAuth2Flow::Implicit { .. } => {
-                        unimplemented!("Implicit OAuth2 is not supported")
+                        let struct_ident = format_ident!(
+                            "{}ImplicitBuilder",
+                            base_struct_ident
+                        );
+                        quote! {
+                            #[derive(Debug)]
+                            pub struct #struct_ident {
+                                oauth_client: BasicClient,
+                                csrf: Option<CsrfToken>,
+                            }
+                        }
                     }
                     OAuth2Flow::Password { .. } => {
                         let struct_ident = format_ident!(
@@ -142,8 +152,6 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                         quote! {
                             #[derive(Debug)]
                             pub struct #struct_ident {
-                                client_id: ClientId,
-                                client_secret: ClientSecret,
                                 scopes: Vec<Scope>,
                                 oauth_client: BasicClient,
                                 username: ResourceOwnerUsername,
@@ -159,8 +167,6 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                         quote! {
                             #[derive(Debug)]
                             pub struct #struct_ident {
-                                client_id: ClientId,
-                                client_secret: ClientSecret,
                                 scopes: Vec<Scope>,
                                 oauth_client: BasicClient,
                             }
@@ -174,8 +180,6 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                         quote! {
                             #[derive(Debug)]
                             pub struct #struct_ident {
-                                client_id: ClientId,
-                                client_secret: ClientSecret,
                                 scopes: Vec<Scope>,
                                 redirect_url: RedirectUrl,
                                 oauth_client: BasicClient,
@@ -234,8 +238,70 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                     &flows.authorization_code
                 ].into_iter().filter_map(|v| v.as_ref()).map(|flow| {
                     match flow {
-                        OAuth2Flow::Implicit { .. } => {
-                            unimplemented!("Implicit OAuth2 is not supported")
+                        OAuth2Flow::Implicit { authorization_url, refresh_url, .. } => {
+                            let builder_struct = format_ident!("{}ImplicitBuilder", base_struct_ident);
+
+                            let schema_impl = quote! {
+                                impl #base_struct_ident {
+                                    pub fn implicit(
+                                        client_id: String,
+                                        client_secret: String,
+                                    ) -> Result<#builder_struct, OAuthClientBuildError> {
+                                        Ok(#builder_struct {
+                                            oauth_client: BasicClient::new(
+                                                ClientId::new(client_id),
+                                                Some(ClientSecret::new(client_secret)),
+                                                // Required by BasicClient, but is not needed
+                                                AuthUrl::new(#authorization_url.to_string())?,
+                                                None,
+                                            ),
+                                            csrf: None,
+                                        })
+                                    }
+                                }
+                            };
+
+                            let refresh_url = refresh_url.as_ref().map(|s| s.as_str()).unwrap_or("");
+
+                            let builder_impl = quote! {
+                                impl #builder_struct {
+                                    pub fn url(&mut self) -> Url {
+                                        let (url, csrf) = self.oauth_client.authorize_url(CsrfToken::new_random)
+                                            .use_implicit_flow()
+                                            .url();
+
+                                        self.csrf = Some(csrf);
+
+                                        url
+                                    }
+
+                                    pub async fn build(
+                                        mut self,
+                                        csrf: CsrfToken,
+                                        access_token: String,
+                                        expires_at: Instant,
+                                    ) -> Result<#base_struct_ident, OAuthClientBuildError> {
+                                        if csrf.secret() != self.csrf.take().ok_or(OAuthClientBuildError::MissingCsrfToken)?.secret() {
+                                            return Err(OAuthClientBuildError::InvalidCsrfToken);
+                                        }
+
+                                        Ok(#base_struct_ident {
+                                            oauth_client: self.oauth_client,
+                                            refresh_url: #refresh_url,
+                                            access_token: std::sync::Arc::new(std::sync::RwLock::new(AccessToken {
+                                                secret: access_token,
+                                                refresh: None,
+                                                expires_at,
+                                            })),
+                                        })
+                                    }
+                                }
+                            };
+
+                            quote! {
+                                #schema_impl
+                                #builder_impl
+                            }
                         },
                         OAuth2Flow::Password { refresh_url, token_url, .. } => {
                             // TODO: Should we validate scopes?
@@ -244,7 +310,7 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
 
                             let schema_impl = quote! {
                                 impl #base_struct_ident {
-                                    pub fn implicit(
+                                    pub fn password(
                                         client_id: String,
                                         client_secret: String,
                                         username: String,
@@ -252,12 +318,10 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                                         scopes: Vec<String>,
                                     ) -> Result<#builder_struct, OAuthClientBuildError> {
                                         Ok(#builder_struct {
-                                            client_id: ClientId::new(client_id),
-                                            client_secret: ClientSecret::new(client_secret),
                                             scopes: scopes.into_iter().map(Scope::new).collect::<Vec<_>>(),
                                             oauth_client: BasicClient::new(
                                                 ClientId::new(client_id),
-                                                Some(ClientId::new(client_secret)),
+                                                Some(ClientSecret::new(client_secret)),
                                                 // Required by BasicClient, but is not needed
                                                 AuthUrl::new(#token_url.to_string())?,
                                                 Some(TokenUrl::new(#token_url.to_string())?),
@@ -323,12 +387,10 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                                         scopes: Vec<String>,
                                     ) -> Result<#builder_struct, OAuthClientBuildError> {
                                         Ok(#builder_struct {
-                                            client_id: ClientId::new(client_id),
-                                            client_secret: ClientSecret::new(client_secret),
                                             scopes: scopes.into_iter().map(Scope::new).collect::<Vec<_>>(),
                                             oauth_client: BasicClient::new(
                                                 ClientId::new(client_id),
-                                                Some(ClientId::new(client_secret)),
+                                                Some(ClientSecret::new(client_secret)),
                                                 // Required by BasicClient, but is not needed
                                                 AuthUrl::new(#token_url.to_string())?,
                                                 Some(TokenUrl::new(#token_url.to_string())?),
@@ -390,8 +452,6 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                                         redirect_url: String,
                                     ) -> Result<#builder_struct, OAuthClientBuildError> {
                                         Ok(#builder_struct {
-                                            client_id: ClientId::new(client_id),
-                                            client_secret: ClientSecret::new(client_secret),
                                             scopes: scopes.into_iter().map(Scope::new).collect::<Vec<_>>(),
                                             redirect_url: RedirectUrl::new(redirect_url)?,
                                             oauth_client: BasicClient::new(

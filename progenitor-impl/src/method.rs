@@ -891,6 +891,8 @@ impl Generator {
         // an InvalidRequest error without actually sending a request, but instead we defer to the
         // API itself to return the appropriate error.
         let apply_security = method.security.as_ref().map(|requirements| {
+            // println!("{:#?} {:#?}", method.operation_id, method.security);
+
             let apply = requirements.0
                 .iter()
                 .enumerate()
@@ -926,6 +928,8 @@ impl Generator {
                     )
                 })
                 .collect::<Vec<_>>();
+
+            // panic!("Applys {}", apply.len());
 
             quote! {
                 #(#apply)*
