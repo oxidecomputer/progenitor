@@ -1,0 +1,80 @@
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, RequestBuilderExt};
+pub use progenitor_client::{ByteStream, Error, ResponseValue};
+pub mod types {
+    use serde::{Deserialize, Serialize};
+    #[allow(unused_imports)]
+    use std::convert::TryFrom;
+}
+
+#[derive(Clone, Debug)]
+pub struct Client {
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
+}
+
+impl Client {
+    pub fn new(baseurl: &str) -> Self {
+        let dur = std::time::Duration::from_secs(15);
+        let client = reqwest::ClientBuilder::new()
+            .connect_timeout(dur)
+            .timeout(dur)
+            .build()
+            .unwrap();
+        Self::new_with_client(baseurl, client)
+    }
+
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
+            baseurl: baseurl.to_string(),
+            client,
+        }
+    }
+
+    pub fn baseurl(&self) -> &String {
+        &self.baseurl
+    }
+
+    pub fn client(&self) -> &reqwest::Client {
+        &self.client
+    }
+}
+
+impl Client {
+    ///Gets a key
+    ///
+    ///Sends a `GET` request to `/key`
+    ///
+    ///Arguments:
+    /// - `key`: The same key parameter that overlaps with the path level
+    ///   parameter
+    /// - `unique_key`: A key parameter that will not be overridden by the path
+    ///   spec
+    pub async fn key_get<'a>(
+        &'a self,
+        key: Option<bool>,
+        unique_key: Option<&'a str>,
+    ) -> Result<ResponseValue<()>, Error<()>> {
+        let url = format!("{}/key", self.baseurl,);
+        let mut query = Vec::new();
+        if let Some(v) = &key {
+            query.push(("key", v.to_string()));
+        }
+
+        if let Some(v) = &unique_key {
+            query.push(("uniqueKey", v.to_string()));
+        }
+
+        let request = self.client.get(url).query(&query).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+}
+
+pub mod prelude {
+    pub use super::Client;
+}

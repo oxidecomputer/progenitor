@@ -6,14 +6,14 @@ use std::{
     str::FromStr,
 };
 
-use openapiv3::{Components, Response, StatusCode};
+use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
 use typify::TypeId;
 
 use crate::{
     template::PathTemplate,
-    util::{sanitize, Case},
+    util::{items, parameter_map, sanitize, Case},
     Error, Generator, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
@@ -237,15 +237,25 @@ impl Generator {
         components: &Option<Components>,
         path: &str,
         method: &str,
+        path_parameters: &[ReferenceOr<Parameter>],
     ) -> Result<OperationMethod> {
         let operation_id = operation.operation_id.as_ref().unwrap();
 
         let mut query: Vec<(String, bool)> = Vec::new();
-        let mut params = operation
-            .parameters
-            .iter()
+
+        let mut combined_path_parameters =
+            parameter_map(&path_parameters, &components)?;
+        for operation_param in items(&operation.parameters, &components) {
+            let parameter = operation_param?;
+            combined_path_parameters
+                .insert(&parameter.parameter_data_ref().name, parameter);
+        }
+
+        // Filter out any path parameters that have been overridden by an operation parameter
+        let mut params = combined_path_parameters
+            .values()
             .map(|parameter| {
-                match parameter.item(components)? {
+                match parameter {
                     openapiv3::Parameter::Path {
                         parameter_data,
                         style: openapiv3::PathStyle::Simple,
@@ -759,6 +769,7 @@ impl Generator {
                 _ => None,
             })
             .collect();
+
         let url_path = method.path.compile(url_renames, client.clone());
 
         // Generate code to handle the body param.
