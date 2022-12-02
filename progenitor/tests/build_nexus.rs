@@ -1,4 +1,4 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2022 Oxide Computer Company
 
 mod positional {
     use futures::StreamExt;
@@ -31,6 +31,11 @@ mod builder_untagged {
             spec = "../sample_openapi/nexus.json",
             interface = Builder,
             tags = Merged,
+            patch = {
+                Name = {
+                    derives = [Hash],
+                }
+            }
         );
     }
 

@@ -76,6 +76,30 @@ impl<T: DeserializeOwned> ResponseValue<T> {
     }
 }
 
+impl ResponseValue<reqwest::Upgraded> {
+    #[doc(hidden)]
+    pub async fn upgrade<E: std::fmt::Debug>(
+        response: reqwest::Response,
+    ) -> Result<Self, Error<E>> {
+        let status = response.status();
+        let headers = response.headers().clone();
+        if status == reqwest::StatusCode::SWITCHING_PROTOCOLS {
+            let inner = response
+                .upgrade()
+                .await
+                .map_err(Error::InvalidResponsePayload)?;
+
+            Ok(Self {
+                inner,
+                status,
+                headers,
+            })
+        } else {
+            Err(Error::UnexpectedResponse(response))
+        }
+    }
+}
+
 impl ResponseValue<ByteStream> {
     #[doc(hidden)]
     pub fn stream(response: reqwest::Response) -> Self {

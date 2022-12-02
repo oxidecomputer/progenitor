@@ -31,6 +31,7 @@ pub(crate) struct OperationMethod {
     responses: Vec<OperationResponse>,
     security: Option<SecurityRequirements>,
     dropshot_paginated: Option<DropshotPagination>,
+    dropshot_websocket: bool,
 }
 
 enum HttpMethod {
@@ -191,6 +192,7 @@ impl OperationResponseStatus {
         matches!(
             self,
             OperationResponseStatus::Default
+                | OperationResponseStatus::Code(101)
                 | OperationResponseStatus::Code(200..=299)
                 | OperationResponseStatus::Range(2)
         )
@@ -227,6 +229,7 @@ enum OperationResponseType {
     Type(TypeId),
     None,
     Raw,
+    Upgrade,
 }
 
 impl Generator {
@@ -350,6 +353,12 @@ impl Generator {
             .map(|or| or.into())
             .or_else(|| global_security_requirements.clone());
 
+        let dropshot_websocket =
+            operation.extensions.get("x-dropshot-websocket").is_some();
+        if dropshot_websocket {
+            self.uses_websockets = true;
+        }
+
         if let Some(body_param) = self.get_body_param(operation, components)? {
             params.push(body_param);
         }
@@ -390,9 +399,10 @@ impl Generator {
                 let (status_code, response) = v?;
 
                 // We categorize responses as "typed" based on the
-                // "application/json" content type, "raw" if there's any other
-                // response content type (we don't investigate further), or
-                // "none" if there is no content.
+                // "application/json" content type, "upgrade" if it's a
+                // websocket channel without a meaningful content-type,
+                // "raw" if there's any other response content type (we don't
+                // investigate further), or "none" if there is no content.
                 // TODO if there are multiple response content types we could
                 // treat those like different response types and create an
                 // enum; the generated client method would check for the
@@ -419,6 +429,8 @@ impl Generator {
                     };
 
                     OperationResponseType::Type(typ)
+                } else if dropshot_websocket {
+                    OperationResponseType::Upgrade
                 } else if response.content.first().is_some() {
                     OperationResponseType::Raw
                 } else {
@@ -461,8 +473,24 @@ impl Generator {
             });
         }
 
+        // Must accept HTTP 101 Switching Protocols
+        if dropshot_websocket {
+            responses.push(OperationResponse {
+                status_code: OperationResponseStatus::Code(101),
+                typ: OperationResponseType::Upgrade,
+                description: None,
+            })
+        }
+
         let dropshot_paginated =
             self.dropshot_pagination_data(operation, &params, &responses);
+
+        if dropshot_websocket && dropshot_paginated.is_some() {
+            return Err(Error::InvalidExtension(format!(
+                "conflicting extensions in {:?}",
+                operation_id
+            )));
+        }
 
         Ok(OperationMethod {
             operation_id: sanitize(operation_id, Case::Snake),
@@ -478,6 +506,7 @@ impl Generator {
             responses,
             security: security_requirements,
             dropshot_paginated,
+            dropshot_websocket,
         })
     }
 
@@ -718,6 +747,20 @@ impl Generator {
             (query_build, query_use)
         };
 
+        let websock_hdrs = if method.dropshot_websocket {
+            quote! {
+                .header(reqwest::header::CONNECTION, "Upgrade")
+                .header(reqwest::header::UPGRADE, "websocket")
+                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(
+                    reqwest::header::SEC_WEBSOCKET_KEY,
+                    base64::encode(rand::random::<[u8; 16]>()),
+                )
+            }
+        } else {
+            quote! {}
+        };
+
         // Generate the path rename map; then use it to generate code for
         // assigning the path parameters to the `url` variable.
         let url_renames = method
@@ -804,6 +847,11 @@ impl Generator {
                             Ok(ResponseValue::stream(response))
                         }
                     }
+                    OperationResponseType::Upgrade => {
+                        quote! {
+                            ResponseValue::upgrade(response).await
+                        }
+                    }
                 };
 
                 quote! { #pat => { #decode } }
@@ -853,6 +901,13 @@ impl Generator {
                             Err(Error::ErrorResponse(
                                 ResponseValue::stream(response)
                             ))
+                        }
+                    }
+                    OperationResponseType::Upgrade => {
+                        if response.status_code == OperationResponseStatus::Default {
+                            return quote! { } // catch-all handled below
+                        } else {
+                            todo!("non-default error response handling for upgrade requests is not yet implemented");
                         }
                     }
                 };
@@ -952,6 +1007,7 @@ impl Generator {
                 . #method_func (url)
                 #(#body_func)*
                 #query_use
+                #websock_hdrs
                 .build()?;
 
             #apply_security
@@ -1063,6 +1119,9 @@ impl Generator {
                 }
                 OperationResponseType::Raw => {
                     quote! { ByteStream }
+                }
+                OperationResponseType::Upgrade => {
+                    quote! { reqwest::Upgraded }
                 }
             })
             // TODO should this be a bytestream?

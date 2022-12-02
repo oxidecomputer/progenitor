@@ -1,6 +1,6 @@
 // Copyright 2022 Oxide Computer Company
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
@@ -14,6 +14,8 @@ use crate::{
     security::SecuritySchemeAuthenticator, to_schema::ToSchema,
     util::ReferenceOrExt,
 };
+
+pub use typify::TypeSpacePatch as TypePatch;
 
 mod method;
 mod security;
@@ -31,6 +33,8 @@ pub enum Error {
     UnexpectedFormat(String),
     #[error("invalid operation path {0}")]
     InvalidPath(String),
+    #[error("invalid dropshot extension use: {0}")]
+    InvalidExtension(String),
     #[error("internal error {0}")]
     InternalError(String),
 }
@@ -41,6 +45,7 @@ pub struct Generator {
     type_space: TypeSpace,
     settings: GenerationSettings,
     uses_futures: bool,
+    uses_websockets: bool,
 }
 
 #[derive(Default, Clone)]
@@ -51,6 +56,7 @@ pub struct GenerationSettings {
     pre_hook: Option<TokenStream>,
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
+    patch: HashMap<String, TypePatch>,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
@@ -111,6 +117,16 @@ impl GenerationSettings {
         self.extra_derives.push(derive.to_string());
         self
     }
+
+    pub fn with_patch<S: AsRef<str>>(
+        &mut self,
+        type_name: S,
+        patch: &TypePatch,
+    ) -> &mut Self {
+        self.patch
+            .insert(type_name.as_ref().to_string(), patch.clone());
+        self
+    }
 }
 
 impl Default for Generator {
@@ -121,6 +137,7 @@ impl Default for Generator {
             ),
             settings: Default::default(),
             uses_futures: Default::default(),
+            uses_websockets: Default::default(),
         }
     }
 }
@@ -134,10 +151,14 @@ impl Generator {
         settings.extra_derives.iter().for_each(|derive| {
             let _ = type_settings.with_derive(derive.clone());
         });
+        settings.patch.iter().for_each(|(type_name, patch)| {
+            type_settings.with_patch(type_name, patch);
+        });
         Self {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
             uses_futures: false,
+            uses_websockets: false,
         }
     }
 
@@ -591,7 +612,7 @@ impl Generator {
             "bytes = \"1.1\"",
             "futures-core = \"0.3\"",
             "percent-encoding = \"2.1\"",
-            "reqwest = { version = \"0.11\", features = [\"json\", \"stream\"] }",
+            "reqwest = { version = \"0.11.12\", features = [\"json\", \"stream\"] }",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
             "serde_urlencoded = \"0.7\"",
         ];
@@ -608,6 +629,10 @@ impl Generator {
         }
         if self.uses_futures {
             deps.push("futures = \"0.3\"")
+        }
+        if self.uses_websockets {
+            deps.push("base64 = \"0.13\"");
+            deps.push("rand = \"0.8\"");
         }
         if self.type_space.uses_serde_json() {
             deps.push("serde_json = \"1.0\"")
