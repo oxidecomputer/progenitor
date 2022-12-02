@@ -474,7 +474,7 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                                     pub fn url(&mut self) -> Url {
                                         let (challenge, verifier) = PkceCodeChallenge::new_random_sha256();
                                         let mut req = self.oauth_client.authorize_url(CsrfToken::new_random);
-                                        for scope in self.scopes {
+                                        for scope in self.scopes.iter() {
                                             req = req.add_scope(Scope::new(scope.to_string()));
                                         }
 
@@ -639,7 +639,8 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                             mut req: reqwest::Request,
                         ) -> Result<reqwest::Request, Error> {
                             if self.token_is_expired() {
-                                self.refresh();
+                                // TODO: Do something with the result
+                                self.refresh().await;
                             }
 
                             if let Ok(guard) = self.access_token.read() {
