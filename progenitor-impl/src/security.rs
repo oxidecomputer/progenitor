@@ -605,17 +605,28 @@ impl<'a> SecuritySchemeAuthenticator<'a> {
                 Ok(quote! {
                     impl #base_struct_ident {
                         async fn refresh(&self) -> Result<bool, OAuthTokenError> {
-                            if let Ok(mut guard) = self.access_token.write() {
-                                if let Some(token) = guard.refresh.as_ref() {
-                                    let refresh = self.oauth_client.exchange_refresh_token(&RefreshToken::new(token.to_string())).request_async(async_http_client)
-                                        .await?;
+                            let refresh_token = self.access_token.read().ok().and_then(|guard| {
+                                guard.refresh.clone()
+                            });
 
+                            if let Some(token) = refresh_token {
+                                let refresh = self
+                                    .oauth_client
+                                    .exchange_refresh_token(&RefreshToken::new(token))
+                                    .request_async(async_http_client)
+                                    .await?;
+
+                                if let Ok(mut guard) = self.access_token.write() {
                                     guard.secret = refresh.access_token().secret().to_string();
 
                                     if let Some(new_refresh_token) = refresh.refresh_token() {
                                         guard.refresh = Some(new_refresh_token.secret().to_string());
+                                    } else {
+                                        // TODO: What should we do with the used refresh token when
+                                        // a new one has not been returned. Presumably this is a per
+                                        // API behavior?
                                     }
-
+    
                                     Ok(true)
                                 } else {
                                     Ok(false)
