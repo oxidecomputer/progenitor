@@ -118,7 +118,6 @@ impl Client {
             .client
             .post(format!("{}/enrol", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -135,7 +134,6 @@ impl Client {
         let request = self
             .client
             .get(format!("{}/global/jobs", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -147,11 +145,7 @@ impl Client {
 
     ///Sends a `GET` request to `/ping`
     pub async fn ping<'a>(&'a self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
-        let request = self
-            .client
-            .get(format!("{}/ping", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&[])
-            .build()?;
+        let request = self.client.get(format!("{}/ping", self.baseurl,)).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -169,7 +163,6 @@ impl Client {
             .client
             .post(format!("{}/report/finish", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -188,7 +181,6 @@ impl Client {
             .client
             .post(format!("{}/report/output", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -207,7 +199,6 @@ impl Client {
             .client
             .post(format!("{}/report/start", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;

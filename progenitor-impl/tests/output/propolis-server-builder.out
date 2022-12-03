@@ -1643,7 +1643,6 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/instance", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1697,7 +1696,6 @@ pub mod builder {
                 .client
                 .put(format!("{}/instance", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1771,7 +1769,6 @@ pub mod builder {
                     encode_path(&id.to_string()),
                     encode_path(&snapshot_id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1826,7 +1823,6 @@ pub mod builder {
                 .client
                 .get(format!("{}/instance/migrate/status", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1864,7 +1860,6 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/instance/serial", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .header(reqwest::header::CONNECTION, "Upgrade")
                 .header(reqwest::header::UPGRADE, "websocket")
                 .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -1918,7 +1913,6 @@ pub mod builder {
                 .client
                 .put(format!("{}/instance/state", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1973,7 +1967,6 @@ pub mod builder {
                 .client
                 .get(format!("{}/instance/state-monitor", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;

@@ -272,7 +272,6 @@ pub mod builder {
                 .client
                 .post(format!("{}/", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;

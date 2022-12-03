@@ -53,11 +53,7 @@ impl Client {
     pub async fn freeform_response<'a>(
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let request = self
-            .client
-            .get(format!("{}/", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&[])
-            .build()?;
+        let request = self.client.get(format!("{}/", self.baseurl,)).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

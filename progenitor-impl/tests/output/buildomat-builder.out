@@ -1520,7 +1520,6 @@ pub mod builder {
             let request = client
                 .client
                 .post(format!("{}/v1/control/hold", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1550,7 +1549,6 @@ pub mod builder {
             let request = client
                 .client
                 .post(format!("{}/v1/control/resume", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1599,7 +1597,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1629,7 +1626,6 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/v1/tasks", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1675,7 +1671,6 @@ pub mod builder {
                 .client
                 .post(format!("{}/v1/tasks", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1791,7 +1786,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1858,7 +1852,6 @@ pub mod builder {
                     encode_path(&task.to_string()),
                     encode_path(&output.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1904,7 +1897,6 @@ pub mod builder {
                 .client
                 .post(format!("{}/v1/users", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1934,7 +1926,6 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/v1/whoami", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1980,7 +1971,6 @@ pub mod builder {
                 .client
                 .post(format!("{}/v1/worker/bootstrap", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -2010,7 +2000,6 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/v1/worker/ping", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -2073,7 +2062,6 @@ pub mod builder {
                     encode_path(&task.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -2140,7 +2128,6 @@ pub mod builder {
                     reqwest::header::HeaderValue::from_static("application/octet-stream"),
                 )
                 .body(body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -2203,7 +2190,6 @@ pub mod builder {
                     encode_path(&task.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -2266,7 +2252,6 @@ pub mod builder {
                     encode_path(&task.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -2296,7 +2281,6 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/v1/workers", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -2326,7 +2310,6 @@ pub mod builder {
             let request = client
                 .client
                 .post(format!("{}/v1/workers/recycle", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
