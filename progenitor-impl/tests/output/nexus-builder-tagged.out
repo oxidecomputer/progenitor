@@ -13721,7 +13721,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -13776,7 +13776,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -13831,7 +13831,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -13886,7 +13886,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -13944,7 +13944,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -13999,7 +13999,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14054,7 +14054,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14109,7 +14109,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14164,7 +14164,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14219,7 +14219,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14274,7 +14274,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14329,7 +14329,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14381,7 +14381,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/device/auth", client.baseurl,))
                 .form_urlencoded(&body)?
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14427,7 +14427,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/device/confirm", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14479,7 +14479,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/device/token", client.baseurl,))
                 .form_urlencoded(&body)?
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14664,7 +14664,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&rack_id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -14855,7 +14855,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&sled_id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15043,7 +15043,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/images", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15098,7 +15098,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&image_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15153,7 +15153,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&image_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15341,7 +15341,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/ip-pools", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15396,7 +15396,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&pool_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15469,7 +15469,7 @@ pub mod builder {
                     encode_path(&pool_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15524,7 +15524,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&pool_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15735,7 +15735,7 @@ pub mod builder {
                     encode_path(&pool_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15808,7 +15808,7 @@ pub mod builder {
                     encode_path(&pool_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15860,7 +15860,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/login", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15927,7 +15927,7 @@ pub mod builder {
                     encode_path(&silo_name.to_string()),
                     encode_path(&provider_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16013,7 +16013,7 @@ pub mod builder {
                     reqwest::header::HeaderValue::from_static("application/octet-stream"),
                 )
                 .body(body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16043,7 +16043,7 @@ pub mod builder {
             let request = client
                 .client
                 .post(format!("{}/logout", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16225,7 +16225,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/organizations", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16283,7 +16283,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&organization_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16356,7 +16356,7 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16414,7 +16414,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&organization_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16474,7 +16474,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&organization_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16549,7 +16549,7 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16779,7 +16779,7 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16853,7 +16853,7 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                     encode_path(&project_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -16942,7 +16942,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -17016,7 +17016,7 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                     encode_path(&project_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -17276,7 +17276,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -17366,7 +17366,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&disk_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -17456,7 +17456,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&disk_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -17931,7 +17931,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18021,7 +18021,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&image_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18111,7 +18111,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&image_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18374,7 +18374,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18464,7 +18464,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18554,7 +18554,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18847,7 +18847,7 @@ pub mod builder {
                     encode_path(&instance_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -18952,7 +18952,7 @@ pub mod builder {
                     encode_path(&instance_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19044,7 +19044,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19149,7 +19149,7 @@ pub mod builder {
                     encode_path(&instance_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19445,7 +19445,7 @@ pub mod builder {
                     encode_path(&instance_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19552,7 +19552,7 @@ pub mod builder {
                     encode_path(&instance_name.to_string()),
                     encode_path(&interface_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19674,7 +19674,7 @@ pub mod builder {
                     encode_path(&interface_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19779,7 +19779,7 @@ pub mod builder {
                     encode_path(&instance_name.to_string()),
                     encode_path(&interface_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -19869,7 +19869,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20100,7 +20100,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20190,7 +20190,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20266,7 +20266,7 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                     encode_path(&project_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20357,7 +20357,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20620,7 +20620,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20710,7 +20710,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&snapshot_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -20800,7 +20800,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&snapshot_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21060,7 +21060,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21150,7 +21150,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&vpc_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21255,7 +21255,7 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21345,7 +21345,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&vpc_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21437,7 +21437,7 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&vpc_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21544,7 +21544,7 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21837,7 +21837,7 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -21942,7 +21942,7 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                     encode_path(&router_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -22062,7 +22062,7 @@ pub mod builder {
                     encode_path(&router_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -22167,7 +22167,7 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                     encode_path(&router_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -22490,7 +22490,7 @@ pub mod builder {
                     encode_path(&router_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -22610,7 +22610,7 @@ pub mod builder {
                     encode_path(&router_name.to_string()),
                     encode_path(&route_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -22745,7 +22745,7 @@ pub mod builder {
                     encode_path(&route_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -22865,7 +22865,7 @@ pub mod builder {
                     encode_path(&router_name.to_string()),
                     encode_path(&route_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23158,7 +23158,7 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23263,7 +23263,7 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                     encode_path(&subnet_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23383,7 +23383,7 @@ pub mod builder {
                     encode_path(&subnet_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23488,7 +23488,7 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                     encode_path(&subnet_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23730,7 +23730,7 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/policy", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23784,7 +23784,7 @@ pub mod builder {
                 .client
                 .put(format!("{}/policy", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -23959,7 +23959,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&role_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24150,7 +24150,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&saga_id.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24186,7 +24186,7 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/session/me", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24374,7 +24374,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/session/me/sshkeys", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24432,7 +24432,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&ssh_key_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24490,7 +24490,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&ssh_key_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24678,7 +24678,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/silos", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24733,7 +24733,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&silo_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -24788,7 +24788,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&silo_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25000,7 +25000,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&silo_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25075,7 +25075,7 @@ pub mod builder {
                     encode_path(&silo_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25151,7 +25151,7 @@ pub mod builder {
                     encode_path(&silo_name.to_string()),
                 ))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25227,7 +25227,7 @@ pub mod builder {
                     encode_path(&silo_name.to_string()),
                     encode_path(&provider_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25418,7 +25418,7 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&user_name.to_string()),
                 ))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -25575,7 +25575,7 @@ pub mod builder {
             let request = client
                 .client
                 .post(format!("{}/updates/refresh", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;

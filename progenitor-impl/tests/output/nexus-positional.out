@@ -3001,7 +3001,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3031,7 +3031,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3061,7 +3061,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3091,7 +3091,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3121,7 +3121,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3151,7 +3151,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3181,7 +3181,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3211,7 +3211,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3241,7 +3241,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3271,7 +3271,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3301,7 +3301,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3331,7 +3331,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3362,7 +3362,7 @@ impl Client {
             .client
             .post(format!("{}/device/auth", self.baseurl,))
             .form_urlencoded(&body)?
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3388,7 +3388,7 @@ impl Client {
             .client
             .post(format!("{}/device/confirm", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3418,7 +3418,7 @@ impl Client {
             .client
             .post(format!("{}/device/token", self.baseurl,))
             .form_urlencoded(&body)?
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3525,7 +3525,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&rack_id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3638,7 +3638,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&sled_id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3755,7 +3755,7 @@ impl Client {
             .client
             .post(format!("{}/images", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3787,7 +3787,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&image_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3821,7 +3821,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&image_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3928,7 +3928,7 @@ impl Client {
             .client
             .post(format!("{}/ip-pools", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3958,7 +3958,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&pool_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -3990,7 +3990,7 @@ impl Client {
                 encode_path(&pool_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4020,7 +4020,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&pool_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4140,7 +4140,7 @@ impl Client {
                 encode_path(&pool_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4172,7 +4172,7 @@ impl Client {
                 encode_path(&pool_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4197,7 +4197,7 @@ impl Client {
             .client
             .post(format!("{}/login", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4226,7 +4226,7 @@ impl Client {
                 encode_path(&silo_name.to_string()),
                 encode_path(&provider_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4262,7 +4262,7 @@ impl Client {
                 reqwest::header::HeaderValue::from_static("application/octet-stream"),
             )
             .body(body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4277,7 +4277,7 @@ impl Client {
         let request = self
             .client
             .post(format!("{}/logout", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4379,7 +4379,7 @@ impl Client {
             .client
             .post(format!("{}/organizations", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4412,7 +4412,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&organization_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4448,7 +4448,7 @@ impl Client {
                 encode_path(&organization_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4481,7 +4481,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&organization_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4514,7 +4514,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&organization_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4550,7 +4550,7 @@ impl Client {
                 encode_path(&organization_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4675,7 +4675,7 @@ impl Client {
                 encode_path(&organization_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4712,7 +4712,7 @@ impl Client {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4752,7 +4752,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4789,7 +4789,7 @@ impl Client {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4930,7 +4930,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4966,7 +4966,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&disk_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5002,7 +5002,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&disk_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5281,7 +5281,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5319,7 +5319,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&image_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5359,7 +5359,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&image_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5501,7 +5501,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5537,7 +5537,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5573,7 +5573,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5724,7 +5724,7 @@ impl Client {
                 encode_path(&instance_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5760,7 +5760,7 @@ impl Client {
                 encode_path(&instance_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5796,7 +5796,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5835,7 +5835,7 @@ impl Client {
                 encode_path(&instance_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -5989,7 +5989,7 @@ impl Client {
                 encode_path(&instance_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6027,7 +6027,7 @@ impl Client {
                 encode_path(&instance_name.to_string()),
                 encode_path(&interface_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6067,7 +6067,7 @@ impl Client {
                 encode_path(&interface_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6110,7 +6110,7 @@ impl Client {
                 encode_path(&instance_name.to_string()),
                 encode_path(&interface_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6146,7 +6146,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6241,7 +6241,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6277,7 +6277,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6314,7 +6314,7 @@ impl Client {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6354,7 +6354,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6496,7 +6496,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6532,7 +6532,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&snapshot_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6568,7 +6568,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&snapshot_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6709,7 +6709,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6745,7 +6745,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6783,7 +6783,7 @@ impl Client {
                 encode_path(&vpc_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6819,7 +6819,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6855,7 +6855,7 @@ impl Client {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -6893,7 +6893,7 @@ impl Client {
                 encode_path(&vpc_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7047,7 +7047,7 @@ impl Client {
                 encode_path(&vpc_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7085,7 +7085,7 @@ impl Client {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7125,7 +7125,7 @@ impl Client {
                 encode_path(&router_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7163,7 +7163,7 @@ impl Client {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7327,7 +7327,7 @@ impl Client {
                 encode_path(&router_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7367,7 +7367,7 @@ impl Client {
                 encode_path(&router_name.to_string()),
                 encode_path(&route_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7409,7 +7409,7 @@ impl Client {
                 encode_path(&route_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7449,7 +7449,7 @@ impl Client {
                 encode_path(&router_name.to_string()),
                 encode_path(&route_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7603,7 +7603,7 @@ impl Client {
                 encode_path(&vpc_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7641,7 +7641,7 @@ impl Client {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&subnet_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7681,7 +7681,7 @@ impl Client {
                 encode_path(&subnet_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7719,7 +7719,7 @@ impl Client {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&subnet_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7868,7 +7868,7 @@ impl Client {
         let request = self
             .client
             .get(format!("{}/policy", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -7895,7 +7895,7 @@ impl Client {
             .client
             .put(format!("{}/policy", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8003,7 +8003,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&role_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8113,7 +8113,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&saga_id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8138,7 +8138,7 @@ impl Client {
         let request = self
             .client
             .get(format!("{}/session/me", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8245,7 +8245,7 @@ impl Client {
             .client
             .post(format!("{}/session/me/sshkeys", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8275,7 +8275,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&ssh_key_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8305,7 +8305,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&ssh_key_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8408,7 +8408,7 @@ impl Client {
             .client
             .post(format!("{}/silos", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8441,7 +8441,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&silo_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8474,7 +8474,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&silo_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8596,7 +8596,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&silo_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8632,7 +8632,7 @@ impl Client {
                 encode_path(&silo_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8668,7 +8668,7 @@ impl Client {
                 encode_path(&silo_name.to_string()),
             ))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8705,7 +8705,7 @@ impl Client {
                 encode_path(&silo_name.to_string()),
                 encode_path(&provider_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8819,7 +8819,7 @@ impl Client {
                 self.baseurl,
                 encode_path(&user_name.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -8918,7 +8918,7 @@ impl Client {
         let request = self
             .client
             .post(format!("{}/updates/refresh", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;

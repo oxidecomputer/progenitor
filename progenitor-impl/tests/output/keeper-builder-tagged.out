@@ -865,7 +865,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/enrol", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -895,7 +895,7 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/global/jobs", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -925,7 +925,7 @@ pub mod builder {
             let request = client
                 .client
                 .get(format!("{}/ping", client.baseurl,))
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -971,7 +971,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/report/finish", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1017,7 +1017,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/report/output", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -1063,7 +1063,7 @@ pub mod builder {
                 .client
                 .post(format!("{}/report/start", client.baseurl,))
                 .json(&body)
-                .query::<[(&str, Option<String>)]>(&vec![])
+                .query::<[(&str, Option<String>)]>(&[])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;

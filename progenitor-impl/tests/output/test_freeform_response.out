@@ -56,7 +56,7 @@ impl Client {
         let request = self
             .client
             .get(format!("{}/", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;

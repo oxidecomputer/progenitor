@@ -728,13 +728,13 @@ impl Generator {
                 _ => None,
             })
             .collect::<Vec<_>>();
-        let query_build = if query_items.is_empty() {
-            quote! { vec![] }
+        let query_call = if query_items.is_empty() {
+            quote! { }
         } else {
             quote! {
-                [
+                .query::<[(&str, Option<String>)]>(&[
                     #(#query_items,)*
-                ]
+                ])
             }
         };
 
@@ -937,7 +937,7 @@ impl Generator {
             let request = #client.client
                 . #method_func (#url_path)
                 #(#body_func)*
-                .query::<[(&str, Option<String>)]>(&#query_build)
+                #query_call
                 #websock_hdrs
                 .build()?;
             #pre_hook

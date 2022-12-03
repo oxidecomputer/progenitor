@@ -378,7 +378,7 @@ impl Client {
         let request = self
             .client
             .get(format!("{}/instance", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -403,7 +403,7 @@ impl Client {
             .client
             .put(format!("{}/instance", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -435,7 +435,7 @@ impl Client {
                 encode_path(&id.to_string()),
                 encode_path(&snapshot_id.to_string()),
             ))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -460,7 +460,7 @@ impl Client {
             .client
             .get(format!("{}/instance/migrate/status", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -483,7 +483,7 @@ impl Client {
         let request = self
             .client
             .get(format!("{}/instance/serial", self.baseurl,))
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .header(reqwest::header::CONNECTION, "Upgrade")
             .header(reqwest::header::UPGRADE, "websocket")
             .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -510,7 +510,7 @@ impl Client {
             .client
             .put(format!("{}/instance/state", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -535,7 +535,7 @@ impl Client {
             .client
             .get(format!("{}/instance/state-monitor", self.baseurl,))
             .json(&body)
-            .query::<[(&str, Option<String>)]>(&vec![])
+            .query::<[(&str, Option<String>)]>(&[])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
