@@ -56,15 +56,13 @@ impl Client {
         unique_key: Option<&'a str>,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/key", self.baseurl,);
-        let mut query = Vec::new();
-        if let Some(v) = &key {
-            query.push(("key", v.to_string()));
-        }
-
-        if let Some(v) = &unique_key {
-            query.push(("uniqueKey", v.to_string()));
-        }
-
+        let query = [
+            ("key", key.map(|v| v.to_string())),
+            ("uniqueKey", unique_key.map(|v| v.to_string())),
+        ]
+        .into_iter()
+        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+        .collect::<Vec<_>>();
         let request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;

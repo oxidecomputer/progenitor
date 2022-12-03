@@ -118,13 +118,13 @@ pub mod builder {
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
             let url = format!("{}/key", client.baseurl,);
-            let mut query = Vec::new();
-            if let Some(v) = &key {
-                query.push(("key", v.to_string()));
-            }
-            if let Some(v) = &unique_key {
-                query.push(("uniqueKey", v.to_string()));
-            }
+            let query = [
+                ("key", key.map(|v| v.to_string())),
+                ("uniqueKey", unique_key.map(|v| v.to_string())),
+            ]
+            .into_iter()
+            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
+            .collect::<Vec<_>>();
             let request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
