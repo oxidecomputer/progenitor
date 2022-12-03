@@ -13714,12 +13714,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/disks/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/disks/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -13766,12 +13769,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/global-images/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/global-images/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -13818,12 +13824,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/images/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/images/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -13870,12 +13879,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/instances/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/instances/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -13925,12 +13937,15 @@ pub mod builder {
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/network-interfaces/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/network-interfaces/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -13977,12 +13992,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/organizations/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/organizations/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14029,12 +14047,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/projects/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/projects/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14081,12 +14102,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/snapshots/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/snapshots/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14133,12 +14157,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/vpc-router-routes/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/vpc-router-routes/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14185,12 +14212,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/vpc-routers/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/vpc-routers/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14237,12 +14267,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/vpc-subnets/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/vpc-subnets/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14289,12 +14322,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/vpcs/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/by-id/vpcs/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14341,8 +14377,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/auth", client.baseurl,);
-            let request = client.client.post(url).form_urlencoded(&body)?.build()?;
+            let request = client
+                .client
+                .post(format!("{}/device/auth", client.baseurl,))
+                .form_urlencoded(&body)?
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14383,8 +14423,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/confirm", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/device/confirm", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14431,8 +14475,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/token", client.baseurl,);
-            let request = client.client.post(url).form_urlencoded(&body)?.build()?;
+            let request = client
+                .client
+                .post(format!("{}/device/token", client.baseurl,))
+                .form_urlencoded(&body)?
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14507,16 +14555,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/hardware/racks", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/hardware/racks", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14610,12 +14657,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
             let Self { client, rack_id } = self;
             let rack_id = rack_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/hardware/racks/{}",
-                client.baseurl,
-                encode_path(&rack_id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/hardware/racks/{}",
+                    client.baseurl,
+                    encode_path(&rack_id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14696,16 +14746,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/hardware/sleds", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/hardware/sleds", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14799,12 +14848,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
             let Self { client, sled_id } = self;
             let sled_id = sled_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/hardware/sleds/{}",
-                client.baseurl,
-                encode_path(&sled_id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/hardware/sleds/{}",
+                    client.baseurl,
+                    encode_path(&sled_id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14885,16 +14937,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/images", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/images", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -14988,8 +15039,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/images", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/images", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15036,12 +15091,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
             let Self { client, image_name } = self;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/images/{}",
-                client.baseurl,
-                encode_path(&image_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/images/{}",
+                    client.baseurl,
+                    encode_path(&image_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15088,12 +15146,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, image_name } = self;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/images/{}",
-                client.baseurl,
-                encode_path(&image_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/images/{}",
+                    client.baseurl,
+                    encode_path(&image_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15174,16 +15235,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/ip-pools", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/ip-pools", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15277,8 +15337,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/ip-pools", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/ip-pools", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15325,12 +15389,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self { client, pool_name } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/ip-pools/{}",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/ip-pools/{}",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15394,12 +15461,16 @@ pub mod builder {
             } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/ip-pools/{}",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/ip-pools/{}",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15446,12 +15517,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, pool_name } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/ip-pools/{}",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/ip-pools/{}",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15532,19 +15606,18 @@ pub mod builder {
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/ip-pools/{}/ranges",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/ip-pools/{}/ranges",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15654,12 +15727,16 @@ pub mod builder {
             } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/ip-pools/{}/ranges/add",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/ip-pools/{}/ranges/add",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15723,12 +15800,16 @@ pub mod builder {
             } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/ip-pools/{}/ranges/remove",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/ip-pools/{}/ranges/remove",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15775,8 +15856,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/login", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/login", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15834,13 +15919,16 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let provider_name = provider_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/login/{}/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/login/{}/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&provider_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -15912,20 +16000,20 @@ pub mod builder {
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let provider_name = provider_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/login/{}/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
-            );
             let request = client
                 .client
-                .post(url)
+                .post(format!(
+                    "{}/login/{}/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&provider_name.to_string()),
+                ))
                 .header(
                     reqwest::header::CONTENT_TYPE,
                     reqwest::header::HeaderValue::from_static("application/octet-stream"),
                 )
                 .body(body)
+                .query::<[(&str, Option<String>)]>(&vec![])
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -15952,8 +16040,11 @@ pub mod builder {
         ///Sends a `POST` request to `/logout`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client } = self;
-            let url = format!("{}/logout", client.baseurl,);
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(format!("{}/logout", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16028,16 +16119,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/organizations", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/organizations", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16131,8 +16221,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/organizations", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/organizations", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16182,12 +16276,15 @@ pub mod builder {
                 organization_name,
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16251,12 +16348,16 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16306,12 +16407,15 @@ pub mod builder {
                 organization_name,
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16363,12 +16467,15 @@ pub mod builder {
                 organization_name,
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/policy",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16434,12 +16541,16 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/policy",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16535,20 +16646,19 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16661,12 +16771,16 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16731,13 +16845,16 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16816,13 +16933,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/projects/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -16887,13 +17008,16 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17003,21 +17127,20 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/disks",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17144,13 +17267,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/disks",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17230,14 +17357,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let disk_name = disk_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&disk_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/disks/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&disk_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17317,14 +17447,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let disk_name = disk_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&disk_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/disks/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&disk_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17473,24 +17606,23 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let start_time = start_time.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&disk_name.to_string()),
-                encode_path(&metric_name.to_string()),
-            );
-            let query = [
-                ("end_time", end_time.map(|v| v.to_string())),
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("start_time", start_time.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&disk_name.to_string()),
+                    encode_path(&metric_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("end_time", end_time.map(|v| v.to_string())),
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("start_time", start_time.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17650,21 +17782,20 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/images",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/images",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17791,13 +17922,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/images",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/images",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17877,14 +18012,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/images/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&image_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/images/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&image_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -17964,14 +18102,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/images/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&image_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/images/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&image_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18082,21 +18223,20 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/instances",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18225,13 +18365,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/instances",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18311,14 +18455,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18398,14 +18545,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18530,22 +18680,21 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/disks",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/disks",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18688,14 +18837,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18789,14 +18942,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18878,14 +19035,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/external-ips",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/external-ips",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -18979,14 +19139,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/migrate",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/migrate",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19112,22 +19276,21 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19272,14 +19435,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19375,15 +19542,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let interface_name = interface_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                    encode_path(&interface_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19493,15 +19663,19 @@ pub mod builder {
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let interface_name = interface_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                    encode_path(&interface_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19595,15 +19769,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let interface_name = interface_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                    encode_path(&interface_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19683,14 +19860,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/reboot",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/reboot",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19817,22 +19997,21 @@ pub mod builder {
             let from_start = from_start.map_err(Error::InvalidRequest)?;
             let max_bytes = max_bytes.map_err(Error::InvalidRequest)?;
             let most_recent = most_recent.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/serial-console",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let query = [
-                ("from_start", from_start.map(|v| v.to_string())),
-                ("max_bytes", max_bytes.map(|v| v.to_string())),
-                ("most_recent", most_recent.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/serial-console",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("from_start", from_start.map(|v| v.to_string())),
+                    ("max_bytes", max_bytes.map(|v| v.to_string())),
+                    ("most_recent", most_recent.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19912,14 +20091,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/start",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/start",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -19999,14 +20181,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/stop",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/stop",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20073,13 +20258,16 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/policy",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20160,13 +20348,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/policy",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/projects/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20277,21 +20469,20 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/snapshots",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/snapshots",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20420,13 +20611,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/snapshots",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/snapshots",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20506,14 +20701,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let snapshot_name = snapshot_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/snapshots/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&snapshot_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/snapshots/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&snapshot_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20593,14 +20791,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let snapshot_name = snapshot_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/snapshots/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&snapshot_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/snapshots/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&snapshot_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20710,21 +20911,20 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20851,13 +21051,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/vpcs",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -20937,14 +21141,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21038,14 +21245,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21125,14 +21336,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21214,14 +21428,17 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21317,14 +21534,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21449,22 +21670,21 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21607,14 +21827,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21708,15 +21932,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21824,15 +22051,19 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21926,15 +22157,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22073,23 +22307,22 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22246,15 +22479,19 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22362,16 +22599,19 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let route_name = route_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                    encode_path(&route_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22493,16 +22733,20 @@ pub mod builder {
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let route_name = route_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                    encode_path(&route_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22610,16 +22854,19 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let route_name = route_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                    encode_path(&route_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22744,22 +22991,21 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22902,14 +23148,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23003,15 +23253,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let subnet_name = subnet_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&subnet_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23119,15 +23372,19 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let subnet_name = subnet_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&subnet_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23221,15 +23478,18 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let subnet_name = subnet_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&subnet_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23369,23 +23629,22 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&subnet_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23468,8 +23727,11 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/policy", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!("{}/policy", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23518,8 +23780,12 @@ pub mod builder {
         ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/policy", client.baseurl,);
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!("{}/policy", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23586,15 +23852,14 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/roles", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/roles", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23687,12 +23952,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
             let Self { client, role_name } = self;
             let role_name = role_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/roles/{}",
-                client.baseurl,
-                encode_path(&role_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/roles/{}",
+                    client.baseurl,
+                    encode_path(&role_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23773,16 +24041,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/sagas", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/sagas", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23876,12 +24143,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
             let Self { client, saga_id } = self;
             let saga_id = saga_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/sagas/{}",
-                client.baseurl,
-                encode_path(&saga_id.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/sagas/{}",
+                    client.baseurl,
+                    encode_path(&saga_id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23913,8 +24183,11 @@ pub mod builder {
         ///Sends a `GET` request to `/session/me`
         pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/session/me", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!("{}/session/me", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23995,16 +24268,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/session/me/sshkeys", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/session/me/sshkeys", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24098,8 +24370,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/session/me/sshkeys", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/session/me/sshkeys", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24149,12 +24425,15 @@ pub mod builder {
                 ssh_key_name,
             } = self;
             let ssh_key_name = ssh_key_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/session/me/sshkeys/{}",
-                client.baseurl,
-                encode_path(&ssh_key_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/session/me/sshkeys/{}",
+                    client.baseurl,
+                    encode_path(&ssh_key_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24204,12 +24483,15 @@ pub mod builder {
                 ssh_key_name,
             } = self;
             let ssh_key_name = ssh_key_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/session/me/sshkeys/{}",
-                client.baseurl,
-                encode_path(&ssh_key_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/session/me/sshkeys/{}",
+                    client.baseurl,
+                    encode_path(&ssh_key_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24290,16 +24572,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/silos", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/silos", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24393,8 +24674,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/silos", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/silos", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24441,12 +24726,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
             let Self { client, silo_name } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/silos/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/silos/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24493,12 +24781,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, silo_name } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/silos/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(format!(
+                    "{}/silos/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24594,20 +24885,19 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/silos/{}/identity-providers",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/silos/{}/identity-providers",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24703,12 +24993,15 @@ pub mod builder {
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
             let Self { client, silo_name } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/silos/{}/policy",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/silos/{}/policy",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24774,12 +25067,16 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/silos/{}/policy",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!(
+                    "{}/silos/{}/policy",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24846,12 +25143,16 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/silos/{}/saml-identity-providers",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/silos/{}/saml-identity-providers",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                ))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24918,13 +25219,16 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let provider_name = provider_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/silos/{}/saml-identity-providers/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/silos/{}/saml-identity-providers/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&provider_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -25005,16 +25309,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/user", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/system/user", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -25108,12 +25411,15 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::UserBuiltin>, Error<types::Error>> {
             let Self { client, user_name } = self;
             let user_name = user_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/user/{}",
-                client.baseurl,
-                encode_path(&user_name.to_string()),
-            );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!(
+                    "{}/system/user/{}",
+                    client.baseurl,
+                    encode_path(&user_name.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -25181,15 +25487,14 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/timeseries/schema", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/timeseries/schema", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -25267,8 +25572,11 @@ pub mod builder {
         ///Sends a `POST` request to `/updates/refresh`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/updates/refresh", client.baseurl,);
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(format!("{}/updates/refresh", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -25349,16 +25657,15 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/users", client.baseurl,);
-            let query = [
-                ("limit", limit.map(|v| v.to_string())),
-                ("page_token", page_token.map(|v| v.to_string())),
-                ("sort_by", sort_by.map(|v| v.to_string())),
-            ]
-            .into_iter()
-            .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-            .collect::<Vec<_>>();
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(format!("{}/users", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&[
+                    ("limit", limit.map(|v| v.to_string())),
+                    ("page_token", page_token.map(|v| v.to_string())),
+                    ("sort_by", sort_by.map(|v| v.to_string())),
+                ])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

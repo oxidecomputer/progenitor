@@ -114,8 +114,12 @@ impl Client {
         &'a self,
         body: &'a types::EnrolBody,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/enrol", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/enrol", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -128,8 +132,11 @@ impl Client {
     pub async fn global_jobs<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
-        let url = format!("{}/global/jobs", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!("{}/global/jobs", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -140,8 +147,11 @@ impl Client {
 
     ///Sends a `GET` request to `/ping`
     pub async fn ping<'a>(&'a self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
-        let url = format!("{}/ping", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!("{}/ping", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -155,8 +165,12 @@ impl Client {
         &'a self,
         body: &'a types::ReportFinishBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/finish", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/report/finish", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -170,8 +184,12 @@ impl Client {
         &'a self,
         body: &'a types::ReportOutputBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/output", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/report/output", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -185,8 +203,12 @@ impl Client {
         &'a self,
         body: &'a types::ReportStartBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/start", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/report/start", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

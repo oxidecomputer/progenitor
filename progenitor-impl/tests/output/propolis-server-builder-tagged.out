@@ -1634,8 +1634,11 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/instance", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!("{}/instance", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1684,8 +1687,12 @@ pub mod builder {
         ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance", client.baseurl,);
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!("{}/instance", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1750,13 +1757,16 @@ pub mod builder {
             } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let snapshot_id = snapshot_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/instance/disk/{}/snapshot/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-                encode_path(&snapshot_id.to_string()),
-            );
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(format!(
+                    "{}/instance/disk/{}/snapshot/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                    encode_path(&snapshot_id.to_string()),
+                ))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1806,8 +1816,12 @@ pub mod builder {
         {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/migrate/status", client.baseurl,);
-            let request = client.client.get(url).json(&body).build()?;
+            let request = client
+                .client
+                .get(format!("{}/instance/migrate/status", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1841,10 +1855,10 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
             let Self { client } = self;
-            let url = format!("{}/instance/serial", client.baseurl,);
             let request = client
                 .client
-                .get(url)
+                .get(format!("{}/instance/serial", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&vec![])
                 .header(reqwest::header::CONNECTION, "Upgrade")
                 .header(reqwest::header::UPGRADE, "websocket")
                 .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -1894,8 +1908,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/state", client.baseurl,);
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(format!("{}/instance/state", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1945,8 +1963,12 @@ pub mod builder {
         {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/state-monitor", client.baseurl,);
-            let request = client.client.get(url).json(&body).build()?;
+            let request = client
+                .client
+                .get(format!("{}/instance/state-monitor", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

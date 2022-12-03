@@ -59,22 +59,21 @@ impl Client {
         in_: &'a str,
         use_: &'a str,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/{}/{}/{}",
-            self.baseurl,
-            encode_path(&ref_.to_string()),
-            encode_path(&type_.to_string()),
-            encode_path(&trait_.to_string()),
-        );
-        let query = [
-            ("if", Some(if_.to_string())),
-            ("in", Some(in_.to_string())),
-            ("use", Some(use_.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/{}/{}/{}",
+                self.baseurl,
+                encode_path(&ref_.to_string()),
+                encode_path(&type_.to_string()),
+                encode_path(&trait_.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("if", Some(if_.to_string())),
+                ("in", Some(in_.to_string())),
+                ("use", Some(use_.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

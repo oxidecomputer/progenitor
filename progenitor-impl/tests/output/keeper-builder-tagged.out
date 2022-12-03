@@ -861,8 +861,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/enrol", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/enrol", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -888,8 +892,11 @@ pub mod builder {
         ///Sends a `GET` request to `/global/jobs`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/global/jobs", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!("{}/global/jobs", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -915,8 +922,11 @@ pub mod builder {
         ///Sends a `GET` request to `/ping`
         pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/ping", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(format!("{}/ping", client.baseurl,))
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -957,8 +967,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/finish", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/report/finish", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -999,8 +1013,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/output", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/report/output", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1041,8 +1059,12 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/start", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(format!("{}/report/start", client.baseurl,))
+                .json(&body)
+                .query::<[(&str, Option<String>)]>(&vec![])
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

@@ -71,6 +71,11 @@ fn test_param_override() {
     verify_apis("param-overrides");
 }
 
+#[test]
+fn test_query_collision_override() {
+    verify_apis("param-collision");
+}
+
 // TODO this file is full of inconsistencies and incorrectly specified types.
 // It's an interesting test to consider whether we try to do our best to
 // interpret the intent or just fail.

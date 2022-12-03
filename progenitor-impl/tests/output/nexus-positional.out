@@ -2994,12 +2994,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/disks/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/disks/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3021,12 +3024,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/global-images/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/global-images/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3048,12 +3054,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/images/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/images/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3075,12 +3084,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/instances/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/instances/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3102,12 +3114,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/network-interfaces/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3129,12 +3144,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/organizations/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/organizations/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3156,12 +3174,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/projects/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/projects/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3183,12 +3204,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/snapshots/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/snapshots/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3210,12 +3234,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/vpc-router-routes/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/vpc-router-routes/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3237,12 +3264,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/vpc-routers/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/vpc-routers/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3264,12 +3294,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/vpc-subnets/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/vpc-subnets/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3291,12 +3324,15 @@ impl Client {
         &'a self,
         id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/vpcs/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/by-id/vpcs/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3322,8 +3358,12 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAuthRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/device/auth", self.baseurl,);
-        let request = self.client.post(url).form_urlencoded(&body)?.build()?;
+        let request = self
+            .client
+            .post(format!("{}/device/auth", self.baseurl,))
+            .form_urlencoded(&body)?
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3344,8 +3384,12 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAuthVerify,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/device/confirm", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/device/confirm", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3370,8 +3414,12 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAccessTokenRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/device/token", self.baseurl,);
-        let request = self.client.post(url).form_urlencoded(&body)?.build()?;
+        let request = self
+            .client
+            .post(format!("{}/device/token", self.baseurl,))
+            .form_urlencoded(&body)?
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3395,16 +3443,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
-        let url = format!("{}/hardware/racks", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/hardware/racks", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3471,12 +3518,15 @@ impl Client {
         &'a self,
         rack_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
-        let url = format!(
-            "{}/hardware/racks/{}",
-            self.baseurl,
-            encode_path(&rack_id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/hardware/racks/{}",
+                self.baseurl,
+                encode_path(&rack_id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3506,16 +3556,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
-        let url = format!("{}/hardware/sleds", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/hardware/sleds", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3582,12 +3631,15 @@ impl Client {
         &'a self,
         sled_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
-        let url = format!(
-            "{}/hardware/sleds/{}",
-            self.baseurl,
-            encode_path(&sled_id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/hardware/sleds/{}",
+                self.baseurl,
+                encode_path(&sled_id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3620,16 +3672,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
-        let url = format!("{}/images", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/images", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3700,8 +3751,12 @@ impl Client {
         &'a self,
         body: &'a types::GlobalImageCreate,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
-        let url = format!("{}/images", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/images", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3725,12 +3780,15 @@ impl Client {
         &'a self,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
-        let url = format!(
-            "{}/images/{}",
-            self.baseurl,
-            encode_path(&image_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/images/{}",
+                self.baseurl,
+                encode_path(&image_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3756,12 +3814,15 @@ impl Client {
         &'a self,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/images/{}",
-            self.baseurl,
-            encode_path(&image_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/images/{}",
+                self.baseurl,
+                encode_path(&image_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3791,16 +3852,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
-        let url = format!("{}/ip-pools", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/ip-pools", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3864,8 +3924,12 @@ impl Client {
         &'a self,
         body: &'a types::IpPoolCreate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!("{}/ip-pools", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/ip-pools", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3887,12 +3951,15 @@ impl Client {
         &'a self,
         pool_name: &'a types::Name,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!(
-            "{}/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/ip-pools/{}",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3915,12 +3982,16 @@ impl Client {
         pool_name: &'a types::Name,
         body: &'a types::IpPoolUpdate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!(
-            "{}/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/ip-pools/{}",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3942,12 +4013,15 @@ impl Client {
         &'a self,
         pool_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/ip-pools/{}",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -3979,19 +4053,18 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/ip-pools/{}/ranges",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/ip-pools/{}/ranges",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4059,12 +4132,16 @@ impl Client {
         pool_name: &'a types::Name,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
-        let url = format!(
-            "{}/ip-pools/{}/ranges/add",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/ip-pools/{}/ranges/add",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4087,12 +4164,16 @@ impl Client {
         pool_name: &'a types::Name,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/ip-pools/{}/ranges/remove",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/ip-pools/{}/ranges/remove",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4112,8 +4193,12 @@ impl Client {
         &'a self,
         body: &'a types::SpoofLoginBody,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/login", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/login", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4133,13 +4218,16 @@ impl Client {
         silo_name: &'a types::Name,
         provider_name: &'a types::Name,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!(
-            "{}/login/{}/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/login/{}/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&provider_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4161,20 +4249,20 @@ impl Client {
         provider_name: &'a types::Name,
         body: B,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!(
-            "{}/login/{}/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
-        );
         let request = self
             .client
-            .post(url)
+            .post(format!(
+                "{}/login/{}/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&provider_name.to_string()),
+            ))
             .header(
                 reqwest::header::CONTENT_TYPE,
                 reqwest::header::HeaderValue::from_static("application/octet-stream"),
             )
             .body(body)
+            .query::<[(&str, Option<String>)]>(&vec![])
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -4186,8 +4274,11 @@ impl Client {
 
     ///Sends a `POST` request to `/logout`
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/logout", self.baseurl,);
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(format!("{}/logout", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4211,16 +4302,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
-        let url = format!("{}/organizations", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/organizations", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4285,8 +4375,12 @@ impl Client {
         &'a self,
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!("{}/organizations", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/organizations", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4311,12 +4405,15 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4343,12 +4440,16 @@ impl Client {
         organization_name: &'a types::Name,
         body: &'a types::OrganizationUpdate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4373,12 +4474,15 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4403,12 +4507,15 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/policy",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4435,12 +4542,16 @@ impl Client {
         organization_name: &'a types::Name,
         body: &'a types::OrganizationRolePolicy,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/policy",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4472,20 +4583,19 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4557,12 +4667,16 @@ impl Client {
         organization_name: &'a types::Name,
         body: &'a types::ProjectCreate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4590,13 +4704,16 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4626,13 +4743,17 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::ProjectUpdate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/projects/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4660,13 +4781,16 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4701,21 +4825,20 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/disks",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4798,13 +4921,17 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::DiskCreate,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/disks",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4830,14 +4957,17 @@ impl Client {
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/disks/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&disk_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4863,14 +4993,17 @@ impl Client {
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/disks/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&disk_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -4912,24 +5045,23 @@ impl Client {
         page_token: Option<&'a str>,
         start_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
     ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
-            encode_path(&metric_name.to_string()),
-        );
-        let query = [
-            ("end_time", end_time.map(|v| v.to_string())),
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("start_time", start_time.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&disk_name.to_string()),
+                encode_path(&metric_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("end_time", end_time.map(|v| v.to_string())),
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("start_time", start_time.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5039,21 +5171,20 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/images",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/images",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5141,13 +5272,17 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::ImageCreate,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/images",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/images",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5175,14 +5310,17 @@ impl Client {
         project_name: &'a types::Name,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/images/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&image_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/images/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&image_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5212,14 +5350,17 @@ impl Client {
         project_name: &'a types::Name,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/images/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&image_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/images/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&image_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5254,21 +5395,20 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/instances",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5352,13 +5492,17 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::InstanceCreate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/instances",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5384,14 +5528,17 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/instances/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5417,14 +5564,17 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/instances/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5462,22 +5612,21 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/disks",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5565,14 +5714,18 @@ impl Client {
         instance_name: &'a types::Name,
         body: &'a types::DiskIdentifier,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5597,14 +5750,18 @@ impl Client {
         instance_name: &'a types::Name,
         body: &'a types::DiskIdentifier,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5630,14 +5787,17 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::ExternalIpResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/external-ips",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/external-ips",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5665,14 +5825,18 @@ impl Client {
         instance_name: &'a types::Name,
         body: &'a types::InstanceMigrate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/migrate",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/migrate",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5710,22 +5874,21 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5816,14 +5979,18 @@ impl Client {
         instance_name: &'a types::Name,
         body: &'a types::NetworkInterfaceCreate,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5850,15 +6017,18 @@ impl Client {
         instance_name: &'a types::Name,
         interface_name: &'a types::Name,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+                encode_path(&interface_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5886,15 +6056,19 @@ impl Client {
         interface_name: &'a types::Name,
         body: &'a types::NetworkInterfaceUpdate,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+                encode_path(&interface_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5926,15 +6100,18 @@ impl Client {
         instance_name: &'a types::Name,
         interface_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+                encode_path(&interface_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -5960,14 +6137,17 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/reboot",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/reboot",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6012,22 +6192,21 @@ impl Client {
         max_bytes: Option<u64>,
         most_recent: Option<u64>,
     ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/serial-console",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let query = [
-            ("from_start", from_start.map(|v| v.to_string())),
-            ("max_bytes", max_bytes.map(|v| v.to_string())),
-            ("most_recent", most_recent.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/serial-console",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("from_start", from_start.map(|v| v.to_string())),
+                ("max_bytes", max_bytes.map(|v| v.to_string())),
+                ("most_recent", most_recent.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6053,14 +6232,17 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/start",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/start",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6086,14 +6268,17 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/stop",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/instances/{}/stop",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6121,13 +6306,16 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/policy",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6157,13 +6345,17 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::ProjectRolePolicy,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/projects/{}/policy",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6198,21 +6390,20 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/snapshots",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6296,13 +6487,17 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::SnapshotCreate,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/snapshots",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6328,14 +6523,17 @@ impl Client {
         project_name: &'a types::Name,
         snapshot_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&snapshot_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/snapshots/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&snapshot_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6361,14 +6559,17 @@ impl Client {
         project_name: &'a types::Name,
         snapshot_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&snapshot_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/snapshots/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&snapshot_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6403,21 +6604,20 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6500,13 +6700,17 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::VpcCreate,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/vpcs",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6532,14 +6736,17 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6566,14 +6773,18 @@ impl Client {
         vpc_name: &'a types::Name,
         body: &'a types::VpcUpdate,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6599,14 +6810,17 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6632,14 +6846,17 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6666,14 +6883,18 @@ impl Client {
         vpc_name: &'a types::Name,
         body: &'a types::VpcFirewallRuleUpdateParams,
     ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6711,22 +6932,21 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6817,14 +7037,18 @@ impl Client {
         vpc_name: &'a types::Name,
         body: &'a types::VpcRouterCreate,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6851,15 +7075,18 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6887,15 +7114,19 @@ impl Client {
         router_name: &'a types::Name,
         body: &'a types::VpcRouterUpdate,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6922,15 +7153,18 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6970,23 +7204,22 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7083,15 +7316,19 @@ impl Client {
         router_name: &'a types::Name,
         body: &'a types::RouterRouteCreateParams,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7119,16 +7356,19 @@ impl Client {
         router_name: &'a types::Name,
         route_name: &'a types::Name,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+                encode_path(&route_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7157,16 +7397,20 @@ impl Client {
         route_name: &'a types::Name,
         body: &'a types::RouterRouteUpdateParams,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+                encode_path(&route_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7194,16 +7438,19 @@ impl Client {
         router_name: &'a types::Name,
         route_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+                encode_path(&route_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7241,22 +7488,21 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7347,14 +7593,18 @@ impl Client {
         vpc_name: &'a types::Name,
         body: &'a types::VpcSubnetCreate,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7381,15 +7631,18 @@ impl Client {
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&subnet_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7417,15 +7670,19 @@ impl Client {
         subnet_name: &'a types::Name,
         body: &'a types::VpcSubnetUpdate,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&subnet_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7452,15 +7709,18 @@ impl Client {
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&subnet_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7500,23 +7760,22 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&subnet_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7606,8 +7865,11 @@ impl Client {
     pub async fn policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/policy", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!("{}/policy", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7629,8 +7891,12 @@ impl Client {
         &'a self,
         body: &'a types::FleetRolePolicy,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/policy", self.baseurl,);
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!("{}/policy", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7658,15 +7924,14 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
-        let url = format!("{}/roles", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/roles", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7731,12 +7996,15 @@ impl Client {
         &'a self,
         role_name: &'a str,
     ) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
-        let url = format!(
-            "{}/roles/{}",
-            self.baseurl,
-            encode_path(&role_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/roles/{}",
+                self.baseurl,
+                encode_path(&role_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7766,16 +8034,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
-        let url = format!("{}/sagas", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/sagas", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7839,12 +8106,15 @@ impl Client {
         &'a self,
         saga_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
-        let url = format!(
-            "{}/sagas/{}",
-            self.baseurl,
-            encode_path(&saga_id.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/sagas/{}",
+                self.baseurl,
+                encode_path(&saga_id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7865,8 +8135,11 @@ impl Client {
     pub async fn session_me<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
-        let url = format!("{}/session/me", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!("{}/session/me", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7896,16 +8169,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
-        let url = format!("{}/session/me/sshkeys", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/session/me/sshkeys", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7969,8 +8241,12 @@ impl Client {
         &'a self,
         body: &'a types::SshKeyCreate,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
-        let url = format!("{}/session/me/sshkeys", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/session/me/sshkeys", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7992,12 +8268,15 @@ impl Client {
         &'a self,
         ssh_key_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
-        let url = format!(
-            "{}/session/me/sshkeys/{}",
-            self.baseurl,
-            encode_path(&ssh_key_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/session/me/sshkeys/{}",
+                self.baseurl,
+                encode_path(&ssh_key_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8019,12 +8298,15 @@ impl Client {
         &'a self,
         ssh_key_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/session/me/sshkeys/{}",
-            self.baseurl,
-            encode_path(&ssh_key_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/session/me/sshkeys/{}",
+                self.baseurl,
+                encode_path(&ssh_key_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8052,16 +8334,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
-        let url = format!("{}/silos", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/silos", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8123,8 +8404,12 @@ impl Client {
         &'a self,
         body: &'a types::SiloCreate,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
-        let url = format!("{}/silos", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!("{}/silos", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8149,12 +8434,15 @@ impl Client {
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
-        let url = format!(
-            "{}/silos/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/silos/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8179,12 +8467,15 @@ impl Client {
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/silos/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(format!(
+                "{}/silos/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8216,20 +8507,19 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/silos/{}/identity-providers",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/silos/{}/identity-providers",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8299,12 +8589,15 @@ impl Client {
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/silos/{}/policy",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/silos/{}/policy",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8331,12 +8624,16 @@ impl Client {
         silo_name: &'a types::Name,
         body: &'a types::SiloRolePolicy,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/silos/{}/policy",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!(
+                "{}/silos/{}/policy",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8363,12 +8660,16 @@ impl Client {
         silo_name: &'a types::Name,
         body: &'a types::SamlIdentityProviderCreate,
     ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
-        let url = format!(
-            "{}/silos/{}/saml-identity-providers",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/silos/{}/saml-identity-providers",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            ))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8396,13 +8697,16 @@ impl Client {
         silo_name: &'a types::Name,
         provider_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
-        let url = format!(
-            "{}/silos/{}/saml-identity-providers/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/silos/{}/saml-identity-providers/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&provider_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8432,16 +8736,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/user", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/system/user", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8509,12 +8812,15 @@ impl Client {
         &'a self,
         user_name: &'a types::Name,
     ) -> Result<ResponseValue<types::UserBuiltin>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/user/{}",
-            self.baseurl,
-            encode_path(&user_name.to_string()),
-        );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!(
+                "{}/system/user/{}",
+                self.baseurl,
+                encode_path(&user_name.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8542,15 +8848,14 @@ impl Client {
         limit: Option<std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
-        let url = format!("{}/timeseries/schema", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/timeseries/schema", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8610,8 +8915,11 @@ impl Client {
     ///
     ///Sends a `POST` request to `/updates/refresh`
     pub async fn updates_refresh<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/updates/refresh", self.baseurl,);
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(format!("{}/updates/refresh", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8641,16 +8949,15 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
-        let url = format!("{}/users", self.baseurl,);
-        let query = [
-            ("limit", limit.map(|v| v.to_string())),
-            ("page_token", page_token.map(|v| v.to_string())),
-            ("sort_by", sort_by.map(|v| v.to_string())),
-        ]
-        .into_iter()
-        .filter_map(|(name, arg)| arg.map(|value| (name, value)))
-        .collect::<Vec<_>>();
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(format!("{}/users", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&[
+                ("limit", limit.map(|v| v.to_string())),
+                ("page_token", page_token.map(|v| v.to_string())),
+                ("sort_by", sort_by.map(|v| v.to_string())),
+            ])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

@@ -375,8 +375,11 @@ impl Client {
     pub async fn instance_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
-        let url = format!("{}/instance", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(format!("{}/instance", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -396,8 +399,12 @@ impl Client {
         &'a self,
         body: &'a types::InstanceEnsureRequest,
     ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
-        let url = format!("{}/instance", self.baseurl,);
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!("{}/instance", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -420,13 +427,16 @@ impl Client {
         id: &'a uuid::Uuid,
         snapshot_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/instance/disk/{}/snapshot/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-            encode_path(&snapshot_id.to_string()),
-        );
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(format!(
+                "{}/instance/disk/{}/snapshot/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+                encode_path(&snapshot_id.to_string()),
+            ))
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -446,8 +456,12 @@ impl Client {
         &'a self,
         body: &'a types::InstanceMigrateStatusRequest,
     ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>> {
-        let url = format!("{}/instance/migrate/status", self.baseurl,);
-        let request = self.client.get(url).json(&body).build()?;
+        let request = self
+            .client
+            .get(format!("{}/instance/migrate/status", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -466,10 +480,10 @@ impl Client {
     pub async fn instance_serial<'a>(
         &'a self,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
-        let url = format!("{}/instance/serial", self.baseurl,);
         let request = self
             .client
-            .get(url)
+            .get(format!("{}/instance/serial", self.baseurl,))
+            .query::<[(&str, Option<String>)]>(&vec![])
             .header(reqwest::header::CONNECTION, "Upgrade")
             .header(reqwest::header::UPGRADE, "websocket")
             .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -492,8 +506,12 @@ impl Client {
         &'a self,
         body: types::InstanceStateRequested,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/instance/state", self.baseurl,);
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(format!("{}/instance/state", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -513,8 +531,12 @@ impl Client {
         &'a self,
         body: &'a types::InstanceStateMonitorRequest,
     ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>> {
-        let url = format!("{}/instance/state-monitor", self.baseurl,);
-        let request = self.client.get(url).json(&body).build()?;
+        let request = self
+            .client
+            .get(format!("{}/instance/state-monitor", self.baseurl,))
+            .json(&body)
+            .query::<[(&str, Option<String>)]>(&vec![])
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

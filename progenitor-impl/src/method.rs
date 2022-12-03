@@ -728,19 +728,14 @@ impl Generator {
                 _ => None,
             })
             .collect::<Vec<_>>();
-        let (query_build, query_use) = if query_items.is_empty() {
-            (quote! {}, quote! {})
+        let query_build = if query_items.is_empty() {
+            quote! { vec![] }
         } else {
-            let query_build = quote! {
-                let query = [
+            quote! {
+                [
                     #(#query_items,)*
-                ].into_iter().filter_map(|(name, arg)| arg.map(|value| (name, value))).collect::<Vec<_>>();
-            };
-            let query_use = quote! {
-                .query(&query)
-            };
-
-            (query_build, query_use)
+                ]
+            }
         };
 
         let websock_hdrs = if method.dropshot_websocket {
@@ -936,14 +931,13 @@ impl Generator {
 
         let method_func = format_ident!("{}", method.method.as_str());
 
+        // `url_path` and `query_build` are not assigned to variables in the body implementation
+        // specifically so that they do not unintentionally shadow method parameters
         let body_impl = quote! {
-            #url_path
-            #query_build
-
             let request = #client.client
-                . #method_func (url)
+                . #method_func (#url_path)
                 #(#body_func)*
-                #query_use
+                .query::<[(&str, Option<String>)]>(&#query_build)
                 #websock_hdrs
                 .build()?;
             #pre_hook
