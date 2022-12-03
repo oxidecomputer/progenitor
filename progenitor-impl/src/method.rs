@@ -729,7 +729,7 @@ impl Generator {
             })
             .collect::<Vec<_>>();
         let query_call = if query_items.is_empty() {
-            quote! { }
+            quote! {}
         } else {
             quote! {
                 .query::<[(&str, Option<String>)]>(&[
