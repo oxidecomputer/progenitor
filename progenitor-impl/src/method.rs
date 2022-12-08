@@ -244,14 +244,15 @@ impl Generator {
         let mut query: Vec<(String, bool)> = Vec::new();
 
         let mut combined_path_parameters =
-            parameter_map(&path_parameters, &components)?;
-        for operation_param in items(&operation.parameters, &components) {
+            parameter_map(path_parameters, components)?;
+        for operation_param in items(&operation.parameters, components) {
             let parameter = operation_param?;
             combined_path_parameters
                 .insert(&parameter.parameter_data_ref().name, parameter);
         }
 
-        // Filter out any path parameters that have been overridden by an operation parameter
+        // Filter out any path parameters that have been overridden by an
+        // operation parameter
         let mut params = combined_path_parameters
             .values()
             .map(|parameter| {
