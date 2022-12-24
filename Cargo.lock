@@ -1158,6 +1158,7 @@ dependencies = [
  "proc-macro2",
  "progenitor-impl",
  "quote",
+ "schemars",
  "serde",
  "serde_json",
  "serde_tokenstream",
@@ -1516,9 +1517,9 @@ dependencies = [
 
 [[package]]
 name = "serde_tokenstream"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2794f0ba0179a8ca422c30d9975d86faf8306be0164bfc3b0b1ca4f060ac639d"
+checksum = "274f512d6748a01e67cbcde5b4307ab2c9d52a98a2b870a980ef0793a351deff"
 dependencies = [
  "proc-macro2",
  "serde",
@@ -1928,7 +1929,7 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 [[package]]
 name = "typify"
 version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#d877c1db69ac076b5ebf96229c9ff4c2f3fa3049"
+source = "git+https://github.com/oxidecomputer/typify#da0505b0b43180ee85d8df2a7c2504acb7ce01e0"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1937,7 +1938,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#d877c1db69ac076b5ebf96229c9ff4c2f3fa3049"
+source = "git+https://github.com/oxidecomputer/typify#da0505b0b43180ee85d8df2a7c2504acb7ce01e0"
 dependencies = [
  "heck",
  "log",
@@ -1955,7 +1956,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#d877c1db69ac076b5ebf96229c9ff4c2f3fa3049"
+source = "git+https://github.com/oxidecomputer/typify#da0505b0b43180ee85d8df2a7c2504acb7ce01e0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1981,9 +1982,9 @@ checksum = "1a01404663e3db436ed2746d9fefef640d868edae3cceb81c3b8d5732fda678f"
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.5"
+version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ceab39d59e4c9499d4e5a8ee0e2735b891bb7308ac83dfb4e80cad195c9f6f3"
+checksum = "84a22b9f218b40614adcb3f4ff08b703773ad44fa9423e4e0d346d5db86e4ebc"
 
 [[package]]
 name = "unicode-normalization"

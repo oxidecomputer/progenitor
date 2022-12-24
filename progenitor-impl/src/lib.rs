@@ -52,6 +52,7 @@ pub struct GenerationSettings {
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
     patch: HashMap<String, TypePatch>,
+    convert: Vec<(schemars::schema::SchemaObject, String, Vec<String>)>,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
@@ -122,6 +123,20 @@ impl GenerationSettings {
             .insert(type_name.as_ref().to_string(), patch.clone());
         self
     }
+
+    pub fn with_conversion<S: ToString, I: Iterator<Item = impl ToString>>(
+        &mut self,
+        schema: schemars::schema::SchemaObject,
+        type_name: S,
+        impls: I,
+    ) -> &mut Self {
+        self.convert.push((
+            schema,
+            type_name.to_string(),
+            impls.map(|x| x.to_string()).collect(),
+        ));
+        self
+    }
 }
 
 impl Default for Generator {
@@ -149,6 +164,16 @@ impl Generator {
         settings.patch.iter().for_each(|(type_name, patch)| {
             type_settings.with_patch(type_name, patch);
         });
+        settings
+            .convert
+            .iter()
+            .for_each(|(schema, type_name, impls)| {
+                type_settings.with_conversion(
+                    schema.clone(),
+                    type_name,
+                    impls.iter(),
+                );
+            });
         Self {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),

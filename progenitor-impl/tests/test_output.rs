@@ -26,7 +26,18 @@ fn verify_apis(openapi_file: &str) {
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Merged)
             .with_derive("JsonSchema")
-            .with_patch("Name", TypePatch::default().with_derive("Hash")),
+            .with_patch("Name", TypePatch::default().with_derive("Hash"))
+            .with_conversion(
+                schemars::schema::SchemaObject {
+                    instance_type: Some(
+                        schemars::schema::InstanceType::Integer.into(),
+                    ),
+                    format: Some("int32".to_string()),
+                    ..Default::default()
+                },
+                "usize",
+                ["Display"].into_iter(),
+            ),
     );
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
