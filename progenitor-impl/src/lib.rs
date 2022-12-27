@@ -471,7 +471,7 @@ impl Generator {
             "bytes = \"1.1\"",
             "futures-core = \"0.3\"",
             "percent-encoding = \"2.1\"",
-            "reqwest = { version = \"0.11.12\", features = [\"json\", \"stream\"] }",
+            "reqwest = { version = \"0.11.12\", default-features=false, features = [\"json\", \"stream\"] }",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
             "serde_urlencoded = \"0.7\"",
         ];
@@ -484,7 +484,7 @@ impl Generator {
             )
         }
         if self.type_space.uses_chrono() {
-            deps.push("chrono = { version = \"0.4\", features = [\"serde\"] }")
+            deps.push("chrono = { version = \"0.4\", default-features=false, features = [\"serde\"] }")
         }
         if self.uses_futures {
             deps.push("futures = \"0.3\"")
