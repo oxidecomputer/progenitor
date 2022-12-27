@@ -3,8 +3,11 @@ name = "progenitor"
 version = "0.2.1-dev"
 edition = "2021"
 license = "MPL-2.0"
-repository = "https://github.com/oxidecomputer/progenitor.git"
 description = "An OpenAPI client generator"
+repository = "https://github.com/oxidecomputer/progenitor.git"
+readme = "../README.md"
+keywords = ["openapi", "openapiv3", "sdk", "generator", "proc_macro"]
+categories = ["api-bindings", "compilers"]
 
 [dependencies]
 progenitor-client = { version = "0.2.1-dev", path = "../progenitor-client" }

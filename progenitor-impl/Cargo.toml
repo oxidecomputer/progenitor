@@ -3,8 +3,9 @@ name = "progenitor-impl"
 version = "0.2.1-dev"
 edition = "2021"
 license = "MPL-2.0"
-repository = "https://github.com/oxidecomputer/progenitor.git"
 description = "An OpenAPI client generator - core implementation"
+repository = "https://github.com/oxidecomputer/progenitor.git"
+readme = "../README.md"
 
 [dependencies]
 heck = "0.4.0"

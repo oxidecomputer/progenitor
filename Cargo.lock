@@ -1158,6 +1158,7 @@ dependencies = [
  "proc-macro2",
  "progenitor-impl",
  "quote",
+ "schemars",
  "serde",
  "serde_json",
  "serde_tokenstream",
@@ -1928,7 +1929,7 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 [[package]]
 name = "typify"
 version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#1aefa41396d0aefa1a9dbb32320445ab02a5cbc3"
+source = "git+https://github.com/oxidecomputer/typify#da0505b0b43180ee85d8df2a7c2504acb7ce01e0"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -1937,7 +1938,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#1aefa41396d0aefa1a9dbb32320445ab02a5cbc3"
+source = "git+https://github.com/oxidecomputer/typify#da0505b0b43180ee85d8df2a7c2504acb7ce01e0"
 dependencies = [
  "heck",
  "log",
@@ -1955,7 +1956,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#1aefa41396d0aefa1a9dbb32320445ab02a5cbc3"
+source = "git+https://github.com/oxidecomputer/typify#da0505b0b43180ee85d8df2a7c2504acb7ce01e0"
 dependencies = [
  "proc-macro2",
  "quote",

@@ -15,5 +15,6 @@ members = [
 #typify = { path = "../typify/typify" }
 
 #[patch.crates-io]
+#serde_tokenstream = { path = "../serde_tokenstream" }
 #typify = { path = "../typify/typify" }
 #rustfmt-wrapper = { path = "../rustfmt-wrapper" }

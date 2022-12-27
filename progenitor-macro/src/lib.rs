@@ -1,6 +1,6 @@
 // Copyright 2022 Oxide Computer Company
 
-use std::{collections::HashMap, path::Path};
+use std::{collections::HashMap, fmt::Display, path::Path};
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
@@ -8,8 +8,9 @@ use progenitor_impl::{
     GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch,
 };
 use quote::{quote, ToTokens};
+use schemars::schema::SchemaObject;
 use serde::Deserialize;
-use serde_tokenstream::ParseWrapper;
+use serde_tokenstream::{OrderedMap, ParseWrapper};
 use syn::LitStr;
 
 /// Generates a client from the given OpenAPI document
@@ -82,6 +83,24 @@ struct MacroSettings {
     derives: Vec<ParseWrapper<syn::Path>>,
     #[serde(default)]
     patch: HashMap<ParseWrapper<syn::Type>, MacroPatch>,
+    #[serde(default)]
+    convert: OrderedMap<
+        SchemaObject,
+        (ParseWrapper<syn::Path>, Vec<MacroSettingsImpl>),
+    >,
+}
+
+#[derive(Deserialize)]
+enum MacroSettingsImpl {
+    Display,
+}
+
+impl Display for MacroSettingsImpl {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MacroSettingsImpl::Display => f.write_str("Display"),
+        }
+    }
 }
 
 #[derive(Deserialize)]
@@ -153,6 +172,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             post_hook,
             derives,
             patch,
+            convert,
         } = serde_tokenstream::from_tokenstream(&item.into())?;
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);
@@ -174,6 +194,15 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
                 &patch.into(),
             );
         });
+        convert
+            .into_iter()
+            .for_each(|(schema, (type_name, impls))| {
+                settings.with_conversion(
+                    schema,
+                    type_name.to_token_stream(),
+                    impls.into_iter(),
+                );
+            });
         (spec.into_inner(), settings)
     };
 

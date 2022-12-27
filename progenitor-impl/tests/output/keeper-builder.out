@@ -55,9 +55,9 @@ pub mod types {
 
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ReportFinishBody {
-        pub duration_millis: i32,
+        pub duration_millis: usize,
         pub end_time: chrono::DateTime<chrono::offset::Utc>,
-        pub exit_status: i32,
+        pub exit_status: usize,
         pub id: ReportId,
     }
 
@@ -120,11 +120,11 @@ pub mod types {
 
     #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
     pub struct ReportSummary {
-        pub age_seconds: i32,
-        pub duration_seconds: i32,
+        pub age_seconds: usize,
+        pub duration_seconds: usize,
         pub host: String,
         pub job: String,
-        pub status: i32,
+        pub status: usize,
         pub when: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -324,9 +324,9 @@ pub mod types {
         }
 
         pub struct ReportFinishBody {
-            duration_millis: Result<i32, String>,
+            duration_millis: Result<usize, String>,
             end_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            exit_status: Result<i32, String>,
+            exit_status: Result<usize, String>,
             id: Result<super::ReportId, String>,
         }
 
@@ -344,7 +344,7 @@ pub mod types {
         impl ReportFinishBody {
             pub fn duration_millis<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<i32>,
+                T: std::convert::TryInto<usize>,
                 T::Error: std::fmt::Display,
             {
                 self.duration_millis = value.try_into().map_err(|e| {
@@ -364,7 +364,7 @@ pub mod types {
             }
             pub fn exit_status<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<i32>,
+                T: std::convert::TryInto<usize>,
                 T::Error: std::fmt::Display,
             {
                 self.exit_status = value
@@ -624,11 +624,11 @@ pub mod types {
         }
 
         pub struct ReportSummary {
-            age_seconds: Result<i32, String>,
-            duration_seconds: Result<i32, String>,
+            age_seconds: Result<usize, String>,
+            duration_seconds: Result<usize, String>,
             host: Result<String, String>,
             job: Result<String, String>,
-            status: Result<i32, String>,
+            status: Result<usize, String>,
             when: Result<chrono::DateTime<chrono::offset::Utc>, String>,
         }
 
@@ -648,7 +648,7 @@ pub mod types {
         impl ReportSummary {
             pub fn age_seconds<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<i32>,
+                T: std::convert::TryInto<usize>,
                 T::Error: std::fmt::Display,
             {
                 self.age_seconds = value
@@ -658,7 +658,7 @@ pub mod types {
             }
             pub fn duration_seconds<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<i32>,
+                T: std::convert::TryInto<usize>,
                 T::Error: std::fmt::Display,
             {
                 self.duration_seconds = value.try_into().map_err(|e| {
@@ -691,7 +691,7 @@ pub mod types {
             }
             pub fn status<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<i32>,
+                T: std::convert::TryInto<usize>,
                 T::Error: std::fmt::Display,
             {
                 self.status = value
