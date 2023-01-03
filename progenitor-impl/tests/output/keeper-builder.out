@@ -5,7 +5,7 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct EnrolBody {
         pub host: String,
         pub key: String,
@@ -17,7 +17,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct GlobalJobsResult {
         pub summary: Vec<ReportSummary>,
     }
@@ -28,7 +28,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct OutputRecord {
         pub msg: String,
         pub stream: String,
@@ -41,7 +41,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct PingResult {
         pub host: String,
         pub ok: bool,
@@ -53,7 +53,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct ReportFinishBody {
         pub duration_millis: usize,
         pub end_time: chrono::DateTime<chrono::offset::Utc>,
@@ -67,7 +67,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct ReportId {
         pub host: String,
         pub job: String,
@@ -82,7 +82,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
@@ -94,7 +94,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct ReportResult {
         pub existed_already: bool,
     }
@@ -105,7 +105,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: String,
@@ -118,7 +118,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct ReportSummary {
         pub age_seconds: usize,
         pub duration_seconds: usize,
