@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
+#[allow(unused_imports)]
+use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -110,12 +112,24 @@ impl Client {
 
 impl Client {
     ///Sends a `POST` request to `/enrol`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    /// - `body`
     pub async fn enrol<'a>(
         &'a self,
+        authorization: &'a str,
         body: &'a types::EnrolBody,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/enrol", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let mut header_map = HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let request = self
+            .client
+            .post(url)
+            .json(&body)
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -125,11 +139,17 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/global/jobs`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
     pub async fn global_jobs<'a>(
         &'a self,
+        authorization: &'a str,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
         let url = format!("{}/global/jobs", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let mut header_map = HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let request = self.client.get(url).headers(header_map).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -139,9 +159,17 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/ping`
-    pub async fn ping<'a>(&'a self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    pub async fn ping<'a>(
+        &'a self,
+        authorization: &'a str,
+    ) -> Result<ResponseValue<types::PingResult>, Error<()>> {
         let url = format!("{}/ping", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let mut header_map = HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let request = self.client.get(url).headers(header_map).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -151,12 +179,24 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/report/finish`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    /// - `body`
     pub async fn report_finish<'a>(
         &'a self,
+        authorization: &'a str,
         body: &'a types::ReportFinishBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/finish", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let mut header_map = HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let request = self
+            .client
+            .post(url)
+            .json(&body)
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -166,12 +206,24 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/report/output`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    /// - `body`
     pub async fn report_output<'a>(
         &'a self,
+        authorization: &'a str,
         body: &'a types::ReportOutputBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/output", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let mut header_map = HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let request = self
+            .client
+            .post(url)
+            .json(&body)
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -181,12 +233,24 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/report/start`
+    ///
+    ///Arguments:
+    /// - `authorization`: Authorization header (bearer token)
+    /// - `body`
     pub async fn report_start<'a>(
         &'a self,
+        authorization: &'a str,
         body: &'a types::ReportStartBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/start", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let mut header_map = HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let request = self
+            .client
+            .post(url)
+            .json(&body)
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

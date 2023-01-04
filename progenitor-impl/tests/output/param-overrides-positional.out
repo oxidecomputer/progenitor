@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
+#[allow(unused_imports)]
+use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -56,7 +58,7 @@ impl Client {
         unique_key: Option<&'a str>,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/key", self.baseurl,);
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(2usize);
         if let Some(v) = &key {
             query.push(("key", v.to_string()));
         }

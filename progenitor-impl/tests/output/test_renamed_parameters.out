@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
+#[allow(unused_imports)]
+use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -66,7 +68,7 @@ impl Client {
             encode_path(&type_.to_string()),
             encode_path(&trait_.to_string()),
         );
-        let mut query = Vec::new();
+        let mut query = Vec::with_capacity(3usize);
         query.push(("if", if_.to_string()));
         query.push(("in", in_.to_string()));
         query.push(("use", use_.to_string()));
