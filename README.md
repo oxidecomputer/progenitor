@@ -34,6 +34,7 @@ You'll need to add add the following to `Cargo.toml`:
 
 ```diff
 [dependencies]
++futures = 0.3
 +progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
 +reqwest = { version = "0.11", features = ["json", "stream"] }
 +serde = { version = "1.0", features = ["derive"] }
@@ -114,6 +115,7 @@ You'll need to add add the following to `Cargo.toml`:
 
 ```diff
 [dependencies]
++futures = 0.3
 +progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
 +reqwest = { version = "0.11", features = ["json", "stream"] }
 +serde = { version = "1.0", features = ["derive"] }
