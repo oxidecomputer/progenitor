@@ -30,7 +30,7 @@ macro:
 generate_api!("path/to/openapi_document.json");
 ```
 
-You'll need to add add the following to `Cargo.toml`:
+You'll need to add the following to `Cargo.toml`:
 
 ```diff
 [dependencies]
