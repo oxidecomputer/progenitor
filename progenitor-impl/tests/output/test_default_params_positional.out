@@ -43,12 +43,18 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
+///Client for pagination-demo
 pub struct Client {
     pub(crate) baseurl: String,
     pub(crate) client: reqwest::Client,
 }
 
 impl Client {
+    /// Create a new client.
+    ///
+    /// `baseurl` is the base URL provided to the internal
+    /// `reqwest::Client`, and should include a scheme and hostname,
+    /// as well as port and a path stem if applicable.
     pub fn new(baseurl: &str) -> Self {
         let dur = std::time::Duration::from_secs(15);
         let client = reqwest::ClientBuilder::new()
@@ -59,6 +65,12 @@ impl Client {
         Self::new_with_client(baseurl, client)
     }
 
+    /// Construct a new client with an existing `reqwest::Client`,
+    /// allowing more control over its configuration.
+    ///
+    /// `baseurl` is the base URL provided to the internal
+    /// `reqwest::Client`, and should include a scheme and hostname,
+    /// as well as port and a path stem if applicable.
     pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
         Self {
             baseurl: baseurl.to_string(),
@@ -66,10 +78,12 @@ impl Client {
         }
     }
 
+    /// Return the base URL to which requests are made.
     pub fn baseurl(&self) -> &String {
         &self.baseurl
     }
 
+    /// Return the internal `reqwest::Client` used to make requests.
     pub fn client(&self) -> &reqwest::Client {
         &self.client
     }
