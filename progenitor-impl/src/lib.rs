@@ -255,6 +255,12 @@ impl Generator {
             }
         });
 
+        let client_docstring = if let Some(description) = &spec.info.description
+        {
+            format!("Client for {}\n\n{}", spec.info.title, description)
+        } else {
+            format!("Client for {}", spec.info.title)
+        };
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
@@ -275,6 +281,7 @@ impl Generator {
             }
 
             #[derive(Clone, Debug)]
+            #[doc = #client_docstring]
             pub struct Client {
                 pub(crate) baseurl: String,
                 pub(crate) client: reqwest::Client,
@@ -282,6 +289,11 @@ impl Generator {
             }
 
             impl Client {
+                /// Create a new client.
+                ///
+                /// `baseurl` is the base URL provided to the internal
+                /// `reqwest::Client`, and should include a scheme and hostname,
+                /// as well as port and a path stem if applicable.
                 pub fn new(
                     baseurl: &str,
                     #inner_parameter
@@ -295,6 +307,12 @@ impl Generator {
                     Self::new_with_client(baseurl, client, #inner_value)
                 }
 
+                /// Construct a new client with an existing `reqwest::Client`,
+                /// allowing more control over its configuration.
+                ///
+                /// `baseurl` is the base URL provided to the internal
+                /// `reqwest::Client`, and should include a scheme and hostname,
+                /// as well as port and a path stem if applicable.
                 pub fn new_with_client(
                     baseurl: &str,
                     client: reqwest::Client,
@@ -307,10 +325,12 @@ impl Generator {
                     }
                 }
 
+                /// Return the base URL to which requests are made.
                 pub fn baseurl(&self) -> &String {
                     &self.baseurl
                 }
 
+                /// Return the internal `reqwest::Client` used to make requests.
                 pub fn client(&self) -> &reqwest::Client {
                     &self.client
                 }
