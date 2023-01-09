@@ -1,6 +1,7 @@
 // Copyright 2022 Oxide Computer Company
 
 use std::{
+    collections::HashMap,
     fs::{File, OpenOptions},
     io::Write,
     path::{Path, PathBuf},
@@ -10,6 +11,11 @@ use anyhow::{bail, Result};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
+
+pub mod built_info {
+    // The file has been placed there by the build script.
+    include!(concat!(env!("OUT_DIR"), "/built.rs"));
+}
 
 #[derive(Parser)]
 struct Args {
@@ -129,7 +135,7 @@ fn main() -> Result<()> {
                 \n",
                 name,
                 version,
-                builder.dependencies().join("\n"),
+                dependencies(builder).join("\n"),
             );
 
             save(&toml, tomlout.as_str())?;
@@ -165,6 +171,64 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+pub fn dependencies(builder: Generator) -> Vec<String> {
+    let dependency_versions: HashMap<String, String> = built_info::DEPENDENCIES
+        .iter()
+        .map(|(name, version)| (name.to_string(), version.to_string()))
+        .collect();
+
+    let mut deps = vec![
+        format!("bytes = \"{}\"", dependency_versions.get("bytes").unwrap()),
+        format!("futures-core = \"{}\"", dependency_versions.get("futures-core").unwrap()),
+        format!("percent-encoding = \"{}\"", dependency_versions.get("percent-encoding").unwrap()),
+        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", dependency_versions.get("reqwest").unwrap()),
+        format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", dependency_versions.get("serde").unwrap()),
+        format!("serde_urlencoded = \"{}\"", dependency_versions.get("serde_urlencoded").unwrap()),
+    ];
+
+    let type_space = builder.get_type_space();
+
+    if type_space.uses_regress() {
+        deps.push(format!(
+            "regress = \"{}\"",
+            dependency_versions.get("regress").unwrap()
+        ));
+    }
+    if type_space.uses_uuid() {
+        deps.push(format!(
+            "uuid = {{ version = \"{}\", features = [\"serde\", \"v4\"] }}",
+            dependency_versions.get("uuid").unwrap()
+        ));
+    }
+    if type_space.uses_chrono() {
+        deps.push(format!("chrono = {{ version = \"{}\", default-features=false, features = [\"serde\"] }}", dependency_versions.get("chrono").unwrap()))
+    }
+    if builder.uses_futures() {
+        deps.push(format!(
+            "futures = \"{}\"",
+            dependency_versions.get("futures").unwrap()
+        ));
+    }
+    if builder.uses_websockets() {
+        deps.push(format!(
+            "base64 = \"{}\"",
+            dependency_versions.get("base64").unwrap()
+        ));
+        deps.push(format!(
+            "rand = \"{}\"",
+            dependency_versions.get("rand").unwrap()
+        ));
+    }
+    if type_space.uses_serde_json() {
+        deps.push(format!(
+            "serde_json = \"{}\"",
+            dependency_versions.get("serde_json").unwrap()
+        ));
+    }
+    deps.sort_unstable();
+    deps
 }
 
 fn load_api<P>(p: P) -> Result<OpenAPI>
