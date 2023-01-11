@@ -1706,8 +1706,7 @@ impl Generator {
         // be validated by doc tests, but in order to use the Client we need
         // to import it, and in order to import it we need to know the name of
         // the containing crate... which we can't from this context.
-        let doc =
-            format!("{}\n```ignore\n{}\n```", make_doc_comment(method), eg);
+        let doc = format!("{}```ignore\n{}\n```", make_doc_comment(method), eg);
 
         let sig = quote! {
             fn #operation_id(&self) -> builder:: #struct_ident
@@ -1945,7 +1944,7 @@ fn make_doc_comment(method: &OperationMethod) -> String {
     }
 
     buf.push_str(&format!(
-        "Sends a `{}` request to `{}`",
+        "Sends a `{}` request to `{}`\n\n",
         method.method.as_str().to_ascii_uppercase(),
         method.path.to_string(),
     ));
@@ -1957,7 +1956,7 @@ fn make_doc_comment(method: &OperationMethod) -> String {
         .count()
         > 0
     {
-        buf.push_str("\n\nArguments:\n");
+        buf.push_str("Arguments:\n");
         for param in &method.params {
             buf.push_str(&format!("- `{}`", param.name));
             if let Some(description) = &param.description {
@@ -1984,7 +1983,7 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
     }
 
     buf.push_str(&format!(
-        "Sends repeated `{}` requests to `{}` until there are no more results.",
+        "Sends repeated `{}` requests to `{}` until there are no more results.\n\n",
         method.method.as_str().to_ascii_uppercase(),
         method.path.to_string(),
     ));
@@ -1997,7 +1996,7 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
         .count()
         > 0
     {
-        buf.push_str("\n\nArguments:\n");
+        buf.push_str("Arguments:\n");
         for param in &method.params {
             if param.api_name.as_str() == "page_token" {
                 continue;

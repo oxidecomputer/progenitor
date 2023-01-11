@@ -68,7 +68,6 @@ impl Client {
     ///   parameter
     /// - `unique_key`: A key parameter that will not be overridden by the path
     ///   spec
-    ///
     ///```ignore
     /// let response = client.key_get()
     ///    .key(key)

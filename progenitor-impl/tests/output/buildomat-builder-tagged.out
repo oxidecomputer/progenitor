@@ -1316,6 +1316,7 @@ impl Client {
 
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
+    ///
     ///```ignore
     /// let response = client.control_hold()
     ///    .send()
@@ -1326,6 +1327,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/control/resume`
+    ///
     ///```ignore
     /// let response = client.control_resume()
     ///    .send()
@@ -1336,6 +1338,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/task/{task}`
+    ///
     ///```ignore
     /// let response = client.task_get()
     ///    .task(task)
@@ -1347,6 +1350,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks`
+    ///
     ///```ignore
     /// let response = client.tasks_get()
     ///    .send()
@@ -1357,6 +1361,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/tasks`
+    ///
     ///```ignore
     /// let response = client.task_submit()
     ///    .body(body)
@@ -1368,6 +1373,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/events`
+    ///
     ///```ignore
     /// let response = client.task_events_get()
     ///    .task(task)
@@ -1380,6 +1386,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
+    ///
     ///```ignore
     /// let response = client.task_outputs_get()
     ///    .task(task)
@@ -1391,6 +1398,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
+    ///
     ///```ignore
     /// let response = client.task_output_download()
     ///    .task(task)
@@ -1403,6 +1411,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/users`
+    ///
     ///```ignore
     /// let response = client.user_create()
     ///    .body(body)
@@ -1414,6 +1423,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/whoami`
+    ///
     ///```ignore
     /// let response = client.whoami()
     ///    .send()
@@ -1424,6 +1434,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/bootstrap`
+    ///
     ///```ignore
     /// let response = client.worker_bootstrap()
     ///    .body(body)
@@ -1435,6 +1446,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/worker/ping`
+    ///
     ///```ignore
     /// let response = client.worker_ping()
     ///    .send()
@@ -1445,6 +1457,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/append`
+    ///
     ///```ignore
     /// let response = client.worker_task_append()
     ///    .task(task)
@@ -1457,6 +1470,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
+    ///
     ///```ignore
     /// let response = client.worker_task_upload_chunk()
     ///    .task(task)
@@ -1469,6 +1483,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
+    ///
     ///```ignore
     /// let response = client.worker_task_complete()
     ///    .task(task)
@@ -1481,6 +1496,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/output`
+    ///
     ///```ignore
     /// let response = client.worker_task_add_output()
     ///    .task(task)
@@ -1493,6 +1509,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/workers`
+    ///
     ///```ignore
     /// let response = client.workers_list()
     ///    .send()
@@ -1503,6 +1520,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/workers/recycle`
+    ///
     ///```ignore
     /// let response = client.workers_recycle()
     ///    .send()
