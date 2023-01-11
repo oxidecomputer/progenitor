@@ -822,7 +822,10 @@ impl Generator {
                 .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
                 .header(
                     reqwest::header::SEC_WEBSOCKET_KEY,
-                    base64::encode(rand::random::<[u8; 16]>()),
+                    base64::Engine::encode(
+                        &base64::engine::general_purpose::STANDARD,
+                        rand::random::<[u8; 16]>(),
+                    )
                 )
             }
         } else {
