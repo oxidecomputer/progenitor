@@ -1,23 +1,42 @@
 // Copyright 2022 Oxide Computer Company
 
-use std::{fs::File, path::PathBuf};
+use std::{
+    fs::File,
+    path::{Path, PathBuf},
+};
 
 use progenitor_impl::{
     GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch,
 };
 
+use openapiv3::OpenAPI;
+
+fn load_api<P>(p: P) -> OpenAPI
+where
+    P: AsRef<Path> + std::clone::Clone + std::fmt::Debug,
+{
+    let mut f = File::open(p.clone()).unwrap();
+    match serde_json::from_reader(f) {
+        Ok(json_value) => json_value,
+        _ => {
+            f = File::open(p.clone()).unwrap();
+            serde_yaml::from_reader(f).unwrap()
+        }
+    }
+}
+
 #[track_caller]
 fn verify_apis(openapi_file: &str) {
     let mut in_path = PathBuf::from("../sample_openapi");
-    in_path.push(format!("{}.json", openapi_file));
+    in_path.push(openapi_file);
+    let openapi_stem = openapi_file.split('.').next().unwrap();
 
-    let file = File::open(in_path).unwrap();
-    let spec = serde_json::from_reader(file).unwrap();
+    let spec = load_api(in_path);
 
     let mut generator = Generator::default();
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
-        format!("tests/output/{}-positional.out", openapi_file),
+        format!("tests/output/{}-positional.out", openapi_stem),
         &output,
     );
 
@@ -41,7 +60,7 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
-        format!("tests/output/{}-builder.out", openapi_file),
+        format!("tests/output/{}-builder.out", openapi_stem),
         &output,
     );
 
@@ -53,34 +72,39 @@ fn verify_apis(openapi_file: &str) {
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     println!("{output}");
     expectorate::assert_contents(
-        format!("tests/output/{}-builder-tagged.out", openapi_file),
+        format!("tests/output/{}-builder-tagged.out", openapi_stem),
         &output,
     );
 }
 
 #[test]
 fn test_keeper() {
-    verify_apis("keeper");
+    verify_apis("keeper.json");
 }
 
 #[test]
 fn test_buildomat() {
-    verify_apis("buildomat");
+    verify_apis("buildomat.json");
 }
 
 #[test]
 fn test_nexus() {
-    verify_apis("nexus");
+    verify_apis("nexus.json");
 }
 
 #[test]
 fn test_propolis_server() {
-    verify_apis("propolis-server");
+    verify_apis("propolis-server.json");
 }
 
 #[test]
 fn test_param_override() {
-    verify_apis("param-overrides");
+    verify_apis("param-overrides.json");
+}
+
+#[test]
+fn test_yaml() {
+    verify_apis("param-overrides.yaml");
 }
 
 // TODO this file is full of inconsistencies and incorrectly specified types.
@@ -89,5 +113,5 @@ fn test_param_override() {
 #[ignore]
 #[test]
 fn test_github() {
-    verify_apis("api.github.com");
+    verify_apis("api.github.com.json");
 }

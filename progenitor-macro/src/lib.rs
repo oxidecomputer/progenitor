@@ -1,6 +1,11 @@
 // Copyright 2022 Oxide Computer Company
 
-use std::{collections::HashMap, fmt::Display, path::Path};
+use std::{
+    collections::HashMap,
+    fmt::Display,
+    fs::File,
+    path::{Path, PathBuf},
+};
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
@@ -33,7 +38,7 @@ use syn::LitStr;
 /// );
 /// ```
 ///
-/// The `spec` key is required; it is the OpenAPI document from which the
+/// The `spec` key is required; it is the OpenAPI document (JSON or YAML) from which the
 /// client is derived.
 ///
 /// The optional `interface` lets you specify either a `Positional` argument or
@@ -158,6 +163,16 @@ impl syn::parse::Parse for ClosureOrPath {
     }
 }
 
+fn open_file(
+    path: PathBuf,
+    span: proc_macro2::Span,
+) -> Result<File, syn::Error> {
+    File::open(path.clone()).map_err(|e| {
+        let path_str = path.to_string_lossy();
+        syn::Error::new(span, format!("couldn't read file {}: {}", path_str, e))
+    })
+}
+
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let (spec, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone())
     {
@@ -214,19 +229,19 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let path = dir.join(spec.value());
     let path_str = path.to_string_lossy();
 
-    let oapi: OpenAPI =
-        serde_json::from_reader(std::fs::File::open(&path).map_err(|e| {
-            syn::Error::new(
-                spec.span(),
-                format!("couldn't read file {}: {}", path_str, e),
-            )
-        })?)
-        .map_err(|e| {
-            syn::Error::new(
-                spec.span(),
-                format!("failed to parse {}: {}", path_str, e),
-            )
-        })?;
+    let mut f = open_file(path.clone(), spec.span())?;
+    let oapi: OpenAPI = match serde_json::from_reader(f) {
+        Ok(json_value) => json_value,
+        _ => {
+            f = open_file(path.clone(), spec.span())?;
+            serde_yaml::from_reader(f).map_err(|e| {
+                syn::Error::new(
+                    spec.span(),
+                    format!("failed to parse {}: {}", path_str, e),
+                )
+            })?
+        }
+    };
 
     let mut builder = Generator::new(&settings);
 

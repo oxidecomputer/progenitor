@@ -13,7 +13,7 @@ use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 
 #[derive(Parser)]
 struct Args {
-    /// OpenAPI definition document (JSON)
+    /// OpenAPI definition document (JSON or YAML)
     #[clap(short = 'i', long)]
     input: String,
     /// Output directory for Rust crate
@@ -167,11 +167,17 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-pub fn load_api<P>(p: P) -> Result<OpenAPI>
+fn load_api<P>(p: P) -> Result<OpenAPI>
 where
-    P: AsRef<Path>,
+    P: AsRef<Path> + std::clone::Clone + std::fmt::Debug,
 {
-    let f = File::open(p)?;
-    let api = serde_json::from_reader(f)?;
+    let mut f = File::open(p.clone())?;
+    let api = match serde_json::from_reader(f) {
+        Ok(json_value) => json_value,
+        _ => {
+            f = File::open(p)?;
+            serde_yaml::from_reader(f)?
+        }
+    };
     Ok(api)
 }
