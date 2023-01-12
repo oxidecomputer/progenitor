@@ -102,7 +102,7 @@ pub(crate) fn sanitize(input: &str, case: Case) -> String {
         "-1" => "minus1".to_string(),
         _ => to_case(
             &input
-                .replace("'", "")
+                .replace('\'', "")
                 .replace(|c: char| !is_xid_continue(c), "-"),
         ),
     };
