@@ -1,4 +1,4 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2023 Oxide Computer Company
 
 #![allow(dead_code)]
 
@@ -366,6 +366,7 @@ where
     }
 }
 
+// See https://url.spec.whatwg.org/#url-path-segment-string
 const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
     .add(b' ')
     .add(b'"')
@@ -375,7 +376,9 @@ const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
     .add(b'?')
     .add(b'`')
     .add(b'{')
-    .add(b'}');
+    .add(b'}')
+    .add(b'/')
+    .add(b'%');
 
 #[doc(hidden)]
 pub fn encode_path(pc: &str) -> String {
