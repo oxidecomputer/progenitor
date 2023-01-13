@@ -1556,6 +1556,7 @@ impl Client {
 
 impl Client {
     ///Sends a `GET` request to `/instance`
+    ///
     ///```ignore
     /// let response = client.instance_get()
     ///    .send()
@@ -1566,6 +1567,7 @@ impl Client {
     }
 
     ///Sends a `PUT` request to `/instance`
+    ///
     ///```ignore
     /// let response = client.instance_ensure()
     ///    .body(body)
@@ -1579,6 +1581,7 @@ impl Client {
     ///Issue a snapshot request to a crucible backend
     ///
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
+    ///
     ///```ignore
     /// let response = client.instance_issue_crucible_snapshot_request()
     ///    .id(id)
@@ -1593,6 +1596,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/instance/migrate/status`
+    ///
     ///```ignore
     /// let response = client.instance_migrate_status()
     ///    .body(body)
@@ -1604,6 +1608,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/instance/serial`
+    ///
     ///```ignore
     /// let response = client.instance_serial()
     ///    .send()
@@ -1614,6 +1619,7 @@ impl Client {
     }
 
     ///Sends a `PUT` request to `/instance/state`
+    ///
     ///```ignore
     /// let response = client.instance_state_put()
     ///    .body(body)
@@ -1625,6 +1631,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/instance/state-monitor`
+    ///
     ///```ignore
     /// let response = client.instance_state_monitor()
     ///    .body(body)

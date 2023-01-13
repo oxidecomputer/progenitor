@@ -11113,6 +11113,7 @@ pub trait ClientDisksExt {
     ///Get a disk by id
     ///
     ///Sends a `GET` request to `/by-id/disks/{id}`
+    ///
     ///```ignore
     /// let response = client.disk_view_by_id()
     ///    .id(id)
@@ -11132,7 +11133,6 @@ pub trait ClientDisksExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.disk_list()
     ///    .organization_name(organization_name)
@@ -11153,7 +11153,6 @@ pub trait ClientDisksExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.disk_create()
     ///    .organization_name(organization_name)
@@ -11167,7 +11166,9 @@ pub trait ClientDisksExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
-    /// {disk_name}` ```ignore
+    /// {disk_name}`
+    ///
+    ///```ignore
     /// let response = client.disk_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11180,7 +11181,9 @@ pub trait ClientDisksExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
-    /// {disk_name}` ```ignore
+    /// {disk_name}`
+    ///
+    ///```ignore
     /// let response = client.disk_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11205,7 +11208,6 @@ pub trait ClientDisksExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `start_time`: An inclusive start time of metrics.
-    ///
     ///```ignore
     /// let response = client.disk_metrics_list()
     ///    .organization_name(organization_name)
@@ -11258,7 +11260,6 @@ pub trait ClientHardwareExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.rack_list()
     ///    .limit(limit)
@@ -11274,7 +11275,6 @@ pub trait ClientHardwareExt {
     ///
     ///Arguments:
     /// - `rack_id`: The rack's unique ID.
-    ///
     ///```ignore
     /// let response = client.rack_view()
     ///    .rack_id(rack_id)
@@ -11291,7 +11291,6 @@ pub trait ClientHardwareExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.sled_list()
     ///    .limit(limit)
@@ -11307,7 +11306,6 @@ pub trait ClientHardwareExt {
     ///
     ///Arguments:
     /// - `sled_id`: The sled's unique ID.
-    ///
     ///```ignore
     /// let response = client.sled_view()
     ///    .sled_id(sled_id)
@@ -11343,6 +11341,7 @@ pub trait ClientHiddenExt {
     /// must be verified and confirmed prior to a token being granted.
     ///
     ///Sends a `POST` request to `/device/auth`
+    ///
     ///```ignore
     /// let response = client.device_auth_request()
     ///    .body(body)
@@ -11358,6 +11357,7 @@ pub trait ClientHiddenExt {
     /// `/device/token`.
     ///
     ///Sends a `POST` request to `/device/confirm`
+    ///
     ///```ignore
     /// let response = client.device_auth_confirm()
     ///    .body(body)
@@ -11371,6 +11371,7 @@ pub trait ClientHiddenExt {
     /// verified and the grant is confirmed.
     ///
     ///Sends a `POST` request to `/device/token`
+    ///
     ///```ignore
     /// let response = client.device_access_token()
     ///    .body(body)
@@ -11379,6 +11380,7 @@ pub trait ClientHiddenExt {
     /// ```
     fn device_access_token(&self) -> builder::DeviceAccessToken;
     ///Sends a `POST` request to `/login`
+    ///
     ///```ignore
     /// let response = client.spoof_login()
     ///    .body(body)
@@ -11387,6 +11389,7 @@ pub trait ClientHiddenExt {
     /// ```
     fn spoof_login(&self) -> builder::SpoofLogin;
     ///Sends a `POST` request to `/logout`
+    ///
     ///```ignore
     /// let response = client.logout()
     ///    .send()
@@ -11396,6 +11399,7 @@ pub trait ClientHiddenExt {
     ///Fetch the user associated with the current session
     ///
     ///Sends a `GET` request to `/session/me`
+    ///
     ///```ignore
     /// let response = client.session_me()
     ///    .send()
@@ -11434,6 +11438,7 @@ pub trait ClientImagesExt {
     ///Fetch an image by id
     ///
     ///Sends a `GET` request to `/by-id/images/{id}`
+    ///
     ///```ignore
     /// let response = client.image_view_by_id()
     ///    .id(id)
@@ -11456,7 +11461,6 @@ pub trait ClientImagesExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.image_list()
     ///    .organization_name(organization_name)
@@ -11479,7 +11483,6 @@ pub trait ClientImagesExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.image_create()
     ///    .organization_name(organization_name)
@@ -11495,7 +11498,9 @@ pub trait ClientImagesExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/images/
-    /// {image_name}` ```ignore
+    /// {image_name}`
+    ///
+    ///```ignore
     /// let response = client.image_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11512,7 +11517,9 @@ pub trait ClientImagesExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/images/
-    /// {image_name}` ```ignore
+    /// {image_name}`
+    ///
+    ///```ignore
     /// let response = client.image_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11549,6 +11556,7 @@ pub trait ClientImagesGlobalExt {
     ///Get a global image by id
     ///
     ///Sends a `GET` request to `/by-id/global-images/{id}`
+    ///
     ///```ignore
     /// let response = client.image_global_view_by_id()
     ///    .id(id)
@@ -11568,7 +11576,6 @@ pub trait ClientImagesGlobalExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.image_global_list()
     ///    .limit(limit)
@@ -11584,6 +11591,7 @@ pub trait ClientImagesGlobalExt {
     /// base for instances.
     ///
     ///Sends a `POST` request to `/images`
+    ///
     ///```ignore
     /// let response = client.image_global_create()
     ///    .body(body)
@@ -11596,6 +11604,7 @@ pub trait ClientImagesGlobalExt {
     ///Returns the details of a specific global image.
     ///
     ///Sends a `GET` request to `/images/{image_name}`
+    ///
     ///```ignore
     /// let response = client.image_global_view()
     ///    .image_name(image_name)
@@ -11610,6 +11619,7 @@ pub trait ClientImagesGlobalExt {
     /// instances can not be created with this image.
     ///
     ///Sends a `DELETE` request to `/images/{image_name}`
+    ///
     ///```ignore
     /// let response = client.image_global_delete()
     ///    .image_name(image_name)
@@ -11645,6 +11655,7 @@ pub trait ClientInstancesExt {
     ///Get an instance by id
     ///
     ///Sends a `GET` request to `/by-id/instances/{id}`
+    ///
     ///```ignore
     /// let response = client.instance_view_by_id()
     ///    .id(id)
@@ -11655,6 +11666,7 @@ pub trait ClientInstancesExt {
     ///Get an instance's network interface by id
     ///
     ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
+    ///
     ///```ignore
     /// let response = client.instance_network_interface_view_by_id()
     ///    .id(id)
@@ -11674,7 +11686,6 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.instance_list()
     ///    .organization_name(organization_name)
@@ -11695,7 +11706,6 @@ pub trait ClientInstancesExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.instance_create()
     ///    .organization_name(organization_name)
@@ -11709,7 +11719,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}` ```ignore
+    /// {instance_name}`
+    ///
+    ///```ignore
     /// let response = client.instance_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11722,7 +11734,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}` ```ignore
+    /// {instance_name}`
+    ///
+    ///```ignore
     /// let response = client.instance_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11745,7 +11759,6 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.instance_disk_list()
     ///    .organization_name(organization_name)
@@ -11760,7 +11773,9 @@ pub trait ClientInstancesExt {
     fn instance_disk_list(&self) -> builder::InstanceDiskList;
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/disks/attach` ```ignore
+    /// {instance_name}/disks/attach`
+    ///
+    ///```ignore
     /// let response = client.instance_disk_attach()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11772,7 +11787,9 @@ pub trait ClientInstancesExt {
     fn instance_disk_attach(&self) -> builder::InstanceDiskAttach;
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/disks/detach` ```ignore
+    /// {instance_name}/disks/detach`
+    ///
+    ///```ignore
     /// let response = client.instance_disk_detach()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11786,7 +11803,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/external-ips` ```ignore
+    /// {instance_name}/external-ips`
+    ///
+    ///```ignore
     /// let response = client.instance_external_ip_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11800,7 +11819,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/migrate` ```ignore
+    /// {instance_name}/migrate`
+    ///
+    ///```ignore
     /// let response = client.instance_migrate()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11824,7 +11845,6 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.instance_network_interface_list()
     ///    .organization_name(organization_name)
@@ -11841,7 +11861,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces` ```ignore
+    /// {instance_name}/network-interfaces`
+    ///
+    ///```ignore
     /// let response = client.instance_network_interface_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11855,7 +11877,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces/{interface_name}` ```ignore
+    /// {instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///```ignore
     /// let response = client.instance_network_interface_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11869,7 +11893,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces/{interface_name}` ```ignore
+    /// {instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///```ignore
     /// let response = client.instance_network_interface_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11889,7 +11915,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces/{interface_name}` ```ignore
+    /// {instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///```ignore
     /// let response = client.instance_network_interface_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11903,7 +11931,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/reboot` ```ignore
+    /// {instance_name}/reboot`
+    ///
+    ///```ignore
     /// let response = client.instance_reboot()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11933,7 +11963,6 @@ pub trait ClientInstancesExt {
     ///   read, counting *backward* from the most recently buffered data
     ///   retrieved from the instance. (See note on `from_start` about mutual
     ///   exclusivity)
-    ///
     ///```ignore
     /// let response = client.instance_serial_console()
     ///    .organization_name(organization_name)
@@ -11950,7 +11979,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/start` ```ignore
+    /// {instance_name}/start`
+    ///
+    ///```ignore
     /// let response = client.instance_start()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -11963,7 +11994,9 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/stop` ```ignore
+    /// {instance_name}/stop`
+    ///
+    ///```ignore
     /// let response = client.instance_stop()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -12066,7 +12099,6 @@ pub trait ClientIpPoolsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.ip_pool_list()
     ///    .limit(limit)
@@ -12079,6 +12111,7 @@ pub trait ClientIpPoolsExt {
     ///Create a new IP Pool
     ///
     ///Sends a `POST` request to `/ip-pools`
+    ///
     ///```ignore
     /// let response = client.ip_pool_create()
     ///    .body(body)
@@ -12089,6 +12122,7 @@ pub trait ClientIpPoolsExt {
     ///Fetch a single IP Pool
     ///
     ///Sends a `GET` request to `/ip-pools/{pool_name}`
+    ///
     ///```ignore
     /// let response = client.ip_pool_view()
     ///    .pool_name(pool_name)
@@ -12099,6 +12133,7 @@ pub trait ClientIpPoolsExt {
     ///Update an IP Pool
     ///
     ///Sends a `PUT` request to `/ip-pools/{pool_name}`
+    ///
     ///```ignore
     /// let response = client.ip_pool_update()
     ///    .pool_name(pool_name)
@@ -12110,6 +12145,7 @@ pub trait ClientIpPoolsExt {
     ///Delete an IP Pool
     ///
     ///Sends a `DELETE` request to `/ip-pools/{pool_name}`
+    ///
     ///```ignore
     /// let response = client.ip_pool_delete()
     ///    .pool_name(pool_name)
@@ -12128,7 +12164,6 @@ pub trait ClientIpPoolsExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///
     ///```ignore
     /// let response = client.ip_pool_range_list()
     ///    .pool_name(pool_name)
@@ -12141,6 +12176,7 @@ pub trait ClientIpPoolsExt {
     ///Add a new range to an existing IP Pool
     ///
     ///Sends a `POST` request to `/ip-pools/{pool_name}/ranges/add`
+    ///
     ///```ignore
     /// let response = client.ip_pool_range_add()
     ///    .pool_name(pool_name)
@@ -12152,6 +12188,7 @@ pub trait ClientIpPoolsExt {
     ///Remove a range from an existing IP Pool
     ///
     ///Sends a `POST` request to `/ip-pools/{pool_name}/ranges/remove`
+    ///
     ///```ignore
     /// let response = client.ip_pool_range_remove()
     ///    .pool_name(pool_name)
@@ -12203,6 +12240,7 @@ pub trait ClientLoginExt {
     /// them to their identity provider.
     ///
     ///Sends a `GET` request to `/login/{silo_name}/{provider_name}`
+    ///
     ///```ignore
     /// let response = client.login()
     ///    .silo_name(silo_name)
@@ -12218,6 +12256,7 @@ pub trait ClientLoginExt {
     /// cookie.
     ///
     ///Sends a `POST` request to `/login/{silo_name}/{provider_name}`
+    ///
     ///```ignore
     /// let response = client.consume_credentials()
     ///    .silo_name(silo_name)
@@ -12248,7 +12287,6 @@ pub trait ClientMetricsExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///
     ///```ignore
     /// let response = client.timeseries_schema_get()
     ///    .limit(limit)
@@ -12269,6 +12307,7 @@ pub trait ClientOrganizationsExt {
     ///Get an organization by id
     ///
     ///Sends a `GET` request to `/by-id/organizations/{id}`
+    ///
     ///```ignore
     /// let response = client.organization_view_by_id()
     ///    .id(id)
@@ -12285,7 +12324,6 @@ pub trait ClientOrganizationsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.organization_list()
     ///    .limit(limit)
@@ -12298,6 +12336,7 @@ pub trait ClientOrganizationsExt {
     ///Create a new organization
     ///
     ///Sends a `POST` request to `/organizations`
+    ///
     ///```ignore
     /// let response = client.organization_create()
     ///    .body(body)
@@ -12311,7 +12350,6 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    ///
     ///```ignore
     /// let response = client.organization_view()
     ///    .organization_name(organization_name)
@@ -12326,7 +12364,6 @@ pub trait ClientOrganizationsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.organization_update()
     ///    .organization_name(organization_name)
@@ -12341,7 +12378,6 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    ///
     ///```ignore
     /// let response = client.organization_delete()
     ///    .organization_name(organization_name)
@@ -12355,7 +12391,6 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    ///
     ///```ignore
     /// let response = client.organization_policy_view()
     ///    .organization_name(organization_name)
@@ -12370,7 +12405,6 @@ pub trait ClientOrganizationsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.organization_policy_update()
     ///    .organization_name(organization_name)
@@ -12419,6 +12453,7 @@ pub trait ClientPolicyExt {
     ///Fetch the top-level IAM policy
     ///
     ///Sends a `GET` request to `/policy`
+    ///
     ///```ignore
     /// let response = client.policy_view()
     ///    .send()
@@ -12428,6 +12463,7 @@ pub trait ClientPolicyExt {
     ///Update the top-level IAM policy
     ///
     ///Sends a `PUT` request to `/policy`
+    ///
     ///```ignore
     /// let response = client.policy_update()
     ///    .body(body)
@@ -12451,6 +12487,7 @@ pub trait ClientProjectsExt {
     ///Get a project by id
     ///
     ///Sends a `GET` request to `/by-id/projects/{id}`
+    ///
     ///```ignore
     /// let response = client.project_view_by_id()
     ///    .id(id)
@@ -12468,7 +12505,6 @@ pub trait ClientProjectsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.project_list()
     ///    .organization_name(organization_name)
@@ -12486,7 +12522,6 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.project_create()
     ///    .organization_name(organization_name)
@@ -12503,7 +12538,6 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    ///
     ///```ignore
     /// let response = client.project_view()
     ///    .organization_name(organization_name)
@@ -12521,7 +12555,6 @@ pub trait ClientProjectsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.project_update()
     ///    .organization_name(organization_name)
@@ -12539,7 +12572,6 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    ///
     ///```ignore
     /// let response = client.project_delete()
     ///    .organization_name(organization_name)
@@ -12556,7 +12588,6 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    ///
     ///```ignore
     /// let response = client.project_policy_view()
     ///    .organization_name(organization_name)
@@ -12574,7 +12605,6 @@ pub trait ClientProjectsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.project_policy_update()
     ///    .organization_name(organization_name)
@@ -12629,7 +12659,6 @@ pub trait ClientRolesExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///
     ///```ignore
     /// let response = client.role_list()
     ///    .limit(limit)
@@ -12644,7 +12673,6 @@ pub trait ClientRolesExt {
     ///
     ///Arguments:
     /// - `role_name`: The built-in role's unique name.
-    ///
     ///```ignore
     /// let response = client.role_view()
     ///    .role_name(role_name)
@@ -12674,7 +12702,6 @@ pub trait ClientSagasExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.saga_list()
     ///    .limit(limit)
@@ -12687,6 +12714,7 @@ pub trait ClientSagasExt {
     ///Fetch information about a single saga (for debugging)
     ///
     ///Sends a `GET` request to `/sagas/{saga_id}`
+    ///
     ///```ignore
     /// let response = client.saga_view()
     ///    .saga_id(saga_id)
@@ -12716,7 +12744,6 @@ pub trait ClientSessionExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.session_sshkey_list()
     ///    .limit(limit)
@@ -12729,6 +12756,7 @@ pub trait ClientSessionExt {
     ///Create a new SSH public key for the current user
     ///
     ///Sends a `POST` request to `/session/me/sshkeys`
+    ///
     ///```ignore
     /// let response = client.session_sshkey_create()
     ///    .body(body)
@@ -12739,6 +12767,7 @@ pub trait ClientSessionExt {
     ///Get (by name) an SSH public key belonging to the current user
     ///
     ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
+    ///
     ///```ignore
     /// let response = client.session_sshkey_view()
     ///    .ssh_key_name(ssh_key_name)
@@ -12749,6 +12778,7 @@ pub trait ClientSessionExt {
     ///Delete (by name) an SSH public key belonging to the current user
     ///
     ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
+    ///
     ///```ignore
     /// let response = client.session_sshkey_delete()
     ///    .ssh_key_name(ssh_key_name)
@@ -12784,7 +12814,6 @@ pub trait ClientSilosExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.silo_list()
     ///    .limit(limit)
@@ -12797,6 +12826,7 @@ pub trait ClientSilosExt {
     ///Create a new silo
     ///
     ///Sends a `POST` request to `/silos`
+    ///
     ///```ignore
     /// let response = client.silo_create()
     ///    .body(body)
@@ -12810,7 +12840,6 @@ pub trait ClientSilosExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    ///
     ///```ignore
     /// let response = client.silo_view()
     ///    .silo_name(silo_name)
@@ -12824,7 +12853,6 @@ pub trait ClientSilosExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    ///
     ///```ignore
     /// let response = client.silo_delete()
     ///    .silo_name(silo_name)
@@ -12842,7 +12870,6 @@ pub trait ClientSilosExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.silo_identity_provider_list()
     ///    .silo_name(silo_name)
@@ -12859,7 +12886,6 @@ pub trait ClientSilosExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    ///
     ///```ignore
     /// let response = client.silo_policy_view()
     ///    .silo_name(silo_name)
@@ -12874,7 +12900,6 @@ pub trait ClientSilosExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.silo_policy_update()
     ///    .silo_name(silo_name)
@@ -12890,7 +12915,6 @@ pub trait ClientSilosExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.silo_identity_provider_create()
     ///    .silo_name(silo_name)
@@ -12907,7 +12931,6 @@ pub trait ClientSilosExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `provider_name`: The SAML identity provider's name
-    ///
     ///```ignore
     /// let response = client.silo_identity_provider_view()
     ///    .silo_name(silo_name)
@@ -12925,7 +12948,6 @@ pub trait ClientSilosExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.user_list()
     ///    .limit(limit)
@@ -12983,6 +13005,7 @@ pub trait ClientSnapshotsExt {
     ///Get a snapshot by id
     ///
     ///Sends a `GET` request to `/by-id/snapshots/{id}`
+    ///
     ///```ignore
     /// let response = client.snapshot_view_by_id()
     ///    .id(id)
@@ -13002,7 +13025,6 @@ pub trait ClientSnapshotsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.snapshot_list()
     ///    .organization_name(organization_name)
@@ -13023,7 +13045,6 @@ pub trait ClientSnapshotsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.snapshot_create()
     ///    .organization_name(organization_name)
@@ -13037,7 +13058,9 @@ pub trait ClientSnapshotsExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
-    /// {snapshot_name}` ```ignore
+    /// {snapshot_name}`
+    ///
+    ///```ignore
     /// let response = client.snapshot_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13050,7 +13073,9 @@ pub trait ClientSnapshotsExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
-    /// {snapshot_name}` ```ignore
+    /// {snapshot_name}`
+    ///
+    ///```ignore
     /// let response = client.snapshot_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13093,7 +13118,6 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.system_user_list()
     ///    .limit(limit)
@@ -13109,7 +13133,6 @@ pub trait ClientSystemExt {
     ///
     ///Arguments:
     /// - `user_name`: The built-in user's unique name.
-    ///
     ///```ignore
     /// let response = client.system_user_view()
     ///    .user_name(user_name)
@@ -13133,6 +13156,7 @@ pub trait ClientUpdatesExt {
     ///Refresh update metadata
     ///
     ///Sends a `POST` request to `/updates/refresh`
+    ///
     ///```ignore
     /// let response = client.updates_refresh()
     ///    .send()
@@ -13151,6 +13175,7 @@ pub trait ClientVpcsExt {
     ///Get a vpc router route by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
+    ///
     ///```ignore
     /// let response = client.vpc_router_route_view_by_id()
     ///    .id(id)
@@ -13161,6 +13186,7 @@ pub trait ClientVpcsExt {
     ///Get a VPC Router by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
+    ///
     ///```ignore
     /// let response = client.vpc_router_view_by_id()
     ///    .id(id)
@@ -13171,6 +13197,7 @@ pub trait ClientVpcsExt {
     ///Get a VPC subnet by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
+    ///
     ///```ignore
     /// let response = client.vpc_subnet_view_by_id()
     ///    .id(id)
@@ -13181,6 +13208,7 @@ pub trait ClientVpcsExt {
     ///Get a VPC by id
     ///
     ///Sends a `GET` request to `/by-id/vpcs/{id}`
+    ///
     ///```ignore
     /// let response = client.vpc_view_by_id()
     ///    .id(id)
@@ -13200,7 +13228,6 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.vpc_list()
     ///    .organization_name(organization_name)
@@ -13221,7 +13248,6 @@ pub trait ClientVpcsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.vpc_create()
     ///    .organization_name(organization_name)
@@ -13235,7 +13261,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}` ```ignore
+    /// {vpc_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13248,7 +13276,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}` ```ignore
+    /// {vpc_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13262,7 +13292,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}` ```ignore
+    /// {vpc_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13275,7 +13307,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/firewall/rules` ```ignore
+    /// {vpc_name}/firewall/rules`
+    ///
+    ///```ignore
     /// let response = client.vpc_firewall_rules_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13288,7 +13322,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/firewall/rules` ```ignore
+    /// {vpc_name}/firewall/rules`
+    ///
+    ///```ignore
     /// let response = client.vpc_firewall_rules_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13312,7 +13348,6 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.vpc_router_list()
     ///    .organization_name(organization_name)
@@ -13329,7 +13364,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers` ```ignore
+    /// {vpc_name}/routers`
+    ///
+    ///```ignore
     /// let response = client.vpc_router_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13343,7 +13380,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}` ```ignore
+    /// {vpc_name}/routers/{router_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_router_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13357,7 +13396,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}` ```ignore
+    /// {vpc_name}/routers/{router_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_router_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13372,7 +13413,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}` ```ignore
+    /// {vpc_name}/routers/{router_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_router_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13397,7 +13440,6 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.vpc_router_route_list()
     ///    .organization_name(organization_name)
@@ -13415,7 +13457,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes` ```ignore
+    /// {vpc_name}/routers/{router_name}/routes`
+    ///
+    ///```ignore
     /// let response = client.vpc_router_route_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13430,7 +13474,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}` ```ignore
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_router_route_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13445,7 +13491,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}` ```ignore
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_router_route_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13461,7 +13509,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}` ```ignore
+    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_router_route_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13486,7 +13536,6 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.vpc_subnet_list()
     ///    .organization_name(organization_name)
@@ -13503,7 +13552,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets` ```ignore
+    /// {vpc_name}/subnets`
+    ///
+    ///```ignore
     /// let response = client.vpc_subnet_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13517,7 +13568,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}` ```ignore
+    /// {vpc_name}/subnets/{subnet_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_subnet_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13531,7 +13584,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}` ```ignore
+    /// {vpc_name}/subnets/{subnet_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_subnet_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13546,7 +13601,9 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}` ```ignore
+    /// {vpc_name}/subnets/{subnet_name}`
+    ///
+    ///```ignore
     /// let response = client.vpc_subnet_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -13571,7 +13628,6 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///
     ///```ignore
     /// let response = client.vpc_subnet_list_network_interfaces()
     ///    .organization_name(organization_name)

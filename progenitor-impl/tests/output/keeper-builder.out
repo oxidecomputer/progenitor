@@ -784,7 +784,6 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.enrol()
     ///    .authorization(authorization)
@@ -800,7 +799,6 @@ impl Client {
     ///
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
-    ///
     ///```ignore
     /// let response = client.global_jobs()
     ///    .authorization(authorization)
@@ -815,7 +813,6 @@ impl Client {
     ///
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
-    ///
     ///```ignore
     /// let response = client.ping()
     ///    .authorization(authorization)
@@ -831,7 +828,6 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.report_finish()
     ///    .authorization(authorization)
@@ -848,7 +844,6 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.report_output()
     ///    .authorization(authorization)
@@ -865,7 +860,6 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
-    ///
     ///```ignore
     /// let response = client.report_start()
     ///    .authorization(authorization)
