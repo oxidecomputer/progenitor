@@ -239,6 +239,17 @@ impl Generator {
 
         let types = self.type_space.to_stream();
 
+        // Generate an implementation of a `Self::as_inner` method, if an inner
+        // type is defined.
+        let maybe_inner = self.settings.inner_type.as_ref().map(|inner| {
+            quote! {
+                /// Return a reference to the inner type stored in `self`.
+                pub fn inner(&self) -> &#inner {
+                    &self.inner
+                }
+            }
+        });
+
         let inner_property = self.settings.inner_type.as_ref().map(|inner| {
             quote! {
                 pub (crate) inner: #inner,
@@ -334,6 +345,8 @@ impl Generator {
                 pub fn client(&self) -> &reqwest::Client {
                     &self.client
                 }
+
+                #maybe_inner
             }
 
             #operation_code
