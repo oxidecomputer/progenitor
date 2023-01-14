@@ -16,6 +16,7 @@
 https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...HEAD[Full list of commits]
 
 * Add support for header parameters (#210)
+* Add support for YAML input (#227)
 
 == 0.2.0 (released 2022-09-11)
 

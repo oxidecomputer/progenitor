@@ -31,3 +31,4 @@ dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features
 expectorate = "1.0"
 http = "0.2.8"
 hyper = "0.14.23"
+serde_yaml = "0.9"

@@ -48,7 +48,7 @@ field set to `date` or `date-time`, include
 +chrono = { version = "0.4", features = ["serde"] }
 ```
 
-Similarly if there is a `format` field set to `uuid`:
+Similarly, if there is a `format` field set to `uuid`:
 
 ```diff
 [dependencies]
@@ -76,7 +76,7 @@ generate_api!(
 );
 ```
 
-Note that the macro will be re-evaluated when the OpenAPI json document
+Note that the macro will be re-evaluated when the `spec` OpenAPI document
 changes (when its mtime is updated).
 
 ### `build.rs`
@@ -111,7 +111,7 @@ code:
 include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 ```
 
-You'll need to add add the following to `Cargo.toml`:
+You'll need to add the following to `Cargo.toml`:
 
 ```diff
 [dependencies]
@@ -143,7 +143,7 @@ Usage:
 progenitor
 
 Options:
-    -i INPUT            OpenAPI definition document (JSON)
+    -i INPUT            OpenAPI definition document (JSON or YAML)
     -o OUTPUT           Generated Rust crate directory
     -n CRATE            Target Rust crate name
     -v VERSION          Target Rust crate version
@@ -155,7 +155,7 @@ For example:
 
 This will produce a package in the specified directory. The output has no
 persistent dependency on Progenitor including the `progenitor-client` crate.
-Here's a excerpt from the emitted `Cargo.toml`:
+Here is an excerpt from the emitted `Cargo.toml`:
 
 ```toml
 [dependencies]

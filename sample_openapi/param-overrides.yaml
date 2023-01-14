@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  description: Minimal API for testing parameter overrides
+  title: Parameter override test
+  version: v1
+components:
+  parameters:
+    key:
+      description: A key parameter that will be overridden by the path spec
+      in: query
+      name: key
+      schema:
+        type: string
+    unique-key:
+      description: A key parameter that will not be overridden by the path spec
+      in: query
+      name: uniqueKey
+      schema:
+        type: string
+paths:
+  /key:
+    get:
+      description: Gets a key
+      operationId: key.get
+      parameters:
+      - description: The same key parameter that overlaps with the path level parameter
+        in: query
+        name: key
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Successful response
+          type: string
+    parameters:
+    - $ref: '#/components/parameters/key'
+    - $ref: '#/components/parameters/unique-key'
