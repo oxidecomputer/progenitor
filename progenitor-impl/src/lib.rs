@@ -507,15 +507,15 @@ impl Generator {
 
     pub fn dependencies(&self) -> Vec<String> {
         let mut deps = vec![
-            "bytes = \"1.1\"",
+            "bytes = \"1.3.0\"",
             "futures-core = \"0.3\"",
-            "percent-encoding = \"2.1\"",
-            "reqwest = { version = \"0.11.12\", default-features=false, features = [\"json\", \"stream\"] }",
+            "percent-encoding = \"2.2\"",
+            "reqwest = { version = \"0.11.13\", default-features=false, features = [\"json\", \"stream\"] }",
             "serde = { version = \"1.0\", features = [\"derive\"] }",
-            "serde_urlencoded = \"0.7\"",
+            "serde_urlencoded = \"0.7.1\"",
         ];
         if self.type_space.uses_regress() {
-            deps.push("regress = \"0.4\"")
+            deps.push("regress = \"0.4.1\"")
         }
         if self.type_space.uses_uuid() {
             deps.push(
@@ -529,7 +529,7 @@ impl Generator {
             deps.push("futures = \"0.3\"")
         }
         if self.uses_websockets {
-            deps.push("base64 = \"0.13\"");
+            deps.push("base64 = \"0.21\"");
             deps.push("rand = \"0.8\"");
         }
         if self.type_space.uses_serde_json() {
