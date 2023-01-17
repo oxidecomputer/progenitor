@@ -505,43 +505,17 @@ impl Generator {
         })
     }
 
-    pub fn dependencies(&self) -> Vec<String> {
-        let mut deps = vec![
-            "bytes = \"1.3.0\"",
-            "futures-core = \"0.3\"",
-            "percent-encoding = \"2.2\"",
-            "reqwest = { version = \"0.11.13\", default-features=false, features = [\"json\", \"stream\"] }",
-            "serde = { version = \"1.0\", features = [\"derive\"] }",
-            "serde_urlencoded = \"0.7.1\"",
-        ];
-        if self.type_space.uses_regress() {
-            deps.push("regress = \"0.4.1\"")
-        }
-        if self.type_space.uses_uuid() {
-            deps.push(
-                "uuid = { version = \">=0.8.0, <2.0.0\", features = [\"serde\", \"v4\"] }",
-            )
-        }
-        if self.type_space.uses_chrono() {
-            deps.push("chrono = { version = \"0.4\", default-features=false, features = [\"serde\"] }")
-        }
-        if self.uses_futures {
-            deps.push("futures = \"0.3\"")
-        }
-        if self.uses_websockets {
-            deps.push("base64 = \"0.21\"");
-            deps.push("rand = \"0.8\"");
-        }
-        if self.type_space.uses_serde_json() {
-            deps.push("serde_json = \"1.0\"")
-        }
-        deps.sort_unstable();
-        deps.iter().map(ToString::to_string).collect()
-    }
-
     // TODO deprecate?
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
+    }
+
+    pub fn uses_futures(&self) -> bool {
+        self.uses_futures
+    }
+
+    pub fn uses_websockets(&self) -> bool {
+        self.uses_websockets
     }
 }
 
