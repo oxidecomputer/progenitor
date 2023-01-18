@@ -105,7 +105,7 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
                     s = State::Parameter;
                 } else if c == '}' {
                     return Err(Error::InvalidPath("unexpected }".to_string()));
-                } else if c != '/' || a.chars().last() != Some('/') {
+                } else if c != '/' || !a.ends_with('/') {
                     a.push(c);
                 }
             }
