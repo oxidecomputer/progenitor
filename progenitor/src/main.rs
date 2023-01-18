@@ -36,6 +36,12 @@ struct Args {
     /// Target Rust crate version
     #[clap(short = 'v', long)]
     version: String,
+    /// Target Rust crate registry
+    #[clap(long)]
+    registry_name: Option<String>,
+    /// Target crate license
+    #[clap(long, default_value = "SPECIFY A LICENSE BEFORE PUBLISHING")]
+    license_name: String,
 
     /// SDK interface style
     #[clap(value_enum, long, default_value_t = InterfaceArg::Positional)]
@@ -132,18 +138,28 @@ fn main() -> Result<()> {
             let mut toml = root.clone();
             toml.push("Cargo.toml");
 
-            let tomlout = format!(
+            let mut tomlout = format!(
                 "[package]\n\
                 name = \"{}\"\n\
                 version = \"{}\"\n\
-                edition = \"2021\"\n\
-                \n\
+                edition = \"2021\"\n\"
+                license = \"{}\"\n",
+                name, version, &args.license_name,
+            );
+            if let Some(registry_name) = args.registry_name {
+                tomlout.extend(
+                    format!("publish = [\"{}\"]\n", registry_name).chars(),
+                );
+            }
+            tomlout.extend(
+                format!(
+                    "\n\
                 [dependencies]\n\
                 {}\n\
                 \n",
-                name,
-                version,
-                dependencies(builder, args.include_client).join("\n"),
+                    dependencies(builder, args.include_client).join("\n"),
+                )
+                .chars(),
             );
 
             save(&toml, tomlout.as_str())?;
