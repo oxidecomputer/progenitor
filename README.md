@@ -58,8 +58,14 @@ Similarly, if there is a `format` field set to `uuid`:
 And if there are any websocket channel endpoints:
 ```diff
 [dependencies]
-+base64 = "0.13"
++base64 = "0.21"
 +rand = "0.8"
+```
+
+If types include regular expression validation:
+```diff
+[dependencies]
++regress = "0.4.1"
 ```
 
 The macro has some additional fancy options to control the generated code:
