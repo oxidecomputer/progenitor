@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
 progenitor-client = { path = "../progenitor-client" }
-reqwest = { version = "0.11.13", features = ["json", "stream"] }
+reqwest = { version = "0.11.14", features = ["json", "stream"] }
 base64 = "0.21"
 rand = "0.8"
 serde = { version = "1.0", features = ["derive"] }
