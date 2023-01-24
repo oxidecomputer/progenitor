@@ -51,7 +51,9 @@ pub struct GenerationSettings {
     pre_hook: Option<TokenStream>,
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
+
     patch: HashMap<String, TypePatch>,
+    replace: HashMap<String, (String, Vec<String>)>,
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<String>)>,
 }
 
@@ -124,6 +126,26 @@ impl GenerationSettings {
         self
     }
 
+    pub fn with_replacement<
+        TS: ToString,
+        RS: ToString,
+        I: Iterator<Item = impl ToString>,
+    >(
+        &mut self,
+        type_name: TS,
+        replace_name: RS,
+        impls: I,
+    ) -> &mut Self {
+        self.replace.insert(
+            type_name.to_string(),
+            (
+                replace_name.to_string(),
+                impls.map(|x| x.to_string()).collect(),
+            ),
+        );
+        self
+    }
+
     pub fn with_conversion<S: ToString, I: Iterator<Item = impl ToString>>(
         &mut self,
         schema: schemars::schema::SchemaObject,
@@ -164,6 +186,15 @@ impl Generator {
         settings.patch.iter().for_each(|(type_name, patch)| {
             type_settings.with_patch(type_name, patch);
         });
+        settings.replace.iter().for_each(
+            |(type_name, (replace_name, impls))| {
+                type_settings.with_replacement(
+                    type_name,
+                    replace_name,
+                    impls.iter(),
+                );
+            },
+        );
         settings
             .convert
             .iter()

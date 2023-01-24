@@ -17,6 +17,9 @@ use schemars::schema::SchemaObject;
 use serde::Deserialize;
 use serde_tokenstream::{OrderedMap, ParseWrapper};
 use syn::LitStr;
+use token_utils::TypeAndImpls;
+
+mod token_utils;
 
 /// Generates a client from the given OpenAPI document
 ///
@@ -81,18 +84,20 @@ struct MacroSettings {
     interface: InterfaceStyle,
     #[serde(default)]
     tags: TagStyle,
+
     inner_type: Option<ParseWrapper<syn::Type>>,
     pre_hook: Option<ParseWrapper<ClosureOrPath>>,
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
+
     #[serde(default)]
     derives: Vec<ParseWrapper<syn::Path>>,
+
     #[serde(default)]
-    patch: HashMap<ParseWrapper<syn::Type>, MacroPatch>,
+    patch: HashMap<ParseWrapper<syn::Ident>, MacroPatch>,
     #[serde(default)]
-    convert: OrderedMap<
-        SchemaObject,
-        (ParseWrapper<syn::Path>, Vec<MacroSettingsImpl>),
-    >,
+    replace: HashMap<ParseWrapper<syn::Ident>, ParseWrapper<TypeAndImpls>>,
+    #[serde(default)]
+    convert: OrderedMap<SchemaObject, ParseWrapper<TypeAndImpls>>,
 }
 
 #[derive(Deserialize)]
@@ -187,6 +192,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             post_hook,
             derives,
             patch,
+            replace,
             convert,
         } = serde_tokenstream::from_tokenstream(&item.into())?;
         let mut settings = GenerationSettings::default();
@@ -209,15 +215,25 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
                 &patch.into(),
             );
         });
-        convert
-            .into_iter()
-            .for_each(|(schema, (type_name, impls))| {
-                settings.with_conversion(
-                    schema,
-                    type_name.to_token_stream(),
-                    impls.into_iter(),
-                );
-            });
+        replace.into_iter().for_each(|(type_name, type_and_impls)| {
+            let type_name = type_name.to_token_stream();
+            let type_and_impls = type_and_impls.into_inner();
+            let replace_name = type_and_impls.type_name.to_token_stream();
+            let impls = type_and_impls
+                .impls
+                .into_iter()
+                .map(|x| x.to_token_stream());
+            settings.with_replacement(type_name, replace_name, impls);
+        });
+        convert.into_iter().for_each(|(schema, type_and_impls)| {
+            let type_and_impls = type_and_impls.into_inner();
+            let type_name = type_and_impls.type_name.to_token_stream();
+            let impls = type_and_impls
+                .impls
+                .into_iter()
+                .map(|x| x.to_token_stream());
+            settings.with_conversion(schema, type_name, impls);
+        });
         (spec.into_inner(), settings)
     };
 
