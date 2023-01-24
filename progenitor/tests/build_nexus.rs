@@ -27,6 +27,7 @@ mod builder_untagged {
     use futures::StreamExt;
 
     mod nexus_client {
+        pub type MyIpv4Net = String;
         progenitor::generate_api!(
             spec = "../sample_openapi/nexus.json",
             interface = Builder,
@@ -35,6 +36,9 @@ mod builder_untagged {
                 Name = {
                     derives = [Hash],
                 }
+            },
+            replace = {
+                Ipv4Net = crate::builder_untagged::nexus_client::MyIpv4Net,
             }
         );
     }
@@ -42,6 +46,9 @@ mod builder_untagged {
     use nexus_client::Client;
 
     pub fn _ignore() {
+        // Verify the replacement above.
+        let _ignore = nexus_client::types::IpNet::V4(String::new());
+
         let client = Client::new("");
         let stream = client
             .instance_disk_list()
