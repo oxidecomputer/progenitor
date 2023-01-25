@@ -103,7 +103,7 @@ pub mod types {
 
         impl std::convert::TryFrom<BodyWithDefaults> for super::BodyWithDefaults {
             type Error = String;
-            fn try_from(value: BodyWithDefaults) -> Result<Self, Self::Error> {
+            fn try_from(value: BodyWithDefaults) -> Result<Self, String> {
                 Ok(Self {
                     forty_two: value.forty_two?,
                     s: value.s?,
@@ -164,7 +164,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Error> for super::Error {
             type Error = String;
-            fn try_from(value: Error) -> Result<Self, Self::Error> {
+            fn try_from(value: Error) -> Result<Self, String> {
                 Ok(Self {
                     error_code: value.error_code?,
                     message: value.message?,

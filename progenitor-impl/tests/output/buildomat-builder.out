@@ -325,7 +325,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Task> for super::Task {
             type Error = String;
-            fn try_from(value: Task) -> Result<Self, Self::Error> {
+            fn try_from(value: Task) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -399,7 +399,7 @@ pub mod types {
 
         impl std::convert::TryFrom<TaskEvent> for super::TaskEvent {
             type Error = String;
-            fn try_from(value: TaskEvent) -> Result<Self, Self::Error> {
+            fn try_from(value: TaskEvent) -> Result<Self, String> {
                 Ok(Self {
                     payload: value.payload?,
                     seq: value.seq?,
@@ -460,7 +460,7 @@ pub mod types {
 
         impl std::convert::TryFrom<TaskOutput> for super::TaskOutput {
             type Error = String;
-            fn try_from(value: TaskOutput) -> Result<Self, Self::Error> {
+            fn try_from(value: TaskOutput) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     path: value.path?,
@@ -520,7 +520,7 @@ pub mod types {
 
         impl std::convert::TryFrom<TaskSubmit> for super::TaskSubmit {
             type Error = String;
-            fn try_from(value: TaskSubmit) -> Result<Self, Self::Error> {
+            fn try_from(value: TaskSubmit) -> Result<Self, String> {
                 Ok(Self {
                     name: value.name?,
                     output_rules: value.output_rules?,
@@ -556,7 +556,7 @@ pub mod types {
 
         impl std::convert::TryFrom<TaskSubmitResult> for super::TaskSubmitResult {
             type Error = String;
-            fn try_from(value: TaskSubmitResult) -> Result<Self, Self::Error> {
+            fn try_from(value: TaskSubmitResult) -> Result<Self, String> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -588,7 +588,7 @@ pub mod types {
 
         impl std::convert::TryFrom<UploadedChunk> for super::UploadedChunk {
             type Error = String;
-            fn try_from(value: UploadedChunk) -> Result<Self, Self::Error> {
+            fn try_from(value: UploadedChunk) -> Result<Self, String> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -620,7 +620,7 @@ pub mod types {
 
         impl std::convert::TryFrom<UserCreate> for super::UserCreate {
             type Error = String;
-            fn try_from(value: UserCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: UserCreate) -> Result<Self, String> {
                 Ok(Self { name: value.name? })
             }
         }
@@ -676,7 +676,7 @@ pub mod types {
 
         impl std::convert::TryFrom<UserCreateResult> for super::UserCreateResult {
             type Error = String;
-            fn try_from(value: UserCreateResult) -> Result<Self, Self::Error> {
+            fn try_from(value: UserCreateResult) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -724,7 +724,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WhoamiResult> for super::WhoamiResult {
             type Error = String;
-            fn try_from(value: WhoamiResult) -> Result<Self, Self::Error> {
+            fn try_from(value: WhoamiResult) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -819,7 +819,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Worker> for super::Worker {
             type Error = String;
-            fn try_from(value: Worker) -> Result<Self, Self::Error> {
+            fn try_from(value: Worker) -> Result<Self, String> {
                 Ok(Self {
                     deleted: value.deleted?,
                     id: value.id?,
@@ -882,7 +882,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkerAddOutput> for super::WorkerAddOutput {
             type Error = String;
-            fn try_from(value: WorkerAddOutput) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkerAddOutput) -> Result<Self, String> {
                 Ok(Self {
                     chunks: value.chunks?,
                     path: value.path?,
@@ -942,7 +942,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkerAppendTask> for super::WorkerAppendTask {
             type Error = String;
-            fn try_from(value: WorkerAppendTask) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkerAppendTask) -> Result<Self, String> {
                 Ok(Self {
                     payload: value.payload?,
                     stream: value.stream?,
@@ -990,7 +990,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkerBootstrap> for super::WorkerBootstrap {
             type Error = String;
-            fn try_from(value: WorkerBootstrap) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkerBootstrap) -> Result<Self, String> {
                 Ok(Self {
                     bootstrap: value.bootstrap?,
                     token: value.token?,
@@ -1025,7 +1025,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkerBootstrapResult> for super::WorkerBootstrapResult {
             type Error = String;
-            fn try_from(value: WorkerBootstrapResult) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkerBootstrapResult) -> Result<Self, String> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -1057,7 +1057,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkerCompleteTask> for super::WorkerCompleteTask {
             type Error = String;
-            fn try_from(value: WorkerCompleteTask) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkerCompleteTask) -> Result<Self, String> {
                 Ok(Self {
                     failed: value.failed?,
                 })
@@ -1103,7 +1103,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkerPingResult> for super::WorkerPingResult {
             type Error = String;
-            fn try_from(value: WorkerPingResult) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkerPingResult) -> Result<Self, String> {
                 Ok(Self {
                     poweroff: value.poweroff?,
                     task: value.task?,
@@ -1162,7 +1162,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkerPingTask> for super::WorkerPingTask {
             type Error = String;
-            fn try_from(value: WorkerPingTask) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkerPingTask) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     output_rules: value.output_rules?,
@@ -1222,7 +1222,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkerTask> for super::WorkerTask {
             type Error = String;
-            fn try_from(value: WorkerTask) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkerTask) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -1258,7 +1258,7 @@ pub mod types {
 
         impl std::convert::TryFrom<WorkersResult> for super::WorkersResult {
             type Error = String;
-            fn try_from(value: WorkersResult) -> Result<Self, Self::Error> {
+            fn try_from(value: WorkersResult) -> Result<Self, String> {
                 Ok(Self {
                     workers: value.workers?,
                 })
