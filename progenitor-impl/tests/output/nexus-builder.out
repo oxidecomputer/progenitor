@@ -81,14 +81,14 @@ pub mod types {
     pub struct BlockSize(i64);
     impl std::ops::Deref for BlockSize {
         type Target = i64;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &i64 {
             &self.0
         }
     }
 
     impl std::convert::TryFrom<i64> for BlockSize {
         type Error = &'static str;
-        fn try_from(value: i64) -> Result<Self, Self::Error> {
+        fn try_from(value: i64) -> Result<Self, &'static str> {
             if ![512_i64, 2048_i64, 4096_i64].contains(&value) {
                 Err("invalid value")
             } else {
@@ -108,7 +108,7 @@ pub mod types {
     pub struct ByteCount(pub u64);
     impl std::ops::Deref for ByteCount {
         type Target = u64;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &u64 {
             &self.0
         }
     }
@@ -206,7 +206,7 @@ pub mod types {
 
     impl std::str::FromStr for DatumType {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "bool" => Ok(Self::Bool),
                 "i64" => Ok(Self::I64),
@@ -219,6 +219,20 @@ pub mod types {
                 "histogram_f64" => Ok(Self::HistogramF64),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for DatumType {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for DatumType {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -372,7 +386,7 @@ pub mod types {
 
     impl std::str::FromStr for DiskMetricName {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "activated" => Ok(Self::Activated),
                 "flush" => Ok(Self::Flush),
@@ -382,6 +396,20 @@ pub mod types {
                 "write_bytes" => Ok(Self::WriteBytes),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for DiskMetricName {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for DiskMetricName {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -554,12 +582,26 @@ pub mod types {
 
     impl std::str::FromStr for FieldSource {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "target" => Ok(Self::Target),
                 "metric" => Ok(Self::Metric),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for FieldSource {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for FieldSource {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -594,7 +636,7 @@ pub mod types {
 
     impl std::str::FromStr for FieldType {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "string" => Ok(Self::String),
                 "i64" => Ok(Self::I64),
@@ -603,6 +645,20 @@ pub mod types {
                 "bool" => Ok(Self::Bool),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for FieldType {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for FieldType {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -630,13 +686,27 @@ pub mod types {
 
     impl std::str::FromStr for FleetRole {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
                 "viewer" => Ok(Self::Viewer),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for FleetRole {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for FleetRole {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -879,11 +949,25 @@ pub mod types {
 
     impl std::str::FromStr for IdSortMode {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "id_ascending" => Ok(Self::IdAscending),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for IdSortMode {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for IdSortMode {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -944,11 +1028,25 @@ pub mod types {
 
     impl std::str::FromStr for IdentityProviderType {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "saml" => Ok(Self::Saml),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for IdentityProviderType {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for IdentityProviderType {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -971,11 +1069,25 @@ pub mod types {
 
     impl std::str::FromStr for IdentityType {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "silo_user" => Ok(Self::SiloUser),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for IdentityType {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for IdentityType {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1106,7 +1218,7 @@ pub mod types {
     pub struct InstanceCpuCount(pub u16);
     impl std::ops::Deref for InstanceCpuCount {
         type Target = u16;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &u16 {
             &self.0
         }
     }
@@ -1282,7 +1394,7 @@ pub mod types {
 
     impl std::str::FromStr for InstanceState {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "creating" => Ok(Self::Creating),
                 "starting" => Ok(Self::Starting),
@@ -1296,6 +1408,20 @@ pub mod types {
                 "destroyed" => Ok(Self::Destroyed),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for InstanceState {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for InstanceState {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1321,12 +1447,26 @@ pub mod types {
 
     impl std::str::FromStr for IpKind {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "ephemeral" => Ok(Self::Ephemeral),
                 "floating" => Ok(Self::Floating),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for IpKind {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for IpKind {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1337,27 +1477,30 @@ pub mod types {
         V6(Ipv6Net),
     }
 
+    impl std::str::FromStr for IpNet {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            if let Ok(v) = value.parse() {
+                Ok(Self::V4(v))
+            } else if let Ok(v) = value.parse() {
+                Ok(Self::V6(v))
+            } else {
+                Err("string conversion failed for all variants")
+            }
+        }
+    }
+
     impl std::convert::TryFrom<&str> for IpNet {
         type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
-            Err("")
-                .or_else(|_: Self::Error| Ok(Self::V4(Ipv4Net::try_from(value)?)))
-                .or_else(|_: Self::Error| Ok(Self::V6(Ipv6Net::try_from(value)?)))
-                .map_err(|_: Self::Error| "string conversion failed for all variants")
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for IpNet {
         type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
-        }
-    }
-
-    impl std::convert::TryFrom<String> for IpNet {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1485,30 +1628,30 @@ pub mod types {
     pub struct Ipv4Net(String);
     impl std::ops::Deref for Ipv4Net {
         type Target = String;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &String {
             &self.0
         }
     }
 
-    impl std::convert::TryFrom<&str> for Ipv4Net {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl std::str::FromStr for Ipv4Net {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             if regress :: Regex :: new ("^(10\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/([8-9]|1[0-9]|2[0-9]|3[0-2])|172\\.(1[6-9]|2[0-9]|3[0-1])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[2-9]|2[0-9]|3[0-2])|192\\.168\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[6-9]|2[0-9]|3[0-2]))$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(10\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/([8-9]|1[0-9]|2[0-9]|3[0-2])|172\\.(1[6-9]|2[0-9]|3[0-1])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[2-9]|2[0-9]|3[0-2])|192\\.168\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\/(1[6-9]|2[0-9]|3[0-2]))$\"") ; }
             Ok(Self(value.to_string()))
         }
     }
 
-    impl std::convert::TryFrom<&String> for Ipv4Net {
+    impl std::convert::TryFrom<&str> for Ipv4Net {
         type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Ipv4Net {
+    impl std::convert::TryFrom<&String> for Ipv4Net {
         type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1517,8 +1660,9 @@ pub mod types {
         where
             D: serde::Deserializer<'de>,
         {
-            Self::try_from(String::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
 
@@ -1542,30 +1686,30 @@ pub mod types {
     pub struct Ipv6Net(String);
     impl std::ops::Deref for Ipv6Net {
         type Target = String;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &String {
             &self.0
         }
     }
 
-    impl std::convert::TryFrom<&str> for Ipv6Net {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl std::str::FromStr for Ipv6Net {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             if regress :: Regex :: new ("^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\"") ; }
             Ok(Self(value.to_string()))
         }
     }
 
-    impl std::convert::TryFrom<&String> for Ipv6Net {
+    impl std::convert::TryFrom<&str> for Ipv6Net {
         type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Ipv6Net {
+    impl std::convert::TryFrom<&String> for Ipv6Net {
         type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1574,8 +1718,9 @@ pub mod types {
         where
             D: serde::Deserializer<'de>,
         {
-            Self::try_from(String::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
 
@@ -1600,14 +1745,14 @@ pub mod types {
     pub struct L4PortRange(String);
     impl std::ops::Deref for L4PortRange {
         type Target = String;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &String {
             &self.0
         }
     }
 
-    impl std::convert::TryFrom<&str> for L4PortRange {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl std::str::FromStr for L4PortRange {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             if value.len() > 11usize {
                 return Err("longer than 11 characters");
             }
@@ -1625,17 +1770,17 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&String> for L4PortRange {
+    impl std::convert::TryFrom<&str> for L4PortRange {
         type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for L4PortRange {
+    impl std::convert::TryFrom<&String> for L4PortRange {
         type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1644,8 +1789,9 @@ pub mod types {
         where
             D: serde::Deserializer<'de>,
         {
-            Self::try_from(String::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
 
@@ -1654,14 +1800,14 @@ pub mod types {
     pub struct MacAddr(String);
     impl std::ops::Deref for MacAddr {
         type Target = String;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &String {
             &self.0
         }
     }
 
-    impl std::convert::TryFrom<&str> for MacAddr {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl std::str::FromStr for MacAddr {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             if value.len() > 17usize {
                 return Err("longer than 17 characters");
             }
@@ -1679,17 +1825,17 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&String> for MacAddr {
+    impl std::convert::TryFrom<&str> for MacAddr {
         type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for MacAddr {
+    impl std::convert::TryFrom<&String> for MacAddr {
         type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1698,8 +1844,9 @@ pub mod types {
         where
             D: serde::Deserializer<'de>,
         {
-            Self::try_from(String::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
 
@@ -1739,14 +1886,14 @@ pub mod types {
     pub struct Name(String);
     impl std::ops::Deref for Name {
         type Target = String;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &String {
             &self.0
         }
     }
 
-    impl std::convert::TryFrom<&str> for Name {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl std::str::FromStr for Name {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             if value.len() > 63usize {
                 return Err("longer than 63 characters");
             }
@@ -1755,17 +1902,17 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&String> for Name {
+    impl std::convert::TryFrom<&str> for Name {
         type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Name {
+    impl std::convert::TryFrom<&String> for Name {
         type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1774,8 +1921,9 @@ pub mod types {
         where
             D: serde::Deserializer<'de>,
         {
-            Self::try_from(String::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
 
@@ -1804,13 +1952,27 @@ pub mod types {
 
     impl std::str::FromStr for NameOrIdSortMode {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "name_ascending" => Ok(Self::NameAscending),
                 "name_descending" => Ok(Self::NameDescending),
                 "id_ascending" => Ok(Self::IdAscending),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for NameOrIdSortMode {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for NameOrIdSortMode {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -1835,11 +1997,25 @@ pub mod types {
 
     impl std::str::FromStr for NameSortMode {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "name_ascending" => Ok(Self::NameAscending),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for NameSortMode {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for NameSortMode {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -2022,13 +2198,27 @@ pub mod types {
 
     impl std::str::FromStr for OrganizationRole {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
                 "viewer" => Ok(Self::Viewer),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for OrganizationRole {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for OrganizationRole {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -2161,13 +2351,27 @@ pub mod types {
 
     impl std::str::FromStr for ProjectRole {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
                 "viewer" => Ok(Self::Viewer),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for ProjectRole {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for ProjectRole {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -2275,14 +2479,14 @@ pub mod types {
     pub struct RoleName(String);
     impl std::ops::Deref for RoleName {
         type Target = String;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &String {
             &self.0
         }
     }
 
-    impl std::convert::TryFrom<&str> for RoleName {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl std::str::FromStr for RoleName {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             if value.len() > 63usize {
                 return Err("longer than 63 characters");
             }
@@ -2297,17 +2501,17 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&String> for RoleName {
+    impl std::convert::TryFrom<&str> for RoleName {
         type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for RoleName {
+    impl std::convert::TryFrom<&String> for RoleName {
         type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -2316,8 +2520,9 @@ pub mod types {
         where
             D: serde::Deserializer<'de>,
         {
-            Self::try_from(String::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
 
@@ -2457,7 +2662,7 @@ pub mod types {
 
     impl std::str::FromStr for RouterRouteKind {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "default" => Ok(Self::Default),
                 "vpc_subnet" => Ok(Self::VpcSubnet),
@@ -2465,6 +2670,20 @@ pub mod types {
                 "custom" => Ok(Self::Custom),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for RouterRouteKind {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for RouterRouteKind {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -2703,13 +2922,27 @@ pub mod types {
 
     impl std::str::FromStr for SiloRole {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
                 "viewer" => Ok(Self::Viewer),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for SiloRole {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for SiloRole {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -2915,14 +3148,14 @@ pub mod types {
     pub struct TimeseriesName(String);
     impl std::ops::Deref for TimeseriesName {
         type Target = String;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &String {
             &self.0
         }
     }
 
-    impl std::convert::TryFrom<&str> for TimeseriesName {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl std::str::FromStr for TimeseriesName {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             if regress::Regex::new(
                 "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)",
             )
@@ -2936,17 +3169,17 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&String> for TimeseriesName {
+    impl std::convert::TryFrom<&str> for TimeseriesName {
         type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for TimeseriesName {
+    impl std::convert::TryFrom<&String> for TimeseriesName {
         type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
-            Self::try_from(value.as_str())
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -2955,8 +3188,9 @@ pub mod types {
         where
             D: serde::Deserializer<'de>,
         {
-            Self::try_from(String::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
 
@@ -3067,12 +3301,26 @@ pub mod types {
 
     impl std::str::FromStr for UserProvisionType {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "fixed" => Ok(Self::Fixed),
                 "jit" => Ok(Self::Jit),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for UserProvisionType {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for UserProvisionType {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -3199,12 +3447,26 @@ pub mod types {
 
     impl std::str::FromStr for VpcFirewallRuleAction {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "allow" => Ok(Self::Allow),
                 "deny" => Ok(Self::Deny),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for VpcFirewallRuleAction {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for VpcFirewallRuleAction {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -3229,12 +3491,26 @@ pub mod types {
 
     impl std::str::FromStr for VpcFirewallRuleDirection {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "inbound" => Ok(Self::Inbound),
                 "outbound" => Ok(Self::Outbound),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for VpcFirewallRuleDirection {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for VpcFirewallRuleDirection {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -3308,13 +3584,27 @@ pub mod types {
 
     impl std::str::FromStr for VpcFirewallRuleProtocol {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "TCP" => Ok(Self::Tcp),
                 "UDP" => Ok(Self::Udp),
                 "ICMP" => Ok(Self::Icmp),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for VpcFirewallRuleProtocol {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for VpcFirewallRuleProtocol {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -3339,12 +3629,26 @@ pub mod types {
 
     impl std::str::FromStr for VpcFirewallRuleStatus {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "disabled" => Ok(Self::Disabled),
                 "enabled" => Ok(Self::Enabled),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for VpcFirewallRuleStatus {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for VpcFirewallRuleStatus {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -3499,12 +3803,26 @@ pub mod types {
 
     impl std::str::FromStr for VpcRouterKind {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "system" => Ok(Self::System),
                 "custom" => Ok(Self::Custom),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for VpcRouterKind {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for VpcRouterKind {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -3685,7 +4003,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Bindouble> for super::Bindouble {
             type Error = String;
-            fn try_from(value: Bindouble) -> Result<Self, Self::Error> {
+            fn try_from(value: Bindouble) -> Result<Self, String> {
                 Ok(Self {
                     count: value.count?,
                     range: value.range?,
@@ -3732,7 +4050,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Binint64> for super::Binint64 {
             type Error = String;
-            fn try_from(value: Binint64) -> Result<Self, Self::Error> {
+            fn try_from(value: Binint64) -> Result<Self, String> {
                 Ok(Self {
                     count: value.count?,
                     range: value.range?,
@@ -3779,7 +4097,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Cumulativedouble> for super::Cumulativedouble {
             type Error = String;
-            fn try_from(value: Cumulativedouble) -> Result<Self, Self::Error> {
+            fn try_from(value: Cumulativedouble) -> Result<Self, String> {
                 Ok(Self {
                     start_time: value.start_time?,
                     value: value.value?,
@@ -3826,7 +4144,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Cumulativeint64> for super::Cumulativeint64 {
             type Error = String;
-            fn try_from(value: Cumulativeint64) -> Result<Self, Self::Error> {
+            fn try_from(value: Cumulativeint64) -> Result<Self, String> {
                 Ok(Self {
                     start_time: value.start_time?,
                     value: value.value?,
@@ -3873,7 +4191,7 @@ pub mod types {
 
         impl std::convert::TryFrom<DerEncodedKeyPair> for super::DerEncodedKeyPair {
             type Error = String;
-            fn try_from(value: DerEncodedKeyPair) -> Result<Self, Self::Error> {
+            fn try_from(value: DerEncodedKeyPair) -> Result<Self, String> {
                 Ok(Self {
                     private_key: value.private_key?,
                     public_cert: value.public_cert?,
@@ -3932,7 +4250,7 @@ pub mod types {
 
         impl std::convert::TryFrom<DeviceAccessTokenRequest> for super::DeviceAccessTokenRequest {
             type Error = String;
-            fn try_from(value: DeviceAccessTokenRequest) -> Result<Self, Self::Error> {
+            fn try_from(value: DeviceAccessTokenRequest) -> Result<Self, String> {
                 Ok(Self {
                     client_id: value.client_id?,
                     device_code: value.device_code?,
@@ -3968,7 +4286,7 @@ pub mod types {
 
         impl std::convert::TryFrom<DeviceAuthRequest> for super::DeviceAuthRequest {
             type Error = String;
-            fn try_from(value: DeviceAuthRequest) -> Result<Self, Self::Error> {
+            fn try_from(value: DeviceAuthRequest) -> Result<Self, String> {
                 Ok(Self {
                     client_id: value.client_id?,
                 })
@@ -4002,7 +4320,7 @@ pub mod types {
 
         impl std::convert::TryFrom<DeviceAuthVerify> for super::DeviceAuthVerify {
             type Error = String;
-            fn try_from(value: DeviceAuthVerify) -> Result<Self, Self::Error> {
+            fn try_from(value: DeviceAuthVerify) -> Result<Self, String> {
                 Ok(Self {
                     user_code: value.user_code?,
                 })
@@ -4168,7 +4486,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Disk> for super::Disk {
             type Error = String;
-            fn try_from(value: Disk) -> Result<Self, Self::Error> {
+            fn try_from(value: Disk) -> Result<Self, String> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -4249,7 +4567,7 @@ pub mod types {
 
         impl std::convert::TryFrom<DiskCreate> for super::DiskCreate {
             type Error = String;
-            fn try_from(value: DiskCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: DiskCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     disk_source: value.disk_source?,
@@ -4286,7 +4604,7 @@ pub mod types {
 
         impl std::convert::TryFrom<DiskIdentifier> for super::DiskIdentifier {
             type Error = String;
-            fn try_from(value: DiskIdentifier) -> Result<Self, Self::Error> {
+            fn try_from(value: DiskIdentifier) -> Result<Self, String> {
                 Ok(Self { name: value.name? })
             }
         }
@@ -4330,7 +4648,7 @@ pub mod types {
 
         impl std::convert::TryFrom<DiskResultsPage> for super::DiskResultsPage {
             type Error = String;
-            fn try_from(value: DiskResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: DiskResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -4377,7 +4695,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Distribution> for super::Distribution {
             type Error = String;
-            fn try_from(value: Distribution) -> Result<Self, Self::Error> {
+            fn try_from(value: Distribution) -> Result<Self, String> {
                 Ok(Self {
                     name: value.name?,
                     version: value.version?,
@@ -4436,7 +4754,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Error> for super::Error {
             type Error = String;
-            fn try_from(value: Error) -> Result<Self, Self::Error> {
+            fn try_from(value: Error) -> Result<Self, String> {
                 Ok(Self {
                     error_code: value.error_code?,
                     message: value.message?,
@@ -4484,7 +4802,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ExternalIp> for super::ExternalIp {
             type Error = String;
-            fn try_from(value: ExternalIp) -> Result<Self, Self::Error> {
+            fn try_from(value: ExternalIp) -> Result<Self, String> {
                 Ok(Self {
                     ip: value.ip?,
                     kind: value.kind?,
@@ -4531,7 +4849,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ExternalIpResultsPage> for super::ExternalIpResultsPage {
             type Error = String;
-            fn try_from(value: ExternalIpResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: ExternalIpResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -4590,7 +4908,7 @@ pub mod types {
 
         impl std::convert::TryFrom<FieldSchema> for super::FieldSchema {
             type Error = String;
-            fn try_from(value: FieldSchema) -> Result<Self, Self::Error> {
+            fn try_from(value: FieldSchema) -> Result<Self, String> {
                 Ok(Self {
                     name: value.name?,
                     source: value.source?,
@@ -4629,7 +4947,7 @@ pub mod types {
 
         impl std::convert::TryFrom<FleetRolePolicy> for super::FleetRolePolicy {
             type Error = String;
-            fn try_from(value: FleetRolePolicy) -> Result<Self, Self::Error> {
+            fn try_from(value: FleetRolePolicy) -> Result<Self, String> {
                 Ok(Self {
                     role_assignments: value.role_assignments?,
                 })
@@ -4687,7 +5005,7 @@ pub mod types {
 
         impl std::convert::TryFrom<FleetRoleRoleAssignment> for super::FleetRoleRoleAssignment {
             type Error = String;
-            fn try_from(value: FleetRoleRoleAssignment) -> Result<Self, Self::Error> {
+            fn try_from(value: FleetRoleRoleAssignment) -> Result<Self, String> {
                 Ok(Self {
                     identity_id: value.identity_id?,
                     identity_type: value.identity_type?,
@@ -4843,7 +5161,7 @@ pub mod types {
 
         impl std::convert::TryFrom<GlobalImage> for super::GlobalImage {
             type Error = String;
-            fn try_from(value: GlobalImage) -> Result<Self, Self::Error> {
+            fn try_from(value: GlobalImage) -> Result<Self, String> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -4935,7 +5253,7 @@ pub mod types {
 
         impl std::convert::TryFrom<GlobalImageCreate> for super::GlobalImageCreate {
             type Error = String;
-            fn try_from(value: GlobalImageCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: GlobalImageCreate) -> Result<Self, String> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -4985,7 +5303,7 @@ pub mod types {
 
         impl std::convert::TryFrom<GlobalImageResultsPage> for super::GlobalImageResultsPage {
             type Error = String;
-            fn try_from(value: GlobalImageResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: GlobalImageResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -5044,7 +5362,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Histogramdouble> for super::Histogramdouble {
             type Error = String;
-            fn try_from(value: Histogramdouble) -> Result<Self, Self::Error> {
+            fn try_from(value: Histogramdouble) -> Result<Self, String> {
                 Ok(Self {
                     bins: value.bins?,
                     n_samples: value.n_samples?,
@@ -5104,7 +5422,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Histogramint64> for super::Histogramint64 {
             type Error = String;
-            fn try_from(value: Histogramint64) -> Result<Self, Self::Error> {
+            fn try_from(value: Histogramint64) -> Result<Self, String> {
                 Ok(Self {
                     bins: value.bins?,
                     n_samples: value.n_samples?,
@@ -5200,7 +5518,7 @@ pub mod types {
 
         impl std::convert::TryFrom<IdentityProvider> for super::IdentityProvider {
             type Error = String;
-            fn try_from(value: IdentityProvider) -> Result<Self, Self::Error> {
+            fn try_from(value: IdentityProvider) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -5251,7 +5569,7 @@ pub mod types {
 
         impl std::convert::TryFrom<IdentityProviderResultsPage> for super::IdentityProviderResultsPage {
             type Error = String;
-            fn try_from(value: IdentityProviderResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: IdentityProviderResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -5406,7 +5724,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Image> for super::Image {
             type Error = String;
-            fn try_from(value: Image) -> Result<Self, Self::Error> {
+            fn try_from(value: Image) -> Result<Self, String> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -5486,7 +5804,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ImageCreate> for super::ImageCreate {
             type Error = String;
-            fn try_from(value: ImageCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: ImageCreate) -> Result<Self, String> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -5535,7 +5853,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ImageResultsPage> for super::ImageResultsPage {
             type Error = String;
-            fn try_from(value: ImageResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: ImageResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -5695,7 +6013,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Instance> for super::Instance {
             type Error = String;
-            fn try_from(value: Instance) -> Result<Self, Self::Error> {
+            fn try_from(value: Instance) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     hostname: value.hostname?,
@@ -5838,7 +6156,7 @@ pub mod types {
 
         impl std::convert::TryFrom<InstanceCreate> for super::InstanceCreate {
             type Error = String;
-            fn try_from(value: InstanceCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: InstanceCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     disks: value.disks?,
@@ -5880,7 +6198,7 @@ pub mod types {
 
         impl std::convert::TryFrom<InstanceMigrate> for super::InstanceMigrate {
             type Error = String;
-            fn try_from(value: InstanceMigrate) -> Result<Self, Self::Error> {
+            fn try_from(value: InstanceMigrate) -> Result<Self, String> {
                 Ok(Self {
                     dst_sled_id: value.dst_sled_id?,
                 })
@@ -5926,7 +6244,7 @@ pub mod types {
 
         impl std::convert::TryFrom<InstanceResultsPage> for super::InstanceResultsPage {
             type Error = String;
-            fn try_from(value: InstanceResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: InstanceResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -5976,7 +6294,7 @@ pub mod types {
 
         impl std::convert::TryFrom<InstanceSerialConsoleData> for super::InstanceSerialConsoleData {
             type Error = String;
-            fn try_from(value: InstanceSerialConsoleData) -> Result<Self, Self::Error> {
+            fn try_from(value: InstanceSerialConsoleData) -> Result<Self, String> {
                 Ok(Self {
                     data: value.data?,
                     last_byte_offset: value.last_byte_offset?,
@@ -6071,7 +6389,7 @@ pub mod types {
 
         impl std::convert::TryFrom<IpPool> for super::IpPool {
             type Error = String;
-            fn try_from(value: IpPool) -> Result<Self, Self::Error> {
+            fn try_from(value: IpPool) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -6146,7 +6464,7 @@ pub mod types {
 
         impl std::convert::TryFrom<IpPoolCreate> for super::IpPoolCreate {
             type Error = String;
-            fn try_from(value: IpPoolCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: IpPoolCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -6207,7 +6525,7 @@ pub mod types {
 
         impl std::convert::TryFrom<IpPoolRange> for super::IpPoolRange {
             type Error = String;
-            fn try_from(value: IpPoolRange) -> Result<Self, Self::Error> {
+            fn try_from(value: IpPoolRange) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     range: value.range?,
@@ -6255,7 +6573,7 @@ pub mod types {
 
         impl std::convert::TryFrom<IpPoolRangeResultsPage> for super::IpPoolRangeResultsPage {
             type Error = String;
-            fn try_from(value: IpPoolRangeResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: IpPoolRangeResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -6302,7 +6620,7 @@ pub mod types {
 
         impl std::convert::TryFrom<IpPoolResultsPage> for super::IpPoolResultsPage {
             type Error = String;
-            fn try_from(value: IpPoolResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: IpPoolResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -6349,7 +6667,7 @@ pub mod types {
 
         impl std::convert::TryFrom<IpPoolUpdate> for super::IpPoolUpdate {
             type Error = String;
-            fn try_from(value: IpPoolUpdate) -> Result<Self, Self::Error> {
+            fn try_from(value: IpPoolUpdate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -6396,7 +6714,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Ipv4Range> for super::Ipv4Range {
             type Error = String;
-            fn try_from(value: Ipv4Range) -> Result<Self, Self::Error> {
+            fn try_from(value: Ipv4Range) -> Result<Self, String> {
                 Ok(Self {
                     first: value.first?,
                     last: value.last?,
@@ -6443,7 +6761,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Ipv6Range> for super::Ipv6Range {
             type Error = String;
-            fn try_from(value: Ipv6Range) -> Result<Self, Self::Error> {
+            fn try_from(value: Ipv6Range) -> Result<Self, String> {
                 Ok(Self {
                     first: value.first?,
                     last: value.last?,
@@ -6490,7 +6808,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Measurement> for super::Measurement {
             type Error = String;
-            fn try_from(value: Measurement) -> Result<Self, Self::Error> {
+            fn try_from(value: Measurement) -> Result<Self, String> {
                 Ok(Self {
                     datum: value.datum?,
                     timestamp: value.timestamp?,
@@ -6537,7 +6855,7 @@ pub mod types {
 
         impl std::convert::TryFrom<MeasurementResultsPage> for super::MeasurementResultsPage {
             type Error = String;
-            fn try_from(value: MeasurementResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: MeasurementResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -6692,7 +7010,7 @@ pub mod types {
 
         impl std::convert::TryFrom<NetworkInterface> for super::NetworkInterface {
             type Error = String;
-            fn try_from(value: NetworkInterface) -> Result<Self, Self::Error> {
+            fn try_from(value: NetworkInterface) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -6784,7 +7102,7 @@ pub mod types {
 
         impl std::convert::TryFrom<NetworkInterfaceCreate> for super::NetworkInterfaceCreate {
             type Error = String;
-            fn try_from(value: NetworkInterfaceCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: NetworkInterfaceCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     ip: value.ip?,
@@ -6834,7 +7152,7 @@ pub mod types {
 
         impl std::convert::TryFrom<NetworkInterfaceResultsPage> for super::NetworkInterfaceResultsPage {
             type Error = String;
-            fn try_from(value: NetworkInterfaceResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: NetworkInterfaceResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -6893,7 +7211,7 @@ pub mod types {
 
         impl std::convert::TryFrom<NetworkInterfaceUpdate> for super::NetworkInterfaceUpdate {
             type Error = String;
-            fn try_from(value: NetworkInterfaceUpdate) -> Result<Self, Self::Error> {
+            fn try_from(value: NetworkInterfaceUpdate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     make_primary: value.make_primary?,
@@ -6977,7 +7295,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Organization> for super::Organization {
             type Error = String;
-            fn try_from(value: Organization) -> Result<Self, Self::Error> {
+            fn try_from(value: Organization) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -7027,7 +7345,7 @@ pub mod types {
 
         impl std::convert::TryFrom<OrganizationCreate> for super::OrganizationCreate {
             type Error = String;
-            fn try_from(value: OrganizationCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: OrganizationCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -7074,7 +7392,7 @@ pub mod types {
 
         impl std::convert::TryFrom<OrganizationResultsPage> for super::OrganizationResultsPage {
             type Error = String;
-            fn try_from(value: OrganizationResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: OrganizationResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -7112,7 +7430,7 @@ pub mod types {
 
         impl std::convert::TryFrom<OrganizationRolePolicy> for super::OrganizationRolePolicy {
             type Error = String;
-            fn try_from(value: OrganizationRolePolicy) -> Result<Self, Self::Error> {
+            fn try_from(value: OrganizationRolePolicy) -> Result<Self, String> {
                 Ok(Self {
                     role_assignments: value.role_assignments?,
                 })
@@ -7172,7 +7490,7 @@ pub mod types {
             for super::OrganizationRoleRoleAssignment
         {
             type Error = String;
-            fn try_from(value: OrganizationRoleRoleAssignment) -> Result<Self, Self::Error> {
+            fn try_from(value: OrganizationRoleRoleAssignment) -> Result<Self, String> {
                 Ok(Self {
                     identity_id: value.identity_id?,
                     identity_type: value.identity_type?,
@@ -7220,7 +7538,7 @@ pub mod types {
 
         impl std::convert::TryFrom<OrganizationUpdate> for super::OrganizationUpdate {
             type Error = String;
-            fn try_from(value: OrganizationUpdate) -> Result<Self, Self::Error> {
+            fn try_from(value: OrganizationUpdate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -7315,7 +7633,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Project> for super::Project {
             type Error = String;
-            fn try_from(value: Project) -> Result<Self, Self::Error> {
+            fn try_from(value: Project) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -7366,7 +7684,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ProjectCreate> for super::ProjectCreate {
             type Error = String;
-            fn try_from(value: ProjectCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: ProjectCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -7413,7 +7731,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ProjectResultsPage> for super::ProjectResultsPage {
             type Error = String;
-            fn try_from(value: ProjectResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: ProjectResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -7451,7 +7769,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ProjectRolePolicy> for super::ProjectRolePolicy {
             type Error = String;
-            fn try_from(value: ProjectRolePolicy) -> Result<Self, Self::Error> {
+            fn try_from(value: ProjectRolePolicy) -> Result<Self, String> {
                 Ok(Self {
                     role_assignments: value.role_assignments?,
                 })
@@ -7509,7 +7827,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ProjectRoleRoleAssignment> for super::ProjectRoleRoleAssignment {
             type Error = String;
-            fn try_from(value: ProjectRoleRoleAssignment) -> Result<Self, Self::Error> {
+            fn try_from(value: ProjectRoleRoleAssignment) -> Result<Self, String> {
                 Ok(Self {
                     identity_id: value.identity_id?,
                     identity_type: value.identity_type?,
@@ -7557,7 +7875,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ProjectUpdate> for super::ProjectUpdate {
             type Error = String;
-            fn try_from(value: ProjectUpdate) -> Result<Self, Self::Error> {
+            fn try_from(value: ProjectUpdate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -7616,7 +7934,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Rack> for super::Rack {
             type Error = String;
-            fn try_from(value: Rack) -> Result<Self, Self::Error> {
+            fn try_from(value: Rack) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     time_created: value.time_created?,
@@ -7664,7 +7982,7 @@ pub mod types {
 
         impl std::convert::TryFrom<RackResultsPage> for super::RackResultsPage {
             type Error = String;
-            fn try_from(value: RackResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: RackResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -7711,7 +8029,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Role> for super::Role {
             type Error = String;
-            fn try_from(value: Role) -> Result<Self, Self::Error> {
+            fn try_from(value: Role) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -7758,7 +8076,7 @@ pub mod types {
 
         impl std::convert::TryFrom<RoleResultsPage> for super::RoleResultsPage {
             type Error = String;
-            fn try_from(value: RoleResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: RoleResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -7889,7 +8207,7 @@ pub mod types {
 
         impl std::convert::TryFrom<RouterRoute> for super::RouterRoute {
             type Error = String;
-            fn try_from(value: RouterRoute) -> Result<Self, Self::Error> {
+            fn try_from(value: RouterRoute) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     destination: value.destination?,
@@ -7967,7 +8285,7 @@ pub mod types {
 
         impl std::convert::TryFrom<RouterRouteCreateParams> for super::RouterRouteCreateParams {
             type Error = String;
-            fn try_from(value: RouterRouteCreateParams) -> Result<Self, Self::Error> {
+            fn try_from(value: RouterRouteCreateParams) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     destination: value.destination?,
@@ -8016,7 +8334,7 @@ pub mod types {
 
         impl std::convert::TryFrom<RouterRouteResultsPage> for super::RouterRouteResultsPage {
             type Error = String;
-            fn try_from(value: RouterRouteResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: RouterRouteResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -8087,7 +8405,7 @@ pub mod types {
 
         impl std::convert::TryFrom<RouterRouteUpdateParams> for super::RouterRouteUpdateParams {
             type Error = String;
-            fn try_from(value: RouterRouteUpdateParams) -> Result<Self, Self::Error> {
+            fn try_from(value: RouterRouteUpdateParams) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     destination: value.destination?,
@@ -8136,7 +8454,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Saga> for super::Saga {
             type Error = String;
-            fn try_from(value: Saga) -> Result<Self, Self::Error> {
+            fn try_from(value: Saga) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     state: value.state?,
@@ -8183,7 +8501,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SagaResultsPage> for super::SagaResultsPage {
             type Error = String;
-            fn try_from(value: SagaResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: SagaResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -8343,7 +8661,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SamlIdentityProvider> for super::SamlIdentityProvider {
             type Error = String;
-            fn try_from(value: SamlIdentityProvider) -> Result<Self, Self::Error> {
+            fn try_from(value: SamlIdentityProvider) -> Result<Self, String> {
                 Ok(Self {
                     acs_url: value.acs_url?,
                     description: value.description?,
@@ -8493,7 +8811,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SamlIdentityProviderCreate> for super::SamlIdentityProviderCreate {
             type Error = String;
-            fn try_from(value: SamlIdentityProviderCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: SamlIdentityProviderCreate) -> Result<Self, String> {
                 Ok(Self {
                     acs_url: value.acs_url?,
                     description: value.description?,
@@ -8612,7 +8930,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Silo> for super::Silo {
             type Error = String;
-            fn try_from(value: Silo) -> Result<Self, Self::Error> {
+            fn try_from(value: Silo) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     discoverable: value.discoverable?,
@@ -8693,7 +9011,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SiloCreate> for super::SiloCreate {
             type Error = String;
-            fn try_from(value: SiloCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: SiloCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     discoverable: value.discoverable?,
@@ -8742,7 +9060,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SiloResultsPage> for super::SiloResultsPage {
             type Error = String;
-            fn try_from(value: SiloResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: SiloResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -8780,7 +9098,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SiloRolePolicy> for super::SiloRolePolicy {
             type Error = String;
-            fn try_from(value: SiloRolePolicy) -> Result<Self, Self::Error> {
+            fn try_from(value: SiloRolePolicy) -> Result<Self, String> {
                 Ok(Self {
                     role_assignments: value.role_assignments?,
                 })
@@ -8838,7 +9156,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SiloRoleRoleAssignment> for super::SiloRoleRoleAssignment {
             type Error = String;
-            fn try_from(value: SiloRoleRoleAssignment) -> Result<Self, Self::Error> {
+            fn try_from(value: SiloRoleRoleAssignment) -> Result<Self, String> {
                 Ok(Self {
                     identity_id: value.identity_id?,
                     identity_type: value.identity_type?,
@@ -8910,7 +9228,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Sled> for super::Sled {
             type Error = String;
-            fn try_from(value: Sled) -> Result<Self, Self::Error> {
+            fn try_from(value: Sled) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     service_address: value.service_address?,
@@ -8959,7 +9277,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SledResultsPage> for super::SledResultsPage {
             type Error = String;
-            fn try_from(value: SledResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: SledResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -9078,7 +9396,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Snapshot> for super::Snapshot {
             type Error = String;
-            fn try_from(value: Snapshot) -> Result<Self, Self::Error> {
+            fn try_from(value: Snapshot) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     disk_id: value.disk_id?,
@@ -9143,7 +9461,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SnapshotCreate> for super::SnapshotCreate {
             type Error = String;
-            fn try_from(value: SnapshotCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: SnapshotCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     disk: value.disk?,
@@ -9191,7 +9509,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SnapshotResultsPage> for super::SnapshotResultsPage {
             type Error = String;
-            fn try_from(value: SnapshotResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: SnapshotResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -9226,7 +9544,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SpoofLoginBody> for super::SpoofLoginBody {
             type Error = String;
-            fn try_from(value: SpoofLoginBody) -> Result<Self, Self::Error> {
+            fn try_from(value: SpoofLoginBody) -> Result<Self, String> {
                 Ok(Self {
                     username: value.username?,
                 })
@@ -9332,7 +9650,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SshKey> for super::SshKey {
             type Error = String;
-            fn try_from(value: SshKey) -> Result<Self, Self::Error> {
+            fn try_from(value: SshKey) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -9396,7 +9714,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SshKeyCreate> for super::SshKeyCreate {
             type Error = String;
-            fn try_from(value: SshKeyCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: SshKeyCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -9444,7 +9762,7 @@ pub mod types {
 
         impl std::convert::TryFrom<SshKeyResultsPage> for super::SshKeyResultsPage {
             type Error = String;
-            fn try_from(value: SshKeyResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: SshKeyResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -9515,7 +9833,7 @@ pub mod types {
 
         impl std::convert::TryFrom<TimeseriesSchema> for super::TimeseriesSchema {
             type Error = String;
-            fn try_from(value: TimeseriesSchema) -> Result<Self, Self::Error> {
+            fn try_from(value: TimeseriesSchema) -> Result<Self, String> {
                 Ok(Self {
                     created: value.created?,
                     datum_type: value.datum_type?,
@@ -9564,7 +9882,7 @@ pub mod types {
 
         impl std::convert::TryFrom<TimeseriesSchemaResultsPage> for super::TimeseriesSchemaResultsPage {
             type Error = String;
-            fn try_from(value: TimeseriesSchemaResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: TimeseriesSchemaResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -9611,7 +9929,7 @@ pub mod types {
 
         impl std::convert::TryFrom<User> for super::User {
             type Error = String;
-            fn try_from(value: User) -> Result<Self, Self::Error> {
+            fn try_from(value: User) -> Result<Self, String> {
                 Ok(Self {
                     display_name: value.display_name?,
                     id: value.id?,
@@ -9694,7 +10012,7 @@ pub mod types {
 
         impl std::convert::TryFrom<UserBuiltin> for super::UserBuiltin {
             type Error = String;
-            fn try_from(value: UserBuiltin) -> Result<Self, Self::Error> {
+            fn try_from(value: UserBuiltin) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -9744,7 +10062,7 @@ pub mod types {
 
         impl std::convert::TryFrom<UserBuiltinResultsPage> for super::UserBuiltinResultsPage {
             type Error = String;
-            fn try_from(value: UserBuiltinResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: UserBuiltinResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -9791,7 +10109,7 @@ pub mod types {
 
         impl std::convert::TryFrom<UserResultsPage> for super::UserResultsPage {
             type Error = String;
-            fn try_from(value: UserResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: UserResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -9925,7 +10243,7 @@ pub mod types {
 
         impl std::convert::TryFrom<Vpc> for super::Vpc {
             type Error = String;
-            fn try_from(value: Vpc) -> Result<Self, Self::Error> {
+            fn try_from(value: Vpc) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     dns_name: value.dns_name?,
@@ -10003,7 +10321,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcCreate> for super::VpcCreate {
             type Error = String;
-            fn try_from(value: VpcCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     dns_name: value.dns_name?,
@@ -10172,7 +10490,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcFirewallRule> for super::VpcFirewallRule {
             type Error = String;
-            fn try_from(value: VpcFirewallRule) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcFirewallRule) -> Result<Self, String> {
                 Ok(Self {
                     action: value.action?,
                     description: value.description?,
@@ -10241,7 +10559,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcFirewallRuleFilter> for super::VpcFirewallRuleFilter {
             type Error = String;
-            fn try_from(value: VpcFirewallRuleFilter) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcFirewallRuleFilter) -> Result<Self, String> {
                 Ok(Self {
                     hosts: value.hosts?,
                     ports: value.ports?,
@@ -10361,7 +10679,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcFirewallRuleUpdate> for super::VpcFirewallRuleUpdate {
             type Error = String;
-            fn try_from(value: VpcFirewallRuleUpdate) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcFirewallRuleUpdate) -> Result<Self, String> {
                 Ok(Self {
                     action: value.action?,
                     description: value.description?,
@@ -10402,7 +10720,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcFirewallRuleUpdateParams> for super::VpcFirewallRuleUpdateParams {
             type Error = String;
-            fn try_from(value: VpcFirewallRuleUpdateParams) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcFirewallRuleUpdateParams) -> Result<Self, String> {
                 Ok(Self {
                     rules: value.rules?,
                 })
@@ -10436,7 +10754,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcFirewallRules> for super::VpcFirewallRules {
             type Error = String;
-            fn try_from(value: VpcFirewallRules) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcFirewallRules) -> Result<Self, String> {
                 Ok(Self {
                     rules: value.rules?,
                 })
@@ -10482,7 +10800,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcResultsPage> for super::VpcResultsPage {
             type Error = String;
-            fn try_from(value: VpcResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -10589,7 +10907,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcRouter> for super::VpcRouter {
             type Error = String;
-            fn try_from(value: VpcRouter) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcRouter) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -10641,7 +10959,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcRouterCreate> for super::VpcRouterCreate {
             type Error = String;
-            fn try_from(value: VpcRouterCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcRouterCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -10688,7 +11006,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcRouterResultsPage> for super::VpcRouterResultsPage {
             type Error = String;
-            fn try_from(value: VpcRouterResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcRouterResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -10735,7 +11053,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcRouterUpdate> for super::VpcRouterUpdate {
             type Error = String;
-            fn try_from(value: VpcRouterUpdate) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcRouterUpdate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -10854,7 +11172,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcSubnet> for super::VpcSubnet {
             type Error = String;
-            fn try_from(value: VpcSubnet) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcSubnet) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -10931,7 +11249,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcSubnetCreate> for super::VpcSubnetCreate {
             type Error = String;
-            fn try_from(value: VpcSubnetCreate) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcSubnetCreate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     ipv4_block: value.ipv4_block?,
@@ -10980,7 +11298,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcSubnetResultsPage> for super::VpcSubnetResultsPage {
             type Error = String;
-            fn try_from(value: VpcSubnetResultsPage) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcSubnetResultsPage) -> Result<Self, String> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -11027,7 +11345,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcSubnetUpdate> for super::VpcSubnetUpdate {
             type Error = String;
-            fn try_from(value: VpcSubnetUpdate) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcSubnetUpdate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -11086,7 +11404,7 @@ pub mod types {
 
         impl std::convert::TryFrom<VpcUpdate> for super::VpcUpdate {
             type Error = String;
-            fn try_from(value: VpcUpdate) -> Result<Self, Self::Error> {
+            fn try_from(value: VpcUpdate) -> Result<Self, String> {
                 Ok(Self {
                     description: value.description?,
                     dns_name: value.dns_name?,

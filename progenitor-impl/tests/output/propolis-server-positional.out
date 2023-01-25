@@ -167,7 +167,7 @@ pub mod types {
 
     impl std::str::FromStr for InstanceState {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "Creating" => Ok(Self::Creating),
                 "Starting" => Ok(Self::Starting),
@@ -181,6 +181,20 @@ pub mod types {
                 "Destroyed" => Ok(Self::Destroyed),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for InstanceState {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for InstanceState {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -216,7 +230,7 @@ pub mod types {
 
     impl std::str::FromStr for InstanceStateRequested {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "Run" => Ok(Self::Run),
                 "Stop" => Ok(Self::Stop),
@@ -224,6 +238,20 @@ pub mod types {
                 "MigrateStart" => Ok(Self::MigrateStart),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for InstanceStateRequested {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for InstanceStateRequested {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -260,7 +288,7 @@ pub mod types {
 
     impl std::str::FromStr for MigrationState {
         type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        fn from_str(value: &str) -> Result<Self, &'static str> {
             match value {
                 "Sync" => Ok(Self::Sync),
                 "RamPush" => Ok(Self::RamPush),
@@ -274,6 +302,20 @@ pub mod types {
                 "Error" => Ok(Self::Error),
                 _ => Err("invalid value"),
             }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for MigrationState {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for MigrationState {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
         }
     }
 
@@ -302,7 +344,7 @@ pub mod types {
     pub struct Slot(pub u8);
     impl std::ops::Deref for Slot {
         type Target = u8;
-        fn deref(&self) -> &Self::Target {
+        fn deref(&self) -> &u8 {
             &self.0
         }
     }

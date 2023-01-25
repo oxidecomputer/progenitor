@@ -176,7 +176,7 @@ pub mod types {
 
         impl std::convert::TryFrom<EnrolBody> for super::EnrolBody {
             type Error = String;
-            fn try_from(value: EnrolBody) -> Result<Self, Self::Error> {
+            fn try_from(value: EnrolBody) -> Result<Self, String> {
                 Ok(Self {
                     host: value.host?,
                     key: value.key?,
@@ -211,7 +211,7 @@ pub mod types {
 
         impl std::convert::TryFrom<GlobalJobsResult> for super::GlobalJobsResult {
             type Error = String;
-            fn try_from(value: GlobalJobsResult) -> Result<Self, Self::Error> {
+            fn try_from(value: GlobalJobsResult) -> Result<Self, String> {
                 Ok(Self {
                     summary: value.summary?,
                 })
@@ -269,7 +269,7 @@ pub mod types {
 
         impl std::convert::TryFrom<OutputRecord> for super::OutputRecord {
             type Error = String;
-            fn try_from(value: OutputRecord) -> Result<Self, Self::Error> {
+            fn try_from(value: OutputRecord) -> Result<Self, String> {
                 Ok(Self {
                     msg: value.msg?,
                     stream: value.stream?,
@@ -317,7 +317,7 @@ pub mod types {
 
         impl std::convert::TryFrom<PingResult> for super::PingResult {
             type Error = String;
-            fn try_from(value: PingResult) -> Result<Self, Self::Error> {
+            fn try_from(value: PingResult) -> Result<Self, String> {
                 Ok(Self {
                     host: value.host?,
                     ok: value.ok?,
@@ -388,7 +388,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ReportFinishBody> for super::ReportFinishBody {
             type Error = String;
-            fn try_from(value: ReportFinishBody) -> Result<Self, Self::Error> {
+            fn try_from(value: ReportFinishBody) -> Result<Self, String> {
                 Ok(Self {
                     duration_millis: value.duration_millis?,
                     end_time: value.end_time?,
@@ -473,7 +473,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ReportId> for super::ReportId {
             type Error = String;
-            fn try_from(value: ReportId) -> Result<Self, Self::Error> {
+            fn try_from(value: ReportId) -> Result<Self, String> {
                 Ok(Self {
                     host: value.host?,
                     job: value.job?,
@@ -523,7 +523,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ReportOutputBody> for super::ReportOutputBody {
             type Error = String;
-            fn try_from(value: ReportOutputBody) -> Result<Self, Self::Error> {
+            fn try_from(value: ReportOutputBody) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     record: value.record?,
@@ -558,7 +558,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ReportResult> for super::ReportResult {
             type Error = String;
-            fn try_from(value: ReportResult) -> Result<Self, Self::Error> {
+            fn try_from(value: ReportResult) -> Result<Self, String> {
                 Ok(Self {
                     existed_already: value.existed_already?,
                 })
@@ -616,7 +616,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ReportStartBody> for super::ReportStartBody {
             type Error = String;
-            fn try_from(value: ReportStartBody) -> Result<Self, Self::Error> {
+            fn try_from(value: ReportStartBody) -> Result<Self, String> {
                 Ok(Self {
                     id: value.id?,
                     script: value.script?,
@@ -715,7 +715,7 @@ pub mod types {
 
         impl std::convert::TryFrom<ReportSummary> for super::ReportSummary {
             type Error = String;
-            fn try_from(value: ReportSummary) -> Result<Self, Self::Error> {
+            fn try_from(value: ReportSummary) -> Result<Self, String> {
                 Ok(Self {
                     age_seconds: value.age_seconds?,
                     duration_seconds: value.duration_seconds?,
