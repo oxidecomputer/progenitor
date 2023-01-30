@@ -210,6 +210,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for DatumType {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct DerEncodedKeyPair {
         ///request signing private key (base64 encoded der file)
@@ -339,6 +346,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for DiskMetricName {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for DiskMetricName {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -497,6 +511,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for FieldSource {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     ///The `FieldType` identifies the data type of a target or metric field.
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum FieldType {
@@ -552,6 +573,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for FieldType {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum FleetRole {
         #[serde(rename = "admin")]
@@ -594,6 +622,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for FleetRole {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for FleetRole {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -815,6 +850,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for IdSortMode {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     ///Client view of an [`IdentityProvider`]
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct IdentityProvider {
@@ -880,6 +922,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for IdentityProviderType {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     ///Describes what kind of identity is described by an id
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum IdentityType {
@@ -915,6 +964,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for IdentityType {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for IdentityType {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -1203,6 +1259,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for InstanceState {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     ///The kind of an external IP address for an instance
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum IpKind {
@@ -1246,6 +1309,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for IpKind {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     #[serde(untagged)]
     pub enum IpNet {
@@ -1276,6 +1346,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for IpNet {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for IpNet {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -1395,6 +1472,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for Ipv4Net {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     impl<'de> serde::Deserialize<'de> for Ipv4Net {
         fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
         where
@@ -1443,6 +1527,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for Ipv6Net {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for Ipv6Net {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -1512,6 +1603,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for L4PortRange {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     impl<'de> serde::Deserialize<'de> for L4PortRange {
         fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
         where
@@ -1563,6 +1661,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for MacAddr {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for MacAddr {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -1632,6 +1737,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for Name {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     impl<'de> serde::Deserialize<'de> for Name {
         fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
         where
@@ -1690,6 +1802,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for NameOrIdSortMode {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     ///Supported set of sort modes for scanning by name only
     ///
     ///Currently, we only support scanning in ascending order.
@@ -1727,6 +1846,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for NameSortMode {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for NameSortMode {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -1890,6 +2016,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for OrganizationRole {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     ///Client view of a [`Policy`], which describes how this resource may be
     /// accessed
     ///
@@ -2005,6 +2138,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for ProjectRole {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     ///Client view of a [`Policy`], which describes how this resource may be
     /// accessed
     ///
@@ -2105,6 +2245,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for RoleName {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for RoleName {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -2257,6 +2404,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for RouterRouteKind {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for RouterRouteKind {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -2464,6 +2618,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for SiloRole {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     ///Client view of a [`Policy`], which describes how this resource may be
     /// accessed
     ///
@@ -2635,6 +2796,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for TimeseriesName {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     impl<'de> serde::Deserialize<'de> for TimeseriesName {
         fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
         where
@@ -2740,6 +2908,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for UserProvisionType {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for UserProvisionType {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -2864,6 +3039,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for VpcFirewallRuleAction {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum VpcFirewallRuleDirection {
         #[serde(rename = "inbound")]
@@ -2902,6 +3084,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for VpcFirewallRuleDirection {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for VpcFirewallRuleDirection {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -2992,6 +3181,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for VpcFirewallRuleProtocol {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum VpcFirewallRuleStatus {
         #[serde(rename = "disabled")]
@@ -3030,6 +3226,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for VpcFirewallRuleStatus {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for VpcFirewallRuleStatus {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -3166,6 +3369,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for VpcRouterKind {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for VpcRouterKind {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
