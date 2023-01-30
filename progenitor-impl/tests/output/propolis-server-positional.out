@@ -198,6 +198,13 @@ pub mod types {
         }
     }
 
+    impl std::convert::TryFrom<String> for InstanceState {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceStateMonitorRequest {
         pub gen: u64,
@@ -251,6 +258,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for InstanceStateRequested {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for InstanceStateRequested {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
@@ -315,6 +329,13 @@ pub mod types {
     impl std::convert::TryFrom<&String> for MigrationState {
         type Error = &'static str;
         fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for MigrationState {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
             value.parse()
         }
     }
