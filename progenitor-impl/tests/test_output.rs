@@ -6,7 +6,8 @@ use std::{
 };
 
 use progenitor_impl::{
-    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch,
+    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl,
+    TypePatch,
 };
 
 use openapiv3::OpenAPI;
@@ -19,7 +20,7 @@ where
     match serde_json::from_reader(f) {
         Ok(json_value) => json_value,
         _ => {
-            f = File::open(p.clone()).unwrap();
+            f = File::open(p).unwrap();
             serde_yaml::from_reader(f).unwrap()
         }
     }
@@ -55,7 +56,7 @@ fn verify_apis(openapi_file: &str) {
                     ..Default::default()
                 },
                 "usize",
-                ["Display"].into_iter(),
+                [TypeImpl::Display].into_iter(),
             ),
     );
     let output = generator.generate_text_normalize_comments(&spec).unwrap();

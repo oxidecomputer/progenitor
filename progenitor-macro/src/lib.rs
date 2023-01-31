@@ -217,21 +217,13 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         });
         replace.into_iter().for_each(|(type_name, type_and_impls)| {
             let type_name = type_name.to_token_stream();
-            let type_and_impls = type_and_impls.into_inner();
-            let replace_name = type_and_impls.type_name.to_token_stream();
-            let impls = type_and_impls
-                .impls
-                .into_iter()
-                .map(|x| x.to_token_stream());
+            let (replace_name, impls) =
+                type_and_impls.into_inner().into_name_and_impls();
             settings.with_replacement(type_name, replace_name, impls);
         });
         convert.into_iter().for_each(|(schema, type_and_impls)| {
-            let type_and_impls = type_and_impls.into_inner();
-            let type_name = type_and_impls.type_name.to_token_stream();
-            let impls = type_and_impls
-                .impls
-                .into_iter()
-                .map(|x| x.to_token_stream());
+            let (type_name, impls) =
+                type_and_impls.into_inner().into_name_and_impls();
             settings.with_conversion(schema, type_name, impls);
         });
         (spec.into_inner(), settings)

@@ -1,4 +1,4 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2023 Oxide Computer Company
 
 use std::collections::{HashMap, HashSet};
 
@@ -11,6 +11,7 @@ use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
+pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
 
 mod method;
@@ -53,8 +54,8 @@ pub struct GenerationSettings {
     extra_derives: Vec<String>,
 
     patch: HashMap<String, TypePatch>,
-    replace: HashMap<String, (String, Vec<String>)>,
-    convert: Vec<(schemars::schema::SchemaObject, String, Vec<String>)>,
+    replace: HashMap<String, (String, Vec<TypeImpl>)>,
+    convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
@@ -129,7 +130,7 @@ impl GenerationSettings {
     pub fn with_replacement<
         TS: ToString,
         RS: ToString,
-        I: Iterator<Item = impl ToString>,
+        I: Iterator<Item = TypeImpl>,
     >(
         &mut self,
         type_name: TS,
@@ -138,25 +139,19 @@ impl GenerationSettings {
     ) -> &mut Self {
         self.replace.insert(
             type_name.to_string(),
-            (
-                replace_name.to_string(),
-                impls.map(|x| x.to_string()).collect(),
-            ),
+            (replace_name.to_string(), impls.collect()),
         );
         self
     }
 
-    pub fn with_conversion<S: ToString, I: Iterator<Item = impl ToString>>(
+    pub fn with_conversion<S: ToString, I: Iterator<Item = TypeImpl>>(
         &mut self,
         schema: schemars::schema::SchemaObject,
         type_name: S,
         impls: I,
     ) -> &mut Self {
-        self.convert.push((
-            schema,
-            type_name.to_string(),
-            impls.map(|x| x.to_string()).collect(),
-        ));
+        self.convert
+            .push((schema, type_name.to_string(), impls.collect()));
         self
     }
 }
@@ -191,7 +186,7 @@ impl Generator {
                 type_settings.with_replacement(
                     type_name,
                     replace_name,
-                    impls.iter(),
+                    impls.iter().cloned(),
                 );
             },
         );
@@ -202,7 +197,7 @@ impl Generator {
                 type_settings.with_conversion(
                     schema.clone(),
                     type_name,
-                    impls.iter(),
+                    impls.iter().cloned(),
                 );
             });
         Self {

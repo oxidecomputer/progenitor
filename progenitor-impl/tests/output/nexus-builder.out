@@ -77,7 +77,7 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    #[derive(Clone, Debug, JsonSchema, Serialize)]
     pub struct BlockSize(i64);
     impl std::ops::Deref for BlockSize {
         type Target = i64;
@@ -94,6 +94,16 @@ pub mod types {
             } else {
                 Ok(Self(value))
             }
+        }
+    }
+
+    impl<'de> serde::Deserialize<'de> for BlockSize {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            Self::try_from(i64::deserialize(deserializer)?)
+                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
 
