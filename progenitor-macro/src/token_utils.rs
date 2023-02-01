@@ -1,5 +1,7 @@
 // Copyright 2023 Oxide Computer Company
 
+use std::collections::HashSet;
+
 use quote::ToTokens;
 use syn::{
     parse::Parse,
@@ -8,11 +10,48 @@ use syn::{
     Ident, Path, Token, TraitBoundModifier,
 };
 
+use progenitor_impl::TypeImpl;
+
 #[derive(Debug)]
 pub struct TypeAndImpls {
     pub type_name: Path,
     pub colon_token: Option<Colon>,
     pub impls: Punctuated<ImplTrait, Add>,
+}
+
+impl TypeAndImpls {
+    pub(crate) fn into_name_and_impls(
+        self,
+    ) -> (String, impl Iterator<Item = TypeImpl>) {
+        // If there are no traits specified, these are assumed to be
+        // implemented. A user would use the `?FromStr` syntax to remove one of
+        // these defaults;
+        const DEFAULT_IMPLS: [TypeImpl; 2] =
+            [TypeImpl::FromStr, TypeImpl::Display];
+
+        let name = self.type_name.to_token_stream().to_string();
+        let mut impls = DEFAULT_IMPLS.into_iter().collect::<HashSet<_>>();
+        self.impls.into_iter().for_each(
+            |ImplTrait {
+                 modifier,
+                 impl_name,
+                 ..
+             }| {
+                // TODO should this be an error rather than silently ignored?
+                if let Some(impl_name) = impl_name {
+                    match modifier {
+                        syn::TraitBoundModifier::None => {
+                            impls.insert(impl_name)
+                        }
+                        syn::TraitBoundModifier::Maybe(_) => {
+                            impls.remove(&impl_name)
+                        }
+                    };
+                }
+            },
+        );
+        (name, impls.into_iter())
+    }
 }
 
 impl Parse for TypeAndImpls {
@@ -52,16 +91,19 @@ impl ToTokens for TypeAndImpls {
 #[derive(Debug)]
 pub struct ImplTrait {
     pub modifier: TraitBoundModifier,
-    pub impl_name: Ident,
+    pub impl_ident: Ident,
+    pub impl_name: Option<TypeImpl>,
 }
 
 impl Parse for ImplTrait {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let modifier: TraitBoundModifier = input.parse()?;
-        let impl_name: Ident = input.parse()?;
+        let impl_ident: Ident = input.parse()?;
+        let impl_name = impl_ident.to_string().parse().ok();
 
         Ok(Self {
             modifier,
+            impl_ident,
             impl_name,
         })
     }
@@ -70,7 +112,7 @@ impl Parse for ImplTrait {
 impl ToTokens for ImplTrait {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         self.modifier.to_tokens(tokens);
-        self.impl_name.to_tokens(tokens);
+        self.impl_ident.to_tokens(tokens);
     }
 }
 
