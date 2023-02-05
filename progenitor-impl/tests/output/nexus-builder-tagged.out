@@ -15,6 +15,12 @@ pub mod types {
         pub serial: String,
     }
 
+    impl From<&Baseboard> for Baseboard {
+        fn from(value: &Baseboard) -> Self {
+            value.clone()
+        }
+    }
+
     impl Baseboard {
         pub fn builder() -> builder::Baseboard {
             builder::Baseboard::default()
@@ -41,6 +47,12 @@ pub mod types {
         RangeFrom { start: f64 },
     }
 
+    impl From<&BinRangedouble> for BinRangedouble {
+        fn from(value: &BinRangedouble) -> Self {
+            value.clone()
+        }
+    }
+
     ///A type storing a range over `T`.
     ///
     ///This type supports ranges similar to the `RangeTo`, `Range` and
@@ -61,6 +73,12 @@ pub mod types {
         RangeFrom { start: i64 },
     }
 
+    impl From<&BinRangeint64> for BinRangeint64 {
+        fn from(value: &BinRangeint64) -> Self {
+            value.clone()
+        }
+    }
+
     ///Type storing bin edges and a count of samples within it.
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Bindouble {
@@ -68,6 +86,12 @@ pub mod types {
         pub count: u64,
         ///The range of the support covered by this bin.
         pub range: BinRangedouble,
+    }
+
+    impl From<&Bindouble> for Bindouble {
+        fn from(value: &Bindouble) -> Self {
+            value.clone()
+        }
     }
 
     impl Bindouble {
@@ -85,6 +109,12 @@ pub mod types {
         pub range: BinRangeint64,
     }
 
+    impl From<&Binint64> for Binint64 {
+        fn from(value: &Binint64) -> Self {
+            value.clone()
+        }
+    }
+
     impl Binint64 {
         pub fn builder() -> builder::Binint64 {
             builder::Binint64::default()
@@ -97,6 +127,18 @@ pub mod types {
         type Target = i64;
         fn deref(&self) -> &i64 {
             &self.0
+        }
+    }
+
+    impl From<BlockSize> for i64 {
+        fn from(value: BlockSize) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&BlockSize> for BlockSize {
+        fn from(value: &BlockSize) -> Self {
+            value.clone()
         }
     }
 
@@ -137,6 +179,58 @@ pub mod types {
         }
     }
 
+    impl From<ByteCount> for u64 {
+        fn from(value: ByteCount) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&ByteCount> for ByteCount {
+        fn from(value: &ByteCount) -> Self {
+            value.clone()
+        }
+    }
+
+    impl From<u64> for ByteCount {
+        fn from(value: u64) -> Self {
+            Self(value)
+        }
+    }
+
+    impl std::str::FromStr for ByteCount {
+        type Err = <u64 as std::str::FromStr>::Err;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            Ok(Self(value.parse()?))
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for ByteCount {
+        type Error = <u64 as std::str::FromStr>::Err;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for ByteCount {
+        type Error = <u64 as std::str::FromStr>::Err;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for ByteCount {
+        type Error = <u64 as std::str::FromStr>::Err;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl ToString for ByteCount {
+        fn to_string(&self) -> String {
+            self.0.to_string()
+        }
+    }
+
     ///Client view of a [`Certificate`]
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Certificate {
@@ -151,6 +245,12 @@ pub mod types {
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl From<&Certificate> for Certificate {
+        fn from(value: &Certificate) -> Self {
+            value.clone()
+        }
     }
 
     impl Certificate {
@@ -173,6 +273,12 @@ pub mod types {
         pub service: ServiceUsingCertificate,
     }
 
+    impl From<&CertificateCreate> for CertificateCreate {
+        fn from(value: &CertificateCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl CertificateCreate {
         pub fn builder() -> builder::CertificateCreate {
             builder::CertificateCreate::default()
@@ -187,6 +293,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&CertificateResultsPage> for CertificateResultsPage {
+        fn from(value: &CertificateResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl CertificateResultsPage {
@@ -209,6 +321,12 @@ pub mod types {
         pub version: SemverVersion,
     }
 
+    impl From<&ComponentUpdate> for ComponentUpdate {
+        fn from(value: &ComponentUpdate) -> Self {
+            value.clone()
+        }
+    }
+
     impl ComponentUpdate {
         pub fn builder() -> builder::ComponentUpdate {
             builder::ComponentUpdate::default()
@@ -225,6 +343,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&ComponentUpdateResultsPage> for ComponentUpdateResultsPage {
+        fn from(value: &ComponentUpdateResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl ComponentUpdateResultsPage {
         pub fn builder() -> builder::ComponentUpdateResultsPage {
             builder::ComponentUpdateResultsPage::default()
@@ -238,6 +362,12 @@ pub mod types {
         pub value: f64,
     }
 
+    impl From<&Cumulativedouble> for Cumulativedouble {
+        fn from(value: &Cumulativedouble) -> Self {
+            value.clone()
+        }
+    }
+
     impl Cumulativedouble {
         pub fn builder() -> builder::Cumulativedouble {
             builder::Cumulativedouble::default()
@@ -249,6 +379,12 @@ pub mod types {
     pub struct Cumulativeint64 {
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
         pub value: i64,
+    }
+
+    impl From<&Cumulativeint64> for Cumulativeint64 {
+        fn from(value: &Cumulativeint64) -> Self {
+            value.clone()
+        }
     }
 
     impl Cumulativeint64 {
@@ -281,6 +417,12 @@ pub mod types {
         HistogramF64(Histogramdouble),
     }
 
+    impl From<&Datum> for Datum {
+        fn from(value: &Datum) -> Self {
+            value.clone()
+        }
+    }
+
     ///The type of an individual datum of a metric.
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum DatumType {
@@ -302,6 +444,12 @@ pub mod types {
         HistogramI64,
         #[serde(rename = "histogram_f64")]
         HistogramF64,
+    }
+
+    impl From<&DatumType> for DatumType {
+        fn from(value: &DatumType) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for DatumType {
@@ -367,6 +515,12 @@ pub mod types {
         pub public_cert: String,
     }
 
+    impl From<&DerEncodedKeyPair> for DerEncodedKeyPair {
+        fn from(value: &DerEncodedKeyPair) -> Self {
+            value.clone()
+        }
+    }
+
     impl DerEncodedKeyPair {
         pub fn builder() -> builder::DerEncodedKeyPair {
             builder::DerEncodedKeyPair::default()
@@ -380,6 +534,12 @@ pub mod types {
         pub grant_type: String,
     }
 
+    impl From<&DeviceAccessTokenRequest> for DeviceAccessTokenRequest {
+        fn from(value: &DeviceAccessTokenRequest) -> Self {
+            value.clone()
+        }
+    }
+
     impl DeviceAccessTokenRequest {
         pub fn builder() -> builder::DeviceAccessTokenRequest {
             builder::DeviceAccessTokenRequest::default()
@@ -389,6 +549,12 @@ pub mod types {
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct DeviceAuthRequest {
         pub client_id: uuid::Uuid,
+    }
+
+    impl From<&DeviceAuthRequest> for DeviceAuthRequest {
+        fn from(value: &DeviceAuthRequest) -> Self {
+            value.clone()
+        }
     }
 
     impl DeviceAuthRequest {
@@ -402,6 +568,12 @@ pub mod types {
         pub user_code: String,
     }
 
+    impl From<&DeviceAuthVerify> for DeviceAuthVerify {
+        fn from(value: &DeviceAuthVerify) -> Self {
+            value.clone()
+        }
+    }
+
     impl DeviceAuthVerify {
         pub fn builder() -> builder::DeviceAuthVerify {
             builder::DeviceAuthVerify::default()
@@ -413,6 +585,12 @@ pub mod types {
     pub enum Digest {
         #[serde(rename = "sha256")]
         Sha256(String),
+    }
+
+    impl From<&Digest> for Digest {
+        fn from(value: &Digest) -> Self {
+            value.clone()
+        }
     }
 
     ///Client view of a [`Disk`]
@@ -439,6 +617,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Disk> for Disk {
+        fn from(value: &Disk) -> Self {
+            value.clone()
+        }
+    }
+
     impl Disk {
         pub fn builder() -> builder::Disk {
             builder::Disk::default()
@@ -457,6 +641,12 @@ pub mod types {
         pub size: ByteCount,
     }
 
+    impl From<&DiskCreate> for DiskCreate {
+        fn from(value: &DiskCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl DiskCreate {
         pub fn builder() -> builder::DiskCreate {
             builder::DiskCreate::default()
@@ -469,6 +659,12 @@ pub mod types {
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct DiskIdentifier {
         pub name: Name,
+    }
+
+    impl From<&DiskIdentifier> for DiskIdentifier {
+        fn from(value: &DiskIdentifier) -> Self {
+            value.clone()
+        }
     }
 
     impl DiskIdentifier {
@@ -491,6 +687,12 @@ pub mod types {
         Write,
         #[serde(rename = "write_bytes")]
         WriteBytes,
+    }
+
+    impl From<&DiskMetricName> for DiskMetricName {
+        fn from(value: &DiskMetricName) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for DiskMetricName {
@@ -547,6 +749,12 @@ pub mod types {
         pub disk: NameOrId,
     }
 
+    impl From<&DiskPath> for DiskPath {
+        fn from(value: &DiskPath) -> Self {
+            value.clone()
+        }
+    }
+
     impl DiskPath {
         pub fn builder() -> builder::DiskPath {
             builder::DiskPath::default()
@@ -561,6 +769,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&DiskResultsPage> for DiskResultsPage {
+        fn from(value: &DiskResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl DiskResultsPage {
@@ -591,6 +805,12 @@ pub mod types {
         GlobalImage { image_id: uuid::Uuid },
     }
 
+    impl From<&DiskSource> for DiskSource {
+        fn from(value: &DiskSource) -> Self {
+            value.clone()
+        }
+    }
+
     ///State of a Disk (primarily: attached or not)
     #[derive(Clone, Debug, Deserialize, Serialize)]
     #[serde(tag = "state", content = "instance")]
@@ -614,6 +834,12 @@ pub mod types {
         Faulted,
     }
 
+    impl From<&DiskState> for DiskState {
+        fn from(value: &DiskState) -> Self {
+            value.clone()
+        }
+    }
+
     ///OS image distribution
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Distribution {
@@ -621,6 +847,12 @@ pub mod types {
         pub name: Name,
         ///The version of the distribution (e.g. "3.10" or "18.04")
         pub version: String,
+    }
+
+    impl From<&Distribution> for Distribution {
+        fn from(value: &Distribution) -> Self {
+            value.clone()
+        }
     }
 
     impl Distribution {
@@ -638,6 +870,12 @@ pub mod types {
         pub request_id: String,
     }
 
+    impl From<&Error> for Error {
+        fn from(value: &Error) -> Self {
+            value.clone()
+        }
+    }
+
     impl Error {
         pub fn builder() -> builder::Error {
             builder::Error::default()
@@ -648,6 +886,12 @@ pub mod types {
     pub struct ExternalIp {
         pub ip: std::net::IpAddr,
         pub kind: IpKind,
+    }
+
+    impl From<&ExternalIp> for ExternalIp {
+        fn from(value: &ExternalIp) -> Self {
+            value.clone()
+        }
     }
 
     impl ExternalIp {
@@ -670,6 +914,12 @@ pub mod types {
         },
     }
 
+    impl From<&ExternalIpCreate> for ExternalIpCreate {
+        fn from(value: &ExternalIpCreate) -> Self {
+            value.clone()
+        }
+    }
+
     ///A single page of results
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct ExternalIpResultsPage {
@@ -678,6 +928,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&ExternalIpResultsPage> for ExternalIpResultsPage {
+        fn from(value: &ExternalIpResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl ExternalIpResultsPage {
@@ -694,6 +950,12 @@ pub mod types {
         pub ty: FieldType,
     }
 
+    impl From<&FieldSchema> for FieldSchema {
+        fn from(value: &FieldSchema) -> Self {
+            value.clone()
+        }
+    }
+
     impl FieldSchema {
         pub fn builder() -> builder::FieldSchema {
             builder::FieldSchema::default()
@@ -707,6 +969,12 @@ pub mod types {
         Target,
         #[serde(rename = "metric")]
         Metric,
+    }
+
+    impl From<&FieldSource> for FieldSource {
+        fn from(value: &FieldSource) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for FieldSource {
@@ -763,6 +1031,12 @@ pub mod types {
         Uuid,
         #[serde(rename = "bool")]
         Bool,
+    }
+
+    impl From<&FieldType> for FieldType {
+        fn from(value: &FieldType) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for FieldType {
@@ -822,6 +1096,12 @@ pub mod types {
         Viewer,
     }
 
+    impl From<&FleetRole> for FleetRole {
+        fn from(value: &FleetRole) -> Self {
+            value.clone()
+        }
+    }
+
     impl ToString for FleetRole {
         fn to_string(&self) -> String {
             match *self {
@@ -877,6 +1157,12 @@ pub mod types {
         pub role_assignments: Vec<FleetRoleRoleAssignment>,
     }
 
+    impl From<&FleetRolePolicy> for FleetRolePolicy {
+        fn from(value: &FleetRolePolicy) -> Self {
+            value.clone()
+        }
+    }
+
     impl FleetRolePolicy {
         pub fn builder() -> builder::FleetRolePolicy {
             builder::FleetRolePolicy::default()
@@ -894,6 +1180,12 @@ pub mod types {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: FleetRole,
+    }
+
+    impl From<&FleetRoleRoleAssignment> for FleetRoleRoleAssignment {
+        fn from(value: &FleetRoleRoleAssignment) -> Self {
+            value.clone()
+        }
     }
 
     impl FleetRoleRoleAssignment {
@@ -931,6 +1223,12 @@ pub mod types {
         pub version: String,
     }
 
+    impl From<&GlobalImage> for GlobalImage {
+        fn from(value: &GlobalImage) -> Self {
+            value.clone()
+        }
+    }
+
     impl GlobalImage {
         pub fn builder() -> builder::GlobalImage {
             builder::GlobalImage::default()
@@ -951,6 +1249,12 @@ pub mod types {
         pub source: ImageSource,
     }
 
+    impl From<&GlobalImageCreate> for GlobalImageCreate {
+        fn from(value: &GlobalImageCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl GlobalImageCreate {
         pub fn builder() -> builder::GlobalImageCreate {
             builder::GlobalImageCreate::default()
@@ -965,6 +1269,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&GlobalImageResultsPage> for GlobalImageResultsPage {
+        fn from(value: &GlobalImageResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl GlobalImageResultsPage {
@@ -983,6 +1293,12 @@ pub mod types {
         pub silo_id: uuid::Uuid,
     }
 
+    impl From<&Group> for Group {
+        fn from(value: &Group) -> Self {
+            value.clone()
+        }
+    }
+
     impl Group {
         pub fn builder() -> builder::Group {
             builder::Group::default()
@@ -997,6 +1313,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&GroupResultsPage> for GroupResultsPage {
+        fn from(value: &GroupResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl GroupResultsPage {
@@ -1054,6 +1376,12 @@ pub mod types {
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Histogramdouble> for Histogramdouble {
+        fn from(value: &Histogramdouble) -> Self {
+            value.clone()
+        }
+    }
+
     impl Histogramdouble {
         pub fn builder() -> builder::Histogramdouble {
             builder::Histogramdouble::default()
@@ -1109,6 +1437,12 @@ pub mod types {
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Histogramint64> for Histogramint64 {
+        fn from(value: &Histogramint64) -> Self {
+            value.clone()
+        }
+    }
+
     impl Histogramint64 {
         pub fn builder() -> builder::Histogramint64 {
             builder::Histogramint64::default()
@@ -1123,6 +1457,12 @@ pub mod types {
         ///sort in increasing order of "id"
         #[serde(rename = "id_ascending")]
         IdAscending,
+    }
+
+    impl From<&IdSortMode> for IdSortMode {
+        fn from(value: &IdSortMode) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for IdSortMode {
@@ -1181,6 +1521,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&IdentityProvider> for IdentityProvider {
+        fn from(value: &IdentityProvider) -> Self {
+            value.clone()
+        }
+    }
+
     impl IdentityProvider {
         pub fn builder() -> builder::IdentityProvider {
             builder::IdentityProvider::default()
@@ -1197,6 +1543,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&IdentityProviderResultsPage> for IdentityProviderResultsPage {
+        fn from(value: &IdentityProviderResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl IdentityProviderResultsPage {
         pub fn builder() -> builder::IdentityProviderResultsPage {
             builder::IdentityProviderResultsPage::default()
@@ -1208,6 +1560,12 @@ pub mod types {
         ///SAML identity provider
         #[serde(rename = "saml")]
         Saml,
+    }
+
+    impl From<&IdentityProviderType> for IdentityProviderType {
+        fn from(value: &IdentityProviderType) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for IdentityProviderType {
@@ -1256,6 +1614,12 @@ pub mod types {
         SiloUser,
         #[serde(rename = "silo_group")]
         SiloGroup,
+    }
+
+    impl From<&IdentityType> for IdentityType {
+        fn from(value: &IdentityType) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for IdentityType {
@@ -1308,6 +1672,12 @@ pub mod types {
         Base64EncodedXml { data: String },
     }
 
+    impl From<&IdpMetadataSource> for IdpMetadataSource {
+        fn from(value: &IdpMetadataSource) -> Self {
+            value.clone()
+        }
+    }
+
     ///Client view of project Images
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Image {
@@ -1338,6 +1708,12 @@ pub mod types {
         pub version: Option<String>,
     }
 
+    impl From<&Image> for Image {
+        fn from(value: &Image) -> Self {
+            value.clone()
+        }
+    }
+
     impl Image {
         pub fn builder() -> builder::Image {
             builder::Image::default()
@@ -1356,6 +1732,12 @@ pub mod types {
         pub source: ImageSource,
     }
 
+    impl From<&ImageCreate> for ImageCreate {
+        fn from(value: &ImageCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl ImageCreate {
         pub fn builder() -> builder::ImageCreate {
             builder::ImageCreate::default()
@@ -1370,6 +1752,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&ImageResultsPage> for ImageResultsPage {
+        fn from(value: &ImageResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl ImageResultsPage {
@@ -1388,6 +1776,12 @@ pub mod types {
         Snapshot { id: uuid::Uuid },
         #[serde(rename = "you_can_boot_anything_as_long_as_its_alpine")]
         YouCanBootAnythingAsLongAsItsAlpine,
+    }
+
+    impl From<&ImageSource> for ImageSource {
+        fn from(value: &ImageSource) -> Self {
+            value.clone()
+        }
     }
 
     ///Client view of an [`Instance`]
@@ -1415,6 +1809,12 @@ pub mod types {
         pub time_run_state_updated: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Instance> for Instance {
+        fn from(value: &Instance) -> Self {
+            value.clone()
+        }
+    }
+
     impl Instance {
         pub fn builder() -> builder::Instance {
             builder::Instance::default()
@@ -1428,6 +1828,58 @@ pub mod types {
         type Target = u16;
         fn deref(&self) -> &u16 {
             &self.0
+        }
+    }
+
+    impl From<InstanceCpuCount> for u16 {
+        fn from(value: InstanceCpuCount) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&InstanceCpuCount> for InstanceCpuCount {
+        fn from(value: &InstanceCpuCount) -> Self {
+            value.clone()
+        }
+    }
+
+    impl From<u16> for InstanceCpuCount {
+        fn from(value: u16) -> Self {
+            Self(value)
+        }
+    }
+
+    impl std::str::FromStr for InstanceCpuCount {
+        type Err = <u16 as std::str::FromStr>::Err;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            Ok(Self(value.parse()?))
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for InstanceCpuCount {
+        type Error = <u16 as std::str::FromStr>::Err;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for InstanceCpuCount {
+        type Error = <u16 as std::str::FromStr>::Err;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for InstanceCpuCount {
+        type Error = <u16 as std::str::FromStr>::Err;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl ToString for InstanceCpuCount {
+        fn to_string(&self) -> String {
+            self.0.to_string()
         }
     }
 
@@ -1464,6 +1916,12 @@ pub mod types {
         pub user_data: String,
     }
 
+    impl From<&InstanceCreate> for InstanceCreate {
+        fn from(value: &InstanceCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl InstanceCreate {
         pub fn builder() -> builder::InstanceCreate {
             builder::InstanceCreate::default()
@@ -1492,11 +1950,23 @@ pub mod types {
         },
     }
 
+    impl From<&InstanceDiskAttachment> for InstanceDiskAttachment {
+        fn from(value: &InstanceDiskAttachment) -> Self {
+            value.clone()
+        }
+    }
+
     ///Migration parameters for an
     /// [`Instance`](omicron_common::api::external::Instance)
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceMigrate {
         pub dst_sled_id: uuid::Uuid,
+    }
+
+    impl From<&InstanceMigrate> for InstanceMigrate {
+        fn from(value: &InstanceMigrate) -> Self {
+            value.clone()
+        }
     }
 
     impl InstanceMigrate {
@@ -1522,6 +1992,12 @@ pub mod types {
         None,
     }
 
+    impl From<&InstanceNetworkInterfaceAttachment> for InstanceNetworkInterfaceAttachment {
+        fn from(value: &InstanceNetworkInterfaceAttachment) -> Self {
+            value.clone()
+        }
+    }
+
     ///A single page of results
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceResultsPage {
@@ -1530,6 +2006,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&InstanceResultsPage> for InstanceResultsPage {
+        fn from(value: &InstanceResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl InstanceResultsPage {
@@ -1548,6 +2030,12 @@ pub mod types {
         ///The absolute offset since boot (suitable for use as `byte_offset` in
         /// a subsequent request) of the last byte returned in `data`.
         pub last_byte_offset: u64,
+    }
+
+    impl From<&InstanceSerialConsoleData> for InstanceSerialConsoleData {
+        fn from(value: &InstanceSerialConsoleData) -> Self {
+            value.clone()
+        }
     }
 
     impl InstanceSerialConsoleData {
@@ -1596,6 +2084,12 @@ pub mod types {
         ///The instance has been deleted.
         #[serde(rename = "destroyed")]
         Destroyed,
+    }
+
+    impl From<&InstanceState> for InstanceState {
+        fn from(value: &InstanceState) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for InstanceState {
@@ -1664,6 +2158,12 @@ pub mod types {
         Floating,
     }
 
+    impl From<&IpKind> for IpKind {
+        fn from(value: &IpKind) -> Self {
+            value.clone()
+        }
+    }
+
     impl ToString for IpKind {
         fn to_string(&self) -> String {
             match *self {
@@ -1710,6 +2210,12 @@ pub mod types {
     pub enum IpNet {
         V4(Ipv4Net),
         V6(Ipv6Net),
+    }
+
+    impl From<&IpNet> for IpNet {
+        fn from(value: &IpNet) -> Self {
+            value.clone()
+        }
     }
 
     impl std::str::FromStr for IpNet {
@@ -1771,6 +2277,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&IpPool> for IpPool {
+        fn from(value: &IpPool) -> Self {
+            value.clone()
+        }
+    }
+
     impl IpPool {
         pub fn builder() -> builder::IpPool {
             builder::IpPool::default()
@@ -1786,6 +2298,12 @@ pub mod types {
         pub name: Name,
     }
 
+    impl From<&IpPoolCreate> for IpPoolCreate {
+        fn from(value: &IpPoolCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl IpPoolCreate {
         pub fn builder() -> builder::IpPoolCreate {
             builder::IpPoolCreate::default()
@@ -1797,6 +2315,12 @@ pub mod types {
         pub id: uuid::Uuid,
         pub range: IpRange,
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl From<&IpPoolRange> for IpPoolRange {
+        fn from(value: &IpPoolRange) -> Self {
+            value.clone()
+        }
     }
 
     impl IpPoolRange {
@@ -1815,6 +2339,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&IpPoolRangeResultsPage> for IpPoolRangeResultsPage {
+        fn from(value: &IpPoolRangeResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl IpPoolRangeResultsPage {
         pub fn builder() -> builder::IpPoolRangeResultsPage {
             builder::IpPoolRangeResultsPage::default()
@@ -1829,6 +2359,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&IpPoolResultsPage> for IpPoolResultsPage {
+        fn from(value: &IpPoolResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl IpPoolResultsPage {
@@ -1846,6 +2382,12 @@ pub mod types {
         pub name: Option<Name>,
     }
 
+    impl From<&IpPoolUpdate> for IpPoolUpdate {
+        fn from(value: &IpPoolUpdate) -> Self {
+            value.clone()
+        }
+    }
+
     impl IpPoolUpdate {
         pub fn builder() -> builder::IpPoolUpdate {
             builder::IpPoolUpdate::default()
@@ -1859,6 +2401,12 @@ pub mod types {
         V6(Ipv6Range),
     }
 
+    impl From<&IpRange> for IpRange {
+        fn from(value: &IpRange) -> Self {
+            value.clone()
+        }
+    }
+
     ///An IPv4 subnet, including prefix and subnet mask
     #[derive(Clone, Debug, Serialize)]
     pub struct Ipv4Net(String);
@@ -1866,6 +2414,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<Ipv4Net> for String {
+        fn from(value: Ipv4Net) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&Ipv4Net> for Ipv4Net {
+        fn from(value: &Ipv4Net) -> Self {
+            value.clone()
         }
     }
 
@@ -1918,6 +2478,12 @@ pub mod types {
         pub last: std::net::Ipv4Addr,
     }
 
+    impl From<&Ipv4Range> for Ipv4Range {
+        fn from(value: &Ipv4Range) -> Self {
+            value.clone()
+        }
+    }
+
     impl Ipv4Range {
         pub fn builder() -> builder::Ipv4Range {
             builder::Ipv4Range::default()
@@ -1931,6 +2497,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<Ipv6Net> for String {
+        fn from(value: Ipv6Net) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&Ipv6Net> for Ipv6Net {
+        fn from(value: &Ipv6Net) -> Self {
+            value.clone()
         }
     }
 
@@ -1983,6 +2561,12 @@ pub mod types {
         pub last: std::net::Ipv6Addr,
     }
 
+    impl From<&Ipv6Range> for Ipv6Range {
+        fn from(value: &Ipv6Range) -> Self {
+            value.clone()
+        }
+    }
+
     impl Ipv6Range {
         pub fn builder() -> builder::Ipv6Range {
             builder::Ipv6Range::default()
@@ -1997,6 +2581,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<L4PortRange> for String {
+        fn from(value: L4PortRange) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&L4PortRange> for L4PortRange {
+        fn from(value: &L4PortRange) -> Self {
+            value.clone()
         }
     }
 
@@ -2062,6 +2658,18 @@ pub mod types {
         }
     }
 
+    impl From<MacAddr> for String {
+        fn from(value: MacAddr) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&MacAddr> for MacAddr {
+        fn from(value: &MacAddr) -> Self {
+            value.clone()
+        }
+    }
+
     impl std::str::FromStr for MacAddr {
         type Err = &'static str;
         fn from_str(value: &str) -> Result<Self, &'static str> {
@@ -2121,6 +2729,12 @@ pub mod types {
         pub timestamp: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Measurement> for Measurement {
+        fn from(value: &Measurement) -> Self {
+            value.clone()
+        }
+    }
+
     impl Measurement {
         pub fn builder() -> builder::Measurement {
             builder::Measurement::default()
@@ -2135,6 +2749,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&MeasurementResultsPage> for MeasurementResultsPage {
+        fn from(value: &MeasurementResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl MeasurementResultsPage {
@@ -2152,6 +2772,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<Name> for String {
+        fn from(value: Name) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&Name> for Name {
+        fn from(value: &Name) -> Self {
+            value.clone()
         }
     }
 
@@ -2203,6 +2835,12 @@ pub mod types {
     pub enum NameOrId {
         Id(uuid::Uuid),
         Name(Name),
+    }
+
+    impl From<&NameOrId> for NameOrId {
+        fn from(value: &NameOrId) -> Self {
+            value.clone()
+        }
     }
 
     impl std::str::FromStr for NameOrId {
@@ -2262,6 +2900,12 @@ pub mod types {
         IdAscending,
     }
 
+    impl From<&NameOrIdSortMode> for NameOrIdSortMode {
+        fn from(value: &NameOrIdSortMode) -> Self {
+            value.clone()
+        }
+    }
+
     impl ToString for NameOrIdSortMode {
         fn to_string(&self) -> String {
             match *self {
@@ -2313,6 +2957,12 @@ pub mod types {
         ///sort in increasing order of "name"
         #[serde(rename = "name_ascending")]
         NameAscending,
+    }
+
+    impl From<&NameSortMode> for NameSortMode {
+        fn from(value: &NameSortMode) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for NameSortMode {
@@ -2382,6 +3032,12 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
+    impl From<&NetworkInterface> for NetworkInterface {
+        fn from(value: &NetworkInterface) -> Self {
+            value.clone()
+        }
+    }
+
     impl NetworkInterface {
         pub fn builder() -> builder::NetworkInterface {
             builder::NetworkInterface::default()
@@ -2404,6 +3060,12 @@ pub mod types {
         pub vpc_name: Name,
     }
 
+    impl From<&NetworkInterfaceCreate> for NetworkInterfaceCreate {
+        fn from(value: &NetworkInterfaceCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl NetworkInterfaceCreate {
         pub fn builder() -> builder::NetworkInterfaceCreate {
             builder::NetworkInterfaceCreate::default()
@@ -2418,6 +3080,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&NetworkInterfaceResultsPage> for NetworkInterfaceResultsPage {
+        fn from(value: &NetworkInterfaceResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl NetworkInterfaceResultsPage {
@@ -2452,6 +3120,12 @@ pub mod types {
         pub primary: bool,
     }
 
+    impl From<&NetworkInterfaceUpdate> for NetworkInterfaceUpdate {
+        fn from(value: &NetworkInterfaceUpdate) -> Self {
+            value.clone()
+        }
+    }
+
     impl NetworkInterfaceUpdate {
         pub fn builder() -> builder::NetworkInterfaceUpdate {
             builder::NetworkInterfaceUpdate::default()
@@ -2473,6 +3147,37 @@ pub mod types {
         }
     }
 
+    impl From<NodeName> for String {
+        fn from(value: NodeName) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&NodeName> for NodeName {
+        fn from(value: &NodeName) -> Self {
+            value.clone()
+        }
+    }
+
+    impl From<String> for NodeName {
+        fn from(value: String) -> Self {
+            Self(value)
+        }
+    }
+
+    impl std::str::FromStr for NodeName {
+        type Err = std::convert::Infallible;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl ToString for NodeName {
+        fn to_string(&self) -> String {
+            self.0.to_string()
+        }
+    }
+
     ///Client view of an [`Organization`]
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Organization {
@@ -2488,6 +3193,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Organization> for Organization {
+        fn from(value: &Organization) -> Self {
+            value.clone()
+        }
+    }
+
     impl Organization {
         pub fn builder() -> builder::Organization {
             builder::Organization::default()
@@ -2500,6 +3211,12 @@ pub mod types {
     pub struct OrganizationCreate {
         pub description: String,
         pub name: Name,
+    }
+
+    impl From<&OrganizationCreate> for OrganizationCreate {
+        fn from(value: &OrganizationCreate) -> Self {
+            value.clone()
+        }
     }
 
     impl OrganizationCreate {
@@ -2518,6 +3235,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&OrganizationResultsPage> for OrganizationResultsPage {
+        fn from(value: &OrganizationResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl OrganizationResultsPage {
         pub fn builder() -> builder::OrganizationResultsPage {
             builder::OrganizationResultsPage::default()
@@ -2532,6 +3255,12 @@ pub mod types {
         Collaborator,
         #[serde(rename = "viewer")]
         Viewer,
+    }
+
+    impl From<&OrganizationRole> for OrganizationRole {
+        fn from(value: &OrganizationRole) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for OrganizationRole {
@@ -2589,6 +3318,12 @@ pub mod types {
         pub role_assignments: Vec<OrganizationRoleRoleAssignment>,
     }
 
+    impl From<&OrganizationRolePolicy> for OrganizationRolePolicy {
+        fn from(value: &OrganizationRolePolicy) -> Self {
+            value.clone()
+        }
+    }
+
     impl OrganizationRolePolicy {
         pub fn builder() -> builder::OrganizationRolePolicy {
             builder::OrganizationRolePolicy::default()
@@ -2608,6 +3343,12 @@ pub mod types {
         pub role_name: OrganizationRole,
     }
 
+    impl From<&OrganizationRoleRoleAssignment> for OrganizationRoleRoleAssignment {
+        fn from(value: &OrganizationRoleRoleAssignment) -> Self {
+            value.clone()
+        }
+    }
+
     impl OrganizationRoleRoleAssignment {
         pub fn builder() -> builder::OrganizationRoleRoleAssignment {
             builder::OrganizationRoleRoleAssignment::default()
@@ -2624,6 +3365,12 @@ pub mod types {
         pub name: Option<Name>,
     }
 
+    impl From<&OrganizationUpdate> for OrganizationUpdate {
+        fn from(value: &OrganizationUpdate) -> Self {
+            value.clone()
+        }
+    }
+
     impl OrganizationUpdate {
         pub fn builder() -> builder::OrganizationUpdate {
             builder::OrganizationUpdate::default()
@@ -2637,6 +3384,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<Password> for String {
+        fn from(value: Password) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&Password> for Password {
+        fn from(value: &Password) -> Self {
+            value.clone()
         }
     }
 
@@ -2700,6 +3459,12 @@ pub mod types {
         pub vendor: String,
     }
 
+    impl From<&PhysicalDisk> for PhysicalDisk {
+        fn from(value: &PhysicalDisk) -> Self {
+            value.clone()
+        }
+    }
+
     impl PhysicalDisk {
         pub fn builder() -> builder::PhysicalDisk {
             builder::PhysicalDisk::default()
@@ -2716,6 +3481,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&PhysicalDiskResultsPage> for PhysicalDiskResultsPage {
+        fn from(value: &PhysicalDiskResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl PhysicalDiskResultsPage {
         pub fn builder() -> builder::PhysicalDiskResultsPage {
             builder::PhysicalDiskResultsPage::default()
@@ -2728,6 +3499,12 @@ pub mod types {
         Internal,
         #[serde(rename = "external")]
         External,
+    }
+
+    impl From<&PhysicalDiskType> for PhysicalDiskType {
+        fn from(value: &PhysicalDiskType) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for PhysicalDiskType {
@@ -2787,6 +3564,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Project> for Project {
+        fn from(value: &Project) -> Self {
+            value.clone()
+        }
+    }
+
     impl Project {
         pub fn builder() -> builder::Project {
             builder::Project::default()
@@ -2799,6 +3582,12 @@ pub mod types {
     pub struct ProjectCreate {
         pub description: String,
         pub name: Name,
+    }
+
+    impl From<&ProjectCreate> for ProjectCreate {
+        fn from(value: &ProjectCreate) -> Self {
+            value.clone()
+        }
     }
 
     impl ProjectCreate {
@@ -2817,6 +3606,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&ProjectResultsPage> for ProjectResultsPage {
+        fn from(value: &ProjectResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl ProjectResultsPage {
         pub fn builder() -> builder::ProjectResultsPage {
             builder::ProjectResultsPage::default()
@@ -2831,6 +3626,12 @@ pub mod types {
         Collaborator,
         #[serde(rename = "viewer")]
         Viewer,
+    }
+
+    impl From<&ProjectRole> for ProjectRole {
+        fn from(value: &ProjectRole) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for ProjectRole {
@@ -2888,6 +3689,12 @@ pub mod types {
         pub role_assignments: Vec<ProjectRoleRoleAssignment>,
     }
 
+    impl From<&ProjectRolePolicy> for ProjectRolePolicy {
+        fn from(value: &ProjectRolePolicy) -> Self {
+            value.clone()
+        }
+    }
+
     impl ProjectRolePolicy {
         pub fn builder() -> builder::ProjectRolePolicy {
             builder::ProjectRolePolicy::default()
@@ -2907,6 +3714,12 @@ pub mod types {
         pub role_name: ProjectRole,
     }
 
+    impl From<&ProjectRoleRoleAssignment> for ProjectRoleRoleAssignment {
+        fn from(value: &ProjectRoleRoleAssignment) -> Self {
+            value.clone()
+        }
+    }
+
     impl ProjectRoleRoleAssignment {
         pub fn builder() -> builder::ProjectRoleRoleAssignment {
             builder::ProjectRoleRoleAssignment::default()
@@ -2921,6 +3734,12 @@ pub mod types {
         pub description: Option<String>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
+    }
+
+    impl From<&ProjectUpdate> for ProjectUpdate {
+        fn from(value: &ProjectUpdate) -> Self {
+            value.clone()
+        }
     }
 
     impl ProjectUpdate {
@@ -2940,6 +3759,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Rack> for Rack {
+        fn from(value: &Rack) -> Self {
+            value.clone()
+        }
+    }
+
     impl Rack {
         pub fn builder() -> builder::Rack {
             builder::Rack::default()
@@ -2956,6 +3781,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&RackResultsPage> for RackResultsPage {
+        fn from(value: &RackResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl RackResultsPage {
         pub fn builder() -> builder::RackResultsPage {
             builder::RackResultsPage::default()
@@ -2967,6 +3798,12 @@ pub mod types {
     pub struct Role {
         pub description: String,
         pub name: RoleName,
+    }
+
+    impl From<&Role> for Role {
+        fn from(value: &Role) -> Self {
+            value.clone()
+        }
     }
 
     impl Role {
@@ -2982,6 +3819,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<RoleName> for String {
+        fn from(value: RoleName) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&RoleName> for RoleName {
+        fn from(value: &RoleName) -> Self {
+            value.clone()
         }
     }
 
@@ -3044,6 +3893,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&RoleResultsPage> for RoleResultsPage {
+        fn from(value: &RoleResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl RoleResultsPage {
         pub fn builder() -> builder::RoleResultsPage {
             builder::RoleResultsPage::default()
@@ -3073,6 +3928,12 @@ pub mod types {
         Subnet(Name),
     }
 
+    impl From<&RouteDestination> for RouteDestination {
+        fn from(value: &RouteDestination) -> Self {
+            value.clone()
+        }
+    }
+
     ///A `RouteTarget` describes the possible locations that traffic matching a
     /// route destination can be sent.
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -3093,6 +3954,12 @@ pub mod types {
         ///Forward traffic to an internet gateway
         #[serde(rename = "internet_gateway")]
         InternetGateway(Name),
+    }
+
+    impl From<&RouteTarget> for RouteTarget {
+        fn from(value: &RouteTarget) -> Self {
+            value.clone()
+        }
     }
 
     ///A route defines a rule that governs where traffic should be sent based
@@ -3117,6 +3984,12 @@ pub mod types {
         pub vpc_router_id: uuid::Uuid,
     }
 
+    impl From<&RouterRoute> for RouterRoute {
+        fn from(value: &RouterRoute) -> Self {
+            value.clone()
+        }
+    }
+
     impl RouterRoute {
         pub fn builder() -> builder::RouterRoute {
             builder::RouterRoute::default()
@@ -3130,6 +4003,12 @@ pub mod types {
         pub destination: RouteDestination,
         pub name: Name,
         pub target: RouteTarget,
+    }
+
+    impl From<&RouterRouteCreateParams> for RouterRouteCreateParams {
+        fn from(value: &RouterRouteCreateParams) -> Self {
+            value.clone()
+        }
     }
 
     impl RouterRouteCreateParams {
@@ -3166,6 +4045,12 @@ pub mod types {
         ///`Destination: User defined` `Modifiable: true`
         #[serde(rename = "custom")]
         Custom,
+    }
+
+    impl From<&RouterRouteKind> for RouterRouteKind {
+        fn from(value: &RouterRouteKind) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for RouterRouteKind {
@@ -3223,6 +4108,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&RouterRouteResultsPage> for RouterRouteResultsPage {
+        fn from(value: &RouterRouteResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl RouterRouteResultsPage {
         pub fn builder() -> builder::RouterRouteResultsPage {
             builder::RouterRouteResultsPage::default()
@@ -3240,6 +4131,12 @@ pub mod types {
         pub target: RouteTarget,
     }
 
+    impl From<&RouterRouteUpdateParams> for RouterRouteUpdateParams {
+        fn from(value: &RouterRouteUpdateParams) -> Self {
+            value.clone()
+        }
+    }
+
     impl RouterRouteUpdateParams {
         pub fn builder() -> builder::RouterRouteUpdateParams {
             builder::RouterRouteUpdateParams::default()
@@ -3250,6 +4147,12 @@ pub mod types {
     pub struct Saga {
         pub id: uuid::Uuid,
         pub state: SagaState,
+    }
+
+    impl From<&Saga> for Saga {
+        fn from(value: &Saga) -> Self {
+            value.clone()
+        }
     }
 
     impl Saga {
@@ -3273,6 +4176,12 @@ pub mod types {
         SubsagaCreateFailed { message: String },
     }
 
+    impl From<&SagaErrorInfo> for SagaErrorInfo {
+        fn from(value: &SagaErrorInfo) -> Self {
+            value.clone()
+        }
+    }
+
     ///A single page of results
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct SagaResultsPage {
@@ -3281,6 +4190,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&SagaResultsPage> for SagaResultsPage {
+        fn from(value: &SagaResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl SagaResultsPage {
@@ -3301,6 +4216,12 @@ pub mod types {
             error_info: SagaErrorInfo,
             error_node_name: NodeName,
         },
+    }
+
+    impl From<&SagaState> for SagaState {
+        fn from(value: &SagaState) -> Self {
+            value.clone()
+        }
     }
 
     ///Identity-related metadata that's included in nearly all public API
@@ -3331,6 +4252,12 @@ pub mod types {
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl From<&SamlIdentityProvider> for SamlIdentityProvider {
+        fn from(value: &SamlIdentityProvider) -> Self {
+            value.clone()
+        }
     }
 
     impl SamlIdentityProvider {
@@ -3366,6 +4293,12 @@ pub mod types {
         pub technical_contact_email: String,
     }
 
+    impl From<&SamlIdentityProviderCreate> for SamlIdentityProviderCreate {
+        fn from(value: &SamlIdentityProviderCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl SamlIdentityProviderCreate {
         pub fn builder() -> builder::SamlIdentityProviderCreate {
             builder::SamlIdentityProviderCreate::default()
@@ -3378,6 +4311,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<SemverVersion> for String {
+        fn from(value: SemverVersion) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&SemverVersion> for SemverVersion {
+        fn from(value: &SemverVersion) -> Self {
+            value.clone()
         }
     }
 
@@ -3433,6 +4378,12 @@ pub mod types {
         ///This certificate is intended for access to the external API.
         #[serde(rename = "external_api")]
         ExternalApi,
+    }
+
+    impl From<&ServiceUsingCertificate> for ServiceUsingCertificate {
+        fn from(value: &ServiceUsingCertificate) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for ServiceUsingCertificate {
@@ -3494,6 +4445,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Silo> for Silo {
+        fn from(value: &Silo) -> Self {
+            value.clone()
+        }
+    }
+
     impl Silo {
         pub fn builder() -> builder::Silo {
             builder::Silo::default()
@@ -3519,6 +4476,12 @@ pub mod types {
         pub name: Name,
     }
 
+    impl From<&SiloCreate> for SiloCreate {
+        fn from(value: &SiloCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl SiloCreate {
         pub fn builder() -> builder::SiloCreate {
             builder::SiloCreate::default()
@@ -3539,6 +4502,12 @@ pub mod types {
         /// to an external authentication provider or identity provider.
         #[serde(rename = "local_only")]
         LocalOnly,
+    }
+
+    impl From<&SiloIdentityMode> for SiloIdentityMode {
+        fn from(value: &SiloIdentityMode) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for SiloIdentityMode {
@@ -3592,6 +4561,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&SiloResultsPage> for SiloResultsPage {
+        fn from(value: &SiloResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl SiloResultsPage {
         pub fn builder() -> builder::SiloResultsPage {
             builder::SiloResultsPage::default()
@@ -3606,6 +4581,12 @@ pub mod types {
         Collaborator,
         #[serde(rename = "viewer")]
         Viewer,
+    }
+
+    impl From<&SiloRole> for SiloRole {
+        fn from(value: &SiloRole) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for SiloRole {
@@ -3663,6 +4644,12 @@ pub mod types {
         pub role_assignments: Vec<SiloRoleRoleAssignment>,
     }
 
+    impl From<&SiloRolePolicy> for SiloRolePolicy {
+        fn from(value: &SiloRolePolicy) -> Self {
+            value.clone()
+        }
+    }
+
     impl SiloRolePolicy {
         pub fn builder() -> builder::SiloRolePolicy {
             builder::SiloRolePolicy::default()
@@ -3680,6 +4667,12 @@ pub mod types {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: SiloRole,
+    }
+
+    impl From<&SiloRoleRoleAssignment> for SiloRoleRoleAssignment {
+        fn from(value: &SiloRoleRoleAssignment) -> Self {
+            value.clone()
+        }
     }
 
     impl SiloRoleRoleAssignment {
@@ -3701,6 +4694,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Sled> for Sled {
+        fn from(value: &Sled) -> Self {
+            value.clone()
+        }
+    }
+
     impl Sled {
         pub fn builder() -> builder::Sled {
             builder::Sled::default()
@@ -3715,6 +4714,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&SledResultsPage> for SledResultsPage {
+        fn from(value: &SledResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl SledResultsPage {
@@ -3742,6 +4747,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Snapshot> for Snapshot {
+        fn from(value: &Snapshot) -> Self {
+            value.clone()
+        }
+    }
+
     impl Snapshot {
         pub fn builder() -> builder::Snapshot {
             builder::Snapshot::default()
@@ -3756,6 +4767,12 @@ pub mod types {
         ///The name of the disk to be snapshotted
         pub disk: Name,
         pub name: Name,
+    }
+
+    impl From<&SnapshotCreate> for SnapshotCreate {
+        fn from(value: &SnapshotCreate) -> Self {
+            value.clone()
+        }
     }
 
     impl SnapshotCreate {
@@ -3774,6 +4791,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&SnapshotResultsPage> for SnapshotResultsPage {
+        fn from(value: &SnapshotResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl SnapshotResultsPage {
         pub fn builder() -> builder::SnapshotResultsPage {
             builder::SnapshotResultsPage::default()
@@ -3790,6 +4813,12 @@ pub mod types {
         Faulted,
         #[serde(rename = "destroyed")]
         Destroyed,
+    }
+
+    impl From<&SnapshotState> for SnapshotState {
+        fn from(value: &SnapshotState) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for SnapshotState {
@@ -3842,6 +4871,12 @@ pub mod types {
         pub username: String,
     }
 
+    impl From<&SpoofLoginBody> for SpoofLoginBody {
+        fn from(value: &SpoofLoginBody) -> Self {
+            value.clone()
+        }
+    }
+
     impl SpoofLoginBody {
         pub fn builder() -> builder::SpoofLoginBody {
             builder::SpoofLoginBody::default()
@@ -3867,6 +4902,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&SshKey> for SshKey {
+        fn from(value: &SshKey) -> Self {
+            value.clone()
+        }
+    }
+
     impl SshKey {
         pub fn builder() -> builder::SshKey {
             builder::SshKey::default()
@@ -3881,6 +4922,12 @@ pub mod types {
         pub name: Name,
         ///SSH public key, e.g., `"ssh-ed25519 AAAAC3NzaC..."`
         pub public_key: String,
+    }
+
+    impl From<&SshKeyCreate> for SshKeyCreate {
+        fn from(value: &SshKeyCreate) -> Self {
+            value.clone()
+        }
     }
 
     impl SshKeyCreate {
@@ -3899,6 +4946,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&SshKeyResultsPage> for SshKeyResultsPage {
+        fn from(value: &SshKeyResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl SshKeyResultsPage {
         pub fn builder() -> builder::SshKeyResultsPage {
             builder::SshKeyResultsPage::default()
@@ -3913,6 +4966,12 @@ pub mod types {
         CpusProvisioned,
         #[serde(rename = "ram_provisioned")]
         RamProvisioned,
+    }
+
+    impl From<&SystemMetricName> for SystemMetricName {
+        fn from(value: &SystemMetricName) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for SystemMetricName {
@@ -3971,6 +5030,12 @@ pub mod types {
         pub version: SemverVersion,
     }
 
+    impl From<&SystemUpdate> for SystemUpdate {
+        fn from(value: &SystemUpdate) -> Self {
+            value.clone()
+        }
+    }
+
     impl SystemUpdate {
         pub fn builder() -> builder::SystemUpdate {
             builder::SystemUpdate::default()
@@ -3987,6 +5052,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&SystemUpdateResultsPage> for SystemUpdateResultsPage {
+        fn from(value: &SystemUpdateResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl SystemUpdateResultsPage {
         pub fn builder() -> builder::SystemUpdateResultsPage {
             builder::SystemUpdateResultsPage::default()
@@ -3996,6 +5067,12 @@ pub mod types {
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct SystemUpdateStart {
         pub version: SemverVersion,
+    }
+
+    impl From<&SystemUpdateStart> for SystemUpdateStart {
+        fn from(value: &SystemUpdateStart) -> Self {
+            value.clone()
+        }
     }
 
     impl SystemUpdateStart {
@@ -4008,6 +5085,12 @@ pub mod types {
     pub struct SystemVersion {
         pub status: UpdateStatus,
         pub version_range: VersionRange,
+    }
+
+    impl From<&SystemVersion> for SystemVersion {
+        fn from(value: &SystemVersion) -> Self {
+            value.clone()
+        }
     }
 
     impl SystemVersion {
@@ -4025,6 +5108,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<TimeseriesName> for String {
+        fn from(value: TimeseriesName) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&TimeseriesName> for TimeseriesName {
+        fn from(value: &TimeseriesName) -> Self {
+            value.clone()
         }
     }
 
@@ -4088,6 +5183,12 @@ pub mod types {
         pub timeseries_name: TimeseriesName,
     }
 
+    impl From<&TimeseriesSchema> for TimeseriesSchema {
+        fn from(value: &TimeseriesSchema) -> Self {
+            value.clone()
+        }
+    }
+
     impl TimeseriesSchema {
         pub fn builder() -> builder::TimeseriesSchema {
             builder::TimeseriesSchema::default()
@@ -4102,6 +5203,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&TimeseriesSchemaResultsPage> for TimeseriesSchemaResultsPage {
+        fn from(value: &TimeseriesSchemaResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl TimeseriesSchemaResultsPage {
@@ -4124,6 +5231,12 @@ pub mod types {
         pub version: SemverVersion,
     }
 
+    impl From<&UpdateDeployment> for UpdateDeployment {
+        fn from(value: &UpdateDeployment) -> Self {
+            value.clone()
+        }
+    }
+
     impl UpdateDeployment {
         pub fn builder() -> builder::UpdateDeployment {
             builder::UpdateDeployment::default()
@@ -4140,6 +5253,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&UpdateDeploymentResultsPage> for UpdateDeploymentResultsPage {
+        fn from(value: &UpdateDeploymentResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl UpdateDeploymentResultsPage {
         pub fn builder() -> builder::UpdateDeploymentResultsPage {
             builder::UpdateDeploymentResultsPage::default()
@@ -4153,6 +5272,12 @@ pub mod types {
         Updating,
         #[serde(rename = "steady")]
         Steady,
+    }
+
+    impl From<&UpdateStatus> for UpdateStatus {
+        fn from(value: &UpdateStatus) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for UpdateStatus {
@@ -4213,6 +5338,12 @@ pub mod types {
         pub version: SemverVersion,
     }
 
+    impl From<&UpdateableComponent> for UpdateableComponent {
+        fn from(value: &UpdateableComponent) -> Self {
+            value.clone()
+        }
+    }
+
     impl UpdateableComponent {
         pub fn builder() -> builder::UpdateableComponent {
             builder::UpdateableComponent::default()
@@ -4227,6 +5358,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&UpdateableComponentResultsPage> for UpdateableComponentResultsPage {
+        fn from(value: &UpdateableComponentResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl UpdateableComponentResultsPage {
@@ -4261,6 +5398,12 @@ pub mod types {
         HeliosHostPhase2,
         #[serde(rename = "host_omicron")]
         HostOmicron,
+    }
+
+    impl From<&UpdateableComponentType> for UpdateableComponentType {
+        fn from(value: &UpdateableComponentType) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for UpdateableComponentType {
@@ -4334,6 +5477,12 @@ pub mod types {
         pub silo_id: uuid::Uuid,
     }
 
+    impl From<&User> for User {
+        fn from(value: &User) -> Self {
+            value.clone()
+        }
+    }
+
     impl User {
         pub fn builder() -> builder::User {
             builder::User::default()
@@ -4355,6 +5504,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&UserBuiltin> for UserBuiltin {
+        fn from(value: &UserBuiltin) -> Self {
+            value.clone()
+        }
+    }
+
     impl UserBuiltin {
         pub fn builder() -> builder::UserBuiltin {
             builder::UserBuiltin::default()
@@ -4369,6 +5524,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&UserBuiltinResultsPage> for UserBuiltinResultsPage {
+        fn from(value: &UserBuiltinResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl UserBuiltinResultsPage {
@@ -4386,6 +5547,12 @@ pub mod types {
         pub password: UserPassword,
     }
 
+    impl From<&UserCreate> for UserCreate {
+        fn from(value: &UserCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl UserCreate {
         pub fn builder() -> builder::UserCreate {
             builder::UserCreate::default()
@@ -4401,6 +5568,18 @@ pub mod types {
         type Target = String;
         fn deref(&self) -> &String {
             &self.0
+        }
+    }
+
+    impl From<UserId> for String {
+        fn from(value: UserId) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&UserId> for UserId {
+        fn from(value: &UserId) -> Self {
+            value.clone()
         }
     }
 
@@ -4458,6 +5637,12 @@ pub mod types {
         InvalidPassword,
     }
 
+    impl From<&UserPassword> for UserPassword {
+        fn from(value: &UserPassword) -> Self {
+            value.clone()
+        }
+    }
+
     ///A single page of results
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct UserResultsPage {
@@ -4466,6 +5651,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&UserResultsPage> for UserResultsPage {
+        fn from(value: &UserResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl UserResultsPage {
@@ -4481,6 +5672,12 @@ pub mod types {
         pub username: UserId,
     }
 
+    impl From<&UsernamePasswordCredentials> for UsernamePasswordCredentials {
+        fn from(value: &UsernamePasswordCredentials) -> Self {
+            value.clone()
+        }
+    }
+
     impl UsernamePasswordCredentials {
         pub fn builder() -> builder::UsernamePasswordCredentials {
             builder::UsernamePasswordCredentials::default()
@@ -4491,6 +5688,12 @@ pub mod types {
     pub struct VersionRange {
         pub high: SemverVersion,
         pub low: SemverVersion,
+    }
+
+    impl From<&VersionRange> for VersionRange {
+        fn from(value: &VersionRange) -> Self {
+            value.clone()
+        }
     }
 
     impl VersionRange {
@@ -4522,6 +5725,12 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&Vpc> for Vpc {
+        fn from(value: &Vpc) -> Self {
+            value.clone()
+        }
+    }
+
     impl Vpc {
         pub fn builder() -> builder::Vpc {
             builder::Vpc::default()
@@ -4542,6 +5751,12 @@ pub mod types {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub ipv6_prefix: Option<Ipv6Net>,
         pub name: Name,
+    }
+
+    impl From<&VpcCreate> for VpcCreate {
+        fn from(value: &VpcCreate) -> Self {
+            value.clone()
+        }
     }
 
     impl VpcCreate {
@@ -4579,6 +5794,12 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
+    impl From<&VpcFirewallRule> for VpcFirewallRule {
+        fn from(value: &VpcFirewallRule) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcFirewallRule {
         pub fn builder() -> builder::VpcFirewallRule {
             builder::VpcFirewallRule::default()
@@ -4591,6 +5812,12 @@ pub mod types {
         Allow,
         #[serde(rename = "deny")]
         Deny,
+    }
+
+    impl From<&VpcFirewallRuleAction> for VpcFirewallRuleAction {
+        fn from(value: &VpcFirewallRuleAction) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for VpcFirewallRuleAction {
@@ -4640,6 +5867,12 @@ pub mod types {
         Inbound,
         #[serde(rename = "outbound")]
         Outbound,
+    }
+
+    impl From<&VpcFirewallRuleDirection> for VpcFirewallRuleDirection {
+        fn from(value: &VpcFirewallRuleDirection) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for VpcFirewallRuleDirection {
@@ -4700,6 +5933,12 @@ pub mod types {
         pub protocols: Option<Vec<VpcFirewallRuleProtocol>>,
     }
 
+    impl From<&VpcFirewallRuleFilter> for VpcFirewallRuleFilter {
+        fn from(value: &VpcFirewallRuleFilter) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcFirewallRuleFilter {
         pub fn builder() -> builder::VpcFirewallRuleFilter {
             builder::VpcFirewallRuleFilter::default()
@@ -4728,6 +5967,12 @@ pub mod types {
         IpNet(IpNet),
     }
 
+    impl From<&VpcFirewallRuleHostFilter> for VpcFirewallRuleHostFilter {
+        fn from(value: &VpcFirewallRuleHostFilter) -> Self {
+            value.clone()
+        }
+    }
+
     ///The protocols that may be specified in a firewall rule's filter
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum VpcFirewallRuleProtocol {
@@ -4737,6 +5982,12 @@ pub mod types {
         Udp,
         #[serde(rename = "ICMP")]
         Icmp,
+    }
+
+    impl From<&VpcFirewallRuleProtocol> for VpcFirewallRuleProtocol {
+        fn from(value: &VpcFirewallRuleProtocol) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for VpcFirewallRuleProtocol {
@@ -4788,6 +6039,12 @@ pub mod types {
         Disabled,
         #[serde(rename = "enabled")]
         Enabled,
+    }
+
+    impl From<&VpcFirewallRuleStatus> for VpcFirewallRuleStatus {
+        fn from(value: &VpcFirewallRuleStatus) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for VpcFirewallRuleStatus {
@@ -4853,6 +6110,12 @@ pub mod types {
         IpNet(IpNet),
     }
 
+    impl From<&VpcFirewallRuleTarget> for VpcFirewallRuleTarget {
+        fn from(value: &VpcFirewallRuleTarget) -> Self {
+            value.clone()
+        }
+    }
+
     ///A single rule in a VPC firewall
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct VpcFirewallRuleUpdate {
@@ -4874,6 +6137,12 @@ pub mod types {
         pub targets: Vec<VpcFirewallRuleTarget>,
     }
 
+    impl From<&VpcFirewallRuleUpdate> for VpcFirewallRuleUpdate {
+        fn from(value: &VpcFirewallRuleUpdate) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcFirewallRuleUpdate {
         pub fn builder() -> builder::VpcFirewallRuleUpdate {
             builder::VpcFirewallRuleUpdate::default()
@@ -4888,6 +6157,12 @@ pub mod types {
         pub rules: Vec<VpcFirewallRuleUpdate>,
     }
 
+    impl From<&VpcFirewallRuleUpdateParams> for VpcFirewallRuleUpdateParams {
+        fn from(value: &VpcFirewallRuleUpdateParams) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcFirewallRuleUpdateParams {
         pub fn builder() -> builder::VpcFirewallRuleUpdateParams {
             builder::VpcFirewallRuleUpdateParams::default()
@@ -4898,6 +6173,12 @@ pub mod types {
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct VpcFirewallRules {
         pub rules: Vec<VpcFirewallRule>,
+    }
+
+    impl From<&VpcFirewallRules> for VpcFirewallRules {
+        fn from(value: &VpcFirewallRules) -> Self {
+            value.clone()
+        }
     }
 
     impl VpcFirewallRules {
@@ -4914,6 +6195,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&VpcResultsPage> for VpcResultsPage {
+        fn from(value: &VpcResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl VpcResultsPage {
@@ -4941,6 +6228,12 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
+    impl From<&VpcRouter> for VpcRouter {
+        fn from(value: &VpcRouter) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcRouter {
         pub fn builder() -> builder::VpcRouter {
             builder::VpcRouter::default()
@@ -4955,6 +6248,12 @@ pub mod types {
         pub name: Name,
     }
 
+    impl From<&VpcRouterCreate> for VpcRouterCreate {
+        fn from(value: &VpcRouterCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcRouterCreate {
         pub fn builder() -> builder::VpcRouterCreate {
             builder::VpcRouterCreate::default()
@@ -4967,6 +6266,12 @@ pub mod types {
         System,
         #[serde(rename = "custom")]
         Custom,
+    }
+
+    impl From<&VpcRouterKind> for VpcRouterKind {
+        fn from(value: &VpcRouterKind) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for VpcRouterKind {
@@ -5020,6 +6325,12 @@ pub mod types {
         pub next_page: Option<String>,
     }
 
+    impl From<&VpcRouterResultsPage> for VpcRouterResultsPage {
+        fn from(value: &VpcRouterResultsPage) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcRouterResultsPage {
         pub fn builder() -> builder::VpcRouterResultsPage {
             builder::VpcRouterResultsPage::default()
@@ -5034,6 +6345,12 @@ pub mod types {
         pub description: Option<String>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
+    }
+
+    impl From<&VpcRouterUpdate> for VpcRouterUpdate {
+        fn from(value: &VpcRouterUpdate) -> Self {
+            value.clone()
+        }
     }
 
     impl VpcRouterUpdate {
@@ -5065,6 +6382,12 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
+    impl From<&VpcSubnet> for VpcSubnet {
+        fn from(value: &VpcSubnet) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcSubnet {
         pub fn builder() -> builder::VpcSubnet {
             builder::VpcSubnet::default()
@@ -5092,6 +6415,12 @@ pub mod types {
         pub name: Name,
     }
 
+    impl From<&VpcSubnetCreate> for VpcSubnetCreate {
+        fn from(value: &VpcSubnetCreate) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcSubnetCreate {
         pub fn builder() -> builder::VpcSubnetCreate {
             builder::VpcSubnetCreate::default()
@@ -5106,6 +6435,12 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub next_page: Option<String>,
+    }
+
+    impl From<&VpcSubnetResultsPage> for VpcSubnetResultsPage {
+        fn from(value: &VpcSubnetResultsPage) -> Self {
+            value.clone()
+        }
     }
 
     impl VpcSubnetResultsPage {
@@ -5124,6 +6459,12 @@ pub mod types {
         pub name: Option<Name>,
     }
 
+    impl From<&VpcSubnetUpdate> for VpcSubnetUpdate {
+        fn from(value: &VpcSubnetUpdate) -> Self {
+            value.clone()
+        }
+    }
+
     impl VpcSubnetUpdate {
         pub fn builder() -> builder::VpcSubnetUpdate {
             builder::VpcSubnetUpdate::default()
@@ -5139,6 +6480,12 @@ pub mod types {
         pub dns_name: Option<Name>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub name: Option<Name>,
+    }
+
+    impl From<&VpcUpdate> for VpcUpdate {
+        fn from(value: &VpcUpdate) -> Self {
+            value.clone()
+        }
     }
 
     impl VpcUpdate {

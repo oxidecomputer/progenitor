@@ -13,9 +13,21 @@ pub mod types {
         pub key: String,
     }
 
+    impl From<&EnrolBody> for EnrolBody {
+        fn from(value: &EnrolBody) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct GlobalJobsResult {
         pub summary: Vec<ReportSummary>,
+    }
+
+    impl From<&GlobalJobsResult> for GlobalJobsResult {
+        fn from(value: &GlobalJobsResult) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -25,10 +37,22 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&OutputRecord> for OutputRecord {
+        fn from(value: &OutputRecord) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct PingResult {
         pub host: String,
         pub ok: bool,
+    }
+
+    impl From<&PingResult> for PingResult {
+        fn from(value: &PingResult) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -37,6 +61,12 @@ pub mod types {
         pub end_time: chrono::DateTime<chrono::offset::Utc>,
         pub exit_status: i32,
         pub id: ReportId,
+    }
+
+    impl From<&ReportFinishBody> for ReportFinishBody {
+        fn from(value: &ReportFinishBody) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -48,10 +78,22 @@ pub mod types {
         pub uuid: String,
     }
 
+    impl From<&ReportId> for ReportId {
+        fn from(value: &ReportId) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
+    }
+
+    impl From<&ReportOutputBody> for ReportOutputBody {
+        fn from(value: &ReportOutputBody) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -59,11 +101,23 @@ pub mod types {
         pub existed_already: bool,
     }
 
+    impl From<&ReportResult> for ReportResult {
+        fn from(value: &ReportResult) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: String,
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl From<&ReportStartBody> for ReportStartBody {
+        fn from(value: &ReportStartBody) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -74,6 +128,12 @@ pub mod types {
         pub job: String,
         pub status: i32,
         pub when: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl From<&ReportSummary> for ReportSummary {
+        fn from(value: &ReportSummary) -> Self {
+            value.clone()
+        }
     }
 }
 
