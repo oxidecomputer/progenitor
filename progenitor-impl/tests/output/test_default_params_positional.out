@@ -18,6 +18,12 @@ pub mod types {
         pub yes: bool,
     }
 
+    impl From<&BodyWithDefaults> for BodyWithDefaults {
+        fn from(value: &BodyWithDefaults) -> Self {
+            value.clone()
+        }
+    }
+
     ///Error information from a response.
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Error {
@@ -25,6 +31,12 @@ pub mod types {
         pub error_code: Option<String>,
         pub message: String,
         pub request_id: String,
+    }
+
+    impl From<&Error> for Error {
+        fn from(value: &Error) -> Self {
+            value.clone()
+        }
     }
 
     mod defaults {

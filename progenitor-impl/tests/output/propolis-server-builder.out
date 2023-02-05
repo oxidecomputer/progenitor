@@ -27,6 +27,12 @@ pub mod types {
         pub target: Vec<String>,
     }
 
+    impl From<&CrucibleOpts> for CrucibleOpts {
+        fn from(value: &CrucibleOpts) -> Self {
+            value.clone()
+        }
+    }
+
     impl CrucibleOpts {
         pub fn builder() -> builder::CrucibleOpts {
             builder::CrucibleOpts::default()
@@ -38,6 +44,12 @@ pub mod types {
         pub disk_id: uuid::Uuid,
         pub generation_id: u64,
         pub state: DiskAttachmentState,
+    }
+
+    impl From<&DiskAttachment> for DiskAttachment {
+        fn from(value: &DiskAttachment) -> Self {
+            value.clone()
+        }
     }
 
     impl DiskAttachment {
@@ -54,6 +66,12 @@ pub mod types {
         Attached(uuid::Uuid),
     }
 
+    impl From<&DiskAttachmentState> for DiskAttachmentState {
+        fn from(value: &DiskAttachmentState) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct DiskRequest {
         pub device: String,
@@ -62,6 +80,12 @@ pub mod types {
         pub read_only: bool,
         pub slot: Slot,
         pub volume_construction_request: VolumeConstructionRequest,
+    }
+
+    impl From<&DiskRequest> for DiskRequest {
+        fn from(value: &DiskRequest) -> Self {
+            value.clone()
+        }
     }
 
     impl DiskRequest {
@@ -79,6 +103,12 @@ pub mod types {
         pub request_id: String,
     }
 
+    impl From<&Error> for Error {
+        fn from(value: &Error) -> Self {
+            value.clone()
+        }
+    }
+
     impl Error {
         pub fn builder() -> builder::Error {
             builder::Error::default()
@@ -91,6 +121,12 @@ pub mod types {
         pub nics: Vec<NetworkInterface>,
         pub properties: InstanceProperties,
         pub state: InstanceState,
+    }
+
+    impl From<&Instance> for Instance {
+        fn from(value: &Instance) -> Self {
+            value.clone()
+        }
     }
 
     impl Instance {
@@ -112,6 +148,12 @@ pub mod types {
         pub properties: InstanceProperties,
     }
 
+    impl From<&InstanceEnsureRequest> for InstanceEnsureRequest {
+        fn from(value: &InstanceEnsureRequest) -> Self {
+            value.clone()
+        }
+    }
+
     impl InstanceEnsureRequest {
         pub fn builder() -> builder::InstanceEnsureRequest {
             builder::InstanceEnsureRequest::default()
@@ -124,6 +166,12 @@ pub mod types {
         pub migrate: Option<InstanceMigrateInitiateResponse>,
     }
 
+    impl From<&InstanceEnsureResponse> for InstanceEnsureResponse {
+        fn from(value: &InstanceEnsureResponse) -> Self {
+            value.clone()
+        }
+    }
+
     impl InstanceEnsureResponse {
         pub fn builder() -> builder::InstanceEnsureResponse {
             builder::InstanceEnsureResponse::default()
@@ -133,6 +181,12 @@ pub mod types {
     #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct InstanceGetResponse {
         pub instance: Instance,
+    }
+
+    impl From<&InstanceGetResponse> for InstanceGetResponse {
+        fn from(value: &InstanceGetResponse) -> Self {
+            value.clone()
+        }
     }
 
     impl InstanceGetResponse {
@@ -148,6 +202,12 @@ pub mod types {
         pub src_uuid: uuid::Uuid,
     }
 
+    impl From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
+        fn from(value: &InstanceMigrateInitiateRequest) -> Self {
+            value.clone()
+        }
+    }
+
     impl InstanceMigrateInitiateRequest {
         pub fn builder() -> builder::InstanceMigrateInitiateRequest {
             builder::InstanceMigrateInitiateRequest::default()
@@ -157,6 +217,12 @@ pub mod types {
     #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct InstanceMigrateInitiateResponse {
         pub migration_id: uuid::Uuid,
+    }
+
+    impl From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
+        fn from(value: &InstanceMigrateInitiateResponse) -> Self {
+            value.clone()
+        }
     }
 
     impl InstanceMigrateInitiateResponse {
@@ -170,6 +236,12 @@ pub mod types {
         pub migration_id: uuid::Uuid,
     }
 
+    impl From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
+        fn from(value: &InstanceMigrateStatusRequest) -> Self {
+            value.clone()
+        }
+    }
+
     impl InstanceMigrateStatusRequest {
         pub fn builder() -> builder::InstanceMigrateStatusRequest {
             builder::InstanceMigrateStatusRequest::default()
@@ -179,6 +251,12 @@ pub mod types {
     #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct InstanceMigrateStatusResponse {
         pub state: MigrationState,
+    }
+
+    impl From<&InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
+        fn from(value: &InstanceMigrateStatusResponse) -> Self {
+            value.clone()
+        }
     }
 
     impl InstanceMigrateStatusResponse {
@@ -205,6 +283,12 @@ pub mod types {
         pub vcpus: u8,
     }
 
+    impl From<&InstanceProperties> for InstanceProperties {
+        fn from(value: &InstanceProperties) -> Self {
+            value.clone()
+        }
+    }
+
     impl InstanceProperties {
         pub fn builder() -> builder::InstanceProperties {
             builder::InstanceProperties::default()
@@ -226,6 +310,12 @@ pub mod types {
         Repairing,
         Failed,
         Destroyed,
+    }
+
+    impl From<&InstanceState> for InstanceState {
+        fn from(value: &InstanceState) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for InstanceState {
@@ -290,6 +380,12 @@ pub mod types {
         pub gen: u64,
     }
 
+    impl From<&InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
+        fn from(value: &InstanceStateMonitorRequest) -> Self {
+            value.clone()
+        }
+    }
+
     impl InstanceStateMonitorRequest {
         pub fn builder() -> builder::InstanceStateMonitorRequest {
             builder::InstanceStateMonitorRequest::default()
@@ -300,6 +396,12 @@ pub mod types {
     pub struct InstanceStateMonitorResponse {
         pub gen: u64,
         pub state: InstanceState,
+    }
+
+    impl From<&InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
+        fn from(value: &InstanceStateMonitorResponse) -> Self {
+            value.clone()
+        }
     }
 
     impl InstanceStateMonitorResponse {
@@ -316,6 +418,12 @@ pub mod types {
         Stop,
         Reboot,
         MigrateStart,
+    }
+
+    impl From<&InstanceStateRequested> for InstanceStateRequested {
+        fn from(value: &InstanceStateRequested) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for InstanceStateRequested {
@@ -377,6 +485,12 @@ pub mod types {
         RamPull,
         Finish,
         Error,
+    }
+
+    impl From<&MigrationState> for MigrationState {
+        fn from(value: &MigrationState) -> Self {
+            value.clone()
+        }
     }
 
     impl ToString for MigrationState {
@@ -442,6 +556,12 @@ pub mod types {
         pub name: String,
     }
 
+    impl From<&NetworkInterface> for NetworkInterface {
+        fn from(value: &NetworkInterface) -> Self {
+            value.clone()
+        }
+    }
+
     impl NetworkInterface {
         pub fn builder() -> builder::NetworkInterface {
             builder::NetworkInterface::default()
@@ -455,10 +575,22 @@ pub mod types {
         Attached(Slot),
     }
 
+    impl From<&NetworkInterfaceAttachmentState> for NetworkInterfaceAttachmentState {
+        fn from(value: &NetworkInterfaceAttachmentState) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct NetworkInterfaceRequest {
         pub name: String,
         pub slot: Slot,
+    }
+
+    impl From<&NetworkInterfaceRequest> for NetworkInterfaceRequest {
+        fn from(value: &NetworkInterfaceRequest) -> Self {
+            value.clone()
+        }
     }
 
     impl NetworkInterfaceRequest {
@@ -475,6 +607,58 @@ pub mod types {
         type Target = u8;
         fn deref(&self) -> &u8 {
             &self.0
+        }
+    }
+
+    impl From<Slot> for u8 {
+        fn from(value: Slot) -> Self {
+            value.0
+        }
+    }
+
+    impl From<&Slot> for Slot {
+        fn from(value: &Slot) -> Self {
+            value.clone()
+        }
+    }
+
+    impl From<u8> for Slot {
+        fn from(value: u8) -> Self {
+            Self(value)
+        }
+    }
+
+    impl std::str::FromStr for Slot {
+        type Err = <u8 as std::str::FromStr>::Err;
+        fn from_str(value: &str) -> Result<Self, Self::Err> {
+            Ok(Self(value.parse()?))
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for Slot {
+        type Error = <u8 as std::str::FromStr>::Err;
+        fn try_from(value: &str) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for Slot {
+        type Error = <u8 as std::str::FromStr>::Err;
+        fn try_from(value: &String) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for Slot {
+        type Error = <u8 as std::str::FromStr>::Err;
+        fn try_from(value: String) -> Result<Self, Self::Error> {
+            value.parse()
+        }
+    }
+
+    impl ToString for Slot {
+        fn to_string(&self) -> String {
+            self.0.to_string()
         }
     }
 
@@ -507,6 +691,12 @@ pub mod types {
             id: uuid::Uuid,
             path: String,
         },
+    }
+
+    impl From<&VolumeConstructionRequest> for VolumeConstructionRequest {
+        fn from(value: &VolumeConstructionRequest) -> Self {
+            value.clone()
+        }
     }
 
     mod builder {

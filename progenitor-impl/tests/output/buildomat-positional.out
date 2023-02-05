@@ -16,6 +16,12 @@ pub mod types {
         pub state: String,
     }
 
+    impl From<&Task> for Task {
+        fn from(value: &Task) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskEvent {
         pub payload: String,
@@ -24,11 +30,23 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&TaskEvent> for TaskEvent {
+        fn from(value: &TaskEvent) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskOutput {
         pub id: String,
         pub path: String,
         pub size: u64,
+    }
+
+    impl From<&TaskOutput> for TaskOutput {
+        fn from(value: &TaskOutput) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -39,9 +57,21 @@ pub mod types {
         pub script: String,
     }
 
+    impl From<&TaskSubmit> for TaskSubmit {
+        fn from(value: &TaskSubmit) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskSubmitResult {
         pub id: String,
+    }
+
+    impl From<&TaskSubmitResult> for TaskSubmitResult {
+        fn from(value: &TaskSubmitResult) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -49,9 +79,21 @@ pub mod types {
         pub id: String,
     }
 
+    impl From<&UploadedChunk> for UploadedChunk {
+        fn from(value: &UploadedChunk) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct UserCreate {
         pub name: String,
+    }
+
+    impl From<&UserCreate> for UserCreate {
+        fn from(value: &UserCreate) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -61,10 +103,22 @@ pub mod types {
         pub token: String,
     }
 
+    impl From<&UserCreateResult> for UserCreateResult {
+        fn from(value: &UserCreateResult) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WhoamiResult {
         pub id: String,
         pub name: String,
+    }
+
+    impl From<&WhoamiResult> for WhoamiResult {
+        fn from(value: &WhoamiResult) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -79,11 +133,23 @@ pub mod types {
         pub tasks: Vec<WorkerTask>,
     }
 
+    impl From<&Worker> for Worker {
+        fn from(value: &Worker) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerAddOutput {
         pub chunks: Vec<String>,
         pub path: String,
         pub size: i64,
+    }
+
+    impl From<&WorkerAddOutput> for WorkerAddOutput {
+        fn from(value: &WorkerAddOutput) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -93,10 +159,22 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
+    impl From<&WorkerAppendTask> for WorkerAppendTask {
+        fn from(value: &WorkerAppendTask) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerBootstrap {
         pub bootstrap: String,
         pub token: String,
+    }
+
+    impl From<&WorkerBootstrap> for WorkerBootstrap {
+        fn from(value: &WorkerBootstrap) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -104,9 +182,21 @@ pub mod types {
         pub id: String,
     }
 
+    impl From<&WorkerBootstrapResult> for WorkerBootstrapResult {
+        fn from(value: &WorkerBootstrapResult) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
+    }
+
+    impl From<&WorkerCompleteTask> for WorkerCompleteTask {
+        fn from(value: &WorkerCompleteTask) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -116,11 +206,23 @@ pub mod types {
         pub task: Option<WorkerPingTask>,
     }
 
+    impl From<&WorkerPingResult> for WorkerPingResult {
+        fn from(value: &WorkerPingResult) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerPingTask {
         pub id: String,
         pub output_rules: Vec<String>,
         pub script: String,
+    }
+
+    impl From<&WorkerPingTask> for WorkerPingTask {
+        fn from(value: &WorkerPingTask) -> Self {
+            value.clone()
+        }
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -130,9 +232,21 @@ pub mod types {
         pub owner: String,
     }
 
+    impl From<&WorkerTask> for WorkerTask {
+        fn from(value: &WorkerTask) -> Self {
+            value.clone()
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkersResult {
         pub workers: Vec<Worker>,
+    }
+
+    impl From<&WorkersResult> for WorkersResult {
+        fn from(value: &WorkersResult) -> Self {
+            value.clone()
+        }
     }
 }
 
