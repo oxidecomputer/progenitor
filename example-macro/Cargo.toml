@@ -10,4 +10,4 @@ progenitor = { path = "../progenitor" }
 reqwest = { version = "0.11.14", features = ["json", "stream"] }
 schemars = { version = "0.8.11", features = ["uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
-uuid = { version = "1.2", features = ["serde", "v4"] }
+uuid = { version = "1.3", features = ["serde", "v4"] }
