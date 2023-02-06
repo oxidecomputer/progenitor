@@ -1856,7 +1856,7 @@ pub mod builder {
             self.minseq = value
                 .try_into()
                 .map(Some)
-                .map_err(|_| "conversion to `Option < u32 >` for minseq failed".to_string());
+                .map_err(|_| "conversion to `u32` for minseq failed".to_string());
             self
         }
 

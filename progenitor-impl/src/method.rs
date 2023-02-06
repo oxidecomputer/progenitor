@@ -1401,18 +1401,26 @@ impl Generator {
                     OperationParameterType::Type(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
                         let details = ty.details();
-                        let err_msg = format!("conversion to `{}` for {} failed", ty.name(), param.name);
                         match &details {
-                            typify::TypeDetails::Option(ref opt_id) => {
+                            typify::TypeDetails::Option(opt_id) => {
                                 // TODO currently we explicitly turn optional
-                                // parameters into Option types; we could probably
-                                // defer this to the code generation step to avoid the
-                                // special handling here.
-                                let typ = self.type_space.get_type(opt_id)?.ident();
+                                // parameters into Option types; we could
+                                // probably defer this to the code generation
+                                // step to avoid the special handling here.
+                                let inner_type =
+                                    self.type_space.get_type(opt_id)?;
+                                let typ = inner_type.ident();
+                                let err_msg = format!(
+                                    "conversion to `{}` for {} failed",
+                                    inner_type.name(),
+                                    param.name,
+                                );
                                 Ok(quote! {
-                                    pub fn #param_name<V>(mut self, value: V)
-                                    -> Self
-                                        where V: std::convert::TryInto<#typ>
+                                    pub fn #param_name<V>(
+                                        mut self,
+                                        value: V,
+                                    ) -> Self
+                                        where V: std::convert::TryInto<#typ>,
                                     {
                                         self.#param_name = value.try_into()
                                             .map(Some)
@@ -1423,8 +1431,16 @@ impl Generator {
                             }
                             _ => {
                                 let typ = ty.ident();
+                                let err_msg = format!(
+                                    "conversion to `{}` for {} failed",
+                                    ty.name(),
+                                    param.name,
+                                );
                                 Ok(quote! {
-                                    pub fn #param_name<V>(mut self, value: V) -> Self
+                                    pub fn #param_name<V>(
+                                        mut self,
+                                        value: V,
+                                    ) -> Self
                                         where V: std::convert::TryInto<#typ>,
                                     {
                                         self.#param_name = value.try_into()
@@ -1437,8 +1453,10 @@ impl Generator {
                     }
 
                     OperationParameterType::RawBody => {
-                        let err_msg =
-                            format!("conversion to `reqwest::Body` for {} failed", param.name);
+                        let err_msg = format!(
+                            "conversion to `reqwest::Body` for {} failed",
+                            param.name,
+                        );
 
                         Ok(quote! {
                             pub fn #param_name<B>(mut self, value: B) -> Self

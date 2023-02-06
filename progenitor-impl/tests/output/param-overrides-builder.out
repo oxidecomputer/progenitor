@@ -112,7 +112,7 @@ pub mod builder {
             self.key = value
                 .try_into()
                 .map(Some)
-                .map_err(|_| "conversion to `Option < bool >` for key failed".to_string());
+                .map_err(|_| "conversion to `bool` for key failed".to_string());
             self
         }
 
@@ -123,7 +123,7 @@ pub mod builder {
             self.unique_key = value
                 .try_into()
                 .map(Some)
-                .map_err(|_| "conversion to `Option < String >` for unique_key failed".to_string());
+                .map_err(|_| "conversion to `String` for unique_key failed".to_string());
             self
         }
 
