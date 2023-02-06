@@ -28,7 +28,7 @@ project-root = "0.2"
 [dev-dependencies]
 base64 = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
-futures = "0.3.25"
+futures = "0.3.26"
 percent-encoding = "2.2"
 rand = "0.8"
 regress = "0.4.1"
