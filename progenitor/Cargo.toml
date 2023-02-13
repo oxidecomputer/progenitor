@@ -22,7 +22,7 @@ serde_yaml = "0.9"
 clap = { version = "4.1.4", features = ["derive"] }
 
 [build-dependencies]
-built = { version = "0.5", features = ["git2"] }
+built = { version = "0.6", features = ["git2"] }
 project-root = "0.2"
 
 [dev-dependencies]
