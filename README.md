@@ -97,16 +97,16 @@ The `build.rs` file should look something like this:
 fn main() {
     let src = "../sample_openapi/keeper.json";
     println!("cargo:rerun-if-changed={}", src);
-    let file = File::open(src).unwrap();
+    let file = std::fs::File::open(src).unwrap();
     let spec = serde_json::from_reader(file).unwrap();
     let mut generator = progenitor::Generator::default();
 
     let content = generator.generate_text(&spec).unwrap();
 
-    let mut out_file = Path::new(&env::var("OUT_DIR").unwrap()).to_path_buf();
+    let mut out_file = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).to_path_buf();
     out_file.push("codegen.rs");
 
-    fs::write(out_file, content).unwrap();
+    std::fs::write(out_file, content).unwrap();
 }
 ```
 
