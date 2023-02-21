@@ -28,7 +28,10 @@ impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
                 let key = &reference[idx + 1..];
                 let parameters =
                     T::get_components(components.as_ref().unwrap());
-                parameters.get(key).unwrap().item(components)
+                parameters
+                    .get(key)
+                    .unwrap_or_else(|| panic!("key {} is missing", key))
+                    .item(components)
             }
         }
     }
