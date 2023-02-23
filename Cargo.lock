@@ -1222,7 +1222,7 @@ dependencies = [
  "serde_yaml",
  "syn",
  "thiserror",
- "typify",
+ "typify-impl",
  "unicode-ident",
 ]
 
@@ -2023,15 +2023,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 
 [[package]]
-name = "typify"
-version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#d579a526b3cc2e0c36d17fae8df549a03187f177"
-dependencies = [
- "typify-impl",
- "typify-macro",
-]
-
-[[package]]
 name = "typify-impl"
 version = "0.0.11-dev"
 source = "git+https://github.com/oxidecomputer/typify#d579a526b3cc2e0c36d17fae8df549a03187f177"
@@ -2047,21 +2038,6 @@ dependencies = [
  "syn",
  "thiserror",
  "unicode-ident",
-]
-
-[[package]]
-name = "typify-macro"
-version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#d579a526b3cc2e0c36d17fae8df549a03187f177"
-dependencies = [
- "proc-macro2",
- "quote",
- "schemars",
- "serde",
- "serde_json",
- "serde_tokenstream",
- "syn",
- "typify-impl",
 ]
 
 [[package]]

@@ -9,7 +9,7 @@ use std::{
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
-use typify::TypeId;
+use typify_impl::{TypeDetails, TypeId};
 
 use crate::{
     template::PathTemplate,
@@ -1218,7 +1218,7 @@ impl Generator {
 
         let typ = self.type_space.get_type(success_response).ok()?;
         let details = match typ.details() {
-            typify::TypeDetails::Struct(details) => details,
+            TypeDetails::Struct(details) => details,
             _ => return None,
         };
 
@@ -1230,7 +1230,7 @@ impl Generator {
         }
 
         // We need a next_page property that's an Option<String>.
-        if let typify::TypeDetails::Option(ref opt_id) = self
+        if let TypeDetails::Option(ref opt_id) = self
             .type_space
             .get_type(properties.get("next_page")?)
             .ok()?
@@ -1238,7 +1238,7 @@ impl Generator {
         {
             if !matches!(
                 self.type_space.get_type(opt_id).ok()?.details(),
-                typify::TypeDetails::String
+                TypeDetails::String
             ) {
                 return None;
             }
@@ -1252,9 +1252,7 @@ impl Generator {
             .ok()?
             .details()
         {
-            typify::TypeDetails::Array(item) => {
-                Some(DropshotPagination { item })
-            }
+            TypeDetails::Array(item) => Some(DropshotPagination { item }),
             _ => None,
         }
     }
@@ -1377,7 +1375,7 @@ impl Generator {
                     OperationParameterType::Type(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
                         let details = ty.details();
-                        matches!(&details, typify::TypeDetails::Option(_))
+                        matches!(&details, TypeDetails::Option(_))
                     }
                     OperationParameterType::RawBody => false,
                 };
@@ -1402,7 +1400,7 @@ impl Generator {
                         let ty = self.type_space.get_type(type_id)?;
                         let details = ty.details();
                         match &details {
-                            typify::TypeDetails::Option(opt_id) => {
+                            TypeDetails::Option(opt_id) => {
                                 // TODO currently we explicitly turn optional
                                 // parameters into Option types; we could
                                 // probably defer this to the code generation

@@ -7,12 +7,12 @@ use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
-use typify::{TypeSpace, TypeSpaceSettings};
+use typify_impl::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
-pub use typify::TypeSpaceImpl as TypeImpl;
-pub use typify::TypeSpacePatch as TypePatch;
+pub use typify_impl::TypeSpaceImpl as TypeImpl;
+pub use typify_impl::TypeSpacePatch as TypePatch;
 
 mod method;
 mod template;
@@ -24,7 +24,7 @@ pub enum Error {
     #[error("unexpected value type {0}: {1}")]
     BadValue(String, serde_json::Value),
     #[error("type error {0}")]
-    TypeError(#[from] typify::Error),
+    TypeError(#[from] typify_impl::Error),
     #[error("unexpected or unhandled format in the OpenAPI document {0}")]
     UnexpectedFormat(String),
     #[error("invalid operation path {0}")]
