@@ -9,7 +9,7 @@ use std::{
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
-use typify::TypeId;
+use typify::{TypeId, TypeSpace};
 
 use crate::{
     template::PathTemplate,
@@ -20,15 +20,15 @@ use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
 /// The intermediate representation of an operation that will become a method.
 pub(crate) struct OperationMethod {
-    operation_id: String,
+    pub operation_id: String,
     pub tags: Vec<String>,
     method: HttpMethod,
     path: PathTemplate,
-    summary: Option<String>,
-    description: Option<String>,
-    params: Vec<OperationParameter>,
+    pub summary: Option<String>,
+    pub description: Option<String>,
+    pub params: Vec<OperationParameter>,
     responses: Vec<OperationResponse>,
-    dropshot_paginated: Option<DropshotPagination>,
+    pub dropshot_paginated: Option<DropshotPagination>,
     dropshot_websocket: bool,
 }
 
@@ -87,28 +87,28 @@ struct BuilderImpl {
     body: TokenStream,
 }
 
-struct DropshotPagination {
+pub struct DropshotPagination {
     item: TypeId,
 }
 
-struct OperationParameter {
+pub struct OperationParameter {
     /// Sanitized parameter name.
-    name: String,
+    pub name: String,
     /// Original parameter name provided by the API.
     api_name: String,
-    description: Option<String>,
-    typ: OperationParameterType,
-    kind: OperationParameterKind,
+    pub description: Option<String>,
+    pub typ: OperationParameterType,
+    pub kind: OperationParameterKind,
 }
 
 #[derive(Eq, PartialEq)]
-enum OperationParameterType {
+pub enum OperationParameterType {
     Type(TypeId),
     RawBody,
 }
 
 #[derive(Debug, PartialEq, Eq)]
-enum OperationParameterKind {
+pub enum OperationParameterKind {
     Path,
     Query(bool),
     Header(bool),
@@ -116,7 +116,7 @@ enum OperationParameterKind {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-enum BodyContentType {
+pub enum BodyContentType {
     OctetStream,
     Json,
     FormUrlencoded,
@@ -139,7 +139,7 @@ impl FromStr for BodyContentType {
 }
 
 #[derive(Debug)]
-struct OperationResponse {
+pub(crate) struct OperationResponse {
     status_code: OperationResponseStatus,
     typ: OperationResponseType,
     // TODO this isn't currently used because dropshot doesn't give us a
@@ -166,7 +166,7 @@ impl PartialOrd for OperationResponse {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-enum OperationResponseStatus {
+pub(crate) enum OperationResponseStatus {
     Code(u16),
     Range(u16),
     Default,
@@ -187,7 +187,7 @@ impl OperationResponseStatus {
         }
     }
 
-    fn is_success_or_default(&self) -> bool {
+    pub fn is_success_or_default(&self) -> bool {
         matches!(
             self,
             OperationResponseStatus::Default
@@ -197,7 +197,7 @@ impl OperationResponseStatus {
         )
     }
 
-    fn is_error_or_default(&self) -> bool {
+    pub fn is_error_or_default(&self) -> bool {
         matches!(
             self,
             OperationResponseStatus::Default
@@ -206,7 +206,7 @@ impl OperationResponseStatus {
         )
     }
 
-    fn is_default(&self) -> bool {
+    pub fn is_default(&self) -> bool {
         matches!(self, OperationResponseStatus::Default)
     }
 }
@@ -224,11 +224,31 @@ impl PartialOrd for OperationResponseStatus {
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
-enum OperationResponseType {
+pub(crate) enum OperationResponseType {
     Type(TypeId),
     None,
     Raw,
     Upgrade,
+}
+
+impl OperationResponseType {
+    pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
+        match self {
+            OperationResponseType::Type(ref type_id) => {
+                let type_name = type_space.get_type(type_id).unwrap().ident();
+                quote! { #type_name }
+            }
+            OperationResponseType::None => {
+                quote! { () }
+            }
+            OperationResponseType::Raw => {
+                quote! { ByteStream }
+            }
+            OperationResponseType::Upgrade => {
+                quote! { reqwest::Upgraded }
+            }
+        }
+    }
 }
 
 impl Generator {
@@ -730,6 +750,9 @@ impl Generator {
         Ok(all)
     }
 
+    /// Common code generation between positional and builder interface-styles.
+    /// Returns a struct with the success and error types and the core body
+    /// implementation that marshals arguments and executes the request.
     fn method_sig_body(
         &self,
         method: &OperationMethod,
@@ -1070,17 +1093,21 @@ impl Generator {
         };
 
         Ok(MethodSigBody {
-            success: response_type,
-            error: error_type,
+            success: response_type.into_tokens(&self.type_space),
+            error: error_type.into_tokens(&self.type_space),
             body: body_impl,
         })
     }
 
-    fn extract_responses<'a>(
+    /// Extract responses that match criteria specified by the `filter`. The
+    /// result is a `Vec<OperationResponse>` that enumerates the cases matching
+    /// the filter, and a `TokenStream` that respresents the generated type for
+    /// those cases.
+    pub(crate) fn extract_responses<'a>(
         &self,
         method: &'a OperationMethod,
         filter: fn(&OperationResponseStatus) -> bool,
-    ) -> (Vec<&'a OperationResponse>, TokenStream) {
+    ) -> (Vec<&'a OperationResponse>, OperationResponseType) {
         let mut response_items = method
             .responses
             .iter()
@@ -1091,22 +1118,20 @@ impl Generator {
         // If we have a success range and a default, we can pop off the default
         // since it will never be hit. Note that this is a no-op for error
         // responses.
-        {
-            let len = response_items.len();
-            if len >= 2 {
-                if let (
-                    OperationResponse {
-                        status_code: OperationResponseStatus::Range(2),
-                        ..
-                    },
-                    OperationResponse {
-                        status_code: OperationResponseStatus::Default,
-                        ..
-                    },
-                ) = (&response_items[len - 2], &response_items[len - 1])
-                {
-                    response_items.pop();
-                }
+        let len = response_items.len();
+        if len >= 2 {
+            if let (
+                OperationResponse {
+                    status_code: OperationResponseStatus::Range(2),
+                    ..
+                },
+                OperationResponse {
+                    status_code: OperationResponseStatus::Default,
+                    ..
+                },
+            ) = (&response_items[len - 2], &response_items[len - 1])
+            {
+                response_items.pop();
             }
         }
 
@@ -1119,26 +1144,31 @@ impl Generator {
         // enum type with variants for each of the response types.
         assert!(response_types.len() <= 1);
         let response_type = response_types
-            .iter()
+            .into_iter()
             .next()
-            .map(|typ| match typ {
-                OperationResponseType::Type(type_id) => {
-                    let type_name =
-                        self.type_space.get_type(type_id).unwrap().ident();
-                    quote! { #type_name }
-                }
-                OperationResponseType::None => {
-                    quote! { () }
-                }
-                OperationResponseType::Raw => {
-                    quote! { ByteStream }
-                }
-                OperationResponseType::Upgrade => {
-                    quote! { reqwest::Upgraded }
-                }
-            })
-            // TODO should this be a bytestream?
-            .unwrap_or_else(|| quote! { () });
+            // TODO should this be OperationResponseType::Raw?
+            .unwrap_or_else(|| OperationResponseType::None);
+        // let response_type = response_types
+        //     .iter()
+        //     .next()
+        //     .map(|typ| match typ {
+        //         OperationResponseType::Type(type_id) => {
+        //             let type_name =
+        //                 self.type_space.get_type(type_id).unwrap().ident();
+        //             quote! { #type_name }
+        //         }
+        //         OperationResponseType::None => {
+        //             quote! { () }
+        //         }
+        //         OperationResponseType::Raw => {
+        //             quote! { ByteStream }
+        //         }
+        //         OperationResponseType::Upgrade => {
+        //             quote! { reqwest::Upgraded }
+        //         }
+        //     })
+        //     // TODO should this be a bytestream?
+        //     .unwrap_or_else(|| quote! { () });
         (response_items, response_type)
     }
 
@@ -1271,9 +1301,9 @@ impl Generator {
     /// }
     /// ```
     ///
-    /// All parameters are present and all their types are Result<T, String> or
-    /// Result<Option<T>, String> for optional parameters. Each parameter also
-    /// has a corresponding method:
+    /// All parameters are present and all their types are `Result<T, String>`
+    /// or `Result<Option<T>, String>` for optional parameters. Each parameter
+    /// also has a corresponding method:
     /// ```ignore
     /// impl<'a> OperationId<'a> {
     ///     pub fn param_1<V>(self, value: V)
@@ -1295,7 +1325,8 @@ impl Generator {
     /// ```
     ///
     /// The Client's operation_id method simply invokes the builder's new
-    /// method:
+    /// method, which assigns an error value to mandatory field and a
+    /// `Ok(None)` value to optional ones:
     /// ```ignore
     /// impl<'a> OperationId<'a> {
     ///     pub fn new(client: &'a super::Client) -> Self {
@@ -1309,7 +1340,7 @@ impl Generator {
     /// ```
     ///
     /// Finally, builders have methods to execute the operation. This simply
-    /// resolves each parameter with the ? (Try operator).
+    /// resolves each parameter with the ? (`Try` operator).
     /// ```ignore
     /// impl<'a> OperationId<'a> {
     ///     pub fn send(self) -> Result<
