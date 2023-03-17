@@ -72,6 +72,12 @@ pub mod types {
         }
     }
 
+    impl From<uuid::Uuid> for DiskAttachmentState {
+        fn from(value: uuid::Uuid) -> Self {
+            Self::Attached(value)
+        }
+    }
+
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct DiskRequest {
         pub device: String,
@@ -572,6 +578,12 @@ pub mod types {
     impl From<&NetworkInterfaceAttachmentState> for NetworkInterfaceAttachmentState {
         fn from(value: &NetworkInterfaceAttachmentState) -> Self {
             value.clone()
+        }
+    }
+
+    impl From<Slot> for NetworkInterfaceAttachmentState {
+        fn from(value: Slot) -> Self {
+            Self::Attached(value)
         }
     }
 
