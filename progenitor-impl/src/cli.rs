@@ -424,7 +424,9 @@ impl Generator {
             crate::method::OperationResponseType::Type(_) => {
                 quote! { println!("success\n{:#?}", r) }
             }
-            crate::method::OperationResponseType::None => quote! { todo!() },
+            crate::method::OperationResponseType::None => {
+                quote! { println!("success\n{:#?}", r) }
+            }
             crate::method::OperationResponseType::Raw => quote! { todo!() },
             crate::method::OperationResponseType::Upgrade => quote! { todo!() },
         };
@@ -433,7 +435,9 @@ impl Generator {
             crate::method::OperationResponseType::Type(_) => {
                 quote! { println!("error\n{:#?}", r) }
             }
-            crate::method::OperationResponseType::None => quote! { todo!() },
+            crate::method::OperationResponseType::None => {
+                quote! { println!("success\n{:#?}", r) }
+            }
             crate::method::OperationResponseType::Raw => quote! { todo!() },
             crate::method::OperationResponseType::Upgrade => quote! { todo!() },
         };
