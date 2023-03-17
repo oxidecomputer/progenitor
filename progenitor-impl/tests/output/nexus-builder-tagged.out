@@ -423,6 +423,54 @@ pub mod types {
         }
     }
 
+    impl From<bool> for Datum {
+        fn from(value: bool) -> Self {
+            Self::Bool(value)
+        }
+    }
+
+    impl From<i64> for Datum {
+        fn from(value: i64) -> Self {
+            Self::I64(value)
+        }
+    }
+
+    impl From<f64> for Datum {
+        fn from(value: f64) -> Self {
+            Self::F64(value)
+        }
+    }
+
+    impl From<Vec<u8>> for Datum {
+        fn from(value: Vec<u8>) -> Self {
+            Self::Bytes(value)
+        }
+    }
+
+    impl From<Cumulativeint64> for Datum {
+        fn from(value: Cumulativeint64) -> Self {
+            Self::CumulativeI64(value)
+        }
+    }
+
+    impl From<Cumulativedouble> for Datum {
+        fn from(value: Cumulativedouble) -> Self {
+            Self::CumulativeF64(value)
+        }
+    }
+
+    impl From<Histogramint64> for Datum {
+        fn from(value: Histogramint64) -> Self {
+            Self::HistogramI64(value)
+        }
+    }
+
+    impl From<Histogramdouble> for Datum {
+        fn from(value: Histogramdouble) -> Self {
+            Self::HistogramF64(value)
+        }
+    }
+
     ///The type of an individual datum of a metric.
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum DatumType {
@@ -1998,6 +2046,12 @@ pub mod types {
         }
     }
 
+    impl From<Vec<NetworkInterfaceCreate>> for InstanceNetworkInterfaceAttachment {
+        fn from(value: Vec<NetworkInterfaceCreate>) -> Self {
+            Self::Create(value)
+        }
+    }
+
     ///A single page of results
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceResultsPage {
@@ -2261,6 +2315,18 @@ pub mod types {
         }
     }
 
+    impl From<Ipv4Net> for IpNet {
+        fn from(value: Ipv4Net) -> Self {
+            Self::V4(value)
+        }
+    }
+
+    impl From<Ipv6Net> for IpNet {
+        fn from(value: Ipv6Net) -> Self {
+            Self::V6(value)
+        }
+    }
+
     ///Identity-related metadata that's included in nearly all public API
     /// objects
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -2404,6 +2470,18 @@ pub mod types {
     impl From<&IpRange> for IpRange {
         fn from(value: &IpRange) -> Self {
             value.clone()
+        }
+    }
+
+    impl From<Ipv4Range> for IpRange {
+        fn from(value: Ipv4Range) -> Self {
+            Self::V4(value)
+        }
+    }
+
+    impl From<Ipv6Range> for IpRange {
+        fn from(value: Ipv6Range) -> Self {
+            Self::V6(value)
         }
     }
 
@@ -2883,6 +2961,18 @@ pub mod types {
                 Self::Id(x) => x.to_string(),
                 Self::Name(x) => x.to_string(),
             }
+        }
+    }
+
+    impl From<uuid::Uuid> for NameOrId {
+        fn from(value: uuid::Uuid) -> Self {
+            Self::Id(value)
+        }
+    }
+
+    impl From<Name> for NameOrId {
+        fn from(value: Name) -> Self {
+            Self::Name(value)
         }
     }
 
@@ -3934,6 +4024,18 @@ pub mod types {
         }
     }
 
+    impl From<std::net::IpAddr> for RouteDestination {
+        fn from(value: std::net::IpAddr) -> Self {
+            Self::Ip(value)
+        }
+    }
+
+    impl From<IpNet> for RouteDestination {
+        fn from(value: IpNet) -> Self {
+            Self::IpNet(value)
+        }
+    }
+
     ///A `RouteTarget` describes the possible locations that traffic matching a
     /// route destination can be sent.
     #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -3959,6 +4061,12 @@ pub mod types {
     impl From<&RouteTarget> for RouteTarget {
         fn from(value: &RouteTarget) -> Self {
             value.clone()
+        }
+    }
+
+    impl From<std::net::IpAddr> for RouteTarget {
+        fn from(value: std::net::IpAddr) -> Self {
+            Self::Ip(value)
         }
     }
 
@@ -5643,6 +5751,12 @@ pub mod types {
         }
     }
 
+    impl From<Password> for UserPassword {
+        fn from(value: Password) -> Self {
+            Self::Password(value)
+        }
+    }
+
     ///A single page of results
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct UserResultsPage {
@@ -5973,6 +6087,18 @@ pub mod types {
         }
     }
 
+    impl From<std::net::IpAddr> for VpcFirewallRuleHostFilter {
+        fn from(value: std::net::IpAddr) -> Self {
+            Self::Ip(value)
+        }
+    }
+
+    impl From<IpNet> for VpcFirewallRuleHostFilter {
+        fn from(value: IpNet) -> Self {
+            Self::IpNet(value)
+        }
+    }
+
     ///The protocols that may be specified in a firewall rule's filter
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum VpcFirewallRuleProtocol {
@@ -6113,6 +6239,18 @@ pub mod types {
     impl From<&VpcFirewallRuleTarget> for VpcFirewallRuleTarget {
         fn from(value: &VpcFirewallRuleTarget) -> Self {
             value.clone()
+        }
+    }
+
+    impl From<std::net::IpAddr> for VpcFirewallRuleTarget {
+        fn from(value: std::net::IpAddr) -> Self {
+            Self::Ip(value)
+        }
+    }
+
+    impl From<IpNet> for VpcFirewallRuleTarget {
+        fn from(value: IpNet) -> Self {
+            Self::IpNet(value)
         }
     }
 
