@@ -15,6 +15,13 @@ use crate::{
     validate_openapi, Generator, Result,
 };
 
+struct CliOperation {
+    cli_fn: TokenStream,
+    execute_fn: TokenStream,
+    cli_trait: TokenStream,
+    execute_trait: TokenStream,
+}
+
 impl Generator {
     pub fn cli_text(
         &mut self,
@@ -72,7 +79,38 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
-        let ops = raw_methods.iter().map(|method| self.cli_method(method));
+        let methods = raw_methods
+            .iter()
+            .map(|method| self.cli_method(method))
+            .collect::<Vec<_>>();
+
+        let ops = methods.iter().map(
+            |CliOperation {
+                 cli_fn,
+                 execute_fn,
+                 cli_trait: _,
+                 execute_trait: _,
+             }| {
+                quote! {
+                    #cli_fn
+                    #execute_fn
+                }
+            },
+        );
+
+        let trait_ops = methods.iter().map(
+            |CliOperation {
+                 cli_fn: _,
+                 execute_fn: _,
+                 cli_trait,
+                 execute_trait,
+             }| {
+                quote! {
+                    #cli_trait
+                    #execute_trait
+                }
+            },
+        );
 
         let cli_fns = raw_methods
             .iter()
@@ -113,12 +151,13 @@ impl Generator {
                 pub fn new(client: #crate_ident::Client) -> Self {
                     Self { client }
                 }
+
                 #(#ops)*
 
-                pub fn get_command(cmd: CliCommand) -> clap::Command {
+                pub fn get_command<C: CliOverride>(cmd: CliCommand) -> clap::Command {
                     match cmd {
                         #(
-                            CliCommand::#cli_variants => Self::#cli_fns(),
+                            CliCommand::#cli_variants => Self::#cli_fns::<C>(),
                         )*
                     }
                 }
@@ -137,6 +176,10 @@ impl Generator {
                         )*
                     };
                 }
+            }
+
+            pub trait CliOverride {
+                #(#trait_ops)*
             }
 
             #[derive(Copy, Clone, Debug)]
@@ -162,7 +205,7 @@ impl Generator {
     fn cli_method(
         &mut self,
         method: &crate::method::OperationMethod,
-    ) -> TokenStream {
+    ) -> CliOperation {
         let fn_name = format_ident!("cli_{}", &method.operation_id);
 
         let args = method
@@ -292,14 +335,22 @@ impl Generator {
         });
 
         let cli_fn = quote! {
-            pub fn #fn_name() -> clap::Command
+            pub fn #fn_name<C: CliOverride>() -> clap::Command
             {
-                clap::Command::new("")
+                let cmd = clap::Command::new("")
                 #(
                     .arg(#args)
                 )*
                 #body_arg
                 #about
+                ;
+                C::#fn_name(cmd)
+            }
+        };
+
+        let cli_trait = quote! {
+            fn #fn_name(cmd: clap::Command) -> clap::Command {
+                cmd
             }
         };
 
@@ -464,9 +515,22 @@ impl Generator {
             }
         };
 
-        quote! {
-            #cli_fn
-            #execute_fn
+        let execute_trait = quote! {
+            fn #fn_name(
+                &self,
+                matches: &clap::ArgMatches,
+                request: &mut (),
+                body: &mut()
+            ) -> Result<(), String> {
+                Ok(())
+            }
+        };
+
+        CliOperation {
+            cli_fn,
+            execute_fn,
+            cli_trait,
+            execute_trait,
         }
     }
 }

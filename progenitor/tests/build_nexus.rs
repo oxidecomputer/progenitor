@@ -27,20 +27,17 @@ mod builder_untagged {
     use futures::StreamExt;
 
     mod nexus_client {
-        use std::convert::Infallible;
-
-        #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
-        pub struct MyIpv4Net(pub String);
-        impl std::fmt::Display for MyIpv4Net {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-                f.write_str(&self.0)
+        #[derive(Clone, serde::Serialize, serde::Deserialize, Debug)]
+        pub struct MyIpv4Net(String);
+        impl std::str::FromStr for MyIpv4Net {
+            type Err = std::convert::Infallible;
+            fn from_str(value: &str) -> Result<Self, Self::Err> {
+                Ok(Self(value.to_string()))
             }
         }
-        impl std::str::FromStr for MyIpv4Net {
-            type Err = Infallible;
-
-            fn from_str(s: &str) -> Result<Self, Self::Err> {
-                Ok(Self(s.to_string()))
+        impl ToString for MyIpv4Net {
+            fn to_string(&self) -> String {
+                self.0.clone()
             }
         }
         progenitor::generate_api!(
@@ -62,9 +59,7 @@ mod builder_untagged {
 
     pub fn _ignore() {
         // Verify the replacement above.
-        let _ignore = nexus_client::types::IpNet::V4(nexus_client::MyIpv4Net(
-            String::new(),
-        ));
+        let _ignore = nexus_client::types::IpNet::V4("".parse().unwrap());
 
         let client = Client::new("");
         let stream = client
