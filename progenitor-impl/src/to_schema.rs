@@ -89,7 +89,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
 
         // 2. It can be used within a oneOf or anyOf schema to determine which
         // subschema is relevant. This is easier to detect because it doesn't
-        // required chasing references. For each subschema we can then make it
+        // require chasing references. For each subschema we can then make it
         // an allOf union of the actual subschema along with a fixed-field
         // structure.
 

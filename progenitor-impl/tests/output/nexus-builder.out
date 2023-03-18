@@ -2530,7 +2530,20 @@ pub mod types {
     impl std::str::FromStr for Ipv4Net {
         type Err = &'static str;
         fn from_str(value: &str) -> Result<Self, &'static str> {
-            if regress :: Regex :: new ("^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/([8-9]|1[0-9]|2[0-9]|3[0-2])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/([8-9]|1[0-9]|2[0-9]|3[0-2])$\"") ; }
+            if regress::Regex::new(
+                "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
+                 ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
+                 ([8-9]|1[0-9]|2[0-9]|3[0-2])$",
+            )
+            .unwrap()
+            .find(value)
+            .is_none()
+            {
+                return Err("doesn't match pattern \
+                            \"^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
+                            ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
+                            ([8-9]|1[0-9]|2[0-9]|3[0-2])$\"");
+            }
             Ok(Self(value.to_string()))
         }
     }
@@ -2613,7 +2626,19 @@ pub mod types {
     impl std::str::FromStr for Ipv6Net {
         type Err = &'static str;
         fn from_str(value: &str) -> Result<Self, &'static str> {
-            if regress :: Regex :: new ("^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\"") ; }
+            if regress::Regex::new(
+                "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,\
+                 4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+            )
+            .unwrap()
+            .find(value)
+            .is_none()
+            {
+                return Err("doesn't match pattern \
+                            \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,\
+                            4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/\
+                            ([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\"");
+            }
             Ok(Self(value.to_string()))
         }
     }
@@ -5283,7 +5308,9 @@ pub mod types {
             .find(value)
             .is_none()
             {
-                return Err ("doesn't match pattern \"(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)\"") ;
+                return Err("doesn't match pattern \
+                            \"(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*\
+                            )(_([a-z0-9]+))*)\"");
             }
             Ok(Self(value.to_string()))
         }
@@ -23771,7 +23798,10 @@ pub mod builder {
         where
             V: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
         {
-            self . end_time = value . try_into () . map (Some) . map_err (| _ | "conversion to `chrono :: DateTime < chrono :: offset :: Utc >` for end_time failed" . to_string ()) ;
+            self.end_time = value.try_into().map(Some).map_err(|_| {
+                "conversion to `chrono :: DateTime < chrono :: offset :: Utc >` for end_time failed"
+                    .to_string()
+            });
             self
         }
 
@@ -23800,7 +23830,11 @@ pub mod builder {
         where
             V: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
         {
-            self . start_time = value . try_into () . map (Some) . map_err (| _ | "conversion to `chrono :: DateTime < chrono :: offset :: Utc >` for start_time failed" . to_string ()) ;
+            self.start_time = value.try_into().map(Some).map_err(|_| {
+                "conversion to `chrono :: DateTime < chrono :: offset :: Utc >` for start_time \
+                 failed"
+                    .to_string()
+            });
             self
         }
 
@@ -33994,7 +34028,10 @@ pub mod builder {
         where
             V: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
         {
-            self . end_time = value . try_into () . map (Some) . map_err (| _ | "conversion to `chrono :: DateTime < chrono :: offset :: Utc >` for end_time failed" . to_string ()) ;
+            self.end_time = value.try_into().map(Some).map_err(|_| {
+                "conversion to `chrono :: DateTime < chrono :: offset :: Utc >` for end_time failed"
+                    .to_string()
+            });
             self
         }
 
@@ -34033,7 +34070,11 @@ pub mod builder {
         where
             V: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
         {
-            self . start_time = value . try_into () . map (Some) . map_err (| _ | "conversion to `chrono :: DateTime < chrono :: offset :: Utc >` for start_time failed" . to_string ()) ;
+            self.start_time = value.try_into().map(Some).map_err(|_| {
+                "conversion to `chrono :: DateTime < chrono :: offset :: Utc >` for start_time \
+                 failed"
+                    .to_string()
+            });
             self
         }
 

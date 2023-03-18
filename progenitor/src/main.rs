@@ -11,6 +11,7 @@ use anyhow::{bail, Result};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
+use progenitor_impl::space_out_items;
 
 pub mod built_info {
     // The file has been placed there by the build script.
@@ -82,6 +83,16 @@ impl From<TagArg> for TagStyle {
             TagArg::Separate => TagStyle::Separate,
         }
     }
+}
+
+fn reformat_code(input: String) -> String {
+    let config = rustfmt_wrapper::config::Config {
+        normalize_doc_attributes: Some(true),
+        wrap_comments: Some(true),
+        ..Default::default()
+    };
+    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap())
+        .unwrap()
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -179,6 +190,8 @@ fn main() -> Result<()> {
             } else {
                 api_code
             };
+            let lib_code = reformat_code(lib_code);
+
             let mut librs = src.clone();
             librs.push("lib.rs");
             save(librs, lib_code.as_str())?;
