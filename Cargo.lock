@@ -1240,7 +1240,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "syn 1.0.109",
+ "syn 2.0.3",
  "thiserror",
  "typify",
  "unicode-ident",
@@ -1259,7 +1259,7 @@ dependencies = [
  "serde_json",
  "serde_tokenstream",
  "serde_yaml",
- "syn 1.0.109",
+ "syn 2.0.3",
 ]
 
 [[package]]
