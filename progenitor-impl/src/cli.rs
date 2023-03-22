@@ -1,5 +1,6 @@
 // Copyright 2023 Oxide Computer Company
 
+use heck::ToKebabCase;
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
@@ -154,10 +155,10 @@ impl Generator {
 
                 #(#ops)*
 
-                pub fn get_command<C: CliOverride>(cmd: CliCommand) -> clap::Command {
+                pub fn get_command(cmd: CliCommand) -> clap::Command {
                     match cmd {
                         #(
-                            CliCommand::#cli_variants => Self::#cli_fns::<C>(),
+                            CliCommand::#cli_variants => Self::#cli_fns(),
                         )*
                     }
                 }
@@ -217,7 +218,7 @@ impl Generator {
                         || (param.name.as_str() != "page_token"))
             })
             .map(|param| {
-                let arg_name = sanitize(&param.name, Case::Kebab);
+                let arg_name = param.name.to_kebab_case();
 
                 let required = match &param.kind {
                     OperationParameterKind::Path => true,
@@ -286,6 +287,7 @@ impl Generator {
                             let prop_type_ident = prop_type.ident();
                             let good =
                                 prop_type.has_impl(TypeSpaceImpl::FromStr);
+                            let prop_name = prop_name.to_kebab_case();
                             // assert!(good || !required);
 
                             good.then(|| {
@@ -335,16 +337,14 @@ impl Generator {
         });
 
         let cli_fn = quote! {
-            pub fn #fn_name<C: CliOverride>() -> clap::Command
+            pub fn #fn_name() -> clap::Command
             {
-                let cmd = clap::Command::new("")
+                clap::Command::new("")
                 #(
                     .arg(#args)
                 )*
                 #body_arg
                 #about
-                ;
-                C::#fn_name(cmd)
             }
         };
 
@@ -367,7 +367,7 @@ impl Generator {
                         || (param.name.as_str() != "page_token"))
             })
             .map(|param| {
-                let arg_name = sanitize(&param.name, Case::Kebab);
+                let arg_name = param.name.to_kebab_case();
                 let arg_fn_name = sanitize(&param.name, Case::Snake);
                 let arg_fn = format_ident!("{}", arg_fn_name);
                 let OperationParameterType::Type(arg_type_id) = &param.typ else {
@@ -425,6 +425,7 @@ impl Generator {
                                 "{}",
                                 sanitize(prop_name, Case::Snake)
                             );
+                            let prop_name = prop_name.to_kebab_case();
                             let prop_type_ident = prop_type.ident();
                             let good =
                                 prop_type.has_impl(TypeSpaceImpl::FromStr);

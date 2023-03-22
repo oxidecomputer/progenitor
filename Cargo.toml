@@ -11,8 +11,8 @@ members = [
 #[patch."https://github.com/oxidecomputer/dropshot"]
 #dropshot = { path = "../dropshot/dropshot" }
 
-[patch."https://github.com/oxidecomputer/typify"]
-typify = { path = "../typify/typify" }
+#[patch."https://github.com/oxidecomputer/typify"]
+#typify = { path = "../typify/typify" }
 
 #[patch.crates-io]
 #serde_tokenstream = { path = "../serde_tokenstream" }

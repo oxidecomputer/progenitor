@@ -2068,8 +2068,8 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 
 [[package]]
 name = "typify"
-version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#b35e5c06e7e67bfc350840d00bf86a19bff662a7"
+version = "0.0.12-dev"
+source = "git+https://github.com/oxidecomputer/typify#44f52879905a135d37ed06aaf87dbd9df5d72b2f"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -2077,8 +2077,8 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#b35e5c06e7e67bfc350840d00bf86a19bff662a7"
+version = "0.0.12-dev"
+source = "git+https://github.com/oxidecomputer/typify#44f52879905a135d37ed06aaf87dbd9df5d72b2f"
 dependencies = [
  "heck",
  "log",
@@ -2087,23 +2087,23 @@ dependencies = [
  "regress",
  "schemars",
  "serde_json",
- "syn 1.0.109",
+ "syn 2.0.3",
  "thiserror",
  "unicode-ident",
 ]
 
 [[package]]
 name = "typify-macro"
-version = "0.0.11-dev"
-source = "git+https://github.com/oxidecomputer/typify#b35e5c06e7e67bfc350840d00bf86a19bff662a7"
+version = "0.0.12-dev"
+source = "git+https://github.com/oxidecomputer/typify#44f52879905a135d37ed06aaf87dbd9df5d72b2f"
 dependencies = [
  "proc-macro2",
  "quote",
  "schemars",
  "serde",
  "serde_json",
- "serde_tokenstream 0.1.7",
- "syn 1.0.109",
+ "serde_tokenstream 0.2.0",
+ "syn 2.0.3",
  "typify-impl",
 ]
 
@@ -2506,7 +2506,3 @@ checksum = "80d0f4e272c85def139476380b12f9ac60926689dd2e01d4923222f40580869d"
 dependencies = [
  "winapi",
 ]
-
-[[patch.unused]]
-name = "typify"
-version = "0.0.12-dev"
