@@ -2506,3 +2506,7 @@ checksum = "80d0f4e272c85def139476380b12f9ac60926689dd2e01d4923222f40580869d"
 dependencies = [
  "winapi",
 ]
+
+[[patch.unused]]
+name = "typify"
+version = "0.0.12-dev"

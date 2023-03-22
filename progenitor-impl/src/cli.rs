@@ -217,7 +217,7 @@ impl Generator {
                         || (param.name.as_str() != "page_token"))
             })
             .map(|param| {
-                let arg_name = sanitize(&param.name, Case::Snake);
+                let arg_name = sanitize(&param.name, Case::Kebab);
 
                 let required = match &param.kind {
                     OperationParameterKind::Path => true,
@@ -367,8 +367,9 @@ impl Generator {
                         || (param.name.as_str() != "page_token"))
             })
             .map(|param| {
-                let arg_name = sanitize(&param.name, Case::Snake);
-                let arg_fn = format_ident!("{}", arg_name);
+                let arg_name = sanitize(&param.name, Case::Kebab);
+                let arg_fn_name = sanitize(&param.name, Case::Snake);
+                let arg_fn = format_ident!("{}", arg_fn_name);
                 let OperationParameterType::Type(arg_type_id) = &param.typ else {
                     panic!()
                 };
