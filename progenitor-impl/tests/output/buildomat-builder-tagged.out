@@ -450,6 +450,18 @@ pub mod types {
             }
         }
 
+        impl From<super::Task> for Task {
+            fn from(value: super::Task) -> Self {
+                Self {
+                    id: Ok(value.id),
+                    name: Ok(value.name),
+                    output_rules: Ok(value.output_rules),
+                    script: Ok(value.script),
+                    state: Ok(value.state),
+                }
+            }
+        }
+
         pub struct TaskEvent {
             payload: Result<String, String>,
             seq: Result<u32, String>,
@@ -523,6 +535,17 @@ pub mod types {
             }
         }
 
+        impl From<super::TaskEvent> for TaskEvent {
+            fn from(value: super::TaskEvent) -> Self {
+                Self {
+                    payload: Ok(value.payload),
+                    seq: Ok(value.seq),
+                    stream: Ok(value.stream),
+                    time: Ok(value.time),
+                }
+            }
+        }
+
         pub struct TaskOutput {
             id: Result<String, String>,
             path: Result<String, String>,
@@ -580,6 +603,16 @@ pub mod types {
                     path: value.path?,
                     size: value.size?,
                 })
+            }
+        }
+
+        impl From<super::TaskOutput> for TaskOutput {
+            fn from(value: super::TaskOutput) -> Self {
+                Self {
+                    id: Ok(value.id),
+                    path: Ok(value.path),
+                    size: Ok(value.size),
+                }
             }
         }
 
@@ -643,6 +676,16 @@ pub mod types {
             }
         }
 
+        impl From<super::TaskSubmit> for TaskSubmit {
+            fn from(value: super::TaskSubmit) -> Self {
+                Self {
+                    name: Ok(value.name),
+                    output_rules: Ok(value.output_rules),
+                    script: Ok(value.script),
+                }
+            }
+        }
+
         pub struct TaskSubmitResult {
             id: Result<String, String>,
         }
@@ -672,6 +715,12 @@ pub mod types {
             type Error = String;
             fn try_from(value: TaskSubmitResult) -> Result<Self, String> {
                 Ok(Self { id: value.id? })
+            }
+        }
+
+        impl From<super::TaskSubmitResult> for TaskSubmitResult {
+            fn from(value: super::TaskSubmitResult) -> Self {
+                Self { id: Ok(value.id) }
             }
         }
 
@@ -707,6 +756,12 @@ pub mod types {
             }
         }
 
+        impl From<super::UploadedChunk> for UploadedChunk {
+            fn from(value: super::UploadedChunk) -> Self {
+                Self { id: Ok(value.id) }
+            }
+        }
+
         pub struct UserCreate {
             name: Result<String, String>,
         }
@@ -736,6 +791,14 @@ pub mod types {
             type Error = String;
             fn try_from(value: UserCreate) -> Result<Self, String> {
                 Ok(Self { name: value.name? })
+            }
+        }
+
+        impl From<super::UserCreate> for UserCreate {
+            fn from(value: super::UserCreate) -> Self {
+                Self {
+                    name: Ok(value.name),
+                }
             }
         }
 
@@ -799,6 +862,16 @@ pub mod types {
             }
         }
 
+        impl From<super::UserCreateResult> for UserCreateResult {
+            fn from(value: super::UserCreateResult) -> Self {
+                Self {
+                    id: Ok(value.id),
+                    name: Ok(value.name),
+                    token: Ok(value.token),
+                }
+            }
+        }
+
         pub struct WhoamiResult {
             id: Result<String, String>,
             name: Result<String, String>,
@@ -843,6 +916,15 @@ pub mod types {
                     id: value.id?,
                     name: value.name?,
                 })
+            }
+        }
+
+        impl From<super::WhoamiResult> for WhoamiResult {
+            fn from(value: super::WhoamiResult) -> Self {
+                Self {
+                    id: Ok(value.id),
+                    name: Ok(value.name),
+                }
             }
         }
 
@@ -945,6 +1027,19 @@ pub mod types {
             }
         }
 
+        impl From<super::Worker> for Worker {
+            fn from(value: super::Worker) -> Self {
+                Self {
+                    deleted: Ok(value.deleted),
+                    id: Ok(value.id),
+                    instance_id: Ok(value.instance_id),
+                    lastping: Ok(value.lastping),
+                    recycle: Ok(value.recycle),
+                    tasks: Ok(value.tasks),
+                }
+            }
+        }
+
         pub struct WorkerAddOutput {
             chunks: Result<Vec<String>, String>,
             path: Result<String, String>,
@@ -1002,6 +1097,16 @@ pub mod types {
                     path: value.path?,
                     size: value.size?,
                 })
+            }
+        }
+
+        impl From<super::WorkerAddOutput> for WorkerAddOutput {
+            fn from(value: super::WorkerAddOutput) -> Self {
+                Self {
+                    chunks: Ok(value.chunks),
+                    path: Ok(value.path),
+                    size: Ok(value.size),
+                }
             }
         }
 
@@ -1065,6 +1170,16 @@ pub mod types {
             }
         }
 
+        impl From<super::WorkerAppendTask> for WorkerAppendTask {
+            fn from(value: super::WorkerAppendTask) -> Self {
+                Self {
+                    payload: Ok(value.payload),
+                    stream: Ok(value.stream),
+                    time: Ok(value.time),
+                }
+            }
+        }
+
         pub struct WorkerBootstrap {
             bootstrap: Result<String, String>,
             token: Result<String, String>,
@@ -1112,6 +1227,15 @@ pub mod types {
             }
         }
 
+        impl From<super::WorkerBootstrap> for WorkerBootstrap {
+            fn from(value: super::WorkerBootstrap) -> Self {
+                Self {
+                    bootstrap: Ok(value.bootstrap),
+                    token: Ok(value.token),
+                }
+            }
+        }
+
         pub struct WorkerBootstrapResult {
             id: Result<String, String>,
         }
@@ -1141,6 +1265,12 @@ pub mod types {
             type Error = String;
             fn try_from(value: WorkerBootstrapResult) -> Result<Self, String> {
                 Ok(Self { id: value.id? })
+            }
+        }
+
+        impl From<super::WorkerBootstrapResult> for WorkerBootstrapResult {
+            fn from(value: super::WorkerBootstrapResult) -> Self {
+                Self { id: Ok(value.id) }
             }
         }
 
@@ -1175,6 +1305,14 @@ pub mod types {
                 Ok(Self {
                     failed: value.failed?,
                 })
+            }
+        }
+
+        impl From<super::WorkerCompleteTask> for WorkerCompleteTask {
+            fn from(value: super::WorkerCompleteTask) -> Self {
+                Self {
+                    failed: Ok(value.failed),
+                }
             }
         }
 
@@ -1222,6 +1360,15 @@ pub mod types {
                     poweroff: value.poweroff?,
                     task: value.task?,
                 })
+            }
+        }
+
+        impl From<super::WorkerPingResult> for WorkerPingResult {
+            fn from(value: super::WorkerPingResult) -> Self {
+                Self {
+                    poweroff: Ok(value.poweroff),
+                    task: Ok(value.task),
+                }
             }
         }
 
@@ -1285,6 +1432,16 @@ pub mod types {
             }
         }
 
+        impl From<super::WorkerPingTask> for WorkerPingTask {
+            fn from(value: super::WorkerPingTask) -> Self {
+                Self {
+                    id: Ok(value.id),
+                    output_rules: Ok(value.output_rules),
+                    script: Ok(value.script),
+                }
+            }
+        }
+
         pub struct WorkerTask {
             id: Result<String, String>,
             name: Result<String, String>,
@@ -1345,6 +1502,16 @@ pub mod types {
             }
         }
 
+        impl From<super::WorkerTask> for WorkerTask {
+            fn from(value: super::WorkerTask) -> Self {
+                Self {
+                    id: Ok(value.id),
+                    name: Ok(value.name),
+                    owner: Ok(value.owner),
+                }
+            }
+        }
+
         pub struct WorkersResult {
             workers: Result<Vec<super::Worker>, String>,
         }
@@ -1376,6 +1543,14 @@ pub mod types {
                 Ok(Self {
                     workers: value.workers?,
                 })
+            }
+        }
+
+        impl From<super::WorkersResult> for WorkersResult {
+            fn from(value: super::WorkersResult) -> Self {
+                Self {
+                    workers: Ok(value.workers),
+                }
             }
         }
     }

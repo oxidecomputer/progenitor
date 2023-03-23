@@ -1,6 +1,6 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2023 Oxide Computer Company
 
-use std::{str::from_utf8, sync::Arc};
+use std::str::from_utf8;
 
 use dropshot::{
     endpoint, ApiDescription, HttpError, HttpResponseUpdatedNoContent, Path,
@@ -40,7 +40,7 @@ struct CursedQuery {
     path = "/{ref}/{type}/{trait}",
 }]
 async fn renamed_parameters(
-    _rqctx: Arc<RequestContext<()>>,
+    _rqctx: RequestContext<()>,
     _path: Path<CursedPath>,
     _query: Query<CursedQuery>,
 ) -> Result<HttpResponseUpdatedNoContent, HttpError> {
@@ -77,7 +77,7 @@ fn test_renamed_parameters() {
     path = "/",
 }]
 async fn freeform_response(
-    _rqctx: Arc<RequestContext<()>>,
+    _rqctx: RequestContext<()>,
 ) -> Result<Response<Body>, HttpError> {
     unreachable!();
 }
@@ -130,7 +130,7 @@ fn yes_yes() -> Option<bool> {
     path = "/",
 }]
 async fn default_params(
-    _rqctx: Arc<RequestContext<()>>,
+    _rqctx: RequestContext<()>,
     _body: TypedBody<BodyWithDefaults>,
 ) -> Result<Response<Body>, HttpError> {
     unreachable!();

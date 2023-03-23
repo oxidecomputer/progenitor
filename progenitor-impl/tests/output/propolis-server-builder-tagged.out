@@ -857,6 +857,23 @@ pub mod types {
             }
         }
 
+        impl From<super::CrucibleOpts> for CrucibleOpts {
+            fn from(value: super::CrucibleOpts) -> Self {
+                Self {
+                    cert_pem: Ok(value.cert_pem),
+                    control: Ok(value.control),
+                    flush_timeout: Ok(value.flush_timeout),
+                    id: Ok(value.id),
+                    key: Ok(value.key),
+                    key_pem: Ok(value.key_pem),
+                    lossy: Ok(value.lossy),
+                    read_only: Ok(value.read_only),
+                    root_cert_pem: Ok(value.root_cert_pem),
+                    target: Ok(value.target),
+                }
+            }
+        }
+
         pub struct DiskAttachment {
             disk_id: Result<uuid::Uuid, String>,
             generation_id: Result<u64, String>,
@@ -914,6 +931,16 @@ pub mod types {
                     generation_id: value.generation_id?,
                     state: value.state?,
                 })
+            }
+        }
+
+        impl From<super::DiskAttachment> for DiskAttachment {
+            fn from(value: super::DiskAttachment) -> Self {
+                Self {
+                    disk_id: Ok(value.disk_id),
+                    generation_id: Ok(value.generation_id),
+                    state: Ok(value.state),
+                }
             }
         }
 
@@ -1021,6 +1048,19 @@ pub mod types {
             }
         }
 
+        impl From<super::DiskRequest> for DiskRequest {
+            fn from(value: super::DiskRequest) -> Self {
+                Self {
+                    device: Ok(value.device),
+                    gen: Ok(value.gen),
+                    name: Ok(value.name),
+                    read_only: Ok(value.read_only),
+                    slot: Ok(value.slot),
+                    volume_construction_request: Ok(value.volume_construction_request),
+                }
+            }
+        }
+
         pub struct Error {
             error_code: Result<Option<String>, String>,
             message: Result<String, String>,
@@ -1078,6 +1118,16 @@ pub mod types {
                     message: value.message?,
                     request_id: value.request_id?,
                 })
+            }
+        }
+
+        impl From<super::Error> for Error {
+            fn from(value: super::Error) -> Self {
+                Self {
+                    error_code: Ok(value.error_code),
+                    message: Ok(value.message),
+                    request_id: Ok(value.request_id),
+                }
             }
         }
 
@@ -1151,6 +1201,17 @@ pub mod types {
                     properties: value.properties?,
                     state: value.state?,
                 })
+            }
+        }
+
+        impl From<super::Instance> for Instance {
+            fn from(value: super::Instance) -> Self {
+                Self {
+                    disks: Ok(value.disks),
+                    nics: Ok(value.nics),
+                    properties: Ok(value.properties),
+                    state: Ok(value.state),
+                }
             }
         }
 
@@ -1243,6 +1304,18 @@ pub mod types {
             }
         }
 
+        impl From<super::InstanceEnsureRequest> for InstanceEnsureRequest {
+            fn from(value: super::InstanceEnsureRequest) -> Self {
+                Self {
+                    cloud_init_bytes: Ok(value.cloud_init_bytes),
+                    disks: Ok(value.disks),
+                    migrate: Ok(value.migrate),
+                    nics: Ok(value.nics),
+                    properties: Ok(value.properties),
+                }
+            }
+        }
+
         pub struct InstanceEnsureResponse {
             migrate: Result<Option<super::InstanceMigrateInitiateResponse>, String>,
         }
@@ -1277,6 +1350,14 @@ pub mod types {
             }
         }
 
+        impl From<super::InstanceEnsureResponse> for InstanceEnsureResponse {
+            fn from(value: super::InstanceEnsureResponse) -> Self {
+                Self {
+                    migrate: Ok(value.migrate),
+                }
+            }
+        }
+
         pub struct InstanceGetResponse {
             instance: Result<super::Instance, String>,
         }
@@ -1308,6 +1389,14 @@ pub mod types {
                 Ok(Self {
                     instance: value.instance?,
                 })
+            }
+        }
+
+        impl From<super::InstanceGetResponse> for InstanceGetResponse {
+            fn from(value: super::InstanceGetResponse) -> Self {
+                Self {
+                    instance: Ok(value.instance),
+                }
             }
         }
 
@@ -1373,6 +1462,16 @@ pub mod types {
             }
         }
 
+        impl From<super::InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
+            fn from(value: super::InstanceMigrateInitiateRequest) -> Self {
+                Self {
+                    migration_id: Ok(value.migration_id),
+                    src_addr: Ok(value.src_addr),
+                    src_uuid: Ok(value.src_uuid),
+                }
+            }
+        }
+
         pub struct InstanceMigrateInitiateResponse {
             migration_id: Result<uuid::Uuid, String>,
         }
@@ -1406,6 +1505,14 @@ pub mod types {
                 Ok(Self {
                     migration_id: value.migration_id?,
                 })
+            }
+        }
+
+        impl From<super::InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
+            fn from(value: super::InstanceMigrateInitiateResponse) -> Self {
+                Self {
+                    migration_id: Ok(value.migration_id),
+                }
             }
         }
 
@@ -1443,6 +1550,14 @@ pub mod types {
             }
         }
 
+        impl From<super::InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
+            fn from(value: super::InstanceMigrateStatusRequest) -> Self {
+                Self {
+                    migration_id: Ok(value.migration_id),
+                }
+            }
+        }
+
         pub struct InstanceMigrateStatusResponse {
             state: Result<super::MigrationState, String>,
         }
@@ -1474,6 +1589,14 @@ pub mod types {
                 Ok(Self {
                     state: value.state?,
                 })
+            }
+        }
+
+        impl From<super::InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
+            fn from(value: super::InstanceMigrateStatusResponse) -> Self {
+                Self {
+                    state: Ok(value.state),
+                }
             }
         }
 
@@ -1589,6 +1712,20 @@ pub mod types {
             }
         }
 
+        impl From<super::InstanceProperties> for InstanceProperties {
+            fn from(value: super::InstanceProperties) -> Self {
+                Self {
+                    bootrom_id: Ok(value.bootrom_id),
+                    description: Ok(value.description),
+                    id: Ok(value.id),
+                    image_id: Ok(value.image_id),
+                    memory: Ok(value.memory),
+                    name: Ok(value.name),
+                    vcpus: Ok(value.vcpus),
+                }
+            }
+        }
+
         pub struct InstanceStateMonitorRequest {
             gen: Result<u64, String>,
         }
@@ -1618,6 +1755,12 @@ pub mod types {
             type Error = String;
             fn try_from(value: InstanceStateMonitorRequest) -> Result<Self, String> {
                 Ok(Self { gen: value.gen? })
+            }
+        }
+
+        impl From<super::InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
+            fn from(value: super::InstanceStateMonitorRequest) -> Self {
+                Self { gen: Ok(value.gen) }
             }
         }
 
@@ -1668,6 +1811,15 @@ pub mod types {
             }
         }
 
+        impl From<super::InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
+            fn from(value: super::InstanceStateMonitorResponse) -> Self {
+                Self {
+                    gen: Ok(value.gen),
+                    state: Ok(value.state),
+                }
+            }
+        }
+
         pub struct NetworkInterface {
             attachment: Result<super::NetworkInterfaceAttachmentState, String>,
             name: Result<String, String>,
@@ -1715,6 +1867,15 @@ pub mod types {
             }
         }
 
+        impl From<super::NetworkInterface> for NetworkInterface {
+            fn from(value: super::NetworkInterface) -> Self {
+                Self {
+                    attachment: Ok(value.attachment),
+                    name: Ok(value.name),
+                }
+            }
+        }
+
         pub struct NetworkInterfaceRequest {
             name: Result<String, String>,
             slot: Result<super::Slot, String>,
@@ -1759,6 +1920,15 @@ pub mod types {
                     name: value.name?,
                     slot: value.slot?,
                 })
+            }
+        }
+
+        impl From<super::NetworkInterfaceRequest> for NetworkInterfaceRequest {
+            fn from(value: super::NetworkInterfaceRequest) -> Self {
+                Self {
+                    name: Ok(value.name),
+                    slot: Ok(value.slot),
+                }
             }
         }
     }
