@@ -67,7 +67,7 @@ checksum = "86ea188f25f0255d8f92797797c97ebf5631fa88178beb1a46fdf5622c9a00e4"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.7",
+ "syn 2.0.8",
 ]
 
 [[package]]
@@ -375,7 +375,7 @@ dependencies = [
  "quote",
  "serde",
  "serde_tokenstream",
- "syn 2.0.7",
+ "syn 2.0.8",
 ]
 
 [[package]]
@@ -2140,7 +2140,7 @@ dependencies = [
  "regress",
  "schemars",
  "serde_json",
- "syn 2.0.7",
+ "syn 2.0.8",
  "thiserror",
  "unicode-ident",
 ]
@@ -2156,7 +2156,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_tokenstream",
- "syn 2.0.7",
+ "syn 2.0.8",
  "typify-impl",
 ]
 
