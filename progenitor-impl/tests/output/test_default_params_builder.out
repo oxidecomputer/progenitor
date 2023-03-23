@@ -125,6 +125,17 @@ pub mod types {
             }
         }
 
+        impl From<super::BodyWithDefaults> for BodyWithDefaults {
+            fn from(value: super::BodyWithDefaults) -> Self {
+                Self {
+                    forty_two: Ok(value.forty_two),
+                    s: Ok(value.s),
+                    something: Ok(value.something),
+                    yes: Ok(value.yes),
+                }
+            }
+        }
+
         pub struct Error {
             error_code: Result<Option<String>, String>,
             message: Result<String, String>,
@@ -182,6 +193,16 @@ pub mod types {
                     message: value.message?,
                     request_id: value.request_id?,
                 })
+            }
+        }
+
+        impl From<super::Error> for Error {
+            fn from(value: super::Error) -> Self {
+                Self {
+                    error_code: Ok(value.error_code),
+                    message: Ok(value.message),
+                    request_id: Ok(value.request_id),
+                }
             }
         }
     }

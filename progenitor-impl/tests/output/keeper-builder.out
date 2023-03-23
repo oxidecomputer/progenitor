@@ -244,6 +244,15 @@ pub mod types {
             }
         }
 
+        impl From<super::EnrolBody> for EnrolBody {
+            fn from(value: super::EnrolBody) -> Self {
+                Self {
+                    host: Ok(value.host),
+                    key: Ok(value.key),
+                }
+            }
+        }
+
         pub struct GlobalJobsResult {
             summary: Result<Vec<super::ReportSummary>, String>,
         }
@@ -275,6 +284,14 @@ pub mod types {
                 Ok(Self {
                     summary: value.summary?,
                 })
+            }
+        }
+
+        impl From<super::GlobalJobsResult> for GlobalJobsResult {
+            fn from(value: super::GlobalJobsResult) -> Self {
+                Self {
+                    summary: Ok(value.summary),
+                }
             }
         }
 
@@ -338,6 +355,16 @@ pub mod types {
             }
         }
 
+        impl From<super::OutputRecord> for OutputRecord {
+            fn from(value: super::OutputRecord) -> Self {
+                Self {
+                    msg: Ok(value.msg),
+                    stream: Ok(value.stream),
+                    time: Ok(value.time),
+                }
+            }
+        }
+
         pub struct PingResult {
             host: Result<String, String>,
             ok: Result<bool, String>,
@@ -382,6 +409,15 @@ pub mod types {
                     host: value.host?,
                     ok: value.ok?,
                 })
+            }
+        }
+
+        impl From<super::PingResult> for PingResult {
+            fn from(value: super::PingResult) -> Self {
+                Self {
+                    host: Ok(value.host),
+                    ok: Ok(value.ok),
+                }
             }
         }
 
@@ -455,6 +491,17 @@ pub mod types {
                     exit_status: value.exit_status?,
                     id: value.id?,
                 })
+            }
+        }
+
+        impl From<super::ReportFinishBody> for ReportFinishBody {
+            fn from(value: super::ReportFinishBody) -> Self {
+                Self {
+                    duration_millis: Ok(value.duration_millis),
+                    end_time: Ok(value.end_time),
+                    exit_status: Ok(value.exit_status),
+                    id: Ok(value.id),
+                }
             }
         }
 
@@ -544,6 +591,18 @@ pub mod types {
             }
         }
 
+        impl From<super::ReportId> for ReportId {
+            fn from(value: super::ReportId) -> Self {
+                Self {
+                    host: Ok(value.host),
+                    job: Ok(value.job),
+                    pid: Ok(value.pid),
+                    time: Ok(value.time),
+                    uuid: Ok(value.uuid),
+                }
+            }
+        }
+
         pub struct ReportOutputBody {
             id: Result<super::ReportId, String>,
             record: Result<super::OutputRecord, String>,
@@ -591,6 +650,15 @@ pub mod types {
             }
         }
 
+        impl From<super::ReportOutputBody> for ReportOutputBody {
+            fn from(value: super::ReportOutputBody) -> Self {
+                Self {
+                    id: Ok(value.id),
+                    record: Ok(value.record),
+                }
+            }
+        }
+
         pub struct ReportResult {
             existed_already: Result<bool, String>,
         }
@@ -622,6 +690,14 @@ pub mod types {
                 Ok(Self {
                     existed_already: value.existed_already?,
                 })
+            }
+        }
+
+        impl From<super::ReportResult> for ReportResult {
+            fn from(value: super::ReportResult) -> Self {
+                Self {
+                    existed_already: Ok(value.existed_already),
+                }
             }
         }
 
@@ -682,6 +758,16 @@ pub mod types {
                     script: value.script?,
                     start_time: value.start_time?,
                 })
+            }
+        }
+
+        impl From<super::ReportStartBody> for ReportStartBody {
+            fn from(value: super::ReportStartBody) -> Self {
+                Self {
+                    id: Ok(value.id),
+                    script: Ok(value.script),
+                    start_time: Ok(value.start_time),
+                }
             }
         }
 
@@ -784,6 +870,19 @@ pub mod types {
                     status: value.status?,
                     when: value.when?,
                 })
+            }
+        }
+
+        impl From<super::ReportSummary> for ReportSummary {
+            fn from(value: super::ReportSummary) -> Self {
+                Self {
+                    age_seconds: Ok(value.age_seconds),
+                    duration_seconds: Ok(value.duration_seconds),
+                    host: Ok(value.host),
+                    job: Ok(value.job),
+                    status: Ok(value.status),
+                    when: Ok(value.when),
+                }
             }
         }
     }
