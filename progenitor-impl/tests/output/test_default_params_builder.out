@@ -51,7 +51,8 @@ pub mod types {
         }
     }
 
-    mod builder {
+    pub mod builder {
+        #[derive(Clone, Debug)]
         pub struct BodyWithDefaults {
             forty_two: Result<u32, String>,
             s: Result<String, String>,
@@ -136,6 +137,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct Error {
             error_code: Result<Option<String>, String>,
             message: Result<String, String>,
@@ -207,7 +209,7 @@ pub mod types {
         }
     }
 
-    mod defaults {
+    pub mod defaults {
         pub(super) fn default_u64<T, const V: u64>() -> T
         where
             T: std::convert::TryFrom<u64>,
@@ -295,14 +297,14 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct DefaultParams<'a> {
         client: &'a super::Client,
-        body: Result<types::BodyWithDefaults, String>,
+        body: Result<types::builder::BodyWithDefaults, String>,
     }
 
     impl<'a> DefaultParams<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::BodyWithDefaults::default()),
             }
         }
 
@@ -312,14 +314,27 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `BodyWithDefaults` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(
+                types::builder::BodyWithDefaults,
+            ) -> types::builder::BodyWithDefaults,
+        {
+            self.body = self.body.map(f);
             self
         }
 
         ///Sends a `POST` request to `/`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::BodyWithDefaults::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;

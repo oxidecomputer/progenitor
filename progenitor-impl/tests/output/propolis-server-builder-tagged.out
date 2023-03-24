@@ -705,7 +705,8 @@ pub mod types {
         }
     }
 
-    mod builder {
+    pub mod builder {
+        #[derive(Clone, Debug)]
         pub struct CrucibleOpts {
             cert_pem: Result<Option<String>, String>,
             control: Result<Option<String>, String>,
@@ -874,6 +875,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct DiskAttachment {
             disk_id: Result<uuid::Uuid, String>,
             generation_id: Result<u64, String>,
@@ -944,6 +946,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct DiskRequest {
             device: Result<String, String>,
             gen: Result<u64, String>,
@@ -1061,6 +1064,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct Error {
             error_code: Result<Option<String>, String>,
             message: Result<String, String>,
@@ -1131,6 +1135,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct Instance {
             disks: Result<Vec<super::DiskAttachment>, String>,
             nics: Result<Vec<super::NetworkInterface>, String>,
@@ -1215,6 +1220,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceEnsureRequest {
             cloud_init_bytes: Result<Option<String>, String>,
             disks: Result<Vec<super::DiskRequest>, String>,
@@ -1316,6 +1322,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceEnsureResponse {
             migrate: Result<Option<super::InstanceMigrateInitiateResponse>, String>,
         }
@@ -1358,6 +1365,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceGetResponse {
             instance: Result<super::Instance, String>,
         }
@@ -1400,6 +1408,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceMigrateInitiateRequest {
             migration_id: Result<uuid::Uuid, String>,
             src_addr: Result<String, String>,
@@ -1472,6 +1481,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceMigrateInitiateResponse {
             migration_id: Result<uuid::Uuid, String>,
         }
@@ -1516,6 +1526,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceMigrateStatusRequest {
             migration_id: Result<uuid::Uuid, String>,
         }
@@ -1558,6 +1569,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceMigrateStatusResponse {
             state: Result<super::MigrationState, String>,
         }
@@ -1600,6 +1612,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceProperties {
             bootrom_id: Result<uuid::Uuid, String>,
             description: Result<String, String>,
@@ -1726,6 +1739,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceStateMonitorRequest {
             gen: Result<u64, String>,
         }
@@ -1764,6 +1778,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct InstanceStateMonitorResponse {
             gen: Result<u64, String>,
             state: Result<super::InstanceState, String>,
@@ -1820,6 +1835,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct NetworkInterface {
             attachment: Result<super::NetworkInterfaceAttachmentState, String>,
             name: Result<String, String>,
@@ -1876,6 +1892,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct NetworkInterfaceRequest {
             name: Result<String, String>,
             slot: Result<super::Slot, String>,
@@ -2119,14 +2136,14 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct InstanceEnsure<'a> {
         client: &'a super::Client,
-        body: Result<types::InstanceEnsureRequest, String>,
+        body: Result<types::builder::InstanceEnsureRequest, String>,
     }
 
     impl<'a> InstanceEnsure<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::InstanceEnsureRequest::default()),
             }
         }
 
@@ -2136,7 +2153,18 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `InstanceEnsureRequest` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(
+                types::builder::InstanceEnsureRequest,
+            ) -> types::builder::InstanceEnsureRequest,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -2145,7 +2173,9 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
             let Self { client, body } = self;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::InstanceEnsureRequest::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance", client.baseurl,);
             let request = client.client.put(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -2240,14 +2270,14 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct InstanceMigrateStatus<'a> {
         client: &'a super::Client,
-        body: Result<types::InstanceMigrateStatusRequest, String>,
+        body: Result<types::builder::InstanceMigrateStatusRequest, String>,
     }
 
     impl<'a> InstanceMigrateStatus<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::InstanceMigrateStatusRequest::default()),
             }
         }
 
@@ -2255,9 +2285,19 @@ pub mod builder {
         where
             V: std::convert::TryInto<types::InstanceMigrateStatusRequest>,
         {
-            self.body = value.try_into().map_err(|_| {
+            self.body = value.try_into().map(From::from).map_err(|_| {
                 "conversion to `InstanceMigrateStatusRequest` for body failed".to_string()
             });
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(
+                types::builder::InstanceMigrateStatusRequest,
+            ) -> types::builder::InstanceMigrateStatusRequest,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -2267,7 +2307,9 @@ pub mod builder {
         ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>>
         {
             let Self { client, body } = self;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::InstanceMigrateStatusRequest::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/migrate/status", client.baseurl,);
             let request = client.client.get(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -2382,14 +2424,14 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct InstanceStateMonitor<'a> {
         client: &'a super::Client,
-        body: Result<types::InstanceStateMonitorRequest, String>,
+        body: Result<types::builder::InstanceStateMonitorRequest, String>,
     }
 
     impl<'a> InstanceStateMonitor<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::InstanceStateMonitorRequest::default()),
             }
         }
 
@@ -2397,9 +2439,19 @@ pub mod builder {
         where
             V: std::convert::TryInto<types::InstanceStateMonitorRequest>,
         {
-            self.body = value.try_into().map_err(|_| {
+            self.body = value.try_into().map(From::from).map_err(|_| {
                 "conversion to `InstanceStateMonitorRequest` for body failed".to_string()
             });
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(
+                types::builder::InstanceStateMonitorRequest,
+            ) -> types::builder::InstanceStateMonitorRequest,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -2409,7 +2461,9 @@ pub mod builder {
         ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>>
         {
             let Self { client, body } = self;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::InstanceStateMonitorRequest::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state-monitor", client.baseurl,);
             let request = client.client.get(url).json(&body).build()?;
             let result = client.client.execute(request).await;

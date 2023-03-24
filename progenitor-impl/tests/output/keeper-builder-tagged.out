@@ -196,7 +196,8 @@ pub mod types {
         }
     }
 
-    mod builder {
+    pub mod builder {
+        #[derive(Clone, Debug)]
         pub struct EnrolBody {
             host: Result<String, String>,
             key: Result<String, String>,
@@ -253,6 +254,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct GlobalJobsResult {
             summary: Result<Vec<super::ReportSummary>, String>,
         }
@@ -295,6 +297,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct OutputRecord {
             msg: Result<String, String>,
             stream: Result<String, String>,
@@ -365,6 +368,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct PingResult {
             host: Result<String, String>,
             ok: Result<bool, String>,
@@ -421,6 +425,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct ReportFinishBody {
             duration_millis: Result<i32, String>,
             end_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
@@ -505,6 +510,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct ReportId {
             host: Result<String, String>,
             job: Result<String, String>,
@@ -603,6 +609,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct ReportOutputBody {
             id: Result<super::ReportId, String>,
             record: Result<super::OutputRecord, String>,
@@ -659,6 +666,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct ReportResult {
             existed_already: Result<bool, String>,
         }
@@ -701,6 +709,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct ReportStartBody {
             id: Result<super::ReportId, String>,
             script: Result<String, String>,
@@ -771,6 +780,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct ReportSummary {
             age_seconds: Result<i32, String>,
             duration_seconds: Result<i32, String>,
@@ -1044,7 +1054,7 @@ pub mod builder {
     pub struct Enrol<'a> {
         client: &'a super::Client,
         authorization: Result<String, String>,
-        body: Result<types::EnrolBody, String>,
+        body: Result<types::builder::EnrolBody, String>,
     }
 
     impl<'a> Enrol<'a> {
@@ -1052,7 +1062,7 @@ pub mod builder {
             Self {
                 client,
                 authorization: Err("authorization was not initialized".to_string()),
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::EnrolBody::default()),
             }
         }
 
@@ -1072,7 +1082,16 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `EnrolBody` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(types::builder::EnrolBody) -> types::builder::EnrolBody,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -1084,7 +1103,9 @@ pub mod builder {
                 body,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::EnrolBody::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/enrol", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
@@ -1204,7 +1225,7 @@ pub mod builder {
     pub struct ReportFinish<'a> {
         client: &'a super::Client,
         authorization: Result<String, String>,
-        body: Result<types::ReportFinishBody, String>,
+        body: Result<types::builder::ReportFinishBody, String>,
     }
 
     impl<'a> ReportFinish<'a> {
@@ -1212,7 +1233,7 @@ pub mod builder {
             Self {
                 client,
                 authorization: Err("authorization was not initialized".to_string()),
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::ReportFinishBody::default()),
             }
         }
 
@@ -1232,7 +1253,18 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `ReportFinishBody` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(
+                types::builder::ReportFinishBody,
+            ) -> types::builder::ReportFinishBody,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -1244,7 +1276,9 @@ pub mod builder {
                 body,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::ReportFinishBody::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/finish", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
@@ -1270,7 +1304,7 @@ pub mod builder {
     pub struct ReportOutput<'a> {
         client: &'a super::Client,
         authorization: Result<String, String>,
-        body: Result<types::ReportOutputBody, String>,
+        body: Result<types::builder::ReportOutputBody, String>,
     }
 
     impl<'a> ReportOutput<'a> {
@@ -1278,7 +1312,7 @@ pub mod builder {
             Self {
                 client,
                 authorization: Err("authorization was not initialized".to_string()),
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::ReportOutputBody::default()),
             }
         }
 
@@ -1298,7 +1332,18 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `ReportOutputBody` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(
+                types::builder::ReportOutputBody,
+            ) -> types::builder::ReportOutputBody,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -1310,7 +1355,9 @@ pub mod builder {
                 body,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::ReportOutputBody::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/output", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
@@ -1336,7 +1383,7 @@ pub mod builder {
     pub struct ReportStart<'a> {
         client: &'a super::Client,
         authorization: Result<String, String>,
-        body: Result<types::ReportStartBody, String>,
+        body: Result<types::builder::ReportStartBody, String>,
     }
 
     impl<'a> ReportStart<'a> {
@@ -1344,7 +1391,7 @@ pub mod builder {
             Self {
                 client,
                 authorization: Err("authorization was not initialized".to_string()),
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::ReportStartBody::default()),
             }
         }
 
@@ -1364,7 +1411,16 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `ReportStartBody` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(types::builder::ReportStartBody) -> types::builder::ReportStartBody,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -1376,7 +1432,9 @@ pub mod builder {
                 body,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::ReportStartBody::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/start", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
