@@ -39,7 +39,7 @@ pub mod types {
         }
     }
 
-    mod defaults {
+    pub mod defaults {
         pub(super) fn default_u64<T, const V: u64>() -> T
         where
             T: std::convert::TryFrom<u64>,

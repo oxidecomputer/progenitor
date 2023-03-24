@@ -363,7 +363,8 @@ pub mod types {
         }
     }
 
-    mod builder {
+    pub mod builder {
+        #[derive(Clone, Debug)]
         pub struct Task {
             id: Result<String, String>,
             name: Result<String, String>,
@@ -462,6 +463,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct TaskEvent {
             payload: Result<String, String>,
             seq: Result<u32, String>,
@@ -546,6 +548,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct TaskOutput {
             id: Result<String, String>,
             path: Result<String, String>,
@@ -616,6 +619,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct TaskSubmit {
             name: Result<String, String>,
             output_rules: Result<Vec<String>, String>,
@@ -686,6 +690,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct TaskSubmitResult {
             id: Result<String, String>,
         }
@@ -724,6 +729,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct UploadedChunk {
             id: Result<String, String>,
         }
@@ -762,6 +768,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct UserCreate {
             name: Result<String, String>,
         }
@@ -802,6 +809,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct UserCreateResult {
             id: Result<String, String>,
             name: Result<String, String>,
@@ -872,6 +880,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WhoamiResult {
             id: Result<String, String>,
             name: Result<String, String>,
@@ -928,6 +937,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct Worker {
             deleted: Result<bool, String>,
             id: Result<String, String>,
@@ -1040,6 +1050,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkerAddOutput {
             chunks: Result<Vec<String>, String>,
             path: Result<String, String>,
@@ -1110,6 +1121,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkerAppendTask {
             payload: Result<String, String>,
             stream: Result<String, String>,
@@ -1180,6 +1192,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkerBootstrap {
             bootstrap: Result<String, String>,
             token: Result<String, String>,
@@ -1236,6 +1249,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkerBootstrapResult {
             id: Result<String, String>,
         }
@@ -1274,6 +1288,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkerCompleteTask {
             failed: Result<bool, String>,
         }
@@ -1316,6 +1331,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkerPingResult {
             poweroff: Result<bool, String>,
             task: Result<Option<super::WorkerPingTask>, String>,
@@ -1372,6 +1388,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkerPingTask {
             id: Result<String, String>,
             output_rules: Result<Vec<String>, String>,
@@ -1442,6 +1459,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkerTask {
             id: Result<String, String>,
             name: Result<String, String>,
@@ -1512,6 +1530,7 @@ pub mod types {
             }
         }
 
+        #[derive(Clone, Debug)]
         pub struct WorkersResult {
             workers: Result<Vec<super::Worker>, String>,
         }
@@ -1959,14 +1978,14 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct TaskSubmit<'a> {
         client: &'a super::Client,
-        body: Result<types::TaskSubmit, String>,
+        body: Result<types::builder::TaskSubmit, String>,
     }
 
     impl<'a> TaskSubmit<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::TaskSubmit::default()),
             }
         }
 
@@ -1976,14 +1995,25 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `TaskSubmit` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(types::builder::TaskSubmit) -> types::builder::TaskSubmit,
+        {
+            self.body = self.body.map(f);
             self
         }
 
         ///Sends a `POST` request to `/v1/tasks`
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
             let Self { client, body } = self;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::TaskSubmit::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/tasks", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -2179,14 +2209,14 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct UserCreate<'a> {
         client: &'a super::Client,
-        body: Result<types::UserCreate, String>,
+        body: Result<types::builder::UserCreate, String>,
     }
 
     impl<'a> UserCreate<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::UserCreate::default()),
             }
         }
 
@@ -2196,14 +2226,25 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `UserCreate` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(types::builder::UserCreate) -> types::builder::UserCreate,
+        {
+            self.body = self.body.map(f);
             self
         }
 
         ///Sends a `POST` request to `/v1/users`
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
             let Self { client, body } = self;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::UserCreate::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/users", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -2248,14 +2289,14 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct WorkerBootstrap<'a> {
         client: &'a super::Client,
-        body: Result<types::WorkerBootstrap, String>,
+        body: Result<types::builder::WorkerBootstrap, String>,
     }
 
     impl<'a> WorkerBootstrap<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client,
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::WorkerBootstrap::default()),
             }
         }
 
@@ -2265,14 +2306,25 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `WorkerBootstrap` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(types::builder::WorkerBootstrap) -> types::builder::WorkerBootstrap,
+        {
+            self.body = self.body.map(f);
             self
         }
 
         ///Sends a `POST` request to `/v1/worker/bootstrap`
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
             let Self { client, body } = self;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::WorkerBootstrap::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
@@ -2318,7 +2370,7 @@ pub mod builder {
     pub struct WorkerTaskAppend<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
-        body: Result<types::WorkerAppendTask, String>,
+        body: Result<types::builder::WorkerAppendTask, String>,
     }
 
     impl<'a> WorkerTaskAppend<'a> {
@@ -2326,7 +2378,7 @@ pub mod builder {
             Self {
                 client,
                 task: Err("task was not initialized".to_string()),
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::WorkerAppendTask::default()),
             }
         }
 
@@ -2346,7 +2398,18 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `WorkerAppendTask` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(
+                types::builder::WorkerAppendTask,
+            ) -> types::builder::WorkerAppendTask,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -2354,7 +2417,9 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::WorkerAppendTask::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/append",
                 client.baseurl,
@@ -2444,7 +2509,7 @@ pub mod builder {
     pub struct WorkerTaskComplete<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
-        body: Result<types::WorkerCompleteTask, String>,
+        body: Result<types::builder::WorkerCompleteTask, String>,
     }
 
     impl<'a> WorkerTaskComplete<'a> {
@@ -2452,7 +2517,7 @@ pub mod builder {
             Self {
                 client,
                 task: Err("task was not initialized".to_string()),
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::WorkerCompleteTask::default()),
             }
         }
 
@@ -2472,7 +2537,18 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `WorkerCompleteTask` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(
+                types::builder::WorkerCompleteTask,
+            ) -> types::builder::WorkerCompleteTask,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -2480,7 +2556,9 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::WorkerCompleteTask::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/complete",
                 client.baseurl,
@@ -2503,7 +2581,7 @@ pub mod builder {
     pub struct WorkerTaskAddOutput<'a> {
         client: &'a super::Client,
         task: Result<String, String>,
-        body: Result<types::WorkerAddOutput, String>,
+        body: Result<types::builder::WorkerAddOutput, String>,
     }
 
     impl<'a> WorkerTaskAddOutput<'a> {
@@ -2511,7 +2589,7 @@ pub mod builder {
             Self {
                 client,
                 task: Err("task was not initialized".to_string()),
-                body: Err("body was not initialized".to_string()),
+                body: Ok(types::builder::WorkerAddOutput::default()),
             }
         }
 
@@ -2531,7 +2609,16 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
+                .map(From::from)
                 .map_err(|_| "conversion to `WorkerAddOutput` for body failed".to_string());
+            self
+        }
+
+        pub fn body_map<F>(mut self, f: F) -> Self
+        where
+            F: std::ops::FnOnce(types::builder::WorkerAddOutput) -> types::builder::WorkerAddOutput,
+        {
+            self.body = self.body.map(f);
             self
         }
 
@@ -2539,7 +2626,9 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
-            let body = body.map_err(Error::InvalidRequest)?;
+            let body = body
+                .and_then(types::WorkerAddOutput::try_from)
+                .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/output",
                 client.baseurl,

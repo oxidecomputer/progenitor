@@ -1357,8 +1357,19 @@ impl Generator {
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
-                    let t = ty.ident();
-                    Ok(quote! { Result<#t, String> })
+
+                    // For body parameters only, if there's a builder we'll
+                    // nest that within this builder.
+                    if let (
+                        OperationParameterKind::Body(_),
+                        Some(builder_name),
+                    ) = (&param.kind, ty.builder())
+                    {
+                        Ok(quote! { Result<#builder_name, String> })
+                    } else {
+                        let t = ty.ident();
+                        Ok(quote! { Result<#t, String> })
+                    }
                 }
 
                 OperationParameterType::RawBody => {
@@ -1372,21 +1383,49 @@ impl Generator {
         let param_values = method
             .params
             .iter()
-            .map(|param| {
-                let opt = match &param.typ {
-                    OperationParameterType::Type(type_id) => {
-                        let ty = self.type_space.get_type(type_id)?;
-                        let details = ty.details();
-                        matches!(&details, typify::TypeDetails::Option(_))
+            .map(|param| match &param.typ {
+                OperationParameterType::Type(type_id) => {
+                    let ty = self.type_space.get_type(type_id)?;
+                    let details = ty.details();
+                    let optional =
+                        matches!(&details, typify::TypeDetails::Option(_));
+                    if optional {
+                        Ok(quote! { Ok(None) })
+                    } else if let (
+                        OperationParameterKind::Body(_),
+                        Some(builder_name),
+                    ) = (&param.kind, ty.builder())
+                    {
+                        Ok(quote! { Ok(#builder_name :: default()) })
+                    } else {
+                        let err_msg =
+                            format!("{} was not initialized", param.name);
+                        Ok(quote! { Err(#err_msg.to_string()) })
                     }
-                    OperationParameterType::RawBody => false,
-                };
-                if opt {
-                    Ok(quote! { Ok(None) })
-                } else {
+                }
+                OperationParameterType::RawBody => {
                     let err_msg = format!("{} was not initialized", param.name);
                     Ok(quote! { Err(#err_msg.to_string()) })
                 }
+            })
+            .collect::<Result<Vec<_>>>()?;
+
+        let param_xxx = method
+            .params
+            .iter()
+            .map(|param| match &param.typ {
+                OperationParameterType::Type(type_id) => {
+                    let ty = self.type_space.get_type(type_id)?;
+                    if let Some(_) = ty.builder() {
+                        let type_name = ty.ident();
+                        Ok(quote! {
+                            .and_then(#type_name :: try_from)
+                        })
+                    } else {
+                        Ok(quote! {})
+                    }
+                }
+                OperationParameterType::RawBody => Ok(quote! {}),
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -1401,8 +1440,13 @@ impl Generator {
                     OperationParameterType::Type(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
                         let details = ty.details();
-                        match &details {
-                            typify::TypeDetails::Option(opt_id) => {
+                        match (&details, ty.builder()) {
+                            // TODO right now optional body paramters are not
+                            // addressed
+                            (typify::TypeDetails::Option(_), Some(_)) => {
+                                unreachable!()
+                            }
+                            (typify::TypeDetails::Option(opt_id), None) => {
                                 // TODO currently we explicitly turn optional
                                 // parameters into Option types; we could
                                 // probably defer this to the code generation
@@ -1429,7 +1473,7 @@ impl Generator {
                                     }
                                 })
                             }
-                            _ => {
+                            (_, None) => {
                                 let typ = ty.ident();
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
@@ -1445,6 +1489,35 @@ impl Generator {
                                     {
                                         self.#param_name = value.try_into()
                                             .map_err(|_| #err_msg.to_string());
+                                        self
+                                    }
+                                })
+                            }
+                            (_, Some(builder_name)) => {
+                                assert_eq!(param.name, "body");
+                                let typ = ty.ident();
+                                let err_msg = format!(
+                                    "conversion to `{}` for {} failed",
+                                    ty.name(),
+                                    param.name,
+                                );
+                                Ok(quote! {
+                                    pub fn body<V>(mut self, value: V) -> Self
+                                    where
+                                        V: std::convert::TryInto<#typ>,
+                                    {
+                                        self.body = value.try_into()
+                                            .map(From::from)
+                                            .map_err(|_| #err_msg.to_string());
+                                        self
+                                    }
+
+                                    pub fn body_map<F>(mut self, f: F) -> Self
+                                    where
+                                        F: std::ops::FnOnce(#builder_name)
+                                            -> #builder_name,
+                                    {
+                                        self.body = self.body.map(f);
                                         self
                                     }
                                 })
@@ -1483,6 +1556,35 @@ impl Generator {
             method.method.as_str().to_ascii_uppercase(),
             method.path.to_string(),
         );
+        let send_impl = quote! {
+            #[doc = #send_doc]
+            pub async fn send(self) -> Result<
+                ResponseValue<#success>,
+                Error<#error>,
+            > {
+                // Destructure the builder for convenience.
+                let Self {
+                    client,
+                    #( #param_names, )*
+                } = self;
+
+                // Extract parameters into variables, returning an error if
+                // a value has not been provided or there was a conversion
+                // error.
+                //
+                // TODO we could do something a bit nicer by collecting all
+                // errors rather than just reporting the first one.
+                #(
+                let #param_names =
+                    #param_names
+                        #param_xxx
+                        .map_err(Error::InvalidRequest)?;
+                )*
+
+                // Do the work.
+                #body
+            }
+        };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
             // We're now using futures.
@@ -1668,33 +1770,7 @@ impl Generator {
                 }
 
                 #( #param_impls )*
-
-                #[doc = #send_doc]
-                pub async fn send(self) -> Result<
-                    ResponseValue<#success>,
-                    Error<#error>,
-                > {
-                    // Destructure the builder for convenience.
-                    let Self {
-                        client,
-                        #( #param_names, )*
-                    } = self;
-
-                    // Extract parameters into variables, returning an error if
-                    // a value has not been provided or there was a conversion
-                    // error.
-                    //
-                    // TODO we could do something a bit nicer by collecting all
-                    // errors rather than just reporting the first one.
-                    #(
-                    let #param_names =
-                        #param_names.map_err(Error::InvalidRequest)?;
-                    )*
-
-                    // Do the work.
-                    #body
-                }
-
+                #send_impl
                 #stream_impl
             }
         })
