@@ -2012,7 +2012,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(types::TaskSubmit::try_from)
+                .and_then(std::convert::TryInto::<types::TaskSubmit>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/tasks", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
@@ -2243,7 +2243,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(types::UserCreate::try_from)
+                .and_then(std::convert::TryInto::<types::UserCreate>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/users", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
@@ -2323,7 +2323,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(types::WorkerBootstrap::try_from)
+                .and_then(std::convert::TryInto::<types::WorkerBootstrap>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
@@ -2418,7 +2418,7 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(types::WorkerAppendTask::try_from)
+                .and_then(std::convert::TryInto::<types::WorkerAppendTask>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/append",
@@ -2557,7 +2557,7 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(types::WorkerCompleteTask::try_from)
+                .and_then(std::convert::TryInto::<types::WorkerCompleteTask>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/complete",
@@ -2627,7 +2627,7 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(types::WorkerAddOutput::try_from)
+                .and_then(std::convert::TryInto::<types::WorkerAddOutput>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/output",

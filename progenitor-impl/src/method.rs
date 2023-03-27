@@ -1416,10 +1416,12 @@ impl Generator {
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
-                    if let Some(_) = ty.builder() {
+                    if ty.builder().is_some() {
                         let type_name = ty.ident();
                         Ok(quote! {
-                            .and_then(#type_name :: try_from)
+                            .and_then(
+                                std::convert::TryInto::<#type_name>::try_into
+                            )
                         })
                     } else {
                         Ok(quote! {})
