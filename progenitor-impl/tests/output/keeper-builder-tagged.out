@@ -1104,7 +1104,7 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(types::EnrolBody::try_from)
+                .and_then(std::convert::TryInto::<types::EnrolBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/enrol", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
@@ -1277,7 +1277,7 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(types::ReportFinishBody::try_from)
+                .and_then(std::convert::TryInto::<types::ReportFinishBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/finish", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
@@ -1356,7 +1356,7 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(types::ReportOutputBody::try_from)
+                .and_then(std::convert::TryInto::<types::ReportOutputBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/output", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
@@ -1433,7 +1433,7 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(types::ReportStartBody::try_from)
+                .and_then(std::convert::TryInto::<types::ReportStartBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/start", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);

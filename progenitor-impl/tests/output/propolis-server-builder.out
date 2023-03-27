@@ -2180,7 +2180,7 @@ pub mod builder {
         ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(types::InstanceEnsureRequest::try_from)
+                .and_then(std::convert::TryInto::<types::InstanceEnsureRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance", client.baseurl,);
             let request = client.client.put(url).json(&body).build()?;
@@ -2314,7 +2314,7 @@ pub mod builder {
         {
             let Self { client, body } = self;
             let body = body
-                .and_then(types::InstanceMigrateStatusRequest::try_from)
+                .and_then(std::convert::TryInto::<types::InstanceMigrateStatusRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/migrate/status", client.baseurl,);
             let request = client.client.get(url).json(&body).build()?;
@@ -2468,7 +2468,7 @@ pub mod builder {
         {
             let Self { client, body } = self;
             let body = body
-                .and_then(types::InstanceStateMonitorRequest::try_from)
+                .and_then(std::convert::TryInto::<types::InstanceStateMonitorRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state-monitor", client.baseurl,);
             let request = client.client.get(url).json(&body).build()?;
