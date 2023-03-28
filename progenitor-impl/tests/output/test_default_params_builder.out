@@ -333,7 +333,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(types::BodyWithDefaults::try_from)
+                .and_then(std::convert::TryInto::<types::BodyWithDefaults>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/", client.baseurl,);
             let request = client.client.post(url).json(&body).build()?;
