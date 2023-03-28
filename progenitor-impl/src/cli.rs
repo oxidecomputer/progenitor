@@ -536,17 +536,3 @@ impl Generator {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use std::fs::File;
-
-    use crate::Generator;
-
-    #[test]
-    fn test_cli() {
-        let file = File::open("../sample_openapi/keeper.json").unwrap();
-        let spec = serde_json::from_reader(file).unwrap();
-        Generator::default().cli(&spec, "oxide_api");
-    }
-}

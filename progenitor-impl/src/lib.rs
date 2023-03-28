@@ -213,16 +213,11 @@ impl Generator {
         validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
-        let schemas = spec
-            .components
-            .iter()
-            .flat_map(|components| {
-                components.schemas.iter().map(|(name, ref_or_schema)| {
-                    (name.clone(), ref_or_schema.to_schema())
-                })
+        let schemas = spec.components.iter().flat_map(|components| {
+            components.schemas.iter().map(|(name, ref_or_schema)| {
+                (name.clone(), ref_or_schema.to_schema())
             })
-            // .collect::<Vec<_>>();
-            ;
+        });
 
         self.type_space.add_ref_types(schemas)?;
 

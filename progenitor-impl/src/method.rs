@@ -1147,28 +1147,7 @@ impl Generator {
             .into_iter()
             .next()
             // TODO should this be OperationResponseType::Raw?
-            .unwrap_or_else(|| OperationResponseType::None);
-        // let response_type = response_types
-        //     .iter()
-        //     .next()
-        //     .map(|typ| match typ {
-        //         OperationResponseType::Type(type_id) => {
-        //             let type_name =
-        //                 self.type_space.get_type(type_id).unwrap().ident();
-        //             quote! { #type_name }
-        //         }
-        //         OperationResponseType::None => {
-        //             quote! { () }
-        //         }
-        //         OperationResponseType::Raw => {
-        //             quote! { ByteStream }
-        //         }
-        //         OperationResponseType::Upgrade => {
-        //             quote! { reqwest::Upgraded }
-        //         }
-        //     })
-        //     // TODO should this be a bytestream?
-        //     .unwrap_or_else(|| quote! { () });
+            .unwrap_or(OperationResponseType::None);
         (response_items, response_type)
     }
 

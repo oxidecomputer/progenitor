@@ -1,0 +1,340 @@
+pub struct Cli {
+    client: sdk::Client,
+}
+
+impl Cli {
+    pub fn new(client: sdk::Client) -> Self {
+        Self { client }
+    }
+
+    pub fn cli_instance_get() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub async fn execute_instance_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.instance_get();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub fn cli_instance_ensure() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub async fn execute_instance_ensure(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.instance_ensure();
+        let request = request.body({
+            let mut body = types::InstanceEnsureRequest::builder();
+            body
+        });
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub fn cli_instance_issue_crucible_snapshot_request() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("id")
+                    .long("id")
+                    .required(true)
+                    .value_parser(clap::value_parser!(uuid::Uuid)),
+            )
+            .arg(
+                clap::Arg::new("snapshot-id")
+                    .long("snapshot-id")
+                    .required(true)
+                    .value_parser(clap::value_parser!(uuid::Uuid)),
+            )
+            .about("Issue a snapshot request to a crucible backend")
+    }
+
+    pub async fn execute_instance_issue_crucible_snapshot_request(
+        &self,
+        matches: &clap::ArgMatches,
+    ) {
+        let mut request = self.client.instance_issue_crucible_snapshot_request();
+        if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
+            request = request.id(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<uuid::Uuid>("snapshot-id") {
+            request = request.snapshot_id(value.clone());
+        }
+
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub fn cli_instance_migrate_status() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("migration-id")
+                .long("migration-id")
+                .required(true)
+                .value_parser(clap::value_parser!(uuid::Uuid)),
+        )
+    }
+
+    pub async fn execute_instance_migrate_status(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.instance_migrate_status();
+        let request = request.body({
+            let mut body = types::InstanceMigrateStatusRequest::builder();
+            if let Some(value) = matches.get_one::<uuid::Uuid>("migration-id") {
+                body = body.migration_id(value.clone());
+            }
+            body
+        });
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub fn cli_instance_serial() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub async fn execute_instance_serial(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.instance_serial();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                todo!()
+            }
+            Err(r) => {
+                todo!()
+            }
+        }
+    }
+
+    pub fn cli_instance_state_put() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub async fn execute_instance_state_put(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.instance_state_put();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub fn cli_instance_state_monitor() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("gen")
+                .long("gen")
+                .required(true)
+                .value_parser(clap::value_parser!(u64)),
+        )
+    }
+
+    pub async fn execute_instance_state_monitor(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.instance_state_monitor();
+        let request = request.body({
+            let mut body = types::InstanceStateMonitorRequest::builder();
+            if let Some(value) = matches.get_one::<u64>("gen") {
+                body = body.gen(value.clone());
+            }
+            body
+        });
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub fn get_command(cmd: CliCommand) -> clap::Command {
+        match cmd {
+            CliCommand::InstanceGet => Self::cli_instance_get(),
+            CliCommand::InstanceEnsure => Self::cli_instance_ensure(),
+            CliCommand::InstanceIssueCrucibleSnapshotRequest => {
+                Self::cli_instance_issue_crucible_snapshot_request()
+            }
+            CliCommand::InstanceMigrateStatus => Self::cli_instance_migrate_status(),
+            CliCommand::InstanceSerial => Self::cli_instance_serial(),
+            CliCommand::InstanceStatePut => Self::cli_instance_state_put(),
+            CliCommand::InstanceStateMonitor => Self::cli_instance_state_monitor(),
+        }
+    }
+
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+        let _ = match cmd {
+            CliCommand::InstanceGet => {
+                self.execute_instance_get(matches).await;
+            }
+            CliCommand::InstanceEnsure => {
+                self.execute_instance_ensure(matches).await;
+            }
+            CliCommand::InstanceIssueCrucibleSnapshotRequest => {
+                self.execute_instance_issue_crucible_snapshot_request(matches)
+                    .await;
+            }
+            CliCommand::InstanceMigrateStatus => {
+                self.execute_instance_migrate_status(matches).await;
+            }
+            CliCommand::InstanceSerial => {
+                self.execute_instance_serial(matches).await;
+            }
+            CliCommand::InstanceStatePut => {
+                self.execute_instance_state_put(matches).await;
+            }
+            CliCommand::InstanceStateMonitor => {
+                self.execute_instance_state_monitor(matches).await;
+            }
+        };
+    }
+}
+
+pub trait CliOverride {
+    fn cli_instance_get(cmd: clap::Command) -> clap::Command {
+        cmd
+    }
+
+    fn execute_instance_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut (),
+        body: &mut (),
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn cli_instance_ensure(cmd: clap::Command) -> clap::Command {
+        cmd
+    }
+
+    fn execute_instance_ensure(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut (),
+        body: &mut (),
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn cli_instance_issue_crucible_snapshot_request(cmd: clap::Command) -> clap::Command {
+        cmd
+    }
+
+    fn execute_instance_issue_crucible_snapshot_request(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut (),
+        body: &mut (),
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn cli_instance_migrate_status(cmd: clap::Command) -> clap::Command {
+        cmd
+    }
+
+    fn execute_instance_migrate_status(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut (),
+        body: &mut (),
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn cli_instance_serial(cmd: clap::Command) -> clap::Command {
+        cmd
+    }
+
+    fn execute_instance_serial(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut (),
+        body: &mut (),
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn cli_instance_state_put(cmd: clap::Command) -> clap::Command {
+        cmd
+    }
+
+    fn execute_instance_state_put(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut (),
+        body: &mut (),
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn cli_instance_state_monitor(cmd: clap::Command) -> clap::Command {
+        cmd
+    }
+
+    fn execute_instance_state_monitor(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut (),
+        body: &mut (),
+    ) -> Result<(), String> {
+        Ok(())
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
+pub enum CliCommand {
+    InstanceGet,
+    InstanceEnsure,
+    InstanceIssueCrucibleSnapshotRequest,
+    InstanceMigrateStatus,
+    InstanceSerial,
+    InstanceStatePut,
+    InstanceStateMonitor,
+}
+
+impl CliCommand {
+    pub fn iter() -> impl Iterator<Item = CliCommand> {
+        vec![
+            CliCommand::InstanceGet,
+            CliCommand::InstanceEnsure,
+            CliCommand::InstanceIssueCrucibleSnapshotRequest,
+            CliCommand::InstanceMigrateStatus,
+            CliCommand::InstanceSerial,
+            CliCommand::InstanceStatePut,
+            CliCommand::InstanceStateMonitor,
+        ]
+        .into_iter()
+    }
+}

@@ -1,0 +1,88 @@
+pub struct Cli {
+    client: sdk::Client,
+}
+
+impl Cli {
+    pub fn new(client: sdk::Client) -> Self {
+        Self { client }
+    }
+
+    pub fn cli_key_get() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("key")
+                    .long("key")
+                    .required(false)
+                    .value_parser(clap::value_parser!(bool))
+                    .help("The same key parameter that overlaps with the path level parameter"),
+            )
+            .arg(
+                clap::Arg::new("unique-key")
+                    .long("unique-key")
+                    .required(false)
+                    .value_parser(clap::value_parser!(String))
+                    .help("A key parameter that will not be overridden by the path spec"),
+            )
+    }
+
+    pub async fn execute_key_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.key_get();
+        if let Some(value) = matches.get_one::<bool>("key") {
+            request = request.key(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("unique-key") {
+            request = request.unique_key(value.clone());
+        }
+
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub fn get_command(cmd: CliCommand) -> clap::Command {
+        match cmd {
+            CliCommand::KeyGet => Self::cli_key_get(),
+        }
+    }
+
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+        let _ = match cmd {
+            CliCommand::KeyGet => {
+                self.execute_key_get(matches).await;
+            }
+        };
+    }
+}
+
+pub trait CliOverride {
+    fn cli_key_get(cmd: clap::Command) -> clap::Command {
+        cmd
+    }
+
+    fn execute_key_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut (),
+        body: &mut (),
+    ) -> Result<(), String> {
+        Ok(())
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
+pub enum CliCommand {
+    KeyGet,
+}
+
+impl CliCommand {
+    pub fn iter() -> impl Iterator<Item = CliCommand> {
+        vec![CliCommand::KeyGet].into_iter()
+    }
+}
