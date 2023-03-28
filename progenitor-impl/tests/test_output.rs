@@ -34,6 +34,7 @@ fn verify_apis(openapi_file: &str) {
 
     let spec = load_api(in_path);
 
+    // Positional generation.
     let mut generator = Generator::default();
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
     expectorate::assert_contents(
@@ -41,6 +42,7 @@ fn verify_apis(openapi_file: &str) {
         &output,
     );
 
+    // Builder generation with derives and patches.
     let mut generator = Generator::new(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
@@ -65,15 +67,22 @@ fn verify_apis(openapi_file: &str) {
         &output,
     );
 
+    // Builder generation with tags.
     let mut generator = Generator::new(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Separate),
     );
     let output = generator.generate_text_normalize_comments(&spec).unwrap();
-    println!("{output}");
     expectorate::assert_contents(
         format!("tests/output/{}-builder-tagged.out", openapi_stem),
+        &output,
+    );
+
+    // CLI generation.
+    let output = generator.cli_text(&spec, "sdk").unwrap();
+    expectorate::assert_contents(
+        format!("tests/output/{}-cli.out", openapi_stem),
         &output,
     );
 }

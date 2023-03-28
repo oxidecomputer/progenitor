@@ -14,6 +14,7 @@ use crate::to_schema::ToSchema;
 pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
 
+mod cli;
 mod method;
 mod template;
 mod to_schema;
@@ -212,15 +213,11 @@ impl Generator {
         validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
-        let schemas = spec
-            .components
-            .iter()
-            .flat_map(|components| {
-                components.schemas.iter().map(|(name, ref_or_schema)| {
-                    (name.clone(), ref_or_schema.to_schema())
-                })
+        let schemas = spec.components.iter().flat_map(|components| {
+            components.schemas.iter().map(|(name, ref_or_schema)| {
+                (name.clone(), ref_or_schema.to_schema())
             })
-            .collect::<Vec<(String, _)>>();
+        });
 
         self.type_space.add_ref_types(schemas)?;
 
@@ -521,14 +518,7 @@ impl Generator {
         // Format the file with rustfmt.
         let content = rustfmt_wrapper::rustfmt_config(config, output).unwrap();
 
-        // Add newlines after end-braces at <= two levels of indentation.
-        Ok(if cfg!(not(windows)) {
-            let regex = regex::Regex::new(r#"(})(\n\s{0,8}[^} ])"#).unwrap();
-            regex.replace_all(&content, "$1\n$2").to_string()
-        } else {
-            let regex = regex::Regex::new(r#"(})(\r\n\s{0,8}[^} ])"#).unwrap();
-            regex.replace_all(&content, "$1\r\n$2").to_string()
-        })
+        space_out_items(content)
     }
 
     // TODO deprecate?
@@ -545,7 +535,18 @@ impl Generator {
     }
 }
 
-fn validate_openapi(spec: &OpenAPI) -> Result<()> {
+pub(crate) fn space_out_items(content: String) -> Result<String> {
+    // Add newlines after end-braces at <= two levels of indentation.
+    Ok(if cfg!(not(windows)) {
+        let regex = regex::Regex::new(r#"(})(\n\s{0,8}[^} ])"#).unwrap();
+        regex.replace_all(&content, "$1\n$2").to_string()
+    } else {
+        let regex = regex::Regex::new(r#"(})(\r\n\s{0,8}[^} ])"#).unwrap();
+        regex.replace_all(&content, "$1\r\n$2").to_string()
+    })
+}
+
+pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     match spec.openapi.as_str() {
         "3.0.0" | "3.0.1" | "3.0.2" | "3.0.3" => (),
         v => {
