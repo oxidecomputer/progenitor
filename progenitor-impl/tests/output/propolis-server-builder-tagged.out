@@ -1955,6 +1955,8 @@ pub mod types {
 ///Client for Oxide Propolis Server API
 ///
 ///API for interacting with the Propolis hypervisor frontend.
+///
+///Version: 0.0.1
 pub struct Client {
     pub(crate) baseurl: String,
     pub(crate) client: reqwest::Client,
@@ -1989,14 +1991,22 @@ impl Client {
         }
     }
 
-    /// Return the base URL to which requests are made.
+    /// Get the base URL to which requests are made.
     pub fn baseurl(&self) -> &String {
         &self.baseurl
     }
 
-    /// Return the internal `reqwest::Client` used to make requests.
+    /// Get the internal `reqwest::Client` used to make requests.
     pub fn client(&self) -> &reqwest::Client {
         &self.client
+    }
+
+    /// Get the version of this API.
+    ///
+    /// This string is pulled directly from the source OpenAPI
+    /// document and may be in any format the API selects.
+    pub fn api_version(&self) -> &'static str {
+        "0.0.1"
     }
 }
 

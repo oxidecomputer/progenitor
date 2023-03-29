@@ -289,12 +289,25 @@ impl Generator {
             }
         });
 
-        let client_docstring = if let Some(description) = &spec.info.description
-        {
-            format!("Client for {}\n\n{}", spec.info.title, description)
-        } else {
-            format!("Client for {}", spec.info.title)
+        let client_docstring = {
+            let mut s = format!("Client for {}", spec.info.title);
+
+            if let Some(ss) = &spec.info.description {
+                s.push_str("\n\n");
+                s.push_str(ss);
+            }
+            if let Some(ss) = &spec.info.terms_of_service {
+                s.push_str("\n\n");
+                s.push_str(ss);
+            }
+
+            s.push_str(&format!("\n\nVersion: {}", &spec.info.version));
+
+            s
         };
+
+        let version_str = &spec.info.version;
+
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
@@ -359,14 +372,22 @@ impl Generator {
                     }
                 }
 
-                /// Return the base URL to which requests are made.
+                /// Get the base URL to which requests are made.
                 pub fn baseurl(&self) -> &String {
                     &self.baseurl
                 }
 
-                /// Return the internal `reqwest::Client` used to make requests.
+                /// Get the internal `reqwest::Client` used to make requests.
                 pub fn client(&self) -> &reqwest::Client {
                     &self.client
+                }
+
+                /// Get the version of this API.
+                ///
+                /// This string is pulled directly from the source OpenAPI
+                /// document and may be in any format the API selects.
+                pub fn api_version(&self) -> &'static str {
+                    #version_str
                 }
 
                 #maybe_inner
