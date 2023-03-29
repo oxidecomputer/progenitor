@@ -1,10 +1,22 @@
-pub struct Cli {
+pub struct Cli<T: CliOverride = ()> {
     client: sdk::Client,
+    over: T,
 }
 
 impl Cli {
     pub fn new(client: sdk::Client) -> Self {
-        Self { client }
+        Self { client, over: () }
+    }
+
+    pub fn get_command(cmd: CliCommand) -> clap::Command {
+        match cmd {
+            CliCommand::Enrol => Self::cli_enrol(),
+            CliCommand::GlobalJobs => Self::cli_global_jobs(),
+            CliCommand::Ping => Self::cli_ping(),
+            CliCommand::ReportFinish => Self::cli_report_finish(),
+            CliCommand::ReportOutput => Self::cli_report_output(),
+            CliCommand::ReportStart => Self::cli_report_start(),
+        }
     }
 
     pub fn cli_enrol() -> clap::Command {
@@ -30,33 +42,6 @@ impl Cli {
             )
     }
 
-    pub async fn execute_enrol(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.enrol();
-        if let Some(value) = matches.get_one::<String>("authorization") {
-            request = request.authorization(value.clone());
-        }
-
-        let request = request.body({
-            let mut body = types::EnrolBody::builder();
-            if let Some(value) = matches.get_one::<String>("host") {
-                body = body.host(value.clone());
-            }
-            if let Some(value) = matches.get_one::<String>("key") {
-                body = body.key(value.clone());
-            }
-            body
-        });
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
-    }
-
     pub fn cli_global_jobs() -> clap::Command {
         clap::Command::new("").arg(
             clap::Arg::new("authorization")
@@ -67,23 +52,6 @@ impl Cli {
         )
     }
 
-    pub async fn execute_global_jobs(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.global_jobs();
-        if let Some(value) = matches.get_one::<String>("authorization") {
-            request = request.authorization(value.clone());
-        }
-
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
-    }
-
     pub fn cli_ping() -> clap::Command {
         clap::Command::new("").arg(
             clap::Arg::new("authorization")
@@ -92,23 +60,6 @@ impl Cli {
                 .value_parser(clap::value_parser!(String))
                 .help("Authorization header (bearer token)"),
         )
-    }
-
-    pub async fn execute_ping(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.ping();
-        if let Some(value) = matches.get_one::<String>("authorization") {
-            request = request.authorization(value.clone());
-        }
-
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
     }
 
     pub fn cli_report_finish() -> clap::Command {
@@ -140,38 +91,6 @@ impl Cli {
             )
     }
 
-    pub async fn execute_report_finish(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.report_finish();
-        if let Some(value) = matches.get_one::<String>("authorization") {
-            request = request.authorization(value.clone());
-        }
-
-        let request = request.body({
-            let mut body = types::ReportFinishBody::builder();
-            if let Some(value) = matches.get_one::<i32>("duration-millis") {
-                body = body.duration_millis(value.clone());
-            }
-            if let Some(value) =
-                matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("end-time")
-            {
-                body = body.end_time(value.clone());
-            }
-            if let Some(value) = matches.get_one::<i32>("exit-status") {
-                body = body.exit_status(value.clone());
-            }
-            body
-        });
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
-    }
-
     pub fn cli_report_output() -> clap::Command {
         clap::Command::new("").arg(
             clap::Arg::new("authorization")
@@ -180,27 +99,6 @@ impl Cli {
                 .value_parser(clap::value_parser!(String))
                 .help("Authorization header (bearer token)"),
         )
-    }
-
-    pub async fn execute_report_output(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.report_output();
-        if let Some(value) = matches.get_one::<String>("authorization") {
-            request = request.authorization(value.clone());
-        }
-
-        let request = request.body({
-            let mut body = types::ReportOutputBody::builder();
-            body
-        });
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
     }
 
     pub fn cli_report_start() -> clap::Command {
@@ -225,49 +123,15 @@ impl Cli {
                     .value_parser(clap::value_parser!(chrono::DateTime<chrono::offset::Utc>)),
             )
     }
+}
 
-    pub async fn execute_report_start(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.report_start();
-        if let Some(value) = matches.get_one::<String>("authorization") {
-            request = request.authorization(value.clone());
-        }
-
-        let request = request.body({
-            let mut body = types::ReportStartBody::builder();
-            if let Some(value) = matches.get_one::<String>("script") {
-                body = body.script(value.clone());
-            }
-            if let Some(value) =
-                matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("start-time")
-            {
-                body = body.start_time(value.clone());
-            }
-            body
-        });
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
-    }
-
-    pub fn get_command(cmd: CliCommand) -> clap::Command {
-        match cmd {
-            CliCommand::Enrol => Self::cli_enrol(),
-            CliCommand::GlobalJobs => Self::cli_global_jobs(),
-            CliCommand::Ping => Self::cli_ping(),
-            CliCommand::ReportFinish => Self::cli_report_finish(),
-            CliCommand::ReportOutput => Self::cli_report_output(),
-            CliCommand::ReportStart => Self::cli_report_start(),
-        }
+impl<T: CliOverride> Cli<T> {
+    pub fn new_with_override(client: sdk::Client, over: T) -> Self {
+        Self { client, over }
     }
 
     pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
-        let _ = match cmd {
+        match cmd {
             CliCommand::Enrol => {
                 self.execute_enrol(matches).await;
             }
@@ -286,89 +150,206 @@ impl Cli {
             CliCommand::ReportStart => {
                 self.execute_report_start(matches).await;
             }
-        };
+        }
+    }
+
+    pub async fn execute_enrol(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.enrol();
+        if let Some(value) = matches.get_one::<String>("authorization") {
+            request = request.authorization(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("host") {
+            request = request.body_map(|body| body.host(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("key") {
+            request = request.body_map(|body| body.key(value.clone()))
+        }
+
+        self.over.execute_enrol(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_global_jobs(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.global_jobs();
+        if let Some(value) = matches.get_one::<String>("authorization") {
+            request = request.authorization(value.clone());
+        }
+
+        self.over
+            .execute_global_jobs(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_ping(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.ping();
+        if let Some(value) = matches.get_one::<String>("authorization") {
+            request = request.authorization(value.clone());
+        }
+
+        self.over.execute_ping(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_report_finish(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.report_finish();
+        if let Some(value) = matches.get_one::<String>("authorization") {
+            request = request.authorization(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<i32>("duration-millis") {
+            request = request.body_map(|body| body.duration_millis(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("end-time") {
+            request = request.body_map(|body| body.end_time(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<i32>("exit-status") {
+            request = request.body_map(|body| body.exit_status(value.clone()))
+        }
+
+        self.over
+            .execute_report_finish(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_report_output(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.report_output();
+        if let Some(value) = matches.get_one::<String>("authorization") {
+            request = request.authorization(value.clone());
+        }
+
+        self.over
+            .execute_report_output(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_report_start(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.report_start();
+        if let Some(value) = matches.get_one::<String>("authorization") {
+            request = request.authorization(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("script") {
+            request = request.body_map(|body| body.script(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("start-time")
+        {
+            request = request.body_map(|body| body.start_time(value.clone()))
+        }
+
+        self.over
+            .execute_report_start(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
     }
 }
 
 pub trait CliOverride {
-    fn cli_enrol(cmd: clap::Command) -> clap::Command {
-        cmd
-    }
-
     fn execute_enrol(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut (),
-        body: &mut (),
+        request: &mut builder::Enrol,
     ) -> Result<(), String> {
         Ok(())
-    }
-
-    fn cli_global_jobs(cmd: clap::Command) -> clap::Command {
-        cmd
     }
 
     fn execute_global_jobs(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut (),
-        body: &mut (),
+        request: &mut builder::GlobalJobs,
     ) -> Result<(), String> {
         Ok(())
-    }
-
-    fn cli_ping(cmd: clap::Command) -> clap::Command {
-        cmd
     }
 
     fn execute_ping(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut (),
-        body: &mut (),
+        request: &mut builder::Ping,
     ) -> Result<(), String> {
         Ok(())
-    }
-
-    fn cli_report_finish(cmd: clap::Command) -> clap::Command {
-        cmd
     }
 
     fn execute_report_finish(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut (),
-        body: &mut (),
+        request: &mut builder::ReportFinish,
     ) -> Result<(), String> {
         Ok(())
-    }
-
-    fn cli_report_output(cmd: clap::Command) -> clap::Command {
-        cmd
     }
 
     fn execute_report_output(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut (),
-        body: &mut (),
+        request: &mut builder::ReportOutput,
     ) -> Result<(), String> {
         Ok(())
-    }
-
-    fn cli_report_start(cmd: clap::Command) -> clap::Command {
-        cmd
     }
 
     fn execute_report_start(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut (),
-        body: &mut (),
+        request: &mut builder::ReportStart,
     ) -> Result<(), String> {
         Ok(())
     }
 }
+
+impl CliOverride for () {}
 
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {

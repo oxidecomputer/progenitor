@@ -19,7 +19,6 @@ use crate::{
 struct CliOperation {
     cli_fn: TokenStream,
     execute_fn: TokenStream,
-    cli_trait: TokenStream,
     execute_trait: TokenStream,
 }
 
@@ -87,33 +86,7 @@ impl Generator {
 
         let cli_ops = methods.iter().map(|op| &op.cli_fn);
         let execute_ops = methods.iter().map(|op| &op.execute_fn);
-        let ops = methods.iter().map(
-            |CliOperation {
-                 cli_fn,
-                 execute_fn,
-                 cli_trait: _,
-                 execute_trait: _,
-             }| {
-                quote! {
-                    #cli_fn
-                    #execute_fn
-                }
-            },
-        );
-
-        let trait_ops = methods.iter().map(
-            |CliOperation {
-                 cli_fn: _,
-                 execute_fn: _,
-                 cli_trait,
-                 execute_trait,
-             }| {
-                quote! {
-                    // #cli_trait
-                    #execute_trait
-                }
-            },
-        );
+        let trait_ops = methods.iter().map(|op| &op.execute_trait);
 
         let cli_fns = raw_methods
             .iter()
@@ -180,14 +153,14 @@ impl Generator {
                     cmd: CliCommand,
                     matches: &clap::ArgMatches,
                 ) {
-                    let _ = match cmd {
+                    match cmd {
                         #(
                             CliCommand::#cli_variants => {
                                 // TODO ... do something with output
                                 self.#execute_fns(matches).await;
                             }
                         )*
-                    };
+                    }
                 }
 
                 #(#execute_ops)*
@@ -361,12 +334,6 @@ impl Generator {
                 )*
                 #body_arg
                 #about
-            }
-        };
-
-        let cli_trait = quote! {
-            fn #fn_name(cmd: clap::Command) -> clap::Command {
-                cmd
             }
         };
 
@@ -551,7 +518,6 @@ impl Generator {
         CliOperation {
             cli_fn,
             execute_fn,
-            cli_trait,
             execute_trait,
         }
     }
