@@ -1,10 +1,17 @@
-pub struct Cli {
+pub struct Cli<T: CliOverride = ()> {
     client: sdk::Client,
+    over: T,
 }
 
 impl Cli {
     pub fn new(client: sdk::Client) -> Self {
-        Self { client }
+        Self { client, over: () }
+    }
+
+    pub fn get_command(cmd: CliCommand) -> clap::Command {
+        match cmd {
+            CliCommand::KeyGet => Self::cli_key_get(),
+        }
     }
 
     pub fn cli_key_get() -> clap::Command {
@@ -24,6 +31,20 @@ impl Cli {
                     .help("A key parameter that will not be overridden by the path spec"),
             )
     }
+}
+
+impl<T: CliOverride> Cli<T> {
+    pub fn new_with_override(client: sdk::Client, over: T) -> Self {
+        Self { client, over }
+    }
+
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+        match cmd {
+            CliCommand::KeyGet => {
+                self.execute_key_get(matches).await;
+            }
+        }
+    }
 
     pub async fn execute_key_get(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.key_get();
@@ -35,6 +56,7 @@ impl Cli {
             request = request.unique_key(value.clone());
         }
 
+        self.over.execute_key_get(matches, &mut request).unwrap();
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -45,36 +67,19 @@ impl Cli {
             }
         }
     }
-
-    pub fn get_command(cmd: CliCommand) -> clap::Command {
-        match cmd {
-            CliCommand::KeyGet => Self::cli_key_get(),
-        }
-    }
-
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
-        let _ = match cmd {
-            CliCommand::KeyGet => {
-                self.execute_key_get(matches).await;
-            }
-        };
-    }
 }
 
 pub trait CliOverride {
-    fn cli_key_get(cmd: clap::Command) -> clap::Command {
-        cmd
-    }
-
     fn execute_key_get(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut (),
-        body: &mut (),
+        request: &mut builder::KeyGet,
     ) -> Result<(), String> {
         Ok(())
     }
 }
+
+impl CliOverride for () {}
 
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {

@@ -19,7 +19,6 @@ use crate::{
 struct CliOperation {
     cli_fn: TokenStream,
     execute_fn: TokenStream,
-    cli_trait: TokenStream,
     execute_trait: TokenStream,
 }
 
@@ -85,33 +84,9 @@ impl Generator {
             .map(|method| self.cli_method(method))
             .collect::<Vec<_>>();
 
-        let ops = methods.iter().map(
-            |CliOperation {
-                 cli_fn,
-                 execute_fn,
-                 cli_trait: _,
-                 execute_trait: _,
-             }| {
-                quote! {
-                    #cli_fn
-                    #execute_fn
-                }
-            },
-        );
-
-        let trait_ops = methods.iter().map(
-            |CliOperation {
-                 cli_fn: _,
-                 execute_fn: _,
-                 cli_trait,
-                 execute_trait,
-             }| {
-                quote! {
-                    #cli_trait
-                    #execute_trait
-                }
-            },
-        );
+        let cli_ops = methods.iter().map(|op| &op.cli_fn);
+        let execute_ops = methods.iter().map(|op| &op.execute_fn);
+        let trait_ops = methods.iter().map(|op| &op.execute_trait);
 
         let cli_fns = raw_methods
             .iter()
@@ -145,15 +120,14 @@ impl Generator {
         let crate_ident = format_ident!("{}", crate_name);
 
         let code = quote! {
-            pub struct Cli {
+            pub struct Cli<T: CliOverride = ()> {
                 client: #crate_ident::Client,
+                over: T,
             }
             impl Cli {
                 pub fn new(client: #crate_ident::Client) -> Self {
-                    Self { client }
+                    Self { client, over: () }
                 }
-
-                #(#ops)*
 
                 pub fn get_command(cmd: CliCommand) -> clap::Command {
                     match cmd {
@@ -163,25 +137,40 @@ impl Generator {
                     }
                 }
 
+                #(#cli_ops)*
+            }
+
+            impl<T: CliOverride> Cli<T> {
+                pub fn new_with_override(
+                    client: #crate_ident::Client,
+                    over: T,
+                ) -> Self {
+                    Self { client, over }
+                }
+
                 pub async fn execute(
                     &self,
                     cmd: CliCommand,
                     matches: &clap::ArgMatches,
                 ) {
-                    let _ = match cmd {
+                    match cmd {
                         #(
                             CliCommand::#cli_variants => {
                                 // TODO ... do something with output
                                 self.#execute_fns(matches).await;
                             }
                         )*
-                    };
+                    }
                 }
+
+                #(#execute_ops)*
             }
 
             pub trait CliOverride {
                 #(#trait_ops)*
             }
+
+            impl CliOverride for () {}
 
             #[derive(Copy, Clone, Debug)]
             pub enum CliCommand {
@@ -348,12 +337,6 @@ impl Generator {
             }
         };
 
-        let cli_trait = quote! {
-            fn #fn_name(cmd: clap::Command) -> clap::Command {
-                cmd
-            }
-        };
-
         let op_name = format_ident!("{}", &method.operation_id);
 
         let fn_name = format_ident!("execute_{}", &method.operation_id);
@@ -404,7 +387,6 @@ impl Generator {
                 };
 
             let body_type = self.type_space.get_type(type_id).unwrap();
-            let body_type_ident = body_type.ident();
 
             let maybe_body_args = match body_type.details() {
                 typify::TypeDetails::Struct(s) => {
@@ -439,10 +421,10 @@ impl Generator {
                                         )
                                     {
                                         // clone here in case the arg type
-                                        // doesn't impl From<&T>
-                                        body = body.#prop_fn(
-                                            value.clone(),
-                                        );
+                                        // doesn't impl TryFrom<&T>
+                                        request = request.body_map(|body| {
+                                            body.#prop_fn(value.clone())
+                                        })
                                     }
                                 }
                             })
@@ -453,13 +435,10 @@ impl Generator {
                 _ => None,
             };
 
+            // TODO rework this.
             maybe_body_args.map(|body_args| {
                 quote! {
-                    let request = request.body({
-                        let mut body = #body_type_ident::builder();
-                        #( #body_args )*
-                        body
-                    });
+                    #( #body_args )*
                 }
             })
         });
@@ -504,6 +483,11 @@ impl Generator {
                 #( #args )*
                 #body_arg
 
+                // TODO don't want to unwrap.
+                self.over
+                    .#fn_name(matches, &mut request)
+                    .unwrap();
+
                 let result = request.send().await;
 
                 match result {
@@ -517,12 +501,15 @@ impl Generator {
             }
         };
 
+        // TODO this is copy-pasted--unwisely?
+        let struct_name = sanitize(&method.operation_id, Case::Pascal);
+        let struct_ident = format_ident!("{}", struct_name);
+
         let execute_trait = quote! {
             fn #fn_name(
                 &self,
                 matches: &clap::ArgMatches,
-                request: &mut (),
-                body: &mut()
+                request: &mut builder :: #struct_ident,
             ) -> Result<(), String> {
                 Ok(())
             }
@@ -531,7 +518,6 @@ impl Generator {
         CliOperation {
             cli_fn,
             execute_fn,
-            cli_trait,
             execute_trait,
         }
     }
