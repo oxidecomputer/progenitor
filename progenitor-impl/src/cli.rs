@@ -254,8 +254,8 @@ impl Generator {
 
         let body_arg = maybe_body_param.map(|param| {
             let OperationParameterType::Type(type_id) = &param.typ else {
-                    unreachable!();
-                };
+                unreachable!();
+            };
 
             let body_args = self.type_space.get_type(type_id).unwrap();
 
@@ -273,11 +273,52 @@ impl Generator {
                                 .type_space
                                 .get_type(&prop_type_id)
                                 .unwrap();
+
+                            // TODO this is maybe a kludge--not completely sure
+                            // of the right way to handle option types. On one
+                            // hand, we could want types from this interface to
+                            // never show us Option<T> types--we could let the
+                            // `required` field give us that information. On
+                            // the other hand, there might be Option types that
+                            // are required ... at least in the JSON sense,
+                            // meaning that we need to include `"foo": null`
+                            // rather than omitting the field. Back to the
+                            // first hand: is that last point just a serde
+                            // issue rather than an interface one?
+                            let maybe_inner_type =
+                                if let typify::TypeDetails::Option(
+                                    inner_type_id,
+                                ) = prop_type.details()
+                                {
+                                    let inner_type = self
+                                        .type_space
+                                        .get_type(&inner_type_id)
+                                        .unwrap();
+                                    Some(inner_type)
+                                } else {
+                                    None
+                                };
+
+                            let prop_type =
+                                if let Some(inner_type) = maybe_inner_type {
+                                    inner_type
+                                } else {
+                                    prop_type
+                                };
+
                             let prop_type_ident = prop_type.ident();
                             let good =
                                 prop_type.has_impl(TypeSpaceImpl::FromStr);
                             let prop_name = prop_name.to_kebab_case();
-                            // assert!(good || !required);
+
+                            // println!(
+                            //     "{}::{}: {}; good: {}; required: {}",
+                            //     body_args.name(),
+                            //     prop_name,
+                            //     prop_type.name(),
+                            //     good,
+                            //     required,
+                            // );
 
                             good.then(|| {
                                 let help =
