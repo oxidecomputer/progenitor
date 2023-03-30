@@ -27,7 +27,12 @@ impl Cli {
     }
 
     pub fn cli_instance_ensure() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").arg(
+            clap::Arg::new("cloud-init-bytes")
+                .long("cloud-init-bytes")
+                .required(false)
+                .value_parser(clap::value_parser!(String)),
+        )
     }
 
     pub fn cli_instance_issue_crucible_snapshot_request() -> clap::Command {
