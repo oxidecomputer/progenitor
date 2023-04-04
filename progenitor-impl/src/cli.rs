@@ -196,6 +196,105 @@ impl Generator {
         &mut self,
         method: &crate::method::OperationMethod,
     ) -> CliOperation {
+        // Preprocess the body parameter (if there is one) to create an
+        // iterator of top-level properties that can be represented as scalar
+        // values. We use these to create `clap::Arg` structures and then to
+        // build up the body parameter in the actual API call.
+        let body_params = method
+            .params
+            .iter()
+            .find(|param| {
+                matches!(&param.kind, OperationParameterKind::Body(_))
+                // TODO not sure how to deal with raw bodies right now
+                    && matches!(&param.typ, OperationParameterType::Type(_))
+            })
+            .into_iter()
+            .flat_map(|param| {
+                let OperationParameterType::Type(type_id) = &param.typ else {
+                    unreachable!();
+                };
+
+                let body_arg_type = self.type_space.get_type(type_id).unwrap();
+                let details = body_arg_type.details();
+
+                match details {
+                    typify::TypeDetails::Struct(struct_info) => {
+                        struct_info
+                            .properties_info()
+                            .filter_map(|prop_info| {
+                                let TypeStructPropInfo {
+                                    name: prop_name,
+                                    description,
+                                    required,
+                                    type_id: prop_type_id,
+                                } = prop_info;
+                                let prop_type = self
+                                    .type_space
+                                    .get_type(&prop_type_id)
+                                    .unwrap();
+
+                                // TODO this is maybe a kludge--not completely sure
+                                // of the right way to handle option types. On one
+                                // hand, we could want types from this interface to
+                                // never show us Option<T> types--we could let the
+                                // `required` field give us that information. On
+                                // the other hand, there might be Option types that
+                                // are required ... at least in the JSON sense,
+                                // meaning that we need to include `"foo": null`
+                                // rather than omitting the field. Back to the
+                                // first hand: is that last point just a serde
+                                // issue rather than an interface one?
+                                let maybe_inner_type =
+                                    if let typify::TypeDetails::Option(
+                                        inner_type_id,
+                                    ) = prop_type.details()
+                                    {
+                                        let inner_type = self
+                                            .type_space
+                                            .get_type(&inner_type_id)
+                                            .unwrap();
+                                        Some(inner_type)
+                                    } else {
+                                        None
+                                    };
+
+                                let prop_type = if let Some(inner_type) =
+                                    maybe_inner_type
+                                {
+                                    inner_type
+                                } else {
+                                    prop_type
+                                };
+
+                                let prop_type_ident = prop_type.ident();
+                                let scalar =
+                                    prop_type.has_impl(TypeSpaceImpl::FromStr);
+                                let prop_name = prop_name.to_kebab_case();
+
+                                // println!(
+                                //     "{}::{}: {}; scalar: {}; required: {}",
+                                //     body_args.name(),
+                                //     prop_name,
+                                //     prop_type.name(),
+                                //     scalar,
+                                //     required,
+                                // );
+
+                                scalar.then(|| {
+                                    (
+                                        prop_name.clone(),
+                                        required,
+                                        description.map(str::to_string),
+                                        prop_type_ident.clone(),
+                                    )
+                                })
+                            })
+                            .collect::<Vec<_>>()
+                    }
+                    _ => Vec::new(),
+                }
+            })
+            .collect::<Vec<_>>();
         let fn_name = format_ident!("cli_{}", &method.operation_id);
 
         let args = method
@@ -246,109 +345,24 @@ impl Generator {
                 }
             });
 
-        let maybe_body_param = method.params.iter().find(|param| {
-            matches!(&param.kind, OperationParameterKind::Body(_))
-                // TODO not sure how to deal with raw bodies right now
-                    && matches!(&param.typ, OperationParameterType::Type(_))
-        });
-
-        let body_arg = maybe_body_param.map(|param| {
-            let OperationParameterType::Type(type_id) = &param.typ else {
-                unreachable!();
-            };
-
-            let body_args = self.type_space.get_type(type_id).unwrap();
-
-            let body_arg = match body_args.details() {
-                typify::TypeDetails::Struct(s) => {
-                    s.properties_info()
-                        .filter_map(|prop_info| {
-                            let TypeStructPropInfo {
-                                name: prop_name,
-                                description,
-                                required,
-                                type_id: prop_type_id,
-                            } = prop_info;
-                            let prop_type = self
-                                .type_space
-                                .get_type(&prop_type_id)
-                                .unwrap();
-
-                            // TODO this is maybe a kludge--not completely sure
-                            // of the right way to handle option types. On one
-                            // hand, we could want types from this interface to
-                            // never show us Option<T> types--we could let the
-                            // `required` field give us that information. On
-                            // the other hand, there might be Option types that
-                            // are required ... at least in the JSON sense,
-                            // meaning that we need to include `"foo": null`
-                            // rather than omitting the field. Back to the
-                            // first hand: is that last point just a serde
-                            // issue rather than an interface one?
-                            let maybe_inner_type =
-                                if let typify::TypeDetails::Option(
-                                    inner_type_id,
-                                ) = prop_type.details()
-                                {
-                                    let inner_type = self
-                                        .type_space
-                                        .get_type(&inner_type_id)
-                                        .unwrap();
-                                    Some(inner_type)
-                                } else {
-                                    None
-                                };
-
-                            let prop_type =
-                                if let Some(inner_type) = maybe_inner_type {
-                                    inner_type
-                                } else {
-                                    prop_type
-                                };
-
-                            let prop_type_ident = prop_type.ident();
-                            let good =
-                                prop_type.has_impl(TypeSpaceImpl::FromStr);
-                            let prop_name = prop_name.to_kebab_case();
-
-                            // println!(
-                            //     "{}::{}: {}; good: {}; required: {}",
-                            //     body_args.name(),
-                            //     prop_name,
-                            //     prop_type.name(),
-                            //     good,
-                            //     required,
-                            // );
-
-                            good.then(|| {
-                                let help =
-                                    description.as_ref().map(|description| {
-                                        quote! {
-                                            .help(#description)
-                                        }
-                                    });
-                                quote! {
-                                    clap::Arg::new(#prop_name)
-                                        .long(#prop_name)
-                                        .required(#required)
-                                        .value_parser(clap::value_parser!(
-                                            #prop_type_ident
-                                        ))
-                                        #help
-                                }
-                            })
-                        })
-                        .collect::<Vec<_>>()
+        let body_args = body_params.iter().map(
+            |(prop_name, required, description, prop_type_ident)| {
+                let help = description.as_ref().map(|description| {
+                    quote! {
+                        .help(#description)
+                    }
+                });
+                quote! {
+                    clap::Arg::new(#prop_name)
+                        .long(#prop_name)
+                        .required(#required)
+                        .value_parser(clap::value_parser!(
+                            #prop_type_ident
+                        ))
+                        #help
                 }
-                _ => Vec::new(),
-            };
-
-            quote! {
-                #(
-                    .arg(#body_arg)
-                )*
-            }
-        });
+            },
+        );
 
         // TODO parameter for body as input json (--body-input?)
         // TODO parameter to output a body template (--body-template?)
@@ -373,15 +387,17 @@ impl Generator {
                 #(
                     .arg(#args)
                 )*
-                #body_arg
+                #(
+                    .arg(#body_args)
+                )*
                 #about
             }
         };
 
         let op_name = format_ident!("{}", &method.operation_id);
-
         let fn_name = format_ident!("execute_{}", &method.operation_id);
 
+        // Build up the iterator processing each top-level parameter.
         let args = method
             .params
             .iter()
@@ -422,67 +438,27 @@ impl Generator {
                 }
             });
 
-        let body_arg = maybe_body_param.map(|param| {
-            let OperationParameterType::Type(type_id) = &param.typ else {
-                    unreachable!();
-                };
-
-            let body_type = self.type_space.get_type(type_id).unwrap();
-
-            let maybe_body_args = match body_type.details() {
-                typify::TypeDetails::Struct(s) => {
-                    let args = s
-                        .properties_info()
-                        .filter_map(|prop_info| {
-                            let TypeStructPropInfo {
-                                name: prop_name,
-                                description: _,
-                                required: _,
-                                type_id: body_type_id,
-                            } = prop_info;
-                            let prop_type = self
-                                .type_space
-                                .get_type(&body_type_id)
-                                .unwrap();
-                            let prop_fn = format_ident!(
-                                "{}",
-                                sanitize(prop_name, Case::Snake)
-                            );
-                            let prop_name = prop_name.to_kebab_case();
-                            let prop_type_ident = prop_type.ident();
-                            let good =
-                                prop_type.has_impl(TypeSpaceImpl::FromStr);
-                            // assert!(good || !required);
-
-                            good.then(|| {
-                                quote! {
-                                    if let Some(value) =
-                                        matches.get_one::<#prop_type_ident>(
-                                            #prop_name,
-                                        )
-                                    {
-                                        // clone here in case the arg type
-                                        // doesn't impl TryFrom<&T>
-                                        request = request.body_map(|body| {
-                                            body.#prop_fn(value.clone())
-                                        })
-                                    }
-                                }
+        // Build up the iterator processing each body property we can handle.
+        let body_args =
+            body_params
+                .iter()
+                .map(|(prop_name, _, _, prop_type_ident)| {
+                    let prop_fn =
+                        format_ident!("{}", sanitize(prop_name, Case::Snake));
+                    quote! {
+                        if let Some(value) =
+                            matches.get_one::<#prop_type_ident>(
+                                #prop_name,
+                            )
+                        {
+                            // clone here in case the arg type
+                            // doesn't impl TryFrom<&T>
+                            request = request.body_map(|body| {
+                                body.#prop_fn(value.clone())
                             })
-                        })
-                        .collect::<Vec<_>>();
-                    Some(args)
-                }
-                _ => None,
-            };
-
-            // TODO rework this.
-            maybe_body_args.map(|body_args| {
-                quote! {
-                    #( #body_args )*
-                }
-            })
-        });
+                        }
+                    }
+                });
 
         let (_, success_type) = self.extract_responses(
             method,
@@ -522,7 +498,7 @@ impl Generator {
             {
                 let mut request = self.client.#op_name();
                 #( #args )*
-                #body_arg
+                #( #body_args )*
 
                 // TODO don't want to unwrap.
                 self.over

@@ -129,6 +129,10 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_instance_ensure(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.instance_ensure();
+        if let Some(value) = matches.get_one::<String>("cloud-init-bytes") {
+            request = request.body_map(|body| body.cloud_init_bytes(value.clone()))
+        }
+
         self.over
             .execute_instance_ensure(matches, &mut request)
             .unwrap();
