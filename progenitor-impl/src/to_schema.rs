@@ -1,4 +1,4 @@
-// Copyright 2021 Oxide Computer Company
+// Copyright 2023 Oxide Computer Company
 
 use indexmap::IndexMap;
 use openapiv3::AnySchema;
@@ -161,15 +161,13 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
             )) => {
                 let (maximum, exclusive_maximum) =
                     match (maximum, exclusive_maximum) {
-                        (None, _) => (None, None),
-                        (Some(v), false) => (Some(*v), None),
-                        (Some(v), true) => (None, Some(*v)),
+                        (v, true) => (None, *v),
+                        (v, false) => (*v, None),
                     };
                 let (minimum, exclusive_minimum) =
                     match (minimum, exclusive_minimum) {
-                        (None, _) => (None, None),
-                        (Some(v), false) => (Some(*v), None),
-                        (Some(v), true) => (None, Some(*v)),
+                        (v, true) => (None, *v),
+                        (v, false) => (*v, None),
                     };
                 schemars::schema::SchemaObject {
                     metadata,
@@ -181,7 +179,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     enum_values: enumeration.convert(),
                     number: Some(Box::new(
                         schemars::schema::NumberValidation {
-                            multiple_of: multiple_of.convert(),
+                            multiple_of: *multiple_of,
                             maximum,
                             exclusive_maximum,
                             minimum,
@@ -207,15 +205,15 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
             )) => {
                 let (maximum, exclusive_maximum) =
                     match (maximum, exclusive_maximum) {
-                        (None, _) => (None, None),
-                        (Some(v), false) => (Some(*v as f64), None),
                         (Some(v), true) => (None, Some(*v as f64)),
+                        (Some(v), false) => (Some(*v as f64), None),
+                        (None, _) => (None, None),
                     };
                 let (minimum, exclusive_minimum) =
                     match (minimum, exclusive_minimum) {
-                        (None, _) => (None, None),
-                        (Some(v), false) => (Some(*v as f64), None),
                         (Some(v), true) => (None, Some(*v as f64)),
+                        (Some(v), false) => (Some(*v as f64), None),
+                        (None, _) => (None, None),
                     };
                 schemars::schema::SchemaObject {
                     metadata,
@@ -546,6 +544,74 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 array.convert().into()
             }
 
+            // Handle integers with floating-point constraint values
+            // (multiple_of, minimum, or maximum). We could check that these
+            // values are integers... but schemars::schema::NumberValidation
+            // doesn't care so neither do we.
+            openapiv3::SchemaKind::Any(AnySchema {
+                typ: Some(typ),
+                pattern: _,
+                multiple_of,
+                exclusive_minimum,
+                exclusive_maximum,
+                minimum,
+                maximum,
+                properties: _,
+                required: _,
+                additional_properties: _,
+                min_properties: _,
+                max_properties: _,
+                items: _,
+                min_items: _,
+                max_items: _,
+                unique_items: _,
+                enumeration,
+                format,
+                min_length: _,
+                max_length: _,
+                one_of,
+                all_of,
+                any_of,
+                not: None,
+            }) if typ == "integer"
+                && one_of.is_empty()
+                && all_of.is_empty()
+                && any_of.is_empty() =>
+            {
+                let (maximum, exclusive_maximum) =
+                    match (maximum, exclusive_maximum) {
+                        (v, Some(true)) => (None, *v),
+                        (v, _) => (*v, None),
+                    };
+                let (minimum, exclusive_minimum) =
+                    match (minimum, exclusive_minimum) {
+                        (v, Some(true)) => (None, *v),
+                        (v, _) => (*v, None),
+                    };
+                schemars::schema::SchemaObject {
+                    metadata,
+                    instance_type: instance_type(
+                        schemars::schema::InstanceType::Integer,
+                        nullable,
+                    ),
+                    format: format.clone(),
+                    enum_values: (!enumeration.is_empty())
+                        .then(|| enumeration.clone()),
+                    number: Some(Box::new(
+                        schemars::schema::NumberValidation {
+                            multiple_of: *multiple_of,
+                            maximum,
+                            exclusive_maximum,
+                            minimum,
+                            exclusive_minimum,
+                        },
+                    ))
+                    .reduce(),
+                    extensions,
+                    ..Default::default()
+                }
+            }
+
             openapiv3::SchemaKind::Any(_) => {
                 panic!("not clear what we could usefully do here {:#?}", self)
             }
@@ -730,5 +796,22 @@ mod tests {
                 schemars::schema::InstanceType::Null
             )))
         );
+    }
+
+    #[test]
+    fn test_weird_integer() {
+        let schema_value = json!({
+            "type": "integer",
+            "minimum": 0.0,
+        });
+        let oa_schema =
+            serde_json::from_value::<openapiv3::Schema>(schema_value.clone())
+                .unwrap();
+        let js_schema =
+            serde_json::from_value::<schemars::schema::Schema>(schema_value)
+                .unwrap();
+
+        let conv_schema = oa_schema.convert();
+        assert_eq!(conv_schema, js_schema);
     }
 }
