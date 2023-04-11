@@ -7,6 +7,7 @@ use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
+use typify::{TypeDetails, TypeId};
 use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
@@ -40,6 +41,7 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 pub struct Generator {
     type_space: TypeSpace,
+    forms: HashSet<TypeId>,
     settings: GenerationSettings,
     uses_futures: bool,
     uses_websockets: bool,
@@ -163,6 +165,7 @@ impl Default for Generator {
             type_space: TypeSpace::new(
                 TypeSpaceSettings::default().with_type_mod("types"),
             ),
+            forms: Default::default(),
             settings: Default::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
@@ -204,6 +207,7 @@ impl Generator {
         Self {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
+            forms: Default::default(),
             uses_futures: false,
             uses_websockets: false,
         }
@@ -262,6 +266,43 @@ impl Generator {
 
         let types = self.type_space.to_stream();
 
+        let extra_impl = TokenStream::from_iter(
+            self.forms
+                .iter()
+                .map(|type_id| {
+                    let typ = self.get_type_space().get_type(type_id).unwrap();
+                    let form_name = typ.name();
+                    let td = typ.details();
+                    let TypeDetails::Struct(tstru) = td else { unreachable!() };
+                    let properties = indexmap::IndexMap::<&'_ str, _>::from_iter(
+                        tstru
+                            .properties()
+                            .filter_map(|(prop_name, prop_id)| {
+                                self.get_type_space()
+                                    .get_type(&prop_id).ok()
+                                    .map(|prop_typ| (prop_name, prop_typ))
+                            })
+                        );
+                    let properties = syn::punctuated::Punctuated::<_, syn::Token![,]>::from_iter(
+                        properties
+                            .into_iter()
+                            .map(|(prop_name, prop_ty)| {
+                                let ident = quote::format_ident!("{}", prop_name);
+                                quote!{ (#prop_name, &self. #ident) }
+                            }));
+
+                    let form_name = quote::format_ident!("{}",typ.name());
+
+                    quote! {
+                        impl #form_name {
+                            pub fn as_form<'f>(&'f self) -> impl std::iter::Iterator<Item=(&'static str, &'f [u8])> {
+                                [#properties]
+                                    .into_iter()
+                                    .filter_map(|(name, val)| val.as_ref().map(|val| (name, val.as_slice())))
+                            }
+                        }
+                    }
+                }));
         // Generate an implementation of a `Self::as_inner` method, if an inner
         // type is defined.
         let maybe_inner = self.settings.inner_type.as_ref().map(|inner| {
@@ -290,20 +331,20 @@ impl Generator {
         });
 
         let client_docstring = {
-            let mut s = format!("Client for {}", spec.info.title);
+            let mut doc = format!("Client for {}", spec.info.title);
 
-            if let Some(ss) = &spec.info.description {
-                s.push_str("\n\n");
-                s.push_str(ss);
+            if let Some(desc) = &spec.info.description {
+                doc.push_str("\n\n");
+                doc.push_str(desc);
             }
-            if let Some(ss) = &spec.info.terms_of_service {
-                s.push_str("\n\n");
-                s.push_str(ss);
+            if let Some(tos) = &spec.info.terms_of_service {
+                doc.push_str("\n\n");
+                doc.push_str(tos);
             }
 
-            s.push_str(&format!("\n\nVersion: {}", &spec.info.version));
+            doc.push_str(&format!("\n\nVersion: {}", &spec.info.version));
 
-            s
+            doc
         };
 
         let version_str = &spec.info.version;
@@ -325,6 +366,8 @@ impl Generator {
                 use std::convert::TryFrom;
 
                 #types
+
+                #extra_impl
             }
 
             #[derive(Clone, Debug)]

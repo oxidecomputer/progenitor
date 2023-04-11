@@ -10,7 +10,7 @@ use indexmap::{IndexMap, IndexSet};
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
-use typify::{TypeId, TypeSpace};
+use typify::{TypeId, TypeSpace, TypeSpacePatch};
 
 use crate::{
     template::PathTemplate,
@@ -105,7 +105,7 @@ pub struct OperationParameter {
 #[derive(Debug, Eq, PartialEq)]
 pub enum OperationParameterType {
     Type(TypeId),
-    Form(IndexSet<String>),
+    Form(TypeId),
     RawBody,
 }
 
@@ -585,26 +585,14 @@ impl Generator {
             .map(|param| {
                 let name = format_ident!("{}", param.name);
                 match &param.typ {
-                    OperationParameterType::Type(type_id) => {
+                    OperationParameterType::Type(type_id)
+                    | OperationParameterType::Form(type_id) => {
                         let typ = self
                             .type_space
                             .get_type(type_id)
                             .expect("TypeIDs are _never_ deleted. qed")
                             .parameter_ident_with_lifetime("a");
                         quote! { #name: #typ}
-                    }
-                    OperationParameterType::Form(keys) => {
-                        let ts = TokenStream::from_iter(
-                            itertools::Itertools::intersperse(
-                                keys.iter().map(|form_prop_name| {
-                                    let form_prop_name =
-                                        format_ident!("{}", form_prop_name);
-                                    quote! { #form_prop_name: Vec<u8> }
-                                }),
-                                quote! {, },
-                            ),
-                        );
-                        ts
                     }
                     OperationParameterType::RawBody => {
                         quote! { #name: B }
@@ -935,15 +923,11 @@ impl Generator {
                     OperationParameterKind::Body(
                         BodyContentType::FormData
                     ),
-                    OperationParameterType::Form(map),
+                    OperationParameterType::Form(_),
                 ) => {
-                    let form_prop_names = map.iter().cloned().map(|form_prop_name| {
-                        let ident=  format_ident!("{}", form_prop_name);
-                        quote! { (#form_prop_name, #ident) }
-                    });
                     Some(quote! {
                     // This uses progenitor_client::RequestBuilderExt which sets up a simple form data based on bytes
-                    .form_from_raw(vec![ #(#form_prop_names),* ])?
+                    .form_from_raw(body.as_form())?
                 })},
                 (OperationParameterKind::Body(_), _) => {
                     unreachable!("invalid body kind/type combination")
@@ -1408,7 +1392,8 @@ impl Generator {
             .params
             .iter()
             .map(|param| match &param.typ {
-                OperationParameterType::Type(type_id) => {
+                OperationParameterType::Type(type_id)
+                | OperationParameterType::Form(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
 
                     // For body parameters only, if there's a builder we'll
@@ -1425,10 +1410,6 @@ impl Generator {
                     }
                 }
 
-                OperationParameterType::Form(_form) => {
-                    todo!("Form is nit expected here")
-                }
-
                 OperationParameterType::RawBody => {
                     cloneable = false;
                     Ok(quote! { Result<reqwest::Body, String> })
@@ -1441,7 +1422,8 @@ impl Generator {
             .params
             .iter()
             .map(|param| match &param.typ {
-                OperationParameterType::Type(type_id) => {
+                OperationParameterType::Type(type_id)
+                | OperationParameterType::Form(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
                     let details = ty.details();
                     let optional =
@@ -1460,9 +1442,6 @@ impl Generator {
                         Ok(quote! { Err(#err_msg.to_string()) })
                     }
                 }
-                OperationParameterType::Form(_form) => {
-                    todo!("Form is nit expected here")
-                }
                 OperationParameterType::RawBody => {
                     let err_msg = format!("{} was not initialized", param.name);
                     Ok(quote! { Err(#err_msg.to_string()) })
@@ -1474,7 +1453,8 @@ impl Generator {
             .params
             .iter()
             .map(|param| match &param.typ {
-                OperationParameterType::Type(type_id) => {
+                OperationParameterType::Type(type_id)
+                | OperationParameterType::Form(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
                     if ty.builder().is_some() {
                         let type_name = ty.ident();
@@ -1486,14 +1466,6 @@ impl Generator {
                     } else {
                         Ok(quote! {})
                     }
-                }
-
-                OperationParameterType::Form(_form) => {
-                    todo!("Form is nit expected here")
-                }
-
-                OperationParameterType::Form(_form) => {
-                    todo!("Form is nit expected here")
                 }
 
                 OperationParameterType::RawBody => Ok(quote! {}),
@@ -1508,11 +1480,12 @@ impl Generator {
             .map(|param| {
                 let param_name = format_ident!("{}", param.name);
                 match &param.typ {
-                    OperationParameterType::Type(type_id) => {
+                    OperationParameterType::Type(type_id)
+                    | OperationParameterType::Form(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
                         let details = ty.details();
                         match (&details, ty.builder()) {
-                            // TODO right now optional body paramters are not
+                            // TODO right now optional body parameters are not
                             // addressed
                             (typify::TypeDetails::Option(_), Some(_)) => {
                                 unreachable!()
@@ -1596,7 +1569,7 @@ impl Generator {
                         }
                     }
 
-                    OperationParameterType::Form(form_keys) => {
+                    OperationParameterType::Form(type_id) => {
                         let err_msg = format!(
                             "conversion to `reqwest::Body` for {} failed",
                             param.name,
@@ -2161,7 +2134,19 @@ impl Generator {
                         schema
                     ))),
                 }?;
-                OperationParameterType::Form(mapped)
+
+                let form_name = sanitize(
+                    &format!(
+                        "{}-form",
+                        operation.operation_id.as_ref().unwrap(),
+                    ),
+                    Case::Pascal,
+                );
+                let type_id = self
+                    .type_space
+                    .add_type_with_name(&schema.to_schema(), Some(form_name))?;
+                self.forms.insert(type_id.clone());
+                OperationParameterType::Form(type_id)
             }
             BodyContentType::Json | BodyContentType::FormUrlencoded => {
                 // TODO it would be legal to have the encoding field set for
