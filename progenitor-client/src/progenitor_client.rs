@@ -386,11 +386,23 @@ pub fn encode_path(pc: &str) -> String {
 }
 
 #[doc(hidden)]
-pub trait RequestBuilderExt<E> {
+pub trait RequestBuilderExt<E>
+where
+    Self: Sized,
+{
     fn form_urlencoded<T: Serialize + ?Sized>(
         self,
         body: &T,
     ) -> Result<RequestBuilder, Error<E>>;
+
+    fn form_from_raw<
+        S: AsRef<str>,
+        T: AsRef<[u8]>,
+        I: Sized + IntoIterator<Item = (S, T)>,
+    >(
+        self,
+        iter: I,
+    ) -> Result<Self, Error<E>>;
 }
 
 impl<E> RequestBuilderExt<E> for RequestBuilder {
@@ -405,8 +417,37 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
                     "application/x-www-form-urlencoded",
                 ),
             )
-            .body(serde_urlencoded::to_string(body).map_err(|_| {
-                Error::InvalidRequest("failed to serialize body".to_string())
+            .body(serde_urlencoded::to_string(body).map_err(|e| {
+                Error::InvalidRequest(format!(
+                    "failed to serialize body: {e:?}"
+                ))
             })?))
+    }
+
+    fn form_from_raw<
+        S: AsRef<str>,
+        T: AsRef<[u8]>,
+        I: Sized + IntoIterator<Item = (S, T)>,
+    >(
+        self,
+        mut iter: I,
+    ) -> Result<Self, Error<E>> {
+        use reqwest::multipart::{Form, Part};
+
+        let mut form = Form::new();
+        for (name, value) in iter {
+            form = form.part(
+                name.as_ref().to_owned(),
+                Part::stream(Vec::from(value.as_ref())),
+            );
+        }
+        Ok(self
+            .header(
+                reqwest::header::CONTENT_TYPE,
+                reqwest::header::HeaderValue::from_static(
+                    "multipart/form-data",
+                ),
+            )
+            .multipart(form))
     }
 }

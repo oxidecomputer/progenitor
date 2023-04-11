@@ -2,10 +2,11 @@
 
 use std::{
     cmp::Ordering,
-    collections::{BTreeMap, BTreeSet},
+    collections::{BTreeMap, BTreeSet, HashMap},
     str::FromStr,
 };
 
+use indexmap::{IndexMap, IndexSet};
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
@@ -101,9 +102,10 @@ pub struct OperationParameter {
     pub kind: OperationParameterKind,
 }
 
-#[derive(Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum OperationParameterType {
     Type(TypeId),
+    Form(IndexSet<String>),
     RawBody,
 }
 
@@ -120,6 +122,7 @@ pub enum BodyContentType {
     OctetStream,
     Json,
     FormUrlencoded,
+    FormData,
 }
 
 impl FromStr for BodyContentType {
@@ -130,11 +133,25 @@ impl FromStr for BodyContentType {
             "application/octet-stream" => Ok(Self::OctetStream),
             "application/json" => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
+            "form-data" | "multipart/form-data" => Ok(Self::FormData),
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
                 s
             ))),
         }
+    }
+}
+
+use std::fmt;
+
+impl fmt::Display for BodyContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(match self {
+            Self::OctetStream => "application/octet-stream",
+            Self::Json => "application/json",
+            Self::FormUrlencoded => "application/x-www-form-urlencoded",
+            Self::FormData => "multipart/form-data",
+        })
     }
 }
 
@@ -328,7 +345,7 @@ impl Generator {
 
                         let typ = self
                             .type_space
-                            .add_type_with_name(&schema, Some(name))?;
+                            .add_type_with_name(&schema, Some(dbg!(name)))?;
 
                         query.push((
                             parameter_data.name.clone(),
@@ -567,18 +584,31 @@ impl Generator {
             .iter()
             .map(|param| {
                 let name = format_ident!("{}", param.name);
-                let typ = match &param.typ {
-                    OperationParameterType::Type(type_id) => self
-                        .type_space
-                        .get_type(type_id)
-                        .unwrap()
-                        .parameter_ident_with_lifetime("a"),
-                    OperationParameterType::RawBody => {
-                        quote! { B }
+                match &param.typ {
+                    OperationParameterType::Type(type_id) => {
+                        let typ = self
+                            .type_space
+                            .get_type(type_id)
+                            .expect("TypeIDs are _never_ deleted. qed")
+                            .parameter_ident_with_lifetime("a");
+                        quote! { #name: #typ}
                     }
-                };
-                quote! {
-                    #name: #typ
+                    OperationParameterType::Form(keys) => {
+                        let ts = TokenStream::from_iter(
+                            itertools::Itertools::intersperse(
+                                keys.iter().map(|form_prop_name| {
+                                    let form_prop_name =
+                                        format_ident!("{}", form_prop_name);
+                                    quote! { #form_prop_name: Vec<u8> }
+                                }),
+                                quote! {, },
+                            ),
+                        );
+                        ts
+                    }
+                    OperationParameterType::RawBody => {
+                        quote! { #name: B }
+                    }
                 }
             })
             .collect::<Vec<_>>();
@@ -857,16 +887,15 @@ impl Generator {
 
         // Generate the path rename map; then use it to generate code for
         // assigning the path parameters to the `url` variable.
-        let url_renames = method
-            .params
-            .iter()
-            .filter_map(|param| match &param.kind {
-                OperationParameterKind::Path => {
-                    Some((&param.api_name, &param.name))
+        let url_renames =
+            HashMap::from_iter(method.params.iter().filter_map(|param| {
+                match &param.kind {
+                    OperationParameterKind::Path => {
+                        Some((&param.api_name, &param.name))
+                    }
+                    _ => None,
                 }
-                _ => None,
-            })
-            .collect();
+            }));
 
         let url_path = method.path.compile(url_renames, client.clone());
 
@@ -902,6 +931,20 @@ impl Generator {
                     // returns an error in the case of a serialization failure.
                     .form_urlencoded(&body)?
                 }),
+                (
+                    OperationParameterKind::Body(
+                        BodyContentType::FormData
+                    ),
+                    OperationParameterType::Form(map),
+                ) => {
+                    let form_prop_names = map.iter().cloned().map(|form_prop_name| {
+                        let ident=  format_ident!("{}", form_prop_name);
+                        quote! { (#form_prop_name, #ident) }
+                    });
+                    Some(quote! {
+                    // This uses progenitor_client::RequestBuilderExt which sets up a simple form data based on bytes
+                    .form_from_raw(vec![ #(#form_prop_names),* ])?
+                })},
                 (OperationParameterKind::Body(_), _) => {
                     unreachable!("invalid body kind/type combination")
                 }
@@ -1382,6 +1425,10 @@ impl Generator {
                     }
                 }
 
+                OperationParameterType::Form(_form) => {
+                    todo!("Form is nit expected here")
+                }
+
                 OperationParameterType::RawBody => {
                     cloneable = false;
                     Ok(quote! { Result<reqwest::Body, String> })
@@ -1413,6 +1460,9 @@ impl Generator {
                         Ok(quote! { Err(#err_msg.to_string()) })
                     }
                 }
+                OperationParameterType::Form(_form) => {
+                    todo!("Form is nit expected here")
+                }
                 OperationParameterType::RawBody => {
                     let err_msg = format!("{} was not initialized", param.name);
                     Ok(quote! { Err(#err_msg.to_string()) })
@@ -1437,6 +1487,15 @@ impl Generator {
                         Ok(quote! {})
                     }
                 }
+
+                OperationParameterType::Form(_form) => {
+                    todo!("Form is nit expected here")
+                }
+
+                OperationParameterType::Form(_form) => {
+                    todo!("Form is nit expected here")
+                }
+
                 OperationParameterType::RawBody => Ok(quote! {}),
             })
             .collect::<Result<Vec<_>>>()?;
@@ -1535,6 +1594,23 @@ impl Generator {
                                 })
                             }
                         }
+                    }
+
+                    OperationParameterType::Form(form_keys) => {
+                        let err_msg = format!(
+                            "conversion to `reqwest::Body` for {} failed",
+                            param.name,
+                        );
+
+                        Ok(quote! {
+                            pub fn #param_name<B>(mut self, value: B) -> Self
+                                where B: std::convert::TryInto<reqwest::Body>
+                            {
+                                self.#param_name = value.try_into()
+                                    .map_err(|_| #err_msg.to_string());
+                                self
+                            }
+                        })
                     }
 
                     OperationParameterType::RawBody => {
@@ -2000,11 +2076,92 @@ impl Generator {
                             )),
                     } if enumeration.is_empty() => Ok(()),
                     _ => Err(Error::UnexpectedFormat(format!(
-                        "invalid schema for application/octet-stream: {:?}",
+                        "invalid schema for {}: {:?}",
+                        BodyContentType::OctetStream,
                         schema
                     ))),
                 }?;
                 OperationParameterType::RawBody
+            }
+            BodyContentType::FormData => {
+                // For form data, we expect a key-value set of types, specific schema:
+
+                // ```yaml
+                //    type: "object"
+                //      properties:
+                //        file:
+                //          description: "The file to upload"
+                //          type: "string"
+                //          format: "binary"
+                // ```
+                // "schema": {
+                //     "type": "string",
+                //     "format": "binary"
+                // }
+
+                let mapped = match schema.item(components)? {
+                    openapiv3::Schema {
+                        schema_data:
+                            openapiv3::SchemaData {
+                                nullable: false,
+                                discriminator: None,
+                                default: None,
+                                // Other fields that describe or document the
+                                // schema are fine.
+                                ..
+                            },
+                        schema_kind:
+                            openapiv3::SchemaKind::Type(openapiv3::Type::Object(
+                                openapiv3::ObjectType {
+                                    properties,
+                                    additional_properties,
+                                    ..
+                                },
+                            )),
+                    } => {
+                        let mapped = Result::<IndexSet<_>>::from_iter(
+                            properties
+                                .into_iter()
+                                .map(|(name, property)| {
+                                        // properties must be plain key value types for now 
+                                        let ReferenceOr::Item(property) = property else {
+                                                return Err(Error::UnexpectedFormat(format!(
+                                                    "invalid schema for {}: didn't expect a reference",
+                                                    BodyContentType::FormData,
+                                                )))};
+                                        match &property.schema_kind {
+                                            openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                                openapiv3::StringType {
+                                                    format:
+                                                        openapiv3::VariantOrUnknownOrEmpty::Item(
+                                                            openapiv3::StringFormat::Binary,
+                                                        ),
+                                                    pattern: None,
+                                                    enumeration,
+                                                    min_length: None,
+                                                    max_length: None,
+                                                },
+                                            )) if enumeration.is_empty() => {
+                                                Ok((name.to_owned()))
+                                            }
+                                            schema => {
+                                                Err(Error::UnexpectedFormat(format!(
+                                                    "invalid schema for {}: {:?}",
+                                                    BodyContentType::FormData,
+                                                    schema
+                                                )))
+                                            }
+                                        }
+                                    }))?;
+                        Ok(mapped)
+                    }
+                    _ => Err(Error::UnexpectedFormat(format!(
+                        "invalid schema for {}: {:?}",
+                        BodyContentType::FormData,
+                        schema
+                    ))),
+                }?;
+                OperationParameterType::Form(mapped)
             }
             BodyContentType::Json | BodyContentType::FormUrlencoded => {
                 // TODO it would be legal to have the encoding field set for
