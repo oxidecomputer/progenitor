@@ -3,12 +3,13 @@
 use std::{
     cmp::Ordering,
     collections::{BTreeMap, BTreeSet},
-    str::FromStr,
+    str::FromStr, fmt::Display,
 };
 
-use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
+use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode, Operation};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
+use schemars::{schema::{Schema, SchemaObject, SubschemaValidation}};
 use typify::{TypeId, TypeSpace};
 
 use crate::{
@@ -27,7 +28,7 @@ pub(crate) struct OperationMethod {
     pub summary: Option<String>,
     pub description: Option<String>,
     pub params: Vec<OperationParameter>,
-    responses: Vec<OperationResponse>,
+    response: OperationResponse,
     pub dropshot_paginated: Option<DropshotPagination>,
     dropshot_websocket: bool,
 }
@@ -138,8 +139,44 @@ impl FromStr for BodyContentType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub(crate) struct OperationResponse {
+    success: OperationResponseClass,
+    error: OperationResponseClass,
+}
+
+#[derive(Clone, Debug)]
+pub(crate) struct OperationResponseClass {
+    type_id: TypeId,
+    optional: bool,
+    upgradable: bool,
+    variants: Vec<OperationResponseVariant>
+}
+
+impl OperationResponseClass {
+    pub fn as_inner_type_tokens(&self, type_space: &TypeSpace) -> TokenStream {
+        type_space.get_type(&self.type_id).unwrap().ident()
+    }
+
+    pub fn as_tokens(&self, type_space: &TypeSpace) -> TokenStream {
+        let type_name = self.as_inner_type_tokens(type_space);
+
+        let inner = if self.optional {
+            quote! { Option<#type_name> }
+        } else {
+            quote! { #type_name }
+        };
+
+        if self.upgradable {
+            quote! { Upgradable<#inner> }
+        } else {
+            quote! { #inner }
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub(crate) struct OperationResponseVariant {
     status_code: OperationResponseStatus,
     typ: OperationResponseType,
     // TODO this isn't currently used because dropshot doesn't give us a
@@ -148,18 +185,18 @@ pub(crate) struct OperationResponse {
     description: Option<String>,
 }
 
-impl Eq for OperationResponse {}
-impl PartialEq for OperationResponse {
+impl Eq for OperationResponseVariant {}
+impl PartialEq for OperationResponseVariant {
     fn eq(&self, other: &Self) -> bool {
         self.status_code == other.status_code
     }
 }
-impl Ord for OperationResponse {
+impl Ord for OperationResponseVariant {
     fn cmp(&self, other: &Self) -> Ordering {
         self.status_code.cmp(&other.status_code)
     }
 }
-impl PartialOrd for OperationResponse {
+impl PartialOrd for OperationResponseVariant {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
@@ -223,32 +260,22 @@ impl PartialOrd for OperationResponseStatus {
     }
 }
 
+impl Display for OperationResponseStatus {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            OperationResponseStatus::Code(code) => write!(f, "{}", code),
+            OperationResponseStatus::Range(range) => write!(f, "{}xx", range),
+            OperationResponseStatus::Default => write!(f, "Default"),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub(crate) enum OperationResponseType {
     Type(TypeId),
     None,
     Raw,
     Upgrade,
-}
-
-impl OperationResponseType {
-    pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
-        match self {
-            OperationResponseType::Type(ref type_id) => {
-                let type_name = type_space.get_type(type_id).unwrap().ident();
-                quote! { #type_name }
-            }
-            OperationResponseType::None => {
-                quote! { () }
-            }
-            OperationResponseType::Raw => {
-                quote! { ByteStream }
-            }
-            OperationResponseType::Upgrade => {
-                quote! { reqwest::Upgraded }
-            }
-        }
-    }
 }
 
 impl Generator {
@@ -414,14 +441,55 @@ impl Generator {
 
         sort_params(&mut params, &names);
 
-        let mut success = false;
+        //
+        //
+        //
+        //
+        //
+        //
+        // TODO: PAGINATION IS BROKEN. FIX ME
+        //
+        //
+        //
+        //
+        //
+        //
+
+
+        #[derive(Debug, Default)]
+        struct ResponseClasses<'a> {
+            informational: Vec<(OperationResponseStatus, &'a Response)>,
+            success: Vec<(OperationResponseStatus, &'a Response)>,
+            redirect: Vec<(OperationResponseStatus, &'a Response)>,
+            client_error: Vec<(OperationResponseStatus, &'a Response)>,
+            server_error: Vec<(OperationResponseStatus, &'a Response)>,
+        }
+
+        impl<'a> ResponseClasses<'a> {
+            fn non_error(&self) -> Vec<(OperationResponseStatus, &'a Response)> {
+                let mut non_errors = Vec::new();
+                non_errors.extend(self.informational.iter().cloned());
+                non_errors.extend(self.success.iter().cloned());
+                non_errors.extend(self.redirect.iter().cloned());
+
+                non_errors
+            }
+
+            fn error(&mut self) -> Vec<(OperationResponseStatus, &'a Response)> {
+                let mut errors = Vec::new();
+                errors.extend(self.client_error.iter().cloned());
+                errors.extend(self.server_error.iter().cloned());
+
+                errors
+            }
+        }
 
         let mut responses = operation
             .responses
             .default
             .iter()
             .map(|response_or_ref| {
-                Ok((
+                Ok::<_, Error>((
                     OperationResponseStatus::Default,
                     response_or_ref.item(components)?,
                 ))
@@ -441,102 +509,51 @@ impl Generator {
                     ))
                 },
             ))
-            .map(|v: Result<(OperationResponseStatus, &Response)>| {
+            .fold(Ok::<_, Error>(ResponseClasses::default()), |classes, v| {
                 let (status_code, response) = v?;
 
-                // We categorize responses as "typed" based on the
-                // "application/json" content type, "upgrade" if it's a
-                // websocket channel without a meaningful content-type,
-                // "raw" if there's any other response content type (we don't
-                // investigate further), or "none" if there is no content.
-                // TODO if there are multiple response content types we could
-                // treat those like different response types and create an
-                // enum; the generated client method would check for the
-                // content type of the response just as it currently examines
-                // the status code.
-                let typ = if let Some(mt) =
-                    response.content.get("application/json")
-                {
-                    assert!(mt.encoding.is_empty());
-
-                    let typ = if let Some(schema) = &mt.schema {
-                        let schema = schema.to_schema();
-                        let name = sanitize(
-                            &format!(
-                                "{}-response",
-                                operation.operation_id.as_ref().unwrap(),
-                            ),
-                            Case::Pascal,
-                        );
-                        self.type_space
-                            .add_type_with_name(&schema, Some(name))?
-                    } else {
-                        todo!("media type encoding, no schema: {:#?}", mt);
+                classes.map(|mut classes| {
+                    match status_code {
+                        OperationResponseStatus::Code(100..=199) | OperationResponseStatus::Range(1) => {
+                            classes.informational.push((status_code, response))
+                        }
+                        OperationResponseStatus::Default
+                            | OperationResponseStatus::Code(200..=299)
+                            | OperationResponseStatus::Range(2) => {
+                            classes.success.push((status_code, response))
+                        }
+                        OperationResponseStatus::Code(300..=399) | OperationResponseStatus::Range(3) => {
+                            classes.redirect.push((status_code, response))
+                        }
+                        OperationResponseStatus::Code(400..=499) | OperationResponseStatus::Range(4) => {
+                            classes.client_error.push((status_code, response))
+                        }
+                        OperationResponseStatus::Code(500..=599) | OperationResponseStatus::Range(5) => {
+                            classes.server_error.push((status_code, response))
+                        }
+                        other => unimplemented!("Unhandled status code case {other:?}")
                     };
 
-                    OperationResponseType::Type(typ)
-                } else if dropshot_websocket {
-                    OperationResponseType::Upgrade
-                } else if response.content.first().is_some() {
-                    OperationResponseType::Raw
-                } else {
-                    OperationResponseType::None
-                };
-
-                // See if there's a status code that covers success cases.
-                if matches!(
-                    status_code,
-                    OperationResponseStatus::Default
-                        | OperationResponseStatus::Code(200..=299)
-                        | OperationResponseStatus::Range(2)
-                ) {
-                    success = true;
-                }
-
-                let description = if response.description.is_empty() {
-                    None
-                } else {
-                    Some(response.description.clone())
-                };
-
-                Ok(OperationResponse {
-                    status_code,
-                    typ,
-                    description,
+                    classes
                 })
-            })
-            .collect::<Result<Vec<_>>>()?;
+            })?;
 
-        // If the API has declined to specify the characteristics of a
-        // successful response, we cons up a generic one. Note that this is
-        // technically permissible within OpenAPI, but advised against by the
-        // spec.
-        if !success {
-            responses.push(OperationResponse {
-                status_code: OperationResponseStatus::Range(2),
-                typ: OperationResponseType::Raw,
-                description: None,
-            });
-        }
+        let success = self.create_response_class(
+            &operation,
+            dropshot_websocket,
+            responses.non_error()
+        )?;
 
-        // Must accept HTTP 101 Switching Protocols
-        if dropshot_websocket {
-            responses.push(OperationResponse {
-                status_code: OperationResponseStatus::Code(101),
-                typ: OperationResponseType::Upgrade,
-                description: None,
-            })
-        }
+        let error = self.create_response_class(
+            &operation,
+            false, // Error responses can not be upgraded
+            responses.error()
+        )?;
 
-        let dropshot_paginated =
-            self.dropshot_pagination_data(operation, &params, &responses);
-
-        if dropshot_websocket && dropshot_paginated.is_some() {
-            return Err(Error::InvalidExtension(format!(
-                "conflicting extensions in {:?}",
-                operation_id
-            )));
-        }
+        let response = OperationResponse {
+            success,
+            error,
+        };
 
         Ok(OperationMethod {
             operation_id: sanitize(operation_id, Case::Snake),
@@ -549,9 +566,124 @@ impl Generator {
                 .clone()
                 .filter(|s| !s.is_empty()),
             params,
-            responses,
-            dropshot_paginated,
+            response,
+            dropshot_paginated: None,
             dropshot_websocket,
+        })
+    }
+
+    fn create_response_class<'a>(
+        &mut self,
+        operation: &Operation,
+        upgrade_support: bool,
+        responses: Vec<(OperationResponseStatus, &'a Response)>,
+    ) -> Result<OperationResponseClass> {
+        let mut optional = false;
+        let mut upgradable = false;
+
+        let mut variants = Vec::new();
+        let mut subschemas = Vec::new();
+        
+        let mut structured_response = SchemaObject::default();
+        structured_response.subschemas = Some(Box::new(SubschemaValidation::default()));
+
+        for (status_code, response) in responses {
+            // We categorize responses as "typed" based on the
+            // "application/json" content type, "upgrade" if it's a
+            // websocket channel without a meaningful content-type,
+            // "raw" if there's any other response content type (we don't
+            // investigate further), or "none" if there is no content.
+
+            // TODO if there are multiple response content types we could
+            // treat those like different response types and create an
+            // enum; the generated client method would check for the
+            // content type of the response just as it currently s
+            // the status code.
+            let description = if response.description.is_empty() {
+                None
+            } else {
+                Some(response.description.clone())
+            };
+
+            if let Some(mt) =
+                response.content.get("application/json")
+            {
+                assert!(mt.encoding.is_empty());
+
+                let (schema, variant_type) = if let Some(schema) = &mt.schema {
+                    let schema = schema.to_schema();
+                    let name = sanitize(
+                        &format!(
+                            "{}-{}-response",
+                            operation.operation_id.as_ref().unwrap(),
+                            status_code,
+                        ),
+                        Case::Pascal,
+                    );
+                    let variant_type = self.type_space
+                        .add_type_with_name(&schema, Some(name))?;
+                    (schema, variant_type)
+                } else {
+                    todo!("media type encoding, no schema: {:#?}", mt);
+                };
+
+                subschemas.push(schema);
+
+                variants.push(OperationResponseVariant {
+                    status_code,
+                    typ: OperationResponseType::Type(variant_type),
+                    description
+                });
+            } else if status_code == OperationResponseStatus::Code(101) && upgrade_support {
+                upgradable = true;
+
+                variants.push(OperationResponseVariant {
+                    status_code,
+                    typ: OperationResponseType::Upgrade,
+                    description
+                });
+            } else if response.content.first().is_some() {
+                variants.push(OperationResponseVariant {
+                    status_code,
+                    typ: OperationResponseType::Raw,
+                    description
+                });
+            } else {
+                optional = true;
+
+                variants.push(OperationResponseVariant {
+                    status_code,
+                    typ: OperationResponseType::None,
+                    description
+                });
+            };
+        }
+
+        let name = sanitize(
+            &format!(
+                "{}-response",
+                operation.operation_id.as_ref().unwrap(),
+            ),
+            Case::Pascal,
+        );
+
+        // If there are more than 1 response schemas, then generate a parent type as an enum
+        // over them. Otherwise, a single type can be created.
+        let type_id = if subschemas.len() == 1 {
+            let schema = subschemas.into_iter().next().unwrap();
+            self.type_space.add_type_with_name(&schema, Some(name))?
+        } else {
+            let subschema = structured_response.subschemas.as_deref_mut().unwrap();
+            subschema.one_of = Some(subschemas);
+
+            self.type_space.add_type_with_name(&Schema::Object(structured_response), Some(name))?
+        };
+
+        Ok(OperationResponseClass {
+            type_id,
+            optional,
+            upgradable,
+            variants,
         })
     }
 
@@ -911,10 +1043,9 @@ impl Generator {
         // ... and there can be at most one body.
         assert!(body_func.clone().count() <= 1);
 
-        let (success_response_items, response_type) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_success_or_default,
-        );
+        let success_response_items = &method.response.success.variants;
+        let response_type = &method.response.success;
+        let inner_type = method.response.success.as_inner_type_tokens(&self.type_space);
 
         let success_response_matches =
             success_response_items.iter().map(|response| {
@@ -929,12 +1060,12 @@ impl Generator {
                 let decode = match &response.typ {
                     OperationResponseType::Type(_) => {
                         quote! {
-                            ResponseValue::from_response(response).await
+                            Ok(ResponseValue::<#inner_type>::from_response(response).await?.into())
                         }
                     }
                     OperationResponseType::None => {
                         quote! {
-                            Ok(ResponseValue::empty(response))
+                            Ok(ResponseValue::from_empty_response(response).into())
                         }
                     }
                     OperationResponseType::Raw => {
@@ -953,10 +1084,8 @@ impl Generator {
             });
 
         // Errors...
-        let (error_response_items, error_type) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_error_or_default,
-        );
+        let error_response_items = &method.response.error.variants;
+        let error_type = &method.response.error;
 
         let error_response_matches =
             error_response_items.iter().map(|response| {
@@ -987,7 +1116,7 @@ impl Generator {
                     OperationResponseType::None => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::empty(response)
+                                ResponseValue::from_empty_response(response)
                             ))
                         }
                     }
@@ -999,11 +1128,15 @@ impl Generator {
                         }
                     }
                     OperationResponseType::Upgrade => {
-                        if response.status_code == OperationResponseStatus::Default {
-                            return quote! { } // catch-all handled below
-                        } else {
-                            todo!("non-default error response handling for upgrade requests is not yet implemented");
-                        }
+
+                        // TODO: This seems to work now?
+
+                        return quote! { }
+                        // if response.status_code == OperationResponseStatus::Default {
+                        //     return quote! { } // catch-all handled below
+                        // } else {
+                        //     todo!("non-default error response handling for upgrade requests is not yet implemented");
+                        // }
                     }
                 };
 
@@ -1016,7 +1149,7 @@ impl Generator {
         // the default as a success response as well.) Otherwise the catch-all
         // produces an error corresponding to a response not specified in the
         // API description.
-        let default_response = match method.responses.iter().last() {
+        let default_response = match method.response.success.variants.iter().last() {
             Some(response) if response.status_code.is_default() => quote! {},
             _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
         };
@@ -1093,8 +1226,8 @@ impl Generator {
         };
 
         Ok(MethodSigBody {
-            success: response_type.into_tokens(&self.type_space),
-            error: error_type.into_tokens(&self.type_space),
+            success: response_type.as_tokens(&self.type_space),
+            error: error_type.as_tokens(&self.type_space),
             body: body_impl,
         })
     }
@@ -1107,9 +1240,11 @@ impl Generator {
         &self,
         method: &'a OperationMethod,
         filter: fn(&OperationResponseStatus) -> bool,
-    ) -> (Vec<&'a OperationResponse>, OperationResponseType) {
+    ) -> (Vec<&'a OperationResponseVariant>, OperationResponseType) {
         let mut response_items = method
-            .responses
+            .response
+            .success
+            .variants
             .iter()
             .filter(|response| filter(&response.status_code))
             .collect::<Vec<_>>();
@@ -1121,11 +1256,11 @@ impl Generator {
         let len = response_items.len();
         if len >= 2 {
             if let (
-                OperationResponse {
+                OperationResponseVariant {
                     status_code: OperationResponseStatus::Range(2),
                     ..
                 },
-                OperationResponse {
+                OperationResponseVariant {
                     status_code: OperationResponseStatus::Default,
                     ..
                 },
@@ -1140,14 +1275,12 @@ impl Generator {
             .map(|response| response.typ.clone())
             .collect::<BTreeSet<_>>();
 
-        // TODO to deal with multiple response types, we'll need to create an
-        // enum type with variants for each of the response types.
-        assert!(response_types.len() <= 1);
         let response_type = response_types
             .into_iter()
             .next()
             // TODO should this be OperationResponseType::Raw?
             .unwrap_or(OperationResponseType::None);
+
         (response_items, response_type)
     }
 
@@ -1157,7 +1290,7 @@ impl Generator {
         &self,
         operation: &openapiv3::Operation,
         parameters: &[OperationParameter],
-        responses: &[OperationResponse],
+        responses: &[OperationResponseVariant],
     ) -> Option<DropshotPagination> {
         if operation
             .extensions
@@ -1568,6 +1701,7 @@ impl Generator {
             method.method.as_str().to_ascii_uppercase(),
             method.path.to_string(),
         );
+
         let send_impl = quote! {
             #[doc = #send_doc]
             pub async fn send(self) -> Result<

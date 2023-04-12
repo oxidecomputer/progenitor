@@ -8,7 +8,7 @@ use std::ops::{Deref, DerefMut};
 
 use bytes::Bytes;
 use futures_core::Stream;
-use reqwest::RequestBuilder;
+use reqwest::{RequestBuilder};
 use serde::{de::DeserializeOwned, Serialize};
 
 type InnerByteStream =
@@ -56,6 +56,41 @@ pub struct ResponseValue<T> {
     // TODO cookies?
 }
 
+pub enum Upgradable<T> {
+    Upgrade(reqwest::Upgraded),
+    Value(T),
+}
+
+impl<T> From<ResponseValue<T>> for ResponseValue<Option<T>> {
+    fn from(value: ResponseValue<T>) -> Self {
+        Self {
+            inner: Some(value.inner),
+            status: value.status,
+            headers: value.headers,
+        }
+    }
+}
+
+impl<T> From<ResponseValue<T>> for ResponseValue<Upgradable<T>> {
+    fn from(value: ResponseValue<T>) -> Self {
+        Self {
+            inner: Upgradable::Value(value.inner),
+            status: value.status,
+            headers: value.headers,
+        }
+    }
+}
+
+impl<T> From<ResponseValue<T>> for ResponseValue<Upgradable<Option<T>>> {
+    fn from(value: ResponseValue<T>) -> Self {
+        Self {
+            inner: Upgradable::Value(Some(value.inner)),
+            status: value.status,
+            headers: value.headers,
+        }
+    }
+}
+
 impl<T: DeserializeOwned> ResponseValue<T> {
     #[doc(hidden)]
     pub async fn from_response<E: std::fmt::Debug>(
@@ -76,7 +111,23 @@ impl<T: DeserializeOwned> ResponseValue<T> {
     }
 }
 
-impl ResponseValue<reqwest::Upgraded> {
+impl<T: DeserializeOwned> ResponseValue<Option<T>> {
+    #[doc(hidden)]
+    pub fn from_empty_response(
+        response: reqwest::Response,
+    ) -> Self {
+        let status = response.status();
+        let headers = response.headers().clone();
+
+        Self {
+            inner: None,
+            status,
+            headers,
+        }
+    }
+}
+
+impl<T: DeserializeOwned> ResponseValue<Upgradable<T>> {
     #[doc(hidden)]
     pub async fn upgrade<E: std::fmt::Debug>(
         response: reqwest::Response,
@@ -90,7 +141,7 @@ impl ResponseValue<reqwest::Upgraded> {
                 .map_err(Error::InvalidResponsePayload)?;
 
             Ok(Self {
-                inner,
+                inner: Upgradable::Upgrade(inner),
                 status,
                 headers,
             })
