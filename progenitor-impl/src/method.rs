@@ -6,18 +6,19 @@ use std::{
     str::FromStr,
 };
 
-use indexmap::{IndexMap, IndexSet};
-use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
+use indexmap::IndexSet;
+use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode, OpenAPI, APIKeyLocation, SecurityScheme};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
-use typify::{TypeId, TypeSpace, TypeSpacePatch};
+use typify::{TypeId, TypeSpace};
 
 use crate::{
     template::PathTemplate,
     util::{items, parameter_map, sanitize, Case},
-    Error, Generator, Result, TagStyle,
+    Error, Generator, Result, TagStyle, Security,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
+
 
 /// The intermediate representation of an operation that will become a method.
 pub(crate) struct OperationMethod {
@@ -25,6 +26,7 @@ pub(crate) struct OperationMethod {
     pub tags: Vec<String>,
     method: HttpMethod,
     path: PathTemplate,
+    pub security: Security,
     pub summary: Option<String>,
     pub description: Option<String>,
     pub params: Vec<OperationParameter>,
@@ -240,6 +242,13 @@ impl PartialOrd for OperationResponseStatus {
     }
 }
 
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
+pub(crate) enum OperationResponseFormat {
+    Json,
+    XML,
+    // TODO more
+}
+
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub(crate) enum OperationResponseType {
     Type(TypeId),
@@ -275,6 +284,7 @@ impl Generator {
         components: &Option<Components>,
         path: &str,
         method: &str,
+        security: &Security,
         path_parameters: &[ReferenceOr<Parameter>],
     ) -> Result<OperationMethod> {
         let operation_id = operation.operation_id.as_ref().unwrap();
@@ -565,8 +575,9 @@ impl Generator {
                 .description
                 .clone()
                 .filter(|s| !s.is_empty()),
-            params,
             responses,
+            params,
+            security: security.clone(), // TODO parse per request requirements instead of assuming the global default
             dropshot_paginated,
             dropshot_websocket,
         })
@@ -777,7 +788,7 @@ impl Generator {
         client: TokenStream,
     ) -> Result<MethodSigBody> {
         // Generate code for query parameters.
-        let query_items = method
+        let query_items = Vec::from_iter(method
             .params
             .iter()
             .filter_map(|param| match &param.kind {
@@ -799,8 +810,7 @@ impl Generator {
                     Some(res)
                 }
                 _ => None,
-            })
-            .collect::<Vec<_>>();
+            }));
 
         let (query_build, query_use) = if query_items.is_empty() {
             (quote! {}, quote! {})
@@ -817,7 +827,7 @@ impl Generator {
             (query_build, query_use)
         };
 
-        let headers = method
+        let mut headers = method
             .params
             .iter()
             .filter_map(|param| match &param.kind {
@@ -840,15 +850,36 @@ impl Generator {
                 _ => None,
             })
             .collect::<Vec<_>>();
-
+ 
+        if let Some(sec_scheme) = method.security.resolve_for_path(&method.path) {
+            match sec_scheme {
+                SecurityScheme::APIKey { location: APIKeyLocation::Header, name, .. } => {
+                    let hn = name;
+                    headers.push(quote!{
+                        {
+                            let value = self.inner.header_api_key(#hn);
+                            header_map.append(#hn, HeaderValue::try_from(value)?);
+                        }
+                    })
+                }
+                SecurityScheme::APIKey { location, name, .. } => {
+                }
+                SecurityScheme::HTTP { scheme, bearer_format, description } => {
+                    todo!("Craft http header")
+                }
+                _ => todo!("Only header APIKeys are supported right now"),
+            }  
+        };
+        
         let (headers_build, headers_use) = if headers.is_empty() {
             (quote! {}, quote! {})
         } else {
             let size = headers.len();
             let headers_build = quote! {
                 let mut header_map = HeaderMap::with_capacity(#size);
-                #(#headers)*
+                #( #headers )*
             };
+            
             let headers_use = quote! {
                 .headers(header_map)
             };
@@ -938,7 +969,7 @@ impl Generator {
         // ... and there can be at most one body.
         assert!(body_func.clone().count() <= 1);
 
-        let (success_response_items, response_type) = self.extract_responses(
+        let (success_response_items, response_type, response_format) = self.extract_responses(
             method,
             OperationResponseStatus::is_success_or_default,
         );
@@ -1077,11 +1108,11 @@ impl Generator {
 
             #pre_hook
             let result = #client.client
-                .execute(request)
+                .execute(dbg!(request))
                 .await;
             #post_hook
 
-            let response = result?;
+            let response = dbg!(result?);
 
             match response.status().as_u16() {
                 // These will be of the form...
@@ -1175,6 +1206,7 @@ impl Generator {
             .next()
             // TODO should this be OperationResponseType::Raw?
             .unwrap_or(OperationResponseType::None);
+
         (response_items, response_type)
     }
 
@@ -1569,7 +1601,7 @@ impl Generator {
                         }
                     }
 
-                    OperationParameterType::Form(type_id) => {
+                    OperationParameterType::Form(_type_id) => {
                         let err_msg = format!(
                             "conversion to `reqwest::Body` for {} failed",
                             param.name,
@@ -2115,7 +2147,7 @@ impl Generator {
                                                     max_length: None,
                                                 },
                                             )) if enumeration.is_empty() => {
-                                                Ok((name.to_owned()))
+                                                Ok(name.to_owned())
                                             }
                                             schema => {
                                                 Err(Error::UnexpectedFormat(format!(

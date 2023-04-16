@@ -51,6 +51,7 @@ impl PathTemplate {
 
         quote! {
             let url = format!(#fmt, #client.baseurl, #(#components,)*);
+            println!("Querying: {}", &url);
         }
     }
 
