@@ -30,6 +30,6 @@ unicode-ident = "1.0.8"
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
 expectorate = "1.0"
 http = "0.2.9"
-hyper = "0.14.25"
+hyper = "0.14.26"
 serde_yaml = "0.9"
 serde_json = "1.0.95"
