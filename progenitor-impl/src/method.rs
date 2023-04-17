@@ -161,6 +161,7 @@ impl fmt::Display for BodyContentType {
 pub(crate) struct OperationResponse {
     status_code: OperationResponseStatus,
     typ: OperationResponseType,
+    format: Option<OperationResponseFormat>,
     // TODO this isn't currently used because dropshot doesn't give us a
     // particularly useful message here.
     #[allow(dead_code)]
@@ -242,11 +243,21 @@ impl PartialOrd for OperationResponseStatus {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
+#[derive(Debug, Hash, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub(crate) enum OperationResponseFormat {
-    Json,
+    JSON,
     XML,
-    // TODO more
+    FormUrlencoded,
+}
+
+impl std::fmt::Display for OperationResponseFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(match self {
+            Self::JSON => "application/json",
+            Self::XML => "application/xml",
+            Self::FormUrlencoded => "application/x-www-form-urlencoded",
+        })
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
@@ -481,7 +492,7 @@ impl Generator {
                 // enum; the generated client method would check for the
                 // content type of the response just as it currently examines
                 // the status code.
-                let typ = if let Some(mt) =
+                let (typ, format ) = if let Some(mt) =
                     response.content.get("application/json")
                 {
                     assert!(mt.encoding.is_empty());
@@ -501,13 +512,13 @@ impl Generator {
                         todo!("media type encoding, no schema: {:#?}", mt);
                     };
 
-                    OperationResponseType::Type(typ)
+                    (OperationResponseType::Type(typ), Some(OperationResponseFormat::JSON))
                 } else if dropshot_websocket {
-                    OperationResponseType::Upgrade
+                    (OperationResponseType::Upgrade, None) 
                 } else if response.content.first().is_some() {
-                    OperationResponseType::Raw
+                    (OperationResponseType::Raw, None)
                 } else {
-                    OperationResponseType::None
+                    (OperationResponseType::None, None)
                 };
 
                 // See if there's a status code that covers success cases.
@@ -529,6 +540,7 @@ impl Generator {
                 Ok(OperationResponse {
                     status_code,
                     typ,
+                    format,
                     description,
                 })
             })
@@ -542,6 +554,7 @@ impl Generator {
             responses.push(OperationResponse {
                 status_code: OperationResponseStatus::Range(2),
                 typ: OperationResponseType::Raw,
+                format: None,
                 description: None,
             });
         }
@@ -551,6 +564,7 @@ impl Generator {
             responses.push(OperationResponse {
                 status_code: OperationResponseStatus::Code(101),
                 typ: OperationResponseType::Upgrade,
+                format: None,
                 description: None,
             })
         }
@@ -871,6 +885,17 @@ impl Generator {
             }  
         };
         
+        use itertools::Itertools;
+        
+        // Add "Accept" headers
+        let accepts = method.responses.iter().filter_map(|response| response.format.as_ref()).unique().map(|format| {
+            let format = format.to_string();
+            quote! {
+                header_map.append("Accept", HeaderValue::from_static(#format));
+            }
+        });
+        headers.extend(accepts);
+        
         let (headers_build, headers_use) = if headers.is_empty() {
             (quote! {}, quote! {})
         } else {
@@ -969,7 +994,7 @@ impl Generator {
         // ... and there can be at most one body.
         assert!(body_func.clone().count() <= 1);
 
-        let (success_response_items, response_type, response_format) = self.extract_responses(
+        let (success_response_items, response_type) = self.extract_responses(
             method,
             OperationResponseStatus::is_success_or_default,
         );
@@ -1108,11 +1133,11 @@ impl Generator {
 
             #pre_hook
             let result = #client.client
-                .execute(dbg!(request))
+                .execute(request)
                 .await;
             #post_hook
 
-            let response = dbg!(result?);
+            let response = result?;
 
             match response.status().as_u16() {
                 // These will be of the form...
