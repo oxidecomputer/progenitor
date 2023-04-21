@@ -456,8 +456,11 @@ impl Generator {
                 // content type of the response just as it currently examines
                 // the status code.
                 let typ = if let Some(mt) =
-                    response.content.iter().find_map(|(x, v)| (x == "application/json" || x.starts_with("application/json;")).then_some(v))
-                {
+                    response.content.iter().find_map(|(x, v)| {
+                        (x == "application/json"
+                            || x.starts_with("application/json;"))
+                        .then_some(v)
+                    }) {
                     assert!(mt.encoding.is_empty());
 
                     let typ = if let Some(schema) = &mt.schema {
