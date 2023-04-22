@@ -9,6 +9,7 @@ readme = "../README.md"
 
 [dependencies]
 heck = "0.4.1"
+http = "0.2.9"
 getopts = "0.2"
 indexmap = "1.9"
 openapiv3 = "1.0.0"

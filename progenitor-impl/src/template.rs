@@ -63,6 +63,31 @@ impl PathTemplate {
             })
             .collect()
     }
+
+    pub fn as_wildcard(&self) -> String {
+        let inner = self
+            .components
+            .iter()
+            .map(|c| match c {
+                Component::Constant(name) => name.clone(),
+                Component::Parameter(_) => ".*".to_string(),
+            })
+            .collect::<String>();
+        format!("^{}$", inner)
+    }
+
+    pub fn as_wildcard_param(&self, param: &str) -> String {
+        let inner = self
+            .components
+            .iter()
+            .map(|c| match c {
+                Component::Constant(name) => name.clone(),
+                Component::Parameter(p) if p == param => "{}".to_string(),
+                Component::Parameter(_) => ".*".to_string(),
+            })
+            .collect::<String>();
+        format!("^{}$", inner)
+    }
 }
 
 pub fn parse(t: &str) -> Result<PathTemplate> {

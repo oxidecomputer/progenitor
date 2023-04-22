@@ -1,0 +1,335 @@
+// Copyright 2023 Oxide Computer Company
+
+//! Generation of mocking extensions for `httpmock`
+
+use openapiv3::OpenAPI;
+use proc_macro2::TokenStream;
+use quote::{format_ident, quote, ToTokens};
+
+use crate::{
+    method::{
+        HttpMethod, OperationParameter, OperationParameterKind,
+        OperationParameterType, OperationResponse, OperationResponseStatus,
+    },
+    to_schema::ToSchema,
+    util::{sanitize, Case},
+    validate_openapi, Generator, Result,
+};
+
+struct MockOp {
+    when: TokenStream,
+    when_impl: TokenStream,
+    then: TokenStream,
+    then_impl: TokenStream,
+}
+
+impl Generator {
+    pub fn httpmock(
+        &mut self,
+        spec: &OpenAPI,
+        crate_name: &str,
+    ) -> Result<TokenStream> {
+        validate_openapi(spec)?;
+
+        // Convert our components dictionary to schemars
+        let schemas = spec.components.iter().flat_map(|components| {
+            components.schemas.iter().map(|(name, ref_or_schema)| {
+                (name.clone(), ref_or_schema.to_schema())
+            })
+        });
+
+        self.type_space.add_ref_types(schemas)?;
+
+        let raw_methods = spec
+            .paths
+            .iter()
+            .flat_map(|(path, ref_or_item)| {
+                // Exclude externally defined path items.
+                let item = ref_or_item.as_item().unwrap();
+                item.iter().map(move |(method, operation)| {
+                    (path.as_str(), method, operation, &item.parameters)
+                })
+            })
+            .map(|(path, method, operation, path_parameters)| {
+                self.process_operation(
+                    operation,
+                    &spec.components,
+                    path,
+                    method,
+                    path_parameters,
+                )
+            })
+            .collect::<Result<Vec<_>>>()?;
+
+        let methods = raw_methods
+            .iter()
+            .map(|method| self.httpmock_method(method))
+            .collect::<Vec<_>>();
+
+        let op = raw_methods
+            .iter()
+            .map(|method| format_ident!("{}", &method.operation_id))
+            .collect::<Vec<_>>();
+        let when = methods.iter().map(|op| &op.when).collect::<Vec<_>>();
+        let when_impl =
+            methods.iter().map(|op| &op.when_impl).collect::<Vec<_>>();
+        let then = methods.iter().map(|op| &op.then).collect::<Vec<_>>();
+        let then_impl =
+            methods.iter().map(|op| &op.then_impl).collect::<Vec<_>>();
+
+        let crate_ident = format_ident!("{}", crate_name);
+
+        let code = quote! {
+            pub mod operations {
+
+                //! [`When`](httpmock::When) and [`Then`](httpmock::Then)
+                //! wrappers for each operation. Each can be converted to
+                //! its inner type with a call to `into_inner()`. This can
+                //! be used to explicitly deviate from permitted values.
+
+                use #crate_ident::*;
+
+                #(
+                    pub struct #when(httpmock::When);
+                    #when_impl
+
+                    pub struct #then(httpmock::Then);
+                    #then_impl
+                )*
+            }
+
+            /// An extension trait for [`MockServer`](httpmock::MockServer) that
+            /// adds a method for each operation. These are the equivalent of
+            /// type-checked [`mock()`](httpmock::MockServer::mock) calls.
+            pub trait MockServerExt {
+                #(
+                    fn #op<F>(&self, config_fn: F) -> httpmock::Mock
+                    where
+                        F: FnOnce(operations::#when, operations::#then);
+                )*
+            }
+
+            impl MockServerExt for httpmock::MockServer {
+                #(
+                    fn #op<F>(&self, config_fn: F) -> httpmock::Mock
+                    where
+                        F: FnOnce(operations::#when, operations::#then)
+                    {
+                        self.mock(|when, then| {
+                            config_fn(
+                                operations::#when::new(when),
+                                operations::#then::new(then),
+                            )
+                        })
+                    }
+                )*
+            }
+        };
+        Ok(code)
+    }
+
+    fn httpmock_method(
+        &mut self,
+        method: &crate::method::OperationMethod,
+    ) -> MockOp {
+        let when_name =
+            sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
+        let when = format_ident!("{}", when_name).to_token_stream();
+        let then_name =
+            sanitize(&format!("{}-then", method.operation_id), Case::Pascal);
+        let then = format_ident!("{}", then_name).to_token_stream();
+
+        let http_method = match &method.method {
+            HttpMethod::Get => quote! { httpmock::Method::GET },
+            HttpMethod::Put => quote! { httpmock::Method::PUT },
+            HttpMethod::Post => quote! { httpmock::Method::POST },
+            HttpMethod::Delete => quote! { httpmock::Method::DELETE },
+            HttpMethod::Options => quote! { httpmock::Method::OPTIONS },
+            HttpMethod::Head => quote! { httpmock::Method::HEAD },
+            HttpMethod::Patch => quote! { httpmock::Method::PATCH },
+            HttpMethod::Trace => quote! { httpmock::Method::TRACE },
+        };
+
+        let path_re = method.path.as_wildcard();
+
+        let when_methods = method.params.iter().map(
+            |OperationParameter {
+                 name, typ, kind, ..
+             }| {
+                let arg_type_name = match typ {
+                    OperationParameterType::Type(arg_type_id) => {
+                        let arg_type =
+                            self.type_space.get_type(arg_type_id).unwrap();
+                        let arg_details = arg_type.details();
+                        let arg_type_name = match &arg_details {
+                            typify::TypeDetails::Option(opt_id) => {
+                                let inner_type =
+                                    self.type_space.get_type(opt_id).unwrap();
+                                inner_type.parameter_ident()
+                            }
+                            _ => arg_type.parameter_ident(),
+                        };
+                        arg_type_name
+                    }
+                    OperationParameterType::RawBody => quote! {
+                        serde_json::Value
+                    },
+                };
+
+                let name_ident = format_ident!("{}", name);
+                let handler = match kind {
+                    OperationParameterKind::Path => {
+                        let re_fmt = method.path.as_wildcard_param(name);
+                        quote! {
+                            let re = regex::Regex::new(
+                                &format!(#re_fmt, value.to_string())
+                            ).unwrap();
+                            Self(self.0.path_matches(re))
+                        }
+                    }
+                    OperationParameterKind::Query(_) => quote! {
+                        Self(self.0.query_param(#name, value.to_string()))
+                    },
+                    OperationParameterKind::Header(_) => quote! { todo!() },
+                    OperationParameterKind::Body(_) => match typ {
+                        OperationParameterType::Type(_) => quote! {
+                            Self(self.0.json_body_obj(value))
+
+                        },
+                        OperationParameterType::RawBody => quote! {
+                            Self(self.0.json_body(value))
+                        },
+                    },
+                };
+                quote! {
+                    pub fn #name_ident(self, value: #arg_type_name) -> Self {
+                        #handler
+                    }
+                }
+            },
+        );
+
+        let when_impl = quote! {
+            impl #when {
+                pub fn new(inner: httpmock::When) -> Self {
+                    Self(inner
+                        .method(#http_method)
+                        .path_matches(regex::Regex::new(#path_re).unwrap()))
+                }
+
+                pub fn into_inner(self) -> httpmock::When {
+                    self.0
+                }
+
+                #(#when_methods)*
+            }
+        };
+
+        let then_methods = method.responses.iter().map(
+            |OperationResponse {
+                 status_code, typ, ..
+             }| {
+                let (value_param, value_use) = match typ {
+                    crate::method::OperationResponseType::Type(arg_type_id) => {
+                        let arg_type =
+                            self.type_space.get_type(arg_type_id).unwrap();
+                        let arg_type_ident = arg_type.parameter_ident();
+                        (
+                            quote! {
+                                value: #arg_type_ident,
+                            },
+                            quote! {
+                                .json_body_obj(value)
+                            },
+                        )
+                    }
+                    crate::method::OperationResponseType::None => {
+                        Default::default()
+                    }
+                    crate::method::OperationResponseType::Raw => (
+                        quote! {
+                            value: serde_json::Value,
+                        },
+                        quote! {
+                            .json_body(value)
+                        },
+                    ),
+                    crate::method::OperationResponseType::Upgrade => {
+                        Default::default()
+                    }
+                };
+
+                match status_code {
+                    OperationResponseStatus::Code(status_code) => {
+                        let canonical_reason =
+                            http::StatusCode::from_u16(*status_code)
+                                .unwrap()
+                                .canonical_reason()
+                                .unwrap();
+                        let fn_name = format_ident!(
+                            "{}",
+                            &sanitize(canonical_reason, Case::Snake)
+                        );
+
+                        quote! {
+                            pub fn #fn_name(self, #value_param) -> Self {
+                                Self(self.0
+                                    .status(#status_code)
+                                    #value_use
+                                )
+                            }
+                        }
+                    }
+                    OperationResponseStatus::Range(status_type) => {
+                        let status_string = match status_type {
+                            1 => "informational",
+                            2 => "success",
+                            3 => "redirect",
+                            4 => "client_error",
+                            5 => "server_error",
+                            _ => unreachable!(),
+                        };
+                        let fn_name = format_ident!("{}", status_string);
+                        quote! {
+                            pub fn #fn_name(self, status: u16, #value_param) -> Self {
+                                Self(self.0
+                                    .status(status)
+                                    #value_use
+                                )
+                            }
+                        }
+                    }
+                    OperationResponseStatus::Default => quote! {
+                        pub fn default_response(self, status: u16, #value_param) -> Self {
+                            Self(self.0
+                                .status(status)
+                                #value_use
+                            )
+                        }
+                    },
+                }
+            },
+        );
+
+        let then_impl = quote! {
+            impl #then {
+                pub fn new(inner: httpmock::Then) -> Self {
+                    Self(inner)
+                }
+
+                pub fn into_inner(self) -> httpmock::Then {
+                    self.0
+                }
+
+                #(#then_methods)*
+            }
+        };
+
+        MockOp {
+            when,
+            when_impl,
+            then,
+            then_impl,
+        }
+    }
+}

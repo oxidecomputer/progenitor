@@ -15,6 +15,7 @@ pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
 
 mod cli;
+mod httpmock;
 mod method;
 mod template;
 mod to_schema;
@@ -567,6 +568,7 @@ pub(crate) fn space_out_items(content: String) -> Result<String> {
     })
 }
 
+/// Do some very basic checks of the OpenAPI documents.
 pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     match spec.openapi.as_str() {
         "3.0.0" | "3.0.1" | "3.0.2" | "3.0.3" => (),
