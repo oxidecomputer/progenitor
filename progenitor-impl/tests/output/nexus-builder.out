@@ -21541,7 +21541,15 @@ pub mod builder {
                 .and_then(std::convert::TryInto::<types::DeviceAuthVerify>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/device/confirm", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -21802,7 +21810,15 @@ pub mod builder {
                 .and_then(std::convert::TryInto::<types::SpoofLoginBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/login", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22078,7 +22094,14 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/logout", client.baseurl,);
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -22502,7 +22525,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23168,7 +23198,14 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -23636,7 +23673,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&disk_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24332,7 +24376,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&image_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -24803,7 +24854,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -26136,7 +26194,14 @@ pub mod builder {
                 encode_path(&instance_name.to_string()),
                 encode_path(&interface_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -27326,7 +27391,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&snapshot_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -27914,7 +27986,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -28799,7 +28878,14 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -29544,7 +29630,14 @@ pub mod builder {
                 encode_path(&router_name.to_string()),
                 encode_path(&route_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -30210,7 +30303,14 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&subnet_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -31245,7 +31345,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&ssh_key_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -31756,7 +31863,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&certificate.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -32812,7 +32926,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&image_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -33226,7 +33347,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&pool_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -33520,7 +33648,15 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&pool_name.to_string()),
             );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -33793,7 +33929,15 @@ pub mod builder {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/ip-pools-service/ranges/remove", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -34583,7 +34727,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -34912,7 +35063,14 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
                 encode_path(&user_id.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -34998,7 +35156,15 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
                 encode_path(&user_id.to_string()),
             );
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -36533,7 +36699,15 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client.client.delete(url).query(&query).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&query)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -37016,7 +37190,15 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client.client.delete(url).query(&query).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&query)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -38582,7 +38764,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization.to_string()),
             );
-            let request = client.client.delete(url).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -39256,7 +39445,15 @@ pub mod builder {
             if let Some(v) = &organization {
                 query.push(("organization", v.to_string()));
             }
-            let request = client.client.delete(url).query(&query).build()?;
+            let request = client
+                .client
+                .delete(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&query)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -39845,7 +40042,14 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/v1/system/update/refresh", client.baseurl,);
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -39949,7 +40153,14 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/v1/system/update/stop", client.baseurl,);
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

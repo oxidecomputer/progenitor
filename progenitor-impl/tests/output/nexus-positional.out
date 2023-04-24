@@ -6332,7 +6332,15 @@ impl Client {
         body: &'a types::DeviceAuthVerify,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/device/confirm", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6467,7 +6475,15 @@ impl Client {
         body: &'a types::SpoofLoginBody,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/login", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6583,7 +6599,14 @@ impl Client {
     ///Sends a `POST` request to `/logout`
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/logout", self.baseurl,);
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -6828,7 +6851,14 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7183,7 +7213,14 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7421,7 +7458,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&disk_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -7814,7 +7858,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&image_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8051,7 +8102,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -8654,7 +8712,14 @@ impl Client {
             encode_path(&instance_name.to_string()),
             encode_path(&interface_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -9220,7 +9285,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&snapshot_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -9494,7 +9566,14 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -9869,7 +9948,14 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -10182,7 +10268,14 @@ impl Client {
             encode_path(&router_name.to_string()),
             encode_path(&route_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -10475,7 +10568,14 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -11117,7 +11217,14 @@ impl Client {
             self.baseurl,
             encode_path(&ssh_key_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -11421,7 +11528,14 @@ impl Client {
             self.baseurl,
             encode_path(&certificate.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -12086,7 +12200,14 @@ impl Client {
             self.baseurl,
             encode_path(&image_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -12308,7 +12429,14 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -12471,7 +12599,15 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -12645,7 +12781,15 @@ impl Client {
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges/remove", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -13100,7 +13244,14 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -13283,7 +13434,14 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&user_id.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -13323,7 +13481,15 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&user_id.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -14171,7 +14337,15 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self.client.delete(url).query(&query).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&query)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -14406,7 +14580,15 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self.client.delete(url).query(&query).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&query)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -15161,7 +15343,14 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
-        let request = self.client.delete(url).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -15485,7 +15674,15 @@ impl Client {
             query.push(("organization", v.to_string()));
         }
 
-        let request = self.client.delete(url).query(&query).build()?;
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&query)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -15815,7 +16012,14 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/refresh", self.baseurl,);
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -15870,7 +16074,14 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/stop", self.baseurl,);
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

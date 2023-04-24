@@ -819,7 +819,15 @@ impl Client {
         body: types::InstanceStateRequested,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/instance/state", self.baseurl,);
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
