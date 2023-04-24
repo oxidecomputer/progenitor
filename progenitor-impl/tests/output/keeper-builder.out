@@ -1171,7 +1171,15 @@ pub mod builder {
             let url = format!("{}/global/jobs", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client.client.get(url).headers(header_map).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1218,7 +1226,15 @@ pub mod builder {
             let url = format!("{}/ping", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client.client.get(url).headers(header_map).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1295,6 +1311,10 @@ pub mod builder {
             let request = client
                 .client
                 .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
                 .json(&body)
                 .headers(header_map)
                 .build()?;
@@ -1374,6 +1394,10 @@ pub mod builder {
             let request = client
                 .client
                 .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
                 .json(&body)
                 .headers(header_map)
                 .build()?;
@@ -1451,6 +1475,10 @@ pub mod builder {
             let request = client
                 .client
                 .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
                 .json(&body)
                 .headers(header_map)
                 .build()?;

@@ -1872,7 +1872,14 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/control/hold", client.baseurl,);
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1945,7 +1952,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -1972,7 +1986,14 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/tasks", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2025,7 +2046,15 @@ pub mod builder {
                 .and_then(std::convert::TryInto::<types::TaskSubmit>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/tasks", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2093,7 +2122,15 @@ pub mod builder {
             if let Some(v) = &minseq {
                 query.push(("minseq", v.to_string()));
             }
-            let request = client.client.get(url).query(&query).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&query)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2139,7 +2176,14 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2256,7 +2300,15 @@ pub mod builder {
                 .and_then(std::convert::TryInto::<types::UserCreate>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/users", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2283,7 +2335,14 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/whoami", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2336,7 +2395,15 @@ pub mod builder {
                 .and_then(std::convert::TryInto::<types::WorkerBootstrap>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
-            let request = client.client.post(url).json(&body).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2363,7 +2430,14 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/worker/ping", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2497,6 +2571,10 @@ pub mod builder {
             let request = client
                 .client
                 .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
                 .header(
                     reqwest::header::CONTENT_TYPE,
                     reqwest::header::HeaderValue::from_static("application/octet-stream"),
@@ -2671,7 +2749,14 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/workers", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

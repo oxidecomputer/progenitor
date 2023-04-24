@@ -235,7 +235,15 @@ impl Client {
         let url = format!("{}/global/jobs", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self.client.get(url).headers(header_map).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -255,7 +263,15 @@ impl Client {
         let url = format!("{}/ping", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self.client.get(url).headers(header_map).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -280,6 +296,10 @@ impl Client {
         let request = self
             .client
             .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
             .json(&body)
             .headers(header_map)
             .build()?;
@@ -307,6 +327,10 @@ impl Client {
         let request = self
             .client
             .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
             .json(&body)
             .headers(header_map)
             .build()?;
@@ -334,6 +358,10 @@ impl Client {
         let request = self
             .client
             .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
             .json(&body)
             .headers(header_map)
             .build()?;
