@@ -1411,7 +1411,10 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
-        // Generate the default value value for each parameter.
+        // Generate the default value value for each parameter. For optional
+        // parameters it's just `Ok(None)`. For builders it's
+        // `Ok(Default::default())`. For required, non-builders it's an Err(_)
+        // that indicates which field isn't initialized.
         let param_values = method
             .params
             .iter()
@@ -1442,7 +1445,10 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
-        let param_xxx = method
+        // For builders we map `Ok` values to perform a `try_into` to attempt
+        // to convert the builder into the desired type. No "finalization" is
+        // required for non-builders (required or optional).
+        let param_finalize = method
             .params
             .iter()
             .map(|param| match &param.typ {
@@ -1527,6 +1533,12 @@ impl Generator {
                                     }
                                 })
                             }
+
+                            // For builder-capable bodies we offer a `body()`
+                            // method that sets the full body (by constructing
+                            // a builder **from** the body type). We also offer
+                            // a `body_map()` method that operates on the
+                            // builder itself.
                             (_, Some(builder_name)) => {
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident();
@@ -1611,7 +1623,7 @@ impl Generator {
                 #(
                 let #param_names =
                     #param_names
-                        #param_xxx
+                        #param_finalize
                         .map_err(Error::InvalidRequest)?;
                 )*
 
