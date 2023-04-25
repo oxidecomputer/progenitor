@@ -17,6 +17,8 @@ https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...HEAD[Full list of 
 
 * Add support for header parameters (#210)
 * Add support for YAML input (#227)
+* Add generation for `clap`-based CLIs
+* Add generation for strongly-typed mocks with `httpmock`
 
 == 0.2.0 (released 2022-09-11)
 

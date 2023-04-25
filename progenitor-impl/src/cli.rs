@@ -42,6 +42,7 @@ impl Generator {
         space_out_items(content)
     }
 
+    /// Generate a `clap`-based CLI.
     pub fn cli(
         &mut self,
         spec: &OpenAPI,

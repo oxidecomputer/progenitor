@@ -85,6 +85,25 @@ fn verify_apis(openapi_file: &str) {
         format!("tests/output/{}-cli.out", openapi_stem),
         &output,
     );
+
+    // httpmock generation.
+    let code = generator.httpmock(&spec, "sdk").unwrap();
+
+    // TODO pending #368
+    let output = rustfmt_wrapper::rustfmt_config(
+        rustfmt_wrapper::config::Config {
+            format_strings: Some(true),
+            ..Default::default()
+        },
+        code,
+    )
+    .unwrap();
+
+    let output = progenitor_impl::space_out_items(output).unwrap();
+    expectorate::assert_contents(
+        format!("tests/output/{}-httpmock.out", openapi_stem),
+        &output,
+    );
 }
 
 #[test]

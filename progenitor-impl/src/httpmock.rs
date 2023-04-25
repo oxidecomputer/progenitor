@@ -24,6 +24,7 @@ struct MockOp {
 }
 
 impl Generator {
+    /// Generate a strongly-typed mocking extension to the `httpmock` crate.
     pub fn httpmock(
         &mut self,
         spec: &OpenAPI,

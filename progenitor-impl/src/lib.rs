@@ -557,7 +557,7 @@ impl Generator {
     }
 }
 
-pub(crate) fn space_out_items(content: String) -> Result<String> {
+pub fn space_out_items(content: String) -> Result<String> {
     // Add newlines after end-braces at <= two levels of indentation.
     Ok(if cfg!(not(windows)) {
         let regex = regex::Regex::new(r#"(})(\n\s{0,8}[^} ])"#).unwrap();
