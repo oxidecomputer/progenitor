@@ -970,9 +970,9 @@ pub mod types {
                     name: Err("no value supplied for name".to_string()),
                     read_only: Err("no value supplied for read_only".to_string()),
                     slot: Err("no value supplied for slot".to_string()),
-                    volume_construction_request: Err(
-                        "no value supplied for volume_construction_request".to_string(),
-                    ),
+                    volume_construction_request: Err("no value supplied for \
+                                                      volume_construction_request"
+                        .to_string()),
                 }
             }
         }

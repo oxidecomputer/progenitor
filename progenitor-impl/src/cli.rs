@@ -10,7 +10,6 @@ use crate::{
     method::{
         OperationParameterKind, OperationParameterType, OperationResponseStatus,
     },
-    space_out_items,
     to_schema::ToSchema,
     util::{sanitize, Case},
     validate_openapi, Generator, Result,
@@ -23,25 +22,6 @@ struct CliOperation {
 }
 
 impl Generator {
-    pub fn cli_text(
-        &mut self,
-        spec: &OpenAPI,
-        crate_name: &str,
-    ) -> Result<String> {
-        let output = self.cli(spec, crate_name)?;
-
-        let content = rustfmt_wrapper::rustfmt_config(
-            rustfmt_wrapper::config::Config {
-                format_strings: Some(true),
-                ..Default::default()
-            },
-            output,
-        )
-        .unwrap();
-
-        space_out_items(content)
-    }
-
     /// Generate a `clap`-based CLI.
     pub fn cli(
         &mut self,
