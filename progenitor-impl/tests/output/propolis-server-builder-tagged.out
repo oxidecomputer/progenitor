@@ -2124,7 +2124,14 @@ pub mod builder {
         ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/instance", client.baseurl,);
-            let request = client.client.get(url).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2187,7 +2194,15 @@ pub mod builder {
                 .and_then(std::convert::TryInto::<types::InstanceEnsureRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance", client.baseurl,);
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2258,7 +2273,14 @@ pub mod builder {
                 encode_path(&id.to_string()),
                 encode_path(&snapshot_id.to_string()),
             );
-            let request = client.client.post(url).build()?;
+            let request = client
+                .client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2321,7 +2343,15 @@ pub mod builder {
                 .and_then(std::convert::TryInto::<types::InstanceMigrateStatusRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/migrate/status", client.baseurl,);
-            let request = client.client.get(url).json(&body).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2412,7 +2442,15 @@ pub mod builder {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state", client.baseurl,);
-            let request = client.client.put(url).json(&body).build()?;
+            let request = client
+                .client
+                .put(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2475,7 +2513,15 @@ pub mod builder {
                 .and_then(std::convert::TryInto::<types::InstanceStateMonitorRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state-monitor", client.baseurl,);
-            let request = client.client.get(url).json(&body).build()?;
+            let request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

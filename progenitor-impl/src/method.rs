@@ -999,16 +999,37 @@ impl Generator {
                         }
                     }
                     OperationResponseType::Upgrade => {
-                        if response.status_code == OperationResponseStatus::Default {
-                            return quote! { } // catch-all handled below
+                        if response.status_code
+                            == OperationResponseStatus::Default
+                        {
+                            return quote! {}; // catch-all handled below
                         } else {
-                            todo!("non-default error response handling for upgrade requests is not yet implemented");
+                            todo!(
+                                "non-default error response handling for \
+                                upgrade requests is not yet implemented"
+                            );
                         }
                     }
                 };
 
                 quote! { #pat => { #decode } }
             });
+
+        let accept_header = matches!(
+            (&response_type, &error_type),
+            (OperationResponseType::Type(_), _)
+                | (OperationResponseType::None, OperationResponseType::Type(_))
+        )
+        .then(|| {
+            quote! {
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static(
+                            "application/json",
+                        ),
+                    )
+            }
+        });
 
         // Generate the catch-all case for other statuses. If the operation
         // specifies a default response, we've already generated a default
@@ -1042,6 +1063,7 @@ impl Generator {
 
             let request = #client.client
                 . #method_func (url)
+                #accept_header
                 #(#body_func)*
                 #query_use
                 #headers_use
