@@ -311,7 +311,14 @@ impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -342,7 +349,14 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -354,7 +368,14 @@ impl Client {
     ///Sends a `GET` request to `/v1/tasks`
     pub async fn tasks_get<'a>(&'a self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -369,7 +390,15 @@ impl Client {
         body: &'a types::TaskSubmit,
     ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -394,7 +423,15 @@ impl Client {
             query.push(("minseq", v.to_string()));
         }
 
-        let request = self.client.get(url).query(&query).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&query)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -413,7 +450,14 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -449,7 +493,15 @@ impl Client {
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
         let url = format!("{}/v1/users", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -461,7 +513,14 @@ impl Client {
     ///Sends a `GET` request to `/v1/whoami`
     pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
         let url = format!("{}/v1/whoami", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -476,7 +535,15 @@ impl Client {
         body: &'a types::WorkerBootstrap,
     ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
         let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -490,7 +557,14 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
         let url = format!("{}/v1/worker/ping", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -533,6 +607,10 @@ impl Client {
         let request = self
             .client
             .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
             .header(
                 reqwest::header::CONTENT_TYPE,
                 reqwest::header::HeaderValue::from_static("application/octet-stream"),
@@ -592,7 +670,14 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
         let url = format!("{}/v1/workers", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

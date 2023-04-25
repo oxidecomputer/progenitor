@@ -669,7 +669,14 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
         let url = format!("{}/instance", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -690,7 +697,15 @@ impl Client {
         body: &'a types::InstanceEnsureRequest,
     ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
         let url = format!("{}/instance", self.baseurl,);
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -719,7 +734,14 @@ impl Client {
             encode_path(&id.to_string()),
             encode_path(&snapshot_id.to_string()),
         );
-        let request = self.client.post(url).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -740,7 +762,15 @@ impl Client {
         body: &'a types::InstanceMigrateStatusRequest,
     ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>> {
         let url = format!("{}/instance/migrate/status", self.baseurl,);
-        let request = self.client.get(url).json(&body).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -789,7 +819,15 @@ impl Client {
         body: types::InstanceStateRequested,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/instance/state", self.baseurl,);
-        let request = self.client.put(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -810,7 +848,15 @@ impl Client {
         body: &'a types::InstanceStateMonitorRequest,
     ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>> {
         let url = format!("{}/instance/state-monitor", self.baseurl,);
-        let request = self.client.get(url).json(&body).build()?;
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
