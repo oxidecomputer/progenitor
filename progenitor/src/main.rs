@@ -120,7 +120,7 @@ fn main() -> Result<()> {
             .with_tag(args.tags.into()),
     );
 
-    match builder.generate_text(&api) {
+    match builder.generate_tokens(&api) {
         Ok(api_code) => {
             let type_space = builder.get_type_space();
 
@@ -188,7 +188,7 @@ fn main() -> Result<()> {
             let lib_code = if args.include_client {
                 format!("mod progenitor_client;\n\n{}", api_code)
             } else {
-                api_code
+                api_code.to_string()
             };
             let lib_code = reformat_code(lib_code);
 
