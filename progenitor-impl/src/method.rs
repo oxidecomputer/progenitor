@@ -22,17 +22,17 @@ use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 pub(crate) struct OperationMethod {
     pub operation_id: String,
     pub tags: Vec<String>,
-    method: HttpMethod,
-    path: PathTemplate,
+    pub method: HttpMethod,
+    pub path: PathTemplate,
     pub summary: Option<String>,
     pub description: Option<String>,
     pub params: Vec<OperationParameter>,
-    responses: Vec<OperationResponse>,
+    pub responses: Vec<OperationResponse>,
     pub dropshot_paginated: Option<DropshotPagination>,
     dropshot_websocket: bool,
 }
 
-enum HttpMethod {
+pub enum HttpMethod {
     Get,
     Put,
     Post,
@@ -140,8 +140,8 @@ impl FromStr for BodyContentType {
 
 #[derive(Debug)]
 pub(crate) struct OperationResponse {
-    status_code: OperationResponseStatus,
-    typ: OperationResponseType,
+    pub status_code: OperationResponseStatus,
+    pub typ: OperationResponseType,
     // TODO this isn't currently used because dropshot doesn't give us a
     // particularly useful message here.
     #[allow(dead_code)]
