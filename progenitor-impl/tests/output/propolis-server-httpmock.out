@@ -30,15 +30,32 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &types::InstanceGetResponse) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -72,15 +89,32 @@ pub mod operations {
         }
 
         pub fn created(self, value: &types::InstanceEnsureResponse) -> Self {
-            Self(self.0.status(201u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -128,15 +162,32 @@ pub mod operations {
         }
 
         pub fn ok(self, value: ()) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -170,15 +221,32 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &types::InstanceMigrateStatusResponse) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -250,11 +318,23 @@ pub mod operations {
         }
 
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -288,15 +368,32 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &types::InstanceStateMonitorResponse) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
 
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
-            Self(self.0.status(status).json_body_obj(value))
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 }

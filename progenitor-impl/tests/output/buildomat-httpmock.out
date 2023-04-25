@@ -30,7 +30,12 @@ pub mod operations {
         }
 
         pub fn ok(self, value: ()) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -95,7 +100,12 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &types::Task) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -125,7 +135,12 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &Vec<types::Task>) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -159,7 +174,12 @@ pub mod operations {
         }
 
         pub fn created(self, value: &types::TaskSubmitResult) -> Self {
-            Self(self.0.status(201u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -199,7 +219,12 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &Vec<types::TaskEvent>) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -235,7 +260,12 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &Vec<types::TaskOutput>) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -277,7 +307,13 @@ pub mod operations {
         }
 
         pub fn success(self, status: u16, value: serde_json::Value) -> Self {
-            Self(self.0.status(status).json_body(value))
+            assert_eq!(status / 100u16, 2u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body(value),
+            )
         }
     }
 
@@ -311,7 +347,12 @@ pub mod operations {
         }
 
         pub fn created(self, value: &types::UserCreateResult) -> Self {
-            Self(self.0.status(201u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -341,7 +382,12 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &types::WhoamiResult) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -375,7 +421,12 @@ pub mod operations {
         }
 
         pub fn created(self, value: &types::WorkerBootstrapResult) -> Self {
-            Self(self.0.status(201u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -405,7 +456,12 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &types::WorkerPingResult) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -485,7 +541,12 @@ pub mod operations {
         }
 
         pub fn created(self, value: &types::UploadedChunk) -> Self {
-            Self(self.0.status(201u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -596,7 +657,12 @@ pub mod operations {
         }
 
         pub fn ok(self, value: &types::WorkersResult) -> Self {
-            Self(self.0.status(200u16).json_body_obj(value))
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 

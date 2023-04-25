@@ -153,6 +153,8 @@ impl Generator {
 
         let path_re = method.path.as_wildcard();
 
+        // Generate methods corresponding to each parameter so that callers
+        // can specify a prescribed value for that parameter.
         let when_methods = method.params.iter().map(
             |OperationParameter {
                  name, typ, kind, ..
@@ -226,6 +228,9 @@ impl Generator {
             }
         };
 
+        // Methods for each discrete response. For specific status codes we use
+        // the name of that code; for classes of codes we use the class name
+        // and require a status code that must be within the prescribed range.
         let then_methods = method.responses.iter().map(
             |OperationResponse {
                  status_code, typ, ..
@@ -240,6 +245,7 @@ impl Generator {
                                 value: #arg_type_ident,
                             },
                             quote! {
+                                .header("content-type", "application/json")
                                 .json_body_obj(value)
                             },
                         )
@@ -252,6 +258,7 @@ impl Generator {
                             value: serde_json::Value,
                         },
                         quote! {
+                            .header("content-type", "application/json")
                             .json_body(value)
                         },
                     ),
@@ -293,6 +300,7 @@ impl Generator {
                         let fn_name = format_ident!("{}", status_string);
                         quote! {
                             pub fn #fn_name(self, status: u16, #value_param) -> Self {
+                                assert_eq!(status / 100u16, #status_type);
                                 Self(self.0
                                     .status(status)
                                     #value_use
