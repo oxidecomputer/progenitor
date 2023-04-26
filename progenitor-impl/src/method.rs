@@ -126,7 +126,8 @@ impl FromStr for BodyContentType {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self> {
-        match s {
+        let offset = s.find(';').unwrap_or(s.len());
+        match &s[..offset] {
             "application/octet-stream" => Ok(Self::OctetStream),
             "application/json" => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
@@ -455,8 +456,11 @@ impl Generator {
                 // content type of the response just as it currently examines
                 // the status code.
                 let typ = if let Some(mt) =
-                    response.content.get("application/json")
-                {
+                    response.content.iter().find_map(|(x, v)| {
+                        (x == "application/json"
+                            || x.starts_with("application/json;"))
+                        .then_some(v)
+                    }) {
                     assert!(mt.encoding.is_empty());
 
                     let typ = if let Some(schema) = &mt.schema {
