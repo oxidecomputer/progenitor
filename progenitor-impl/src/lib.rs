@@ -504,11 +504,6 @@ impl Generator {
         Ok(out)
     }
 
-    /// Render text output.
-    pub fn generate_text(&mut self, spec: &OpenAPI) -> Result<String> {
-        Ok(self.generate_tokens(spec)?.to_string())
-    }
-
     // TODO deprecate?
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
