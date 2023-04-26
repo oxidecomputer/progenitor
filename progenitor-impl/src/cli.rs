@@ -4,7 +4,7 @@ use heck::ToKebabCase;
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use typify::{TypeSpaceImpl, TypeStructPropInfo};
+use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 
 use crate::{
     method::{
@@ -247,7 +247,6 @@ impl Generator {
                                     prop_type
                                 };
 
-                                let prop_type_ident = prop_type.ident();
                                 let scalar =
                                     prop_type.has_impl(TypeSpaceImpl::FromStr);
                                 let prop_name = prop_name.to_kebab_case();
@@ -266,7 +265,7 @@ impl Generator {
                                         prop_name.clone(),
                                         required,
                                         description.map(str::to_string),
-                                        prop_type_ident.clone(),
+                                        prop_type,
                                     )
                                 })
                             })
@@ -296,52 +295,34 @@ impl Generator {
                     OperationParameterKind::Body(_) => unreachable!(),
                 };
 
-                let OperationParameterType::Type(arg_type_id) = &param.typ else {
+                let OperationParameterType::Type(arg_type_id) = &param.typ
+                else {
                     panic!()
                 };
                 let arg_type = self.type_space.get_type(arg_type_id).unwrap();
-                let arg_details = arg_type.details();
-                let arg_type_name = match &arg_details{
-                    typify::TypeDetails::Option(opt_id) => {
-                        let inner_type = self.type_space.get_type(opt_id).unwrap();
-                        inner_type.ident()
-                    }
-                    _ => {
-                        arg_type.ident()
-                    }
+
+                let maybe_inner_type =
+                    if let typify::TypeDetails::Option(inner_type_id) =
+                        arg_type.details()
+                    {
+                        let inner_type =
+                            self.type_space.get_type(&inner_type_id).unwrap();
+                        Some(inner_type)
+                    } else {
+                        None
+                    };
+                let arg_type = if let Some(inner_type) = maybe_inner_type {
+                    inner_type
+                } else {
+                    arg_type
                 };
 
-                let help = param.description.as_ref().map(|description| {
-                    quote! {
-                        .help(#description)
-                    }
-                });
-
-                quote! {
-                    clap::Arg::new(#arg_name)
-                        .long(#arg_name)
-                        .required(#required)
-                        .value_parser(clap::value_parser!(#arg_type_name))
-                        #help
-                }
+                clap_arg(&arg_name, required, &param.description, &arg_type)
             });
 
         let body_args = body_params.iter().map(
-            |(prop_name, required, description, prop_type_ident)| {
-                let help = description.as_ref().map(|description| {
-                    quote! {
-                        .help(#description)
-                    }
-                });
-                quote! {
-                    clap::Arg::new(#prop_name)
-                        .long(#prop_name)
-                        .required(#required)
-                        .value_parser(clap::value_parser!(
-                            #prop_type_ident
-                        ))
-                        #help
-                }
+            |(prop_name, required, description, prop_type)| {
+                clap_arg(prop_name, *required, description, prop_type)
             },
         );
 
@@ -421,25 +402,24 @@ impl Generator {
 
         // Build up the iterator processing each body property we can handle.
         let body_args =
-            body_params
-                .iter()
-                .map(|(prop_name, _, _, prop_type_ident)| {
-                    let prop_fn =
-                        format_ident!("{}", sanitize(prop_name, Case::Snake));
-                    quote! {
-                        if let Some(value) =
-                            matches.get_one::<#prop_type_ident>(
-                                #prop_name,
-                            )
-                        {
-                            // clone here in case the arg type
-                            // doesn't impl TryFrom<&T>
-                            request = request.body_map(|body| {
-                                body.#prop_fn(value.clone())
-                            })
-                        }
+            body_params.iter().map(|(prop_name, _, _, prop_type)| {
+                let prop_fn =
+                    format_ident!("{}", sanitize(prop_name, Case::Snake));
+                let prop_type_ident = prop_type.ident();
+                quote! {
+                    if let Some(value) =
+                        matches.get_one::<#prop_type_ident>(
+                            #prop_name,
+                        )
+                    {
+                        // clone here in case the arg type
+                        // doesn't impl TryFrom<&T>
+                        request = request.body_map(|body| {
+                            body.#prop_fn(value.clone())
+                        })
                     }
-                });
+                }
+            });
 
         let (_, success_type) = self.extract_responses(
             method,
@@ -518,5 +498,70 @@ impl Generator {
             execute_fn,
             execute_trait,
         }
+    }
+}
+
+fn clap_arg(
+    arg_name: &str,
+    required: bool,
+    description: &Option<String>,
+    arg_type: &Type,
+) -> TokenStream {
+    let help = description.as_ref().map(|description| {
+        quote! {
+            .help(#description)
+        }
+    });
+    let arg_type_name = arg_type.ident();
+
+    // For enums that have **only** simple variants, we do some slightly
+    // fancier argument handling to expose the possible values. In particular,
+    // we use clap's `PossibleValuesParser` with each variant converted to a
+    // string. Then we use TypedValueParser::map to translate that into the
+    // actual type of the enum.
+    let maybe_enum_parser =
+        if let typify::TypeDetails::Enum(e) = arg_type.details() {
+            let maybe_var_names = e
+                .variants()
+                .map(|(var_name, var_details)| {
+                    if let TypeEnumVariant::Simple = var_details {
+                        Some(format_ident!("{}", var_name))
+                    } else {
+                        None
+                    }
+                })
+                .collect::<Option<Vec<_>>>();
+
+            maybe_var_names.map(|var_names| {
+                quote! {
+                    clap::builder::TypedValueParser::map(
+                        clap::builder::PossibleValuesParser::new([
+                            #( #arg_type_name :: #var_names.to_string(), )*
+                        ]),
+                        |s| #arg_type_name :: try_from(s).unwrap()
+                    )
+                }
+            })
+        } else {
+            None
+        };
+
+    let value_parser = if let Some(enum_parser) = maybe_enum_parser {
+        enum_parser
+    } else {
+        // Let clap pick a value parser for us. This has the benefit of
+        // allowing for override implementations. A generated client may
+        // implement ValueParserFactory for a type to create a custom parser.
+        quote! {
+            clap::value_parser!(#arg_type_name)
+        }
+    };
+
+    quote! {
+        clap::Arg::new(#arg_name)
+            .long(#arg_name)
+            .required(#required)
+            .value_parser(#value_parser)
+            #help
     }
 }
