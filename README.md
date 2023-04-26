@@ -101,7 +101,7 @@ fn main() {
     let spec = serde_json::from_reader(file).unwrap();
     let mut generator = progenitor::Generator::default();
 
-    let content = generator.generate_text(&spec).unwrap();
+    let content = generator.generate_tokens(&spec).unwrap().to_string();
 
     let mut out_file = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).to_path_buf();
     out_file.push("codegen.rs");
