@@ -346,13 +346,18 @@ impl Generator {
                     baseurl: &str,
                     #inner_parameter
                 ) -> Self {
-                    let dur = std::time::Duration::from_secs(15);
-                    let client = reqwest::ClientBuilder::new()
-                        .connect_timeout(dur)
-                        .timeout(dur)
-                        .build()
-                        .unwrap();
-                    Self::new_with_client(baseurl, client, #inner_value)
+                    #[cfg(not(target_arch = "wasm32"))]
+                    let client = {
+                        let dur = std::time::Duration::from_secs(15);
+
+                        reqwest::ClientBuilder::new()
+                            .connect_timeout(dur)
+                            .timeout(dur)
+                    };
+                    #[cfg(target_arch = "wasm32")]
+                    let client = reqwest::ClientBuilder::new();
+
+                    Self::new_with_client(baseurl, client.build().unwrap(), #inner_value)
                 }
 
                 /// Construct a new client with an existing `reqwest::Client`,

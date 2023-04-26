@@ -2,6 +2,7 @@
 members = [
 	"example-build",
 	"example-macro",
+	"example-wasm",
 	"progenitor",
 	"progenitor-client",
 	"progenitor-impl",

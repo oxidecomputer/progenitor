@@ -11,8 +11,13 @@ use futures_core::Stream;
 use reqwest::RequestBuilder;
 use serde::{de::DeserializeOwned, Serialize};
 
+#[cfg(not(target_arch = "wasm32"))]
 type InnerByteStream =
     std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
+
+#[cfg(target_arch = "wasm32")]
+type InnerByteStream =
+    std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>>>>;
 
 /// Untyped byte stream used for both success and error responses.
 pub struct ByteStream(InnerByteStream);
@@ -76,6 +81,7 @@ impl<T: DeserializeOwned> ResponseValue<T> {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl ResponseValue<reqwest::Upgraded> {
     #[doc(hidden)]
     pub async fn upgrade<E: std::fmt::Debug>(

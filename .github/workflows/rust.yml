@@ -60,3 +60,29 @@ jobs:
       run: cargo build --locked --tests --verbose
     - name: Run tests
       run: cargo test --locked --verbose
+
+  test-wasm:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        components: rustfmt
+        default: false
+        target: wasm32-unknown-unknown
+    - uses: nanasess/setup-chromedriver@v1
+    - name: Install stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        components: rustfmt
+        default: true
+        target: wasm32-unknown-unknown
+    - name: Install wasm-bindgen-cli
+      run: cargo install --version 0.2.84 wasm-bindgen-cli
+    - name: Run tests
+      run: |
+        cd example-wasm
+        CHROMEDRIVER=$(which chromedriver) cargo test --target wasm32-unknown-unknown --locked --verbose
