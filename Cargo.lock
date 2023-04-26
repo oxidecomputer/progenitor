@@ -519,11 +519,13 @@ version = "0.1.0"
 dependencies = [
  "base64",
  "chrono",
+ "prettyplease",
  "progenitor",
  "progenitor-client",
  "reqwest",
  "serde",
  "serde_json",
+ "syn 1.0.109",
  "uuid",
  "wasm-bindgen-test",
 ]
