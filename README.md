@@ -101,7 +101,9 @@ fn main() {
     let spec = serde_json::from_reader(file).unwrap();
     let mut generator = progenitor::Generator::default();
 
-    let content = generator.generate_tokens(&spec).unwrap().to_string();
+    let tokens = generator.generate_tokens(&spec).unwrap();
+    let ast = syn::parse2(tokens).unwrap();
+    let content = prettyplease::unparse(&ast);
 
     let mut out_file = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).to_path_buf();
     out_file.push("codegen.rs");
@@ -127,8 +129,10 @@ You'll need to add the following to `Cargo.toml`:
 +serde = { version = "1.0", features = ["derive"] }
 
 [build-dependencies]
++prettyplease = "0.1.25"
 +progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
 +serde_json = "1.0"
++syn = "1.0"
 ```
 
 (`chrono`, `uuid`, `base64`, and `rand` as above)
