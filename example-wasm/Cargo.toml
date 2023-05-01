@@ -15,7 +15,7 @@ uuid = { version = "1.3", features = ["serde", "v4", "js"] }
 wasm-bindgen-test = "0.3.34"
 
 [build-dependencies]
-prettyplease = "0.1.25"
+prettyplease = "0.2.4"
 progenitor = { path = "../progenitor" }
 serde_json = "1.0"
-syn = "1.0"
+syn = "2.0"
