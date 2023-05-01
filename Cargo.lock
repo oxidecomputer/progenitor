@@ -1284,7 +1284,7 @@ dependencies = [
  "progenitor-macro",
  "project-root",
  "rand",
- "regress",
+ "regress 0.6.0",
  "reqwest",
  "rustfmt-wrapper",
  "schemars",
@@ -1435,6 +1435,16 @@ name = "regress"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d995d590bd8ec096d1893f414bf3f5e8b0ee4c9eed9a5642b9766ef2c8e2e8e9"
+dependencies = [
+ "hashbrown 0.13.2",
+ "memchr",
+]
+
+[[package]]
+name = "regress"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82a9ecfa0cb04d0b04dddb99b8ccf4f66bc8dfd23df694b398570bd8ae3a50fb"
 dependencies = [
  "hashbrown 0.13.2",
  "memchr",
@@ -2203,7 +2213,7 @@ dependencies = [
  "log",
  "proc-macro2",
  "quote",
- "regress",
+ "regress 0.5.0",
  "schemars",
  "serde_json",
  "syn 2.0.15",
