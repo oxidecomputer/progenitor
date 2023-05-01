@@ -391,7 +391,7 @@ dependencies = [
 [[package]]
 name = "dropshot"
 version = "0.9.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#66aa7652f61e821171d632994040cd370234ca39"
+source = "git+https://github.com/oxidecomputer/dropshot#d17f74d428f0adf7fcab09663c708c72c34b99c0"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -433,7 +433,7 @@ dependencies = [
 [[package]]
 name = "dropshot_endpoint"
 version = "0.9.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#66aa7652f61e821171d632994040cd370234ca39"
+source = "git+https://github.com/oxidecomputer/dropshot#d17f74d428f0adf7fcab09663c708c72c34b99c0"
 dependencies = [
  "proc-macro2",
  "quote",
