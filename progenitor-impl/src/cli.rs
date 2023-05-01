@@ -452,6 +452,43 @@ impl Generator {
             crate::method::OperationResponseType::Upgrade => quote! { todo!() },
         };
 
+        let execute_and_output = match method.dropshot_paginated {
+            None => {
+                quote! {
+                    let result = request.send().await;
+
+                    match result {
+                        Ok(r) => {
+                            #success_output
+                        }
+                        Err(r) => {
+                            #error_output
+                        }
+                    }
+                }
+            }
+            Some(_) => {
+                quote! {
+                    let mut stream = request.stream();
+
+                    loop {
+                        match futures::TryStreamExt::try_next(&mut stream).await {
+                            Err(r) => {
+                                #error_output;
+                                break;
+                            }
+                            Ok(None) => {
+                                break;
+                            }
+                            Ok(Some(value)) => {
+                                println!("{:#?}", value);
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
         let execute_fn = quote! {
             pub async fn #fn_name(&self, matches: &clap::ArgMatches)
                 // ->
@@ -466,16 +503,7 @@ impl Generator {
                     .#fn_name(matches, &mut request)
                     .unwrap();
 
-                let result = request.send().await;
-
-                match result {
-                    Ok(r) => {
-                        #success_output
-                    }
-                    Err(r) => {
-                        #error_output
-                    }
-                }
+                #execute_and_output
             }
         };
 
