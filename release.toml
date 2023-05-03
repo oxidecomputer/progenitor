@@ -11,11 +11,8 @@ pre-release-replacements = [
 ]
 
 pre-release-commit-message = "release progenitor {{version}}"
-post-release-commit-message = "starting progenitor {{next_version}} after releasing {{version}}"
 tag-message = "release {{crate_name}} {{version}}"
 tag-prefix = ""
-dev-version = true
-dev-version-ext = "dev"
 consolidate-commits = true
 push = false
 shared-version = true

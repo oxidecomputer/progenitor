@@ -19,6 +19,11 @@ https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...HEAD[Full list of 
 * Add support for YAML input (#227)
 * Add generation for `clap`-based CLIs
 * Add generation for strongly-typed mocks with `httpmock`
+* Remove dependency on rustfmt installations in macro and builder uses
+* Many improvements to type schema handling
+* Use of builder types for body parameters
+* Path-level parameter handling
+* Many options for augmenting type generation
 
 == 0.2.0 (released 2022-09-11)
 
