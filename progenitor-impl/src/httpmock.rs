@@ -160,20 +160,11 @@ impl Generator {
                  name, typ, kind, ..
              }| {
                 let arg_type_name = match typ {
-                    OperationParameterType::Type(arg_type_id) => {
-                        let arg_type =
-                            self.type_space.get_type(arg_type_id).unwrap();
-                        let arg_details = arg_type.details();
-                        let arg_type_name = match &arg_details {
-                            typify::TypeDetails::Option(opt_id) => {
-                                let inner_type =
-                                    self.type_space.get_type(opt_id).unwrap();
-                                inner_type.parameter_ident()
-                            }
-                            _ => arg_type.parameter_ident(),
-                        };
-                        arg_type_name
-                    }
+                    OperationParameterType::Type(arg_type_id) => self
+                        .type_space
+                        .get_type(arg_type_id)
+                        .unwrap()
+                        .parameter_ident(),
                     OperationParameterType::RawBody => quote! {
                         serde_json::Value
                     },
