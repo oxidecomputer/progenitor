@@ -13,7 +13,15 @@
 
 == Unreleased changes (release date TBD)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.3.0\...HEAD[Full list of commits]
+
+== 0.3.0 (released 2023-05-03)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.3.0\...v0.3.0[Full list of commits]
+
+== 0.3.0 (released 2023-05-03)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...v0.3.0[Full list of commits]
 
 * Add support for header parameters (#210)
 * Add support for YAML input (#227)

@@ -1,6 +1,6 @@
 [package]
 name = "progenitor"
-version = "0.2.1-dev"
+version = "0.3.0"
 edition = "2021"
 license = "MPL-2.0"
 description = "An OpenAPI client generator"
@@ -11,9 +11,9 @@ categories = ["api-bindings", "compilers"]
 build = "build.rs"
 
 [dependencies]
-progenitor-client = { version = "0.2.1-dev", path = "../progenitor-client" }
-progenitor-impl = { version = "0.2.1-dev", path = "../progenitor-impl" }
-progenitor-macro = { version = "0.2.1-dev", path = "../progenitor-macro" }
+progenitor-client = { version = "0.3.0", path = "../progenitor-client" }
+progenitor-impl = { version = "0.3.0", path = "../progenitor-impl" }
+progenitor-macro = { version = "0.3.0", path = "../progenitor-macro" }
 anyhow = "1.0"
 openapiv3 = "1.0.0"
 rustfmt-wrapper = "0.2.0"

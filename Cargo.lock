@@ -1269,7 +1269,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor"
-version = "0.2.1-dev"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "base64",
@@ -1296,7 +1296,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-client"
-version = "0.2.1-dev"
+version = "0.3.0"
 dependencies = [
  "bytes",
  "futures-core",
@@ -1309,7 +1309,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-impl"
-version = "0.2.1-dev"
+version = "0.3.0"
 dependencies = [
  "dropshot",
  "expectorate",
@@ -1335,7 +1335,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-macro"
-version = "0.2.1-dev"
+version = "0.3.0"
 dependencies = [
  "openapiv3",
  "proc-macro2",
