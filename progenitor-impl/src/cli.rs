@@ -301,22 +301,6 @@ impl Generator {
                 };
                 let arg_type = self.type_space.get_type(arg_type_id).unwrap();
 
-                let maybe_inner_type =
-                    if let typify::TypeDetails::Option(inner_type_id) =
-                        arg_type.details()
-                    {
-                        let inner_type =
-                            self.type_space.get_type(&inner_type_id).unwrap();
-                        Some(inner_type)
-                    } else {
-                        None
-                    };
-                let arg_type = if let Some(inner_type) = maybe_inner_type {
-                    inner_type
-                } else {
-                    arg_type
-                };
-
                 clap_arg(&arg_name, required, &param.description, &arg_type)
             });
 
@@ -376,18 +360,7 @@ impl Generator {
                     panic!()
                 };
                 let arg_type = self.type_space.get_type(arg_type_id).unwrap();
-
-                // TODO this really should be simpler.
-                let arg_details = arg_type.details();
-                let arg_type_name = match &arg_details{
-                    typify::TypeDetails::Option(opt_id) => {
-                        let inner_type = self.type_space.get_type(opt_id).unwrap();
-                        inner_type.ident()
-                    }
-                    _ => {
-                        arg_type.ident()
-                    }
-                };
+                let arg_type_name = arg_type.ident();
 
                 quote! {
                     if let Some(value) =

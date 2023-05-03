@@ -112,7 +112,23 @@ pub enum OperationParameterKind {
     Path,
     Query(bool),
     Header(bool),
+    // TODO bodies may be optional
     Body(BodyContentType),
+}
+
+impl OperationParameterKind {
+    fn is_required(&self) -> bool {
+        match self {
+            OperationParameterKind::Path => true,
+            OperationParameterKind::Query(required) => *required,
+            OperationParameterKind::Header(required) => *required,
+            // TODO may be optional
+            OperationParameterKind::Body(_) => true,
+        }
+    }
+    fn is_optional(&self) -> bool {
+        !self.is_required()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -263,8 +279,6 @@ impl Generator {
     ) -> Result<OperationMethod> {
         let operation_id = operation.operation_id.as_ref().unwrap();
 
-        let mut query: Vec<(String, bool)> = Vec::new();
-
         let mut combined_path_parameters =
             parameter_map(path_parameters, components)?;
         for operation_param in items(&operation.parameters, components) {
@@ -313,7 +327,7 @@ impl Generator {
                         style: openapiv3::QueryStyle::Form,
                         allow_empty_value: _, // Irrelevant for this client
                     } => {
-                        let mut schema = parameter_data.schema()?.to_schema();
+                        let schema = parameter_data.schema()?.to_schema();
                         let name = sanitize(
                             &format!(
                                 "{}-{}",
@@ -323,34 +337,38 @@ impl Generator {
                             Case::Pascal,
                         );
 
-                        if !parameter_data.required {
-                            schema = make_optional(schema);
-                        }
-
-                        let typ = self
+                        let type_id = self
                             .type_space
                             .add_type_with_name(&schema, Some(name))?;
 
-                        query.push((
-                            parameter_data.name.clone(),
-                            !parameter_data.required,
-                        ));
+                        let ty = self.type_space.get_type(&type_id).unwrap();
+
+                        // If the type is itself optional, then we'll treat it
+                        // as optional (irrespective of the `required` field on
+                        // the parameter) and use the "inner" type.
+                        let details = ty.details();
+                        let (type_id, required) =
+                            if let typify::TypeDetails::Option(inner_type_id) =
+                                details
+                            {
+                                (inner_type_id, false)
+                            } else {
+                                (type_id, parameter_data.required)
+                            };
 
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
                             api_name: parameter_data.name.clone(),
                             description: parameter_data.description.clone(),
-                            typ: OperationParameterType::Type(typ),
-                            kind: OperationParameterKind::Query(
-                                parameter_data.required,
-                            ),
+                            typ: OperationParameterType::Type(type_id),
+                            kind: OperationParameterKind::Query(required),
                         })
                     }
                     openapiv3::Parameter::Header {
                         parameter_data,
                         style: openapiv3::HeaderStyle::Simple,
                     } => {
-                        let mut schema = parameter_data.schema()?.to_schema();
+                        let schema = parameter_data.schema()?.to_schema();
                         let name = sanitize(
                             &format!(
                                 "{}-{}",
@@ -359,10 +377,6 @@ impl Generator {
                             ),
                             Case::Pascal,
                         );
-
-                        if !parameter_data.required {
-                            schema = make_optional(schema);
-                        }
 
                         let typ = self
                             .type_space
@@ -571,15 +585,24 @@ impl Generator {
             .iter()
             .map(|param| {
                 let name = format_ident!("{}", param.name);
-                let typ = match &param.typ {
-                    OperationParameterType::Type(type_id) => self
+                let typ = match (&param.typ, param.kind.is_optional()) {
+                    (OperationParameterType::Type(type_id), false) => self
                         .type_space
                         .get_type(type_id)
                         .unwrap()
                         .parameter_ident_with_lifetime("a"),
-                    OperationParameterType::RawBody => {
+                    (OperationParameterType::Type(type_id), true) => {
+                        let t = self
+                            .type_space
+                            .get_type(type_id)
+                            .unwrap()
+                            .parameter_ident_with_lifetime("a");
+                        quote! { Option<#t> }
+                    }
+                    (OperationParameterType::RawBody, false) => {
                         quote! { B }
                     }
+                    (OperationParameterType::RawBody, true) => unreachable!(),
                 };
                 quote! {
                     #name: #typ
@@ -1402,9 +1425,12 @@ impl Generator {
                     ) = (&param.kind, ty.builder())
                     {
                         Ok(quote! { Result<#builder_name, String> })
-                    } else {
+                    } else if param.kind.is_required() {
                         let t = ty.ident();
                         Ok(quote! { Result<#t, String> })
+                    } else {
+                        let t = ty.ident();
+                        Ok(quote! { Result<Option<#t>, String> })
                     }
                 }
 
@@ -1425,9 +1451,7 @@ impl Generator {
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
-                    let details = ty.details();
-                    let optional =
-                        matches!(&details, typify::TypeDetails::Option(_));
+                    let optional = param.kind.is_optional();
                     if optional {
                         Ok(quote! { Ok(None) })
                     } else if let (
@@ -1483,24 +1507,17 @@ impl Generator {
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
-                        let details = ty.details();
-                        match (&details, ty.builder()) {
-                            // TODO right now optional body paramters are not
+                        match (ty.builder(), param.kind.is_optional()) {
+                            // TODO right now optional body parameters are not
                             // addressed
-                            (typify::TypeDetails::Option(_), Some(_)) => {
+                            (Some(_), true) => {
                                 unreachable!()
                             }
-                            (typify::TypeDetails::Option(opt_id), None) => {
-                                // TODO currently we explicitly turn optional
-                                // parameters into Option types; we could
-                                // probably defer this to the code generation
-                                // step to avoid the special handling here.
-                                let inner_type =
-                                    self.type_space.get_type(opt_id)?;
-                                let typ = inner_type.ident();
+                            (None, true) => {
+                                let ty_ident = ty.ident();
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
-                                    inner_type.name(),
+                                    ty.name(),
                                     param.name,
                                 );
                                 Ok(quote! {
@@ -1508,7 +1525,7 @@ impl Generator {
                                         mut self,
                                         value: V,
                                     ) -> Self
-                                        where V: std::convert::TryInto<#typ>,
+                                        where V: std::convert::TryInto<#ty_ident>,
                                     {
                                         self.#param_name = value.try_into()
                                             .map(Some)
@@ -1517,7 +1534,7 @@ impl Generator {
                                     }
                                 })
                             }
-                            (_, None) => {
+                            (None, false) => {
                                 let typ = ty.ident();
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
@@ -1543,7 +1560,7 @@ impl Generator {
                             // a builder **from** the body type). We also offer
                             // a `body_map()` method that operates on the
                             // builder itself.
-                            (_, Some(builder_name)) => {
+                            (Some(builder_name), false) => {
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident();
                                 let err_msg = format!(
@@ -2156,42 +2173,6 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
     }
 
     buf
-}
-
-/// Make the schema optional if it isn't already.
-fn make_optional(schema: schemars::schema::Schema) -> schemars::schema::Schema {
-    match &schema {
-        // If the instance_type already includes Null then this is already
-        // optional.
-        schemars::schema::Schema::Object(schemars::schema::SchemaObject {
-            instance_type: Some(schemars::schema::SingleOrVec::Vec(types)),
-            ..
-        }) if types.contains(&schemars::schema::InstanceType::Null) => schema,
-
-        // Otherwise, create a oneOf where one of the branches is the null
-        // type. We could potentially check to see if the schema already
-        // conforms to this pattern as well, but it doesn't hurt as typify will
-        // already reduce nested Options to a single Option.
-        _ => {
-            let null_schema = schemars::schema::Schema::Object(
-                schemars::schema::SchemaObject {
-                    instance_type: Some(schemars::schema::SingleOrVec::Single(
-                        Box::new(schemars::schema::InstanceType::Null),
-                    )),
-                    ..Default::default()
-                },
-            );
-            schemars::schema::Schema::Object(schemars::schema::SchemaObject {
-                subschemas: Some(Box::new(
-                    schemars::schema::SubschemaValidation {
-                        one_of: Some(vec![schema, null_schema]),
-                        ..Default::default()
-                    },
-                )),
-                ..Default::default()
-            })
-        }
-    }
 }
 
 fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
