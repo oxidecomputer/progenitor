@@ -19,15 +19,15 @@ impl Cli {
             .arg(
                 clap::Arg::new("key")
                     .long("key")
-                    .required(false)
                     .value_parser(clap::value_parser!(bool))
+                    .required(false)
                     .help("The same key parameter that overlaps with the path level parameter"),
             )
             .arg(
                 clap::Arg::new("unique-key")
                     .long("unique-key")
-                    .required(false)
                     .value_parser(clap::value_parser!(String))
+                    .required(false)
                     .help("A key parameter that will not be overridden by the path spec"),
             )
     }

@@ -177,18 +177,19 @@ impl Generator {
         &mut self,
         method: &crate::method::OperationMethod,
     ) -> CliOperation {
+        let maybe_body_arg = method.params.iter().find(|param| {
+            matches!(&param.kind, OperationParameterKind::Body(_))
+            // TODO not sure how to deal with raw bodies right now
+            && matches!(&param.typ, OperationParameterType::Type(_))
+        });
+
+        let mut full_body = true;
+
         // Preprocess the body parameter (if there is one) to create an
         // iterator of top-level properties that can be represented as scalar
         // values. We use these to create `clap::Arg` structures and then to
         // build up the body parameter in the actual API call.
-        let body_params = method
-            .params
-            .iter()
-            .find(|param| {
-                matches!(&param.kind, OperationParameterKind::Body(_))
-                // TODO not sure how to deal with raw bodies right now
-                    && matches!(&param.typ, OperationParameterType::Type(_))
-            })
+        let body_params = maybe_body_arg
             .into_iter()
             .flat_map(|param| {
                 let OperationParameterType::Type(type_id) = &param.typ else {
@@ -251,6 +252,14 @@ impl Generator {
                                     prop_type.has_impl(TypeSpaceImpl::FromStr);
                                 let prop_name = prop_name.to_kebab_case();
 
+                                // If there's a required property that we can't
+                                // represent as a scalar (and therefore as a
+                                // CLI parameter), the user will be unable to
+                                // specify the full body without a json file.
+                                if required && !scalar {
+                                    full_body = false;
+                                }
+
                                 // println!(
                                 //     "{}::{}: {}; scalar: {}; required: {}",
                                 //     body_args.name(),
@@ -289,9 +298,15 @@ impl Generator {
                 let arg_name = param.name.to_kebab_case();
 
                 let required = match &param.kind {
-                    OperationParameterKind::Path => true,
-                    OperationParameterKind::Query(required) => *required,
-                    OperationParameterKind::Header(required) => *required,
+                    OperationParameterKind::Path => Volitionality::Required,
+                    OperationParameterKind::Query(true)
+                    | OperationParameterKind::Header(true) => {
+                        Volitionality::Required
+                    }
+                    OperationParameterKind::Query(false)
+                    | OperationParameterKind::Header(false) => {
+                        Volitionality::Optional
+                    }
                     OperationParameterKind::Body(_) => unreachable!(),
                 };
 
@@ -306,13 +321,42 @@ impl Generator {
 
         let body_args = body_params.iter().map(
             |(prop_name, required, description, prop_type)| {
-                clap_arg(prop_name, *required, description, prop_type)
+                let volitionality = if *required {
+                    Volitionality::RequiredIfNoBody
+                } else {
+                    Volitionality::Optional
+                };
+                clap_arg(prop_name, volitionality, description, prop_type)
             },
         );
 
         // TODO parameter for body as input json (--body-input?)
         // TODO parameter to output a body template (--body-template?)
         // TODO deal with all parameters?
+
+        let body_json_args = maybe_body_arg.map(|_| {
+            let help = "Path to a file that contains the full json body.";
+            let required = !full_body;
+
+            quote! {
+                .arg(
+                    clap::Arg::new("json-body")
+                        .long("json-body")
+                        .value_name("JSON-FILE")
+                        // Required if we can't turn the body into individual
+                        // parameters.
+                        .required(#required)
+                        .value_parser(clap::value_parser!(std::path::PathBuf))
+                        .help(#help)
+                )
+                .arg(
+                    clap::Arg::new("json-body-template")
+                        .long("json-body-template")
+                        .action(clap::ArgAction::SetTrue)
+                        .help("XXX")
+                )
+            }
+        });
 
         let about = method.summary.as_ref().map(|summary| {
             let mut about_str = summary.clone();
@@ -336,6 +380,7 @@ impl Generator {
                 #(
                     .arg(#body_args)
                 )*
+                #body_json_args
                 #about
             }
         };
@@ -462,15 +507,39 @@ impl Generator {
             }
         };
 
+        let body_json_args = maybe_body_arg.map(|body_param| {
+            let OperationParameterType::Type(body_type_id) = &body_param.typ
+            else {
+                unreachable!();
+            };
+            let body_type = self.type_space.get_type(body_type_id).unwrap();
+            let body_type_ident = body_type.ident();
+            quote! {
+                if let Some(value) =
+                    matches.get_one::<std::path::PathBuf>("json-body")
+                {
+                    let body_txt = std::fs::read_to_string(value).unwrap();
+                    let body_value =
+                        serde_json::from_str::<#body_type_ident>(
+                            &body_txt,
+                        )
+                        .unwrap();
+                    request = request.body(body_value);
+                }
+            }
+        });
+
         let execute_fn = quote! {
             pub async fn #fn_name(&self, matches: &clap::ArgMatches)
                 // ->
                 // Result<ResponseValue<#success_type>, Error<#error_type>>
             {
                 let mut request = self.client.#op_name();
+                #body_json_args
                 #( #args )*
                 #( #body_args )*
 
+                // Call the override function.
                 // TODO don't want to unwrap.
                 self.over
                     .#fn_name(matches, &mut request)
@@ -502,9 +571,15 @@ impl Generator {
     }
 }
 
+enum Volitionality {
+    Optional,
+    Required,
+    RequiredIfNoBody,
+}
+
 fn clap_arg(
     arg_name: &str,
-    required: bool,
+    volitionality: Volitionality,
     description: &Option<String>,
     arg_type: &Type,
 ) -> TokenStream {
@@ -558,11 +633,19 @@ fn clap_arg(
         }
     };
 
+    let required = match volitionality {
+        Volitionality::Optional => quote! { .required(false) },
+        Volitionality::Required => quote! { .required(true) },
+        Volitionality::RequiredIfNoBody => {
+            quote! { .required_unless_present("json-body") }
+        }
+    };
+
     quote! {
         clap::Arg::new(#arg_name)
             .long(#arg_name)
-            .required(#required)
             .value_parser(#value_parser)
+            #required
             #help
     }
 }

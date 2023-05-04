@@ -6481,7 +6481,7 @@ impl Client {
         self.group_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -6489,10 +6489,7 @@ impl Client {
                         self.group_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -6738,7 +6735,7 @@ impl Client {
         self.organization_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -6746,10 +6743,7 @@ impl Client {
                         self.organization_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -7085,7 +7079,7 @@ impl Client {
         self.project_list(organization_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -7093,10 +7087,7 @@ impl Client {
                         self.project_list(organization_name, None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -7378,7 +7369,7 @@ impl Client {
         self.disk_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -7392,10 +7383,7 @@ impl Client {
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
-                            Some((
-                                futures::stream::iter(page.items.into_iter().map(Ok)),
-                                page.next_page,
-                            ))
+                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                         })
                         .await
                     }
@@ -7654,7 +7642,7 @@ impl Client {
         )
         .map_ok(move |page| {
             let page = page.into_inner();
-            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let first = futures::stream::iter(page.items).map(Ok);
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
                     Ok(None)
@@ -7671,10 +7659,7 @@ impl Client {
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
-                        Some((
-                            futures::stream::iter(page.items.into_iter().map(Ok)),
-                            page.next_page,
-                        ))
+                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                     })
                     .await
                 }
@@ -7784,7 +7769,7 @@ impl Client {
         self.image_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -7798,10 +7783,7 @@ impl Client {
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
-                            Some((
-                                futures::stream::iter(page.items.into_iter().map(Ok)),
-                                page.next_page,
-                            ))
+                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                         })
                         .await
                     }
@@ -8038,7 +8020,7 @@ impl Client {
         self.instance_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -8052,10 +8034,7 @@ impl Client {
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
-                            Some((
-                                futures::stream::iter(page.items.into_iter().map(Ok)),
-                                page.next_page,
-                            ))
+                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                         })
                         .await
                     }
@@ -8304,7 +8283,7 @@ impl Client {
         )
         .map_ok(move |page| {
             let page = page.into_inner();
-            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let first = futures::stream::iter(page.items).map(Ok);
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
                     Ok(None)
@@ -8319,10 +8298,7 @@ impl Client {
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
-                        Some((
-                            futures::stream::iter(page.items.into_iter().map(Ok)),
-                            page.next_page,
-                        ))
+                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                     })
                     .await
                 }
@@ -8612,7 +8588,7 @@ impl Client {
         )
         .map_ok(move |page| {
             let page = page.into_inner();
-            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let first = futures::stream::iter(page.items).map(Ok);
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
                     Ok(None)
@@ -8627,10 +8603,7 @@ impl Client {
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
-                        Some((
-                            futures::stream::iter(page.items.into_iter().map(Ok)),
-                            page.next_page,
-                        ))
+                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                     })
                     .await
                 }
@@ -9241,7 +9214,7 @@ impl Client {
         self.snapshot_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -9255,10 +9228,7 @@ impl Client {
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
-                            Some((
-                                futures::stream::iter(page.items.into_iter().map(Ok)),
-                                page.next_page,
-                            ))
+                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                         })
                         .await
                     }
@@ -9488,7 +9458,7 @@ impl Client {
         self.vpc_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -9502,10 +9472,7 @@ impl Client {
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
-                            Some((
-                                futures::stream::iter(page.items.into_iter().map(Ok)),
-                                page.next_page,
-                            ))
+                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                         })
                         .await
                     }
@@ -9871,7 +9838,7 @@ impl Client {
         )
         .map_ok(move |page| {
             let page = page.into_inner();
-            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let first = futures::stream::iter(page.items).map(Ok);
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
                     Ok(None)
@@ -9886,10 +9853,7 @@ impl Client {
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
-                        Some((
-                            futures::stream::iter(page.items.into_iter().map(Ok)),
-                            page.next_page,
-                        ))
+                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                     })
                     .await
                 }
@@ -10188,7 +10152,7 @@ impl Client {
         )
         .map_ok(move |page| {
             let page = page.into_inner();
-            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let first = futures::stream::iter(page.items).map(Ok);
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
                     Ok(None)
@@ -10204,10 +10168,7 @@ impl Client {
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
-                        Some((
-                            futures::stream::iter(page.items.into_iter().map(Ok)),
-                            page.next_page,
-                        ))
+                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                     })
                     .await
                 }
@@ -10503,7 +10464,7 @@ impl Client {
         )
         .map_ok(move |page| {
             let page = page.into_inner();
-            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let first = futures::stream::iter(page.items).map(Ok);
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
                     Ok(None)
@@ -10518,10 +10479,7 @@ impl Client {
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
-                        Some((
-                            futures::stream::iter(page.items.into_iter().map(Ok)),
-                            page.next_page,
-                        ))
+                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                     })
                     .await
                 }
@@ -10816,7 +10774,7 @@ impl Client {
         )
         .map_ok(move |page| {
             let page = page.into_inner();
-            let first = futures::stream::iter(page.items.into_iter().map(Ok));
+            let first = futures::stream::iter(page.items).map(Ok);
             let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                 if state.is_none() {
                     Ok(None)
@@ -10832,10 +10790,7 @@ impl Client {
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
-                        Some((
-                            futures::stream::iter(page.items.into_iter().map(Ok)),
-                            page.next_page,
-                        ))
+                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                     })
                     .await
                 }
@@ -10976,7 +10931,7 @@ impl Client {
         self.role_list(limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -10984,10 +10939,7 @@ impl Client {
                         self.role_list(None, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -11142,7 +11094,7 @@ impl Client {
         self.session_me_groups(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -11150,10 +11102,7 @@ impl Client {
                         self.session_me_groups(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -11246,7 +11195,7 @@ impl Client {
         self.session_sshkey_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -11254,10 +11203,7 @@ impl Client {
                         self.session_sshkey_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -11564,7 +11510,7 @@ impl Client {
         self.certificate_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -11572,10 +11518,7 @@ impl Client {
                         self.certificate_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -11771,7 +11714,7 @@ impl Client {
         self.physical_disk_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -11779,10 +11722,7 @@ impl Client {
                         self.physical_disk_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -11871,7 +11811,7 @@ impl Client {
         self.rack_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -11879,10 +11819,7 @@ impl Client {
                         self.rack_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -12008,7 +11945,7 @@ impl Client {
         self.sled_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -12016,10 +11953,7 @@ impl Client {
                         self.sled_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -12155,7 +12089,7 @@ impl Client {
         self.sled_physical_disk_list(sled_id, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -12163,10 +12097,7 @@ impl Client {
                         self.sled_physical_disk_list(sled_id, None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -12264,7 +12195,7 @@ impl Client {
         self.system_image_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -12272,10 +12203,7 @@ impl Client {
                         self.system_image_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -12472,7 +12400,7 @@ impl Client {
         self.ip_pool_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -12480,10 +12408,7 @@ impl Client {
                         self.ip_pool_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -12712,7 +12637,7 @@ impl Client {
         self.ip_pool_range_list(pool_name, limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -12720,10 +12645,7 @@ impl Client {
                         self.ip_pool_range_list(pool_name, None, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -12910,7 +12832,7 @@ impl Client {
         self.ip_pool_service_range_list(limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -12918,10 +12840,7 @@ impl Client {
                         self.ip_pool_service_range_list(None, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -13199,7 +13118,7 @@ impl Client {
         self.saga_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -13207,10 +13126,7 @@ impl Client {
                         self.saga_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -13337,7 +13253,7 @@ impl Client {
         self.silo_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -13345,10 +13261,7 @@ impl Client {
                         self.silo_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -13556,7 +13469,7 @@ impl Client {
         self.silo_identity_provider_list(silo_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -13564,10 +13477,7 @@ impl Client {
                         self.silo_identity_provider_list(silo_name, None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -13957,7 +13867,7 @@ impl Client {
         self.silo_users_list(silo_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -13965,10 +13875,7 @@ impl Client {
                         self.silo_users_list(silo_name, None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -14098,7 +14005,7 @@ impl Client {
         self.system_user_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -14106,10 +14013,7 @@ impl Client {
                         self.system_user_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -14228,7 +14132,7 @@ impl Client {
         self.timeseries_schema_get(limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -14236,10 +14140,7 @@ impl Client {
                         self.timeseries_schema_get(None, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -14328,7 +14229,7 @@ impl Client {
         self.user_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -14336,10 +14237,7 @@ impl Client {
                         self.user_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -14444,7 +14342,7 @@ impl Client {
         self.disk_list_v1(limit, organization, None, project, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -14452,10 +14350,7 @@ impl Client {
                         self.disk_list_v1(None, None, state.as_deref(), None, None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -14693,7 +14588,7 @@ impl Client {
         self.instance_list_v1(limit, organization, None, project, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -14701,10 +14596,7 @@ impl Client {
                         self.instance_list_v1(None, None, state.as_deref(), None, None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -14949,7 +14841,7 @@ impl Client {
         self.instance_disk_list_v1(instance, limit, organization, None, project, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -14964,10 +14856,7 @@ impl Client {
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
-                            Some((
-                                futures::stream::iter(page.items.into_iter().map(Ok)),
-                                page.next_page,
-                            ))
+                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                         })
                         .await
                     }
@@ -15464,7 +15353,7 @@ impl Client {
         self.organization_list_v1(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -15472,10 +15361,7 @@ impl Client {
                         self.organization_list_v1(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -15777,7 +15663,7 @@ impl Client {
         self.project_list_v1(limit, organization, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -15785,10 +15671,7 @@ impl Client {
                         self.project_list_v1(None, None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -16122,7 +16005,7 @@ impl Client {
         self.system_component_version_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -16130,10 +16013,7 @@ impl Client {
                         self.system_component_version_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -16223,7 +16103,7 @@ impl Client {
         self.update_deployments_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -16231,10 +16111,7 @@ impl Client {
                         self.update_deployments_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }
@@ -16449,7 +16326,7 @@ impl Client {
         self.system_update_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
-                let first = futures::stream::iter(page.items.into_iter().map(Ok));
+                let first = futures::stream::iter(page.items).map(Ok);
                 let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
                     if state.is_none() {
                         Ok(None)
@@ -16457,10 +16334,7 @@ impl Client {
                         self.system_update_list(None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
-                                Some((
-                                    futures::stream::iter(page.items.into_iter().map(Ok)),
-                                    page.next_page,
-                                ))
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
                             })
                             .await
                     }

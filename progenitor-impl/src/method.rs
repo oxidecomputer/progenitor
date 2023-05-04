@@ -729,9 +729,8 @@ impl Generator {
                             let page = page.into_inner();
 
                             // Create a stream from the items of the first page.
-                            let first = futures::stream::iter(
-                                page.items.into_iter().map(Ok)
-                            );
+                            let first =
+                                futures::stream::iter(page.items).map(Ok);
 
                             // We unfold subsequent pages using page.next_page
                             // as the seed value. Each iteration returns its
@@ -756,11 +755,8 @@ impl Generator {
                                             let page = page.into_inner();
                                             Some((
                                                 futures::stream::iter(
-                                                    page
-                                                        .items
-                                                        .into_iter()
-                                                        .map(Ok),
-                                                ),
+                                                    page.items
+                                                ).map(Ok),
                                                 page.next_page,
                                             ))
                                         })
@@ -1725,9 +1721,8 @@ impl Generator {
                             let page = page.into_inner();
 
                             // Create a stream from the first page of items.
-                            let first = futures::stream::iter(
-                                page.items.into_iter().map(Ok)
-                            );
+                            let first =
+                                futures::stream::iter(page.items).map(Ok);
 
                             // We unfold subsequent pages using page.next_page
                             // as the seed value. Each iteration returns its
@@ -1753,11 +1748,8 @@ impl Generator {
                                             let page = page.into_inner();
                                             Some((
                                                 futures::stream::iter(
-                                                    page
-                                                        .items
-                                                        .into_iter()
-                                                        .map(Ok),
-                                                ),
+                                                    page.items
+                                                ).map(Ok),
                                                 (page.next_page, next),
                                             ))
                                         })

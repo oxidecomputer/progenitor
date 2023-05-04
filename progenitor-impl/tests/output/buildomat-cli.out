@@ -43,8 +43,8 @@ impl Cli {
         clap::Command::new("").arg(
             clap::Arg::new("task")
                 .long("task")
-                .required(true)
-                .value_parser(clap::value_parser!(String)),
+                .value_parser(clap::value_parser!(String))
+                .required(true),
         )
     }
 
@@ -57,14 +57,28 @@ impl Cli {
             .arg(
                 clap::Arg::new("name")
                     .long("name")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
             )
             .arg(
                 clap::Arg::new("script")
                     .long("script")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
             )
     }
 
@@ -73,14 +87,14 @@ impl Cli {
             .arg(
                 clap::Arg::new("task")
                     .long("task")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("minseq")
                     .long("minseq")
-                    .required(false)
-                    .value_parser(clap::value_parser!(u32)),
+                    .value_parser(clap::value_parser!(u32))
+                    .required(false),
             )
     }
 
@@ -88,8 +102,8 @@ impl Cli {
         clap::Command::new("").arg(
             clap::Arg::new("task")
                 .long("task")
-                .required(true)
-                .value_parser(clap::value_parser!(String)),
+                .value_parser(clap::value_parser!(String))
+                .required(true),
         )
     }
 
@@ -98,24 +112,39 @@ impl Cli {
             .arg(
                 clap::Arg::new("task")
                     .long("task")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("output")
                     .long("output")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
     }
 
     pub fn cli_user_create() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("name")
-                .long("name")
-                .required(true)
-                .value_parser(clap::value_parser!(String)),
-        )
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
     }
 
     pub fn cli_whoami() -> clap::Command {
@@ -127,14 +156,28 @@ impl Cli {
             .arg(
                 clap::Arg::new("bootstrap")
                     .long("bootstrap")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
             )
             .arg(
                 clap::Arg::new("token")
                     .long("token")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
             )
     }
 
@@ -147,26 +190,40 @@ impl Cli {
             .arg(
                 clap::Arg::new("task")
                     .long("task")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("payload")
                     .long("payload")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
             )
             .arg(
                 clap::Arg::new("stream")
                     .long("stream")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
             )
             .arg(
                 clap::Arg::new("time")
                     .long("time")
-                    .required(true)
-                    .value_parser(clap::value_parser!(chrono::DateTime<chrono::offset::Utc>)),
+                    .value_parser(clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
             )
     }
 
@@ -174,8 +231,8 @@ impl Cli {
         clap::Command::new("").arg(
             clap::Arg::new("task")
                 .long("task")
-                .required(true)
-                .value_parser(clap::value_parser!(String)),
+                .value_parser(clap::value_parser!(String))
+                .required(true),
         )
     }
 
@@ -184,14 +241,28 @@ impl Cli {
             .arg(
                 clap::Arg::new("task")
                     .long("task")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("failed")
                     .long("failed")
-                    .required(true)
-                    .value_parser(clap::value_parser!(bool)),
+                    .value_parser(clap::value_parser!(bool))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
             )
     }
 
@@ -200,20 +271,34 @@ impl Cli {
             .arg(
                 clap::Arg::new("task")
                     .long("task")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("path")
                     .long("path")
-                    .required(true)
-                    .value_parser(clap::value_parser!(String)),
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
             )
             .arg(
                 clap::Arg::new("size")
                     .long("size")
+                    .value_parser(clap::value_parser!(i64))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(i64)),
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
             )
     }
 
@@ -356,6 +441,12 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_task_submit(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.task_submit();
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::TaskSubmit>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
         if let Some(value) = matches.get_one::<String>("name") {
             request = request.body_map(|body| body.name(value.clone()))
         }
@@ -448,6 +539,12 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_user_create(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.user_create();
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::UserCreate>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
         if let Some(value) = matches.get_one::<String>("name") {
             request = request.body_map(|body| body.name(value.clone()))
         }
@@ -482,6 +579,12 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_worker_bootstrap(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_bootstrap();
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerBootstrap>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
         if let Some(value) = matches.get_one::<String>("bootstrap") {
             request = request.body_map(|body| body.bootstrap(value.clone()))
         }
@@ -522,6 +625,12 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_worker_task_append(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_task_append();
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerAppendTask>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
         if let Some(value) = matches.get_one::<String>("task") {
             request = request.task(value.clone());
         }
@@ -574,6 +683,12 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_worker_task_complete(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_task_complete();
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerCompleteTask>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
         if let Some(value) = matches.get_one::<String>("task") {
             request = request.task(value.clone());
         }
@@ -598,6 +713,12 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_worker_task_add_output(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_task_add_output();
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerAddOutput>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
         if let Some(value) = matches.get_one::<String>("task") {
             request = request.task(value.clone());
         }
