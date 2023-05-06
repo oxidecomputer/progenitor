@@ -359,14 +359,14 @@ impl Generator {
         });
 
         let about = method.summary.as_ref().map(|summary| {
-            let mut about_str = summary.clone();
-            if let Some(description) = &method.description {
-                about_str.push_str("\n\n");
-                about_str.push_str(description);
-            }
-
             quote! {
-                .about(#about_str)
+                .about(#summary)
+            }
+        });
+
+        let long_about = method.description.as_ref().map(|description| {
+            quote! {
+                .long_about(#description)
             }
         });
 
@@ -382,6 +382,7 @@ impl Generator {
                 )*
                 #body_json_args
                 #about
+                #long_about
             }
         };
 

@@ -30,6 +30,7 @@ impl Cli {
                     .required(false)
                     .help("A key parameter that will not be overridden by the path spec"),
             )
+            .long_about("Gets a key")
     }
 }
 
