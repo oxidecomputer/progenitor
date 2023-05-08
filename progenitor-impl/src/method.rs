@@ -89,6 +89,10 @@ struct BuilderImpl {
 
 pub struct DropshotPagination {
     item: TypeId,
+    // TODO this is going to be used by the SDK and CLI generation to validate
+    // inputs.
+    #[allow(unused)]
+    first_page_params: Vec<String>,
 }
 
 pub struct OperationParameter {
@@ -1214,14 +1218,10 @@ impl Generator {
         parameters: &[OperationParameter],
         responses: &[OperationResponse],
     ) -> Option<DropshotPagination> {
-        if operation
-            .extensions
-            .get("x-dropshot-pagination")
-            .and_then(|v| v.as_bool())
-            != Some(true)
-        {
+        let Some(value) = operation.extensions.get("x-dropshot-pagination")
+        else {
             return None;
-        }
+        };
 
         // We expect to see at least "page_token" and "limit" parameters.
         if parameters
@@ -1316,7 +1316,21 @@ impl Generator {
             .ok()?
             .details()
         {
-            typify::TypeDetails::Vec(item) => Some(DropshotPagination { item }),
+            typify::TypeDetails::Vec(item) => {
+                #[derive(serde::Deserialize, Default)]
+                struct DropshotPaginationFormat {
+                    required: Vec<String>,
+                }
+                let first_page_params = serde_json::from_value::<
+                    DropshotPaginationFormat,
+                >(value.clone())
+                .unwrap_or_default()
+                .required;
+                Some(DropshotPagination {
+                    item,
+                    first_page_params,
+                })
+            }
             _ => None,
         }
     }
