@@ -1346,7 +1346,7 @@ impl Generator {
             .ok()?
             .details()
         {
-            typify::TypeDetails::Array(item) => {
+            typify::TypeDetails::Array(item, ..) => {
                 Some(DropshotPagination { item })
             }
             _ => None,
