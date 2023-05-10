@@ -349,10 +349,18 @@ impl Generator {
 
                     quote! {
                         impl #form_name {
-                            pub fn as_form<'f>(&'f self) -> impl std::iter::Iterator<Item=(&'static str, &'f [u8])> {
+                            pub fn as_form<'f>(&'f self) -> impl std::iter::Iterator<Item=(&'static str, reqwest::multipart::Part)> + 'f {
                                 [#properties]
                                     .into_iter()
-                                    .filter_map(|(name, val)| val.as_ref().map(|val| (name, val.as_slice())))
+                                    .filter_map(|(name, val)|{
+                                        val.as_ref().map(|val| (name, val))
+                                    })
+                                    .map(|(name, val)| {
+                                        let part = reqwest::multipart::Part::stream(val.to_vec())
+                                            .file_name("sortme.pdf".to_owned()) // required for sevdesk, for "validation"
+                                            .mime_str("application/pdf").unwrap();
+                                        (name, part)
+                                    })
                             }
                         }
                     }

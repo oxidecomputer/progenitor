@@ -4,11 +4,14 @@
 
 //! Support code for generated clients.
 
-use std::ops::{Deref, DerefMut};
+use std::{
+    borrow::Cow,
+    ops::{Deref, DerefMut}, fs,
+};
 
 use bytes::Bytes;
 use futures_core::Stream;
-use reqwest::RequestBuilder;
+use reqwest::{RequestBuilder, multipart};
 use serde::{de::DeserializeOwned, Serialize};
 
 type InnerByteStream =
@@ -63,10 +66,13 @@ impl<T: DeserializeOwned> ResponseValue<T> {
     ) -> Result<Self, Error<E>> {
         let status = response.status();
         let headers = response.headers().clone();
-        let inner = response
-            .json()
-            .await
-            .map_err(Error::InvalidResponsePayload)?;
+        let response = response.text().await?;
+        fs::write("responsefcuk.json", &response).unwrap();
+        let inner: T = serde_json::from_str(&response).unwrap();
+        // let inner = response
+        //     .json()
+        //     .await
+        //     .map_err(|e| Error::InvalidResponsePayload(reqwest::Error::from(e)))?;
 
         Ok(Self {
             inner,
@@ -397,8 +403,7 @@ where
 
     fn form_from_raw<
         S: AsRef<str>,
-        T: AsRef<[u8]>,
-        I: Sized + IntoIterator<Item = (S, T)>,
+        I: Sized + IntoIterator<Item = (S, reqwest::multipart::Part)>,
     >(
         self,
         iter: I,
@@ -426,8 +431,7 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
 
     fn form_from_raw<
         S: AsRef<str>,
-        T: AsRef<[u8]>,
-        I: Sized + IntoIterator<Item = (S, T)>,
+        I: Sized + IntoIterator<Item = (S, reqwest::multipart::Part)>,
     >(
         self,
         mut iter: I,
@@ -435,19 +439,16 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
         use reqwest::multipart::{Form, Part};
 
         let mut form = Form::new();
-        for (name, value) in iter {
+        for (name, part) in iter {
             form = form.part(
-                name.as_ref().to_owned(),
-                Part::stream(Vec::from(value.as_ref())),
+                name.as_ref().to_owned(), part,
             );
         }
+
+        dbg!(&form);
+
         Ok(self
-            .header(
-                reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static(
-                    "multipart/form-data",
-                ),
-            )
-            .multipart(form))
+            .multipart(form)
+        )
     }
 }

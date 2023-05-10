@@ -253,8 +253,8 @@ pub(crate) enum OperationResponseFormat {
 impl std::fmt::Display for OperationResponseFormat {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(match self {
-            Self::JSON => "application/json",
-            Self::XML => "application/xml",
+            Self::JSON => "application/json;charset=UTF-8",
+            Self::XML => "application/xml;charset=UTF-8",
             Self::FormUrlencoded => "application/x-www-form-urlencoded",
         })
     }
@@ -881,8 +881,8 @@ impl Generator {
                 SecurityScheme::HTTP { scheme, bearer_format, description } => {
                     todo!("Craft http header")
                 }
-                _ => todo!("Only header APIKeys are supported right now"),
-            }  
+                _ => eprintln!("Only header APIKeys are supported right now, others have to be impl'd manually"),
+            } 
         };
         
         use itertools::Itertools;
@@ -982,6 +982,7 @@ impl Generator {
                     OperationParameterType::Form(_),
                 ) => {
                     Some(quote! {
+                    // form data header is set automatically by our call to reqwest's `fn multipart(..)`. 
                     // This uses progenitor_client::RequestBuilderExt which sets up a simple form data based on bytes
                     .form_from_raw(body.as_form())?
                 })},
@@ -1125,7 +1126,7 @@ impl Generator {
 
             let request = #client.client
                 . #method_func (url)
-                #(#body_func)*
+                #( #body_func )*
                 #query_use
                 #headers_use
                 #websock_hdrs
