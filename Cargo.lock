@@ -1216,7 +1216,7 @@ dependencies = [
  "progenitor-macro",
  "project-root",
  "rand",
- "regress",
+ "regress 0.5.0",
  "reqwest",
  "schemars",
  "serde",
@@ -1367,6 +1367,16 @@ name = "regress"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d995d590bd8ec096d1893f414bf3f5e8b0ee4c9eed9a5642b9766ef2c8e2e8e9"
+dependencies = [
+ "hashbrown 0.13.2",
+ "memchr",
+]
+
+[[package]]
+name = "regress"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82a9ecfa0cb04d0b04dddb99b8ccf4f66bc8dfd23df694b398570bd8ae3a50fb"
 dependencies = [
  "hashbrown 0.13.2",
  "memchr",
@@ -2129,7 +2139,8 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 
 [[package]]
 name = "typify"
-version = "0.0.12-dev"
+version = "0.0.12"
+source = "git+https://github.com/drahnr/typify?branch=main#28db444b60335af3db6e72e9be7f121148b8fdef"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -2137,13 +2148,14 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.0.12-dev"
+version = "0.0.12"
+source = "git+https://github.com/drahnr/typify?branch=main#28db444b60335af3db6e72e9be7f121148b8fdef"
 dependencies = [
  "heck",
  "log",
  "proc-macro2",
  "quote",
- "regress",
+ "regress 0.6.0",
  "schemars",
  "serde_json",
  "syn 2.0.8",
@@ -2153,7 +2165,8 @@ dependencies = [
 
 [[package]]
 name = "typify-macro"
-version = "0.0.12-dev"
+version = "0.0.12"
+source = "git+https://github.com/drahnr/typify?branch=main#28db444b60335af3db6e72e9be7f121148b8fdef"
 dependencies = [
  "proc-macro2",
  "quote",
