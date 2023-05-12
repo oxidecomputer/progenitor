@@ -122,9 +122,9 @@ pub mod operations {
     impl InstanceIssueCrucibleSnapshotRequestWhen {
         pub fn new(inner: httpmock::When) -> Self {
             Self(
-                inner
-                    .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/instance/disk/.*/snapshot/.*$").unwrap()),
+                inner.method(httpmock::Method::POST).path_matches(
+                    regex::Regex::new("^/instance/disk/[^/]*/snapshot/[^/]*$").unwrap(),
+                ),
             )
         }
 

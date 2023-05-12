@@ -70,7 +70,7 @@ impl PathTemplate {
             .iter()
             .map(|c| match c {
                 Component::Constant(name) => name.clone(),
-                Component::Parameter(_) => ".*".to_string(),
+                Component::Parameter(_) => "[^/]*".to_string(),
             })
             .collect::<String>();
         format!("^{}$", inner)
