@@ -75,7 +75,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/task/.*$").unwrap()),
+                    .path_matches(regex::Regex::new("^/v1/task/[^/]*$").unwrap()),
             )
         }
 
@@ -189,7 +189,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks/.*/events$").unwrap()),
+                    .path_matches(regex::Regex::new("^/v1/tasks/[^/]*/events$").unwrap()),
             )
         }
 
@@ -234,7 +234,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks/.*/outputs$").unwrap()),
+                    .path_matches(regex::Regex::new("^/v1/tasks/[^/]*/outputs$").unwrap()),
             )
         }
 
@@ -275,7 +275,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks/.*/outputs/.*$").unwrap()),
+                    .path_matches(regex::Regex::new("^/v1/tasks/[^/]*/outputs/[^/]*$").unwrap()),
             )
         }
 
@@ -471,7 +471,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/.*/append$").unwrap()),
+                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/append$").unwrap()),
             )
         }
 
@@ -511,7 +511,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/.*/chunk$").unwrap()),
+                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/chunk$").unwrap()),
             )
         }
 
@@ -556,7 +556,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/.*/complete$").unwrap()),
+                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/complete$").unwrap()),
             )
         }
 
@@ -597,7 +597,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/.*/output$").unwrap()),
+                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/output$").unwrap()),
             )
         }
 
