@@ -181,9 +181,53 @@ impl Generator {
                             Self(self.0.path_matches(re))
                         }
                     }
-                    OperationParameterKind::Query(_) => quote! {
+                    OperationParameterKind::Query(true) => quote! {
                         Self(self.0.query_param(#name, value.to_string()))
                     },
+
+                    OperationParameterKind::Query(false) => {
+                        // If the type is a ref, augment it with a lifetime that we'll also use in the function
+                        let (lifetime, arg_type_name) =
+                            if let syn::Type::Reference(mut rr) =
+                                syn::parse2::<syn::Type>(arg_type_name.clone())
+                                    .unwrap()
+                            {
+                                rr.lifetime = Some(syn::Lifetime::new(
+                                    "'a",
+                                    proc_macro2::Span::call_site(),
+                                ));
+                                (Some(quote! { 'a, }), rr.to_token_stream())
+                            } else {
+                                (None, arg_type_name)
+                            };
+
+                        return quote! {
+                            pub fn #name_ident<#lifetime T>(
+                                self,
+                                value: T,
+                            ) -> Self
+                            where
+                                T: Into<Option<#arg_type_name>>,
+                            {
+                                if let Some(value) = value.into() {
+                                    Self(self.0.query_param(
+                                        #name,
+                                        value.to_string(),
+                                    ))
+                                } else {
+                                    Self(self.0.matches(|req| {
+                                        req.query_params
+                                            .as_ref()
+                                            .and_then(|qs| {
+                                                qs.iter().find(
+                                                    |(key, _)| key == #name)
+                                            })
+                                            .is_none()
+                                    }))
+                                }
+                            }
+                        };
+                    }
                     OperationParameterKind::Header(_) => quote! { todo!() },
                     OperationParameterKind::Body(_) => match typ {
                         OperationParameterType::Type(_) => quote! {

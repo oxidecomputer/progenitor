@@ -18,12 +18,36 @@ pub mod operations {
             self.0
         }
 
-        pub fn key(self, value: bool) -> Self {
-            Self(self.0.query_param("key", value.to_string()))
+        pub fn key<T>(self, value: T) -> Self
+        where
+            T: Into<Option<bool>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("key", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.query_params
+                        .as_ref()
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "key"))
+                        .is_none()
+                }))
+            }
         }
 
-        pub fn unique_key(self, value: &str) -> Self {
-            Self(self.0.query_param("unique_key", value.to_string()))
+        pub fn unique_key<'a, T>(self, value: T) -> Self
+        where
+            T: Into<Option<&'a str>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("unique_key", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.query_params
+                        .as_ref()
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "unique_key"))
+                        .is_none()
+                }))
+            }
         }
     }
 

@@ -203,8 +203,20 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn minseq(self, value: u32) -> Self {
-            Self(self.0.query_param("minseq", value.to_string()))
+        pub fn minseq<T>(self, value: T) -> Self
+        where
+            T: Into<Option<u32>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("minseq", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.query_params
+                        .as_ref()
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "minseq"))
+                        .is_none()
+                }))
+            }
         }
     }
 
