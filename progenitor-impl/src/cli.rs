@@ -286,28 +286,42 @@ impl Generator {
             .collect::<Vec<_>>();
         let fn_name = format_ident!("cli_{}", &method.operation_id);
 
+        let first_page_required_set = method
+            .dropshot_paginated
+            .as_ref()
+            .map(|d| &d.first_page_params);
+
         let args = method
             .params
             .iter()
             .filter(|param| {
                 !matches!(&param.kind, OperationParameterKind::Body(_))
                     && (method.dropshot_paginated.is_none()
-                        || (param.name.as_str() != "page_token"))
+                        || param.name.as_str() != "page_token")
             })
             .map(|param| {
                 let arg_name = param.name.to_kebab_case();
 
-                let required = match &param.kind {
-                    OperationParameterKind::Path => Volitionality::Required,
-                    OperationParameterKind::Query(true)
-                    | OperationParameterKind::Header(true) => {
-                        Volitionality::Required
+                let first_page_required = first_page_required_set
+                    .map_or(false, |required| {
+                        required.contains(&param.api_name)
+                    });
+
+                let required = if first_page_required {
+                    Volitionality::Required
+                } else {
+                    match &param.kind {
+                        OperationParameterKind::Path => Volitionality::Required,
+                        OperationParameterKind::Query(true)
+                        | OperationParameterKind::Header(true) => {
+                            Volitionality::Required
+                        }
+                        OperationParameterKind::Query(false)
+                        | OperationParameterKind::Header(false) => {
+                            Volitionality::Optional
+                        }
+                        OperationParameterKind::Body(_) => unreachable!(),
                     }
-                    OperationParameterKind::Query(false)
-                    | OperationParameterKind::Header(false) => {
-                        Volitionality::Optional
-                    }
-                    OperationParameterKind::Body(_) => unreachable!(),
                 };
 
                 let OperationParameterType::Type(arg_type_id) = &param.typ

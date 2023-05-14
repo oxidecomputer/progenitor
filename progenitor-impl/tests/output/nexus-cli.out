@@ -1066,7 +1066,7 @@ impl Cli {
                 clap::Arg::new("end-time")
                     .long("end-time")
                     .value_parser(clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
-                    .required(false)
+                    .required(true)
                     .help("An exclusive end time of metrics."),
             )
             .arg(
@@ -1080,7 +1080,7 @@ impl Cli {
                 clap::Arg::new("start-time")
                     .long("start-time")
                     .value_parser(clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
-                    .required(false)
+                    .required(true)
                     .help("An inclusive start time of metrics."),
             )
             .about("Fetch disk metrics")
