@@ -1,4 +1,4 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2023 Oxide Computer Company
 
 use std::{
     cmp::Ordering,
@@ -88,18 +88,15 @@ struct BuilderImpl {
 }
 
 pub struct DropshotPagination {
-    item: TypeId,
-    // TODO this is going to be used by the SDK and CLI generation to validate
-    // inputs.
-    #[allow(unused)]
-    first_page_params: Vec<String>,
+    pub item: TypeId,
+    pub first_page_params: Vec<String>,
 }
 
 pub struct OperationParameter {
     /// Sanitized parameter name.
     pub name: String,
     /// Original parameter name provided by the API.
-    api_name: String,
+    pub api_name: String,
     pub description: Option<String>,
     pub typ: OperationParameterType,
     pub kind: OperationParameterKind,
