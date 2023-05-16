@@ -1,5 +1,6 @@
 [workspace]
 members = [
+	"cargo-progenitor",
 	"example-build",
 	"example-macro",
 	"example-wasm",
