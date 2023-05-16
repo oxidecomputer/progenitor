@@ -7,6 +7,10 @@ futures for `async` API calls and `Streams` for paginated interfaces.
 It generates a type called `Client` with methods that correspond to the
 operations specified in the OpenAPI document.
 
+Progenitor can also generate a CLI to interact with an OpenAPI service
+instance, and [`httpmock`](https://crates.io/crates/httpmock) helpers to
+create a strongly typed mock of the OpenAPI service.
+
 The primary target is OpenAPI documents emitted by
 [Dropshot](https://github.com/oxidecomputer/dropshot)-generated APIs, but it
 can be used for many OpenAPI documents. As OpenAPI covers a wide range of APIs,
@@ -56,6 +60,7 @@ Similarly, if there is a `format` field set to `uuid`:
 ```
 
 And if there are any websocket channel endpoints:
+
 ```diff
 [dependencies]
 +base64 = "0.21"
@@ -63,6 +68,7 @@ And if there are any websocket channel endpoints:
 ```
 
 If types include regular expression validation:
+
 ```diff
 [dependencies]
 +regress = "0.4.1"
@@ -90,6 +96,8 @@ changes (when its mtime is updated).
 Progenitor includes an interface appropriate for use in a
 [`build.rs`](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
 file. While slightly more onerous than the macro, a builder has the advantage of making the generated code visible.
+The capability of generating a CLI and `httpmock` helpers is only available using `build.rs`, using
+and the `Generator` functions `cli` and `httpmock` respectively.
 
 The `build.rs` file should look something like this:
 
@@ -140,7 +148,6 @@ You'll need to add the following to `Cargo.toml`:
 Note that `progenitor` is used by `build.rs`, but the generated code required
 `progenitor-client`.
 
-
 ### Static Crate
 
 Progenitor can be run to emit a stand-alone crate for the generated client.
@@ -187,7 +194,6 @@ percent-encoding = "2.2.0"
 reqwest = { version = "0.11.13", default-features=false, features = ["json", "stream"] }
 serde = { version = "1.0.152", features = ["derive"] }
 serde_urlencoded = "0.7.1"
-
 ```
 
 The dependency versions in the generated `Cargo.toml` are the same as the
