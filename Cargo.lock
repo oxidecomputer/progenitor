@@ -201,6 +201,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "cargo-progenitor"
+version = "0.3.0"
+dependencies = [
+ "anyhow",
+ "built",
+ "clap",
+ "openapiv3",
+ "progenitor",
+ "progenitor-client",
+ "progenitor-impl",
+ "project-root",
+ "rustfmt-wrapper",
+ "serde_json",
+ "serde_yaml",
+]
+
+[[package]]
 name = "cc"
 version = "1.0.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1271,26 +1288,19 @@ dependencies = [
 name = "progenitor"
 version = "0.3.0"
 dependencies = [
- "anyhow",
  "base64",
- "built",
  "chrono",
- "clap",
  "futures",
- "openapiv3",
  "percent-encoding",
  "progenitor-client",
  "progenitor-impl",
  "progenitor-macro",
- "project-root",
  "rand",
  "regress",
  "reqwest",
- "rustfmt-wrapper",
  "schemars",
  "serde",
  "serde_json",
- "serde_yaml",
  "uuid",
 ]
 

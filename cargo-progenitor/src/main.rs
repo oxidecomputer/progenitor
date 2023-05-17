@@ -24,6 +24,13 @@ fn release_is_unstable() -> bool {
 }
 
 #[derive(Parser)]
+#[command(name = "cargo")]
+#[command(bin_name = "cargo")]
+enum CargoCli {
+    Progenitor(Args),
+}
+
+#[derive(Parser)]
 struct Args {
     /// OpenAPI definition document (JSON or YAML)
     #[clap(short = 'i', long)]
@@ -111,7 +118,7 @@ where
 }
 
 fn main() -> Result<()> {
-    let args = Args::parse();
+    let CargoCli::Progenitor(args) = CargoCli::parse();
     let api = load_api(&args.input)?;
 
     let mut builder = Generator::new(
