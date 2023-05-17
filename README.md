@@ -150,7 +150,7 @@ however, the most manual way to use Progenitor.
 Usage:
 
 ```
-progenitor
+cargo progenitor
 
 Options:
     -i INPUT            OpenAPI definition document (JSON or YAML)
@@ -161,7 +161,10 @@ Options:
 
 For example:
 
-`cargo run --bin progenitor -- -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0`
+```
+cargo install --path cargo-progenitor
+cargo progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
+```
 
 This will produce a package in the specified directory.
 
