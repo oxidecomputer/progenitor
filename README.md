@@ -162,8 +162,13 @@ Options:
 For example:
 
 ```
-cargo install --path cargo-progenitor
+cargo install cargo-progenitor
 cargo progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
+```
+
+... or within the repo:
+```
+cargo run --bin cargo-progenitor -- progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
 ```
 
 This will produce a package in the specified directory.
