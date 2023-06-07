@@ -39,7 +39,7 @@ impl PathTemplate {
                     "{}",
                     rename
                         .get(&n)
-                        .expect(&format!("missing path name mapping {}", n)),
+                        .unwrap_or_else(|| panic!("missing path name mapping {}", n)),
                 );
                 Some(quote! {
                     encode_path(&#param.to_string())

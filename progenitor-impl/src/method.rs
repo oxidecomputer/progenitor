@@ -345,7 +345,7 @@ impl Generator {
 
                         let typ = self
                             .type_space
-                            .add_type_with_name(&schema, Some(dbg!(name)))?;
+                            .add_type_with_name(&schema, Some(name))?;
 
                         query.push((
                             parameter_data.name.clone(),
@@ -2072,7 +2072,7 @@ impl Generator {
                 //     "format": "binary"
                 // }
 
-                let mapped = match schema.item(components)? {
+                let _mapped = match schema.item(components)? {
                     openapiv3::Schema {
                         schema_data:
                             openapiv3::SchemaData {
@@ -2087,7 +2087,7 @@ impl Generator {
                             openapiv3::SchemaKind::Type(openapiv3::Type::Object(
                                 openapiv3::ObjectType {
                                     properties,
-                                    additional_properties,
+                                    additional_properties: _,
                                     ..
                                 },
                             )),

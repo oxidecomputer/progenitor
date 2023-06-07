@@ -286,7 +286,7 @@ impl Generator {
                     let properties = syn::punctuated::Punctuated::<_, syn::Token![,]>::from_iter(
                         properties
                             .into_iter()
-                            .map(|(prop_name, prop_ty)| {
+                            .map(|(prop_name, _prop_ty)| {
                                 let ident = quote::format_ident!("{}", prop_name);
                                 quote!{ (#prop_name, &self. #ident) }
                             }));
