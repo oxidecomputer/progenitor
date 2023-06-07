@@ -1568,8 +1568,7 @@ impl Generator {
                             }
                         }
                     }
-
-                    OperationParameterType::Form(type_id) => {
+                    OperationParameterType::Form(_type_id) => {
                         let err_msg = format!(
                             "conversion to `reqwest::Body` for {} failed",
                             param.name,
@@ -1585,7 +1584,6 @@ impl Generator {
                             }
                         })
                     }
-
                     OperationParameterType::RawBody => {
                         let err_msg = format!(
                             "conversion to `reqwest::Body` for {} failed",
