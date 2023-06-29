@@ -1,5 +1,7 @@
 // Copyright 2023 Oxide Computer Company
 
+use std::collections::BTreeMap;
+
 use heck::ToKebabCase;
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
@@ -177,200 +179,10 @@ impl Generator {
         &mut self,
         method: &crate::method::OperationMethod,
     ) -> CliOperation {
-        let maybe_body_arg = method.params.iter().find(|param| {
-            matches!(&param.kind, OperationParameterKind::Body(_))
-            // TODO not sure how to deal with raw bodies right now
-            && matches!(&param.typ, OperationParameterType::Type(_))
-        });
-
-        let mut full_body = true;
-
-        // Preprocess the body parameter (if there is one) to create an
-        // iterator of top-level properties that can be represented as scalar
-        // values. We use these to create `clap::Arg` structures and then to
-        // build up the body parameter in the actual API call.
-        let body_params = maybe_body_arg
-            .into_iter()
-            .flat_map(|param| {
-                let OperationParameterType::Type(type_id) = &param.typ else {
-                    unreachable!();
-                };
-
-                let body_arg_type = self.type_space.get_type(type_id).unwrap();
-                let details = body_arg_type.details();
-
-                match details {
-                    typify::TypeDetails::Struct(struct_info) => {
-                        struct_info
-                            .properties_info()
-                            .filter_map(|prop_info| {
-                                let TypeStructPropInfo {
-                                    name: prop_name,
-                                    description,
-                                    required,
-                                    type_id: prop_type_id,
-                                } = prop_info;
-                                let prop_type = self
-                                    .type_space
-                                    .get_type(&prop_type_id)
-                                    .unwrap();
-
-                                // TODO this is maybe a kludge--not completely sure
-                                // of the right way to handle option types. On one
-                                // hand, we could want types from this interface to
-                                // never show us Option<T> types--we could let the
-                                // `required` field give us that information. On
-                                // the other hand, there might be Option types that
-                                // are required ... at least in the JSON sense,
-                                // meaning that we need to include `"foo": null`
-                                // rather than omitting the field. Back to the
-                                // first hand: is that last point just a serde
-                                // issue rather than an interface one?
-                                let maybe_inner_type =
-                                    if let typify::TypeDetails::Option(
-                                        inner_type_id,
-                                    ) = prop_type.details()
-                                    {
-                                        let inner_type = self
-                                            .type_space
-                                            .get_type(&inner_type_id)
-                                            .unwrap();
-                                        Some(inner_type)
-                                    } else {
-                                        None
-                                    };
-
-                                let prop_type = if let Some(inner_type) =
-                                    maybe_inner_type
-                                {
-                                    inner_type
-                                } else {
-                                    prop_type
-                                };
-
-                                let scalar =
-                                    prop_type.has_impl(TypeSpaceImpl::FromStr);
-                                let prop_name = prop_name.to_kebab_case();
-
-                                // If there's a required property that we can't
-                                // represent as a scalar (and therefore as a
-                                // CLI parameter), the user will be unable to
-                                // specify the full body without a json file.
-                                if required && !scalar {
-                                    full_body = false;
-                                }
-
-                                // println!(
-                                //     "{}::{}: {}; scalar: {}; required: {}",
-                                //     body_args.name(),
-                                //     prop_name,
-                                //     prop_type.name(),
-                                //     scalar,
-                                //     required,
-                                // );
-
-                                scalar.then(|| {
-                                    (
-                                        prop_name.clone(),
-                                        required,
-                                        description.map(str::to_string),
-                                        prop_type,
-                                    )
-                                })
-                            })
-                            .collect::<Vec<_>>()
-                    }
-                    _ => Vec::new(),
-                }
-            })
-            .collect::<Vec<_>>();
-        let fn_name = format_ident!("cli_{}", &method.operation_id);
-
-        let first_page_required_set = method
-            .dropshot_paginated
-            .as_ref()
-            .map(|d| &d.first_page_params);
-
-        let args = method
-            .params
-            .iter()
-            .filter(|param| {
-                !matches!(&param.kind, OperationParameterKind::Body(_))
-                    && (method.dropshot_paginated.is_none()
-                        || param.name.as_str() != "page_token")
-            })
-            .map(|param| {
-                let arg_name = param.name.to_kebab_case();
-
-                let first_page_required = first_page_required_set
-                    .map_or(false, |required| {
-                        required.contains(&param.api_name)
-                    });
-
-                let required = if first_page_required {
-                    Volitionality::Required
-                } else {
-                    match &param.kind {
-                        OperationParameterKind::Path => Volitionality::Required,
-                        OperationParameterKind::Query(true)
-                        | OperationParameterKind::Header(true) => {
-                            Volitionality::Required
-                        }
-                        OperationParameterKind::Query(false)
-                        | OperationParameterKind::Header(false) => {
-                            Volitionality::Optional
-                        }
-                        OperationParameterKind::Body(_) => unreachable!(),
-                    }
-                };
-
-                let OperationParameterType::Type(arg_type_id) = &param.typ
-                else {
-                    panic!()
-                };
-                let arg_type = self.type_space.get_type(arg_type_id).unwrap();
-
-                clap_arg(&arg_name, required, &param.description, &arg_type)
-            });
-
-        let body_args = body_params.iter().map(
-            |(prop_name, required, description, prop_type)| {
-                let volitionality = if *required {
-                    Volitionality::RequiredIfNoBody
-                } else {
-                    Volitionality::Optional
-                };
-                clap_arg(prop_name, volitionality, description, prop_type)
-            },
-        );
-
-        // TODO parameter for body as input json (--body-input?)
-        // TODO parameter to output a body template (--body-template?)
-        // TODO deal with all parameters?
-
-        let body_json_args = maybe_body_arg.map(|_| {
-            let help = "Path to a file that contains the full json body.";
-            let required = !full_body;
-
-            quote! {
-                .arg(
-                    clap::Arg::new("json-body")
-                        .long("json-body")
-                        .value_name("JSON-FILE")
-                        // Required if we can't turn the body into individual
-                        // parameters.
-                        .required(#required)
-                        .value_parser(clap::value_parser!(std::path::PathBuf))
-                        .help(#help)
-                )
-                .arg(
-                    clap::Arg::new("json-body-template")
-                        .long("json-body-template")
-                        .action(clap::ArgAction::SetTrue)
-                        .help("XXX")
-                )
-            }
-        });
+        let CliArg {
+            parser: parser_args,
+            consumer: consumer_args,
+        } = self.cli_method_args(method);
 
         let about = method.summary.as_ref().map(|summary| {
             quote! {
@@ -384,75 +196,20 @@ impl Generator {
             }
         });
 
+        let fn_name = format_ident!("cli_{}", &method.operation_id);
+
         let cli_fn = quote! {
             pub fn #fn_name() -> clap::Command
             {
                 clap::Command::new("")
-                #(
-                    .arg(#args)
-                )*
-                #(
-                    .arg(#body_args)
-                )*
-                #body_json_args
+                #parser_args
                 #about
                 #long_about
             }
         };
 
-        let op_name = format_ident!("{}", &method.operation_id);
         let fn_name = format_ident!("execute_{}", &method.operation_id);
-
-        // Build up the iterator processing each top-level parameter.
-        let args = method
-            .params
-            .iter()
-            .filter(|param| {
-                !matches!(&param.kind, OperationParameterKind::Body(_))
-                    && (method.dropshot_paginated.is_none()
-                        || (param.name.as_str() != "page_token"))
-            })
-            .map(|param| {
-                let arg_name = param.name.to_kebab_case();
-                let arg_fn_name = sanitize(&param.name, Case::Snake);
-                let arg_fn = format_ident!("{}", arg_fn_name);
-                let OperationParameterType::Type(arg_type_id) = &param.typ else {
-                    panic!()
-                };
-                let arg_type = self.type_space.get_type(arg_type_id).unwrap();
-                let arg_type_name = arg_type.ident();
-
-                quote! {
-                    if let Some(value) =
-                        matches.get_one::<#arg_type_name>(#arg_name)
-                    {
-                        // clone here in case the arg type doesn't impl
-                        // From<&T>
-                        request = request.#arg_fn(value.clone());
-                    }
-                }
-            });
-
-        // Build up the iterator processing each body property we can handle.
-        let body_args =
-            body_params.iter().map(|(prop_name, _, _, prop_type)| {
-                let prop_fn =
-                    format_ident!("{}", sanitize(prop_name, Case::Snake));
-                let prop_type_ident = prop_type.ident();
-                quote! {
-                    if let Some(value) =
-                        matches.get_one::<#prop_type_ident>(
-                            #prop_name,
-                        )
-                    {
-                        // clone here in case the arg type
-                        // doesn't impl TryFrom<&T>
-                        request = request.body_map(|body| {
-                            body.#prop_fn(value.clone())
-                        })
-                    }
-                }
-            });
+        let op_name = format_ident!("{}", &method.operation_id);
 
         let (_, success_type) = self.extract_responses(
             method,
@@ -522,37 +279,13 @@ impl Generator {
             }
         };
 
-        let body_json_args = maybe_body_arg.map(|body_param| {
-            let OperationParameterType::Type(body_type_id) = &body_param.typ
-            else {
-                unreachable!();
-            };
-            let body_type = self.type_space.get_type(body_type_id).unwrap();
-            let body_type_ident = body_type.ident();
-            quote! {
-                if let Some(value) =
-                    matches.get_one::<std::path::PathBuf>("json-body")
-                {
-                    let body_txt = std::fs::read_to_string(value).unwrap();
-                    let body_value =
-                        serde_json::from_str::<#body_type_ident>(
-                            &body_txt,
-                        )
-                        .unwrap();
-                    request = request.body(body_value);
-                }
-            }
-        });
-
         let execute_fn = quote! {
             pub async fn #fn_name(&self, matches: &clap::ArgMatches)
                 // ->
                 // Result<ResponseValue<#success_type>, Error<#error_type>>
             {
                 let mut request = self.client.#op_name();
-                #body_json_args
-                #( #args )*
-                #( #body_args )*
+                #consumer_args
 
                 // Call the override function.
                 // TODO don't want to unwrap.
@@ -583,6 +316,276 @@ impl Generator {
             execute_fn,
             execute_trait,
         }
+    }
+
+    fn cli_method_args(
+        &self,
+        method: &crate::method::OperationMethod,
+    ) -> CliArg {
+        let mut args = CliOperationArgs::default();
+
+        let first_page_required_set = method
+            .dropshot_paginated
+            .as_ref()
+            .map(|d| &d.first_page_params);
+
+        for param in &method.params {
+            let innately_required = match &param.kind {
+                // We're not interetested in the body parameter yet.
+                OperationParameterKind::Body(_) => continue,
+
+                OperationParameterKind::Path => true,
+                OperationParameterKind::Query(required) => *required,
+                OperationParameterKind::Header(required) => *required,
+            };
+
+            // For paginated endpoints, we don't generate 'page_token' args.
+            if method.dropshot_paginated.is_some()
+                && param.name.as_str() == "page_token"
+            {
+                continue;
+            }
+
+            let first_page_required = first_page_required_set
+                .map_or(false, |required| required.contains(&param.api_name));
+
+            let volitionality = if innately_required || first_page_required {
+                Volitionality::Required
+            } else {
+                Volitionality::Optional
+            };
+
+            let OperationParameterType::Type(arg_type_id) = &param.typ
+            else {
+                unreachable!("query and path parameters must be typed")
+            };
+            let arg_type = self.type_space.get_type(arg_type_id).unwrap();
+
+            let arg_name = param.name.to_kebab_case();
+
+            // There should be no conflicting path or query parameters.
+            assert!(!args.has_arg(&arg_name));
+
+            let parser = clap_arg(
+                &arg_name,
+                volitionality,
+                &param.description,
+                &arg_type,
+            );
+
+            let arg_fn_name = sanitize(&param.name, Case::Snake);
+            let arg_fn = format_ident!("{}", arg_fn_name);
+            let OperationParameterType::Type(arg_type_id) = &param.typ else {
+                    panic!()
+                };
+            let arg_type = self.type_space.get_type(arg_type_id).unwrap();
+            let arg_type_name = arg_type.ident();
+
+            let consumer = quote! {
+                if let Some(value) =
+                    matches.get_one::<#arg_type_name>(#arg_name)
+                {
+                    // clone here in case the arg type doesn't impl
+                    // From<&T>
+                    request = request.#arg_fn(value.clone());
+                }
+            };
+
+            args.add_arg(arg_name, CliArg { parser, consumer })
+        }
+
+        let maybe_body_type_id = method
+            .params
+            .iter()
+            .find(|param| {
+                matches!(&param.kind, OperationParameterKind::Body(_))
+            })
+            .and_then(|param| match &param.typ {
+                // TODO not sure how to deal with raw bodies, but we definitely
+                // need **some** input so we shouldn't just ignore it... as we
+                // are currently...
+                OperationParameterType::RawBody => None,
+
+                OperationParameterType::Type(body_type_id) => {
+                    Some(body_type_id)
+                }
+            });
+
+        if let Some(body_type_id) = maybe_body_type_id {
+            args.body_present();
+            let body_type = self.type_space.get_type(body_type_id).unwrap();
+            let details = body_type.details();
+
+            match details {
+                typify::TypeDetails::Struct(struct_info) => {
+                    for prop_info in struct_info.properties_info() {
+                        self.cli_method_body_arg(&mut args, prop_info)
+                    }
+                }
+
+                _ => {
+                    // If the body is not a struct, we don't know what's
+                    // required or how to generate it
+                    args.body_required()
+                }
+            }
+        }
+
+        let parser_args =
+            args.args.values().map(|CliArg { parser, .. }| parser);
+
+        // TODO do this as args we add in.
+        let body_json_args = (match args.body {
+            CliBodyArg::None => None,
+            CliBodyArg::Required => Some(true),
+            CliBodyArg::Optional => Some(false),
+        })
+        .map(|required| {
+            let help = "Path to a file that contains the full json body.";
+
+            quote! {
+                .arg(
+                    clap::Arg::new("json-body")
+                        .long("json-body")
+                        .value_name("JSON-FILE")
+                        // Required if we can't turn the body into individual
+                        // parameters.
+                        .required(#required)
+                        .value_parser(clap::value_parser!(std::path::PathBuf))
+                        .help(#help)
+                )
+                .arg(
+                    clap::Arg::new("json-body-template")
+                        .long("json-body-template")
+                        .action(clap::ArgAction::SetTrue)
+                        .help("XXX")
+                )
+            }
+        });
+
+        let parser = quote! {
+            #(
+                .arg(#parser_args)
+            )*
+            #body_json_args
+        };
+
+        let consumer_args =
+            args.args.values().map(|CliArg { consumer, .. }| consumer);
+
+        let body_json_consumer = maybe_body_type_id.map(|body_type_id| {
+            let body_type = self.type_space.get_type(body_type_id).unwrap();
+            let body_type_ident = body_type.ident();
+            quote! {
+                if let Some(value) =
+                    matches.get_one::<std::path::PathBuf>("json-body")
+                {
+                    let body_txt = std::fs::read_to_string(value).unwrap();
+                    let body_value =
+                        serde_json::from_str::<#body_type_ident>(
+                            &body_txt,
+                        )
+                        .unwrap();
+                    request = request.body(body_value);
+                }
+            }
+        });
+
+        let consumer = quote! {
+            #(
+                #consumer_args
+            )*
+            #body_json_consumer
+        };
+
+        CliArg { parser, consumer }
+    }
+
+    fn cli_method_body_arg(
+        &self,
+        args: &mut CliOperationArgs,
+        prop_info: TypeStructPropInfo<'_>,
+    ) {
+        let TypeStructPropInfo {
+            name,
+            description,
+            required,
+            type_id,
+        } = prop_info;
+
+        let prop_type = self.type_space.get_type(&type_id).unwrap();
+
+        // TODO this is maybe a kludge--not completely sure of the right way to
+        // handle option types. On one hand, we could want types from this
+        // interface to never show us Option<T> types--we could let the
+        // `required` field give us that information. On the other hand, there
+        // might be Option types that are required ... at least in the JSON
+        // sense, meaning that we need to include `"foo": null` rather than
+        // omitting the field. Back to the first hand: is that last point just
+        // a serde issue rather than an interface one?
+        let maybe_inner_type =
+            if let typify::TypeDetails::Option(inner_type_id) =
+                prop_type.details()
+            {
+                let inner_type =
+                    self.type_space.get_type(&inner_type_id).unwrap();
+                Some(inner_type)
+            } else {
+                None
+            };
+
+        let prop_type = if let Some(inner_type) = maybe_inner_type {
+            inner_type
+        } else {
+            prop_type
+        };
+
+        let scalar = prop_type.has_impl(TypeSpaceImpl::FromStr);
+
+        if scalar {
+            let volitionality = if required {
+                Volitionality::RequiredIfNoBody
+            } else {
+                Volitionality::Optional
+            };
+            let prop_name = name.to_kebab_case();
+            let parser = clap_arg(
+                &prop_name,
+                volitionality,
+                &description.map(str::to_string),
+                &prop_type,
+            );
+
+            let prop_fn = format_ident!("{}", sanitize(name, Case::Snake));
+            let prop_type_ident = prop_type.ident();
+            let consumer = quote! {
+                if let Some(value) =
+                    matches.get_one::<#prop_type_ident>(
+                        #prop_name,
+                    )
+                {
+                    // clone here in case the arg type
+                    // doesn't impl TryFrom<&T>
+                    request = request.body_map(|body| {
+                        body.#prop_fn(value.clone())
+                    })
+                }
+            };
+            args.add_arg(prop_name, CliArg { parser, consumer })
+        } else if required {
+            args.body_required()
+        }
+
+        // Cases
+        // 1. If the type can be represented as a string, great
+        //
+        // 2. If it's a substruct then we can try to glue the names together
+        // and hope?
+        //
+        // 3. enums
+        // 3.1 simple enums (should be covered by 1 above)
+        //   e.g. enum { A, B }
+        //   args for --a and --b that are in a group
     }
 }
 
@@ -662,5 +665,50 @@ fn clap_arg(
             .value_parser(#value_parser)
             #required
             #help
+    }
+}
+
+#[derive(Debug)]
+struct CliArg {
+    /// Code to parse the argument
+    parser: TokenStream,
+
+    /// Code to consume the argument
+    consumer: TokenStream,
+}
+
+#[derive(Debug, Default, PartialEq, Eq)]
+enum CliBodyArg {
+    #[default]
+    None,
+    Required,
+    Optional,
+}
+
+#[derive(Default, Debug)]
+struct CliOperationArgs {
+    args: BTreeMap<String, CliArg>,
+    body: CliBodyArg,
+}
+
+impl CliOperationArgs {
+    fn has_arg(&self, name: &String) -> bool {
+        self.args.contains_key(name)
+    }
+    fn add_arg(&mut self, name: String, arg: CliArg) {
+        self.args.insert(name, arg);
+    }
+
+    fn body_present(&mut self) {
+        assert_eq!(self.body, CliBodyArg::None);
+        self.body = CliBodyArg::Optional;
+    }
+
+    fn body_required(&mut self) {
+        assert!(
+            self.body == CliBodyArg::Optional
+                || self.body == CliBodyArg::Required
+        );
+        self.body = CliBodyArg::Required;
     }
 }
