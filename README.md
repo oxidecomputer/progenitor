@@ -307,7 +307,7 @@ let result = client
     .await?;
 ```
 
-The string parameters are will implicitly have `TryFrom::try_from()` invoked on
+The string parameters will implicitly have `TryFrom::try_from()` invoked on
 them. Failed conversions or missing required parameters will result in an
 `Error` result from the `send()` call.
 
