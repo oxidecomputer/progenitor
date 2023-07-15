@@ -212,12 +212,6 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_enrol(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.enrol();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::EnrolBody>(&body_txt).unwrap();
-            request = request.body(body_value);
-        }
-
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
         }
@@ -228,6 +222,12 @@ impl<T: CliOverride> Cli<T> {
 
         if let Some(value) = matches.get_one::<String>("key") {
             request = request.body_map(|body| body.key(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::EnrolBody>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
         self.over.execute_enrol(matches, &mut request).unwrap();
@@ -282,12 +282,6 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_report_finish(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.report_finish();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::ReportFinishBody>(&body_txt).unwrap();
-            request = request.body(body_value);
-        }
-
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
         }
@@ -302,6 +296,12 @@ impl<T: CliOverride> Cli<T> {
 
         if let Some(value) = matches.get_one::<i32>("exit-status") {
             request = request.body_map(|body| body.exit_status(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::ReportFinishBody>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
         self.over
@@ -320,14 +320,14 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_report_output(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.report_output();
+        if let Some(value) = matches.get_one::<String>("authorization") {
+            request = request.authorization(value.clone());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
             let body_value = serde_json::from_str::<types::ReportOutputBody>(&body_txt).unwrap();
             request = request.body(body_value);
-        }
-
-        if let Some(value) = matches.get_one::<String>("authorization") {
-            request = request.authorization(value.clone());
         }
 
         self.over
@@ -346,12 +346,6 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_report_start(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.report_start();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::ReportStartBody>(&body_txt).unwrap();
-            request = request.body(body_value);
-        }
-
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
         }
@@ -363,6 +357,12 @@ impl<T: CliOverride> Cli<T> {
         if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("start-time")
         {
             request = request.body_map(|body| body.start_time(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::ReportStartBody>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
         self.over

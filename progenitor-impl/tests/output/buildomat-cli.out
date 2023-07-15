@@ -85,16 +85,16 @@ impl Cli {
     pub fn cli_task_events_get() -> clap::Command {
         clap::Command::new("")
             .arg(
-                clap::Arg::new("task")
-                    .long("task")
-                    .value_parser(clap::value_parser!(String))
-                    .required(true),
-            )
-            .arg(
                 clap::Arg::new("minseq")
                     .long("minseq")
                     .value_parser(clap::value_parser!(u32))
                     .required(false),
+            )
+            .arg(
+                clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
     }
 
@@ -110,14 +110,14 @@ impl Cli {
     pub fn cli_task_output_download() -> clap::Command {
         clap::Command::new("")
             .arg(
-                clap::Arg::new("task")
-                    .long("task")
+                clap::Arg::new("output")
+                    .long("output")
                     .value_parser(clap::value_parser!(String))
                     .required(true),
             )
             .arg(
-                clap::Arg::new("output")
-                    .long("output")
+                clap::Arg::new("task")
+                    .long("task")
                     .value_parser(clap::value_parser!(String))
                     .required(true),
             )
@@ -188,12 +188,6 @@ impl Cli {
     pub fn cli_worker_task_append() -> clap::Command {
         clap::Command::new("")
             .arg(
-                clap::Arg::new("task")
-                    .long("task")
-                    .value_parser(clap::value_parser!(String))
-                    .required(true),
-            )
-            .arg(
                 clap::Arg::new("payload")
                     .long("payload")
                     .value_parser(clap::value_parser!(String))
@@ -204,6 +198,12 @@ impl Cli {
                     .long("stream")
                     .value_parser(clap::value_parser!(String))
                     .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("time")
@@ -239,16 +239,16 @@ impl Cli {
     pub fn cli_worker_task_complete() -> clap::Command {
         clap::Command::new("")
             .arg(
-                clap::Arg::new("task")
-                    .long("task")
-                    .value_parser(clap::value_parser!(String))
-                    .required(true),
-            )
-            .arg(
                 clap::Arg::new("failed")
                     .long("failed")
                     .value_parser(clap::value_parser!(bool))
                     .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("json-body")
@@ -269,12 +269,6 @@ impl Cli {
     pub fn cli_worker_task_add_output() -> clap::Command {
         clap::Command::new("")
             .arg(
-                clap::Arg::new("task")
-                    .long("task")
-                    .value_parser(clap::value_parser!(String))
-                    .required(true),
-            )
-            .arg(
                 clap::Arg::new("path")
                     .long("path")
                     .value_parser(clap::value_parser!(String))
@@ -285,6 +279,12 @@ impl Cli {
                     .long("size")
                     .value_parser(clap::value_parser!(i64))
                     .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("json-body")
@@ -441,18 +441,18 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_task_submit(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.task_submit();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::TaskSubmit>(&body_txt).unwrap();
-            request = request.body(body_value);
-        }
-
         if let Some(value) = matches.get_one::<String>("name") {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<String>("script") {
             request = request.body_map(|body| body.script(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::TaskSubmit>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
         self.over
@@ -471,12 +471,12 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_task_events_get(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.task_events_get();
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
         if let Some(value) = matches.get_one::<u32>("minseq") {
             request = request.minseq(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("task") {
+            request = request.task(value.clone());
         }
 
         self.over
@@ -515,12 +515,12 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_task_output_download(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.task_output_download();
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
         if let Some(value) = matches.get_one::<String>("output") {
             request = request.output(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("task") {
+            request = request.task(value.clone());
         }
 
         self.over
@@ -539,14 +539,14 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_user_create(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.user_create();
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.body_map(|body| body.name(value.clone()))
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
             let body_value = serde_json::from_str::<types::UserCreate>(&body_txt).unwrap();
             request = request.body(body_value);
-        }
-
-        if let Some(value) = matches.get_one::<String>("name") {
-            request = request.body_map(|body| body.name(value.clone()))
         }
 
         self.over
@@ -579,18 +579,18 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_worker_bootstrap(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_bootstrap();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::WorkerBootstrap>(&body_txt).unwrap();
-            request = request.body(body_value);
-        }
-
         if let Some(value) = matches.get_one::<String>("bootstrap") {
             request = request.body_map(|body| body.bootstrap(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<String>("token") {
             request = request.body_map(|body| body.token(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerBootstrap>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
         self.over
@@ -625,16 +625,6 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_worker_task_append(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_task_append();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::WorkerAppendTask>(&body_txt).unwrap();
-            request = request.body(body_value);
-        }
-
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
         if let Some(value) = matches.get_one::<String>("payload") {
             request = request.body_map(|body| body.payload(value.clone()))
         }
@@ -643,8 +633,18 @@ impl<T: CliOverride> Cli<T> {
             request = request.body_map(|body| body.stream(value.clone()))
         }
 
+        if let Some(value) = matches.get_one::<String>("task") {
+            request = request.task(value.clone());
+        }
+
         if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("time") {
             request = request.body_map(|body| body.time(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerAppendTask>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
         self.over
@@ -683,18 +683,18 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_worker_task_complete(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_task_complete();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::WorkerCompleteTask>(&body_txt).unwrap();
-            request = request.body(body_value);
+        if let Some(value) = matches.get_one::<bool>("failed") {
+            request = request.body_map(|body| body.failed(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<String>("task") {
             request = request.task(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<bool>("failed") {
-            request = request.body_map(|body| body.failed(value.clone()))
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerCompleteTask>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
         self.over
@@ -713,22 +713,22 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_worker_task_add_output(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_task_add_output();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::WorkerAddOutput>(&body_txt).unwrap();
-            request = request.body(body_value);
-        }
-
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
         if let Some(value) = matches.get_one::<String>("path") {
             request = request.body_map(|body| body.path(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<i64>("size") {
             request = request.body_map(|body| body.size(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("task") {
+            request = request.task(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerAddOutput>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
         self.over
