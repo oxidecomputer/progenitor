@@ -158,7 +158,7 @@ pub mod types {
         where
             D: serde::Deserializer<'de>,
         {
-            Self::try_from(i64::deserialize(deserializer)?)
+            Self::try_from(<i64>::deserialize(deserializer)?)
                 .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
         }
     }
