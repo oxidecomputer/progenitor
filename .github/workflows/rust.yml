@@ -72,7 +72,7 @@ jobs:
         components: rustfmt
         default: false
         target: wasm32-unknown-unknown
-    - uses: nanasess/setup-chromedriver@v1
+    - uses: nanasess/setup-chromedriver@v2
     - name: Install stable
       uses: actions-rs/toolchain@v1
       with:
