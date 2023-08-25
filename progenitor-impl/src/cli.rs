@@ -355,8 +355,7 @@ impl Generator {
                 Volitionality::Optional
             };
 
-            let OperationParameterType::Type(arg_type_id) = &param.typ
-            else {
+            let OperationParameterType::Type(arg_type_id) = &param.typ else {
                 unreachable!("query and path parameters must be typed")
             };
             let arg_type = self.type_space.get_type(arg_type_id).unwrap();
@@ -376,8 +375,8 @@ impl Generator {
             let arg_fn_name = sanitize(&param.name, Case::Snake);
             let arg_fn = format_ident!("{}", arg_fn_name);
             let OperationParameterType::Type(arg_type_id) = &param.typ else {
-                    panic!()
-                };
+                panic!()
+            };
             let arg_type = self.type_space.get_type(arg_type_id).unwrap();
             let arg_type_name = arg_type.ident();
 
