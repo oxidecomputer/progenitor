@@ -52,7 +52,10 @@ fn verify_apis(openapi_file: &str) {
     let openapi_stem = openapi_file.split('.').next().unwrap();
 
     let spec = load_api(in_path);
+    verify_spec(openapi_stem, &spec);
+}
 
+fn verify_spec(openapi_stem: &str, spec: &OpenAPI) {
     // Positional generation.
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
@@ -157,11 +160,43 @@ fn test_yaml() {
     verify_apis("param-overrides.yaml");
 }
 
-// TODO this file is full of inconsistencies and incorrectly specified types.
-// It's an interesting test to consider whether we try to do our best to
-// interpret the intent or just fail.
-#[ignore]
+// TODO this file is not fully supported.
+// See https://github.com/oxidecomputer/progenitor/issues/444 for details
 #[test]
 fn test_github() {
-    verify_apis("api.github.com.json");
+    let in_path = PathBuf::from("../sample_openapi/api.github.com.json");
+
+    let mut spec = load_api(in_path);
+
+    spec.paths.paths.remove("/orgs/{org}");
+    spec.paths.paths.remove("/markdown/raw");
+    spec.paths.paths.remove("/repos/{owner}/{repo}/releases");
+    spec.paths
+        .paths
+        .remove("/repos/{owner}/{repo}/releases/{release_id}");
+    spec.paths
+        .paths
+        .remove("/projects/columns/{column_id}/cards");
+
+    // Remove "conditions" property from "repository-ruleset" schema
+    let schema_name = "repository-ruleset";
+    let schemas = &mut spec.components.as_mut().unwrap().schemas;
+    let broken_schema = schemas.get(schema_name).unwrap();
+    let mut broken_schema_item = broken_schema.as_item().unwrap().to_owned();
+    match &broken_schema_item.schema_kind {
+        openapiv3::SchemaKind::Type(openapiv3::Type::Object(x)) => {
+            let mut new_object = x.clone();
+            new_object.properties.remove("conditions");
+            broken_schema_item.schema_kind = openapiv3::SchemaKind::Type(
+                openapiv3::Type::Object(new_object),
+            );
+            schemas.insert(
+                schema_name.to_string(),
+                openapiv3::ReferenceOr::Item(broken_schema_item),
+            );
+        }
+        _ => panic!("Unexpected type"),
+    }
+
+    verify_spec("github", &spec);
 }
