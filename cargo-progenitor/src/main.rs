@@ -1,4 +1,4 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2023 Oxide Computer Company
 
 use std::{
     collections::HashMap,
@@ -118,6 +118,8 @@ where
 }
 
 fn main() -> Result<()> {
+    env_logger::init();
+
     let CargoCli::Progenitor(args) = CargoCli::parse();
     let api = load_api(&args.input)?;
 
