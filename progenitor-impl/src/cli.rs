@@ -21,6 +21,7 @@ struct CliOperation {
     cli_fn: TokenStream,
     execute_fn: TokenStream,
     execute_trait: TokenStream,
+    output_trait: TokenStream,
 }
 
 impl Generator {
@@ -70,6 +71,7 @@ impl Generator {
         let cli_ops = methods.iter().map(|op| &op.cli_fn);
         let execute_ops = methods.iter().map(|op| &op.execute_fn);
         let trait_ops = methods.iter().map(|op| &op.execute_trait);
+        let output_ops = methods.iter().map(|op| &op.output_trait);
 
         let cli_fns = raw_methods
             .iter()
@@ -103,13 +105,14 @@ impl Generator {
         let crate_ident = format_ident!("{}", crate_name);
 
         let code = quote! {
-            pub struct Cli<T: CliOverride = ()> {
+            pub struct Cli<T: CliOverride = (), U: CliOutput = ()> {
                 client: #crate_ident::Client,
                 over: T,
+                output: U,
             }
             impl Cli {
                 pub fn new(client: #crate_ident::Client) -> Self {
-                    Self { client, over: () }
+                    Self { client, over: (), output: () }
                 }
 
                 pub fn get_command(cmd: CliCommand) -> clap::Command {
@@ -123,12 +126,13 @@ impl Generator {
                 #(#cli_ops)*
             }
 
-            impl<T: CliOverride> Cli<T> {
+            impl<T: CliOverride, U: CliOutput> Cli<T, U> {
                 pub fn new_with_override(
                     client: #crate_ident::Client,
                     over: T,
+                    output: U,
                 ) -> Self {
-                    Self { client, over }
+                    Self { client, over, output }
                 }
 
                 pub async fn execute(
@@ -154,6 +158,12 @@ impl Generator {
             }
 
             impl CliOverride for () {}
+
+            pub trait CliOutput {
+                #(#output_ops)*
+            }
+
+            impl CliOutput for () {}
 
             #[derive(Copy, Clone, Debug)]
             pub enum CliCommand {
@@ -209,6 +219,7 @@ impl Generator {
         };
 
         let fn_name = format_ident!("execute_{}", &method.operation_id);
+        let output_fn_name = format_ident!("output_{}", &method.operation_id);
         let op_name = format_ident!("{}", &method.operation_id);
 
         let (_, success_type) = self.extract_responses(
@@ -222,24 +233,46 @@ impl Generator {
 
         let success_output = match success_type {
             crate::method::OperationResponseType::Type(_) => {
-                quote! { println!("success\n{:#?}", r) }
+                quote! { self.output.#output_fn_name(Ok(r.into_inner())) }
             }
             crate::method::OperationResponseType::None => {
-                quote! { println!("success\n{:#?}", r) }
+                quote! { self.output.#output_fn_name(Ok(r.into_inner())) }
             }
             crate::method::OperationResponseType::Raw => quote! { todo!() },
             crate::method::OperationResponseType::Upgrade => quote! { todo!() },
         };
+        let success_output_type = match success_type {
+            crate::method::OperationResponseType::Type(t) => {
+                let type_ = self.type_space.get_type(&t).unwrap();
+                type_.ident()
+            }
+            crate::method::OperationResponseType::None => {
+                quote! { r }
+            }
+            crate::method::OperationResponseType::Raw => quote! { () },
+            crate::method::OperationResponseType::Upgrade => quote! { () },
+        };
 
         let error_output = match error_type {
             crate::method::OperationResponseType::Type(_) => {
-                quote! { println!("error\n{:#?}", r) }
+                quote! { self.output.#output_fn_name(Err(r)) }
             }
             crate::method::OperationResponseType::None => {
-                quote! { println!("success\n{:#?}", r) }
+                quote! { self.output.#output_fn_name(Err(r)) }
             }
             crate::method::OperationResponseType::Raw => quote! { todo!() },
             crate::method::OperationResponseType::Upgrade => quote! { todo!() },
+        };
+        let error_output_type = match error_type {
+            crate::method::OperationResponseType::Type(t) => {
+                let type_ = self.type_space.get_type(&t).unwrap();
+                type_.ident()
+            }
+            crate::method::OperationResponseType::None => {
+                quote! { r }
+            }
+            crate::method::OperationResponseType::Raw => quote! { () },
+            crate::method::OperationResponseType::Upgrade => quote! { () },
         };
 
         let execute_and_output = match method.dropshot_paginated {
@@ -282,7 +315,7 @@ impl Generator {
         let execute_fn = quote! {
             pub async fn #fn_name(&self, matches: &clap::ArgMatches)
                 // ->
-                // Result<ResponseValue<#success_type>, Error<#error_type>>
+                // Result<ResponseValue<#success_output_type>, Error<#error_output_type>>
             {
                 let mut request = self.client.#op_name();
                 #consumer_args
@@ -311,10 +344,18 @@ impl Generator {
             }
         };
 
+        let output_trait = quote! {
+            fn #output_fn_name(
+                &self,
+                response: Result<#success_output_type, progenitor_client::Error<#error_output_type>>
+            ) {}
+        };
+
         CliOperation {
             cli_fn,
             execute_fn,
             execute_trait,
+            output_trait,
         }
     }
 
