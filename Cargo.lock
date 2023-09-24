@@ -459,7 +459,7 @@ dependencies = [
 [[package]]
 name = "dropshot"
 version = "0.9.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#bd3bf5853a8fef5757b132cec7f61974bbd37de2"
+source = "git+https://github.com/oxidecomputer/dropshot#5228d048f86c65895dc600b00074a99e690fd85c"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -475,6 +475,7 @@ dependencies = [
  "http",
  "hyper",
  "indexmap 2.0.0",
+ "multer",
  "openapiv3",
  "paste",
  "percent-encoding",
@@ -494,7 +495,7 @@ dependencies = [
  "slog-term",
  "tokio",
  "tokio-rustls",
- "toml 0.7.6",
+ "toml 0.8.0",
  "uuid",
  "version_check",
  "waitgroup",
@@ -503,7 +504,7 @@ dependencies = [
 [[package]]
 name = "dropshot_endpoint"
 version = "0.9.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#bd3bf5853a8fef5757b132cec7f61974bbd37de2"
+source = "git+https://github.com/oxidecomputer/dropshot#5228d048f86c65895dc600b00074a99e690fd85c"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1165,6 +1166,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "multer"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "01acbdc23469fd8fe07ab135923371d5f5a422fbf9c522158677c8eb15bc51c2"
+dependencies = [
+ "bytes",
+ "encoding_rs",
+ "futures-util",
+ "http",
+ "httparse",
+ "log",
+ "memchr",
+ "mime",
+ "spin 0.9.8",
+ "version_check",
+]
+
+[[package]]
 name = "native-tls"
 version = "0.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1611,7 +1630,7 @@ dependencies = [
  "cc",
  "libc",
  "once_cell",
- "spin",
+ "spin 0.5.2",
  "untrusted",
  "web-sys",
  "winapi",
@@ -2027,6 +2046,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
 
 [[package]]
+name = "spin"
+version = "0.9.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
+
+[[package]]
 name = "strsim"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2238,7 +2263,19 @@ dependencies = [
  "serde",
  "serde_spanned",
  "toml_datetime",
- "toml_edit",
+ "toml_edit 0.19.12",
+]
+
+[[package]]
+name = "toml"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c226a7bba6d859b63c92c4b4fe69c5b6b72d0cb897dbc8e6012298e6154cb56e"
+dependencies = [
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "toml_edit 0.20.0",
 ]
 
 [[package]]
@@ -2260,7 +2297,20 @@ dependencies = [
  "serde",
  "serde_spanned",
  "toml_datetime",
- "winnow",
+ "winnow 0.4.7",
+]
+
+[[package]]
+name = "toml_edit"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8ff63e60a958cefbb518ae1fd6566af80d9d4be430a33f3723dfc47d1d411d95"
+dependencies = [
+ "indexmap 2.0.0",
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "winnow 0.5.15",
 ]
 
 [[package]]
@@ -2804,6 +2854,15 @@ name = "winnow"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca0ace3845f0d96209f0375e6d367e3eb87eb65d27d445bdc9f1843a26f39448"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
+name = "winnow"
+version = "0.5.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7c2e3184b9c4e92ad5167ca73039d0c42476302ab603e2fec4487511f38ccefc"
 dependencies = [
  "memchr",
 ]
