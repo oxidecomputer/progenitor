@@ -23,5 +23,5 @@ serde_json = "1.0"
 serde_yaml = "0.9"
 
 [build-dependencies]
-built = { version = "0.7", features = ["git2"] }
+built = { version = "0.7", features = ["cargo-lock", "git2"] }
 project-root = "0.2"

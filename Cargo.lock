@@ -210,6 +210,7 @@ version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1462f4ab147e1378c64dacd28f03a56d4771d93eab6c325265a35355ce47213d"
 dependencies = [
+ "cargo-lock",
  "git2",
 ]
 
@@ -232,6 +233,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c59e92b5a388f549b863a7bea62612c09f24c8393560709a54558a9abdfb3b9c"
 dependencies = [
  "serde",
+]
+
+[[package]]
+name = "cargo-lock"
+version = "9.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e11c675378efb449ed3ce8de78d75d0d80542fc98487c26aba28eb3b82feac72"
+dependencies = [
+ "semver 1.0.19",
+ "serde",
+ "toml 0.7.6",
+ "url",
 ]
 
 [[package]]
@@ -1780,6 +1793,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "semver"
+version = "1.0.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ad977052201c6de01a8ef2aa3378c4bd23217a056337d1d6da40468d267a4fb0"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "semver-parser"
 version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2261,7 +2283,7 @@ dependencies = [
  "home",
  "lazy_static",
  "regex",
- "semver",
+ "semver 0.11.0",
  "walkdir",
 ]
 
