@@ -13,11 +13,19 @@
 
 == Unreleased changes (release date TBD)
 
+https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...HEAD[Full list of commits]
+
+== 0.4.0 (released 2023-09-25)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...v0.4.0[Full list of commits]
+
+== 0.4.0 (released 2023-09-25)
+
 * Support for updated dropshot pagination extension (#465)
 * Many CLI and http mock generation improvements (beta)
 * Add cargo-progenitor (#476)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.3.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.3.0\...v0.4.0[Full list of commits]
 
 == 0.3.0 (released 2023-05-03)
 
