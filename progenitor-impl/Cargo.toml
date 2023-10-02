@@ -28,7 +28,7 @@ unicode-ident = "1.0.12"
 
 [dev-dependencies]
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
-expectorate = "1.0"
+expectorate = "1.1"
 http = "0.2.9"
 hyper = "0.14.27"
 rustfmt-wrapper = "0.2.0"
