@@ -10,6 +10,8 @@ keywords = ["openapi", "openapiv3", "sdk", "generator"]
 categories = ["api-bindings", "development-tools::cargo-plugins"]
 build = "build.rs"
 
+default-run = "cargo-progenitor"
+
 [dependencies]
 progenitor = { version = "0.4.0", path = "../progenitor" }
 progenitor-client = { version = "0.4.0", path = "../progenitor-client" }
