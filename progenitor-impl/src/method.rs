@@ -137,6 +137,7 @@ pub enum BodyContentType {
     OctetStream,
     Json,
     FormUrlencoded,
+    Text(String),
 }
 
 impl FromStr for BodyContentType {
@@ -148,11 +149,27 @@ impl FromStr for BodyContentType {
             "application/octet-stream" => Ok(Self::OctetStream),
             "application/json" => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
+            "text/plain" | "text/x-markdown" => {
+                Ok(Self::Text(String::from(&s[..offset])))
+            }
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
                 s
             ))),
         }
+    }
+}
+
+use std::fmt;
+
+impl fmt::Display for BodyContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(match self {
+            Self::OctetStream => "application/octet-stream",
+            Self::Json => "application/json",
+            Self::FormUrlencoded => "application/x-www-form-urlencoded",
+            Self::Text(typ) => &typ,
+        })
     }
 }
 
@@ -601,7 +618,19 @@ impl Generator {
                         quote! { Option<#t> }
                     }
                     (OperationParameterType::RawBody, false) => {
-                        quote! { B }
+                        match &param.kind {
+                            OperationParameterKind::Body(
+                                BodyContentType::OctetStream,
+                            ) => {
+                                quote! { B }
+                            }
+                            OperationParameterKind::Body(
+                                BodyContentType::Text(_),
+                            ) => {
+                                quote! { String }
+                            }
+                            _ => unreachable!(),
+                        }
                     }
                     (OperationParameterType::RawBody, true) => unreachable!(),
                 };
@@ -611,10 +640,13 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let raw_body_param = method
-            .params
-            .iter()
-            .any(|param| param.typ == OperationParameterType::RawBody);
+        let raw_body_param = method.params.iter().any(|param| {
+            param.typ == OperationParameterType::RawBody
+                && param.kind
+                    == OperationParameterKind::Body(
+                        BodyContentType::OctetStream,
+                    )
+        });
 
         let bounds = if raw_body_param {
             quote! { <'a, B: Into<reqwest::Body> > }
@@ -916,6 +948,18 @@ impl Generator {
                     .header(
                         reqwest::header::CONTENT_TYPE,
                         reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    )
+                    .body(body)
+                }),
+                (
+                    OperationParameterKind::Body(BodyContentType::Text(mime_type)),
+                    OperationParameterType::RawBody,
+                ) => Some(quote! {
+                    // Set the content type (this is handled by helper
+                    // functions for other MIME types).
+                    .header(
+                        reqwest::header::CONTENT_TYPE,
+                        reqwest::header::HeaderValue::from_static(#mime_type),
                     )
                     .body(body)
                 }),
@@ -1607,21 +1651,42 @@ impl Generator {
                         }
                     }
 
-                    OperationParameterType::RawBody => {
-                        let err_msg = format!(
-                            "conversion to `reqwest::Body` for {} failed",
-                            param.name,
-                        );
+                    OperationParameterType::RawBody => match param.kind {
+                        OperationParameterKind::Body(BodyContentType::OctetStream) => {
+                            let err_msg = format!(
+                                "conversion to `reqwest::Body` for {} failed",
+                                param.name,
+                            );
 
-                        Ok(quote! {
-                            pub fn #param_name<B>(mut self, value: B) -> Self
-                                where B: std::convert::TryInto<reqwest::Body>
-                            {
-                                self.#param_name = value.try_into()
-                                    .map_err(|_| #err_msg.to_string());
-                                self
-                            }
-                        })
+                            Ok(quote! {
+                                pub fn #param_name<B>(mut self, value: B) -> Self
+                                    where B: std::convert::TryInto<reqwest::Body>
+                                {
+                                    self.#param_name = value.try_into()
+                                        .map_err(|_| #err_msg.to_string());
+                                    self
+                                }
+                            })
+                        },
+                        OperationParameterKind::Body(BodyContentType::Text(_)) => {
+                            let err_msg = format!(
+                                "conversion to `String` for {} failed",
+                                param.name,
+                            );
+
+                            Ok(quote! {
+                                pub fn #param_name<V>(mut self, value: V) -> Self
+                                    where V: std::convert::TryInto<String>
+                                {
+                                    self.#param_name = value
+                                        .try_into()
+                                        .map_err(|_| #err_msg.to_string())
+                                        .map(|v| v.into());
+                                    self
+                                }
+                            })
+                        },
+                        _ => unreachable!(),
                     }
                 }
             })
@@ -2081,6 +2146,41 @@ impl Generator {
                     _ => Err(Error::UnexpectedFormat(format!(
                         "invalid schema for application/octet-stream: {:?}",
                         schema
+                    ))),
+                }?;
+                OperationParameterType::RawBody
+            }
+            BodyContentType::Text(_) => {
+                // For a plain text body, we expect a simple, specific schema:
+                // "schema": {
+                //     "type": "string",
+                // }
+                match schema.item(components)? {
+                    openapiv3::Schema {
+                        schema_data:
+                            openapiv3::SchemaData {
+                                nullable: false,
+                                discriminator: None,
+                                default: None,
+                                // Other fields that describe or document the
+                                // schema are fine.
+                                ..
+                            },
+                        schema_kind:
+                            openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                openapiv3::StringType {
+                                    format:
+                                        openapiv3::VariantOrUnknownOrEmpty::Empty,
+                                    pattern: None,
+                                    enumeration,
+                                    min_length: None,
+                                    max_length: None,
+                                },
+                            )),
+                    } if enumeration.is_empty() => Ok(()),
+                    _ => Err(Error::UnexpectedFormat(format!(
+                        "invalid schema for {}: {:?}",
+                        content_type, schema
                     ))),
                 }?;
                 OperationParameterType::RawBody

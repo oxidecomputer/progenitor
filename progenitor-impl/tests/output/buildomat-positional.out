@@ -532,6 +532,29 @@ impl Client {
         }
     }
 
+    ///Sends a `PUT` request to `/v1/whoami/name`
+    pub async fn whoami_put_name<'a>(
+        &'a self,
+        body: String,
+    ) -> Result<ResponseValue<()>, Error<()>> {
+        let url = format!("{}/v1/whoami/name", self.baseurl,);
+        let request = self
+            .client
+            .put(url)
+            .header(
+                reqwest::header::CONTENT_TYPE,
+                reqwest::header::HeaderValue::from_static("text/plain"),
+            )
+            .body(body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
     ///Sends a `POST` request to `/v1/worker/bootstrap`
     pub async fn worker_bootstrap<'a>(
         &'a self,

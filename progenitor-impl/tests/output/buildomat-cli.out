@@ -20,6 +20,7 @@ impl Cli {
             CliCommand::TaskOutputDownload => Self::cli_task_output_download(),
             CliCommand::UserCreate => Self::cli_user_create(),
             CliCommand::Whoami => Self::cli_whoami(),
+            CliCommand::WhoamiPutName => Self::cli_whoami_put_name(),
             CliCommand::WorkerBootstrap => Self::cli_worker_bootstrap(),
             CliCommand::WorkerPing => Self::cli_worker_ping(),
             CliCommand::WorkerTaskAppend => Self::cli_worker_task_append(),
@@ -148,6 +149,10 @@ impl Cli {
     }
 
     pub fn cli_whoami() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_whoami_put_name() -> clap::Command {
         clap::Command::new("")
     }
 
@@ -347,6 +352,9 @@ impl<T: CliOverride> Cli<T> {
             }
             CliCommand::Whoami => {
                 self.execute_whoami(matches).await;
+            }
+            CliCommand::WhoamiPutName => {
+                self.execute_whoami_put_name(matches).await;
             }
             CliCommand::WorkerBootstrap => {
                 self.execute_worker_bootstrap(matches).await;
@@ -566,6 +574,22 @@ impl<T: CliOverride> Cli<T> {
     pub async fn execute_whoami(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.whoami();
         self.over.execute_whoami(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_whoami_put_name(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.whoami_put_name();
+        self.over
+            .execute_whoami_put_name(matches, &mut request)
+            .unwrap();
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -859,6 +883,14 @@ pub trait CliOverride {
         Ok(())
     }
 
+    fn execute_whoami_put_name(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WhoamiPutName,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
     fn execute_worker_bootstrap(
         &self,
         matches: &clap::ArgMatches,
@@ -938,6 +970,7 @@ pub enum CliCommand {
     TaskOutputDownload,
     UserCreate,
     Whoami,
+    WhoamiPutName,
     WorkerBootstrap,
     WorkerPing,
     WorkerTaskAppend,
@@ -961,6 +994,7 @@ impl CliCommand {
             CliCommand::TaskOutputDownload,
             CliCommand::UserCreate,
             CliCommand::Whoami,
+            CliCommand::WhoamiPutName,
             CliCommand::WorkerBootstrap,
             CliCommand::WorkerPing,
             CliCommand::WorkerTaskAppend,
