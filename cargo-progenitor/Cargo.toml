@@ -17,7 +17,7 @@ progenitor = { version = "0.4.0", path = "../progenitor" }
 progenitor-client = { version = "0.4.0", path = "../progenitor-client" }
 progenitor-impl = { version = "0.4.0", path = "../progenitor-impl" }
 anyhow = "1.0"
-clap = { version = "4.4.4", features = ["derive"] }
+clap = { version = "4.4.6", features = ["derive"] }
 env_logger = "0.10.0"
 openapiv3 = "1.0.3"
 rustfmt-wrapper = "0.2.0"
