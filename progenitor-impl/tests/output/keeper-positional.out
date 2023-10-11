@@ -210,20 +210,20 @@ impl Client {
         authorization: &'a str,
         body: &'a types::EnrolBody,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/enrol", self.baseurl,);
+        let __progenitor_url = format!("{}/enrol", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        let __progenitor_request = self
             .client
-            .post(url)
+            .post(__progenitor_url)
             .json(&body)
             .headers(header_map)
             .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            201u16 => Ok(ResponseValue::empty(response)),
-            _ => Err(Error::UnexpectedResponse(response)),
+        let __progenitor_result = self.client.execute(__progenitor_request).await;
+        let __progenitor_response = __progenitor_result?;
+        match __progenitor_response.status().as_u16() {
+            201u16 => Ok(ResponseValue::empty(__progenitor_response)),
+            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
         }
     }
 
@@ -235,23 +235,23 @@ impl Client {
         &'a self,
         authorization: &'a str,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
-        let url = format!("{}/global/jobs", self.baseurl,);
+        let __progenitor_url = format!("{}/global/jobs", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        let __progenitor_request = self
             .client
-            .get(url)
+            .get(__progenitor_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .headers(header_map)
             .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            201u16 => ResponseValue::from_response(response).await,
-            _ => Err(Error::UnexpectedResponse(response)),
+        let __progenitor_result = self.client.execute(__progenitor_request).await;
+        let __progenitor_response = __progenitor_result?;
+        match __progenitor_response.status().as_u16() {
+            201u16 => ResponseValue::from_response(__progenitor_response).await,
+            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
         }
     }
 
@@ -263,23 +263,23 @@ impl Client {
         &'a self,
         authorization: &'a str,
     ) -> Result<ResponseValue<types::PingResult>, Error<()>> {
-        let url = format!("{}/ping", self.baseurl,);
+        let __progenitor_url = format!("{}/ping", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        let __progenitor_request = self
             .client
-            .get(url)
+            .get(__progenitor_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .headers(header_map)
             .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            201u16 => ResponseValue::from_response(response).await,
-            _ => Err(Error::UnexpectedResponse(response)),
+        let __progenitor_result = self.client.execute(__progenitor_request).await;
+        let __progenitor_response = __progenitor_result?;
+        match __progenitor_response.status().as_u16() {
+            201u16 => ResponseValue::from_response(__progenitor_response).await,
+            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
         }
     }
 
@@ -293,12 +293,12 @@ impl Client {
         authorization: &'a str,
         body: &'a types::ReportFinishBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/finish", self.baseurl,);
+        let __progenitor_url = format!("{}/report/finish", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        let __progenitor_request = self
             .client
-            .post(url)
+            .post(__progenitor_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
@@ -306,11 +306,11 @@ impl Client {
             .json(&body)
             .headers(header_map)
             .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            201u16 => ResponseValue::from_response(response).await,
-            _ => Err(Error::UnexpectedResponse(response)),
+        let __progenitor_result = self.client.execute(__progenitor_request).await;
+        let __progenitor_response = __progenitor_result?;
+        match __progenitor_response.status().as_u16() {
+            201u16 => ResponseValue::from_response(__progenitor_response).await,
+            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
         }
     }
 
@@ -324,12 +324,12 @@ impl Client {
         authorization: &'a str,
         body: &'a types::ReportOutputBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/output", self.baseurl,);
+        let __progenitor_url = format!("{}/report/output", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        let __progenitor_request = self
             .client
-            .post(url)
+            .post(__progenitor_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
@@ -337,11 +337,11 @@ impl Client {
             .json(&body)
             .headers(header_map)
             .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            201u16 => ResponseValue::from_response(response).await,
-            _ => Err(Error::UnexpectedResponse(response)),
+        let __progenitor_result = self.client.execute(__progenitor_request).await;
+        let __progenitor_response = __progenitor_result?;
+        match __progenitor_response.status().as_u16() {
+            201u16 => ResponseValue::from_response(__progenitor_response).await,
+            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
         }
     }
 
@@ -355,12 +355,12 @@ impl Client {
         authorization: &'a str,
         body: &'a types::ReportStartBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/start", self.baseurl,);
+        let __progenitor_url = format!("{}/report/start", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        let __progenitor_request = self
             .client
-            .post(url)
+            .post(__progenitor_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
@@ -368,11 +368,11 @@ impl Client {
             .json(&body)
             .headers(header_map)
             .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            201u16 => ResponseValue::from_response(response).await,
-            _ => Err(Error::UnexpectedResponse(response)),
+        let __progenitor_result = self.client.execute(__progenitor_request).await;
+        let __progenitor_response = __progenitor_result?;
+        match __progenitor_response.status().as_u16() {
+            201u16 => ResponseValue::from_response(__progenitor_response).await,
+            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
         }
     }
 }

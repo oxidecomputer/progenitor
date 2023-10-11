@@ -2126,26 +2126,26 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/instance", client.baseurl,);
-            let request = client
+            let __progenitor_url = format!("{}/instance", client.baseurl,);
+            let __progenitor_request = client
                 .client
-                .get(url)
+                .get(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                200u16 => ResponseValue::from_response(__progenitor_response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(response)),
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -2196,27 +2196,27 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::InstanceEnsureRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance", client.baseurl,);
-            let request = client
+            let __progenitor_url = format!("{}/instance", client.baseurl,);
+            let __progenitor_request = client
                 .client
-                .put(url)
+                .put(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                201u16 => ResponseValue::from_response(__progenitor_response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(response)),
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -2270,31 +2270,31 @@ pub mod builder {
             } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let snapshot_id = snapshot_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
+            let __progenitor_url = format!(
                 "{}/instance/disk/{}/snapshot/{}",
                 client.baseurl,
                 encode_path(&id.to_string()),
                 encode_path(&snapshot_id.to_string()),
             );
-            let request = client
+            let __progenitor_request = client
                 .client
-                .post(url)
+                .post(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                200u16 => ResponseValue::from_response(__progenitor_response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(response)),
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -2345,27 +2345,27 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::InstanceMigrateStatusRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/migrate/status", client.baseurl,);
-            let request = client
+            let __progenitor_url = format!("{}/instance/migrate/status", client.baseurl,);
+            let __progenitor_request = client
                 .client
-                .get(url)
+                .get(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                200u16 => ResponseValue::from_response(__progenitor_response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(response)),
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -2388,10 +2388,10 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
             let Self { client } = self;
-            let url = format!("{}/instance/serial", client.baseurl,);
-            let request = client
+            let __progenitor_url = format!("{}/instance/serial", client.baseurl,);
+            let __progenitor_request = client
                 .client
-                .get(url)
+                .get(__progenitor_url)
                 .header(reqwest::header::CONNECTION, "Upgrade")
                 .header(reqwest::header::UPGRADE, "websocket")
                 .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -2403,12 +2403,12 @@ pub mod builder {
                     ),
                 )
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                101u16 => ResponseValue::upgrade(response).await,
-                200..=299 => ResponseValue::upgrade(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                101u16 => ResponseValue::upgrade(__progenitor_response).await,
+                200..=299 => ResponseValue::upgrade(__progenitor_response).await,
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -2444,27 +2444,27 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/state", client.baseurl,);
-            let request = client
+            let __progenitor_url = format!("{}/instance/state", client.baseurl,);
+            let __progenitor_request = client
                 .client
-                .put(url)
+                .put(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                204u16 => Ok(ResponseValue::empty(__progenitor_response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(response)),
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -2515,27 +2515,27 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::InstanceStateMonitorRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/state-monitor", client.baseurl,);
-            let request = client
+            let __progenitor_url = format!("{}/instance/state-monitor", client.baseurl,);
+            let __progenitor_request = client
                 .client
-                .get(url)
+                .get(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                200u16 => ResponseValue::from_response(__progenitor_response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
+                    ResponseValue::from_response(__progenitor_response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(response)),
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }

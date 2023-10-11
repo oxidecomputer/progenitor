@@ -120,13 +120,15 @@ impl Client {
         &'a self,
         body: &'a types::BodyWithDefaults,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            200..=299 => Ok(ResponseValue::stream(response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+        let __progenitor_url = format!("{}/", self.baseurl,);
+        let __progenitor_request = self.client.post(__progenitor_url).json(&body).build()?;
+        let __progenitor_result = self.client.execute(__progenitor_request).await;
+        let __progenitor_response = __progenitor_result?;
+        match __progenitor_response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::stream(__progenitor_response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(
+                __progenitor_response,
+            ))),
         }
     }
 }
