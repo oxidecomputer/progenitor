@@ -50,7 +50,7 @@ impl PathTemplate {
         });
 
         quote! {
-            let url = format!(#fmt, #client.baseurl, #(#components,)*);
+            format!(#fmt, #client.baseurl, #(#components,)*)
         }
     }
 

@@ -792,6 +792,16 @@ impl Generator {
         method: &OperationMethod,
         client: TokenStream,
     ) -> Result<MethodSigBody> {
+        // We prefix internal variable names to mitigate possible name
+        // collisions with the input spec. See:
+        // https://github.com/oxidecomputer/progenitor/issues/288
+        let internal_prefix = "__progenitor";
+        let url_var = format_ident!("{internal_prefix}_url");
+        let query_var = format_ident!("{internal_prefix}_query");
+        let request_var = format_ident!("{internal_prefix}_request");
+        let response_var = format_ident!("{internal_prefix}_response");
+        let result_var = format_ident!("{internal_prefix}_result");
+
         // Generate code for query parameters.
         let query_items = method
             .params
@@ -802,12 +812,12 @@ impl Generator {
                     let qn_ident = format_ident!("{}", &param.name);
                     let res = if *required {
                         quote! {
-                            query.push((#qn, #qn_ident .to_string()));
+                            #query_var.push((#qn, #qn_ident .to_string()));
                         }
                     } else {
                         quote! {
                             if let Some(v) = & #qn_ident {
-                                query.push((#qn, v.to_string()));
+                                #query_var.push((#qn, v.to_string()));
                             }
                         }
                     };
@@ -823,11 +833,11 @@ impl Generator {
         } else {
             let size = query_items.len();
             let query_build = quote! {
-                let mut query = Vec::with_capacity(#size);
+                let mut #query_var = Vec::with_capacity(#size);
                 #(#query_items)*
             };
             let query_use = quote! {
-                .query(&query)
+                .query(&#query_var)
             };
 
             (query_build, query_use)
@@ -903,6 +913,9 @@ impl Generator {
             .collect();
 
         let url_path = method.path.compile(url_renames, client.clone());
+        let url_path = quote! {
+            let #url_var = #url_path;
+        };
 
         // Generate code to handle the body param.
         let body_func = method.params.iter().filter_map(|param| {
@@ -963,22 +976,22 @@ impl Generator {
                 let decode = match &response.typ {
                     OperationResponseType::Type(_) => {
                         quote! {
-                            ResponseValue::from_response(response).await
+                            ResponseValue::from_response(#response_var).await
                         }
                     }
                     OperationResponseType::None => {
                         quote! {
-                            Ok(ResponseValue::empty(response))
+                            Ok(ResponseValue::empty(#response_var))
                         }
                     }
                     OperationResponseType::Raw => {
                         quote! {
-                            Ok(ResponseValue::stream(response))
+                            Ok(ResponseValue::stream(#response_var))
                         }
                     }
                     OperationResponseType::Upgrade => {
                         quote! {
-                            ResponseValue::upgrade(response).await
+                            ResponseValue::upgrade(#response_var).await
                         }
                     }
                 };
@@ -1013,7 +1026,7 @@ impl Generator {
                     OperationResponseType::Type(_) => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::from_response(response)
+                                ResponseValue::from_response(#response_var)
                                     .await?
                             ))
                         }
@@ -1021,14 +1034,14 @@ impl Generator {
                     OperationResponseType::None => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::empty(response)
+                                ResponseValue::empty(#response_var)
                             ))
                         }
                     }
                     OperationResponseType::Raw => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::stream(response)
+                                ResponseValue::stream(#response_var)
                             ))
                         }
                     }
@@ -1073,17 +1086,19 @@ impl Generator {
         // API description.
         let default_response = match method.responses.iter().last() {
             Some(response) if response.status_code.is_default() => quote! {},
-            _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
+            _ => {
+                quote! { _ => Err(Error::UnexpectedResponse(#response_var)), }
+            }
         };
 
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &request);
+                (#hook)(&#client.inner, &#request_var);
             }
         });
         let post_hook = self.settings.post_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &result);
+                (#hook)(&#client.inner, &#result_var);
             }
         });
 
@@ -1095,8 +1110,8 @@ impl Generator {
 
             #headers_build
 
-            let request = #client.client
-                . #method_func (url)
+            let #request_var = #client.client
+                . #method_func (#url_var)
                 #accept_header
                 #(#body_func)*
                 #query_use
@@ -1105,14 +1120,14 @@ impl Generator {
                 .build()?;
 
             #pre_hook
-            let result = #client.client
-                .execute(request)
+            let #result_var = #client.client
+                .execute(#request_var)
                 .await;
             #post_hook
 
-            let response = result?;
+            let #response_var = #result_var?;
 
-            match response.status().as_u16() {
+            match #response_var.status().as_u16() {
                 // These will be of the form...
                 // 201 => ResponseValue::from_response(response).await,
                 // 200..299 => ResponseValue::empty(response),
