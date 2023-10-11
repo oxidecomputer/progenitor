@@ -247,7 +247,7 @@ impl Generator {
                 type_.ident()
             }
             crate::method::OperationResponseType::None => {
-                quote! { r }
+                quote! { () }
             }
             crate::method::OperationResponseType::Raw => quote! { () },
             crate::method::OperationResponseType::Upgrade => quote! { () },
@@ -269,7 +269,7 @@ impl Generator {
                 type_.ident()
             }
             crate::method::OperationResponseType::None => {
-                quote! { r }
+                quote! { () }
             }
             crate::method::OperationResponseType::Raw => quote! { () },
             crate::method::OperationResponseType::Upgrade => quote! { () },
