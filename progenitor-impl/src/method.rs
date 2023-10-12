@@ -1429,6 +1429,7 @@ impl Generator {
     ) -> Result<TokenStream> {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
+        let client_ident = format_ident!("__progenitor_client");
 
         // Generate an ident for each parameter.
         let param_names = method
@@ -1646,7 +1647,7 @@ impl Generator {
             success,
             error,
             body,
-        } = self.method_sig_body(method, quote! { client})?;
+        } = self.method_sig_body(method, quote! { #client_ident })?;
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
@@ -1661,7 +1662,7 @@ impl Generator {
             > {
                 // Destructure the builder for convenience.
                 let Self {
-                    client,
+                    #client_ident,
                     #( #param_names, )*
                 } = self;
 
@@ -1863,14 +1864,14 @@ impl Generator {
             #[doc = #struct_doc]
             #derive
             pub struct #struct_ident<'a> {
-                client: &'a super::Client,
+                #client_ident: &'a super::Client,
                 #( #param_names: #param_types, )*
             }
 
             impl<'a> #struct_ident<'a> {
                 pub fn new(client: &'a super::Client) -> Self {
                     Self {
-                        client,
+                        #client_ident: client,
                         #( #param_names: #param_values, )*
                     }
                 }
