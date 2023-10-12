@@ -1065,7 +1065,7 @@ pub mod builder {
     ///[`Client::enrol`]: super::Client::enrol
     #[derive(Debug, Clone)]
     pub struct Enrol<'a> {
-        client: &'a super::Client,
+        __progenitor_client: &'a super::Client,
         authorization: Result<String, String>,
         body: Result<types::builder::EnrolBody, String>,
     }
@@ -1073,7 +1073,7 @@ pub mod builder {
     impl<'a> Enrol<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                __progenitor_client: client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(types::builder::EnrolBody::default()),
             }
@@ -1111,7 +1111,7 @@ pub mod builder {
         ///Sends a `POST` request to `/enrol`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
-                client,
+                __progenitor_client,
                 authorization,
                 body,
             } = self;
@@ -1119,16 +1119,19 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::EnrolBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/enrol", client.baseurl,);
+            let __progenitor_url = format!("{}/enrol", __progenitor_client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let __progenitor_request = client
+            let __progenitor_request = __progenitor_client
                 .client
                 .post(__progenitor_url)
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_result = __progenitor_client
+                .client
+                .execute(__progenitor_request)
+                .await;
             let __progenitor_response = __progenitor_result?;
             match __progenitor_response.status().as_u16() {
                 201u16 => Ok(ResponseValue::empty(__progenitor_response)),
@@ -1142,14 +1145,14 @@ pub mod builder {
     ///[`Client::global_jobs`]: super::Client::global_jobs
     #[derive(Debug, Clone)]
     pub struct GlobalJobs<'a> {
-        client: &'a super::Client,
+        __progenitor_client: &'a super::Client,
         authorization: Result<String, String>,
     }
 
     impl<'a> GlobalJobs<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                __progenitor_client: client,
                 authorization: Err("authorization was not initialized".to_string()),
             }
         }
@@ -1167,14 +1170,14 @@ pub mod builder {
         ///Sends a `GET` request to `/global/jobs`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
             let Self {
-                client,
+                __progenitor_client,
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/global/jobs", client.baseurl,);
+            let __progenitor_url = format!("{}/global/jobs", __progenitor_client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let __progenitor_request = client
+            let __progenitor_request = __progenitor_client
                 .client
                 .get(__progenitor_url)
                 .header(
@@ -1183,7 +1186,10 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_result = __progenitor_client
+                .client
+                .execute(__progenitor_request)
+                .await;
             let __progenitor_response = __progenitor_result?;
             match __progenitor_response.status().as_u16() {
                 201u16 => ResponseValue::from_response(__progenitor_response).await,
@@ -1197,14 +1203,14 @@ pub mod builder {
     ///[`Client::ping`]: super::Client::ping
     #[derive(Debug, Clone)]
     pub struct Ping<'a> {
-        client: &'a super::Client,
+        __progenitor_client: &'a super::Client,
         authorization: Result<String, String>,
     }
 
     impl<'a> Ping<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                __progenitor_client: client,
                 authorization: Err("authorization was not initialized".to_string()),
             }
         }
@@ -1222,14 +1228,14 @@ pub mod builder {
         ///Sends a `GET` request to `/ping`
         pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
             let Self {
-                client,
+                __progenitor_client,
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/ping", client.baseurl,);
+            let __progenitor_url = format!("{}/ping", __progenitor_client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let __progenitor_request = client
+            let __progenitor_request = __progenitor_client
                 .client
                 .get(__progenitor_url)
                 .header(
@@ -1238,7 +1244,10 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_result = __progenitor_client
+                .client
+                .execute(__progenitor_request)
+                .await;
             let __progenitor_response = __progenitor_result?;
             match __progenitor_response.status().as_u16() {
                 201u16 => ResponseValue::from_response(__progenitor_response).await,
@@ -1252,7 +1261,7 @@ pub mod builder {
     ///[`Client::report_finish`]: super::Client::report_finish
     #[derive(Debug, Clone)]
     pub struct ReportFinish<'a> {
-        client: &'a super::Client,
+        __progenitor_client: &'a super::Client,
         authorization: Result<String, String>,
         body: Result<types::builder::ReportFinishBody, String>,
     }
@@ -1260,7 +1269,7 @@ pub mod builder {
     impl<'a> ReportFinish<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                __progenitor_client: client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(types::builder::ReportFinishBody::default()),
             }
@@ -1300,7 +1309,7 @@ pub mod builder {
         ///Sends a `POST` request to `/report/finish`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
-                client,
+                __progenitor_client,
                 authorization,
                 body,
             } = self;
@@ -1308,10 +1317,10 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportFinishBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/report/finish", client.baseurl,);
+            let __progenitor_url = format!("{}/report/finish", __progenitor_client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let __progenitor_request = client
+            let __progenitor_request = __progenitor_client
                 .client
                 .post(__progenitor_url)
                 .header(
@@ -1321,7 +1330,10 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_result = __progenitor_client
+                .client
+                .execute(__progenitor_request)
+                .await;
             let __progenitor_response = __progenitor_result?;
             match __progenitor_response.status().as_u16() {
                 201u16 => ResponseValue::from_response(__progenitor_response).await,
@@ -1335,7 +1347,7 @@ pub mod builder {
     ///[`Client::report_output`]: super::Client::report_output
     #[derive(Debug, Clone)]
     pub struct ReportOutput<'a> {
-        client: &'a super::Client,
+        __progenitor_client: &'a super::Client,
         authorization: Result<String, String>,
         body: Result<types::builder::ReportOutputBody, String>,
     }
@@ -1343,7 +1355,7 @@ pub mod builder {
     impl<'a> ReportOutput<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                __progenitor_client: client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(types::builder::ReportOutputBody::default()),
             }
@@ -1383,7 +1395,7 @@ pub mod builder {
         ///Sends a `POST` request to `/report/output`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
-                client,
+                __progenitor_client,
                 authorization,
                 body,
             } = self;
@@ -1391,10 +1403,10 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportOutputBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/report/output", client.baseurl,);
+            let __progenitor_url = format!("{}/report/output", __progenitor_client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let __progenitor_request = client
+            let __progenitor_request = __progenitor_client
                 .client
                 .post(__progenitor_url)
                 .header(
@@ -1404,7 +1416,10 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_result = __progenitor_client
+                .client
+                .execute(__progenitor_request)
+                .await;
             let __progenitor_response = __progenitor_result?;
             match __progenitor_response.status().as_u16() {
                 201u16 => ResponseValue::from_response(__progenitor_response).await,
@@ -1418,7 +1433,7 @@ pub mod builder {
     ///[`Client::report_start`]: super::Client::report_start
     #[derive(Debug, Clone)]
     pub struct ReportStart<'a> {
-        client: &'a super::Client,
+        __progenitor_client: &'a super::Client,
         authorization: Result<String, String>,
         body: Result<types::builder::ReportStartBody, String>,
     }
@@ -1426,7 +1441,7 @@ pub mod builder {
     impl<'a> ReportStart<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                __progenitor_client: client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(types::builder::ReportStartBody::default()),
             }
@@ -1464,7 +1479,7 @@ pub mod builder {
         ///Sends a `POST` request to `/report/start`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
-                client,
+                __progenitor_client,
                 authorization,
                 body,
             } = self;
@@ -1472,10 +1487,10 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportStartBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/report/start", client.baseurl,);
+            let __progenitor_url = format!("{}/report/start", __progenitor_client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let __progenitor_request = client
+            let __progenitor_request = __progenitor_client
                 .client
                 .post(__progenitor_url)
                 .header(
@@ -1485,7 +1500,10 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_result = __progenitor_client
+                .client
+                .execute(__progenitor_request)
+                .await;
             let __progenitor_response = __progenitor_result?;
             match __progenitor_response.status().as_u16() {
                 201u16 => ResponseValue::from_response(__progenitor_response).await,

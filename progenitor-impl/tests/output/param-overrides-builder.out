@@ -104,7 +104,7 @@ pub mod builder {
     ///[`Client::key_get`]: super::Client::key_get
     #[derive(Debug, Clone)]
     pub struct KeyGet<'a> {
-        client: &'a super::Client,
+        __progenitor_client: &'a super::Client,
         key: Result<Option<bool>, String>,
         unique_key: Result<Option<String>, String>,
     }
@@ -112,7 +112,7 @@ pub mod builder {
     impl<'a> KeyGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                __progenitor_client: client,
                 key: Ok(None),
                 unique_key: Ok(None),
             }
@@ -143,13 +143,13 @@ pub mod builder {
         ///Sends a `GET` request to `/key`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
-                client,
+                __progenitor_client,
                 key,
                 unique_key,
             } = self;
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/key", client.baseurl,);
+            let __progenitor_url = format!("{}/key", __progenitor_client.baseurl,);
             let mut __progenitor_query = Vec::with_capacity(2usize);
             if let Some(v) = &key {
                 __progenitor_query.push(("key", v.to_string()));
@@ -157,12 +157,15 @@ pub mod builder {
             if let Some(v) = &unique_key {
                 __progenitor_query.push(("uniqueKey", v.to_string()));
             }
-            let __progenitor_request = client
+            let __progenitor_request = __progenitor_client
                 .client
                 .get(__progenitor_url)
                 .query(&__progenitor_query)
                 .build()?;
-            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_result = __progenitor_client
+                .client
+                .execute(__progenitor_request)
+                .await;
             let __progenitor_response = __progenitor_result?;
             match __progenitor_response.status().as_u16() {
                 200u16 => Ok(ResponseValue::empty(__progenitor_response)),
