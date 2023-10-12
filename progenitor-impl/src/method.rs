@@ -796,11 +796,11 @@ impl Generator {
         // collisions with the input spec. See:
         // https://github.com/oxidecomputer/progenitor/issues/288
         let internal_prefix = "__progenitor";
-        let url_var = format_ident!("{internal_prefix}_url");
-        let query_var = format_ident!("{internal_prefix}_query");
-        let request_var = format_ident!("{internal_prefix}_request");
-        let response_var = format_ident!("{internal_prefix}_response");
-        let result_var = format_ident!("{internal_prefix}_result");
+        let url_ident = format_ident!("{internal_prefix}_url");
+        let query_ident = format_ident!("{internal_prefix}_query");
+        let request_ident = format_ident!("{internal_prefix}_request");
+        let response_ident = format_ident!("{internal_prefix}_response");
+        let result_ident = format_ident!("{internal_prefix}_result");
 
         // Generate code for query parameters.
         let query_items = method
@@ -812,12 +812,12 @@ impl Generator {
                     let qn_ident = format_ident!("{}", &param.name);
                     let res = if *required {
                         quote! {
-                            #query_var.push((#qn, #qn_ident .to_string()));
+                            #query_ident.push((#qn, #qn_ident .to_string()));
                         }
                     } else {
                         quote! {
                             if let Some(v) = & #qn_ident {
-                                #query_var.push((#qn, v.to_string()));
+                                #query_ident.push((#qn, v.to_string()));
                             }
                         }
                     };
@@ -833,11 +833,11 @@ impl Generator {
         } else {
             let size = query_items.len();
             let query_build = quote! {
-                let mut #query_var = Vec::with_capacity(#size);
+                let mut #query_ident = Vec::with_capacity(#size);
                 #(#query_items)*
             };
             let query_use = quote! {
-                .query(&#query_var)
+                .query(&#query_ident)
             };
 
             (query_build, query_use)
@@ -914,7 +914,7 @@ impl Generator {
 
         let url_path = method.path.compile(url_renames, client.clone());
         let url_path = quote! {
-            let #url_var = #url_path;
+            let #url_ident = #url_path;
         };
 
         // Generate code to handle the body param.
@@ -976,22 +976,22 @@ impl Generator {
                 let decode = match &response.typ {
                     OperationResponseType::Type(_) => {
                         quote! {
-                            ResponseValue::from_response(#response_var).await
+                            ResponseValue::from_response(#response_ident).await
                         }
                     }
                     OperationResponseType::None => {
                         quote! {
-                            Ok(ResponseValue::empty(#response_var))
+                            Ok(ResponseValue::empty(#response_ident))
                         }
                     }
                     OperationResponseType::Raw => {
                         quote! {
-                            Ok(ResponseValue::stream(#response_var))
+                            Ok(ResponseValue::stream(#response_ident))
                         }
                     }
                     OperationResponseType::Upgrade => {
                         quote! {
-                            ResponseValue::upgrade(#response_var).await
+                            ResponseValue::upgrade(#response_ident).await
                         }
                     }
                 };
@@ -1026,7 +1026,7 @@ impl Generator {
                     OperationResponseType::Type(_) => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::from_response(#response_var)
+                                ResponseValue::from_response(#response_ident)
                                     .await?
                             ))
                         }
@@ -1034,14 +1034,14 @@ impl Generator {
                     OperationResponseType::None => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::empty(#response_var)
+                                ResponseValue::empty(#response_ident)
                             ))
                         }
                     }
                     OperationResponseType::Raw => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::stream(#response_var)
+                                ResponseValue::stream(#response_ident)
                             ))
                         }
                     }
@@ -1087,18 +1087,18 @@ impl Generator {
         let default_response = match method.responses.iter().last() {
             Some(response) if response.status_code.is_default() => quote! {},
             _ => {
-                quote! { _ => Err(Error::UnexpectedResponse(#response_var)), }
+                quote! { _ => Err(Error::UnexpectedResponse(#response_ident)), }
             }
         };
 
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &#request_var);
+                (#hook)(&#client.inner, &#request_ident);
             }
         });
         let post_hook = self.settings.post_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &#result_var);
+                (#hook)(&#client.inner, &#result_ident);
             }
         });
 
@@ -1110,8 +1110,8 @@ impl Generator {
 
             #headers_build
 
-            let #request_var = #client.client
-                . #method_func (#url_var)
+            let #request_ident = #client.client
+                . #method_func (#url_ident)
                 #accept_header
                 #(#body_func)*
                 #query_use
@@ -1120,14 +1120,14 @@ impl Generator {
                 .build()?;
 
             #pre_hook
-            let #result_var = #client.client
-                .execute(#request_var)
+            let #result_ident = #client.client
+                .execute(#request_ident)
                 .await;
             #post_hook
 
-            let #response_var = #result_var?;
+            let #response_ident = #result_ident?;
 
-            match #response_var.status().as_u16() {
+            match #response_ident.status().as_u16() {
                 // These will be of the form...
                 // 201 => ResponseValue::from_response(response).await,
                 // 200..299 => ResponseValue::empty(response),
