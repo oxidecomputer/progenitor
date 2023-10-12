@@ -309,14 +309,14 @@ pub mod builder {
     ///[`Client::default_params`]: super::Client::default_params
     #[derive(Debug, Clone)]
     pub struct DefaultParams<'a> {
-        client: &'a super::Client,
+        __progenitor_client: &'a super::Client,
         body: Result<types::builder::BodyWithDefaults, String>,
     }
 
     impl<'a> DefaultParams<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                __progenitor_client: client,
                 body: Ok(types::builder::BodyWithDefaults::default()),
             }
         }
@@ -344,13 +344,23 @@ pub mod builder {
 
         ///Sends a `POST` request to `/`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-            let Self { client, body } = self;
+            let Self {
+                __progenitor_client,
+                body,
+            } = self;
             let body = body
                 .and_then(std::convert::TryInto::<types::BodyWithDefaults>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/", client.baseurl,);
-            let __progenitor_request = client.client.post(__progenitor_url).json(&body).build()?;
-            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_url = format!("{}/", __progenitor_client.baseurl,);
+            let __progenitor_request = __progenitor_client
+                .client
+                .post(__progenitor_url)
+                .json(&body)
+                .build()?;
+            let __progenitor_result = __progenitor_client
+                .client
+                .execute(__progenitor_request)
+                .await;
             let __progenitor_response = __progenitor_result?;
             match __progenitor_response.status().as_u16() {
                 200..=299 => Ok(ResponseValue::stream(__progenitor_response)),
