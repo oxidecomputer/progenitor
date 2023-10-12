@@ -1119,20 +1119,20 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::EnrolBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/enrol", client.baseurl,);
+            let __progenitor_url = format!("{}/enrol", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            let __progenitor_request = client
                 .client
-                .post(url)
+                .post(__progenitor_url)
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                201u16 => Ok(ResponseValue::empty(__progenitor_response)),
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -1171,23 +1171,23 @@ pub mod builder {
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/global/jobs", client.baseurl,);
+            let __progenitor_url = format!("{}/global/jobs", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            let __progenitor_request = client
                 .client
-                .get(url)
+                .get(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .headers(header_map)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                201u16 => ResponseValue::from_response(__progenitor_response).await,
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -1226,23 +1226,23 @@ pub mod builder {
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/ping", client.baseurl,);
+            let __progenitor_url = format!("{}/ping", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            let __progenitor_request = client
                 .client
-                .get(url)
+                .get(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .headers(header_map)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                201u16 => ResponseValue::from_response(__progenitor_response).await,
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -1308,12 +1308,12 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportFinishBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/finish", client.baseurl,);
+            let __progenitor_url = format!("{}/report/finish", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            let __progenitor_request = client
                 .client
-                .post(url)
+                .post(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
@@ -1321,11 +1321,11 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                201u16 => ResponseValue::from_response(__progenitor_response).await,
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -1391,12 +1391,12 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportOutputBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/output", client.baseurl,);
+            let __progenitor_url = format!("{}/report/output", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            let __progenitor_request = client
                 .client
-                .post(url)
+                .post(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
@@ -1404,11 +1404,11 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                201u16 => ResponseValue::from_response(__progenitor_response).await,
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }
@@ -1472,12 +1472,12 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportStartBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/start", client.baseurl,);
+            let __progenitor_url = format!("{}/report/start", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            let __progenitor_request = client
                 .client
-                .post(url)
+                .post(__progenitor_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
@@ -1485,11 +1485,11 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
+            let __progenitor_result = client.client.execute(__progenitor_request).await;
+            let __progenitor_response = __progenitor_result?;
+            match __progenitor_response.status().as_u16() {
+                201u16 => ResponseValue::from_response(__progenitor_response).await,
+                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
             }
         }
     }

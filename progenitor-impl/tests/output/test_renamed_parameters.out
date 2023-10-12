@@ -94,37 +94,37 @@ impl Client {
         in_: &'a str,
         use_: &'a str,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
+        let __progenitor_url = format!(
             "{}/{}/{}/{}",
             self.baseurl,
             encode_path(&ref_.to_string()),
             encode_path(&type_.to_string()),
             encode_path(&trait_.to_string()),
         );
-        let mut query = Vec::with_capacity(3usize);
-        query.push(("if", if_.to_string()));
-        query.push(("in", in_.to_string()));
-        query.push(("use", use_.to_string()));
-        let request = self
+        let mut __progenitor_query = Vec::with_capacity(3usize);
+        __progenitor_query.push(("if", if_.to_string()));
+        __progenitor_query.push(("in", in_.to_string()));
+        __progenitor_query.push(("use", use_.to_string()));
+        let __progenitor_request = self
             .client
-            .get(url)
+            .get(__progenitor_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&query)
+            .query(&__progenitor_query)
             .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+        let __progenitor_result = self.client.execute(__progenitor_request).await;
+        let __progenitor_response = __progenitor_result?;
+        match __progenitor_response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(__progenitor_response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
+                ResponseValue::from_response(__progenitor_response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
+                ResponseValue::from_response(__progenitor_response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(response)),
+            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
         }
     }
 }
