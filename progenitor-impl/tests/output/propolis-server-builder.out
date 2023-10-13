@@ -2119,39 +2119,39 @@ pub mod builder {
     ///[`Client::instance_get`]: super::Client::instance_get
     #[derive(Debug, Clone)]
     pub struct InstanceGet<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
     }
 
     impl<'a> InstanceGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { _client: client }
+            Self { client: client }
         }
 
         ///Sends a `GET` request to `/instance`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
-            let Self { _client } = self;
-            let _url = format!("{}/instance", _client.baseurl,);
-            let _request = _client
+            let Self { client } = self;
+            let url = format!("{}/instance", client.baseurl,);
+            let request = client
                 .client
-                .get(_url)
+                .get(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                200u16 => ResponseValue::from_response(_response).await,
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(_response)),
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -2161,14 +2161,14 @@ pub mod builder {
     ///[`Client::instance_ensure`]: super::Client::instance_ensure
     #[derive(Debug, Clone)]
     pub struct InstanceEnsure<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         body: Result<types::builder::InstanceEnsureRequest, String>,
     }
 
     impl<'a> InstanceEnsure<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 body: Ok(types::builder::InstanceEnsureRequest::default()),
             }
         }
@@ -2198,31 +2198,31 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
-            let Self { _client, body } = self;
+            let Self { client, body } = self;
             let body = body
                 .and_then(std::convert::TryInto::<types::InstanceEnsureRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/instance", _client.baseurl,);
-            let _request = _client
+            let url = format!("{}/instance", client.baseurl,);
+            let request = client
                 .client
-                .put(_url)
+                .put(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                201u16 => ResponseValue::from_response(_response).await,
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(_response)),
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -2232,7 +2232,7 @@ pub mod builder {
     ///[`Client::instance_issue_crucible_snapshot_request`]: super::Client::instance_issue_crucible_snapshot_request
     #[derive(Debug, Clone)]
     pub struct InstanceIssueCrucibleSnapshotRequest<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         id: Result<uuid::Uuid, String>,
         snapshot_id: Result<uuid::Uuid, String>,
     }
@@ -2240,7 +2240,7 @@ pub mod builder {
     impl<'a> InstanceIssueCrucibleSnapshotRequest<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 id: Err("id was not initialized".to_string()),
                 snapshot_id: Err("snapshot_id was not initialized".to_string()),
             }
@@ -2270,37 +2270,37 @@ pub mod builder {
         /// `/instance/disk/{id}/snapshot/{snapshot_id}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
-                _client,
+                client,
                 id,
                 snapshot_id,
             } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let snapshot_id = snapshot_id.map_err(Error::InvalidRequest)?;
-            let _url = format!(
+            let url = format!(
                 "{}/instance/disk/{}/snapshot/{}",
-                _client.baseurl,
+                client.baseurl,
                 encode_path(&id.to_string()),
                 encode_path(&snapshot_id.to_string()),
             );
-            let _request = _client
+            let request = client
                 .client
-                .post(_url)
+                .post(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                200u16 => ResponseValue::from_response(_response).await,
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(_response)),
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -2310,14 +2310,14 @@ pub mod builder {
     ///[`Client::instance_migrate_status`]: super::Client::instance_migrate_status
     #[derive(Debug, Clone)]
     pub struct InstanceMigrateStatus<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         body: Result<types::builder::InstanceMigrateStatusRequest, String>,
     }
 
     impl<'a> InstanceMigrateStatus<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 body: Ok(types::builder::InstanceMigrateStatusRequest::default()),
             }
         }
@@ -2347,31 +2347,31 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>>
         {
-            let Self { _client, body } = self;
+            let Self { client, body } = self;
             let body = body
                 .and_then(std::convert::TryInto::<types::InstanceMigrateStatusRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/instance/migrate/status", _client.baseurl,);
-            let _request = _client
+            let url = format!("{}/instance/migrate/status", client.baseurl,);
+            let request = client
                 .client
-                .get(_url)
+                .get(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                200u16 => ResponseValue::from_response(_response).await,
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(_response)),
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -2381,23 +2381,23 @@ pub mod builder {
     ///[`Client::instance_serial`]: super::Client::instance_serial
     #[derive(Debug, Clone)]
     pub struct InstanceSerial<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
     }
 
     impl<'a> InstanceSerial<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { _client: client }
+            Self { client: client }
         }
 
         ///Sends a `GET` request to `/instance/serial`
         pub async fn send(
             self,
         ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
-            let Self { _client } = self;
-            let _url = format!("{}/instance/serial", _client.baseurl,);
-            let _request = _client
+            let Self { client } = self;
+            let url = format!("{}/instance/serial", client.baseurl,);
+            let request = client
                 .client
-                .get(_url)
+                .get(url)
                 .header(reqwest::header::CONNECTION, "Upgrade")
                 .header(reqwest::header::UPGRADE, "websocket")
                 .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -2409,12 +2409,12 @@ pub mod builder {
                     ),
                 )
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                101u16 => ResponseValue::upgrade(_response).await,
-                200..=299 => ResponseValue::upgrade(_response).await,
-                _ => Err(Error::UnexpectedResponse(_response)),
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                101u16 => ResponseValue::upgrade(response).await,
+                200..=299 => ResponseValue::upgrade(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -2424,14 +2424,14 @@ pub mod builder {
     ///[`Client::instance_state_put`]: super::Client::instance_state_put
     #[derive(Debug, Clone)]
     pub struct InstanceStatePut<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         body: Result<types::InstanceStateRequested, String>,
     }
 
     impl<'a> InstanceStatePut<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -2448,29 +2448,29 @@ pub mod builder {
 
         ///Sends a `PUT` request to `/instance/state`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
-            let Self { _client, body } = self;
+            let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/instance/state", _client.baseurl,);
-            let _request = _client
+            let url = format!("{}/instance/state", client.baseurl,);
+            let request = client
                 .client
-                .put(_url)
+                .put(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(_response)),
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                204u16 => Ok(ResponseValue::empty(response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(_response)),
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -2480,14 +2480,14 @@ pub mod builder {
     ///[`Client::instance_state_monitor`]: super::Client::instance_state_monitor
     #[derive(Debug, Clone)]
     pub struct InstanceStateMonitor<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         body: Result<types::builder::InstanceStateMonitorRequest, String>,
     }
 
     impl<'a> InstanceStateMonitor<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 body: Ok(types::builder::InstanceStateMonitorRequest::default()),
             }
         }
@@ -2517,31 +2517,31 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>>
         {
-            let Self { _client, body } = self;
+            let Self { client, body } = self;
             let body = body
                 .and_then(std::convert::TryInto::<types::InstanceStateMonitorRequest>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/instance/state-monitor", _client.baseurl,);
-            let _request = _client
+            let url = format!("{}/instance/state-monitor", client.baseurl,);
+            let request = client
                 .client
-                .get(_url)
+                .get(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                200u16 => ResponseValue::from_response(_response).await,
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
                 400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
                 500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(_response).await?,
+                    ResponseValue::from_response(response).await?,
                 )),
-                _ => Err(Error::UnexpectedResponse(_response)),
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }

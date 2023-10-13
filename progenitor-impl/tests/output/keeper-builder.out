@@ -1065,7 +1065,7 @@ pub mod builder {
     ///[`Client::enrol`]: super::Client::enrol
     #[derive(Debug, Clone)]
     pub struct Enrol<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         authorization: Result<String, String>,
         body: Result<types::builder::EnrolBody, String>,
     }
@@ -1073,7 +1073,7 @@ pub mod builder {
     impl<'a> Enrol<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(types::builder::EnrolBody::default()),
             }
@@ -1111,7 +1111,7 @@ pub mod builder {
         ///Sends a `POST` request to `/enrol`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
-                _client,
+                client,
                 authorization,
                 body,
             } = self;
@@ -1119,20 +1119,20 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::EnrolBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/enrol", _client.baseurl,);
+            let url = format!("{}/enrol", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let _request = _client
+            let request = client
                 .client
-                .post(_url)
+                .post(url)
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(_response)),
-                _ => Err(Error::UnexpectedResponse(_response)),
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -1142,14 +1142,14 @@ pub mod builder {
     ///[`Client::global_jobs`]: super::Client::global_jobs
     #[derive(Debug, Clone)]
     pub struct GlobalJobs<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         authorization: Result<String, String>,
     }
 
     impl<'a> GlobalJobs<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 authorization: Err("authorization was not initialized".to_string()),
             }
         }
@@ -1167,27 +1167,27 @@ pub mod builder {
         ///Sends a `GET` request to `/global/jobs`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
             let Self {
-                _client,
+                client,
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/global/jobs", _client.baseurl,);
+            let url = format!("{}/global/jobs", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let _request = _client
+            let request = client
                 .client
-                .get(_url)
+                .get(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .headers(header_map)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                201u16 => ResponseValue::from_response(_response).await,
-                _ => Err(Error::UnexpectedResponse(_response)),
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -1197,14 +1197,14 @@ pub mod builder {
     ///[`Client::ping`]: super::Client::ping
     #[derive(Debug, Clone)]
     pub struct Ping<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         authorization: Result<String, String>,
     }
 
     impl<'a> Ping<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 authorization: Err("authorization was not initialized".to_string()),
             }
         }
@@ -1222,27 +1222,27 @@ pub mod builder {
         ///Sends a `GET` request to `/ping`
         pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
             let Self {
-                _client,
+                client,
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/ping", _client.baseurl,);
+            let url = format!("{}/ping", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let _request = _client
+            let request = client
                 .client
-                .get(_url)
+                .get(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .headers(header_map)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                201u16 => ResponseValue::from_response(_response).await,
-                _ => Err(Error::UnexpectedResponse(_response)),
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -1252,7 +1252,7 @@ pub mod builder {
     ///[`Client::report_finish`]: super::Client::report_finish
     #[derive(Debug, Clone)]
     pub struct ReportFinish<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         authorization: Result<String, String>,
         body: Result<types::builder::ReportFinishBody, String>,
     }
@@ -1260,7 +1260,7 @@ pub mod builder {
     impl<'a> ReportFinish<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(types::builder::ReportFinishBody::default()),
             }
@@ -1300,7 +1300,7 @@ pub mod builder {
         ///Sends a `POST` request to `/report/finish`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
-                _client,
+                client,
                 authorization,
                 body,
             } = self;
@@ -1308,12 +1308,12 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportFinishBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/report/finish", _client.baseurl,);
+            let url = format!("{}/report/finish", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let _request = _client
+            let request = client
                 .client
-                .post(_url)
+                .post(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
@@ -1321,11 +1321,11 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                201u16 => ResponseValue::from_response(_response).await,
-                _ => Err(Error::UnexpectedResponse(_response)),
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -1335,7 +1335,7 @@ pub mod builder {
     ///[`Client::report_output`]: super::Client::report_output
     #[derive(Debug, Clone)]
     pub struct ReportOutput<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         authorization: Result<String, String>,
         body: Result<types::builder::ReportOutputBody, String>,
     }
@@ -1343,7 +1343,7 @@ pub mod builder {
     impl<'a> ReportOutput<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(types::builder::ReportOutputBody::default()),
             }
@@ -1383,7 +1383,7 @@ pub mod builder {
         ///Sends a `POST` request to `/report/output`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
-                _client,
+                client,
                 authorization,
                 body,
             } = self;
@@ -1391,12 +1391,12 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportOutputBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/report/output", _client.baseurl,);
+            let url = format!("{}/report/output", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let _request = _client
+            let request = client
                 .client
-                .post(_url)
+                .post(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
@@ -1404,11 +1404,11 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                201u16 => ResponseValue::from_response(_response).await,
-                _ => Err(Error::UnexpectedResponse(_response)),
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }
@@ -1418,7 +1418,7 @@ pub mod builder {
     ///[`Client::report_start`]: super::Client::report_start
     #[derive(Debug, Clone)]
     pub struct ReportStart<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         authorization: Result<String, String>,
         body: Result<types::builder::ReportStartBody, String>,
     }
@@ -1426,7 +1426,7 @@ pub mod builder {
     impl<'a> ReportStart<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(types::builder::ReportStartBody::default()),
             }
@@ -1464,7 +1464,7 @@ pub mod builder {
         ///Sends a `POST` request to `/report/start`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
-                _client,
+                client,
                 authorization,
                 body,
             } = self;
@@ -1472,12 +1472,12 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::ReportStartBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/report/start", _client.baseurl,);
+            let url = format!("{}/report/start", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let _request = _client
+            let request = client
                 .client
-                .post(_url)
+                .post(url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
@@ -1485,11 +1485,11 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                201u16 => ResponseValue::from_response(_response).await,
-                _ => Err(Error::UnexpectedResponse(_response)),
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                201u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }

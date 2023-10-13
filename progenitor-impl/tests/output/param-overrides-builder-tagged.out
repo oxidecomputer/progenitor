@@ -104,7 +104,7 @@ pub mod builder {
     ///[`Client::key_get`]: super::Client::key_get
     #[derive(Debug, Clone)]
     pub struct KeyGet<'a> {
-        _client: &'a super::Client,
+        client: &'a super::Client,
         key: Result<Option<bool>, String>,
         unique_key: Result<Option<String>, String>,
     }
@@ -112,7 +112,7 @@ pub mod builder {
     impl<'a> KeyGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                _client: client,
+                client: client,
                 key: Ok(None),
                 unique_key: Ok(None),
             }
@@ -143,26 +143,26 @@ pub mod builder {
         ///Sends a `GET` request to `/key`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
-                _client,
+                client,
                 key,
                 unique_key,
             } = self;
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
-            let _url = format!("{}/key", _client.baseurl,);
-            let mut _query = Vec::with_capacity(2usize);
+            let url = format!("{}/key", client.baseurl,);
+            let mut query = Vec::with_capacity(2usize);
             if let Some(v) = &key {
-                _query.push(("key", v.to_string()));
+                query.push(("key", v.to_string()));
             }
             if let Some(v) = &unique_key {
-                _query.push(("uniqueKey", v.to_string()));
+                query.push(("uniqueKey", v.to_string()));
             }
-            let _request = _client.client.get(_url).query(&_query).build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(_response)),
-                _ => Err(Error::UnexpectedResponse(_response)),
+            let request = client.client.get(url).query(&query).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
             }
         }
     }

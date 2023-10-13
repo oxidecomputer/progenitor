@@ -671,26 +671,26 @@ impl Client {
     pub async fn instance_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
-        let _url = format!("{}/instance", self.baseurl,);
-        let _request = self
+        let url = format!("{}/instance", self.baseurl,);
+        let request = self
             .client
-            .get(_url)
+            .get(url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
-        let _result = self.client.execute(_request).await;
-        let _response = _result?;
-        match _response.status().as_u16() {
-            200u16 => ResponseValue::from_response(_response).await,
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(_response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -699,27 +699,27 @@ impl Client {
         &'a self,
         body: &'a types::InstanceEnsureRequest,
     ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
-        let _url = format!("{}/instance", self.baseurl,);
-        let _request = self
+        let url = format!("{}/instance", self.baseurl,);
+        let request = self
             .client
-            .put(_url)
+            .put(url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
-        let _result = self.client.execute(_request).await;
-        let _response = _result?;
-        match _response.status().as_u16() {
-            201u16 => ResponseValue::from_response(_response).await,
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(_response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -731,31 +731,31 @@ impl Client {
         id: &'a uuid::Uuid,
         snapshot_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let _url = format!(
+        let url = format!(
             "{}/instance/disk/{}/snapshot/{}",
             self.baseurl,
             encode_path(&id.to_string()),
             encode_path(&snapshot_id.to_string()),
         );
-        let _request = self
+        let request = self
             .client
-            .post(_url)
+            .post(url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
-        let _result = self.client.execute(_request).await;
-        let _response = _result?;
-        match _response.status().as_u16() {
-            200u16 => ResponseValue::from_response(_response).await,
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(_response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -764,27 +764,27 @@ impl Client {
         &'a self,
         body: &'a types::InstanceMigrateStatusRequest,
     ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>> {
-        let _url = format!("{}/instance/migrate/status", self.baseurl,);
-        let _request = self
+        let url = format!("{}/instance/migrate/status", self.baseurl,);
+        let request = self
             .client
-            .get(_url)
+            .get(url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
-        let _result = self.client.execute(_request).await;
-        let _response = _result?;
-        match _response.status().as_u16() {
-            200u16 => ResponseValue::from_response(_response).await,
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(_response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -792,10 +792,10 @@ impl Client {
     pub async fn instance_serial<'a>(
         &'a self,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
-        let _url = format!("{}/instance/serial", self.baseurl,);
-        let _request = self
+        let url = format!("{}/instance/serial", self.baseurl,);
+        let request = self
             .client
-            .get(_url)
+            .get(url)
             .header(reqwest::header::CONNECTION, "Upgrade")
             .header(reqwest::header::UPGRADE, "websocket")
             .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -807,12 +807,12 @@ impl Client {
                 ),
             )
             .build()?;
-        let _result = self.client.execute(_request).await;
-        let _response = _result?;
-        match _response.status().as_u16() {
-            101u16 => ResponseValue::upgrade(_response).await,
-            200..=299 => ResponseValue::upgrade(_response).await,
-            _ => Err(Error::UnexpectedResponse(_response)),
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            101u16 => ResponseValue::upgrade(response).await,
+            200..=299 => ResponseValue::upgrade(response).await,
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -821,27 +821,27 @@ impl Client {
         &'a self,
         body: types::InstanceStateRequested,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let _url = format!("{}/instance/state", self.baseurl,);
-        let _request = self
+        let url = format!("{}/instance/state", self.baseurl,);
+        let request = self
             .client
-            .put(_url)
+            .put(url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
-        let _result = self.client.execute(_request).await;
-        let _response = _result?;
-        match _response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(_response)),
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(_response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
@@ -850,27 +850,27 @@ impl Client {
         &'a self,
         body: &'a types::InstanceStateMonitorRequest,
     ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>> {
-        let _url = format!("{}/instance/state-monitor", self.baseurl,);
-        let _request = self
+        let url = format!("{}/instance/state-monitor", self.baseurl,);
+        let request = self
             .client
-            .get(_url)
+            .get(url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
-        let _result = self.client.execute(_request).await;
-        let _response = _result?;
-        match _response.status().as_u16() {
-            200u16 => ResponseValue::from_response(_response).await,
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(_response).await?,
+                ResponseValue::from_response(response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(_response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 }

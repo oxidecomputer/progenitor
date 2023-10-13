@@ -88,13 +88,13 @@ impl Client {
     pub async fn freeform_response<'a>(
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let _url = format!("{}/", self.baseurl,);
-        let _request = self.client.get(_url).build()?;
-        let _result = self.client.execute(_request).await;
-        let _response = _result?;
-        match _response.status().as_u16() {
-            200..=299 => Ok(ResponseValue::stream(_response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::stream(_response))),
+        let url = format!("{}/", self.baseurl,);
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
         }
     }
 }
