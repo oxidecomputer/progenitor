@@ -23,6 +23,6 @@ percent-encoding = "2.3"
 rand = "0.8"
 regress = "0.7.1"
 reqwest = { version = "0.11.22", features = ["json", "stream"] }
-schemars = { version = "0.8.12", features = ["uuid1"] }
+schemars = { version = "0.8.15", features = ["uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.4", features = ["serde", "v4"] }
