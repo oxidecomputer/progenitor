@@ -157,6 +157,11 @@ fn test_yaml() {
     verify_apis("param-overrides.yaml");
 }
 
+#[test]
+fn test_param_collision() {
+    verify_apis("param-collision.json");
+}
+
 // TODO this file is full of inconsistencies and incorrectly specified types.
 // It's an interesting test to consider whether we try to do our best to
 // interpret the intent or just fail.
