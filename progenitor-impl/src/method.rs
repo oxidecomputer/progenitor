@@ -13,7 +13,7 @@ use typify::{TypeId, TypeSpace};
 
 use crate::{
     template::PathTemplate,
-    util::{items, parameter_map, sanitize, Case},
+    util::{items, parameter_map, sanitize, unique_ident_from, Case},
     Error, Generator, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
@@ -792,15 +792,18 @@ impl Generator {
         method: &OperationMethod,
         client: TokenStream,
     ) -> Result<MethodSigBody> {
-        // We prefix internal variable names to mitigate possible name
-        // collisions with the input spec. See:
-        // https://github.com/oxidecomputer/progenitor/issues/288
-        let internal_prefix = "__progenitor";
-        let url_ident = format_ident!("{internal_prefix}_url");
-        let query_ident = format_ident!("{internal_prefix}_query");
-        let request_ident = format_ident!("{internal_prefix}_request");
-        let response_ident = format_ident!("{internal_prefix}_response");
-        let result_ident = format_ident!("{internal_prefix}_result");
+        let param_names = method
+            .params
+            .iter()
+            .map(|param| format_ident!("{}", param.name))
+            .collect::<Vec<_>>();
+
+        // Generate a unique Ident for internal variables
+        let url_ident = unique_ident_from("url", &param_names);
+        let query_ident = unique_ident_from("query", &param_names);
+        let request_ident = unique_ident_from("request", &param_names);
+        let response_ident = unique_ident_from("response", &param_names);
+        let result_ident = unique_ident_from("result", &param_names);
 
         // Generate code for query parameters.
         let query_items = method
@@ -1429,7 +1432,6 @@ impl Generator {
     ) -> Result<TokenStream> {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
-        let client_ident = format_ident!("__progenitor_client");
 
         // Generate an ident for each parameter.
         let param_names = method
@@ -1437,6 +1439,8 @@ impl Generator {
             .iter()
             .map(|param| format_ident!("{}", param.name))
             .collect::<Vec<_>>();
+
+        let client_ident = unique_ident_from("client", &param_names);
 
         let mut cloneable = true;
 

@@ -671,26 +671,26 @@ impl Client {
     pub async fn instance_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
-        let __progenitor_url = format!("{}/instance", self.baseurl,);
-        let __progenitor_request = self
+        let _url = format!("{}/instance", self.baseurl,);
+        let _request = self
             .client
-            .get(__progenitor_url)
+            .get(_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
-        let __progenitor_result = self.client.execute(__progenitor_request).await;
-        let __progenitor_response = __progenitor_result?;
-        match __progenitor_response.status().as_u16() {
-            200u16 => ResponseValue::from_response(__progenitor_response).await,
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            200u16 => ResponseValue::from_response(_response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 
@@ -699,27 +699,27 @@ impl Client {
         &'a self,
         body: &'a types::InstanceEnsureRequest,
     ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
-        let __progenitor_url = format!("{}/instance", self.baseurl,);
-        let __progenitor_request = self
+        let _url = format!("{}/instance", self.baseurl,);
+        let _request = self
             .client
-            .put(__progenitor_url)
+            .put(_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
-        let __progenitor_result = self.client.execute(__progenitor_request).await;
-        let __progenitor_response = __progenitor_result?;
-        match __progenitor_response.status().as_u16() {
-            201u16 => ResponseValue::from_response(__progenitor_response).await,
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            201u16 => ResponseValue::from_response(_response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 
@@ -731,31 +731,31 @@ impl Client {
         id: &'a uuid::Uuid,
         snapshot_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let __progenitor_url = format!(
+        let _url = format!(
             "{}/instance/disk/{}/snapshot/{}",
             self.baseurl,
             encode_path(&id.to_string()),
             encode_path(&snapshot_id.to_string()),
         );
-        let __progenitor_request = self
+        let _request = self
             .client
-            .post(__progenitor_url)
+            .post(_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
-        let __progenitor_result = self.client.execute(__progenitor_request).await;
-        let __progenitor_response = __progenitor_result?;
-        match __progenitor_response.status().as_u16() {
-            200u16 => ResponseValue::from_response(__progenitor_response).await,
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            200u16 => ResponseValue::from_response(_response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 
@@ -764,27 +764,27 @@ impl Client {
         &'a self,
         body: &'a types::InstanceMigrateStatusRequest,
     ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>> {
-        let __progenitor_url = format!("{}/instance/migrate/status", self.baseurl,);
-        let __progenitor_request = self
+        let _url = format!("{}/instance/migrate/status", self.baseurl,);
+        let _request = self
             .client
-            .get(__progenitor_url)
+            .get(_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
-        let __progenitor_result = self.client.execute(__progenitor_request).await;
-        let __progenitor_response = __progenitor_result?;
-        match __progenitor_response.status().as_u16() {
-            200u16 => ResponseValue::from_response(__progenitor_response).await,
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            200u16 => ResponseValue::from_response(_response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 
@@ -792,10 +792,10 @@ impl Client {
     pub async fn instance_serial<'a>(
         &'a self,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
-        let __progenitor_url = format!("{}/instance/serial", self.baseurl,);
-        let __progenitor_request = self
+        let _url = format!("{}/instance/serial", self.baseurl,);
+        let _request = self
             .client
-            .get(__progenitor_url)
+            .get(_url)
             .header(reqwest::header::CONNECTION, "Upgrade")
             .header(reqwest::header::UPGRADE, "websocket")
             .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -807,12 +807,12 @@ impl Client {
                 ),
             )
             .build()?;
-        let __progenitor_result = self.client.execute(__progenitor_request).await;
-        let __progenitor_response = __progenitor_result?;
-        match __progenitor_response.status().as_u16() {
-            101u16 => ResponseValue::upgrade(__progenitor_response).await,
-            200..=299 => ResponseValue::upgrade(__progenitor_response).await,
-            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            101u16 => ResponseValue::upgrade(_response).await,
+            200..=299 => ResponseValue::upgrade(_response).await,
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 
@@ -821,27 +821,27 @@ impl Client {
         &'a self,
         body: types::InstanceStateRequested,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let __progenitor_url = format!("{}/instance/state", self.baseurl,);
-        let __progenitor_request = self
+        let _url = format!("{}/instance/state", self.baseurl,);
+        let _request = self
             .client
-            .put(__progenitor_url)
+            .put(_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
-        let __progenitor_result = self.client.execute(__progenitor_request).await;
-        let __progenitor_response = __progenitor_result?;
-        match __progenitor_response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(__progenitor_response)),
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(_response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 
@@ -850,27 +850,27 @@ impl Client {
         &'a self,
         body: &'a types::InstanceStateMonitorRequest,
     ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>> {
-        let __progenitor_url = format!("{}/instance/state-monitor", self.baseurl,);
-        let __progenitor_request = self
+        let _url = format!("{}/instance/state-monitor", self.baseurl,);
+        let _request = self
             .client
-            .get(__progenitor_url)
+            .get(_url)
             .header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
-        let __progenitor_result = self.client.execute(__progenitor_request).await;
-        let __progenitor_response = __progenitor_result?;
-        match __progenitor_response.status().as_u16() {
-            200u16 => ResponseValue::from_response(__progenitor_response).await,
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            200u16 => ResponseValue::from_response(_response).await,
             400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
             500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(__progenitor_response).await?,
+                ResponseValue::from_response(_response).await?,
             )),
-            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 }

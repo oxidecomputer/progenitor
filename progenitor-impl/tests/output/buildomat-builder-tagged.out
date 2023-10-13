@@ -1863,38 +1863,31 @@ pub mod builder {
     ///[`Client::control_hold`]: super::Client::control_hold
     #[derive(Debug, Clone)]
     pub struct ControlHold<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
     }
 
     impl<'a> ControlHold<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self {
-                __progenitor_client: client,
-            }
+            Self { _client: client }
         }
 
         ///Sends a `POST` request to `/v1/control/hold`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self {
-                __progenitor_client,
-            } = self;
-            let __progenitor_url = format!("{}/v1/control/hold", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
+            let Self { _client } = self;
+            let _url = format!("{}/v1/control/hold", _client.baseurl,);
+            let _request = _client
                 .client
-                .post(__progenitor_url)
+                .post(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -1904,31 +1897,24 @@ pub mod builder {
     ///[`Client::control_resume`]: super::Client::control_resume
     #[derive(Debug, Clone)]
     pub struct ControlResume<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
     }
 
     impl<'a> ControlResume<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self {
-                __progenitor_client: client,
-            }
+            Self { _client: client }
         }
 
         ///Sends a `POST` request to `/v1/control/resume`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self {
-                __progenitor_client,
-            } = self;
-            let __progenitor_url = format!("{}/v1/control/resume", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client.client.post(__progenitor_url).build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(__progenitor_response)),
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let Self { _client } = self;
+            let _url = format!("{}/v1/control/resume", _client.baseurl,);
+            let _request = _client.client.post(_url).build()?;
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(_response)),
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -1938,14 +1924,14 @@ pub mod builder {
     ///[`Client::task_get`]: super::Client::task_get
     #[derive(Debug, Clone)]
     pub struct TaskGet<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         task: Result<String, String>,
     }
 
     impl<'a> TaskGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 task: Err("task was not initialized".to_string()),
             }
         }
@@ -1962,32 +1948,26 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/task/{task}`
         pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
-            let Self {
-                __progenitor_client,
-                task,
-            } = self;
+            let Self { _client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!(
+            let _url = format!(
                 "{}/v1/task/{}",
-                __progenitor_client.baseurl,
+                _client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let __progenitor_request = __progenitor_client
+            let _request = _client
                 .client
-                .get(__progenitor_url)
+                .get(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -1997,38 +1977,31 @@ pub mod builder {
     ///[`Client::tasks_get`]: super::Client::tasks_get
     #[derive(Debug, Clone)]
     pub struct TasksGet<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
     }
 
     impl<'a> TasksGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self {
-                __progenitor_client: client,
-            }
+            Self { _client: client }
         }
 
         ///Sends a `GET` request to `/v1/tasks`
         pub async fn send(self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
-            let Self {
-                __progenitor_client,
-            } = self;
-            let __progenitor_url = format!("{}/v1/tasks", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
+            let Self { _client } = self;
+            let _url = format!("{}/v1/tasks", _client.baseurl,);
+            let _request = _client
                 .client
-                .get(__progenitor_url)
+                .get(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2038,14 +2011,14 @@ pub mod builder {
     ///[`Client::task_submit`]: super::Client::task_submit
     #[derive(Debug, Clone)]
     pub struct TaskSubmit<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         body: Result<types::builder::TaskSubmit, String>,
     }
 
     impl<'a> TaskSubmit<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 body: Ok(types::builder::TaskSubmit::default()),
             }
         }
@@ -2071,31 +2044,25 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/tasks`
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
-            let Self {
-                __progenitor_client,
-                body,
-            } = self;
+            let Self { _client, body } = self;
             let body = body
                 .and_then(std::convert::TryInto::<types::TaskSubmit>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/v1/tasks", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
+            let _url = format!("{}/v1/tasks", _client.baseurl,);
+            let _request = _client
                 .client
-                .post(__progenitor_url)
+                .post(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                201u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                201u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2105,7 +2072,7 @@ pub mod builder {
     ///[`Client::task_events_get`]: super::Client::task_events_get
     #[derive(Debug, Clone)]
     pub struct TaskEventsGet<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         task: Result<String, String>,
         minseq: Result<Option<u32>, String>,
     }
@@ -2113,7 +2080,7 @@ pub mod builder {
     impl<'a> TaskEventsGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 task: Err("task was not initialized".to_string()),
                 minseq: Ok(None),
             }
@@ -2143,38 +2110,35 @@ pub mod builder {
         ///Sends a `GET` request to `/v1/tasks/{task}/events`
         pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskEvent>>, Error<()>> {
             let Self {
-                __progenitor_client,
+                _client,
                 task,
                 minseq,
             } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let minseq = minseq.map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!(
+            let _url = format!(
                 "{}/v1/tasks/{}/events",
-                __progenitor_client.baseurl,
+                _client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let mut __progenitor_query = Vec::with_capacity(1usize);
+            let mut _query = Vec::with_capacity(1usize);
             if let Some(v) = &minseq {
-                __progenitor_query.push(("minseq", v.to_string()));
+                _query.push(("minseq", v.to_string()));
             }
-            let __progenitor_request = __progenitor_client
+            let _request = _client
                 .client
-                .get(__progenitor_url)
+                .get(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&__progenitor_query)
+                .query(&_query)
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2184,14 +2148,14 @@ pub mod builder {
     ///[`Client::task_outputs_get`]: super::Client::task_outputs_get
     #[derive(Debug, Clone)]
     pub struct TaskOutputsGet<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         task: Result<String, String>,
     }
 
     impl<'a> TaskOutputsGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 task: Err("task was not initialized".to_string()),
             }
         }
@@ -2208,32 +2172,26 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
         pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskOutput>>, Error<()>> {
-            let Self {
-                __progenitor_client,
-                task,
-            } = self;
+            let Self { _client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!(
+            let _url = format!(
                 "{}/v1/tasks/{}/outputs",
-                __progenitor_client.baseurl,
+                _client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let __progenitor_request = __progenitor_client
+            let _request = _client
                 .client
-                .get(__progenitor_url)
+                .get(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2243,7 +2201,7 @@ pub mod builder {
     ///[`Client::task_output_download`]: super::Client::task_output_download
     #[derive(Debug, Clone)]
     pub struct TaskOutputDownload<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         task: Result<String, String>,
         output: Result<String, String>,
     }
@@ -2251,7 +2209,7 @@ pub mod builder {
     impl<'a> TaskOutputDownload<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 task: Err("task was not initialized".to_string()),
                 output: Err("output was not initialized".to_string()),
             }
@@ -2280,27 +2238,24 @@ pub mod builder {
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
             let Self {
-                __progenitor_client,
+                _client,
                 task,
                 output,
             } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let output = output.map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!(
+            let _url = format!(
                 "{}/v1/tasks/{}/outputs/{}",
-                __progenitor_client.baseurl,
+                _client.baseurl,
                 encode_path(&task.to_string()),
                 encode_path(&output.to_string()),
             );
-            let __progenitor_request = __progenitor_client.client.get(__progenitor_url).build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(__progenitor_response)),
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _request = _client.client.get(_url).build()?;
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200..=299 => Ok(ResponseValue::stream(_response)),
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2310,14 +2265,14 @@ pub mod builder {
     ///[`Client::user_create`]: super::Client::user_create
     #[derive(Debug, Clone)]
     pub struct UserCreate<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         body: Result<types::builder::UserCreate, String>,
     }
 
     impl<'a> UserCreate<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 body: Ok(types::builder::UserCreate::default()),
             }
         }
@@ -2343,31 +2298,25 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/users`
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
-            let Self {
-                __progenitor_client,
-                body,
-            } = self;
+            let Self { _client, body } = self;
             let body = body
                 .and_then(std::convert::TryInto::<types::UserCreate>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/v1/users", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
+            let _url = format!("{}/v1/users", _client.baseurl,);
+            let _request = _client
                 .client
-                .post(__progenitor_url)
+                .post(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                201u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                201u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2377,38 +2326,31 @@ pub mod builder {
     ///[`Client::whoami`]: super::Client::whoami
     #[derive(Debug, Clone)]
     pub struct Whoami<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
     }
 
     impl<'a> Whoami<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self {
-                __progenitor_client: client,
-            }
+            Self { _client: client }
         }
 
         ///Sends a `GET` request to `/v1/whoami`
         pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
-            let Self {
-                __progenitor_client,
-            } = self;
-            let __progenitor_url = format!("{}/v1/whoami", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
+            let Self { _client } = self;
+            let _url = format!("{}/v1/whoami", _client.baseurl,);
+            let _request = _client
                 .client
-                .get(__progenitor_url)
+                .get(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2418,14 +2360,14 @@ pub mod builder {
     ///[`Client::worker_bootstrap`]: super::Client::worker_bootstrap
     #[derive(Debug, Clone)]
     pub struct WorkerBootstrap<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         body: Result<types::builder::WorkerBootstrap, String>,
     }
 
     impl<'a> WorkerBootstrap<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 body: Ok(types::builder::WorkerBootstrap::default()),
             }
         }
@@ -2451,31 +2393,25 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/worker/bootstrap`
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
-            let Self {
-                __progenitor_client,
-                body,
-            } = self;
+            let Self { _client, body } = self;
             let body = body
                 .and_then(std::convert::TryInto::<types::WorkerBootstrap>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/v1/worker/bootstrap", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
+            let _url = format!("{}/v1/worker/bootstrap", _client.baseurl,);
+            let _request = _client
                 .client
-                .post(__progenitor_url)
+                .post(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                201u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                201u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2485,38 +2421,31 @@ pub mod builder {
     ///[`Client::worker_ping`]: super::Client::worker_ping
     #[derive(Debug, Clone)]
     pub struct WorkerPing<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
     }
 
     impl<'a> WorkerPing<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self {
-                __progenitor_client: client,
-            }
+            Self { _client: client }
         }
 
         ///Sends a `GET` request to `/v1/worker/ping`
         pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
-            let Self {
-                __progenitor_client,
-            } = self;
-            let __progenitor_url = format!("{}/v1/worker/ping", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
+            let Self { _client } = self;
+            let _url = format!("{}/v1/worker/ping", _client.baseurl,);
+            let _request = _client
                 .client
-                .get(__progenitor_url)
+                .get(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2526,7 +2455,7 @@ pub mod builder {
     ///[`Client::worker_task_append`]: super::Client::worker_task_append
     #[derive(Debug, Clone)]
     pub struct WorkerTaskAppend<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         task: Result<String, String>,
         body: Result<types::builder::WorkerAppendTask, String>,
     }
@@ -2534,7 +2463,7 @@ pub mod builder {
     impl<'a> WorkerTaskAppend<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(types::builder::WorkerAppendTask::default()),
             }
@@ -2574,7 +2503,7 @@ pub mod builder {
         ///Sends a `POST` request to `/v1/worker/task/{task}/append`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
-                __progenitor_client,
+                _client,
                 task,
                 body,
             } = self;
@@ -2582,24 +2511,17 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::WorkerAppendTask>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!(
+            let _url = format!(
                 "{}/v1/worker/task/{}/append",
-                __progenitor_client.baseurl,
+                _client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let __progenitor_request = __progenitor_client
-                .client
-                .post(__progenitor_url)
-                .json(&body)
-                .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(__progenitor_response)),
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _request = _client.client.post(_url).json(&body).build()?;
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                201u16 => Ok(ResponseValue::empty(_response)),
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2609,7 +2531,7 @@ pub mod builder {
     ///[`Client::worker_task_upload_chunk`]: super::Client::worker_task_upload_chunk
     #[derive(Debug)]
     pub struct WorkerTaskUploadChunk<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         task: Result<String, String>,
         body: Result<reqwest::Body, String>,
     }
@@ -2617,7 +2539,7 @@ pub mod builder {
     impl<'a> WorkerTaskUploadChunk<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 task: Err("task was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
@@ -2646,20 +2568,20 @@ pub mod builder {
         ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
         pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
             let Self {
-                __progenitor_client,
+                _client,
                 task,
                 body,
             } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!(
+            let _url = format!(
                 "{}/v1/worker/task/{}/chunk",
-                __progenitor_client.baseurl,
+                _client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let __progenitor_request = __progenitor_client
+            let _request = _client
                 .client
-                .post(__progenitor_url)
+                .post(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
@@ -2670,14 +2592,11 @@ pub mod builder {
                 )
                 .body(body)
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                201u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                201u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2687,7 +2606,7 @@ pub mod builder {
     ///[`Client::worker_task_complete`]: super::Client::worker_task_complete
     #[derive(Debug, Clone)]
     pub struct WorkerTaskComplete<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         task: Result<String, String>,
         body: Result<types::builder::WorkerCompleteTask, String>,
     }
@@ -2695,7 +2614,7 @@ pub mod builder {
     impl<'a> WorkerTaskComplete<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(types::builder::WorkerCompleteTask::default()),
             }
@@ -2735,7 +2654,7 @@ pub mod builder {
         ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
-                __progenitor_client,
+                _client,
                 task,
                 body,
             } = self;
@@ -2743,24 +2662,17 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::WorkerCompleteTask>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!(
+            let _url = format!(
                 "{}/v1/worker/task/{}/complete",
-                __progenitor_client.baseurl,
+                _client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let __progenitor_request = __progenitor_client
-                .client
-                .post(__progenitor_url)
-                .json(&body)
-                .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(__progenitor_response)),
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _request = _client.client.post(_url).json(&body).build()?;
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(_response)),
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2770,7 +2682,7 @@ pub mod builder {
     ///[`Client::worker_task_add_output`]: super::Client::worker_task_add_output
     #[derive(Debug, Clone)]
     pub struct WorkerTaskAddOutput<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         task: Result<String, String>,
         body: Result<types::builder::WorkerAddOutput, String>,
     }
@@ -2778,7 +2690,7 @@ pub mod builder {
     impl<'a> WorkerTaskAddOutput<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(types::builder::WorkerAddOutput::default()),
             }
@@ -2816,7 +2728,7 @@ pub mod builder {
         ///Sends a `POST` request to `/v1/worker/task/{task}/output`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
-                __progenitor_client,
+                _client,
                 task,
                 body,
             } = self;
@@ -2824,24 +2736,17 @@ pub mod builder {
             let body = body
                 .and_then(std::convert::TryInto::<types::WorkerAddOutput>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!(
+            let _url = format!(
                 "{}/v1/worker/task/{}/output",
-                __progenitor_client.baseurl,
+                _client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let __progenitor_request = __progenitor_client
-                .client
-                .post(__progenitor_url)
-                .json(&body)
-                .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(__progenitor_response)),
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _request = _client.client.post(_url).json(&body).build()?;
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                201u16 => Ok(ResponseValue::empty(_response)),
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2851,38 +2756,31 @@ pub mod builder {
     ///[`Client::workers_list`]: super::Client::workers_list
     #[derive(Debug, Clone)]
     pub struct WorkersList<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
     }
 
     impl<'a> WorkersList<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self {
-                __progenitor_client: client,
-            }
+            Self { _client: client }
         }
 
         ///Sends a `GET` request to `/v1/workers`
         pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
-            let Self {
-                __progenitor_client,
-            } = self;
-            let __progenitor_url = format!("{}/v1/workers", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
+            let Self { _client } = self;
+            let _url = format!("{}/v1/workers", _client.baseurl,);
+            let _request = _client
                 .client
-                .get(__progenitor_url)
+                .get(_url)
                 .header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => ResponseValue::from_response(__progenitor_response).await,
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => ResponseValue::from_response(_response).await,
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }
@@ -2892,31 +2790,24 @@ pub mod builder {
     ///[`Client::workers_recycle`]: super::Client::workers_recycle
     #[derive(Debug, Clone)]
     pub struct WorkersRecycle<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
     }
 
     impl<'a> WorkersRecycle<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self {
-                __progenitor_client: client,
-            }
+            Self { _client: client }
         }
 
         ///Sends a `POST` request to `/v1/workers/recycle`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self {
-                __progenitor_client,
-            } = self;
-            let __progenitor_url = format!("{}/v1/workers/recycle", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client.client.post(__progenitor_url).build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(__progenitor_response)),
-                _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+            let Self { _client } = self;
+            let _url = format!("{}/v1/workers/recycle", _client.baseurl,);
+            let _request = _client.client.post(_url).build()?;
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(_response)),
+                _ => Err(Error::UnexpectedResponse(_response)),
             }
         }
     }

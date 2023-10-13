@@ -309,14 +309,14 @@ pub mod builder {
     ///[`Client::default_params`]: super::Client::default_params
     #[derive(Debug, Clone)]
     pub struct DefaultParams<'a> {
-        __progenitor_client: &'a super::Client,
+        _client: &'a super::Client,
         body: Result<types::builder::BodyWithDefaults, String>,
     }
 
     impl<'a> DefaultParams<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                __progenitor_client: client,
+                _client: client,
                 body: Ok(types::builder::BodyWithDefaults::default()),
             }
         }
@@ -344,29 +344,17 @@ pub mod builder {
 
         ///Sends a `POST` request to `/`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-            let Self {
-                __progenitor_client,
-                body,
-            } = self;
+            let Self { _client, body } = self;
             let body = body
                 .and_then(std::convert::TryInto::<types::BodyWithDefaults>::try_into)
                 .map_err(Error::InvalidRequest)?;
-            let __progenitor_url = format!("{}/", __progenitor_client.baseurl,);
-            let __progenitor_request = __progenitor_client
-                .client
-                .post(__progenitor_url)
-                .json(&body)
-                .build()?;
-            let __progenitor_result = __progenitor_client
-                .client
-                .execute(__progenitor_request)
-                .await;
-            let __progenitor_response = __progenitor_result?;
-            match __progenitor_response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(__progenitor_response)),
-                _ => Err(Error::ErrorResponse(ResponseValue::stream(
-                    __progenitor_response,
-                ))),
+            let _url = format!("{}/", _client.baseurl,);
+            let _request = _client.client.post(_url).json(&body).build()?;
+            let _result = _client.client.execute(_request).await;
+            let _response = _result?;
+            match _response.status().as_u16() {
+                200..=299 => Ok(ResponseValue::stream(_response)),
+                _ => Err(Error::ErrorResponse(ResponseValue::stream(_response))),
             }
         }
     }

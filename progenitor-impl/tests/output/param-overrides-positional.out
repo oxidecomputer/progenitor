@@ -86,26 +86,22 @@ impl Client {
         key: Option<bool>,
         unique_key: Option<&'a str>,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let __progenitor_url = format!("{}/key", self.baseurl,);
-        let mut __progenitor_query = Vec::with_capacity(2usize);
+        let _url = format!("{}/key", self.baseurl,);
+        let mut _query = Vec::with_capacity(2usize);
         if let Some(v) = &key {
-            __progenitor_query.push(("key", v.to_string()));
+            _query.push(("key", v.to_string()));
         }
 
         if let Some(v) = &unique_key {
-            __progenitor_query.push(("uniqueKey", v.to_string()));
+            _query.push(("uniqueKey", v.to_string()));
         }
 
-        let __progenitor_request = self
-            .client
-            .get(__progenitor_url)
-            .query(&__progenitor_query)
-            .build()?;
-        let __progenitor_result = self.client.execute(__progenitor_request).await;
-        let __progenitor_response = __progenitor_result?;
-        match __progenitor_response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(__progenitor_response)),
-            _ => Err(Error::UnexpectedResponse(__progenitor_response)),
+        let _request = self.client.get(_url).query(&_query).build()?;
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            200u16 => Ok(ResponseValue::empty(_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 }

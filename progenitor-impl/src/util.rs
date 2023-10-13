@@ -123,3 +123,21 @@ pub(crate) fn sanitize(input: &str, case: Case) -> String {
         format!("{}_", out)
     }
 }
+
+/// Given a desired name and a slice of proc_macro2::Ident, generate a new
+/// Ident that is unique from the slice.
+pub(crate) fn unique_ident_from(
+    name: &str,
+    identities: &[proc_macro2::Ident],
+) -> proc_macro2::Ident {
+    let mut name = name.to_string();
+
+    loop {
+        name.insert_str(0, "_");
+        let ident = quote::format_ident!("{}", name);
+
+        if !identities.contains(&ident) {
+            return ident;
+        }
+    }
+}
