@@ -133,11 +133,12 @@ pub(crate) fn unique_ident_from(
     let mut name = name.to_string();
 
     loop {
-        name.insert_str(0, "_");
         let ident = quote::format_ident!("{}", name);
 
         if !identities.contains(&ident) {
             return ident;
         }
+
+        name.insert_str(0, "_");
     }
 }
