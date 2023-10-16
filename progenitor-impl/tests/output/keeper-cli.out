@@ -45,8 +45,11 @@ impl Cli {
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(false)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .value_parser(clap::value_parser!(String))
+                    .help(
+                        "Path to a file that contains the full json body (use \"-\" to read from \
+                         standard input).",
+                    ),
             )
             .arg(
                 clap::Arg::new("json-body-template")
@@ -108,8 +111,11 @@ impl Cli {
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .value_parser(clap::value_parser!(String))
+                    .help(
+                        "Path to a file that contains the full json body (use \"-\" to read from \
+                         standard input).",
+                    ),
             )
             .arg(
                 clap::Arg::new("json-body-template")
@@ -133,8 +139,11 @@ impl Cli {
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .value_parser(clap::value_parser!(String))
+                    .help(
+                        "Path to a file that contains the full json body (use \"-\" to read from \
+                         standard input).",
+                    ),
             )
             .arg(
                 clap::Arg::new("json-body-template")
@@ -170,8 +179,11 @@ impl Cli {
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .value_parser(clap::value_parser!(String))
+                    .help(
+                        "Path to a file that contains the full json body (use \"-\" to read from \
+                         standard input).",
+                    ),
             )
             .arg(
                 clap::Arg::new("json-body-template")
@@ -224,9 +236,17 @@ impl<T: CliOverride> Cli<T> {
             request = request.body_map(|body| body.key(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::EnrolBody>(&body_txt).unwrap();
+        if let Some(value) = matches.get_one::<String>("json-body") {
+            use std::io::Read;
+            let body_input = match value.as_str() {
+                "-" => {
+                    let mut buf = Vec::new();
+                    std::io::stdin().read_to_end(&mut buf).unwrap();
+                    buf
+                }
+                file => std::fs::read(&file).unwrap(),
+            };
+            let body_value = serde_json::from_slice::<types::EnrolBody>(&body_input).unwrap();
             request = request.body(body_value);
         }
 
@@ -298,9 +318,18 @@ impl<T: CliOverride> Cli<T> {
             request = request.body_map(|body| body.exit_status(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::ReportFinishBody>(&body_txt).unwrap();
+        if let Some(value) = matches.get_one::<String>("json-body") {
+            use std::io::Read;
+            let body_input = match value.as_str() {
+                "-" => {
+                    let mut buf = Vec::new();
+                    std::io::stdin().read_to_end(&mut buf).unwrap();
+                    buf
+                }
+                file => std::fs::read(&file).unwrap(),
+            };
+            let body_value =
+                serde_json::from_slice::<types::ReportFinishBody>(&body_input).unwrap();
             request = request.body(body_value);
         }
 
@@ -324,9 +353,18 @@ impl<T: CliOverride> Cli<T> {
             request = request.authorization(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::ReportOutputBody>(&body_txt).unwrap();
+        if let Some(value) = matches.get_one::<String>("json-body") {
+            use std::io::Read;
+            let body_input = match value.as_str() {
+                "-" => {
+                    let mut buf = Vec::new();
+                    std::io::stdin().read_to_end(&mut buf).unwrap();
+                    buf
+                }
+                file => std::fs::read(&file).unwrap(),
+            };
+            let body_value =
+                serde_json::from_slice::<types::ReportOutputBody>(&body_input).unwrap();
             request = request.body(body_value);
         }
 
@@ -359,9 +397,17 @@ impl<T: CliOverride> Cli<T> {
             request = request.body_map(|body| body.start_time(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::ReportStartBody>(&body_txt).unwrap();
+        if let Some(value) = matches.get_one::<String>("json-body") {
+            use std::io::Read;
+            let body_input = match value.as_str() {
+                "-" => {
+                    let mut buf = Vec::new();
+                    std::io::stdin().read_to_end(&mut buf).unwrap();
+                    buf
+                }
+                file => std::fs::read(&file).unwrap(),
+            };
+            let body_value = serde_json::from_slice::<types::ReportStartBody>(&body_input).unwrap();
             request = request.body(body_value);
         }
 

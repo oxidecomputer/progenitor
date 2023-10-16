@@ -440,7 +440,7 @@ impl Generator {
             CliBodyArg::Optional => Some(false),
         })
         .map(|required| {
-            let help = "Path to a file that contains the full json body.";
+            let help = r#"Path to a file that contains the full json body (use "-" to read from standard input)."#;
 
             quote! {
                 .arg(
@@ -450,7 +450,7 @@ impl Generator {
                         // Required if we can't turn the body into individual
                         // parameters.
                         .required(#required)
-                        .value_parser(clap::value_parser!(std::path::PathBuf))
+                        .value_parser(clap::value_parser!(String))
                         .help(#help)
                 )
                 .arg(
@@ -477,12 +477,21 @@ impl Generator {
             let body_type_ident = body_type.ident();
             quote! {
                 if let Some(value) =
-                    matches.get_one::<std::path::PathBuf>("json-body")
+                    matches.get_one::<String>("json-body")
                 {
-                    let body_txt = std::fs::read_to_string(value).unwrap();
+                    use std::io::Read;
+                    let body_input = match value.as_str() {
+                        "-" => {
+                            let mut buf = Vec::new();
+                            std::io::stdin().read_to_end(&mut buf).unwrap();
+                            buf
+                        }
+                        file => std::fs::read(&file).unwrap()
+                    };
+
                     let body_value =
-                        serde_json::from_str::<#body_type_ident>(
-                            &body_txt,
+                        serde_json::from_slice::<#body_type_ident>(
+                            &body_input,
                         )
                         .unwrap();
                     request = request.body(body_value);
