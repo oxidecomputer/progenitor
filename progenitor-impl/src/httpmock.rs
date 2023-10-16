@@ -8,8 +8,9 @@ use quote::{format_ident, quote, ToTokens};
 
 use crate::{
     method::{
-        HttpMethod, OperationParameter, OperationParameterKind,
-        OperationParameterType, OperationResponse, OperationResponseStatus,
+        BodyContentType, HttpMethod, OperationParameter,
+        OperationParameterKind, OperationParameterType, OperationResponse,
+        OperationResponseStatus,
     },
     to_schema::ToSchema,
     util::{sanitize, Case},
@@ -165,8 +166,18 @@ impl Generator {
                         .get_type(arg_type_id)
                         .unwrap()
                         .parameter_ident(),
-                    OperationParameterType::RawBody => quote! {
-                        serde_json::Value
+                    OperationParameterType::RawBody => match kind {
+                        OperationParameterKind::Body(
+                            BodyContentType::OctetStream,
+                        ) => quote! {
+                            serde_json::Value
+                        },
+                        OperationParameterKind::Body(
+                            BodyContentType::Text(_),
+                        ) => quote! {
+                            String
+                        },
+                        _ => unreachable!(),
                     },
                 };
 
@@ -229,15 +240,25 @@ impl Generator {
                         };
                     }
                     OperationParameterKind::Header(_) => quote! { todo!() },
-                    OperationParameterKind::Body(_) => match typ {
-                        OperationParameterType::Type(_) => quote! {
-                            Self(self.0.json_body_obj(value))
+                    OperationParameterKind::Body(body_content_type) => {
+                        match typ {
+                            OperationParameterType::Type(_) => quote! {
+                                Self(self.0.json_body_obj(value))
 
-                        },
-                        OperationParameterType::RawBody => quote! {
-                            Self(self.0.json_body(value))
-                        },
-                    },
+                            },
+                            OperationParameterType::RawBody => {
+                                match body_content_type {
+                                    BodyContentType::OctetStream => quote! {
+                                        Self(self.0.json_body(value))
+                                    },
+                                    BodyContentType::Text(_) => quote! {
+                                        Self(self.0.body(value))
+                                    },
+                                    _ => unreachable!(),
+                                }
+                            }
+                        }
+                    }
                 };
                 quote! {
                     pub fn #name_ident(self, value: #arg_type_name) -> Self {

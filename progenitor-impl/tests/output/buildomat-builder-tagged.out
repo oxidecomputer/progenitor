@@ -1754,6 +1754,18 @@ impl Client {
         builder::Whoami::new(self)
     }
 
+    ///Sends a `PUT` request to `/v1/whoami/name`
+    ///
+    ///```ignore
+    /// let response = client.whoami_put_name()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn whoami_put_name(&self) -> builder::WhoamiPutName {
+        builder::WhoamiPutName::new(self)
+    }
+
     ///Sends a `POST` request to `/v1/worker/bootstrap`
     ///
     ///```ignore
@@ -2350,6 +2362,57 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::whoami_put_name`]
+    ///
+    ///[`Client::whoami_put_name`]: super::Client::whoami_put_name
+    #[derive(Debug)]
+    pub struct WhoamiPutName<'a> {
+        client: &'a super::Client,
+        body: Result<reqwest::Body, String>,
+    }
+
+    impl<'a> WhoamiPutName<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client,
+                body: Err("body was not initialized".to_string()),
+            }
+        }
+
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<String>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for body failed".to_string())
+                .map(|v| v.into());
+            self
+        }
+
+        ///Sends a `PUT` request to `/v1/whoami/name`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client, body } = self;
+            let body = body.map_err(Error::InvalidRequest)?;
+            let url = format!("{}/v1/whoami/name", client.baseurl,);
+            let request = client
+                .client
+                .put(url)
+                .header(
+                    reqwest::header::CONTENT_TYPE,
+                    reqwest::header::HeaderValue::from_static("text/plain"),
+                )
+                .body(body)
+                .build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(response)),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
