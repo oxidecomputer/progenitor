@@ -2379,7 +2379,7 @@ pub mod builder {
     impl<'a> WhoamiPutName<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 body: Err("body was not initialized".to_string()),
             }
         }
