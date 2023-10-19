@@ -205,17 +205,10 @@ impl<T: CliOverride> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<String>("json-body") {
-            use std::io::Read;
-            let body_input = match value.as_str() {
-                "-" => {
-                    let mut buf = Vec::new();
-                    std::io::stdin().read_to_end(&mut buf).unwrap();
-                    buf
-                }
-                file => std::fs::read(&file).unwrap(),
+            let body_value: types::InstanceEnsureRequest = match value.as_str() {
+                "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
             };
-            let body_value =
-                serde_json::from_slice::<types::InstanceEnsureRequest>(&body_input).unwrap();
             request = request.body(body_value);
         }
 
@@ -267,17 +260,10 @@ impl<T: CliOverride> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<String>("json-body") {
-            use std::io::Read;
-            let body_input = match value.as_str() {
-                "-" => {
-                    let mut buf = Vec::new();
-                    std::io::stdin().read_to_end(&mut buf).unwrap();
-                    buf
-                }
-                file => std::fs::read(&file).unwrap(),
+            let body_value: types::InstanceMigrateStatusRequest = match value.as_str() {
+                "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
             };
-            let body_value =
-                serde_json::from_slice::<types::InstanceMigrateStatusRequest>(&body_input).unwrap();
             request = request.body(body_value);
         }
 
@@ -314,17 +300,10 @@ impl<T: CliOverride> Cli<T> {
     pub async fn execute_instance_state_put(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.instance_state_put();
         if let Some(value) = matches.get_one::<String>("json-body") {
-            use std::io::Read;
-            let body_input = match value.as_str() {
-                "-" => {
-                    let mut buf = Vec::new();
-                    std::io::stdin().read_to_end(&mut buf).unwrap();
-                    buf
-                }
-                file => std::fs::read(&file).unwrap(),
+            let body_value: types::InstanceStateRequested = match value.as_str() {
+                "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
             };
-            let body_value =
-                serde_json::from_slice::<types::InstanceStateRequested>(&body_input).unwrap();
             request = request.body(body_value);
         }
 
@@ -349,17 +328,10 @@ impl<T: CliOverride> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<String>("json-body") {
-            use std::io::Read;
-            let body_input = match value.as_str() {
-                "-" => {
-                    let mut buf = Vec::new();
-                    std::io::stdin().read_to_end(&mut buf).unwrap();
-                    buf
-                }
-                file => std::fs::read(&file).unwrap(),
+            let body_value: types::InstanceStateMonitorRequest = match value.as_str() {
+                "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
             };
-            let body_value =
-                serde_json::from_slice::<types::InstanceStateMonitorRequest>(&body_input).unwrap();
             request = request.body(body_value);
         }
 

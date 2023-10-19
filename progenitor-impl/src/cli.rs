@@ -479,21 +479,11 @@ impl Generator {
                 if let Some(value) =
                     matches.get_one::<String>("json-body")
                 {
-                    use std::io::Read;
-                    let body_input = match value.as_str() {
-                        "-" => {
-                            let mut buf = Vec::new();
-                            std::io::stdin().read_to_end(&mut buf).unwrap();
-                            buf
-                        }
-                        file => std::fs::read(&file).unwrap()
+                    let body_value: #body_type_ident = match value.as_str() {
+                        "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                        file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
                     };
 
-                    let body_value =
-                        serde_json::from_slice::<#body_type_ident>(
-                            &body_input,
-                        )
-                        .unwrap();
                     request = request.body(body_value);
                 }
             }
