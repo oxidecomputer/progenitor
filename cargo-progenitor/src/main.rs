@@ -234,7 +234,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", dependency_versions.get("bytes").unwrap()),
         format!("futures-core = \"{}\"", dependency_versions.get("futures-core").unwrap()),
-        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", dependency_versions.get("reqwest").unwrap()),
+        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\", \"multipart\"] }}", dependency_versions.get("reqwest").unwrap()),
         format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", dependency_versions.get("serde").unwrap()),
         format!("serde_urlencoded = \"{}\"", dependency_versions.get("serde_urlencoded").unwrap()),
     ];
