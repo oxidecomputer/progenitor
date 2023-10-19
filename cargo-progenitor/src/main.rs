@@ -94,8 +94,8 @@ impl From<TagArg> for TagStyle {
 
 fn reformat_code(input: String) -> String {
     let config = rustfmt_wrapper::config::Config {
-        normalize_doc_attributes: Some(true),
-        wrap_comments: Some(true),
+        //normalize_doc_attributes: Some(true),
+        //wrap_comments: Some(true),
         ..Default::default()
     };
     space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap())
