@@ -255,7 +255,7 @@ dependencies = [
  "built",
  "clap",
  "env_logger",
- "openapiv3",
+ "openapiv3 2.0.0-rc.0",
  "progenitor",
  "progenitor-client",
  "progenitor-impl",
@@ -476,7 +476,7 @@ dependencies = [
  "hyper",
  "indexmap 2.0.2",
  "multer",
- "openapiv3",
+ "openapiv3 1.0.3",
  "paste",
  "percent-encoding",
  "proc-macro2",
@@ -1265,6 +1265,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "openapiv3"
+version = "2.0.0-rc.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c282a84bd67f641465bd16b1ba041fdf300ebec6f663f1b37d17d3403387eab1"
+dependencies = [
+ "indexmap 2.0.2",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "openssl"
 version = "0.10.55"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1439,7 +1450,7 @@ dependencies = [
  "http",
  "hyper",
  "indexmap 2.0.2",
- "openapiv3",
+ "openapiv3 2.0.0-rc.0",
  "proc-macro2",
  "quote",
  "regex",
@@ -1458,7 +1469,7 @@ dependencies = [
 name = "progenitor-macro"
 version = "0.4.0"
 dependencies = [
- "openapiv3",
+ "openapiv3 2.0.0-rc.0",
  "proc-macro2",
  "progenitor-impl",
  "quote",
