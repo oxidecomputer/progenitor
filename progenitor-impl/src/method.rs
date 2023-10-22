@@ -441,9 +441,7 @@ impl Generator {
             self.uses_websockets = true;
         }
 
-        if let Some(body_param) = self.get_body_param(operation, components)? {
-            params.push(body_param);
-        }
+        params.extend(self.get_body_params(operation, components)?);
 
         let tmp = crate::template::parse(path)?;
         let names = tmp.names();
@@ -1003,18 +1001,11 @@ impl Generator {
                     OperationParameterKind::Body(
                         BodyContentType::FormData
                     ),
-                    OperationParameterType::Type(typ),
+                    OperationParameterType::Type(_),
                 ) => {
-                    let params = &method.params.iter().filter_map(|param| match &param.kind{
-                        OperationParameterKind::Body(typ1) => { Some((typ, typ1))},
-                        _ => None,
-                    } ).collect::<Vec<_>>();
-                    // todo: somehow get hold of form schema and pass that
-                    // todo: in this, recognize binary format of string and
-                    //  interpret them as files respectively reqwest::multipart::Part::stream
-                    dbg!(params);
+                    // todo: generate form
                     Some(quote! {
-                    .form_multipart(&body)?
+                    .multipart(form)
                 })},
                 (OperationParameterKind::Body(_), _) => {
                     unreachable!("invalid body kind/type combination")
@@ -1023,7 +1014,7 @@ impl Generator {
             }
         });
         // ... and there can be at most one body.
-        assert!(body_func.clone().count() <= 1);
+        //assert!(body_func.clone().count() <= 1);
 
         let (success_response_items, response_type) = self.extract_responses(
             method,
@@ -2122,19 +2113,19 @@ impl Generator {
         impl_body
     }
 
-    fn get_body_param(
+    fn get_body_params(
         &mut self,
         operation: &openapiv3::Operation,
         components: &Option<Components>,
-    ) -> Result<Option<OperationParameter>> {
+    ) -> Result<Vec<OperationParameter>> {
         let body = match &operation.request_body {
             Some(body) => body.item(components)?,
-            None => return Ok(None),
+            None => return Ok(vec![]),
         };
 
         let (content_str, media_type) =
             match (body.content.first(), body.content.len()) {
-                (None, _) => return Ok(None),
+                (None, _) => return Ok(vec![]),
                 (Some(first), 1) => first,
                 (_, n) => todo!(
                     "more media types than expected for {}: {}",
@@ -2225,9 +2216,7 @@ impl Generator {
                 }?;
                 OperationParameterType::RawBody
             }
-            BodyContentType::Json
-            | BodyContentType::FormUrlencoded
-            | BodyContentType::FormData => {
+            BodyContentType::Json | BodyContentType::FormUrlencoded => {
                 // TODO it would be legal to have the encoding field set for
                 // application/x-www-form-urlencoded content, but I'm not sure
                 // how to interpret the values.
@@ -2246,15 +2235,80 @@ impl Generator {
                     .add_type_with_name(&schema.to_schema(), Some(name))?;
                 OperationParameterType::Type(typ)
             }
+            BodyContentType::FormData => {
+                let name = sanitize(
+                    &format!(
+                        "{}-body",
+                        operation.operation_id.as_ref().unwrap(),
+                    ),
+                    Case::Pascal,
+                );
+                let schema = schema.to_schema();
+                let typ =
+                    self.type_space.add_type_with_name(&schema, Some(name))?;
+                OperationParameterType::Type(typ)
+            }
         };
 
-        Ok(Some(OperationParameter {
+        let mut body_params = vec![];
+        if let BodyContentType::FormData = content_type {
+            match &schema.item(components)?.schema_kind {
+                openapiv3::SchemaKind::Type(
+                    openapiv3::Type::Object(obj_type),
+                ) => obj_type
+                    .properties
+                    .iter()
+                    .filter_map(|(key, item)| match item {
+                        ReferenceOr::Item(i) => {
+                            match (&i.schema_data, &i.schema_kind) {
+                                (openapiv3::SchemaData {
+                                        nullable: false,
+                                        discriminator: None,
+                                        default: None,
+                                        description,
+                                        ..
+                                } ,
+                             openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                    openapiv3::StringType {
+                                        format:
+                                            openapiv3::VariantOrUnknownOrEmpty::Item(
+                                                openapiv3::StringFormat::Binary,
+                                            ),
+                                        pattern: None,
+                                        enumeration,
+                                        min_length: None,
+                                        max_length: None,
+                                    },
+                                )),
+                                ) if enumeration.is_empty() => {
+                                    Some(OperationParameter {
+                                                name: key.to_string(),
+                                                api_name: key.to_string(),
+                                                description: description.clone(),
+                                                // todo: own Type and FormData Kind
+                                                typ: OperationParameterType::RawBody,
+                                                kind: OperationParameterKind::Body(BodyContentType::OctetStream),
+                                            })
+                                    }
+                                ,
+                                _ => None,
+                            }
+                        }
+                        _ => None,
+                    }).
+                    for_each(|p| body_params.push(p)),
+                _ => {},
+            }
+        };
+        let body_param = OperationParameter {
             name: "body".to_string(),
             api_name: "body".to_string(),
             description: body.description.clone(),
             typ,
             kind: OperationParameterKind::Body(content_type),
-        }))
+        };
+        body_params.push(body_param);
+        Ok(body_params)
     }
 }
 
@@ -2416,9 +2470,7 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                 (
                     OperationParameterKind::Body(_),
                     OperationParameterKind::Body(_),
-                ) => {
-                    panic!("should only be one body")
-                }
+                ) => Ordering::Less,
 
                 // Header params are in lexicographic order.
                 (

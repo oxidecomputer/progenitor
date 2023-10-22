@@ -397,10 +397,6 @@ pub trait RequestBuilderExt<E> {
         self,
         body: &T,
     ) -> Result<RequestBuilder, Error<E>>;
-    fn form_multipart<T: Serialize + ?Sized>(
-        self,
-        body: &T,
-    ) -> Result<RequestBuilder, Error<E>>;
 }
 
 impl<E> RequestBuilderExt<E> for RequestBuilder {
@@ -408,24 +404,6 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
         self,
         body: &T,
     ) -> Result<Self, Error<E>> {
-        Ok(self
-            .header(
-                reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static(
-                    "application/x-www-form-urlencoded",
-                ),
-            )
-            .body(serde_urlencoded::to_string(body).map_err(|_| {
-                Error::InvalidRequest("failed to serialize body".to_string())
-            })?))
-    }
-
-    fn form_multipart<T: Serialize + ?Sized>(
-        self,
-        body: &T,
-    ) -> Result<RequestBuilder, Error<E>> {
-        let mut local_var_form = reqwest::multipart::Form::new();
-        // todo: fill form and self.multipart it
         Ok(self
             .header(
                 reqwest::header::CONTENT_TYPE,

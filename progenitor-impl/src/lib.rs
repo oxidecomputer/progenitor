@@ -46,7 +46,7 @@ pub struct Generator {
     uses_websockets: bool,
 }
 
-#[derive(Default, Clone)]
+#[derive(Clone)]
 pub struct GenerationSettings {
     interface: InterfaceStyle,
     tag: TagStyle,
@@ -58,6 +58,50 @@ pub struct GenerationSettings {
     patch: HashMap<String, TypePatch>,
     replace: HashMap<String, (String, Vec<TypeImpl>)>,
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
+}
+
+impl Default for GenerationSettings {
+    fn default() -> Self {
+        // set Type from String to meta data for form body parts
+        use schemars::schema::{InstanceType, SchemaObject};
+        let bin_string = SchemaObject {
+            instance_type: Some(schemars::schema::SingleOrVec::Single(
+                Box::new(InstanceType::String),
+            )),
+            format: Some("binary".to_string()),
+            ..SchemaObject::default()
+        };
+        // todo: best place to create default conversion, or typify?
+        // todo: declare PartMeta struct and TypeImpls in progenitor_client
+        /*
+        use schemars::{schema_for, JsonSchema};
+        use serde::Serialize;
+        #[derive(JsonSchema, Serialize)]
+        struct PartMeta {
+            #[serde(default)]
+            file_name: Option<String>,
+            #[serde(default)]
+            mime_str: Option<String>,
+        }
+        let bin_schema = schema_for!(PartMeta).schema.into();
+        let bin_typ = self
+            .type_space
+            .add_type_with_name(&bin_schema, Some("PartMeta".to_string()))?;
+        */
+        let convert =
+            (bin_string, "PartMeta".to_string(), vec![TypeImpl::Default]);
+        Self {
+            interface: InterfaceStyle::default(),
+            tag: TagStyle::default(),
+            inner_type: None,
+            pre_hook: None,
+            post_hook: None,
+            extra_derives: Vec::default(),
+            patch: HashMap::default(),
+            replace: HashMap::default(),
+            convert: vec![convert],
+        }
+    }
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
