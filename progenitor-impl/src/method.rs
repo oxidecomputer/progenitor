@@ -2368,8 +2368,8 @@ impl Generator {
                 _ => None,
             })
             .for_each(|(required, api_name)| {
+                form_data_names.insert(api_name.clone());
                 let param_ident = format_ident!("{}", api_name);
-                form_data_names.insert(param_ident.clone());
                 if required {
                     form_parts.push(quote! { .part(#api_name, #param_ident) });
                 } else {
@@ -2388,46 +2388,35 @@ impl Generator {
             let typify::TypeDetails::Struct(tstru) = td else {
                 unreachable!()
             };
-            tstru
+            let body_parts = tstru
                 .properties()
                 .filter_map(|(prop_name, prop_id)| {
-                    self.get_type_space()
-                        .get_type(&prop_id)
-                        .ok()
-                        .map(|prop_typ| (prop_name, prop_typ))
+                    if form_data_names.contains(prop_name) {
+                        None
+                    }
+                    else
+                    {
+                        self.get_type_space()
+                            .get_type(&prop_id)
+                            .ok()
+                            .map(|_| prop_name)
+                    }
                 })
-                .map(|(prop_name, prop_typ)| {
-                    // todo: this is not sufficient and correct to determine optional.
-                    // Determining optional would need access to StructPropertyState::Optional
-                    // or has_default() for that matter. This is used for
-                    // serde skip_serializing_if annotations as well.
-                    let required = !matches!(
-                        prop_typ.details(),
-                        typify::TypeDetails::Option(_)
-                            | typify::TypeDetails::Unit
-                    );
-                    (required, prop_name)
-                })
-                .for_each(|(required, prop_name)| {
-                    // todo: .to_string() serialization is what most servers will expect
-                    // and work with, but fails for nested types which some servers
-                    // suggest in their schema.
-                    let body_ident = format_ident!("body");
-                    let param_ident = format_ident!("{}", prop_name);
-                    if !form_data_names.contains(&param_ident) {
-                        if required {
-                            form_parts.push(quote! { .text(#prop_name, #body_ident.#param_ident.to_string()) });
-                        } else {
-                            form_parts_optional.push(quote! {
-                                if let Some(v) = &#body_ident.#param_ident {
-                                    #form_ident = #form_ident.text(#prop_name, v.to_string());
-                                };
-                            });
+                .map(|prop_name| {
+                    // Stringish serialization is what most servers expect,
+                    // for nested types we also assume they want those json
+                    // formatted. A customizable solution would be possible
+                    // with a custom Serializer.
+                    quote! {
+                        if let Some(v) =
+                            body.get(#prop_name).map(serde_json::to_string)
+                        {
+                            let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+                            #form_ident = #form_ident.text(#prop_name, v);
                         };
-                    } else {
-                        dbg!(("DUP", prop_name, required));
-                    };
+                    }
                 });
+            form_parts_optional.extend(body_parts);
         }
 
         // only build if any param or at least a body without additional parts
@@ -2442,7 +2431,17 @@ impl Generator {
             };
             form_parts.insert(
                 0,
-                quote! {let #mutt #form_ident = reqwest::multipart::Form::new()},
+                quote! {
+                    // prepare body
+                    let body = serde_json::to_value(body)
+                        // todo: impl From serde::Error?
+                        .map_err(|e| Error::InvalidRequest(e.to_string()))?
+                        .as_object()
+                        .cloned()
+                        .ok_or_else(|| Error::InvalidRequest("Serializing body failed.".to_string()))?;
+                    // prepare form
+                    let #mutt #form_ident = reqwest::multipart::Form::new()
+                },
             );
             form_parts.push(quote! {;});
             form_parts.extend(form_parts_optional);
