@@ -964,8 +964,8 @@ impl Generator {
             let #url_ident = #url_path;
         };
 
-        // Generate code to generate a form
-        let form_parts = get_form_builder(&method.params, &form_ident);
+        // Generate code to generate a form.
+        let form_build = self.get_form_builder(&method.params, &form_ident)?;
 
         // Generate code to handle the body param.
         let body_func = method.params.iter().filter_map(|param| {
@@ -1187,7 +1187,7 @@ impl Generator {
 
             #headers_build
 
-            #(#form_parts)*
+            #(#form_build)*
 
             let #request_ident = #client.client
                 . #method_func (#url_ident)
@@ -2336,6 +2336,120 @@ impl Generator {
 
         Ok(body_params)
     }
+
+    fn get_form_builder(
+        &self,
+        params: &[OperationParameter],
+        form_ident: &proc_macro2::Ident,
+    ) -> Result<Vec<TokenStream>> {
+        let mut form_parts = vec![];
+        let mut form_parts_optional = vec![];
+        let mut build_form_type_id = None;
+        let mut form_data_names = std::collections::HashSet::with_capacity(1);
+
+        params
+            .iter()
+            .filter_map(|param| match (&param.kind, &param.typ) {
+                (
+                    OperationParameterKind::Body(BodyContentType::FormData(
+                        required,
+                    )),
+                    OperationParameterType::FormPart,
+                ) => Some((*required, &param.api_name)),
+                (
+                    OperationParameterKind::Body(BodyContentType::FormData(
+                        true,
+                    )),
+                    OperationParameterType::Type(type_id),
+                ) => {
+                    build_form_type_id = Some(type_id);
+                    None
+                }
+                _ => None,
+            })
+            .for_each(|(required, api_name)| {
+                let param_ident = format_ident!("{}", api_name);
+                form_data_names.insert(param_ident.clone());
+                if required {
+                    form_parts.push(quote! { .part(#api_name, #param_ident) });
+                } else {
+                    form_parts_optional.push(quote! {
+                        if let Some(#param_ident) = #param_ident {
+                            #form_ident = #form_ident.part(#api_name, #param_ident);
+                        };
+                    });
+                };
+            });
+
+        // set params from form
+        if let Some(type_id) = build_form_type_id {
+            let typ = self.get_type_space().get_type(type_id)?;
+            let td = typ.details();
+            let typify::TypeDetails::Struct(tstru) = td else {
+                unreachable!()
+            };
+            tstru
+                .properties()
+                .filter_map(|(prop_name, prop_id)| {
+                    self.get_type_space()
+                        .get_type(&prop_id)
+                        .ok()
+                        .map(|prop_typ| (prop_name, prop_typ))
+                })
+                .map(|(prop_name, prop_typ)| {
+                    // todo: this is not sufficient and correct to determine optional.
+                    // Determining optional would need access to StructPropertyState::Optional
+                    // or has_default() for that matter. This is used for
+                    // serde skip_serializing_if annotations as well.
+                    let required = !matches!(
+                        prop_typ.details(),
+                        typify::TypeDetails::Option(_)
+                            | typify::TypeDetails::Unit
+                    );
+                    (required, prop_name)
+                })
+                .for_each(|(required, prop_name)| {
+                    // todo: .to_string() serialization is what most servers will expect
+                    // and work with, but fails for nested types which some servers
+                    // suggest in their schema.
+                    let body_ident = format_ident!("body");
+                    let param_ident = format_ident!("{}", prop_name);
+                    if !form_data_names.contains(&param_ident) {
+                        if required {
+                            form_parts.push(quote! { .text(#prop_name, #body_ident.#param_ident.to_string()) });
+                        } else {
+                            form_parts_optional.push(quote! {
+                                if let Some(v) = &#body_ident.#param_ident {
+                                    #form_ident = #form_ident.text(#prop_name, v.to_string());
+                                };
+                            });
+                        };
+                    } else {
+                        dbg!(("DUP", prop_name, required));
+                    };
+                });
+        }
+
+        // only build if any param or at least a body without additional parts
+        if form_parts.len() > 0
+            || form_parts_optional.len() > 0
+            || build_form_type_id.is_some()
+        {
+            let mutt = if form_parts_optional.len() > 0 {
+                quote! {mut}
+            } else {
+                quote! {}
+            };
+            form_parts.insert(
+                0,
+                quote! {let #mutt #form_ident = reqwest::multipart::Form::new()},
+            );
+            form_parts.push(quote! {;});
+            form_parts.extend(form_parts_optional);
+        };
+
+        Ok(form_parts)
+    }
 }
 
 fn get_form_data_params(
@@ -2389,68 +2503,6 @@ fn get_form_data_params(
                 kind,
             }
         })
-}
-
-fn get_form_builder(
-    params: &[OperationParameter],
-    form_ident: &proc_macro2::Ident,
-) -> Vec<TokenStream> {
-    let mut form_parts = vec![];
-    let mut form_parts_optional = vec![];
-    let mut build_form = false;
-
-    params
-        .iter()
-        .filter_map(|param| match (&param.kind, &param.typ) {
-            (
-                OperationParameterKind::Body(BodyContentType::FormData(
-                    required,
-                )),
-                OperationParameterType::FormPart,
-            ) => {
-                let param_ident = format_ident!("{}", param.api_name.as_str());
-                let name = param.api_name.clone();
-                Some((*required, name, param_ident))
-            }
-            (
-                OperationParameterKind::Body(BodyContentType::FormData(true)),
-                OperationParameterType::Type(_),
-            ) => {
-                build_form = true;
-                None
-            }
-            _ => None,
-        })
-        .for_each(|(required, name, param_ident)| {
-            if required {
-                form_parts.push(quote! { .part(#name, #param_ident) });
-            } else {
-                form_parts_optional.push(quote! {
-                    if let Some(#param_ident) = #param_ident {
-                        #form_ident = #form_ident.part(#name, #param_ident);
-                    };
-                });
-            };
-        });
-
-    // only build if any param or at least a body without additional
-    // parts
-    if form_parts.len() > 0 || form_parts_optional.len() > 0 || build_form {
-        let mutt = if form_parts_optional.len() > 0 {
-            quote! {mut}
-        } else {
-            quote! {}
-        };
-        form_parts.insert(
-            0,
-            // todo: create form from body
-            quote! {let #mutt #form_ident = reqwest::multipart::Form::new()},
-        );
-        form_parts.push(quote! {;});
-        form_parts.extend(form_parts_optional);
-    };
-
-    form_parts
 }
 
 fn make_doc_comment(method: &OperationMethod) -> String {
