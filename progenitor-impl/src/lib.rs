@@ -362,6 +362,8 @@ impl Generator {
             use progenitor_client::{encode_path, RequestBuilderExt};
             #[allow(unused_imports)]
             use reqwest::header::{HeaderMap, HeaderValue};
+            #[allow(unused_imports)]
+            use reqwest::multipart::Part;
 
             pub mod types {
                 use serde::{Deserialize, Serialize};

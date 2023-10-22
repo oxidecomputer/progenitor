@@ -408,6 +408,14 @@ impl Generator {
                 OperationParameterType::Type(body_type_id) => {
                     Some(body_type_id)
                 }
+                OperationParameterType::FormPart => {
+                    let content_type = &param.kind;
+                    eprintln!(
+                        "todo: add --{}-file parameter for {content_type:?})",
+                        param.name
+                    );
+                    None
+                }
             });
 
         if let Some(body_type_id) = maybe_body_type_id {

@@ -106,6 +106,7 @@ pub struct OperationParameter {
 pub enum OperationParameterType {
     Type(TypeId),
     RawBody,
+    FormPart,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -123,6 +124,9 @@ impl OperationParameterKind {
             OperationParameterKind::Path => true,
             OperationParameterKind::Query(required) => *required,
             OperationParameterKind::Header(required) => *required,
+            OperationParameterKind::Body(BodyContentType::FormData(
+                required,
+            )) => *required,
             // TODO may be optional
             OperationParameterKind::Body(_) => true,
         }
@@ -138,7 +142,7 @@ pub enum BodyContentType {
     Json,
     FormUrlencoded,
     Text(String),
-    FormData,
+    FormData(bool),
 }
 
 impl FromStr for BodyContentType {
@@ -153,7 +157,7 @@ impl FromStr for BodyContentType {
             "text/plain" | "text/x-markdown" => {
                 Ok(Self::Text(String::from(&s[..offset])))
             }
-            "multipart/form-data" => Ok(Self::FormData),
+            "multipart/form-data" => Ok(Self::FormData(true)),
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
                 s
@@ -171,7 +175,7 @@ impl fmt::Display for BodyContentType {
             Self::Json => "application/json",
             Self::FormUrlencoded => "application/x-www-form-urlencoded",
             Self::Text(typ) => &typ,
-            Self::FormData => "multipart/form-data",
+            Self::FormData(_) => "multipart/form-data",
         })
     }
 }
@@ -634,6 +638,12 @@ impl Generator {
                         }
                     }
                     (OperationParameterType::RawBody, true) => unreachable!(),
+                    (OperationParameterType::FormPart, false) => {
+                        quote! { Part }
+                    }
+                    (OperationParameterType::FormPart, true) => {
+                        quote! { Option<Part> }
+                    }
                 };
                 quote! {
                     #name: #typ
@@ -999,7 +1009,7 @@ impl Generator {
                 }),
                 (
                     OperationParameterKind::Body(
-                        BodyContentType::FormData
+                        BodyContentType::FormData(true)
                     ),
                     OperationParameterType::Type(_),
                 ) => {
@@ -1007,6 +1017,12 @@ impl Generator {
                     Some(quote! {
                     .multipart(form)
                 })},
+                (
+                    OperationParameterKind::Body(
+                        BodyContentType::FormData(_)
+                    ),
+                    OperationParameterType::FormPart,
+                ) => None,  // FormData parts are handled separately
                 (OperationParameterKind::Body(_), _) => {
                     unreachable!("invalid body kind/type combination")
                 }
@@ -1014,7 +1030,7 @@ impl Generator {
             }
         });
         // ... and there can be at most one body.
-        //assert!(body_func.clone().count() <= 1);
+        assert!(body_func.clone().count() <= 1);
 
         let (success_response_items, response_type) = self.extract_responses(
             method,
@@ -1528,6 +1544,22 @@ impl Generator {
                     cloneable = false;
                     Ok(quote! { Result<reqwest::Body, String> })
                 }
+                OperationParameterType::FormPart => {
+                    cloneable = false;
+                    if let OperationParameterKind::Body(
+                        BodyContentType::FormData(required),
+                    ) = param.kind
+                    {
+                        // todo: probably incorrect, to what does this translate?
+                        if required {
+                            Ok(quote! { reqwest::multipart::Part })
+                        } else {
+                            Ok(quote! { Option<reqwest::multipart::Part> })
+                        }
+                    } else {
+                        unreachable!()
+                    }
+                }
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -1560,6 +1592,24 @@ impl Generator {
                     let err_msg = format!("{} was not initialized", param.name);
                     Ok(quote! { Err(#err_msg.to_string()) })
                 }
+                OperationParameterType::FormPart => {
+                    if let OperationParameterKind::Body(
+                        BodyContentType::FormData(required),
+                    ) = param.kind
+                    {
+                        // todo: probably incorrect, to what does this translate?
+                        // Result or not?
+                        if required {
+                            let err_msg =
+                                format!("{} was not initialized", param.name);
+                            Ok(quote! { Err(#err_msg.to_string()) })
+                        } else {
+                            Ok(quote! { Ok(None) })
+                        }
+                    } else {
+                        unreachable!()
+                    }
+                }
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -1584,6 +1634,7 @@ impl Generator {
                     }
                 }
                 OperationParameterType::RawBody => Ok(quote! {}),
+                OperationParameterType::FormPart => Ok(quote! {}),
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -1651,6 +1702,7 @@ impl Generator {
                             // a `body_map()` method that operates on the
                             // builder itself.
                             (Some(builder_name), false) => {
+                                // todo: rm for ...Kind::FormData
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident();
                                 let err_msg = format!(
@@ -1719,6 +1771,30 @@ impl Generator {
                         },
                         _ => unreachable!(),
                     }
+                    OperationParameterType::FormPart => match &param.kind {
+                        OperationParameterKind::Body(BodyContentType::FormData(required)) => {
+                            if *required {
+                                Ok(quote! {
+                                    pub fn #param_name(mut self, value: P) -> Self
+                                        where P: reqwest::multipart::Part
+                                    {
+                                        self.#param_name = value;
+                                        self
+                                    }
+                                })
+                            } else {
+                                Ok(quote! {
+                                    pub fn #param_name(mut self, value: Option<P>) -> Self
+                                        where P: reqwest::multipart::Part
+                                    {
+                                        self.#param_name = value;
+                                        self
+                                    }
+                                })
+                            }
+                        },
+                        _ => unreachable!(),
+                    },
                 }
             })
             .collect::<Result<Vec<_>>>()?;
@@ -2235,7 +2311,7 @@ impl Generator {
                     .add_type_with_name(&schema.to_schema(), Some(name))?;
                 OperationParameterType::Type(typ)
             }
-            BodyContentType::FormData => {
+            BodyContentType::FormData(_) => {
                 let name = sanitize(
                     &format!(
                         "{}-body",
@@ -2251,7 +2327,8 @@ impl Generator {
         };
 
         let mut body_params = vec![];
-        if let BodyContentType::FormData = content_type {
+        // additional Parts from Type(TypeId) fields
+        if let BodyContentType::FormData(_) = content_type {
             match &schema.item(components)?.schema_kind {
                 openapiv3::SchemaKind::Type(
                     openapiv3::Type::Object(obj_type),
@@ -2281,13 +2358,14 @@ impl Generator {
                                     },
                                 )),
                                 ) if enumeration.is_empty() => {
+                                    let required = obj_type.required.contains(key);
+                                    dbg!((key, description.clone().unwrap(), required, obj_type.required.clone()));
                                     Some(OperationParameter {
                                                 name: key.to_string(),
                                                 api_name: key.to_string(),
                                                 description: description.clone(),
-                                                // todo: own Type and FormData Kind
-                                                typ: OperationParameterType::RawBody,
-                                                kind: OperationParameterKind::Body(BodyContentType::OctetStream),
+                                                typ: OperationParameterType::FormPart,
+                                                kind: OperationParameterKind::Body(BodyContentType::FormData(required)),
                                             })
                                     }
                                 ,
@@ -2454,7 +2532,7 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                     OperationParameterKind::Header(_),
                 ) => Ordering::Less,
 
-                // Body params are last and should be singular.
+                // Body params are almost last and should be singular.
                 (
                     OperationParameterKind::Body(_),
                     OperationParameterKind::Path,
@@ -2467,11 +2545,17 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                     OperationParameterKind::Body(_),
                     OperationParameterKind::Header(_),
                 ) => Ordering::Greater,
+                // FormPart should come after their serializable Body
+                (
+                    OperationParameterKind::Body(_),
+                    OperationParameterKind::Body(BodyContentType::FormData(_)),
+                ) => Ordering::Less,
                 (
                     OperationParameterKind::Body(_),
                     OperationParameterKind::Body(_),
-                ) => Ordering::Less,
-
+                ) => {
+                    panic!("only one body with non FormData expected")
+                }
                 // Header params are in lexicographic order.
                 (
                     OperationParameterKind::Header(_),
