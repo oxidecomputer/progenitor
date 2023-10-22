@@ -1555,11 +1555,10 @@ impl Generator {
                         BodyContentType::FormData(required),
                     ) = param.kind
                     {
-                        // todo: probably incorrect, to what does this translate?
                         if required {
-                            Ok(quote! { reqwest::multipart::Part })
+                            Ok(quote! { Result<Part, String> })
                         } else {
-                            Ok(quote! { Option<reqwest::multipart::Part> })
+                            Ok(quote! { Result<Option<Part>, String> })
                         }
                     } else {
                         unreachable!()
@@ -1602,8 +1601,6 @@ impl Generator {
                         BodyContentType::FormData(required),
                     ) = param.kind
                     {
-                        // todo: probably incorrect, to what does this translate?
-                        // Result or not?
                         if required {
                             let err_msg =
                                 format!("{} was not initialized", param.name);
@@ -1780,19 +1777,17 @@ impl Generator {
                         OperationParameterKind::Body(BodyContentType::FormData(required)) => {
                             if *required {
                                 Ok(quote! {
-                                    pub fn #param_name(mut self, value: P) -> Self
-                                        where P: reqwest::multipart::Part
+                                    pub fn #param_name(mut self, value: Part) -> Self
                                     {
-                                        self.#param_name = value;
+                                        self.#param_name = Ok(value);
                                         self
                                     }
                                 })
                             } else {
                                 Ok(quote! {
-                                    pub fn #param_name(mut self, value: Option<P>) -> Self
-                                        where P: reqwest::multipart::Part
+                                    pub fn #param_name(mut self, value: Option<Part>) -> Self
                                     {
-                                        self.#param_name = value;
+                                        self.#param_name = Ok(value);
                                         self
                                     }
                                 })
