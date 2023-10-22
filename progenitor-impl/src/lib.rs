@@ -88,8 +88,9 @@ impl Default for GenerationSettings {
             .type_space
             .add_type_with_name(&bin_schema, Some("PartMeta".to_string()))?;
         */
+        // () errors and doesn't convert to unit
         let convert =
-            (bin_string, "PartMeta".to_string(), vec![TypeImpl::Default]);
+            (bin_string, "Vec<()>".to_string(), vec![TypeImpl::Default]);
         Self {
             interface: InterfaceStyle::default(),
             tag: TagStyle::default(),
