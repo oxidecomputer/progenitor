@@ -844,6 +844,7 @@ impl Generator {
         // Generate a unique Ident for internal variables
         let url_ident = unique_ident_from("url", &param_names);
         let query_ident = unique_ident_from("query", &param_names);
+        let form_ident = unique_ident_from("form", &param_names);
         let request_ident = unique_ident_from("request", &param_names);
         let response_ident = unique_ident_from("response", &param_names);
         let result_ident = unique_ident_from("result", &param_names);
@@ -963,6 +964,9 @@ impl Generator {
             let #url_ident = #url_path;
         };
 
+        // Generate code to generate a form
+        let form_parts = get_form_builder(&method.params, &form_ident);
+
         // Generate code to handle the body param.
         let body_func = method.params.iter().filter_map(|param| {
             match (&param.kind, &param.typ) {
@@ -1013,9 +1017,8 @@ impl Generator {
                     ),
                     OperationParameterType::Type(_),
                 ) => {
-                    // todo: generate form
                     Some(quote! {
-                    .multipart(form)
+                    .multipart(#form_ident)
                 })},
                 (
                     OperationParameterKind::Body(
@@ -1183,6 +1186,8 @@ impl Generator {
             #query_build
 
             #headers_build
+
+            #(#form_parts)*
 
             let #request_ident = #client.client
                 . #method_func (#url_ident)
@@ -2390,6 +2395,68 @@ fn get_form_data_params(
                 kind,
             }
         })
+}
+
+fn get_form_builder(
+    params: &[OperationParameter],
+    form_ident: &proc_macro2::Ident,
+) -> Vec<TokenStream> {
+    let mut form_parts = vec![];
+    let mut form_parts_optional = vec![];
+    let mut build_form = false;
+
+    params
+        .iter()
+        .filter_map(|param| match (&param.kind, &param.typ) {
+            (
+                OperationParameterKind::Body(BodyContentType::FormData(
+                    required,
+                )),
+                OperationParameterType::FormPart,
+            ) => {
+                let param_ident = format_ident!("{}", param.api_name.as_str());
+                let name = param.api_name.clone();
+                Some((*required, name, param_ident))
+            }
+            (
+                OperationParameterKind::Body(BodyContentType::FormData(true)),
+                OperationParameterType::Type(_),
+            ) => {
+                build_form = true;
+                None
+            }
+            _ => None,
+        })
+        .for_each(|(required, name, param_ident)| {
+            if required {
+                form_parts.push(quote! { .part(#name, #param_ident) });
+            } else {
+                form_parts_optional.push(quote! {
+                    if let Some(#param_ident) = #param_ident {
+                        #form_ident = #form_ident.part(#name, #param_ident);
+                    };
+                });
+            };
+        });
+
+    // only build if any param or at least a body without additional
+    // parts
+    if form_parts.len() > 0 || form_parts_optional.len() > 0 || build_form {
+        let mutt = if form_parts_optional.len() > 0 {
+            quote! {mut}
+        } else {
+            quote! {}
+        };
+        form_parts.insert(
+            0,
+            // todo: create form from body
+            quote! {let #mutt #form_ident = reqwest::multipart::Form::new()},
+        );
+        form_parts.push(quote! {;});
+        form_parts.extend(form_parts_optional);
+    };
+
+    form_parts
 }
 
 fn make_doc_comment(method: &OperationMethod) -> String {
