@@ -2373,7 +2373,6 @@ fn get_form_data_params(
                     )),
                 ) if enumeration.is_empty() => {
                     let required = obj_type.required.contains(key);
-                    dbg!((key, description.clone().unwrap(), required));
                     Some((key, required, description))
                 }
                 _ => None,

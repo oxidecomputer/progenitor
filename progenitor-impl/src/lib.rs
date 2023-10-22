@@ -80,6 +80,7 @@ impl Default for GenerationSettings {
         struct PartMeta {
             #[serde(default)]
             file_name: Option<String>,
+            // probably wait until Mime in reqwest
             #[serde(default)]
             mime_str: Option<String>,
         }
