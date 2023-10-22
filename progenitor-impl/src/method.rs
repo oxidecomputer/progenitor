@@ -2292,7 +2292,9 @@ impl Generator {
                 }?;
                 OperationParameterType::RawBody
             }
-            BodyContentType::Json | BodyContentType::FormUrlencoded => {
+            BodyContentType::Json
+            | BodyContentType::FormUrlencoded
+            | BodyContentType::FormData(_) => {
                 // TODO it would be legal to have the encoding field set for
                 // application/x-www-form-urlencoded content, but I'm not sure
                 // how to interpret the values.
@@ -2311,73 +2313,18 @@ impl Generator {
                     .add_type_with_name(&schema.to_schema(), Some(name))?;
                 OperationParameterType::Type(typ)
             }
-            BodyContentType::FormData(_) => {
-                let name = sanitize(
-                    &format!(
-                        "{}-body",
-                        operation.operation_id.as_ref().unwrap(),
-                    ),
-                    Case::Pascal,
-                );
-                let schema = schema.to_schema();
-                let typ =
-                    self.type_space.add_type_with_name(&schema, Some(name))?;
-                OperationParameterType::Type(typ)
-            }
         };
 
-        let mut body_params = vec![];
-        // additional Parts from Type(TypeId) fields
-        if let BodyContentType::FormData(_) = content_type {
-            match &schema.item(components)?.schema_kind {
-                openapiv3::SchemaKind::Type(
-                    openapiv3::Type::Object(obj_type),
-                ) => obj_type
-                    .properties
-                    .iter()
-                    .filter_map(|(key, item)| match item {
-                        ReferenceOr::Item(i) => {
-                            match (&i.schema_data, &i.schema_kind) {
-                                (openapiv3::SchemaData {
-                                        nullable: false,
-                                        discriminator: None,
-                                        default: None,
-                                        description,
-                                        ..
-                                } ,
-                             openapiv3::SchemaKind::Type(openapiv3::Type::String(
-                                    openapiv3::StringType {
-                                        format:
-                                            openapiv3::VariantOrUnknownOrEmpty::Item(
-                                                openapiv3::StringFormat::Binary,
-                                            ),
-                                        pattern: None,
-                                        enumeration,
-                                        min_length: None,
-                                        max_length: None,
-                                    },
-                                )),
-                                ) if enumeration.is_empty() => {
-                                    let required = obj_type.required.contains(key);
-                                    dbg!((key, description.clone().unwrap(), required, obj_type.required.clone()));
-                                    Some(OperationParameter {
-                                                name: key.to_string(),
-                                                api_name: key.to_string(),
-                                                description: description.clone(),
-                                                typ: OperationParameterType::FormPart,
-                                                kind: OperationParameterKind::Body(BodyContentType::FormData(required)),
-                                            })
-                                    }
-                                ,
-                                _ => None,
-                            }
-                        }
-                        _ => None,
-                    }).
-                    for_each(|p| body_params.push(p)),
-                _ => {},
-            }
+        let item_schema = schema.item(components)?;
+        let mut body_params = match (&content_type, &item_schema.schema_kind) {
+            // add parameters from binary strings of FormData body
+            (
+                BodyContentType::FormData(_),
+                openapiv3::SchemaKind::Type(openapiv3::Type::Object(obj_type)),
+            ) => get_form_data_params(obj_type).collect(),
+            _ => Vec::with_capacity(1),
         };
+
         let body_param = OperationParameter {
             name: "body".to_string(),
             api_name: "body".to_string(),
@@ -2386,8 +2333,63 @@ impl Generator {
             kind: OperationParameterKind::Body(content_type),
         };
         body_params.push(body_param);
+
         Ok(body_params)
     }
+}
+
+fn get_form_data_params(
+    obj_type: &openapiv3::ObjectType,
+) -> impl Iterator<Item = OperationParameter> + '_ {
+    obj_type
+        .properties
+        .iter()
+        .filter_map(|(key, item)| match item {
+            ReferenceOr::Item(i) => Some((key, i)),
+            _ => None,
+        })
+        .filter_map(|(key, i)| {
+            match (&i.schema_data, &i.schema_kind) {
+                (
+                    openapiv3::SchemaData {
+                        // todo: assert nullable if not required?
+                        //nullable: false,
+                        default: None,
+                        discriminator: None,
+                        description,
+                        ..
+                    },
+                    openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                        openapiv3::StringType {
+                            format:
+                                openapiv3::VariantOrUnknownOrEmpty::Item(
+                                    openapiv3::StringFormat::Binary,
+                                ),
+                            pattern: None,
+                            enumeration,
+                            min_length: None,
+                            max_length: None,
+                        },
+                    )),
+                ) if enumeration.is_empty() => {
+                    let required = obj_type.required.contains(key);
+                    dbg!((key, description.clone().unwrap(), required));
+                    Some((key, required, description))
+                }
+                _ => None,
+            }
+        })
+        .map(|(key, req, description)| {
+            let kind =
+                OperationParameterKind::Body(BodyContentType::FormData(req));
+            OperationParameter {
+                name: key.to_string(),
+                api_name: key.to_string(),
+                description: description.clone(),
+                typ: OperationParameterType::FormPart,
+                kind,
+            }
+        })
 }
 
 fn make_doc_comment(method: &OperationMethod) -> String {
