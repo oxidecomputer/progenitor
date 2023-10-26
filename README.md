@@ -96,7 +96,7 @@ changes (when its mtime is updated).
 Progenitor includes an interface appropriate for use in a
 [`build.rs`](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
 file. While slightly more onerous than the macro, a builder has the advantage of making the generated code visible.
-The capability of generating a CLI and `httpmock` helpers is only available using `build.rs`, using
+The capability of generating a CLI and `httpmock` helpers is only available using `build.rs`
 and the `Generator` functions `cli` and `httpmock` respectively.
 
 The `build.rs` file should look something like this:
