@@ -1,0 +1,444 @@
+pub struct Cli<T: CliOverride = ()> {
+    client: sdk::Client,
+    over: T,
+}
+
+impl Cli {
+    pub fn new(client: sdk::Client) -> Self {
+        Self { client, over: () }
+    }
+
+    pub fn get_command(cmd: CliCommand) -> clap::Command {
+        match cmd {
+            CliCommand::CreateImage => Self::cli_create_image(),
+            CliCommand::CreateImageEdit => Self::cli_create_image_edit(),
+            CliCommand::CreateImageVariation => Self::cli_create_image_variation(),
+        }
+    }
+
+    pub fn cli_create_image() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("n")
+                    .long("n")
+                    .value_parser(clap::value_parser!(i64))
+                    .required(false)
+                    .help("The number of images to generate. Must be between 1 and 10."),
+            )
+            .arg(
+                clap::Arg::new("prompt")
+                    .long("prompt")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body")
+                    .help(
+                        "A text description of the desired image(s). The maximum length is 1000 \
+                         characters.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("response-format")
+                    .long("response-format")
+                    .value_parser(clap::builder::TypedValueParser::map(
+                        clap::builder::PossibleValuesParser::new([
+                            types::CreateImageRequestResponseFormat::Url.to_string(),
+                            types::CreateImageRequestResponseFormat::B64Json.to_string(),
+                        ]),
+                        |s| types::CreateImageRequestResponseFormat::try_from(s).unwrap(),
+                    ))
+                    .required(false)
+                    .help(
+                        "The format in which the generated images are returned. Must be one of \
+                         `url` or `b64_json`.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("size")
+                    .long("size")
+                    .value_parser(clap::builder::TypedValueParser::map(
+                        clap::builder::PossibleValuesParser::new([
+                            types::CreateImageRequestSize::_256x256.to_string(),
+                            types::CreateImageRequestSize::_512x512.to_string(),
+                            types::CreateImageRequestSize::_1024x1024.to_string(),
+                        ]),
+                        |s| types::CreateImageRequestSize::try_from(s).unwrap(),
+                    ))
+                    .required(false)
+                    .help(
+                        "The size of the generated images. Must be one of `256x256`, `512x512`, \
+                         or `1024x1024`.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("user")
+                    .long("user")
+                    .value_parser(clap::value_parser!(String))
+                    .required(false)
+                    .help(
+                        "A unique identifier representing your end-user, which can help OpenAI to \
+                         monitor and detect abuse. [Learn \
+                         more](/docs/guides/safety-best-practices/end-user-ids).\n",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+            .about("Creates an image given a prompt.")
+    }
+
+    pub fn cli_create_image_edit() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("n")
+                    .long("n")
+                    .value_parser(clap::value_parser!(i64))
+                    .required(false)
+                    .help("The number of images to generate. Must be between 1 and 10."),
+            )
+            .arg(
+                clap::Arg::new("prompt")
+                    .long("prompt")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body")
+                    .help(
+                        "A text description of the desired image(s). The maximum length is 1000 \
+                         characters.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("response-format")
+                    .long("response-format")
+                    .value_parser(clap::builder::TypedValueParser::map(
+                        clap::builder::PossibleValuesParser::new([
+                            types::CreateImageEditRequestResponseFormat::Url.to_string(),
+                            types::CreateImageEditRequestResponseFormat::B64Json.to_string(),
+                        ]),
+                        |s| types::CreateImageEditRequestResponseFormat::try_from(s).unwrap(),
+                    ))
+                    .required(false)
+                    .help(
+                        "The format in which the generated images are returned. Must be one of \
+                         `url` or `b64_json`.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("size")
+                    .long("size")
+                    .value_parser(clap::builder::TypedValueParser::map(
+                        clap::builder::PossibleValuesParser::new([
+                            types::CreateImageEditRequestSize::_256x256.to_string(),
+                            types::CreateImageEditRequestSize::_512x512.to_string(),
+                            types::CreateImageEditRequestSize::_1024x1024.to_string(),
+                        ]),
+                        |s| types::CreateImageEditRequestSize::try_from(s).unwrap(),
+                    ))
+                    .required(false)
+                    .help(
+                        "The size of the generated images. Must be one of `256x256`, `512x512`, \
+                         or `1024x1024`.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("user")
+                    .long("user")
+                    .value_parser(clap::value_parser!(String))
+                    .required(false)
+                    .help(
+                        "A unique identifier representing your end-user, which can help OpenAI to \
+                         monitor and detect abuse. [Learn \
+                         more](/docs/guides/safety-best-practices/end-user-ids).\n",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(true)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+            .about("Creates an edited or extended image given an original image and a prompt.")
+    }
+
+    pub fn cli_create_image_variation() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("n")
+                    .long("n")
+                    .value_parser(clap::value_parser!(i64))
+                    .required(false)
+                    .help("The number of images to generate. Must be between 1 and 10."),
+            )
+            .arg(
+                clap::Arg::new("response-format")
+                    .long("response-format")
+                    .value_parser(clap::builder::TypedValueParser::map(
+                        clap::builder::PossibleValuesParser::new([
+                            types::CreateImageVariationRequestResponseFormat::Url.to_string(),
+                            types::CreateImageVariationRequestResponseFormat::B64Json.to_string(),
+                        ]),
+                        |s| types::CreateImageVariationRequestResponseFormat::try_from(s).unwrap(),
+                    ))
+                    .required(false)
+                    .help(
+                        "The format in which the generated images are returned. Must be one of \
+                         `url` or `b64_json`.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("size")
+                    .long("size")
+                    .value_parser(clap::builder::TypedValueParser::map(
+                        clap::builder::PossibleValuesParser::new([
+                            types::CreateImageVariationRequestSize::_256x256.to_string(),
+                            types::CreateImageVariationRequestSize::_512x512.to_string(),
+                            types::CreateImageVariationRequestSize::_1024x1024.to_string(),
+                        ]),
+                        |s| types::CreateImageVariationRequestSize::try_from(s).unwrap(),
+                    ))
+                    .required(false)
+                    .help(
+                        "The size of the generated images. Must be one of `256x256`, `512x512`, \
+                         or `1024x1024`.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("user")
+                    .long("user")
+                    .value_parser(clap::value_parser!(String))
+                    .required(false)
+                    .help(
+                        "A unique identifier representing your end-user, which can help OpenAI to \
+                         monitor and detect abuse. [Learn \
+                         more](/docs/guides/safety-best-practices/end-user-ids).\n",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(true)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+            .about("Creates a variation of a given image.")
+    }
+}
+
+impl<T: CliOverride> Cli<T> {
+    pub fn new_with_override(client: sdk::Client, over: T) -> Self {
+        Self { client, over }
+    }
+
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+        match cmd {
+            CliCommand::CreateImage => {
+                self.execute_create_image(matches).await;
+            }
+            CliCommand::CreateImageEdit => {
+                self.execute_create_image_edit(matches).await;
+            }
+            CliCommand::CreateImageVariation => {
+                self.execute_create_image_variation(matches).await;
+            }
+        }
+    }
+
+    pub async fn execute_create_image(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.create_image();
+        if let Some(value) = matches.get_one::<i64>("n") {
+            request = request.body_map(|body| body.n(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("prompt") {
+            request = request.body_map(|body| body.prompt(value.clone()))
+        }
+
+        if let Some(value) =
+            matches.get_one::<types::CreateImageRequestResponseFormat>("response-format")
+        {
+            request = request.body_map(|body| body.response_format(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<types::CreateImageRequestSize>("size") {
+            request = request.body_map(|body| body.size(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("user") {
+            request = request.body_map(|body| body.user(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::CreateImageRequest>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_create_image(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_create_image_edit(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.create_image_edit();
+        if let Some(value) = matches.get_one::<i64>("n") {
+            request = request.body_map(|body| body.n(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("prompt") {
+            request = request.body_map(|body| body.prompt(value.clone()))
+        }
+
+        if let Some(value) =
+            matches.get_one::<types::CreateImageEditRequestResponseFormat>("response-format")
+        {
+            request = request.body_map(|body| body.response_format(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<types::CreateImageEditRequestSize>("size") {
+            request = request.body_map(|body| body.size(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("user") {
+            request = request.body_map(|body| body.user(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value =
+                serde_json::from_str::<types::CreateImageEditRequest>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_create_image_edit(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_create_image_variation(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.create_image_variation();
+        if let Some(value) = matches.get_one::<i64>("n") {
+            request = request.body_map(|body| body.n(value.clone()))
+        }
+
+        if let Some(value) =
+            matches.get_one::<types::CreateImageVariationRequestResponseFormat>("response-format")
+        {
+            request = request.body_map(|body| body.response_format(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<types::CreateImageVariationRequestSize>("size") {
+            request = request.body_map(|body| body.size(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("user") {
+            request = request.body_map(|body| body.user(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value =
+                serde_json::from_str::<types::CreateImageVariationRequest>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_create_image_variation(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("success\n{:#?}", r)
+            }
+        }
+    }
+}
+
+pub trait CliOverride {
+    fn execute_create_image(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::CreateImage,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_create_image_edit(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::CreateImageEdit,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_create_image_variation(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::CreateImageVariation,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+}
+
+impl CliOverride for () {}
+
+#[derive(Copy, Clone, Debug)]
+pub enum CliCommand {
+    CreateImage,
+    CreateImageEdit,
+    CreateImageVariation,
+}
+
+impl CliCommand {
+    pub fn iter() -> impl Iterator<Item = CliCommand> {
+        vec![
+            CliCommand::CreateImage,
+            CliCommand::CreateImageEdit,
+            CliCommand::CreateImageVariation,
+        ]
+        .into_iter()
+    }
+}

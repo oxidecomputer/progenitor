@@ -170,3 +170,8 @@ fn test_param_collision() {
 fn test_github() {
     verify_apis("api.github.com.json");
 }
+
+#[test]
+fn test_openai() {
+    verify_apis("openai-openapi.yaml")
+}
