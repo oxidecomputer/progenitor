@@ -2393,7 +2393,7 @@ impl Generator {
             let typ = self.get_type_space().get_type(type_id)?;
             let td = typ.details();
             let typify::TypeDetails::Struct(tstru) = td else {
-                unreachable!()
+                unimplemented!("form-data bodies must be a Struct")
             };
             let body_parts = tstru
                 .properties()
