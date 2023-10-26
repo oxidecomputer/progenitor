@@ -299,17 +299,18 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 ..Default::default()
             },
 
-            openapiv3::SchemaKind::Type(openapiv3::Type::Boolean {}) => {
-                schemars::schema::SchemaObject {
-                    metadata,
-                    instance_type: instance_type(
-                        schemars::schema::InstanceType::Boolean,
-                        nullable,
-                    ),
-                    extensions,
-                    ..Default::default()
-                }
-            }
+            openapiv3::SchemaKind::Type(openapiv3::Type::Boolean(
+                openapiv3::BooleanType { enumeration },
+            )) => schemars::schema::SchemaObject {
+                metadata,
+                instance_type: instance_type(
+                    schemars::schema::InstanceType::Boolean,
+                    nullable,
+                ),
+                enum_values: enumeration.convert(),
+                extensions,
+                ..Default::default()
+            },
 
             openapiv3::SchemaKind::OneOf { one_of } => {
                 schemars::schema::SchemaObject {
@@ -740,6 +741,14 @@ impl Convert<Value> for Option<i64> {
     fn convert(&self) -> Value {
         match self {
             Some(value) => Value::Number(serde_json::Number::from(*value)),
+            None => Value::Null,
+        }
+    }
+}
+impl Convert<Value> for Option<bool> {
+    fn convert(&self) -> Value {
+        match self {
+            Some(value) => Value::Bool(*value),
             None => Value::Null,
         }
     }

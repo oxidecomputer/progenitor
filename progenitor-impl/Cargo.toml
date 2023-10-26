@@ -12,10 +12,10 @@ heck = "0.4.1"
 http = "0.2.9"
 getopts = "0.2"
 indexmap = "2.0.2"
-openapiv3 = "1.0.3"
+openapiv3 = "2.0.0-rc.0"
 proc-macro2 = "1.0"
 quote = "1.0"
-regex = "1.9"
+regex = "1.10"
 schemars = { version = "0.8.12", features = ["chrono", "uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
