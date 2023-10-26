@@ -9,5 +9,7 @@ have been pulled in from other projects:
 - `keeper.json`: https://github.com/jclulow/keeper
 - `nexus.json`: https://github.com/oxidecomputer/omicron
 - `propolis-server.json`: https://github.com/oxidecomputer/propolis
+- `openai-openapi.yaml`: https://github.com/openai/openai-openapi
 
-Note that keeper and buildomat have diverged in order to validate support for various features. The others should not be changed other than updating them from their source repository.
+Note that keeper, buildomat and openai-openapi.yaml have diverged in order to validate support for various features.
+The others should not be changed other than updating them from their source repository.
