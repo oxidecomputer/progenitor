@@ -2397,16 +2397,13 @@ impl Generator {
             };
             let body_parts = tstru
                 .properties()
-                .filter_map(|(prop_name, prop_id)| {
+                .filter_map(|(prop_name, _)| {
                     if form_data_names.contains(prop_name) {
                         None
                     }
                     else
                     {
-                        self.get_type_space()
-                            .get_type(&prop_id)
-                            .ok()
-                            .map(|_| prop_name)
+                        Some(prop_name)
                     }
                 })
                 .map(|prop_name| {
