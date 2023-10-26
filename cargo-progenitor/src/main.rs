@@ -290,7 +290,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
             dependency_versions.get("rand").unwrap()
         ));
     }
-    if type_space.uses_serde_json() {
+    if type_space.uses_serde_json() || builder.uses_serde_json() {
         deps.push(format!(
             "serde_json = \"{}\"",
             dependency_versions.get("serde_json").unwrap()

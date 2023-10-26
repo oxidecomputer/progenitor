@@ -446,6 +446,13 @@ impl Generator {
         }
 
         params.extend(self.get_body_params(operation, components)?);
+        if params
+            .iter()
+            .any(|param| matches!(param.typ, OperationParameterType::FormPart))
+        {
+            // body fields use serde_json for serialization
+            self.uses_serde_json = true;
+        }
 
         let tmp = crate::template::parse(path)?;
         let names = tmp.names();
