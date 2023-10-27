@@ -10,6 +10,163 @@ pub mod types {
     #[allow(unused_imports)]
     use std::convert::TryFrom;
     #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    pub struct CreateImageEditBody {
+        ///The number of images to generate. Must be between 1 and 10.
+        #[serde(default = "defaults::create_image_edit_body_n")]
+        pub n: Option<i64>,
+        ///A text description of the desired image(s). The maximum length is
+        /// 1000 characters.
+        pub prompt: String,
+        ///The format in which the generated images are returned. Must be one
+        /// of `url` or `b64_json`.
+        #[serde(default = "defaults::create_image_edit_body_response_format")]
+        pub response_format: Option<CreateImageEditBodyResponseFormat>,
+        ///The size of the generated images. Must be one of `256x256`,
+        /// `512x512`, or `1024x1024`.
+        #[serde(default = "defaults::create_image_edit_body_size")]
+        pub size: Option<CreateImageEditBodySize>,
+        ///A unique identifier representing your end-user, which can help
+        /// OpenAI to monitor and detect abuse. [Learn
+        /// more](/docs/guides/safety-best-practices/end-user-ids).
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub user: Option<String>,
+    }
+
+    impl From<&CreateImageEditBody> for CreateImageEditBody {
+        fn from(value: &CreateImageEditBody) -> Self {
+            value.clone()
+        }
+    }
+
+    impl CreateImageEditBody {
+        pub fn builder() -> builder::CreateImageEditBody {
+            builder::CreateImageEditBody::default()
+        }
+    }
+
+    ///The format in which the generated images are returned. Must be one of
+    /// `url` or `b64_json`.
+    #[derive(
+        Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
+    )]
+    pub enum CreateImageEditBodyResponseFormat {
+        #[serde(rename = "url")]
+        Url,
+        #[serde(rename = "b64_json")]
+        B64Json,
+    }
+
+    impl From<&CreateImageEditBodyResponseFormat> for CreateImageEditBodyResponseFormat {
+        fn from(value: &CreateImageEditBodyResponseFormat) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ToString for CreateImageEditBodyResponseFormat {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::Url => "url".to_string(),
+                Self::B64Json => "b64_json".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for CreateImageEditBodyResponseFormat {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            match value {
+                "url" => Ok(Self::Url),
+                "b64_json" => Ok(Self::B64Json),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for CreateImageEditBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for CreateImageEditBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for CreateImageEditBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    ///The size of the generated images. Must be one of `256x256`, `512x512`,
+    /// or `1024x1024`.
+    #[derive(
+        Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
+    )]
+    pub enum CreateImageEditBodySize {
+        #[serde(rename = "256x256")]
+        _256x256,
+        #[serde(rename = "512x512")]
+        _512x512,
+        #[serde(rename = "1024x1024")]
+        _1024x1024,
+    }
+
+    impl From<&CreateImageEditBodySize> for CreateImageEditBodySize {
+        fn from(value: &CreateImageEditBodySize) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ToString for CreateImageEditBodySize {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::_256x256 => "256x256".to_string(),
+                Self::_512x512 => "512x512".to_string(),
+                Self::_1024x1024 => "1024x1024".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for CreateImageEditBodySize {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            match value {
+                "256x256" => Ok(Self::_256x256),
+                "512x512" => Ok(Self::_512x512),
+                "1024x1024" => Ok(Self::_1024x1024),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for CreateImageEditBodySize {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for CreateImageEditBodySize {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for CreateImageEditBodySize {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct CreateImageEditRequest {
         ///The image to edit. Must be a valid PNG file, less than 4MB, and
         /// square. If mask is not provided, image must have transparency, which
@@ -333,6 +490,160 @@ pub mod types {
     }
 
     #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    pub struct CreateImageVariationBody {
+        ///The number of images to generate. Must be between 1 and 10.
+        #[serde(default = "defaults::create_image_variation_body_n")]
+        pub n: Option<i64>,
+        ///The format in which the generated images are returned. Must be one
+        /// of `url` or `b64_json`.
+        #[serde(default = "defaults::create_image_variation_body_response_format")]
+        pub response_format: Option<CreateImageVariationBodyResponseFormat>,
+        ///The size of the generated images. Must be one of `256x256`,
+        /// `512x512`, or `1024x1024`.
+        #[serde(default = "defaults::create_image_variation_body_size")]
+        pub size: Option<CreateImageVariationBodySize>,
+        ///A unique identifier representing your end-user, which can help
+        /// OpenAI to monitor and detect abuse. [Learn
+        /// more](/docs/guides/safety-best-practices/end-user-ids).
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub user: Option<String>,
+    }
+
+    impl From<&CreateImageVariationBody> for CreateImageVariationBody {
+        fn from(value: &CreateImageVariationBody) -> Self {
+            value.clone()
+        }
+    }
+
+    impl CreateImageVariationBody {
+        pub fn builder() -> builder::CreateImageVariationBody {
+            builder::CreateImageVariationBody::default()
+        }
+    }
+
+    ///The format in which the generated images are returned. Must be one of
+    /// `url` or `b64_json`.
+    #[derive(
+        Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
+    )]
+    pub enum CreateImageVariationBodyResponseFormat {
+        #[serde(rename = "url")]
+        Url,
+        #[serde(rename = "b64_json")]
+        B64Json,
+    }
+
+    impl From<&CreateImageVariationBodyResponseFormat> for CreateImageVariationBodyResponseFormat {
+        fn from(value: &CreateImageVariationBodyResponseFormat) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ToString for CreateImageVariationBodyResponseFormat {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::Url => "url".to_string(),
+                Self::B64Json => "b64_json".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for CreateImageVariationBodyResponseFormat {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            match value {
+                "url" => Ok(Self::Url),
+                "b64_json" => Ok(Self::B64Json),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for CreateImageVariationBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for CreateImageVariationBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for CreateImageVariationBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    ///The size of the generated images. Must be one of `256x256`, `512x512`,
+    /// or `1024x1024`.
+    #[derive(
+        Clone, Copy, Debug, Deserialize, Eq, Hash, JsonSchema, Ord, PartialEq, PartialOrd, Serialize,
+    )]
+    pub enum CreateImageVariationBodySize {
+        #[serde(rename = "256x256")]
+        _256x256,
+        #[serde(rename = "512x512")]
+        _512x512,
+        #[serde(rename = "1024x1024")]
+        _1024x1024,
+    }
+
+    impl From<&CreateImageVariationBodySize> for CreateImageVariationBodySize {
+        fn from(value: &CreateImageVariationBodySize) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ToString for CreateImageVariationBodySize {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::_256x256 => "256x256".to_string(),
+                Self::_512x512 => "512x512".to_string(),
+                Self::_1024x1024 => "1024x1024".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for CreateImageVariationBodySize {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            match value {
+                "256x256" => Ok(Self::_256x256),
+                "512x512" => Ok(Self::_512x512),
+                "1024x1024" => Ok(Self::_1024x1024),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for CreateImageVariationBodySize {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for CreateImageVariationBodySize {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for CreateImageVariationBodySize {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
     pub struct CreateImageVariationRequest {
         ///The image to use as the basis for the variation(s). Must be a valid
         /// PNG file, less than 4MB, and square.
@@ -575,6 +886,105 @@ pub mod types {
 
     pub mod builder {
         #[derive(Clone, Debug)]
+        pub struct CreateImageEditBody {
+            n: Result<Option<i64>, String>,
+            prompt: Result<String, String>,
+            response_format: Result<Option<super::CreateImageEditBodyResponseFormat>, String>,
+            size: Result<Option<super::CreateImageEditBodySize>, String>,
+            user: Result<Option<String>, String>,
+        }
+
+        impl Default for CreateImageEditBody {
+            fn default() -> Self {
+                Self {
+                    n: Ok(super::defaults::create_image_edit_body_n()),
+                    prompt: Err("no value supplied for prompt".to_string()),
+                    response_format: Ok(super::defaults::create_image_edit_body_response_format()),
+                    size: Ok(super::defaults::create_image_edit_body_size()),
+                    user: Ok(Default::default()),
+                }
+            }
+        }
+
+        impl CreateImageEditBody {
+            pub fn n<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<i64>>,
+                T::Error: std::fmt::Display,
+            {
+                self.n = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for n: {}", e));
+                self
+            }
+            pub fn prompt<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<String>,
+                T::Error: std::fmt::Display,
+            {
+                self.prompt = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for prompt: {}", e));
+                self
+            }
+            pub fn response_format<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<super::CreateImageEditBodyResponseFormat>>,
+                T::Error: std::fmt::Display,
+            {
+                self.response_format = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for response_format: {}", e)
+                });
+                self
+            }
+            pub fn size<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<super::CreateImageEditBodySize>>,
+                T::Error: std::fmt::Display,
+            {
+                self.size = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for size: {}", e));
+                self
+            }
+            pub fn user<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<String>>,
+                T::Error: std::fmt::Display,
+            {
+                self.user = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for user: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<CreateImageEditBody> for super::CreateImageEditBody {
+            type Error = String;
+            fn try_from(value: CreateImageEditBody) -> Result<Self, String> {
+                Ok(Self {
+                    n: value.n?,
+                    prompt: value.prompt?,
+                    response_format: value.response_format?,
+                    size: value.size?,
+                    user: value.user?,
+                })
+            }
+        }
+
+        impl From<super::CreateImageEditBody> for CreateImageEditBody {
+            fn from(value: super::CreateImageEditBody) -> Self {
+                Self {
+                    n: Ok(value.n),
+                    prompt: Ok(value.prompt),
+                    response_format: Ok(value.response_format),
+                    size: Ok(value.size),
+                    user: Ok(value.user),
+                }
+            }
+        }
+
+        #[derive(Clone, Debug)]
         pub struct CreateImageEditRequest {
             image: Result<Vec<()>, String>,
             mask: Result<Option<Vec<()>>, String>,
@@ -795,6 +1205,93 @@ pub mod types {
                 Self {
                     n: Ok(value.n),
                     prompt: Ok(value.prompt),
+                    response_format: Ok(value.response_format),
+                    size: Ok(value.size),
+                    user: Ok(value.user),
+                }
+            }
+        }
+
+        #[derive(Clone, Debug)]
+        pub struct CreateImageVariationBody {
+            n: Result<Option<i64>, String>,
+            response_format: Result<Option<super::CreateImageVariationBodyResponseFormat>, String>,
+            size: Result<Option<super::CreateImageVariationBodySize>, String>,
+            user: Result<Option<String>, String>,
+        }
+
+        impl Default for CreateImageVariationBody {
+            fn default() -> Self {
+                Self {
+                    n: Ok(super::defaults::create_image_variation_body_n()),
+                    response_format: Ok(
+                        super::defaults::create_image_variation_body_response_format(),
+                    ),
+                    size: Ok(super::defaults::create_image_variation_body_size()),
+                    user: Ok(Default::default()),
+                }
+            }
+        }
+
+        impl CreateImageVariationBody {
+            pub fn n<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<i64>>,
+                T::Error: std::fmt::Display,
+            {
+                self.n = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for n: {}", e));
+                self
+            }
+            pub fn response_format<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<super::CreateImageVariationBodyResponseFormat>>,
+                T::Error: std::fmt::Display,
+            {
+                self.response_format = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for response_format: {}", e)
+                });
+                self
+            }
+            pub fn size<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<super::CreateImageVariationBodySize>>,
+                T::Error: std::fmt::Display,
+            {
+                self.size = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for size: {}", e));
+                self
+            }
+            pub fn user<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Option<String>>,
+                T::Error: std::fmt::Display,
+            {
+                self.user = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for user: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<CreateImageVariationBody> for super::CreateImageVariationBody {
+            type Error = String;
+            fn try_from(value: CreateImageVariationBody) -> Result<Self, String> {
+                Ok(Self {
+                    n: value.n?,
+                    response_format: value.response_format?,
+                    size: value.size?,
+                    user: value.user?,
+                })
+            }
+        }
+
+        impl From<super::CreateImageVariationBody> for CreateImageVariationBody {
+            fn from(value: super::CreateImageVariationBody) -> Self {
+                Self {
+                    n: Ok(value.n),
                     response_format: Ok(value.response_format),
                     size: Ok(value.size),
                     user: Ok(value.user),
@@ -1148,6 +1645,19 @@ pub mod types {
     }
 
     pub mod defaults {
+        pub(super) fn create_image_edit_body_n() -> Option<i64> {
+            Some(1_i64)
+        }
+
+        pub(super) fn create_image_edit_body_response_format(
+        ) -> Option<super::CreateImageEditBodyResponseFormat> {
+            Some(super::CreateImageEditBodyResponseFormat::Url)
+        }
+
+        pub(super) fn create_image_edit_body_size() -> Option<super::CreateImageEditBodySize> {
+            Some(super::CreateImageEditBodySize::_1024x1024)
+        }
+
         pub(super) fn create_image_edit_request_n() -> Option<i64> {
             Some(1_i64)
         }
@@ -1173,6 +1683,20 @@ pub mod types {
 
         pub(super) fn create_image_request_size() -> Option<super::CreateImageRequestSize> {
             Some(super::CreateImageRequestSize::_1024x1024)
+        }
+
+        pub(super) fn create_image_variation_body_n() -> Option<i64> {
+            Some(1_i64)
+        }
+
+        pub(super) fn create_image_variation_body_response_format(
+        ) -> Option<super::CreateImageVariationBodyResponseFormat> {
+            Some(super::CreateImageVariationBodyResponseFormat::Url)
+        }
+
+        pub(super) fn create_image_variation_body_size(
+        ) -> Option<super::CreateImageVariationBodySize> {
+            Some(super::CreateImageVariationBodySize::_1024x1024)
         }
 
         pub(super) fn create_image_variation_request_n() -> Option<i64> {
@@ -1391,7 +1915,7 @@ pub mod builder {
     #[derive(Debug)]
     pub struct CreateImageEdit<'a> {
         client: &'a super::Client,
-        body: Result<types::builder::CreateImageEditRequest, String>,
+        body: Result<types::builder::CreateImageEditBody, String>,
         mask: Result<Option<Part>, String>,
         image: Result<Part, String>,
     }
@@ -1400,7 +1924,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::CreateImageEditRequest::default()),
+                body: Ok(types::builder::CreateImageEditBody::default()),
                 mask: Ok(None),
                 image: Err("image was not initialized".to_string()),
             }
@@ -1408,20 +1932,20 @@ pub mod builder {
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<types::CreateImageEditRequest>,
+            V: std::convert::TryInto<types::CreateImageEditBody>,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `CreateImageEditRequest` for body failed".to_string());
+                .map_err(|_| "conversion to `CreateImageEditBody` for body failed".to_string());
             self
         }
 
         pub fn body_map<F>(mut self, f: F) -> Self
         where
             F: std::ops::FnOnce(
-                types::builder::CreateImageEditRequest,
-            ) -> types::builder::CreateImageEditRequest,
+                types::builder::CreateImageEditBody,
+            ) -> types::builder::CreateImageEditBody,
         {
             self.body = self.body.map(f);
             self
@@ -1446,7 +1970,7 @@ pub mod builder {
                 image,
             } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::CreateImageEditRequest>::try_into)
+                .and_then(std::convert::TryInto::<types::CreateImageEditBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let mask = mask.map_err(Error::InvalidRequest)?;
             let image = image.map_err(Error::InvalidRequest)?;
@@ -1504,7 +2028,7 @@ pub mod builder {
     #[derive(Debug)]
     pub struct CreateImageVariation<'a> {
         client: &'a super::Client,
-        body: Result<types::builder::CreateImageVariationRequest, String>,
+        body: Result<types::builder::CreateImageVariationBody, String>,
         image: Result<Part, String>,
     }
 
@@ -1512,17 +2036,17 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::CreateImageVariationRequest::default()),
+                body: Ok(types::builder::CreateImageVariationBody::default()),
                 image: Err("image was not initialized".to_string()),
             }
         }
 
         pub fn body<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<types::CreateImageVariationRequest>,
+            V: std::convert::TryInto<types::CreateImageVariationBody>,
         {
             self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `CreateImageVariationRequest` for body failed".to_string()
+                "conversion to `CreateImageVariationBody` for body failed".to_string()
             });
             self
         }
@@ -1530,8 +2054,8 @@ pub mod builder {
         pub fn body_map<F>(mut self, f: F) -> Self
         where
             F: std::ops::FnOnce(
-                types::builder::CreateImageVariationRequest,
-            ) -> types::builder::CreateImageVariationRequest,
+                types::builder::CreateImageVariationBody,
+            ) -> types::builder::CreateImageVariationBody,
         {
             self.body = self.body.map(f);
             self
@@ -1550,7 +2074,7 @@ pub mod builder {
                 image,
             } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::CreateImageVariationRequest>::try_into)
+                .and_then(std::convert::TryInto::<types::CreateImageVariationBody>::try_into)
                 .map_err(Error::InvalidRequest)?;
             let image = image.map_err(Error::InvalidRequest)?;
             let url = format!("{}/images/variations", client.baseurl,);

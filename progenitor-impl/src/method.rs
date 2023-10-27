@@ -2225,6 +2225,16 @@ impl Generator {
 
         let content_type = BodyContentType::from_str(content_str)?;
 
+        let item_schema = schema.item(components)?;
+        let mut body_params = match (&content_type, &item_schema.schema_kind) {
+            // add parameters from binary strings of FormData body
+            (
+                BodyContentType::FormData(_),
+                openapiv3::SchemaKind::Type(openapiv3::Type::Object(obj_type)),
+            ) => get_form_data_params(obj_type).collect(),
+            _ => Vec::with_capacity(1),
+        };
+
         let typ = match content_type {
             BodyContentType::OctetStream => {
                 // For an octet stream, we expect a simple, specific schema:
@@ -2299,9 +2309,7 @@ impl Generator {
                 }?;
                 OperationParameterType::RawBody
             }
-            BodyContentType::Json
-            | BodyContentType::FormUrlencoded
-            | BodyContentType::FormData(_) => {
+            BodyContentType::Json | BodyContentType::FormUrlencoded => {
                 // TODO it would be legal to have the encoding field set for
                 // application/x-www-form-urlencoded content, but I'm not sure
                 // how to interpret the values.
@@ -2320,16 +2328,52 @@ impl Generator {
                     .add_type_with_name(&schema.to_schema(), Some(name))?;
                 OperationParameterType::Type(typ)
             }
-        };
-
-        let item_schema = schema.item(components)?;
-        let mut body_params = match (&content_type, &item_schema.schema_kind) {
-            // add parameters from binary strings of FormData body
-            (
-                BodyContentType::FormData(_),
-                openapiv3::SchemaKind::Type(openapiv3::Type::Object(obj_type)),
-            ) => get_form_data_params(obj_type).collect(),
-            _ => Vec::with_capacity(1),
+            BodyContentType::FormData(_) => {
+                // remove FormPart properties
+                // TODO: move into util
+                let schema = match schema {
+                    ReferenceOr::Reference { reference } => {
+                        let idx = reference.rfind('/').unwrap();
+                        let key = &reference[idx + 1..];
+                        let parameters = <openapiv3::Schema as crate::util::ComponentLookup>::get_components(
+                            components.as_ref().unwrap(),
+                        );
+                        parameters
+                            .get(key)
+                            .cloned()
+                            .unwrap_or_else(|| panic!("key {} is missing", key))
+                            .into_item()
+                            .unwrap()
+                    }
+                    ReferenceOr::Item(s) => s.to_owned(),
+                };
+                let mut schema = schema.to_schema();
+                if let schemars::schema::Schema::Object(
+                    schemars::schema::SchemaObject {
+                        object: Some(ref mut object),
+                        ..
+                    },
+                ) = schema
+                {
+                    for param in body_params.iter() {
+                        dbg!(("remove", &param.api_name, &param.description));
+                        object.properties.remove_entry(&param.api_name);
+                    }
+                };
+                // TODO: because add_ref_types is called before, the unmodified
+                // body also exists as additional type ending in Request.
+                // There should be a better way to modify a reference type.
+                let name = sanitize(
+                    &format!(
+                        "{}-body",
+                        operation.operation_id.as_ref().unwrap(),
+                    ),
+                    Case::Pascal,
+                );
+                let typ =
+                    self.type_space.add_type_with_name(&schema, Some(name))?;
+                OperationParameterType::Type(typ)
+            }
         };
 
         let body_param = OperationParameter {

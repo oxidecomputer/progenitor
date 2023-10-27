@@ -57,7 +57,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn body(self, value: &types::CreateImageEditRequest) -> Self {
+        pub fn body(self, value: &types::CreateImageEditBody) -> Self {
             Self(self.0.json_body_obj(value))
         }
 
@@ -104,7 +104,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn body(self, value: &types::CreateImageVariationRequest) -> Self {
+        pub fn body(self, value: &types::CreateImageVariationBody) -> Self {
             Self(self.0.json_body_obj(value))
         }
 

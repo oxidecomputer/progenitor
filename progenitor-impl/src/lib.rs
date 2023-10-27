@@ -72,27 +72,18 @@ impl Default for GenerationSettings {
             format: Some("binary".to_string()),
             ..SchemaObject::default()
         };
-        // todo: best place to create default conversion, or typify?
-        // todo: declare PartMeta struct and TypeImpls in progenitor_client
-        /*
-        use schemars::{schema_for, JsonSchema};
-        use serde::Serialize;
-        #[derive(JsonSchema, Serialize)]
-        struct PartMeta {
-            #[serde(default)]
-            file_name: Option<String>,
-            // probably wait until Mime in reqwest
-            #[serde(default)]
-            mime_str: Option<String>,
-        }
-        let bin_schema = schema_for!(PartMeta).schema.into();
-        let bin_typ = self
-            .type_space
-            .add_type_with_name(&bin_schema, Some("PartMeta".to_string()))?;
-        */
-        // () errors and doesn't convert to unit
-        let convert =
-            (bin_string, "Vec<()>".to_string(), vec![TypeImpl::Default]);
+        // This treats binary strings on the level of generated types.
+        // For now, we'd want to remove this field because
+        // the only supported binary string is handled as FormPart instead.
+        // Not sure if or how patch could help, at least making it not
+        // required.
+        // TODO: remove after the right ref objects can be modified.
+        let convert = (
+            bin_string,
+            // () errors and doesn't convert to unit
+            "Vec<()>".to_string(),
+            vec![TypeImpl::Default, TypeImpl::Default, TypeImpl::Display],
+        );
         Self {
             interface: InterfaceStyle::default(),
             tag: TagStyle::default(),

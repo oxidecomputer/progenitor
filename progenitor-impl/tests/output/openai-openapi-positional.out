@@ -10,6 +10,153 @@ pub mod types {
     #[allow(unused_imports)]
     use std::convert::TryFrom;
     #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct CreateImageEditBody {
+        ///The number of images to generate. Must be between 1 and 10.
+        #[serde(default = "defaults::create_image_edit_body_n")]
+        pub n: Option<i64>,
+        ///A text description of the desired image(s). The maximum length is
+        /// 1000 characters.
+        pub prompt: String,
+        ///The format in which the generated images are returned. Must be one
+        /// of `url` or `b64_json`.
+        #[serde(default = "defaults::create_image_edit_body_response_format")]
+        pub response_format: Option<CreateImageEditBodyResponseFormat>,
+        ///The size of the generated images. Must be one of `256x256`,
+        /// `512x512`, or `1024x1024`.
+        #[serde(default = "defaults::create_image_edit_body_size")]
+        pub size: Option<CreateImageEditBodySize>,
+        ///A unique identifier representing your end-user, which can help
+        /// OpenAI to monitor and detect abuse. [Learn
+        /// more](/docs/guides/safety-best-practices/end-user-ids).
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub user: Option<String>,
+    }
+
+    impl From<&CreateImageEditBody> for CreateImageEditBody {
+        fn from(value: &CreateImageEditBody) -> Self {
+            value.clone()
+        }
+    }
+
+    ///The format in which the generated images are returned. Must be one of
+    /// `url` or `b64_json`.
+    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    pub enum CreateImageEditBodyResponseFormat {
+        #[serde(rename = "url")]
+        Url,
+        #[serde(rename = "b64_json")]
+        B64Json,
+    }
+
+    impl From<&CreateImageEditBodyResponseFormat> for CreateImageEditBodyResponseFormat {
+        fn from(value: &CreateImageEditBodyResponseFormat) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ToString for CreateImageEditBodyResponseFormat {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::Url => "url".to_string(),
+                Self::B64Json => "b64_json".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for CreateImageEditBodyResponseFormat {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            match value {
+                "url" => Ok(Self::Url),
+                "b64_json" => Ok(Self::B64Json),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for CreateImageEditBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for CreateImageEditBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for CreateImageEditBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    ///The size of the generated images. Must be one of `256x256`, `512x512`,
+    /// or `1024x1024`.
+    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    pub enum CreateImageEditBodySize {
+        #[serde(rename = "256x256")]
+        _256x256,
+        #[serde(rename = "512x512")]
+        _512x512,
+        #[serde(rename = "1024x1024")]
+        _1024x1024,
+    }
+
+    impl From<&CreateImageEditBodySize> for CreateImageEditBodySize {
+        fn from(value: &CreateImageEditBodySize) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ToString for CreateImageEditBodySize {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::_256x256 => "256x256".to_string(),
+                Self::_512x512 => "512x512".to_string(),
+                Self::_1024x1024 => "1024x1024".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for CreateImageEditBodySize {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            match value {
+                "256x256" => Ok(Self::_256x256),
+                "512x512" => Ok(Self::_512x512),
+                "1024x1024" => Ok(Self::_1024x1024),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for CreateImageEditBodySize {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for CreateImageEditBodySize {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for CreateImageEditBodySize {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct CreateImageEditRequest {
         ///The image to edit. Must be a valid PNG file, less than 4MB, and
         /// square. If mask is not provided, image must have transparency, which
@@ -313,6 +460,150 @@ pub mod types {
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct CreateImageVariationBody {
+        ///The number of images to generate. Must be between 1 and 10.
+        #[serde(default = "defaults::create_image_variation_body_n")]
+        pub n: Option<i64>,
+        ///The format in which the generated images are returned. Must be one
+        /// of `url` or `b64_json`.
+        #[serde(default = "defaults::create_image_variation_body_response_format")]
+        pub response_format: Option<CreateImageVariationBodyResponseFormat>,
+        ///The size of the generated images. Must be one of `256x256`,
+        /// `512x512`, or `1024x1024`.
+        #[serde(default = "defaults::create_image_variation_body_size")]
+        pub size: Option<CreateImageVariationBodySize>,
+        ///A unique identifier representing your end-user, which can help
+        /// OpenAI to monitor and detect abuse. [Learn
+        /// more](/docs/guides/safety-best-practices/end-user-ids).
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub user: Option<String>,
+    }
+
+    impl From<&CreateImageVariationBody> for CreateImageVariationBody {
+        fn from(value: &CreateImageVariationBody) -> Self {
+            value.clone()
+        }
+    }
+
+    ///The format in which the generated images are returned. Must be one of
+    /// `url` or `b64_json`.
+    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    pub enum CreateImageVariationBodyResponseFormat {
+        #[serde(rename = "url")]
+        Url,
+        #[serde(rename = "b64_json")]
+        B64Json,
+    }
+
+    impl From<&CreateImageVariationBodyResponseFormat> for CreateImageVariationBodyResponseFormat {
+        fn from(value: &CreateImageVariationBodyResponseFormat) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ToString for CreateImageVariationBodyResponseFormat {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::Url => "url".to_string(),
+                Self::B64Json => "b64_json".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for CreateImageVariationBodyResponseFormat {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            match value {
+                "url" => Ok(Self::Url),
+                "b64_json" => Ok(Self::B64Json),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for CreateImageVariationBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for CreateImageVariationBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for CreateImageVariationBodyResponseFormat {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    ///The size of the generated images. Must be one of `256x256`, `512x512`,
+    /// or `1024x1024`.
+    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    pub enum CreateImageVariationBodySize {
+        #[serde(rename = "256x256")]
+        _256x256,
+        #[serde(rename = "512x512")]
+        _512x512,
+        #[serde(rename = "1024x1024")]
+        _1024x1024,
+    }
+
+    impl From<&CreateImageVariationBodySize> for CreateImageVariationBodySize {
+        fn from(value: &CreateImageVariationBodySize) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ToString for CreateImageVariationBodySize {
+        fn to_string(&self) -> String {
+            match *self {
+                Self::_256x256 => "256x256".to_string(),
+                Self::_512x512 => "512x512".to_string(),
+                Self::_1024x1024 => "1024x1024".to_string(),
+            }
+        }
+    }
+
+    impl std::str::FromStr for CreateImageVariationBodySize {
+        type Err = &'static str;
+        fn from_str(value: &str) -> Result<Self, &'static str> {
+            match value {
+                "256x256" => Ok(Self::_256x256),
+                "512x512" => Ok(Self::_512x512),
+                "1024x1024" => Ok(Self::_1024x1024),
+                _ => Err("invalid value"),
+            }
+        }
+    }
+
+    impl std::convert::TryFrom<&str> for CreateImageVariationBodySize {
+        type Error = &'static str;
+        fn try_from(value: &str) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<&String> for CreateImageVariationBodySize {
+        type Error = &'static str;
+        fn try_from(value: &String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    impl std::convert::TryFrom<String> for CreateImageVariationBodySize {
+        type Error = &'static str;
+        fn try_from(value: String) -> Result<Self, &'static str> {
+            value.parse()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct CreateImageVariationRequest {
         ///The image to use as the basis for the variation(s). Must be a valid
         /// PNG file, less than 4MB, and square.
@@ -520,6 +811,19 @@ pub mod types {
     }
 
     pub mod defaults {
+        pub(super) fn create_image_edit_body_n() -> Option<i64> {
+            Some(1_i64)
+        }
+
+        pub(super) fn create_image_edit_body_response_format(
+        ) -> Option<super::CreateImageEditBodyResponseFormat> {
+            Some(super::CreateImageEditBodyResponseFormat::Url)
+        }
+
+        pub(super) fn create_image_edit_body_size() -> Option<super::CreateImageEditBodySize> {
+            Some(super::CreateImageEditBodySize::_1024x1024)
+        }
+
         pub(super) fn create_image_edit_request_n() -> Option<i64> {
             Some(1_i64)
         }
@@ -545,6 +849,20 @@ pub mod types {
 
         pub(super) fn create_image_request_size() -> Option<super::CreateImageRequestSize> {
             Some(super::CreateImageRequestSize::_1024x1024)
+        }
+
+        pub(super) fn create_image_variation_body_n() -> Option<i64> {
+            Some(1_i64)
+        }
+
+        pub(super) fn create_image_variation_body_response_format(
+        ) -> Option<super::CreateImageVariationBodyResponseFormat> {
+            Some(super::CreateImageVariationBodyResponseFormat::Url)
+        }
+
+        pub(super) fn create_image_variation_body_size(
+        ) -> Option<super::CreateImageVariationBodySize> {
+            Some(super::CreateImageVariationBodySize::_1024x1024)
         }
 
         pub(super) fn create_image_variation_request_n() -> Option<i64> {
@@ -668,7 +986,7 @@ impl Client {
     ///   which will be used as the mask.
     pub async fn create_image_edit<'a>(
         &'a self,
-        body: &'a types::CreateImageEditRequest,
+        body: &'a types::CreateImageEditBody,
         mask: Option<Part>,
         image: Part,
     ) -> Result<ResponseValue<types::ImagesResponse>, Error<()>> {
@@ -729,7 +1047,7 @@ impl Client {
     ///   valid PNG file, less than 4MB, and square.
     pub async fn create_image_variation<'a>(
         &'a self,
-        body: &'a types::CreateImageVariationRequest,
+        body: &'a types::CreateImageVariationBody,
         image: Part,
     ) -> Result<ResponseValue<types::ImagesResponse>, Error<()>> {
         let url = format!("{}/images/variations", self.baseurl,);

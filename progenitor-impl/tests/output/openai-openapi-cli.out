@@ -99,6 +99,26 @@ impl Cli {
     pub fn cli_create_image_edit() -> clap::Command {
         clap::Command::new("")
             .arg(
+                clap::Arg::new("image")
+                    .required(true)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help(
+                        "The image to edit. Must be a valid PNG file, less than 4MB, and square. \
+                         If mask is not provided, image must have transparency, which will be \
+                         used as the mask.",
+                    ),
+            )
+            .arg(
+                clap::Arg::new("mask")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help(
+                        "An additional image whose fully transparent areas (e.g. where alpha is \
+                         zero) indicate where `image` should be edited. Must be a valid PNG file, \
+                         less than 4MB, and have the same dimensions as `image`.",
+                    ),
+            )
+            .arg(
                 clap::Arg::new("n")
                     .long("n")
                     .value_parser(clap::value_parser!(i64))
@@ -120,10 +140,10 @@ impl Cli {
                     .long("response-format")
                     .value_parser(clap::builder::TypedValueParser::map(
                         clap::builder::PossibleValuesParser::new([
-                            types::CreateImageEditRequestResponseFormat::Url.to_string(),
-                            types::CreateImageEditRequestResponseFormat::B64Json.to_string(),
+                            types::CreateImageEditBodyResponseFormat::Url.to_string(),
+                            types::CreateImageEditBodyResponseFormat::B64Json.to_string(),
                         ]),
-                        |s| types::CreateImageEditRequestResponseFormat::try_from(s).unwrap(),
+                        |s| types::CreateImageEditBodyResponseFormat::try_from(s).unwrap(),
                     ))
                     .required(false)
                     .help(
@@ -136,11 +156,11 @@ impl Cli {
                     .long("size")
                     .value_parser(clap::builder::TypedValueParser::map(
                         clap::builder::PossibleValuesParser::new([
-                            types::CreateImageEditRequestSize::_256x256.to_string(),
-                            types::CreateImageEditRequestSize::_512x512.to_string(),
-                            types::CreateImageEditRequestSize::_1024x1024.to_string(),
+                            types::CreateImageEditBodySize::_256x256.to_string(),
+                            types::CreateImageEditBodySize::_512x512.to_string(),
+                            types::CreateImageEditBodySize::_1024x1024.to_string(),
                         ]),
-                        |s| types::CreateImageEditRequestSize::try_from(s).unwrap(),
+                        |s| types::CreateImageEditBodySize::try_from(s).unwrap(),
                     ))
                     .required(false)
                     .help(
@@ -163,7 +183,7 @@ impl Cli {
                 clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
+                    .required(false)
                     .value_parser(clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -179,6 +199,15 @@ impl Cli {
     pub fn cli_create_image_variation() -> clap::Command {
         clap::Command::new("")
             .arg(
+                clap::Arg::new("image")
+                    .required(true)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help(
+                        "The image to use as the basis for the variation(s). Must be a valid PNG \
+                         file, less than 4MB, and square.",
+                    ),
+            )
+            .arg(
                 clap::Arg::new("n")
                     .long("n")
                     .value_parser(clap::value_parser!(i64))
@@ -190,10 +219,10 @@ impl Cli {
                     .long("response-format")
                     .value_parser(clap::builder::TypedValueParser::map(
                         clap::builder::PossibleValuesParser::new([
-                            types::CreateImageVariationRequestResponseFormat::Url.to_string(),
-                            types::CreateImageVariationRequestResponseFormat::B64Json.to_string(),
+                            types::CreateImageVariationBodyResponseFormat::Url.to_string(),
+                            types::CreateImageVariationBodyResponseFormat::B64Json.to_string(),
                         ]),
-                        |s| types::CreateImageVariationRequestResponseFormat::try_from(s).unwrap(),
+                        |s| types::CreateImageVariationBodyResponseFormat::try_from(s).unwrap(),
                     ))
                     .required(false)
                     .help(
@@ -206,11 +235,11 @@ impl Cli {
                     .long("size")
                     .value_parser(clap::builder::TypedValueParser::map(
                         clap::builder::PossibleValuesParser::new([
-                            types::CreateImageVariationRequestSize::_256x256.to_string(),
-                            types::CreateImageVariationRequestSize::_512x512.to_string(),
-                            types::CreateImageVariationRequestSize::_1024x1024.to_string(),
+                            types::CreateImageVariationBodySize::_256x256.to_string(),
+                            types::CreateImageVariationBodySize::_512x512.to_string(),
+                            types::CreateImageVariationBodySize::_1024x1024.to_string(),
                         ]),
-                        |s| types::CreateImageVariationRequestSize::try_from(s).unwrap(),
+                        |s| types::CreateImageVariationBodySize::try_from(s).unwrap(),
                     ))
                     .required(false)
                     .help(
@@ -233,7 +262,7 @@ impl Cli {
                 clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
+                    .required(false)
                     .value_parser(clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -312,6 +341,24 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_create_image_edit(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.create_image_edit();
+        if let Some(file_name) = matches.get_one::<std::path::PathBuf>("image") {
+            use std::io::Read;
+            let mut file = std::fs::File::open(&file_name).unwrap();
+            let mut value = Vec::new();
+            file.read_to_end(&mut value).unwrap();
+            let part = reqwest::multipart::Part::bytes(value);
+            request = request.image(part);
+        }
+
+        if let Some(file_name) = matches.get_one::<std::path::PathBuf>("mask") {
+            use std::io::Read;
+            let mut file = std::fs::File::open(&file_name).unwrap();
+            let mut value = Vec::new();
+            file.read_to_end(&mut value).unwrap();
+            let part = reqwest::multipart::Part::bytes(value);
+            request = request.mask(Some(part));
+        }
+
         if let Some(value) = matches.get_one::<i64>("n") {
             request = request.body_map(|body| body.n(value.clone()))
         }
@@ -321,12 +368,12 @@ impl<T: CliOverride> Cli<T> {
         }
 
         if let Some(value) =
-            matches.get_one::<types::CreateImageEditRequestResponseFormat>("response-format")
+            matches.get_one::<types::CreateImageEditBodyResponseFormat>("response-format")
         {
             request = request.body_map(|body| body.response_format(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<types::CreateImageEditRequestSize>("size") {
+        if let Some(value) = matches.get_one::<types::CreateImageEditBodySize>("size") {
             request = request.body_map(|body| body.size(value.clone()))
         }
 
@@ -336,8 +383,7 @@ impl<T: CliOverride> Cli<T> {
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value =
-                serde_json::from_str::<types::CreateImageEditRequest>(&body_txt).unwrap();
+            let body_value = serde_json::from_str::<types::CreateImageEditBody>(&body_txt).unwrap();
             request = request.body(body_value);
         }
 
@@ -357,17 +403,26 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_create_image_variation(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.create_image_variation();
+        if let Some(file_name) = matches.get_one::<std::path::PathBuf>("image") {
+            use std::io::Read;
+            let mut file = std::fs::File::open(&file_name).unwrap();
+            let mut value = Vec::new();
+            file.read_to_end(&mut value).unwrap();
+            let part = reqwest::multipart::Part::bytes(value);
+            request = request.image(part);
+        }
+
         if let Some(value) = matches.get_one::<i64>("n") {
             request = request.body_map(|body| body.n(value.clone()))
         }
 
         if let Some(value) =
-            matches.get_one::<types::CreateImageVariationRequestResponseFormat>("response-format")
+            matches.get_one::<types::CreateImageVariationBodyResponseFormat>("response-format")
         {
             request = request.body_map(|body| body.response_format(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<types::CreateImageVariationRequestSize>("size") {
+        if let Some(value) = matches.get_one::<types::CreateImageVariationBodySize>("size") {
             request = request.body_map(|body| body.size(value.clone()))
         }
 
@@ -378,7 +433,7 @@ impl<T: CliOverride> Cli<T> {
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
             let body_value =
-                serde_json::from_str::<types::CreateImageVariationRequest>(&body_txt).unwrap();
+                serde_json::from_str::<types::CreateImageVariationBody>(&body_txt).unwrap();
             request = request.body(body_value);
         }
 

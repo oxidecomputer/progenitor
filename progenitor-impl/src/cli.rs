@@ -10,7 +10,8 @@ use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 
 use crate::{
     method::{
-        OperationParameterKind, OperationParameterType, OperationResponseStatus,
+        BodyContentType, OperationParameterKind, OperationParameterType,
+        OperationResponseStatus,
     },
     to_schema::ToSchema,
     util::{sanitize, Case},
@@ -393,28 +394,15 @@ impl Generator {
             args.add_arg(arg_name, CliArg { parser, consumer })
         }
 
-        let maybe_body_type_id = method
-            .params
-            .iter()
-            .find(|param| {
-                matches!(&param.kind, OperationParameterKind::Body(_))
-            })
-            .and_then(|param| match &param.typ {
-                // TODO not sure how to deal with raw bodies, but we definitely
-                // need **some** input so we shouldn't just ignore it... as we
-                // are currently...
-                OperationParameterType::RawBody => None,
-
-                OperationParameterType::Type(body_type_id) => {
-                    Some(body_type_id)
-                }
-                OperationParameterType::FormPart => {
-                    let content_type = &param.kind;
-                    eprintln!(
-                        "todo: add --{}-file parameter for {content_type:?})",
-                        param.name
-                    );
-                    None
+        // args that destructure a structured body
+        let maybe_body_type_id =
+            method.params.iter().find_map(|param| {
+                match (&param.kind, &param.typ) {
+                    (
+                        OperationParameterKind::Body(_),
+                        OperationParameterType::Type(body_type_id),
+                    ) => Some(body_type_id),
+                    _ => None,
                 }
             });
 
@@ -437,6 +425,63 @@ impl Generator {
                 }
             }
         }
+
+        // args to send binary files
+        let body_file_args = method
+            .params
+            .iter()
+            .filter_map(|param| match (&param.kind, &param.typ) {
+                // TODO: impl, which should be pretty
+                // straight forward with a custom consumer
+                ( _, OperationParameterType::RawBody) => None,
+                // TODO: impl, which should be pretty
+                // straight forward with a custom consumer
+                ( OperationParameterKind::Body(BodyContentType::OctetStream),
+                    _,
+                ) => None,
+                (
+                    OperationParameterKind::Body(BodyContentType::FormData(
+                        required,
+                    )),
+                    OperationParameterType::FormPart,
+                ) => Some((param, *required)),
+                _ => None,
+            })
+            .map(|(param, required)| {
+                let help = if let Some(description) = &param.description {
+                    quote! { .help(#description) }
+                } else {
+                    quote! { .help("Path to file.") }
+                };
+                let arg_name = param.api_name.to_kebab_case();
+                let request_field = format_ident!("{}", param.name);
+                let parser = quote! {
+                        clap::Arg::new(#arg_name)
+                            .required(#required)
+                            .value_parser(clap::value_parser!(std::path::PathBuf))
+                            #help
+                };
+                let part = if required {
+                    quote! { part }
+                } else {
+                    quote ! { Some(part) }
+                };
+                let consumer = quote! {
+                    if let Some(file_name) = matches.get_one::<std::path::PathBuf>(#arg_name) {
+                        use std::io::Read;
+                        let mut file = std::fs::File::open(&file_name).unwrap();
+                        let mut value = Vec::new();
+                        file.read_to_end(&mut value).unwrap();
+                        // todo: here we can construct a (tokio) stream for
+                        // large files, set mime types etc.
+                        let part = reqwest::multipart::Part::bytes(value);
+                        request = request.#request_field(#part);
+                    }
+
+                };
+                (param.api_name.clone(), CliArg { parser, consumer })
+            });
+        args.args.extend(body_file_args);
 
         let parser_args =
             args.args.values().map(|CliArg { parser, .. }| parser);
