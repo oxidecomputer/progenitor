@@ -446,12 +446,15 @@ impl Generator {
         }
 
         params.extend(self.get_body_params(operation, components)?);
-        if params
-            .iter()
-            .any(|param| matches!(param.typ, OperationParameterType::FormPart))
-        {
-            // body fields use serde_json for serialization
-            self.uses_serde_json = true;
+        // check if some bodies use serde_json and more for serialization
+        if params.iter().any(|param| {
+            matches!(param.typ, OperationParameterType::FormPart)
+                || matches!(
+                    param.kind,
+                    OperationParameterKind::Body(BodyContentType::FormData(_))
+                )
+        }) {
+            self.uses_form_parts = true;
         }
 
         let tmp = crate::template::parse(path)?;
@@ -2470,11 +2473,9 @@ impl Generator {
             || form_parts_optional.len() > 0
             || build_form_type_id.is_some()
         {
-            let mutt = if form_parts_optional.len() > 0 {
+            let mutt = (form_parts_optional.len() > 0).then(|| {
                 quote! {mut}
-            } else {
-                quote! {}
-            };
+            });
             form_parts.insert(
                 0,
                 quote! {

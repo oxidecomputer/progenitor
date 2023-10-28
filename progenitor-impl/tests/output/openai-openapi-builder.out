@@ -3,8 +3,7 @@ use progenitor_client::{encode_path, to_form_string, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 #[allow(unused_imports)]
 use reqwest::header::{HeaderMap, HeaderValue};
-#[allow(unused_imports)]
-use reqwest::multipart::Part;
+pub use reqwest::multipart::Part;
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
