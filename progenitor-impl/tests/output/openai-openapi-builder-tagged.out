@@ -1969,24 +1969,24 @@ pub mod builder {
             if let Some(mask) = mask {
                 form = form.part("mask", mask);
             };
-            if let Some(v) = body.get("n").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("n") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("n", v);
             };
-            if let Some(v) = body.get("prompt").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("prompt") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("prompt", v);
             };
-            if let Some(v) = body.get("response_format").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("response_format") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("response_format", v);
             };
-            if let Some(v) = body.get("size").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("size") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("size", v);
             };
-            if let Some(v) = body.get("user").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("user") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("user", v);
             };
             let request = client
@@ -2069,20 +2069,20 @@ pub mod builder {
                 .cloned()
                 .ok_or_else(|| Error::InvalidRequest("Serializing body failed.".to_string()))?;
             let mut form = reqwest::multipart::Form::new().part("image", image);
-            if let Some(v) = body.get("n").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("n") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("n", v);
             };
-            if let Some(v) = body.get("response_format").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("response_format") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("response_format", v);
             };
-            if let Some(v) = body.get("size").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("size") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("size", v);
             };
-            if let Some(v) = body.get("user").map(serde_json::to_string) {
-                let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+            if let Some(v) = body.get("user") {
+                let v = progenitor_client::to_form_string(v)?;
                 form = form.text("user", v);
             };
             let request = client

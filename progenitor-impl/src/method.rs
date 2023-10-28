@@ -2356,7 +2356,6 @@ impl Generator {
                 ) = schema
                 {
                     for param in body_params.iter() {
-                        dbg!(("remove", &param.api_name, &param.description));
                         object.properties.remove_entry(&param.api_name);
                     }
                 };
@@ -2441,25 +2440,24 @@ impl Generator {
             };
             let body_parts = tstru
                 .properties()
+                // skip Parts made from binary strings
                 .filter_map(|(prop_name, _)| {
                     if form_data_names.contains(prop_name) {
                         None
-                    }
-                    else
-                    {
+                    } else {
                         Some(prop_name)
                     }
                 })
                 .map(|prop_name| {
-                    // Stringish serialization is what most servers expect,
-                    // for nested types we also assume they want those json
-                    // formatted. A customizable solution would be possible
-                    // with a custom Serializer.
+                    // Serialialize text fields.
+                    // Unquoted strings are what servers expect for
+                    // single values, including datetimes.
+                    // We assume they want a json string for nested types.
+                    // The field is not set if it skipped in Serialize.
                     quote! {
-                        if let Some(v) =
-                            body.get(#prop_name).map(serde_json::to_string)
+                        if let Some(v) = body.get(#prop_name)
                         {
-                            let v = v.map_err(|e| Error::InvalidRequest(e.to_string()))?;
+                            let v = progenitor_client::to_form_string(v)?;
                             #form_ident = #form_ident.text(#prop_name, v);
                         };
                     }
@@ -2480,9 +2478,8 @@ impl Generator {
             form_parts.insert(
                 0,
                 quote! {
-                    // prepare body
+                    // prepare body as json Map
                     let body = serde_json::to_value(body)
-                        // todo: impl From serde::Error?
                         .map_err(|e| Error::InvalidRequest(e.to_string()))?
                         .as_object()
                         .cloned()

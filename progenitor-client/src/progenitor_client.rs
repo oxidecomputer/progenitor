@@ -416,3 +416,17 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
             })?))
     }
 }
+
+#[doc(hidden)]
+pub fn to_form_string<E>(
+    value: &serde_json::Value,
+) -> Result<String, Error<E>> {
+    match value.as_str() {
+        // Take unquoted String Value
+        Some(v) => Ok(v.to_string()),
+        // otherwise convert to quoted json
+        None => serde_json::to_string(value).map_err(|_| {
+            Error::InvalidRequest("failed to serialize Value".to_string())
+        }),
+    }
+}
