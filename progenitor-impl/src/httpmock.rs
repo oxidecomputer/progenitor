@@ -183,11 +183,13 @@ impl Generator {
                         OperationParameterKind::Body(
                             BodyContentType::FormData(required),
                         ) => {
-                            // todo: how to mock?
+                            // No data can be accessed from a reqwest::multiform::Part
+                            // Hence, only form-data headers will be checked
+                            // automatically.
                             if *required {
-                                quote! { Part }
+                                quote! { () }
                             } else {
-                                quote! { Option<Part> }
+                                quote! { Option<()> }
                             }
                         }
                         _ => unreachable!(),
@@ -270,9 +272,32 @@ impl Generator {
                                     _ => unreachable!(),
                                 }
                             }
+                            // no binary data checks supported:
+                            // https://github.com/alexliesenfeld/httpmock/issues/39#issuecomment-983140233
+                            // you should check ascii text manually
                             OperationParameterType::FormPart => {
-                                // todo: what does it do?
-                                quote! { self.0 }
+                                if let BodyContentType::FormData(required) =
+                                    body_content_type
+                                {
+                                    let f =
+                                        format!("form-data; name=\"{}\"", name);
+                                    if *required {
+                                        quote! {
+                                            Self(self.0.body_contains(#f))
+                                        }
+                                    } else {
+                                        quote! {
+                                            if let Some(()) = value {
+                                                Self(self.0.body_contains(#f))
+                                            }
+                                            else {
+                                                self
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    unreachable!()
+                                }
                             }
                         }
                     }

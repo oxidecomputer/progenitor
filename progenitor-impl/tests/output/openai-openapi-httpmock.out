@@ -61,12 +61,16 @@ pub mod operations {
             Self(self.0.json_body_obj(value))
         }
 
-        pub fn mask(self, value: Option<Part>) -> Self {
-            self.0
+        pub fn mask(self, value: Option<()>) -> Self {
+            if let Some(()) = value {
+                Self(self.0.body_contains("form-data; name=\"mask\""))
+            } else {
+                self
+            }
         }
 
-        pub fn image(self, value: Part) -> Self {
-            self.0
+        pub fn image(self, value: ()) -> Self {
+            Self(self.0.body_contains("form-data; name=\"image\""))
         }
     }
 
@@ -108,8 +112,8 @@ pub mod operations {
             Self(self.0.json_body_obj(value))
         }
 
-        pub fn image(self, value: Part) -> Self {
-            self.0
+        pub fn image(self, value: ()) -> Self {
+            Self(self.0.body_contains("form-data; name=\"image\""))
         }
     }
 
