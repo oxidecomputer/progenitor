@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, RequestBuilderExt};
+use progenitor_client::{encode_path, to_form_string, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 #[allow(unused_imports)]
 use reqwest::header::{HeaderMap, HeaderValue};
@@ -1970,23 +1970,23 @@ pub mod builder {
                 form = form.part("mask", mask);
             };
             if let Some(v) = body.get("n") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("n", v);
             };
             if let Some(v) = body.get("prompt") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("prompt", v);
             };
             if let Some(v) = body.get("response_format") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("response_format", v);
             };
             if let Some(v) = body.get("size") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("size", v);
             };
             if let Some(v) = body.get("user") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("user", v);
             };
             let request = client
@@ -2070,19 +2070,19 @@ pub mod builder {
                 .ok_or_else(|| Error::InvalidRequest("Serializing body failed.".to_string()))?;
             let mut form = reqwest::multipart::Form::new().part("image", image);
             if let Some(v) = body.get("n") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("n", v);
             };
             if let Some(v) = body.get("response_format") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("response_format", v);
             };
             if let Some(v) = body.get("size") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("size", v);
             };
             if let Some(v) = body.get("user") {
-                let v = progenitor_client::to_form_string(v)?;
+                let v = to_form_string(v)?;
                 form = form.text("user", v);
             };
             let request = client

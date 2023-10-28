@@ -2457,7 +2457,7 @@ impl Generator {
                     quote! {
                         if let Some(v) = body.get(#prop_name)
                         {
-                            let v = progenitor_client::to_form_string(v)?;
+                            let v = to_form_string(v)?;
                             #form_ident = #form_ident.text(#prop_name, v);
                         };
                     }
