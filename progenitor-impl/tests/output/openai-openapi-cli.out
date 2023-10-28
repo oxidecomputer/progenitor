@@ -1,3 +1,16 @@
+fn request_file_part(path: &std::path::PathBuf) -> reqwest::multipart::Part {
+    use std::io::Read;
+    let mut file = std::fs::File::open(&path).unwrap();
+    let mut value = Vec::new();
+    file.read_to_end(&mut value).unwrap();
+    let part = reqwest::multipart::Part::bytes(value);
+    if let Some(file_name) = path.file_name() {
+        part.file_name(file_name.to_string_lossy().into_owned())
+    } else {
+        part
+    }
+}
+
 pub struct Cli<T: CliOverride = ()> {
     client: sdk::Client,
     over: T,
@@ -341,21 +354,13 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_create_image_edit(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.create_image_edit();
-        if let Some(file_name) = matches.get_one::<std::path::PathBuf>("image") {
-            use std::io::Read;
-            let mut file = std::fs::File::open(&file_name).unwrap();
-            let mut value = Vec::new();
-            file.read_to_end(&mut value).unwrap();
-            let part = reqwest::multipart::Part::bytes(value);
+        if let Some(path) = matches.get_one::<std::path::PathBuf>("image") {
+            let part = request_file_part(path);
             request = request.image(part);
         }
 
-        if let Some(file_name) = matches.get_one::<std::path::PathBuf>("mask") {
-            use std::io::Read;
-            let mut file = std::fs::File::open(&file_name).unwrap();
-            let mut value = Vec::new();
-            file.read_to_end(&mut value).unwrap();
-            let part = reqwest::multipart::Part::bytes(value);
+        if let Some(path) = matches.get_one::<std::path::PathBuf>("mask") {
+            let part = request_file_part(path);
             request = request.mask(Some(part));
         }
 
@@ -403,12 +408,8 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute_create_image_variation(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.create_image_variation();
-        if let Some(file_name) = matches.get_one::<std::path::PathBuf>("image") {
-            use std::io::Read;
-            let mut file = std::fs::File::open(&file_name).unwrap();
-            let mut value = Vec::new();
-            file.read_to_end(&mut value).unwrap();
-            let part = reqwest::multipart::Part::bytes(value);
+        if let Some(path) = matches.get_one::<std::path::PathBuf>("image") {
+            let part = request_file_part(path);
             request = request.image(part);
         }
 
