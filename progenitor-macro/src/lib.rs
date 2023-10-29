@@ -1,5 +1,9 @@
 // Copyright 2022 Oxide Computer Company
 
+//! Macros for the progenitor OpenAPI client generator.
+
+#![deny(missing_docs)]
+
 use std::{
     collections::HashMap,
     fmt::Display,
