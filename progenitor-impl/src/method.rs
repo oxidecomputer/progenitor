@@ -106,6 +106,7 @@ pub struct OperationParameter {
 pub enum OperationParameterType {
     Type(TypeId),
     RawBody,
+    /// Denotes binary parts of a multipart/form-data body.
     FormPart,
 }
 
@@ -142,6 +143,11 @@ pub enum BodyContentType {
     Json,
     FormUrlencoded,
     Text(String),
+    /// Binary or text parts of a multipart/form-data body.
+    /// The bool signifies if it is required.
+    // TODO any other body content ought to become optional,
+    // after which flag would be redundant
+    // (see comment in OperationParameterKind)
     FormData(bool),
 }
 
