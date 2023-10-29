@@ -417,6 +417,21 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
     }
 }
 
+/// Returns a string from any json value which is expected
+/// to work as `multipart/form-data` text. In particular, a
+/// [`serde_json::Value::String`] remains unquoted.
+///
+/// # Example
+/// ```
+/// # use progenitor_client::to_form_string;
+/// use serde_json::json;
+/// assert_eq!(to_form_string::<()>(&json!("a")).unwrap(), "a");
+/// assert_eq!(to_form_string::<()>(&json!(101)).unwrap(), "101");
+/// assert_eq!(
+///  to_form_string::<()>(&json!({"a": 202})).unwrap(),
+///  "{\"a\":202}"
+/// );
+/// ```
 #[doc(hidden)]
 pub fn to_form_string<E>(
     value: &serde_json::Value,
