@@ -648,13 +648,13 @@ impl Generator {
                             _ => unreachable!(),
                         }
                     }
-                    (OperationParameterType::RawBody, true) => unreachable!(),
                     (OperationParameterType::FormPart, false) => {
                         quote! { Part }
                     }
                     (OperationParameterType::FormPart, true) => {
                         quote! { Option<Part> }
                     }
+                    (OperationParameterType::RawBody, true) => unreachable!(),
                 };
                 quote! {
                     #name: #typ
