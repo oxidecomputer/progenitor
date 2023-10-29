@@ -2469,11 +2469,11 @@ impl Generator {
         }
 
         // only build if any param or at least a body without additional parts
-        if form_parts.len() > 0
-            || form_parts_optional.len() > 0
+        if !form_parts.is_empty()
+            || !form_parts_optional.is_empty()
             || build_form_type_id.is_some()
         {
-            let mutt = (form_parts_optional.len() > 0).then(|| {
+            let mutt = (!form_parts_optional.is_empty()).then(|| {
                 quote! {mut}
             });
             form_parts.insert(
