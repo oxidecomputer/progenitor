@@ -446,7 +446,8 @@ impl Generator {
         }
 
         params.extend(self.get_body_params(operation, components)?);
-        // check if some bodies use serde_json and more for serialization
+        // Set use_form_parts if any parameter requires all or a subset of
+        // features from serde_json and associated imports
         if params.iter().any(|param| {
             matches!(param.typ, OperationParameterType::FormPart)
                 || matches!(
