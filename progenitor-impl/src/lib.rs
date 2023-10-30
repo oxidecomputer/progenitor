@@ -213,17 +213,43 @@ impl Generator {
         }
     }
 
-    pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
+    fn add_ref_types(&mut self, spec: &OpenAPI) -> Result<()> {
         validate_openapi(spec)?;
 
-        // Convert our components dictionary to schemars
-        let schemas = spec.components.iter().flat_map(|components| {
-            components.schemas.iter().map(|(name, ref_or_schema)| {
-                (name.clone(), ref_or_schema.to_schema())
+        // collect all component names in request body media references
+        // that are only used for multipart/form-data operations.
+        let media_conents = spec
+            .paths
+            .iter()
+            .flat_map(|(_path, ref_or_item)| {
+                // Exclude externally defined path items.
+                let item = ref_or_item.as_item().unwrap();
+                item.iter().map(move |(_method, operation)| operation)
             })
-        });
+            .flat_map(|operation| operation.request_body.iter())
+            .filter_map(|b| b.as_item().map(|b| &b.content))
+            .flat_map(|body_content| body_content.iter());
+        let form_data_refs_only = get_exclusive_formdata_refs(media_conents);
+
+        // Convert our components dictionary to schemars
+        let schemas = spec
+            .components
+            .iter()
+            .flat_map(|components| {
+                let filter = form_data_refs_only.clone();
+                components.schemas.iter().map(move |(name, ref_or_schema)| {
+                    (!filter.contains(name.as_str()))
+                        .then(|| (name.clone(), ref_or_schema.to_schema()))
+                })
+            })
+            .filter_map(std::convert::identity);
 
         self.type_space.add_ref_types(schemas)?;
+        Ok(())
+    }
+
+    pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
+        self.add_ref_types(spec)?;
 
         let raw_methods = spec
             .paths
@@ -604,10 +630,51 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     Ok(())
 }
 
+/// Return all component names where schema references are keyed
+/// by multipart/form-data but nowhere else. The last part of a media
+/// schema's json path reference is considered the component name.
+fn get_exclusive_formdata_refs<'a>(
+    media_contents: impl IntoIterator<
+        Item = (impl AsRef<str>, &'a openapiv3::MediaType),
+    >,
+) -> HashSet<String> {
+    let mut used_form_excl = HashSet::<String>::new();
+    let mut used_elsewhere = HashSet::<String>::new();
+    media_contents
+        .into_iter()
+        .for_each(|(content_type, media)| {
+            if let Some(schema_ref) =
+                media.schema.as_ref().and_then(|s| match s {
+                    openapiv3::ReferenceOr::Reference { reference } => {
+                        Some(reference)
+                    }
+                    openapiv3::ReferenceOr::Item(_) => None,
+                })
+            {
+                let component_ref = schema_ref
+                    .rsplit_once('/')
+                    .map(|(_a, b)| b)
+                    .unwrap_or(&schema_ref);
+
+                // note that body content types are keyed by content_type
+                // and not media.encoding, thus don't use it to compare
+                if content_type.as_ref() != "multipart/form-data" {
+                    used_form_excl.remove(component_ref);
+                    used_elsewhere.insert(component_ref.to_owned());
+                } else if !used_elsewhere.contains(schema_ref) {
+                    used_form_excl.insert(component_ref.to_owned());
+                };
+            };
+        });
+    used_form_excl
+}
+
 #[cfg(test)]
 mod tests {
+    use openapiv3::ReferenceOr;
     use serde_json::json;
 
+    use super::*;
     use crate::Error;
 
     #[test]
@@ -639,6 +706,38 @@ mod tests {
         assert_eq!(
             Error::InternalError("nope".to_string()).to_string(),
             "internal error nope",
+        );
+    }
+
+    #[test]
+    fn form_media_matches_exclusively() {
+        use openapiv3::MediaType;
+        let form_str = "multipart/form-data";
+        let request1: MediaType = MediaType {
+            schema: Some(ReferenceOr::ref_("#/components/schemas/Request1")),
+            ..Default::default()
+        };
+        let request2: MediaType = MediaType {
+            schema: Some(ReferenceOr::ref_("foo/Request2")),
+            ..Default::default()
+        };
+
+        let request3: MediaType = MediaType {
+            schema: Some(ReferenceOr::ref_("Request3")),
+            ..Default::default()
+        };
+
+        let media_contents = vec![
+            (form_str, &request2),
+            ("other", &request1),
+            (form_str, &request1),
+            ("another", &request2),
+            (form_str, &request3),
+            ("somewhere", &request1),
+        ];
+        assert_eq!(
+            get_exclusive_formdata_refs(media_contents),
+            HashSet::from_iter(vec!["Request3".to_string()].into_iter())
         );
     }
 }

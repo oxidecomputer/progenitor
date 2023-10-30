@@ -2351,9 +2351,6 @@ impl Generator {
                         object.properties.remove_entry(&param.api_name);
                     }
                 };
-                // TODO: because add_ref_types is called before, the unmodified
-                // body also exists as additional type ending in Request.
-                // There should be a better way to modify a reference type.
                 let name = sanitize(
                     &format!(
                         "{}-body",
