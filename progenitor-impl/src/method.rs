@@ -2517,8 +2517,10 @@ fn get_form_data_params(
             match (&i.schema_data, &i.schema_kind) {
                 (
                     openapiv3::SchemaData {
-                        // todo: assert nullable if not required?
-                        //nullable: false,
+                        // nullable is a different concept than required
+                        // and is not a typical or documented case for
+                        // binary strings in form-data properties
+                        nullable: false,
                         default: None,
                         discriminator: None,
                         description,
