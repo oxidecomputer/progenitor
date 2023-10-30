@@ -2251,7 +2251,7 @@ impl Generator {
                 //     "type": "string",
                 //     "format": "binary"
                 // }
-                match schema.item(components)? {
+                match item_schema {
                     openapiv3::Schema {
                         schema_data:
                             openapiv3::SchemaData {
@@ -2288,7 +2288,7 @@ impl Generator {
                 // "schema": {
                 //     "type": "string",
                 // }
-                match schema.item(components)? {
+                match item_schema {
                     openapiv3::Schema {
                         schema_data:
                             openapiv3::SchemaData {
@@ -2339,24 +2339,7 @@ impl Generator {
             }
             BodyContentType::FormData(_) => {
                 // remove FormPart properties
-                // TODO: move into util
-                let schema = match schema {
-                    ReferenceOr::Reference { reference } => {
-                        let idx = reference.rfind('/').unwrap();
-                        let key = &reference[idx + 1..];
-                        let parameters = <openapiv3::Schema as crate::util::ComponentLookup>::get_components(
-                            components.as_ref().unwrap(),
-                        );
-                        parameters
-                            .get(key)
-                            .cloned()
-                            .unwrap_or_else(|| panic!("key {} is missing", key))
-                            .into_item()
-                            .unwrap()
-                    }
-                    ReferenceOr::Item(s) => s.to_owned(),
-                };
-                let mut schema = schema.to_schema();
+                let mut schema = item_schema.to_schema();
                 if let schemars::schema::Schema::Object(
                     schemars::schema::SchemaObject {
                         object: Some(ref mut object),
