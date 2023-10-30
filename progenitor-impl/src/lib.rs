@@ -47,7 +47,7 @@ pub struct Generator {
     uses_form_parts: bool,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct GenerationSettings {
     interface: InterfaceStyle,
     tag: TagStyle,
@@ -59,43 +59,6 @@ pub struct GenerationSettings {
     patch: HashMap<String, TypePatch>,
     replace: HashMap<String, (String, Vec<TypeImpl>)>,
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
-}
-
-impl Default for GenerationSettings {
-    fn default() -> Self {
-        // set Type from String to meta data for form body parts
-        use schemars::schema::{InstanceType, SchemaObject};
-        let bin_string = SchemaObject {
-            instance_type: Some(schemars::schema::SingleOrVec::Single(
-                Box::new(InstanceType::String),
-            )),
-            format: Some("binary".to_string()),
-            ..SchemaObject::default()
-        };
-        // This treats binary strings on the level of generated types.
-        // For now, we'd want to remove this field because
-        // the only supported binary string is handled as FormPart instead.
-        // Not sure if or how patch could help, at least making it not
-        // required.
-        // TODO: remove after the right ref objects can be modified.
-        let convert = (
-            bin_string,
-            // () errors and doesn't convert to unit
-            "Vec<()>".to_string(),
-            vec![TypeImpl::Default, TypeImpl::Default, TypeImpl::Display],
-        );
-        Self {
-            interface: InterfaceStyle::default(),
-            tag: TagStyle::default(),
-            inner_type: None,
-            pre_hook: None,
-            post_hook: None,
-            extra_derives: Vec::default(),
-            patch: HashMap::default(),
-            replace: HashMap::default(),
-            convert: vec![convert],
-        }
-    }
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]

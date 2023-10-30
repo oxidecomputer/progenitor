@@ -166,12 +166,12 @@ pub mod types {
         ///The image to edit. Must be a valid PNG file, less than 4MB, and
         /// square. If mask is not provided, image must have transparency, which
         /// will be used as the mask.
-        pub image: Vec<()>,
+        pub image: String,
         ///An additional image whose fully transparent areas (e.g. where alpha
         /// is zero) indicate where `image` should be edited. Must be a valid
         /// PNG file, less than 4MB, and have the same dimensions as `image`.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub mask: Option<Vec<()>>,
+        pub mask: Option<String>,
         ///The number of images to generate. Must be between 1 and 10.
         #[serde(default = "defaults::create_image_edit_request_n")]
         pub n: Option<i64>,
@@ -630,7 +630,7 @@ pub mod types {
     pub struct CreateImageVariationRequest {
         ///The image to use as the basis for the variation(s). Must be a valid
         /// PNG file, less than 4MB, and square.
-        pub image: Vec<()>,
+        pub image: String,
         ///The number of images to generate. Must be between 1 and 10.
         #[serde(default = "defaults::create_image_variation_request_n")]
         pub n: Option<i64>,
@@ -965,8 +965,8 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct CreateImageEditRequest {
-            image: Result<Vec<()>, String>,
-            mask: Result<Option<Vec<()>>, String>,
+            image: Result<String, String>,
+            mask: Result<Option<String>, String>,
             n: Result<Option<i64>, String>,
             prompt: Result<String, String>,
             response_format: Result<Option<super::CreateImageEditRequestResponseFormat>, String>,
@@ -993,7 +993,7 @@ pub mod types {
         impl CreateImageEditRequest {
             pub fn image<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<()>>,
+                T: std::convert::TryInto<String>,
                 T::Error: std::fmt::Display,
             {
                 self.image = value
@@ -1003,7 +1003,7 @@ pub mod types {
             }
             pub fn mask<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<Vec<()>>>,
+                T: std::convert::TryInto<Option<String>>,
                 T::Error: std::fmt::Display,
             {
                 self.mask = value
@@ -1280,7 +1280,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct CreateImageVariationRequest {
-            image: Result<Vec<()>, String>,
+            image: Result<String, String>,
             n: Result<Option<i64>, String>,
             response_format:
                 Result<Option<super::CreateImageVariationRequestResponseFormat>, String>,
@@ -1305,7 +1305,7 @@ pub mod types {
         impl CreateImageVariationRequest {
             pub fn image<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<()>>,
+                T: std::convert::TryInto<String>,
                 T::Error: std::fmt::Display,
             {
                 self.image = value
