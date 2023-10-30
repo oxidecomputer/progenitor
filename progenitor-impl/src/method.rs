@@ -1721,7 +1721,6 @@ impl Generator {
                             // a `body_map()` method that operates on the
                             // builder itself.
                             (Some(builder_name), false) => {
-                                // todo: rm for ...Kind::FormData
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident();
                                 let err_msg = format!(
