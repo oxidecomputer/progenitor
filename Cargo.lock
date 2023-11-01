@@ -1432,8 +1432,12 @@ dependencies = [
 name = "progenitor-impl"
 version = "0.4.0"
 dependencies = [
+ "base64",
+ "chrono",
+ "clap",
  "dropshot",
  "expectorate",
+ "futures",
  "getopts",
  "heck",
  "http",
@@ -1441,17 +1445,23 @@ dependencies = [
  "indexmap 2.0.2",
  "openapiv3",
  "proc-macro2",
+ "progenitor-client",
  "quote",
+ "rand",
  "regex",
+ "regress",
+ "reqwest",
  "rustfmt-wrapper",
  "schemars",
  "serde",
  "serde_json",
  "serde_yaml",
  "syn 2.0.38",
+ "test-progenitor-compilation",
  "thiserror",
  "typify",
  "unicode-ident",
+ "uuid",
 ]
 
 [[package]]
@@ -2139,6 +2149,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "be55cf8942feac5c765c2c993422806843c9a9a45d4d5c407ad6dd2ea95eb9b6"
 dependencies = [
  "winapi-util",
+]
+
+[[package]]
+name = "test-progenitor-compilation"
+version = "0.1.0"
+dependencies = [
+ "dropshot",
+ "expectorate",
+ "http",
+ "hyper",
+ "openapiv3",
+ "proc-macro2",
+ "progenitor-impl",
+ "quote",
+ "schemars",
+ "serde_json",
+ "serde_yaml",
+ "syn 2.0.38",
 ]
 
 [[package]]
