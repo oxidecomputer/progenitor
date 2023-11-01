@@ -4,9 +4,14 @@ extern crate proc_macro;
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
-use progenitor_impl::{Generator, GenerationSettings, InterfaceStyle, TagStyle};
+use progenitor_impl::{
+    GenerationSettings, Generator, InterfaceStyle, TagStyle,
+};
 use quote::quote;
-use std::{fs::File, path::{Path, PathBuf}};
+use std::{
+    fs::File,
+    path::{Path, PathBuf},
+};
 
 #[proc_macro]
 pub fn cli_tokens(item: TokenStream) -> TokenStream {
@@ -35,9 +40,9 @@ pub fn cli_tokens(item: TokenStream) -> TokenStream {
         use sdk::*;
 
         #cli
-    }.into()
+    }
+    .into()
 }
-
 
 fn load_api<P>(p: P) -> OpenAPI
 where

@@ -4,7 +4,7 @@ use test_progenitor_compilation::cli_tokens;
 
 #[test]
 fn test_keeper_compilation() {
-    cli_tokens!("keeper.json");    
+    cli_tokens!("keeper.json");
 }
 
 #[test]
