@@ -31,6 +31,6 @@ dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features
 expectorate = "1.1"
 http = "0.2.9"
 hyper = "0.14.27"
-rustfmt-wrapper = "0.2.0"
+rustfmt-wrapper = "0.2.1"
 serde_yaml = "0.9"
 serde_json = "1.0.108"
