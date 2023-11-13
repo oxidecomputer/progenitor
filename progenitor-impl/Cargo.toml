@@ -9,7 +9,7 @@ readme = "../README.md"
 
 [dependencies]
 heck = "0.4.1"
-http = "0.2.9"
+http = "0.2.10"
 getopts = "0.2"
 indexmap = "2.1.0"
 openapiv3 = "2.0.0-rc.0"
@@ -29,7 +29,7 @@ unicode-ident = "1.0.12"
 [dev-dependencies]
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
 expectorate = "1.1"
-http = "0.2.9"
+http = "0.2.10"
 hyper = "0.14.27"
 rustfmt-wrapper = "0.2.0"
 serde_yaml = "0.9"
