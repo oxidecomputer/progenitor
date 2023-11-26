@@ -85,9 +85,7 @@ impl Client {
 
 impl Client {
     ///Sends a `GET` request to `/`
-    pub async fn freeform_response<'a>(
-        &'a self,
-    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+    pub async fn freeform_response(&self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/", self.baseurl,);
         let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;

@@ -662,16 +662,30 @@ impl Generator {
             body,
         } = self.method_sig_body(method, quote! { self })?;
 
-        let method_impl = quote! {
-            #[doc = #doc_comment]
-            pub async fn #operation_id #bounds (
-                &'a self,
-                #(#params),*
-            ) -> Result<
-                ResponseValue<#success_type>,
-                Error<#error_type>,
-            > {
-                #body
+        let method_impl = if params.is_empty() {
+            quote! {
+                #[doc = #doc_comment]
+                pub async fn #operation_id (
+                    &self,
+                ) -> Result<
+                    ResponseValue<#success_type>,
+                    Error<#error_type>,
+                > {
+                    #body
+                }
+            }
+        } else {
+            quote! {
+                #[doc = #doc_comment]
+                pub async fn #operation_id #bounds (
+                    &'a self,
+                    #(#params),*
+                ) -> Result<
+                    ResponseValue<#success_type>,
+                    Error<#error_type>,
+                > {
+                    #body
+                }
             }
         };
 
