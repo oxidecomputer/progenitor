@@ -5,90 +5,785 @@
     "version": "1.0"
   },
   "paths": {
-    "/v1/control/hold": {
+    "/0/admin/factory": {
       "post": {
-        "operationId": "control_hold",
+        "operationId": "factory_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FactoryCreate"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
-          "200": {
-            "description": "successful operation",
+          "201": {
+            "description": "successful creation",
             "content": {
-              "application/json; charset=utf-8": {
+              "application/json": {
                 "schema": {
-                  "enum": [
-                    null
-                  ]
+                  "$ref": "#/components/schemas/FactoryCreateResult"
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
-    "/v1/control/resume": {
-      "post": {
-        "operationId": "control_resume",
-        "responses": {
-          "200": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/v1/task/{task}": {
+    "/0/admin/jobs": {
       "get": {
-        "operationId": "task_get",
+        "operationId": "admin_jobs_get",
         "parameters": [
           {
-            "in": "path",
-            "name": "task",
-            "required": true,
+            "in": "query",
+            "name": "active",
             "schema": {
-              "type": "string"
-            },
-            "style": "simple"
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "completed",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json; charset=utf-8": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Task"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/tasks": {
-      "get": {
-        "operationId": "tasks_get",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "title": "Array_of_Task",
+                  "title": "Array_of_Job",
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Task"
+                    "$ref": "#/components/schemas/Job"
                   }
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/jobs/{job}": {
+      "get": {
+        "operationId": "admin_job_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/jobs/{job}/archive": {
+      "post": {
+        "operationId": "admin_job_archive_request",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/target": {
+      "post": {
+        "operationId": "target_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TargetCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TargetCreateResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/targets": {
+      "get": {
+        "operationId": "targets_list",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array_of_Target",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Target"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/targets/{target}/redirect": {
+      "put": {
+        "operationId": "target_redirect",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "target",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TargetRedirect"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/targets/{target}/rename": {
+      "post": {
+        "operationId": "target_rename",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "target",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TargetRename"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TargetCreateResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/targets/{target}/require": {
+      "delete": {
+        "operationId": "target_require_no_privilege",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "target",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/targets/{target}/require/{privilege}": {
+      "put": {
+        "operationId": "target_require_privilege",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "privilege",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "target",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/admin/worker/{worker}/recycle": {
+      "post": {
+        "operationId": "worker_recycle",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "worker",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/control/hold": {
+      "post": {
+        "operationId": "control_hold",
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/control/resume": {
+      "post": {
+        "operationId": "control_resume",
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/factory/lease": {
+      "post": {
+        "operationId": "factory_lease",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FactoryWhatsNext"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FactoryLeaseResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/factory/lease/{job}": {
+      "post": {
+        "operationId": "factory_lease_renew",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Boolean",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/factory/ping": {
+      "get": {
+        "operationId": "factory_ping",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FactoryPingResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/factory/worker": {
+      "post": {
+        "operationId": "factory_worker_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FactoryWorkerCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FactoryWorker"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/factory/worker/{worker}": {
+      "get": {
+        "operationId": "factory_worker_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "worker",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FactoryWorkerResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "factory_worker_destroy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "worker",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Boolean",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "factory_worker_associate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "worker",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FactoryWorkerAssociate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/factory/worker/{worker}/append": {
+      "post": {
+        "operationId": "factory_worker_append",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "worker",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FactoryWorkerAppend"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FactoryWorkerAppendResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/factory/worker/{worker}/flush": {
+      "post": {
+        "operationId": "factory_worker_flush",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "worker",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/factory/workers": {
+      "get": {
+        "operationId": "factory_workers",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array_of_FactoryWorker",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FactoryWorker"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/job/{job}": {
+      "get": {
+        "operationId": "job_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/jobs": {
+      "get": {
+        "operationId": "jobs_get",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array_of_Job",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Job"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       },
       "post": {
-        "operationId": "task_submit",
+        "operationId": "job_submit",
         "requestBody": {
           "content": {
-            "application/json; charset=utf-8": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TaskSubmit"
+                "$ref": "#/components/schemas/JobSubmit"
               }
             }
           },
@@ -98,266 +793,59 @@
           "201": {
             "description": "successful creation",
             "content": {
-              "application/json; charset=utf-8": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TaskSubmitResult"
+                  "$ref": "#/components/schemas/JobSubmitResult"
                 }
               }
             }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
-    "/v1/tasks/{task}/events": {
-      "get": {
-        "operationId": "task_events_get",
+    "/0/jobs/{job}/cancel": {
+      "post": {
+        "operationId": "job_cancel",
         "parameters": [
           {
             "in": "path",
-            "name": "task",
+            "name": "job",
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "query",
-            "name": "minseq",
-            "schema": {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0
-            },
-            "style": "form"
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "title": "Array_of_TaskEvent",
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TaskEvent"
-                  }
-                }
-              }
-            }
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
-    "/v1/tasks/{task}/outputs": {
-      "get": {
-        "operationId": "task_outputs_get",
+    "/0/jobs/{job}/chunk": {
+      "post": {
+        "operationId": "job_upload_chunk",
         "parameters": [
           {
             "in": "path",
-            "name": "task",
+            "name": "job",
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "style": "simple"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "title": "Array_of_TaskOutput",
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TaskOutput"
-                  }
-                }
-              }
             }
-          }
-        }
-      }
-    },
-    "/v1/tasks/{task}/outputs/{output}": {
-      "get": {
-        "operationId": "task_output_download",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "output",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "style": "simple"
-          },
-          {
-            "in": "path",
-            "name": "task",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "style": "simple"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/v1/users": {
-      "post": {
-        "operationId": "user_create",
-        "requestBody": {
-          "content": {
-            "application/json; charset=utf-8": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "successful creation",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserCreateResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/whoami": {
-      "get": {
-        "operationId": "whoami",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/WhoamiResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/whoami/name": {
-      "put": {
-        "operationId": "whoami_put_name",
-        "requestBody": {
-          "content": {
-            "text/plain": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/v1/worker/bootstrap": {
-      "post": {
-        "operationId": "worker_bootstrap",
-        "requestBody": {
-          "content": {
-            "application/json; charset=utf-8": {
-              "schema": {
-                "$ref": "#/components/schemas/WorkerBootstrap"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "successful creation",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkerBootstrapResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/worker/ping": {
-      "get": {
-        "operationId": "worker_ping",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkerPingResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/worker/task/{task}/append": {
-      "post": {
-        "operationId": "worker_task_append",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "task",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "style": "simple"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json; charset=utf-8": {
-              "schema": {
-                "$ref": "#/components/schemas/WorkerAppendTask"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "successful creation"
-          }
-        }
-      }
-    },
-    "/v1/worker/task/{task}/chunk": {
-      "post": {
-        "operationId": "worker_task_upload_chunk",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "task",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "style": "simple"
           }
         ],
         "requestBody": {
@@ -375,33 +863,911 @@
           "201": {
             "description": "successful creation",
             "content": {
-              "application/json; charset=utf-8": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UploadedChunk"
                 }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/jobs/{job}/events": {
+      "get": {
+        "operationId": "job_events_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "minseq",
+            "schema": {
+              "nullable": true,
+              "type": "integer",
+              "format": "uint",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array_of_JobEvent",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JobEvent"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/jobs/{job}/outputs": {
+      "get": {
+        "operationId": "job_outputs_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array_of_JobOutput",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JobOutput"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/jobs/{job}/outputs/{output}": {
+      "get": {
+        "operationId": "job_output_download",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "output",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
               }
             }
           }
         }
       }
     },
-    "/v1/worker/task/{task}/complete": {
+    "/0/jobs/{job}/outputs/{output}/publish": {
       "post": {
-        "operationId": "worker_task_complete",
+        "operationId": "job_output_publish",
         "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "output",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobOutputPublish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/jobs/{job}/outputs/{output}/sign": {
+      "post": {
+        "operationId": "job_output_signed_url",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "output",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobOutputSignedUrl"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOutputSignedUrlResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/jobs/{job}/store": {
+      "get": {
+        "operationId": "job_store_get_all",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Map_of_JobStoreValueInfo",
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/JobStoreValueInfo"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/jobs/{job}/store/{name}": {
+      "put": {
+        "operationId": "job_store_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobStoreValue"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/public/file/{username}/{series}/{version}/{name}": {
+      "get": {
+        "operationId": "public_file_download",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "series",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "username",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/0/quota": {
+      "get": {
+        "operationId": "quota",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quota"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/users": {
+      "get": {
+        "operationId": "users_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array_of_User",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "post": {
+        "operationId": "user_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCreateResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/users/{user}": {
+      "get": {
+        "operationId": "user_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/users/{user}/privilege/{privilege}": {
+      "put": {
+        "operationId": "user_privilege_grant",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "privilege",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "user_privilege_revoke",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "privilege",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/whoami": {
+      "get": {
+        "operationId": "whoami",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WhoamiResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/worker/bootstrap": {
+      "post": {
+        "operationId": "worker_bootstrap",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkerBootstrap"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerBootstrapResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/worker/job/{job}/chunk": {
+      "post": {
+        "operationId": "worker_job_upload_chunk",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadedChunk"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/worker/job/{job}/complete": {
+      "post": {
+        "operationId": "worker_job_complete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkerCompleteJob"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/worker/job/{job}/inputs/{input}": {
+      "get": {
+        "operationId": "worker_job_input_download",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "input",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/0/worker/job/{job}/quota": {
+      "get": {
+        "operationId": "worker_job_quota",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerJobQuota"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/worker/job/{job}/store/{name}": {
+      "get": {
+        "operationId": "worker_job_store_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerJobStoreGet"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "put": {
+        "operationId": "worker_job_store_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkerJobStoreValue"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/worker/job/{job}/task/{task}/append": {
+      "post": {
+        "operationId": "worker_task_append",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "in": "path",
             "name": "task",
             "required": true,
             "schema": {
-              "type": "string"
-            },
-            "style": "simple"
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 0
+            }
           }
         ],
         "requestBody": {
           "content": {
-            "application/json; charset=utf-8": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkerAppendJob"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/worker/job/{job}/task/{task}/complete": {
+      "post": {
+        "operationId": "worker_task_complete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "task",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 0
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/WorkerCompleteTask"
               }
@@ -410,29 +1776,188 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "successful operation"
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     },
-    "/v1/worker/task/{task}/output": {
+    "/0/worker/ping": {
+      "get": {
+        "operationId": "worker_ping",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerPingResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/workers": {
+      "get": {
+        "operationId": "workers_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "active",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkersResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/0/workers/recycle": {
       "post": {
-        "operationId": "worker_task_add_output",
+        "operationId": "workers_recycle",
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/1/jobs/{job}/input": {
+      "post": {
+        "operationId": "job_add_input",
         "parameters": [
           {
             "in": "path",
-            "name": "task",
+            "name": "job",
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "style": "simple"
+            }
           }
         ],
         "requestBody": {
           "content": {
-            "application/json; charset=utf-8": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobAddInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAddInputResult"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/1/worker/job/{job}/append": {
+      "post": {
+        "operationId": "worker_job_append",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Array_of_WorkerAppendJobOrTask",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/WorkerAppendJobOrTask"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "resource updated"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/1/worker/job/{job}/output": {
+      "post": {
+        "operationId": "worker_job_add_output",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/WorkerAddOutput"
               }
@@ -441,45 +1966,338 @@
           "required": true
         },
         "responses": {
-          "201": {
-            "description": "successful creation"
-          }
-        }
-      }
-    },
-    "/v1/workers": {
-      "get": {
-        "operationId": "workers_list",
-        "responses": {
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json; charset=utf-8": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WorkersResult"
+                  "$ref": "#/components/schemas/WorkerAddOutputResult"
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/v1/workers/recycle": {
-      "post": {
-        "operationId": "workers_recycle",
-        "responses": {
-          "200": {
-            "description": "successful operation"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/Error"
           }
         }
       }
     }
   },
   "components": {
+    "responses": {
+      "Error": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
     "schemas": {
-      "Task": {
+      "DependSubmit": {
         "type": "object",
         "properties": {
+          "copy_outputs": {
+            "type": "boolean"
+          },
+          "on_completed": {
+            "type": "boolean"
+          },
+          "on_failed": {
+            "type": "boolean"
+          },
+          "prior_job": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "copy_outputs",
+          "on_completed",
+          "on_failed",
+          "prior_job"
+        ]
+      },
+      "Error": {
+        "description": "Error information from a response.",
+        "type": "object",
+        "properties": {
+          "error_code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "request_id"
+        ]
+      },
+      "FactoryAddresses": {
+        "type": "object",
+        "properties": {
+          "cidr": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "first": {
+            "type": "string"
+          },
+          "gateway": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "routed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "cidr",
+          "count",
+          "first",
+          "name",
+          "routed"
+        ]
+      },
+      "FactoryCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "FactoryCreateResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "token"
+        ]
+      },
+      "FactoryLease": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job",
+          "target"
+        ]
+      },
+      "FactoryLeaseResult": {
+        "type": "object",
+        "properties": {
+          "lease": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FactoryLease"
+              }
+            ]
+          }
+        }
+      },
+      "FactoryMetadata": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "addresses": {
+                "default": [],
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FactoryAddresses"
+                }
+              },
+              "v": {
+                "type": "string",
+                "enum": [
+                  "1"
+                ]
+              }
+            },
+            "required": [
+              "v"
+            ]
+          }
+        ]
+      },
+      "FactoryPingResult": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ]
+      },
+      "FactoryWhatsNext": {
+        "type": "object",
+        "properties": {
+          "supported_targets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "supported_targets"
+        ]
+      },
+      "FactoryWorker": {
+        "type": "object",
+        "properties": {
+          "bootstrap": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "online": {
+            "type": "boolean"
+          },
+          "private": {
+            "nullable": true,
+            "type": "string"
+          },
+          "recycle": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "bootstrap",
+          "id",
+          "online",
+          "recycle"
+        ]
+      },
+      "FactoryWorkerAppend": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "type": "string"
+          },
+          "stream": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "payload",
+          "stream",
+          "time"
+        ]
+      },
+      "FactoryWorkerAppendResult": {
+        "type": "object",
+        "properties": {
+          "retry": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "retry"
+        ]
+      },
+      "FactoryWorkerAssociate": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FactoryMetadata"
+              }
+            ]
+          },
+          "private": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "private"
+        ]
+      },
+      "FactoryWorkerCreate": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "nullable": true,
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "wait_for_flush": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "target"
+        ]
+      },
+      "FactoryWorkerResult": {
+        "type": "object",
+        "properties": {
+          "worker": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FactoryWorker"
+              }
+            ]
+          }
+        }
+      },
+      "Job": {
+        "type": "object",
+        "properties": {
+          "cancelled": {
+            "type": "boolean"
+          },
           "id": {
             "type": "string"
           },
@@ -492,22 +2310,96 @@
               "type": "string"
             }
           },
-          "script": {
+          "owner": {
             "type": "string"
           },
           "state": {
             "type": "string"
+          },
+          "tags": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "target": {
+            "type": "string"
+          },
+          "target_real": {
+            "type": "string"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Task"
+            }
+          },
+          "times": {
+            "default": {},
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "date-time"
+            }
           }
         },
         "required": [
+          "cancelled",
           "id",
           "name",
           "output_rules",
-          "script",
-          "state"
+          "owner",
+          "state",
+          "tags",
+          "target",
+          "target_real",
+          "tasks"
         ]
       },
-      "TaskEvent": {
+      "JobAddInput": {
+        "type": "object",
+        "properties": {
+          "chunks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "commit_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "chunks",
+          "commit_id",
+          "name",
+          "size"
+        ]
+      },
+      "JobAddInputResult": {
+        "type": "object",
+        "properties": {
+          "complete": {
+            "type": "boolean"
+          },
+          "error": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "complete"
+        ]
+      },
+      "JobEvent": {
         "type": "object",
         "properties": {
           "payload": {
@@ -521,7 +2413,18 @@
           "stream": {
             "type": "string"
           },
+          "task": {
+            "nullable": true,
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
           "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_remote": {
+            "nullable": true,
             "type": "string",
             "format": "date-time"
           }
@@ -533,7 +2436,7 @@
           "time"
         ]
       },
-      "TaskOutput": {
+      "JobOutput": {
         "type": "object",
         "properties": {
           "id": {
@@ -554,9 +2457,112 @@
           "size"
         ]
       },
-      "TaskSubmit": {
+      "JobOutputPublish": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string"
+          },
+          "series": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "series",
+          "version"
+        ]
+      },
+      "JobOutputSignedUrl": {
+        "type": "object",
+        "properties": {
+          "content_disposition": {
+            "nullable": true,
+            "type": "string"
+          },
+          "content_type": {
+            "nullable": true,
+            "type": "string"
+          },
+          "expiry_seconds": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "expiry_seconds"
+        ]
+      },
+      "JobOutputSignedUrlResult": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "JobStoreValue": {
+        "type": "object",
+        "properties": {
+          "secret": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "secret",
+          "value"
+        ]
+      },
+      "JobStoreValueInfo": {
+        "type": "object",
+        "properties": {
+          "secret": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string"
+          },
+          "time_update": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "secret",
+          "source",
+          "time_update"
+        ]
+      },
+      "JobSubmit": {
+        "type": "object",
+        "properties": {
+          "depends": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DependSubmit"
+            }
+          },
+          "inputs": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "name": {
             "type": "string"
           },
@@ -566,16 +2572,31 @@
               "type": "string"
             }
           },
-          "script": {
+          "tags": {
+            "default": {},
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "target": {
             "type": "string"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskSubmit"
+            }
           }
         },
         "required": [
           "name",
-          "script"
+          "output_rules",
+          "target",
+          "tasks"
         ]
       },
-      "TaskSubmitResult": {
+      "JobSubmitResult": {
         "type": "object",
         "properties": {
           "id": {
@@ -584,6 +2605,184 @@
         },
         "required": [
           "id"
+        ]
+      },
+      "Quota": {
+        "type": "object",
+        "properties": {
+          "max_bytes_per_input": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "max_bytes_per_input"
+        ]
+      },
+      "Target": {
+        "type": "object",
+        "properties": {
+          "desc": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "privilege": {
+            "nullable": true,
+            "type": "string"
+          },
+          "redirect": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "desc",
+          "id",
+          "name"
+        ]
+      },
+      "TargetCreate": {
+        "type": "object",
+        "properties": {
+          "desc": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "desc",
+          "name"
+        ]
+      },
+      "TargetCreateResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "TargetRedirect": {
+        "type": "object",
+        "properties": {
+          "redirect": {
+            "nullable": true,
+            "type": "string"
+          }
+        }
+      },
+      "TargetRename": {
+        "type": "object",
+        "properties": {
+          "new_name": {
+            "type": "string"
+          },
+          "signpost_description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "new_name",
+          "signpost_description"
+        ]
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "env": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "env_clear": {
+            "type": "boolean"
+          },
+          "gid": {
+            "nullable": true,
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "script": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "uid": {
+            "nullable": true,
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "workdir": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "env",
+          "env_clear",
+          "name",
+          "script",
+          "state"
+        ]
+      },
+      "TaskSubmit": {
+        "type": "object",
+        "properties": {
+          "env": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "env_clear": {
+            "type": "boolean"
+          },
+          "gid": {
+            "nullable": true,
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "script": {
+            "type": "string"
+          },
+          "uid": {
+            "nullable": true,
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "workdir": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "env",
+          "env_clear",
+          "name",
+          "script"
         ]
       },
       "UploadedChunk": {
@@ -595,6 +2794,33 @@
         },
         "required": [
           "id"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "privileges": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "time_create": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "privileges",
+          "time_create"
         ]
       },
       "UserCreate": {
@@ -645,34 +2871,48 @@
       "Worker": {
         "type": "object",
         "properties": {
+          "bootstrap": {
+            "type": "boolean"
+          },
           "deleted": {
             "type": "boolean"
+          },
+          "factory": {
+            "type": "string"
+          },
+          "factory_private": {
+            "nullable": true,
+            "type": "string"
           },
           "id": {
             "type": "string"
           },
-          "instance_id": {
-            "type": "string"
+          "jobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkerJob"
+            }
           },
           "lastping": {
+            "nullable": true,
             "type": "string",
             "format": "date-time"
           },
           "recycle": {
             "type": "boolean"
           },
-          "tasks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WorkerTask"
-            }
+          "target": {
+            "type": "string"
           }
         },
         "required": [
+          "bootstrap",
           "deleted",
+          "factory",
           "id",
+          "jobs",
           "recycle",
-          "tasks"
+          "target"
         ]
       },
       "WorkerAddOutput": {
@@ -684,21 +2924,41 @@
               "type": "string"
             }
           },
+          "commit_id": {
+            "type": "string"
+          },
           "path": {
             "type": "string"
           },
           "size": {
             "type": "integer",
-            "format": "int64"
+            "format": "uint64",
+            "minimum": 0
           }
         },
         "required": [
           "chunks",
+          "commit_id",
           "path",
           "size"
         ]
       },
-      "WorkerAppendTask": {
+      "WorkerAddOutputResult": {
+        "type": "object",
+        "properties": {
+          "complete": {
+            "type": "boolean"
+          },
+          "error": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "complete"
+        ]
+      },
+      "WorkerAppendJob": {
         "type": "object",
         "properties": {
           "payload": {
@@ -706,6 +2966,32 @@
           },
           "stream": {
             "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "payload",
+          "stream",
+          "time"
+        ]
+      },
+      "WorkerAppendJobOrTask": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "type": "string"
+          },
+          "stream": {
+            "type": "string"
+          },
+          "task": {
+            "nullable": true,
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
           },
           "time": {
             "type": "string",
@@ -744,6 +3030,17 @@
           "id"
         ]
       },
+      "WorkerCompleteJob": {
+        "type": "object",
+        "properties": {
+          "failed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "failed"
+        ]
+      },
       "WorkerCompleteTask": {
         "type": "object",
         "properties": {
@@ -755,43 +3052,7 @@
           "failed"
         ]
       },
-      "WorkerPingResult": {
-        "type": "object",
-        "properties": {
-          "poweroff": {
-            "type": "boolean"
-          },
-          "task": {
-            "$ref": "#/components/schemas/WorkerPingTask"
-          }
-        },
-        "required": [
-          "poweroff"
-        ]
-      },
-      "WorkerPingTask": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "output_rules": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "script": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "output_rules",
-          "script"
-        ]
-      },
-      "WorkerTask": {
+      "WorkerJob": {
         "type": "object",
         "properties": {
           "id": {
@@ -802,12 +3063,213 @@
           },
           "owner": {
             "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         },
         "required": [
           "id",
           "name",
-          "owner"
+          "owner",
+          "state",
+          "tags"
+        ]
+      },
+      "WorkerJobQuota": {
+        "type": "object",
+        "properties": {
+          "max_bytes_per_output": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "max_bytes_per_output"
+        ]
+      },
+      "WorkerJobStoreGet": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WorkerJobStoreValue"
+              }
+            ]
+          }
+        }
+      },
+      "WorkerJobStoreValue": {
+        "type": "object",
+        "properties": {
+          "secret": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "secret",
+          "value"
+        ]
+      },
+      "WorkerPingInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "WorkerPingJob": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkerPingInput"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "output_rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkerPingOutputRule"
+            }
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkerPingTask"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "inputs",
+          "name",
+          "output_rules",
+          "tasks"
+        ]
+      },
+      "WorkerPingOutputRule": {
+        "type": "object",
+        "properties": {
+          "ignore": {
+            "type": "boolean"
+          },
+          "require_match": {
+            "type": "boolean"
+          },
+          "rule": {
+            "type": "string"
+          },
+          "size_change_ok": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ignore",
+          "require_match",
+          "rule",
+          "size_change_ok"
+        ]
+      },
+      "WorkerPingResult": {
+        "type": "object",
+        "properties": {
+          "factory_metadata": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FactoryMetadata"
+              }
+            ]
+          },
+          "job": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WorkerPingJob"
+              }
+            ]
+          },
+          "poweroff": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "poweroff"
+        ]
+      },
+      "WorkerPingTask": {
+        "type": "object",
+        "properties": {
+          "env": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "env_clear": {
+            "type": "boolean"
+          },
+          "gid": {
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "id": {
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "script": {
+            "type": "string"
+          },
+          "uid": {
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          },
+          "workdir": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "env",
+          "env_clear",
+          "gid",
+          "id",
+          "name",
+          "script",
+          "uid",
+          "workdir"
         ]
       },
       "WorkersResult": {

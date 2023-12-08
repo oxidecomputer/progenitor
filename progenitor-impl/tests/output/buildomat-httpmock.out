@@ -4,13 +4,698 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use sdk::*;
+    pub struct FactoryCreateWhen(httpmock::When);
+    impl FactoryCreateWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/admin/factory$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn body(self, value: &types::FactoryCreate) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct FactoryCreateThen(httpmock::Then);
+    impl FactoryCreateThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn created(self, value: &types::FactoryCreateResult) -> Self {
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct AdminJobsGetWhen(httpmock::When);
+    impl AdminJobsGetWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/admin/jobs$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn active<T>(self, value: T) -> Self
+        where
+            T: Into<Option<bool>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("active", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.query_params
+                        .as_ref()
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "active"))
+                        .is_none()
+                }))
+            }
+        }
+
+        pub fn completed<T>(self, value: T) -> Self
+        where
+            T: Into<Option<u64>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("completed", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.query_params
+                        .as_ref()
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "completed"))
+                        .is_none()
+                }))
+            }
+        }
+    }
+
+    pub struct AdminJobsGetThen(httpmock::Then);
+    impl AdminJobsGetThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &Vec<types::Job>) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct AdminJobGetWhen(httpmock::When);
+    impl AdminJobGetWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/admin/jobs/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/admin/jobs/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct AdminJobGetThen(httpmock::Then);
+    impl AdminJobGetThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::Job) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct AdminJobArchiveRequestWhen(httpmock::When);
+    impl AdminJobArchiveRequestWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/admin/jobs/[^/]*/archive$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/admin/jobs/{}/archive$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct AdminJobArchiveRequestThen(httpmock::Then);
+    impl AdminJobArchiveRequestThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct TargetCreateWhen(httpmock::When);
+    impl TargetCreateWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/admin/target$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn body(self, value: &types::TargetCreate) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct TargetCreateThen(httpmock::Then);
+    impl TargetCreateThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn created(self, value: &types::TargetCreateResult) -> Self {
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct TargetsListWhen(httpmock::When);
+    impl TargetsListWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/admin/targets$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+    }
+
+    pub struct TargetsListThen(httpmock::Then);
+    impl TargetsListThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &Vec<types::Target>) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct TargetRedirectWhen(httpmock::When);
+    impl TargetRedirectWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::PUT)
+                    .path_matches(regex::Regex::new("^/0/admin/targets/[^/]*/redirect$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn target(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/admin/targets/{}/redirect$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::TargetRedirect) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct TargetRedirectThen(httpmock::Then);
+    impl TargetRedirectThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct TargetRenameWhen(httpmock::When);
+    impl TargetRenameWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/admin/targets/[^/]*/rename$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn target(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/admin/targets/{}/rename$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::TargetRename) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct TargetRenameThen(httpmock::Then);
+    impl TargetRenameThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn created(self, value: &types::TargetCreateResult) -> Self {
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct TargetRequireNoPrivilegeWhen(httpmock::When);
+    impl TargetRequireNoPrivilegeWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::DELETE)
+                    .path_matches(regex::Regex::new("^/0/admin/targets/[^/]*/require$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn target(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/admin/targets/{}/require$", value.to_string()))
+                    .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct TargetRequireNoPrivilegeThen(httpmock::Then);
+    impl TargetRequireNoPrivilegeThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct TargetRequirePrivilegeWhen(httpmock::When);
+    impl TargetRequirePrivilegeWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner.method(httpmock::Method::PUT).path_matches(
+                    regex::Regex::new("^/0/admin/targets/[^/]*/require/[^/]*$").unwrap(),
+                ),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn target(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/admin/targets/{}/require/.*$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn privilege(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/admin/targets/.*/require/{}$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct TargetRequirePrivilegeThen(httpmock::Then);
+    impl TargetRequirePrivilegeThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerRecycleWhen(httpmock::When);
+    impl WorkerRecycleWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/admin/worker/[^/]*/recycle$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn worker(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/admin/worker/{}/recycle$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct WorkerRecycleThen(httpmock::Then);
+    impl WorkerRecycleThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
     pub struct ControlHoldWhen(httpmock::When);
     impl ControlHoldWhen {
         pub fn new(inner: httpmock::When) -> Self {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/control/hold$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/control/hold$").unwrap()),
             )
         }
 
@@ -29,10 +714,25 @@ pub mod operations {
             self.0
         }
 
-        pub fn ok(self, value: ()) -> Self {
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
             Self(
                 self.0
-                    .status(200u16)
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
             )
@@ -45,7 +745,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/control/resume$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/control/resume$").unwrap()),
             )
         }
 
@@ -64,93 +764,38 @@ pub mod operations {
             self.0
         }
 
-        pub fn ok(self) -> Self {
-            Self(self.0.status(200u16))
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
         }
-    }
 
-    pub struct TaskGetWhen(httpmock::When);
-    impl TaskGetWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
             Self(
-                inner
-                    .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/task/[^/]*$").unwrap()),
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
-            self.0
-        }
-
-        pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/task/{}$", value.to_string())).unwrap();
-            Self(self.0.path_matches(re))
-        }
-    }
-
-    pub struct TaskGetThen(httpmock::Then);
-    impl TaskGetThen {
-        pub fn new(inner: httpmock::Then) -> Self {
-            Self(inner)
-        }
-
-        pub fn into_inner(self) -> httpmock::Then {
-            self.0
-        }
-
-        pub fn ok(self, value: &types::Task) -> Self {
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
             Self(
                 self.0
-                    .status(200u16)
+                    .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
             )
         }
     }
 
-    pub struct TasksGetWhen(httpmock::When);
-    impl TasksGetWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(
-                inner
-                    .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks$").unwrap()),
-            )
-        }
-
-        pub fn into_inner(self) -> httpmock::When {
-            self.0
-        }
-    }
-
-    pub struct TasksGetThen(httpmock::Then);
-    impl TasksGetThen {
-        pub fn new(inner: httpmock::Then) -> Self {
-            Self(inner)
-        }
-
-        pub fn into_inner(self) -> httpmock::Then {
-            self.0
-        }
-
-        pub fn ok(self, value: &Vec<types::Task>) -> Self {
-            Self(
-                self.0
-                    .status(200u16)
-                    .header("content-type", "application/json")
-                    .json_body_obj(value),
-            )
-        }
-    }
-
-    pub struct TaskSubmitWhen(httpmock::When);
-    impl TaskSubmitWhen {
+    pub struct FactoryLeaseWhen(httpmock::When);
+    impl FactoryLeaseWhen {
         pub fn new(inner: httpmock::When) -> Self {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/tasks$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/factory/lease$").unwrap()),
             )
         }
 
@@ -158,13 +803,13 @@ pub mod operations {
             self.0
         }
 
-        pub fn body(self, value: &types::TaskSubmit) -> Self {
+        pub fn body(self, value: &types::FactoryWhatsNext) -> Self {
             Self(self.0.json_body_obj(value))
         }
     }
 
-    pub struct TaskSubmitThen(httpmock::Then);
-    impl TaskSubmitThen {
+    pub struct FactoryLeaseThen(httpmock::Then);
+    impl FactoryLeaseThen {
         pub fn new(inner: httpmock::Then) -> Self {
             Self(inner)
         }
@@ -173,7 +818,182 @@ pub mod operations {
             self.0
         }
 
-        pub fn created(self, value: &types::TaskSubmitResult) -> Self {
+        pub fn ok(self, value: &types::FactoryLeaseResult) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct FactoryLeaseRenewWhen(httpmock::When);
+    impl FactoryLeaseRenewWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/factory/lease/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/factory/lease/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct FactoryLeaseRenewThen(httpmock::Then);
+    impl FactoryLeaseRenewThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: bool) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct FactoryPingWhen(httpmock::When);
+    impl FactoryPingWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/factory/ping$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+    }
+
+    pub struct FactoryPingThen(httpmock::Then);
+    impl FactoryPingThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::FactoryPingResult) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct FactoryWorkerCreateWhen(httpmock::When);
+    impl FactoryWorkerCreateWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/factory/worker$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn body(self, value: &types::FactoryWorkerCreate) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct FactoryWorkerCreateThen(httpmock::Then);
+    impl FactoryWorkerCreateThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn created(self, value: &types::FactoryWorker) -> Self {
             Self(
                 self.0
                     .status(201u16)
@@ -181,15 +1001,35 @@ pub mod operations {
                     .json_body_obj(value),
             )
         }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
     }
 
-    pub struct TaskEventsGetWhen(httpmock::When);
-    impl TaskEventsGetWhen {
+    pub struct FactoryWorkerGetWhen(httpmock::When);
+    impl FactoryWorkerGetWhen {
         pub fn new(inner: httpmock::When) -> Self {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks/[^/]*/events$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/factory/worker/[^/]*$").unwrap()),
             )
         }
 
@@ -197,9 +1037,660 @@ pub mod operations {
             self.0
         }
 
-        pub fn task(self, value: &str) -> Self {
+        pub fn worker(self, value: &str) -> Self {
             let re =
-                regex::Regex::new(&format!("^/v1/tasks/{}/events$", value.to_string())).unwrap();
+                regex::Regex::new(&format!("^/0/factory/worker/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct FactoryWorkerGetThen(httpmock::Then);
+    impl FactoryWorkerGetThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::FactoryWorkerResult) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct FactoryWorkerDestroyWhen(httpmock::When);
+    impl FactoryWorkerDestroyWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::DELETE)
+                    .path_matches(regex::Regex::new("^/0/factory/worker/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn worker(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/factory/worker/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct FactoryWorkerDestroyThen(httpmock::Then);
+    impl FactoryWorkerDestroyThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: bool) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct FactoryWorkerAssociateWhen(httpmock::When);
+    impl FactoryWorkerAssociateWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::PATCH)
+                    .path_matches(regex::Regex::new("^/0/factory/worker/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn worker(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/factory/worker/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::FactoryWorkerAssociate) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct FactoryWorkerAssociateThen(httpmock::Then);
+    impl FactoryWorkerAssociateThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct FactoryWorkerAppendWhen(httpmock::When);
+    impl FactoryWorkerAppendWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/factory/worker/[^/]*/append$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn worker(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/factory/worker/{}/append$", value.to_string()))
+                    .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::FactoryWorkerAppend) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct FactoryWorkerAppendThen(httpmock::Then);
+    impl FactoryWorkerAppendThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::FactoryWorkerAppendResult) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct FactoryWorkerFlushWhen(httpmock::When);
+    impl FactoryWorkerFlushWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/factory/worker/[^/]*/flush$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn worker(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/factory/worker/{}/flush$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct FactoryWorkerFlushThen(httpmock::Then);
+    impl FactoryWorkerFlushThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct FactoryWorkersWhen(httpmock::When);
+    impl FactoryWorkersWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/factory/workers$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+    }
+
+    pub struct FactoryWorkersThen(httpmock::Then);
+    impl FactoryWorkersThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &Vec<types::FactoryWorker>) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobGetWhen(httpmock::When);
+    impl JobGetWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/job/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/job/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct JobGetThen(httpmock::Then);
+    impl JobGetThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::Job) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobsGetWhen(httpmock::When);
+    impl JobsGetWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/jobs$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+    }
+
+    pub struct JobsGetThen(httpmock::Then);
+    impl JobsGetThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &Vec<types::Job>) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobSubmitWhen(httpmock::When);
+    impl JobSubmitWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/jobs$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn body(self, value: &types::JobSubmit) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct JobSubmitThen(httpmock::Then);
+    impl JobSubmitThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn created(self, value: &types::JobSubmitResult) -> Self {
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobCancelWhen(httpmock::When);
+    impl JobCancelWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/jobs/[^/]*/cancel$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/jobs/{}/cancel$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct JobCancelThen(httpmock::Then);
+    impl JobCancelThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobUploadChunkWhen(httpmock::When);
+    impl JobUploadChunkWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/jobs/[^/]*/chunk$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/jobs/{}/chunk$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: serde_json::Value) -> Self {
+            Self(self.0.json_body(value))
+        }
+    }
+
+    pub struct JobUploadChunkThen(httpmock::Then);
+    impl JobUploadChunkThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn created(self, value: &types::UploadedChunk) -> Self {
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobEventsGetWhen(httpmock::When);
+    impl JobEventsGetWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/jobs/[^/]*/events$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/jobs/{}/events$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -220,8 +1711,8 @@ pub mod operations {
         }
     }
 
-    pub struct TaskEventsGetThen(httpmock::Then);
-    impl TaskEventsGetThen {
+    pub struct JobEventsGetThen(httpmock::Then);
+    impl JobEventsGetThen {
         pub fn new(inner: httpmock::Then) -> Self {
             Self(inner)
         }
@@ -230,7 +1721,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn ok(self, value: &Vec<types::TaskEvent>) -> Self {
+        pub fn ok(self, value: &Vec<types::JobEvent>) -> Self {
             Self(
                 self.0
                     .status(200u16)
@@ -238,15 +1729,35 @@ pub mod operations {
                     .json_body_obj(value),
             )
         }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
     }
 
-    pub struct TaskOutputsGetWhen(httpmock::When);
-    impl TaskOutputsGetWhen {
+    pub struct JobOutputsGetWhen(httpmock::When);
+    impl JobOutputsGetWhen {
         pub fn new(inner: httpmock::When) -> Self {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks/[^/]*/outputs$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/jobs/[^/]*/outputs$").unwrap()),
             )
         }
 
@@ -254,15 +1765,15 @@ pub mod operations {
             self.0
         }
 
-        pub fn task(self, value: &str) -> Self {
+        pub fn job(self, value: &str) -> Self {
             let re =
-                regex::Regex::new(&format!("^/v1/tasks/{}/outputs$", value.to_string())).unwrap();
+                regex::Regex::new(&format!("^/0/jobs/{}/outputs$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct TaskOutputsGetThen(httpmock::Then);
-    impl TaskOutputsGetThen {
+    pub struct JobOutputsGetThen(httpmock::Then);
+    impl JobOutputsGetThen {
         pub fn new(inner: httpmock::Then) -> Self {
             Self(inner)
         }
@@ -271,7 +1782,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn ok(self, value: &Vec<types::TaskOutput>) -> Self {
+        pub fn ok(self, value: &Vec<types::JobOutput>) -> Self {
             Self(
                 self.0
                     .status(200u16)
@@ -279,15 +1790,35 @@ pub mod operations {
                     .json_body_obj(value),
             )
         }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
     }
 
-    pub struct TaskOutputDownloadWhen(httpmock::When);
-    impl TaskOutputDownloadWhen {
+    pub struct JobOutputDownloadWhen(httpmock::When);
+    impl JobOutputDownloadWhen {
         pub fn new(inner: httpmock::When) -> Self {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks/[^/]*/outputs/[^/]*$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/jobs/[^/]*/outputs/[^/]*$").unwrap()),
             )
         }
 
@@ -295,21 +1826,21 @@ pub mod operations {
             self.0
         }
 
-        pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/tasks/{}/outputs/.*$", value.to_string()))
-                .unwrap();
+        pub fn job(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/jobs/{}/outputs/.*$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn output(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/tasks/.*/outputs/{}$", value.to_string()))
-                .unwrap();
+            let re =
+                regex::Regex::new(&format!("^/0/jobs/.*/outputs/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct TaskOutputDownloadThen(httpmock::Then);
-    impl TaskOutputDownloadThen {
+    pub struct JobOutputDownloadThen(httpmock::Then);
+    impl JobOutputDownloadThen {
         pub fn new(inner: httpmock::Then) -> Self {
             Self(inner)
         }
@@ -318,13 +1849,467 @@ pub mod operations {
             self.0
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
-            assert_eq!(status / 100u16, 2u16);
+        pub fn default_response(self, status: u16, value: serde_json::Value) -> Self {
             Self(
                 self.0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body(value),
+            )
+        }
+    }
+
+    pub struct JobOutputPublishWhen(httpmock::When);
+    impl JobOutputPublishWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner.method(httpmock::Method::POST).path_matches(
+                    regex::Regex::new("^/0/jobs/[^/]*/outputs/[^/]*/publish$").unwrap(),
+                ),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/jobs/{}/outputs/.*/publish$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn output(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/jobs/.*/outputs/{}/publish$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::JobOutputPublish) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct JobOutputPublishThen(httpmock::Then);
+    impl JobOutputPublishThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobOutputSignedUrlWhen(httpmock::When);
+    impl JobOutputSignedUrlWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/jobs/[^/]*/outputs/[^/]*/sign$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/jobs/{}/outputs/.*/sign$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn output(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/jobs/.*/outputs/{}/sign$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::JobOutputSignedUrl) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct JobOutputSignedUrlThen(httpmock::Then);
+    impl JobOutputSignedUrlThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::JobOutputSignedUrlResult) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobStoreGetAllWhen(httpmock::When);
+    impl JobStoreGetAllWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/jobs/[^/]*/store$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/jobs/{}/store$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct JobStoreGetAllThen(httpmock::Then);
+    impl JobStoreGetAllThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(
+            self,
+            value: &std::collections::HashMap<String, types::JobStoreValueInfo>,
+        ) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobStorePutWhen(httpmock::When);
+    impl JobStorePutWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::PUT)
+                    .path_matches(regex::Regex::new("^/0/jobs/[^/]*/store/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/jobs/{}/store/.*$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn name(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/jobs/.*/store/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::JobStoreValue) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct JobStorePutThen(httpmock::Then);
+    impl JobStorePutThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct PublicFileDownloadWhen(httpmock::When);
+    impl PublicFileDownloadWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(inner.method(httpmock::Method::GET).path_matches(
+                regex::Regex::new("^/0/public/file/[^/]*/[^/]*/[^/]*/[^/]*$").unwrap(),
+            ))
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn username(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/public/file/{}/.*/.*/.*$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn series(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/public/file/.*/{}/.*/.*$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn version(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/public/file/.*/.*/{}/.*$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn name(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/public/file/.*/.*/.*/{}$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct PublicFileDownloadThen(httpmock::Then);
+    impl PublicFileDownloadThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn default_response(self, status: u16, value: serde_json::Value) -> Self {
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body(value),
+            )
+        }
+    }
+
+    pub struct QuotaWhen(httpmock::When);
+    impl QuotaWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/quota$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+    }
+
+    pub struct QuotaThen(httpmock::Then);
+    impl QuotaThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::Quota) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct UsersListWhen(httpmock::When);
+    impl UsersListWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/users$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn name<'a, T>(self, value: T) -> Self
+        where
+            T: Into<Option<&'a str>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("name", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.query_params
+                        .as_ref()
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "name"))
+                        .is_none()
+                }))
+            }
+        }
+    }
+
+    pub struct UsersListThen(httpmock::Then);
+    impl UsersListThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &Vec<types::User>) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
             )
         }
     }
@@ -335,7 +2320,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/users$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/users$").unwrap()),
             )
         }
 
@@ -366,6 +2351,210 @@ pub mod operations {
                     .json_body_obj(value),
             )
         }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct UserGetWhen(httpmock::When);
+    impl UserGetWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/users/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn user(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/users/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct UserGetThen(httpmock::Then);
+    impl UserGetThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::User) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct UserPrivilegeGrantWhen(httpmock::When);
+    impl UserPrivilegeGrantWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::PUT)
+                    .path_matches(regex::Regex::new("^/0/users/[^/]*/privilege/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn user(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/users/{}/privilege/.*$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn privilege(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/users/.*/privilege/{}$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct UserPrivilegeGrantThen(httpmock::Then);
+    impl UserPrivilegeGrantThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct UserPrivilegeRevokeWhen(httpmock::When);
+    impl UserPrivilegeRevokeWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::DELETE)
+                    .path_matches(regex::Regex::new("^/0/users/[^/]*/privilege/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn user(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/users/{}/privilege/.*$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn privilege(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/users/.*/privilege/{}$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct UserPrivilegeRevokeThen(httpmock::Then);
+    impl UserPrivilegeRevokeThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
     }
 
     pub struct WhoamiWhen(httpmock::When);
@@ -374,7 +2563,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/whoami$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/whoami$").unwrap()),
             )
         }
 
@@ -401,39 +2590,25 @@ pub mod operations {
                     .json_body_obj(value),
             )
         }
-    }
 
-    pub struct WhoamiPutNameWhen(httpmock::When);
-    impl WhoamiPutNameWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
             Self(
-                inner
-                    .method(httpmock::Method::PUT)
-                    .path_matches(regex::Regex::new("^/v1/whoami/name$").unwrap()),
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
-            self.0
-        }
-
-        pub fn body(self, value: String) -> Self {
-            Self(self.0.body(value))
-        }
-    }
-
-    pub struct WhoamiPutNameThen(httpmock::Then);
-    impl WhoamiPutNameThen {
-        pub fn new(inner: httpmock::Then) -> Self {
-            Self(inner)
-        }
-
-        pub fn into_inner(self) -> httpmock::Then {
-            self.0
-        }
-
-        pub fn ok(self) -> Self {
-            Self(self.0.status(200u16))
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -443,7 +2618,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/bootstrap$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/worker/bootstrap$").unwrap()),
             )
         }
 
@@ -474,6 +2649,532 @@ pub mod operations {
                     .json_body_obj(value),
             )
         }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerJobUploadChunkWhen(httpmock::When);
+    impl WorkerJobUploadChunkWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/worker/job/[^/]*/chunk$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/worker/job/{}/chunk$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: serde_json::Value) -> Self {
+            Self(self.0.json_body(value))
+        }
+    }
+
+    pub struct WorkerJobUploadChunkThen(httpmock::Then);
+    impl WorkerJobUploadChunkThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn created(self, value: &types::UploadedChunk) -> Self {
+            Self(
+                self.0
+                    .status(201u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerJobCompleteWhen(httpmock::When);
+    impl WorkerJobCompleteWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/0/worker/job/[^/]*/complete$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/worker/job/{}/complete$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::WorkerCompleteJob) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct WorkerJobCompleteThen(httpmock::Then);
+    impl WorkerJobCompleteThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerJobInputDownloadWhen(httpmock::When);
+    impl WorkerJobInputDownloadWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/worker/job/[^/]*/inputs/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/worker/job/{}/inputs/.*$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn input(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/worker/job/.*/inputs/{}$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct WorkerJobInputDownloadThen(httpmock::Then);
+    impl WorkerJobInputDownloadThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn default_response(self, status: u16, value: serde_json::Value) -> Self {
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body(value),
+            )
+        }
+    }
+
+    pub struct WorkerJobQuotaWhen(httpmock::When);
+    impl WorkerJobQuotaWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/worker/job/[^/]*/quota$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re =
+                regex::Regex::new(&format!("^/0/worker/job/{}/quota$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct WorkerJobQuotaThen(httpmock::Then);
+    impl WorkerJobQuotaThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::WorkerJobQuota) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerJobStoreGetWhen(httpmock::When);
+    impl WorkerJobStoreGetWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/0/worker/job/[^/]*/store/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/worker/job/{}/store/.*$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn name(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/worker/job/.*/store/{}$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct WorkerJobStoreGetThen(httpmock::Then);
+    impl WorkerJobStoreGetThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::WorkerJobStoreGet) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerJobStorePutWhen(httpmock::When);
+    impl WorkerJobStorePutWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::PUT)
+                    .path_matches(regex::Regex::new("^/0/worker/job/[^/]*/store/[^/]*$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/worker/job/{}/store/.*$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn name(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/0/worker/job/.*/store/{}$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::WorkerJobStoreValue) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct WorkerJobStorePutThen(httpmock::Then);
+    impl WorkerJobStorePutThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerTaskAppendWhen(httpmock::When);
+    impl WorkerTaskAppendWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(inner.method(httpmock::Method::POST).path_matches(
+                regex::Regex::new("^/0/worker/job/[^/]*/task/[^/]*/append$").unwrap(),
+            ))
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/worker/job/{}/task/.*/append$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn task(self, value: u32) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/worker/job/.*/task/{}/append$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::WorkerAppendJob) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct WorkerTaskAppendThen(httpmock::Then);
+    impl WorkerTaskAppendThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerTaskCompleteWhen(httpmock::When);
+    impl WorkerTaskCompleteWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(inner.method(httpmock::Method::POST).path_matches(
+                regex::Regex::new("^/0/worker/job/[^/]*/task/[^/]*/complete$").unwrap(),
+            ))
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/worker/job/{}/task/.*/complete$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn task(self, value: u32) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/0/worker/job/.*/task/{}/complete$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::WorkerCompleteTask) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct WorkerTaskCompleteThen(httpmock::Then);
+    impl WorkerTaskCompleteThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
     }
 
     pub struct WorkerPingWhen(httpmock::When);
@@ -482,7 +3183,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/worker/ping$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/worker/ping$").unwrap()),
             )
         }
 
@@ -509,171 +3210,25 @@ pub mod operations {
                     .json_body_obj(value),
             )
         }
-    }
 
-    pub struct WorkerTaskAppendWhen(httpmock::When);
-    impl WorkerTaskAppendWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(
-                inner
-                    .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/append$").unwrap()),
-            )
-        }
-
-        pub fn into_inner(self) -> httpmock::When {
-            self.0
-        }
-
-        pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/worker/task/{}/append$", value.to_string()))
-                .unwrap();
-            Self(self.0.path_matches(re))
-        }
-
-        pub fn body(self, value: &types::WorkerAppendTask) -> Self {
-            Self(self.0.json_body_obj(value))
-        }
-    }
-
-    pub struct WorkerTaskAppendThen(httpmock::Then);
-    impl WorkerTaskAppendThen {
-        pub fn new(inner: httpmock::Then) -> Self {
-            Self(inner)
-        }
-
-        pub fn into_inner(self) -> httpmock::Then {
-            self.0
-        }
-
-        pub fn created(self) -> Self {
-            Self(self.0.status(201u16))
-        }
-    }
-
-    pub struct WorkerTaskUploadChunkWhen(httpmock::When);
-    impl WorkerTaskUploadChunkWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(
-                inner
-                    .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/chunk$").unwrap()),
-            )
-        }
-
-        pub fn into_inner(self) -> httpmock::When {
-            self.0
-        }
-
-        pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/worker/task/{}/chunk$", value.to_string()))
-                .unwrap();
-            Self(self.0.path_matches(re))
-        }
-
-        pub fn body(self, value: serde_json::Value) -> Self {
-            Self(self.0.json_body(value))
-        }
-    }
-
-    pub struct WorkerTaskUploadChunkThen(httpmock::Then);
-    impl WorkerTaskUploadChunkThen {
-        pub fn new(inner: httpmock::Then) -> Self {
-            Self(inner)
-        }
-
-        pub fn into_inner(self) -> httpmock::Then {
-            self.0
-        }
-
-        pub fn created(self, value: &types::UploadedChunk) -> Self {
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
             Self(
                 self.0
-                    .status(201u16)
+                    .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
             )
         }
-    }
 
-    pub struct WorkerTaskCompleteWhen(httpmock::When);
-    impl WorkerTaskCompleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
             Self(
-                inner
-                    .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/complete$").unwrap()),
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
             )
-        }
-
-        pub fn into_inner(self) -> httpmock::When {
-            self.0
-        }
-
-        pub fn task(self, value: &str) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/worker/task/{}/complete$", value.to_string()))
-                    .unwrap();
-            Self(self.0.path_matches(re))
-        }
-
-        pub fn body(self, value: &types::WorkerCompleteTask) -> Self {
-            Self(self.0.json_body_obj(value))
-        }
-    }
-
-    pub struct WorkerTaskCompleteThen(httpmock::Then);
-    impl WorkerTaskCompleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
-            Self(inner)
-        }
-
-        pub fn into_inner(self) -> httpmock::Then {
-            self.0
-        }
-
-        pub fn ok(self) -> Self {
-            Self(self.0.status(200u16))
-        }
-    }
-
-    pub struct WorkerTaskAddOutputWhen(httpmock::When);
-    impl WorkerTaskAddOutputWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(
-                inner
-                    .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/output$").unwrap()),
-            )
-        }
-
-        pub fn into_inner(self) -> httpmock::When {
-            self.0
-        }
-
-        pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/worker/task/{}/output$", value.to_string()))
-                .unwrap();
-            Self(self.0.path_matches(re))
-        }
-
-        pub fn body(self, value: &types::WorkerAddOutput) -> Self {
-            Self(self.0.json_body_obj(value))
-        }
-    }
-
-    pub struct WorkerTaskAddOutputThen(httpmock::Then);
-    impl WorkerTaskAddOutputThen {
-        pub fn new(inner: httpmock::Then) -> Self {
-            Self(inner)
-        }
-
-        pub fn into_inner(self) -> httpmock::Then {
-            self.0
-        }
-
-        pub fn created(self) -> Self {
-            Self(self.0.status(201u16))
         }
     }
 
@@ -683,12 +3238,28 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/workers$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/workers$").unwrap()),
             )
         }
 
         pub fn into_inner(self) -> httpmock::When {
             self.0
+        }
+
+        pub fn active<T>(self, value: T) -> Self
+        where
+            T: Into<Option<bool>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("active", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.query_params
+                        .as_ref()
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "active"))
+                        .is_none()
+                }))
+            }
         }
     }
 
@@ -710,6 +3281,26 @@ pub mod operations {
                     .json_body_obj(value),
             )
         }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
     }
 
     pub struct WorkersRecycleWhen(httpmock::When);
@@ -718,7 +3309,7 @@ pub mod operations {
             Self(
                 inner
                     .method(httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/workers/recycle$").unwrap()),
+                    .path_matches(regex::Regex::new("^/0/workers/recycle$").unwrap()),
             )
         }
 
@@ -737,8 +3328,217 @@ pub mod operations {
             self.0
         }
 
-        pub fn ok(self) -> Self {
-            Self(self.0.status(200u16))
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct JobAddInputWhen(httpmock::When);
+    impl JobAddInputWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/1/jobs/[^/]*/input$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/1/jobs/{}/input$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::JobAddInput) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct JobAddInputThen(httpmock::Then);
+    impl JobAddInputThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::JobAddInputResult) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerJobAppendWhen(httpmock::When);
+    impl WorkerJobAppendWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/1/worker/job/[^/]*/append$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/1/worker/job/{}/append$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &Vec<types::WorkerAppendJobOrTask>) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct WorkerJobAppendThen(httpmock::Then);
+    impl WorkerJobAppendThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct WorkerJobAddOutputWhen(httpmock::When);
+    impl WorkerJobAddOutputWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/1/worker/job/[^/]*/output$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn job(self, value: &str) -> Self {
+            let re = regex::Regex::new(&format!("^/1/worker/job/{}/output$", value.to_string()))
+                .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn body(self, value: &types::WorkerAddOutput) -> Self {
+            Self(self.0.json_body_obj(value))
+        }
+    }
+
+    pub struct WorkerJobAddOutputThen(httpmock::Then);
+    impl WorkerJobAddOutputThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &types::WorkerAddOutputResult) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 }
@@ -747,66 +3547,321 @@ pub mod operations {
 #[doc = r" adds a method for each operation. These are the equivalent of"]
 #[doc = r" type-checked [`mock()`](httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
+    fn factory_create<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryCreateWhen, operations::FactoryCreateThen);
+    fn admin_jobs_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::AdminJobsGetWhen, operations::AdminJobsGetThen);
+    fn admin_job_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::AdminJobGetWhen, operations::AdminJobGetThen);
+    fn admin_job_archive_request<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::AdminJobArchiveRequestWhen, operations::AdminJobArchiveRequestThen);
+    fn target_create<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetCreateWhen, operations::TargetCreateThen);
+    fn targets_list<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetsListWhen, operations::TargetsListThen);
+    fn target_redirect<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetRedirectWhen, operations::TargetRedirectThen);
+    fn target_rename<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetRenameWhen, operations::TargetRenameThen);
+    fn target_require_no_privilege<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(
+            operations::TargetRequireNoPrivilegeWhen,
+            operations::TargetRequireNoPrivilegeThen,
+        );
+    fn target_require_privilege<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetRequirePrivilegeWhen, operations::TargetRequirePrivilegeThen);
+    fn worker_recycle<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerRecycleWhen, operations::WorkerRecycleThen);
     fn control_hold<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::ControlHoldWhen, operations::ControlHoldThen);
     fn control_resume<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::ControlResumeWhen, operations::ControlResumeThen);
-    fn task_get<F>(&self, config_fn: F) -> httpmock::Mock
+    fn factory_lease<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskGetWhen, operations::TaskGetThen);
-    fn tasks_get<F>(&self, config_fn: F) -> httpmock::Mock
+        F: FnOnce(operations::FactoryLeaseWhen, operations::FactoryLeaseThen);
+    fn factory_lease_renew<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TasksGetWhen, operations::TasksGetThen);
-    fn task_submit<F>(&self, config_fn: F) -> httpmock::Mock
+        F: FnOnce(operations::FactoryLeaseRenewWhen, operations::FactoryLeaseRenewThen);
+    fn factory_ping<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskSubmitWhen, operations::TaskSubmitThen);
-    fn task_events_get<F>(&self, config_fn: F) -> httpmock::Mock
+        F: FnOnce(operations::FactoryPingWhen, operations::FactoryPingThen);
+    fn factory_worker_create<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskEventsGetWhen, operations::TaskEventsGetThen);
-    fn task_outputs_get<F>(&self, config_fn: F) -> httpmock::Mock
+        F: FnOnce(operations::FactoryWorkerCreateWhen, operations::FactoryWorkerCreateThen);
+    fn factory_worker_get<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskOutputsGetWhen, operations::TaskOutputsGetThen);
-    fn task_output_download<F>(&self, config_fn: F) -> httpmock::Mock
+        F: FnOnce(operations::FactoryWorkerGetWhen, operations::FactoryWorkerGetThen);
+    fn factory_worker_destroy<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskOutputDownloadWhen, operations::TaskOutputDownloadThen);
+        F: FnOnce(operations::FactoryWorkerDestroyWhen, operations::FactoryWorkerDestroyThen);
+    fn factory_worker_associate<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryWorkerAssociateWhen, operations::FactoryWorkerAssociateThen);
+    fn factory_worker_append<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryWorkerAppendWhen, operations::FactoryWorkerAppendThen);
+    fn factory_worker_flush<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryWorkerFlushWhen, operations::FactoryWorkerFlushThen);
+    fn factory_workers<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryWorkersWhen, operations::FactoryWorkersThen);
+    fn job_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobGetWhen, operations::JobGetThen);
+    fn jobs_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobsGetWhen, operations::JobsGetThen);
+    fn job_submit<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobSubmitWhen, operations::JobSubmitThen);
+    fn job_cancel<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobCancelWhen, operations::JobCancelThen);
+    fn job_upload_chunk<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobUploadChunkWhen, operations::JobUploadChunkThen);
+    fn job_events_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobEventsGetWhen, operations::JobEventsGetThen);
+    fn job_outputs_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobOutputsGetWhen, operations::JobOutputsGetThen);
+    fn job_output_download<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobOutputDownloadWhen, operations::JobOutputDownloadThen);
+    fn job_output_publish<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobOutputPublishWhen, operations::JobOutputPublishThen);
+    fn job_output_signed_url<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobOutputSignedUrlWhen, operations::JobOutputSignedUrlThen);
+    fn job_store_get_all<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobStoreGetAllWhen, operations::JobStoreGetAllThen);
+    fn job_store_put<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobStorePutWhen, operations::JobStorePutThen);
+    fn public_file_download<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::PublicFileDownloadWhen, operations::PublicFileDownloadThen);
+    fn quota<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::QuotaWhen, operations::QuotaThen);
+    fn users_list<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::UsersListWhen, operations::UsersListThen);
     fn user_create<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::UserCreateWhen, operations::UserCreateThen);
+    fn user_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::UserGetWhen, operations::UserGetThen);
+    fn user_privilege_grant<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::UserPrivilegeGrantWhen, operations::UserPrivilegeGrantThen);
+    fn user_privilege_revoke<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::UserPrivilegeRevokeWhen, operations::UserPrivilegeRevokeThen);
     fn whoami<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WhoamiWhen, operations::WhoamiThen);
-    fn whoami_put_name<F>(&self, config_fn: F) -> httpmock::Mock
-    where
-        F: FnOnce(operations::WhoamiPutNameWhen, operations::WhoamiPutNameThen);
     fn worker_bootstrap<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WorkerBootstrapWhen, operations::WorkerBootstrapThen);
-    fn worker_ping<F>(&self, config_fn: F) -> httpmock::Mock
+    fn worker_job_upload_chunk<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::WorkerPingWhen, operations::WorkerPingThen);
+        F: FnOnce(operations::WorkerJobUploadChunkWhen, operations::WorkerJobUploadChunkThen);
+    fn worker_job_complete<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobCompleteWhen, operations::WorkerJobCompleteThen);
+    fn worker_job_input_download<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobInputDownloadWhen, operations::WorkerJobInputDownloadThen);
+    fn worker_job_quota<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobQuotaWhen, operations::WorkerJobQuotaThen);
+    fn worker_job_store_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobStoreGetWhen, operations::WorkerJobStoreGetThen);
+    fn worker_job_store_put<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobStorePutWhen, operations::WorkerJobStorePutThen);
     fn worker_task_append<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WorkerTaskAppendWhen, operations::WorkerTaskAppendThen);
-    fn worker_task_upload_chunk<F>(&self, config_fn: F) -> httpmock::Mock
-    where
-        F: FnOnce(operations::WorkerTaskUploadChunkWhen, operations::WorkerTaskUploadChunkThen);
     fn worker_task_complete<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WorkerTaskCompleteWhen, operations::WorkerTaskCompleteThen);
-    fn worker_task_add_output<F>(&self, config_fn: F) -> httpmock::Mock
+    fn worker_ping<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::WorkerTaskAddOutputWhen, operations::WorkerTaskAddOutputThen);
+        F: FnOnce(operations::WorkerPingWhen, operations::WorkerPingThen);
     fn workers_list<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WorkersListWhen, operations::WorkersListThen);
     fn workers_recycle<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WorkersRecycleWhen, operations::WorkersRecycleThen);
+    fn job_add_input<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobAddInputWhen, operations::JobAddInputThen);
+    fn worker_job_append<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobAppendWhen, operations::WorkerJobAppendThen);
+    fn worker_job_add_output<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobAddOutputWhen, operations::WorkerJobAddOutputThen);
 }
 
 impl MockServerExt for httpmock::MockServer {
+    fn factory_create<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryCreateWhen, operations::FactoryCreateThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::FactoryCreateWhen::new(when),
+                operations::FactoryCreateThen::new(then),
+            )
+        })
+    }
+
+    fn admin_jobs_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::AdminJobsGetWhen, operations::AdminJobsGetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::AdminJobsGetWhen::new(when),
+                operations::AdminJobsGetThen::new(then),
+            )
+        })
+    }
+
+    fn admin_job_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::AdminJobGetWhen, operations::AdminJobGetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::AdminJobGetWhen::new(when),
+                operations::AdminJobGetThen::new(then),
+            )
+        })
+    }
+
+    fn admin_job_archive_request<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::AdminJobArchiveRequestWhen, operations::AdminJobArchiveRequestThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::AdminJobArchiveRequestWhen::new(when),
+                operations::AdminJobArchiveRequestThen::new(then),
+            )
+        })
+    }
+
+    fn target_create<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetCreateWhen, operations::TargetCreateThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::TargetCreateWhen::new(when),
+                operations::TargetCreateThen::new(then),
+            )
+        })
+    }
+
+    fn targets_list<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetsListWhen, operations::TargetsListThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::TargetsListWhen::new(when),
+                operations::TargetsListThen::new(then),
+            )
+        })
+    }
+
+    fn target_redirect<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetRedirectWhen, operations::TargetRedirectThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::TargetRedirectWhen::new(when),
+                operations::TargetRedirectThen::new(then),
+            )
+        })
+    }
+
+    fn target_rename<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetRenameWhen, operations::TargetRenameThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::TargetRenameWhen::new(when),
+                operations::TargetRenameThen::new(then),
+            )
+        })
+    }
+
+    fn target_require_no_privilege<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(
+            operations::TargetRequireNoPrivilegeWhen,
+            operations::TargetRequireNoPrivilegeThen,
+        ),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::TargetRequireNoPrivilegeWhen::new(when),
+                operations::TargetRequireNoPrivilegeThen::new(then),
+            )
+        })
+    }
+
+    fn target_require_privilege<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::TargetRequirePrivilegeWhen, operations::TargetRequirePrivilegeThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::TargetRequirePrivilegeWhen::new(when),
+                operations::TargetRequirePrivilegeThen::new(then),
+            )
+        })
+    }
+
+    fn worker_recycle<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerRecycleWhen, operations::WorkerRecycleThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WorkerRecycleWhen::new(when),
+                operations::WorkerRecycleThen::new(then),
+            )
+        })
+    }
+
     fn control_hold<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::ControlHoldWhen, operations::ControlHoldThen),
@@ -831,74 +3886,302 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn task_get<F>(&self, config_fn: F) -> httpmock::Mock
+    fn factory_lease<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskGetWhen, operations::TaskGetThen),
+        F: FnOnce(operations::FactoryLeaseWhen, operations::FactoryLeaseThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::TaskGetWhen::new(when),
-                operations::TaskGetThen::new(then),
+                operations::FactoryLeaseWhen::new(when),
+                operations::FactoryLeaseThen::new(then),
             )
         })
     }
 
-    fn tasks_get<F>(&self, config_fn: F) -> httpmock::Mock
+    fn factory_lease_renew<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TasksGetWhen, operations::TasksGetThen),
+        F: FnOnce(operations::FactoryLeaseRenewWhen, operations::FactoryLeaseRenewThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::TasksGetWhen::new(when),
-                operations::TasksGetThen::new(then),
+                operations::FactoryLeaseRenewWhen::new(when),
+                operations::FactoryLeaseRenewThen::new(then),
             )
         })
     }
 
-    fn task_submit<F>(&self, config_fn: F) -> httpmock::Mock
+    fn factory_ping<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskSubmitWhen, operations::TaskSubmitThen),
+        F: FnOnce(operations::FactoryPingWhen, operations::FactoryPingThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::TaskSubmitWhen::new(when),
-                operations::TaskSubmitThen::new(then),
+                operations::FactoryPingWhen::new(when),
+                operations::FactoryPingThen::new(then),
             )
         })
     }
 
-    fn task_events_get<F>(&self, config_fn: F) -> httpmock::Mock
+    fn factory_worker_create<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskEventsGetWhen, operations::TaskEventsGetThen),
+        F: FnOnce(operations::FactoryWorkerCreateWhen, operations::FactoryWorkerCreateThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::TaskEventsGetWhen::new(when),
-                operations::TaskEventsGetThen::new(then),
+                operations::FactoryWorkerCreateWhen::new(when),
+                operations::FactoryWorkerCreateThen::new(then),
             )
         })
     }
 
-    fn task_outputs_get<F>(&self, config_fn: F) -> httpmock::Mock
+    fn factory_worker_get<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskOutputsGetWhen, operations::TaskOutputsGetThen),
+        F: FnOnce(operations::FactoryWorkerGetWhen, operations::FactoryWorkerGetThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::TaskOutputsGetWhen::new(when),
-                operations::TaskOutputsGetThen::new(then),
+                operations::FactoryWorkerGetWhen::new(when),
+                operations::FactoryWorkerGetThen::new(then),
             )
         })
     }
 
-    fn task_output_download<F>(&self, config_fn: F) -> httpmock::Mock
+    fn factory_worker_destroy<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::TaskOutputDownloadWhen, operations::TaskOutputDownloadThen),
+        F: FnOnce(operations::FactoryWorkerDestroyWhen, operations::FactoryWorkerDestroyThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::TaskOutputDownloadWhen::new(when),
-                operations::TaskOutputDownloadThen::new(then),
+                operations::FactoryWorkerDestroyWhen::new(when),
+                operations::FactoryWorkerDestroyThen::new(then),
+            )
+        })
+    }
+
+    fn factory_worker_associate<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryWorkerAssociateWhen, operations::FactoryWorkerAssociateThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::FactoryWorkerAssociateWhen::new(when),
+                operations::FactoryWorkerAssociateThen::new(then),
+            )
+        })
+    }
+
+    fn factory_worker_append<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryWorkerAppendWhen, operations::FactoryWorkerAppendThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::FactoryWorkerAppendWhen::new(when),
+                operations::FactoryWorkerAppendThen::new(then),
+            )
+        })
+    }
+
+    fn factory_worker_flush<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryWorkerFlushWhen, operations::FactoryWorkerFlushThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::FactoryWorkerFlushWhen::new(when),
+                operations::FactoryWorkerFlushThen::new(then),
+            )
+        })
+    }
+
+    fn factory_workers<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::FactoryWorkersWhen, operations::FactoryWorkersThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::FactoryWorkersWhen::new(when),
+                operations::FactoryWorkersThen::new(then),
+            )
+        })
+    }
+
+    fn job_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobGetWhen, operations::JobGetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobGetWhen::new(when),
+                operations::JobGetThen::new(then),
+            )
+        })
+    }
+
+    fn jobs_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobsGetWhen, operations::JobsGetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobsGetWhen::new(when),
+                operations::JobsGetThen::new(then),
+            )
+        })
+    }
+
+    fn job_submit<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobSubmitWhen, operations::JobSubmitThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobSubmitWhen::new(when),
+                operations::JobSubmitThen::new(then),
+            )
+        })
+    }
+
+    fn job_cancel<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobCancelWhen, operations::JobCancelThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobCancelWhen::new(when),
+                operations::JobCancelThen::new(then),
+            )
+        })
+    }
+
+    fn job_upload_chunk<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobUploadChunkWhen, operations::JobUploadChunkThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobUploadChunkWhen::new(when),
+                operations::JobUploadChunkThen::new(then),
+            )
+        })
+    }
+
+    fn job_events_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobEventsGetWhen, operations::JobEventsGetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobEventsGetWhen::new(when),
+                operations::JobEventsGetThen::new(then),
+            )
+        })
+    }
+
+    fn job_outputs_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobOutputsGetWhen, operations::JobOutputsGetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobOutputsGetWhen::new(when),
+                operations::JobOutputsGetThen::new(then),
+            )
+        })
+    }
+
+    fn job_output_download<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobOutputDownloadWhen, operations::JobOutputDownloadThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobOutputDownloadWhen::new(when),
+                operations::JobOutputDownloadThen::new(then),
+            )
+        })
+    }
+
+    fn job_output_publish<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobOutputPublishWhen, operations::JobOutputPublishThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobOutputPublishWhen::new(when),
+                operations::JobOutputPublishThen::new(then),
+            )
+        })
+    }
+
+    fn job_output_signed_url<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobOutputSignedUrlWhen, operations::JobOutputSignedUrlThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobOutputSignedUrlWhen::new(when),
+                operations::JobOutputSignedUrlThen::new(then),
+            )
+        })
+    }
+
+    fn job_store_get_all<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobStoreGetAllWhen, operations::JobStoreGetAllThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobStoreGetAllWhen::new(when),
+                operations::JobStoreGetAllThen::new(then),
+            )
+        })
+    }
+
+    fn job_store_put<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobStorePutWhen, operations::JobStorePutThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobStorePutWhen::new(when),
+                operations::JobStorePutThen::new(then),
+            )
+        })
+    }
+
+    fn public_file_download<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::PublicFileDownloadWhen, operations::PublicFileDownloadThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::PublicFileDownloadWhen::new(when),
+                operations::PublicFileDownloadThen::new(then),
+            )
+        })
+    }
+
+    fn quota<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::QuotaWhen, operations::QuotaThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::QuotaWhen::new(when),
+                operations::QuotaThen::new(then),
+            )
+        })
+    }
+
+    fn users_list<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::UsersListWhen, operations::UsersListThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::UsersListWhen::new(when),
+                operations::UsersListThen::new(then),
             )
         })
     }
@@ -915,6 +4198,42 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
+    fn user_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::UserGetWhen, operations::UserGetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::UserGetWhen::new(when),
+                operations::UserGetThen::new(then),
+            )
+        })
+    }
+
+    fn user_privilege_grant<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::UserPrivilegeGrantWhen, operations::UserPrivilegeGrantThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::UserPrivilegeGrantWhen::new(when),
+                operations::UserPrivilegeGrantThen::new(then),
+            )
+        })
+    }
+
+    fn user_privilege_revoke<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::UserPrivilegeRevokeWhen, operations::UserPrivilegeRevokeThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::UserPrivilegeRevokeWhen::new(when),
+                operations::UserPrivilegeRevokeThen::new(then),
+            )
+        })
+    }
+
     fn whoami<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WhoamiWhen, operations::WhoamiThen),
@@ -923,18 +4242,6 @@ impl MockServerExt for httpmock::MockServer {
             config_fn(
                 operations::WhoamiWhen::new(when),
                 operations::WhoamiThen::new(then),
-            )
-        })
-    }
-
-    fn whoami_put_name<F>(&self, config_fn: F) -> httpmock::Mock
-    where
-        F: FnOnce(operations::WhoamiPutNameWhen, operations::WhoamiPutNameThen),
-    {
-        self.mock(|when, then| {
-            config_fn(
-                operations::WhoamiPutNameWhen::new(when),
-                operations::WhoamiPutNameThen::new(then),
             )
         })
     }
@@ -951,14 +4258,74 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn worker_ping<F>(&self, config_fn: F) -> httpmock::Mock
+    fn worker_job_upload_chunk<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::WorkerPingWhen, operations::WorkerPingThen),
+        F: FnOnce(operations::WorkerJobUploadChunkWhen, operations::WorkerJobUploadChunkThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::WorkerPingWhen::new(when),
-                operations::WorkerPingThen::new(then),
+                operations::WorkerJobUploadChunkWhen::new(when),
+                operations::WorkerJobUploadChunkThen::new(then),
+            )
+        })
+    }
+
+    fn worker_job_complete<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobCompleteWhen, operations::WorkerJobCompleteThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WorkerJobCompleteWhen::new(when),
+                operations::WorkerJobCompleteThen::new(then),
+            )
+        })
+    }
+
+    fn worker_job_input_download<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobInputDownloadWhen, operations::WorkerJobInputDownloadThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WorkerJobInputDownloadWhen::new(when),
+                operations::WorkerJobInputDownloadThen::new(then),
+            )
+        })
+    }
+
+    fn worker_job_quota<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobQuotaWhen, operations::WorkerJobQuotaThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WorkerJobQuotaWhen::new(when),
+                operations::WorkerJobQuotaThen::new(then),
+            )
+        })
+    }
+
+    fn worker_job_store_get<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobStoreGetWhen, operations::WorkerJobStoreGetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WorkerJobStoreGetWhen::new(when),
+                operations::WorkerJobStoreGetThen::new(then),
+            )
+        })
+    }
+
+    fn worker_job_store_put<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobStorePutWhen, operations::WorkerJobStorePutThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WorkerJobStorePutWhen::new(when),
+                operations::WorkerJobStorePutThen::new(then),
             )
         })
     }
@@ -975,18 +4342,6 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn worker_task_upload_chunk<F>(&self, config_fn: F) -> httpmock::Mock
-    where
-        F: FnOnce(operations::WorkerTaskUploadChunkWhen, operations::WorkerTaskUploadChunkThen),
-    {
-        self.mock(|when, then| {
-            config_fn(
-                operations::WorkerTaskUploadChunkWhen::new(when),
-                operations::WorkerTaskUploadChunkThen::new(then),
-            )
-        })
-    }
-
     fn worker_task_complete<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WorkerTaskCompleteWhen, operations::WorkerTaskCompleteThen),
@@ -999,14 +4354,14 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn worker_task_add_output<F>(&self, config_fn: F) -> httpmock::Mock
+    fn worker_ping<F>(&self, config_fn: F) -> httpmock::Mock
     where
-        F: FnOnce(operations::WorkerTaskAddOutputWhen, operations::WorkerTaskAddOutputThen),
+        F: FnOnce(operations::WorkerPingWhen, operations::WorkerPingThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::WorkerTaskAddOutputWhen::new(when),
-                operations::WorkerTaskAddOutputThen::new(then),
+                operations::WorkerPingWhen::new(when),
+                operations::WorkerPingThen::new(then),
             )
         })
     }
@@ -1031,6 +4386,42 @@ impl MockServerExt for httpmock::MockServer {
             config_fn(
                 operations::WorkersRecycleWhen::new(when),
                 operations::WorkersRecycleThen::new(then),
+            )
+        })
+    }
+
+    fn job_add_input<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::JobAddInputWhen, operations::JobAddInputThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::JobAddInputWhen::new(when),
+                operations::JobAddInputThen::new(then),
+            )
+        })
+    }
+
+    fn worker_job_append<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobAppendWhen, operations::WorkerJobAppendThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WorkerJobAppendWhen::new(when),
+                operations::WorkerJobAppendThen::new(then),
+            )
+        })
+    }
+
+    fn worker_job_add_output<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WorkerJobAddOutputWhen, operations::WorkerJobAddOutputThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WorkerJobAddOutputWhen::new(when),
+                operations::WorkerJobAddOutputThen::new(then),
             )
         })
     }

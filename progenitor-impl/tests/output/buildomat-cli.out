@@ -10,60 +10,72 @@ impl Cli {
 
     pub fn get_command(cmd: CliCommand) -> clap::Command {
         match cmd {
+            CliCommand::FactoryCreate => Self::cli_factory_create(),
+            CliCommand::AdminJobsGet => Self::cli_admin_jobs_get(),
+            CliCommand::AdminJobGet => Self::cli_admin_job_get(),
+            CliCommand::AdminJobArchiveRequest => Self::cli_admin_job_archive_request(),
+            CliCommand::TargetCreate => Self::cli_target_create(),
+            CliCommand::TargetsList => Self::cli_targets_list(),
+            CliCommand::TargetRedirect => Self::cli_target_redirect(),
+            CliCommand::TargetRename => Self::cli_target_rename(),
+            CliCommand::TargetRequireNoPrivilege => Self::cli_target_require_no_privilege(),
+            CliCommand::TargetRequirePrivilege => Self::cli_target_require_privilege(),
+            CliCommand::WorkerRecycle => Self::cli_worker_recycle(),
             CliCommand::ControlHold => Self::cli_control_hold(),
             CliCommand::ControlResume => Self::cli_control_resume(),
-            CliCommand::TaskGet => Self::cli_task_get(),
-            CliCommand::TasksGet => Self::cli_tasks_get(),
-            CliCommand::TaskSubmit => Self::cli_task_submit(),
-            CliCommand::TaskEventsGet => Self::cli_task_events_get(),
-            CliCommand::TaskOutputsGet => Self::cli_task_outputs_get(),
-            CliCommand::TaskOutputDownload => Self::cli_task_output_download(),
+            CliCommand::FactoryLease => Self::cli_factory_lease(),
+            CliCommand::FactoryLeaseRenew => Self::cli_factory_lease_renew(),
+            CliCommand::FactoryPing => Self::cli_factory_ping(),
+            CliCommand::FactoryWorkerCreate => Self::cli_factory_worker_create(),
+            CliCommand::FactoryWorkerGet => Self::cli_factory_worker_get(),
+            CliCommand::FactoryWorkerDestroy => Self::cli_factory_worker_destroy(),
+            CliCommand::FactoryWorkerAssociate => Self::cli_factory_worker_associate(),
+            CliCommand::FactoryWorkerAppend => Self::cli_factory_worker_append(),
+            CliCommand::FactoryWorkerFlush => Self::cli_factory_worker_flush(),
+            CliCommand::FactoryWorkers => Self::cli_factory_workers(),
+            CliCommand::JobGet => Self::cli_job_get(),
+            CliCommand::JobsGet => Self::cli_jobs_get(),
+            CliCommand::JobSubmit => Self::cli_job_submit(),
+            CliCommand::JobCancel => Self::cli_job_cancel(),
+            CliCommand::JobUploadChunk => Self::cli_job_upload_chunk(),
+            CliCommand::JobEventsGet => Self::cli_job_events_get(),
+            CliCommand::JobOutputsGet => Self::cli_job_outputs_get(),
+            CliCommand::JobOutputDownload => Self::cli_job_output_download(),
+            CliCommand::JobOutputPublish => Self::cli_job_output_publish(),
+            CliCommand::JobOutputSignedUrl => Self::cli_job_output_signed_url(),
+            CliCommand::JobStoreGetAll => Self::cli_job_store_get_all(),
+            CliCommand::JobStorePut => Self::cli_job_store_put(),
+            CliCommand::PublicFileDownload => Self::cli_public_file_download(),
+            CliCommand::Quota => Self::cli_quota(),
+            CliCommand::UsersList => Self::cli_users_list(),
             CliCommand::UserCreate => Self::cli_user_create(),
+            CliCommand::UserGet => Self::cli_user_get(),
+            CliCommand::UserPrivilegeGrant => Self::cli_user_privilege_grant(),
+            CliCommand::UserPrivilegeRevoke => Self::cli_user_privilege_revoke(),
             CliCommand::Whoami => Self::cli_whoami(),
-            CliCommand::WhoamiPutName => Self::cli_whoami_put_name(),
             CliCommand::WorkerBootstrap => Self::cli_worker_bootstrap(),
-            CliCommand::WorkerPing => Self::cli_worker_ping(),
+            CliCommand::WorkerJobUploadChunk => Self::cli_worker_job_upload_chunk(),
+            CliCommand::WorkerJobComplete => Self::cli_worker_job_complete(),
+            CliCommand::WorkerJobInputDownload => Self::cli_worker_job_input_download(),
+            CliCommand::WorkerJobQuota => Self::cli_worker_job_quota(),
+            CliCommand::WorkerJobStoreGet => Self::cli_worker_job_store_get(),
+            CliCommand::WorkerJobStorePut => Self::cli_worker_job_store_put(),
             CliCommand::WorkerTaskAppend => Self::cli_worker_task_append(),
-            CliCommand::WorkerTaskUploadChunk => Self::cli_worker_task_upload_chunk(),
             CliCommand::WorkerTaskComplete => Self::cli_worker_task_complete(),
-            CliCommand::WorkerTaskAddOutput => Self::cli_worker_task_add_output(),
+            CliCommand::WorkerPing => Self::cli_worker_ping(),
             CliCommand::WorkersList => Self::cli_workers_list(),
             CliCommand::WorkersRecycle => Self::cli_workers_recycle(),
+            CliCommand::JobAddInput => Self::cli_job_add_input(),
+            CliCommand::WorkerJobAppend => Self::cli_worker_job_append(),
+            CliCommand::WorkerJobAddOutput => Self::cli_worker_job_add_output(),
         }
     }
 
-    pub fn cli_control_hold() -> clap::Command {
-        clap::Command::new("")
-    }
-
-    pub fn cli_control_resume() -> clap::Command {
-        clap::Command::new("")
-    }
-
-    pub fn cli_task_get() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("task")
-                .long("task")
-                .value_parser(clap::value_parser!(String))
-                .required(true),
-        )
-    }
-
-    pub fn cli_tasks_get() -> clap::Command {
-        clap::Command::new("")
-    }
-
-    pub fn cli_task_submit() -> clap::Command {
+    pub fn cli_factory_create() -> clap::Command {
         clap::Command::new("")
             .arg(
                 clap::Arg::new("name")
                     .long("name")
-                    .value_parser(clap::value_parser!(String))
-                    .required_unless_present("json-body"),
-            )
-            .arg(
-                clap::Arg::new("script")
-                    .long("script")
                     .value_parser(clap::value_parser!(String))
                     .required_unless_present("json-body"),
             )
@@ -83,33 +95,468 @@ impl Cli {
             )
     }
 
-    pub fn cli_task_events_get() -> clap::Command {
+    pub fn cli_admin_jobs_get() -> clap::Command {
         clap::Command::new("")
+            .arg(
+                clap::Arg::new("active")
+                    .long("active")
+                    .value_parser(clap::value_parser!(bool))
+                    .required(false),
+            )
+            .arg(
+                clap::Arg::new("completed")
+                    .long("completed")
+                    .value_parser(clap::value_parser!(u64))
+                    .required(false),
+            )
+    }
+
+    pub fn cli_admin_job_get() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_admin_job_archive_request() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_target_create() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("desc")
+                    .long("desc")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_targets_list() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_target_redirect() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("redirect")
+                    .long("redirect")
+                    .value_parser(clap::value_parser!(String))
+                    .required(false),
+            )
+            .arg(
+                clap::Arg::new("target")
+                    .long("target")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_target_rename() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("new-name")
+                    .long("new-name")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("signpost-description")
+                    .long("signpost-description")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("target")
+                    .long("target")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_target_require_no_privilege() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("target")
+                .long("target")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_target_require_privilege() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("privilege")
+                    .long("privilege")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("target")
+                    .long("target")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+    }
+
+    pub fn cli_worker_recycle() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("worker")
+                .long("worker")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_control_hold() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_control_resume() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_factory_lease() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(true)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_factory_lease_renew() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_factory_ping() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_factory_worker_create() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(false),
+            )
+            .arg(
+                clap::Arg::new("target")
+                    .long("target")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("wait-for-flush")
+                    .long("wait-for-flush")
+                    .value_parser(clap::value_parser!(bool))
+                    .required(false),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_factory_worker_get() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("worker")
+                .long("worker")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_factory_worker_destroy() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("worker")
+                .long("worker")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_factory_worker_associate() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("private")
+                    .long("private")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("worker")
+                    .long("worker")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_factory_worker_append() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("payload")
+                    .long("payload")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("stream")
+                    .long("stream")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("time")
+                    .long("time")
+                    .value_parser(clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("worker")
+                    .long("worker")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_factory_worker_flush() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("worker")
+                .long("worker")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_factory_workers() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_job_get() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_jobs_get() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_job_submit() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("target")
+                    .long("target")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(true)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_job_cancel() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_job_upload_chunk() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_job_events_get() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
             .arg(
                 clap::Arg::new("minseq")
                     .long("minseq")
                     .value_parser(clap::value_parser!(u32))
                     .required(false),
             )
-            .arg(
-                clap::Arg::new("task")
-                    .long("task")
-                    .value_parser(clap::value_parser!(String))
-                    .required(true),
-            )
     }
 
-    pub fn cli_task_outputs_get() -> clap::Command {
+    pub fn cli_job_outputs_get() -> clap::Command {
         clap::Command::new("").arg(
-            clap::Arg::new("task")
-                .long("task")
+            clap::Arg::new("job")
+                .long("job")
                 .value_parser(clap::value_parser!(String))
                 .required(true),
         )
     }
 
-    pub fn cli_task_output_download() -> clap::Command {
+    pub fn cli_job_output_download() -> clap::Command {
         clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("output")
+                    .long("output")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+    }
+
+    pub fn cli_job_output_publish() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
             .arg(
                 clap::Arg::new("output")
                     .long("output")
@@ -117,11 +564,171 @@ impl Cli {
                     .required(true),
             )
             .arg(
-                clap::Arg::new("task")
-                    .long("task")
+                clap::Arg::new("series")
+                    .long("series")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("version")
+                    .long("version")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_job_output_signed_url() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("content-disposition")
+                    .long("content-disposition")
+                    .value_parser(clap::value_parser!(String))
+                    .required(false),
+            )
+            .arg(
+                clap::Arg::new("content-type")
+                    .long("content-type")
+                    .value_parser(clap::value_parser!(String))
+                    .required(false),
+            )
+            .arg(
+                clap::Arg::new("expiry-seconds")
+                    .long("expiry-seconds")
+                    .value_parser(clap::value_parser!(u64))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
                     .value_parser(clap::value_parser!(String))
                     .required(true),
             )
+            .arg(
+                clap::Arg::new("output")
+                    .long("output")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_job_store_get_all() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_job_store_put() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("secret")
+                    .long("secret")
+                    .value_parser(clap::value_parser!(bool))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("value")
+                    .long("value")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_public_file_download() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("series")
+                    .long("series")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("username")
+                    .long("username")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("version")
+                    .long("version")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+    }
+
+    pub fn cli_quota() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_users_list() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("name")
+                .long("name")
+                .value_parser(clap::value_parser!(String))
+                .required(false),
+        )
     }
 
     pub fn cli_user_create() -> clap::Command {
@@ -148,11 +755,48 @@ impl Cli {
             )
     }
 
-    pub fn cli_whoami() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_user_get() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("user")
+                .long("user")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
     }
 
-    pub fn cli_whoami_put_name() -> clap::Command {
+    pub fn cli_user_privilege_grant() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("privilege")
+                    .long("privilege")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("user")
+                    .long("user")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+    }
+
+    pub fn cli_user_privilege_revoke() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("privilege")
+                    .long("privilege")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("user")
+                    .long("user")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+    }
+
+    pub fn cli_whoami() -> clap::Command {
         clap::Command::new("")
     }
 
@@ -186,12 +830,136 @@ impl Cli {
             )
     }
 
-    pub fn cli_worker_ping() -> clap::Command {
+    pub fn cli_worker_job_upload_chunk() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_worker_job_complete() -> clap::Command {
         clap::Command::new("")
+            .arg(
+                clap::Arg::new("failed")
+                    .long("failed")
+                    .value_parser(clap::value_parser!(bool))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_worker_job_input_download() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("input")
+                    .long("input")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+    }
+
+    pub fn cli_worker_job_quota() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("job")
+                .long("job")
+                .value_parser(clap::value_parser!(String))
+                .required(true),
+        )
+    }
+
+    pub fn cli_worker_job_store_get() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+    }
+
+    pub fn cli_worker_job_store_put() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("secret")
+                    .long("secret")
+                    .value_parser(clap::value_parser!(bool))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("value")
+                    .long("value")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(false)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
     }
 
     pub fn cli_worker_task_append() -> clap::Command {
         clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
             .arg(
                 clap::Arg::new("payload")
                     .long("payload")
@@ -207,7 +975,7 @@ impl Cli {
             .arg(
                 clap::Arg::new("task")
                     .long("task")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(clap::value_parser!(u32))
                     .required(true),
             )
             .arg(
@@ -232,15 +1000,6 @@ impl Cli {
             )
     }
 
-    pub fn cli_worker_task_upload_chunk() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("task")
-                .long("task")
-                .value_parser(clap::value_parser!(String))
-                .required(true),
-        )
-    }
-
     pub fn cli_worker_task_complete() -> clap::Command {
         clap::Command::new("")
             .arg(
@@ -250,9 +1009,15 @@ impl Cli {
                     .required_unless_present("json-body"),
             )
             .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
                 clap::Arg::new("task")
                     .long("task")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(clap::value_parser!(u32))
                     .required(true),
             )
             .arg(
@@ -271,23 +1036,70 @@ impl Cli {
             )
     }
 
-    pub fn cli_worker_task_add_output() -> clap::Command {
+    pub fn cli_worker_ping() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_workers_list() -> clap::Command {
+        clap::Command::new("").arg(
+            clap::Arg::new("active")
+                .long("active")
+                .value_parser(clap::value_parser!(bool))
+                .required(false),
+        )
+    }
+
+    pub fn cli_workers_recycle() -> clap::Command {
+        clap::Command::new("")
+    }
+
+    pub fn cli_job_add_input() -> clap::Command {
         clap::Command::new("")
             .arg(
-                clap::Arg::new("path")
-                    .long("path")
+                clap::Arg::new("commit-id")
+                    .long("commit-id")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("name")
+                    .long("name")
                     .value_parser(clap::value_parser!(String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 clap::Arg::new("size")
                     .long("size")
-                    .value_parser(clap::value_parser!(i64))
+                    .value_parser(clap::value_parser!(u64))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("task")
-                    .long("task")
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(true)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
+    }
+
+    pub fn cli_worker_job_append() -> clap::Command {
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
                     .value_parser(clap::value_parser!(String))
                     .required(true),
             )
@@ -307,12 +1119,46 @@ impl Cli {
             )
     }
 
-    pub fn cli_workers_list() -> clap::Command {
+    pub fn cli_worker_job_add_output() -> clap::Command {
         clap::Command::new("")
-    }
-
-    pub fn cli_workers_recycle() -> clap::Command {
-        clap::Command::new("")
+            .arg(
+                clap::Arg::new("commit-id")
+                    .long("commit-id")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("job")
+                    .long("job")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .arg(
+                clap::Arg::new("path")
+                    .long("path")
+                    .value_parser(clap::value_parser!(String))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("size")
+                    .long("size")
+                    .value_parser(clap::value_parser!(u64))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
+                clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(true)
+                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
+            )
+            .arg(
+                clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
     }
 }
 
@@ -323,62 +1169,443 @@ impl<T: CliOverride> Cli<T> {
 
     pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
         match cmd {
+            CliCommand::FactoryCreate => {
+                self.execute_factory_create(matches).await;
+            }
+            CliCommand::AdminJobsGet => {
+                self.execute_admin_jobs_get(matches).await;
+            }
+            CliCommand::AdminJobGet => {
+                self.execute_admin_job_get(matches).await;
+            }
+            CliCommand::AdminJobArchiveRequest => {
+                self.execute_admin_job_archive_request(matches).await;
+            }
+            CliCommand::TargetCreate => {
+                self.execute_target_create(matches).await;
+            }
+            CliCommand::TargetsList => {
+                self.execute_targets_list(matches).await;
+            }
+            CliCommand::TargetRedirect => {
+                self.execute_target_redirect(matches).await;
+            }
+            CliCommand::TargetRename => {
+                self.execute_target_rename(matches).await;
+            }
+            CliCommand::TargetRequireNoPrivilege => {
+                self.execute_target_require_no_privilege(matches).await;
+            }
+            CliCommand::TargetRequirePrivilege => {
+                self.execute_target_require_privilege(matches).await;
+            }
+            CliCommand::WorkerRecycle => {
+                self.execute_worker_recycle(matches).await;
+            }
             CliCommand::ControlHold => {
                 self.execute_control_hold(matches).await;
             }
             CliCommand::ControlResume => {
                 self.execute_control_resume(matches).await;
             }
-            CliCommand::TaskGet => {
-                self.execute_task_get(matches).await;
+            CliCommand::FactoryLease => {
+                self.execute_factory_lease(matches).await;
             }
-            CliCommand::TasksGet => {
-                self.execute_tasks_get(matches).await;
+            CliCommand::FactoryLeaseRenew => {
+                self.execute_factory_lease_renew(matches).await;
             }
-            CliCommand::TaskSubmit => {
-                self.execute_task_submit(matches).await;
+            CliCommand::FactoryPing => {
+                self.execute_factory_ping(matches).await;
             }
-            CliCommand::TaskEventsGet => {
-                self.execute_task_events_get(matches).await;
+            CliCommand::FactoryWorkerCreate => {
+                self.execute_factory_worker_create(matches).await;
             }
-            CliCommand::TaskOutputsGet => {
-                self.execute_task_outputs_get(matches).await;
+            CliCommand::FactoryWorkerGet => {
+                self.execute_factory_worker_get(matches).await;
             }
-            CliCommand::TaskOutputDownload => {
-                self.execute_task_output_download(matches).await;
+            CliCommand::FactoryWorkerDestroy => {
+                self.execute_factory_worker_destroy(matches).await;
+            }
+            CliCommand::FactoryWorkerAssociate => {
+                self.execute_factory_worker_associate(matches).await;
+            }
+            CliCommand::FactoryWorkerAppend => {
+                self.execute_factory_worker_append(matches).await;
+            }
+            CliCommand::FactoryWorkerFlush => {
+                self.execute_factory_worker_flush(matches).await;
+            }
+            CliCommand::FactoryWorkers => {
+                self.execute_factory_workers(matches).await;
+            }
+            CliCommand::JobGet => {
+                self.execute_job_get(matches).await;
+            }
+            CliCommand::JobsGet => {
+                self.execute_jobs_get(matches).await;
+            }
+            CliCommand::JobSubmit => {
+                self.execute_job_submit(matches).await;
+            }
+            CliCommand::JobCancel => {
+                self.execute_job_cancel(matches).await;
+            }
+            CliCommand::JobUploadChunk => {
+                self.execute_job_upload_chunk(matches).await;
+            }
+            CliCommand::JobEventsGet => {
+                self.execute_job_events_get(matches).await;
+            }
+            CliCommand::JobOutputsGet => {
+                self.execute_job_outputs_get(matches).await;
+            }
+            CliCommand::JobOutputDownload => {
+                self.execute_job_output_download(matches).await;
+            }
+            CliCommand::JobOutputPublish => {
+                self.execute_job_output_publish(matches).await;
+            }
+            CliCommand::JobOutputSignedUrl => {
+                self.execute_job_output_signed_url(matches).await;
+            }
+            CliCommand::JobStoreGetAll => {
+                self.execute_job_store_get_all(matches).await;
+            }
+            CliCommand::JobStorePut => {
+                self.execute_job_store_put(matches).await;
+            }
+            CliCommand::PublicFileDownload => {
+                self.execute_public_file_download(matches).await;
+            }
+            CliCommand::Quota => {
+                self.execute_quota(matches).await;
+            }
+            CliCommand::UsersList => {
+                self.execute_users_list(matches).await;
             }
             CliCommand::UserCreate => {
                 self.execute_user_create(matches).await;
             }
+            CliCommand::UserGet => {
+                self.execute_user_get(matches).await;
+            }
+            CliCommand::UserPrivilegeGrant => {
+                self.execute_user_privilege_grant(matches).await;
+            }
+            CliCommand::UserPrivilegeRevoke => {
+                self.execute_user_privilege_revoke(matches).await;
+            }
             CliCommand::Whoami => {
                 self.execute_whoami(matches).await;
-            }
-            CliCommand::WhoamiPutName => {
-                self.execute_whoami_put_name(matches).await;
             }
             CliCommand::WorkerBootstrap => {
                 self.execute_worker_bootstrap(matches).await;
             }
-            CliCommand::WorkerPing => {
-                self.execute_worker_ping(matches).await;
+            CliCommand::WorkerJobUploadChunk => {
+                self.execute_worker_job_upload_chunk(matches).await;
+            }
+            CliCommand::WorkerJobComplete => {
+                self.execute_worker_job_complete(matches).await;
+            }
+            CliCommand::WorkerJobInputDownload => {
+                self.execute_worker_job_input_download(matches).await;
+            }
+            CliCommand::WorkerJobQuota => {
+                self.execute_worker_job_quota(matches).await;
+            }
+            CliCommand::WorkerJobStoreGet => {
+                self.execute_worker_job_store_get(matches).await;
+            }
+            CliCommand::WorkerJobStorePut => {
+                self.execute_worker_job_store_put(matches).await;
             }
             CliCommand::WorkerTaskAppend => {
                 self.execute_worker_task_append(matches).await;
             }
-            CliCommand::WorkerTaskUploadChunk => {
-                self.execute_worker_task_upload_chunk(matches).await;
-            }
             CliCommand::WorkerTaskComplete => {
                 self.execute_worker_task_complete(matches).await;
             }
-            CliCommand::WorkerTaskAddOutput => {
-                self.execute_worker_task_add_output(matches).await;
+            CliCommand::WorkerPing => {
+                self.execute_worker_ping(matches).await;
             }
             CliCommand::WorkersList => {
                 self.execute_workers_list(matches).await;
             }
             CliCommand::WorkersRecycle => {
                 self.execute_workers_recycle(matches).await;
+            }
+            CliCommand::JobAddInput => {
+                self.execute_job_add_input(matches).await;
+            }
+            CliCommand::WorkerJobAppend => {
+                self.execute_worker_job_append(matches).await;
+            }
+            CliCommand::WorkerJobAddOutput => {
+                self.execute_worker_job_add_output(matches).await;
+            }
+        }
+    }
+
+    pub async fn execute_factory_create(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_create();
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.body_map(|body| body.name(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::FactoryCreate>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_factory_create(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_admin_jobs_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.admin_jobs_get();
+        if let Some(value) = matches.get_one::<bool>("active") {
+            request = request.active(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<u64>("completed") {
+            request = request.completed(value.clone());
+        }
+
+        self.over
+            .execute_admin_jobs_get(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_admin_job_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.admin_job_get();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over
+            .execute_admin_job_get(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_admin_job_archive_request(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.admin_job_archive_request();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over
+            .execute_admin_job_archive_request(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_target_create(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.target_create();
+        if let Some(value) = matches.get_one::<String>("desc") {
+            request = request.body_map(|body| body.desc(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.body_map(|body| body.name(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::TargetCreate>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_target_create(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_targets_list(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.targets_list();
+        self.over
+            .execute_targets_list(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_target_redirect(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.target_redirect();
+        if let Some(value) = matches.get_one::<String>("redirect") {
+            request = request.body_map(|body| body.redirect(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("target") {
+            request = request.target(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::TargetRedirect>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_target_redirect(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_target_rename(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.target_rename();
+        if let Some(value) = matches.get_one::<String>("new-name") {
+            request = request.body_map(|body| body.new_name(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("signpost-description") {
+            request = request.body_map(|body| body.signpost_description(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("target") {
+            request = request.target(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::TargetRename>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_target_rename(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_target_require_no_privilege(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.target_require_no_privilege();
+        if let Some(value) = matches.get_one::<String>("target") {
+            request = request.target(value.clone());
+        }
+
+        self.over
+            .execute_target_require_no_privilege(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_target_require_privilege(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.target_require_privilege();
+        if let Some(value) = matches.get_one::<String>("privilege") {
+            request = request.privilege(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("target") {
+            request = request.target(value.clone());
+        }
+
+        self.over
+            .execute_target_require_privilege(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_worker_recycle(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_recycle();
+        if let Some(value) = matches.get_one::<String>("worker") {
+            request = request.worker(value.clone());
+        }
+
+        self.over
+            .execute_worker_recycle(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
             }
         }
     }
@@ -394,7 +1621,7 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
@@ -410,61 +1637,21 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
 
-    pub async fn execute_task_get(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.task_get();
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
-        self.over.execute_task_get(matches, &mut request).unwrap();
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
-    }
-
-    pub async fn execute_tasks_get(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.tasks_get();
-        self.over.execute_tasks_get(matches, &mut request).unwrap();
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
-    }
-
-    pub async fn execute_task_submit(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.task_submit();
-        if let Some(value) = matches.get_one::<String>("name") {
-            request = request.body_map(|body| body.name(value.clone()))
-        }
-
-        if let Some(value) = matches.get_one::<String>("script") {
-            request = request.body_map(|body| body.script(value.clone()))
-        }
-
+    pub async fn execute_factory_lease(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_lease();
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::TaskSubmit>(&body_txt).unwrap();
+            let body_value = serde_json::from_str::<types::FactoryWhatsNext>(&body_txt).unwrap();
             request = request.body(body_value);
         }
 
         self.over
-            .execute_task_submit(matches, &mut request)
+            .execute_factory_lease(matches, &mut request)
             .unwrap();
         let result = request.send().await;
         match result {
@@ -472,23 +1659,336 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
 
-    pub async fn execute_task_events_get(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.task_events_get();
+    pub async fn execute_factory_lease_renew(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_lease_renew();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over
+            .execute_factory_lease_renew(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_factory_ping(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_ping();
+        self.over
+            .execute_factory_ping(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_factory_worker_create(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_worker_create();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.body_map(|body| body.job(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("target") {
+            request = request.body_map(|body| body.target(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<bool>("wait-for-flush") {
+            request = request.body_map(|body| body.wait_for_flush(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::FactoryWorkerCreate>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_factory_worker_create(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_factory_worker_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_worker_get();
+        if let Some(value) = matches.get_one::<String>("worker") {
+            request = request.worker(value.clone());
+        }
+
+        self.over
+            .execute_factory_worker_get(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_factory_worker_destroy(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_worker_destroy();
+        if let Some(value) = matches.get_one::<String>("worker") {
+            request = request.worker(value.clone());
+        }
+
+        self.over
+            .execute_factory_worker_destroy(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_factory_worker_associate(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_worker_associate();
+        if let Some(value) = matches.get_one::<String>("private") {
+            request = request.body_map(|body| body.private(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("worker") {
+            request = request.worker(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value =
+                serde_json::from_str::<types::FactoryWorkerAssociate>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_factory_worker_associate(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_factory_worker_append(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_worker_append();
+        if let Some(value) = matches.get_one::<String>("payload") {
+            request = request.body_map(|body| body.payload(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("stream") {
+            request = request.body_map(|body| body.stream(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("time") {
+            request = request.body_map(|body| body.time(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("worker") {
+            request = request.worker(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::FactoryWorkerAppend>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_factory_worker_append(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_factory_worker_flush(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_worker_flush();
+        if let Some(value) = matches.get_one::<String>("worker") {
+            request = request.worker(value.clone());
+        }
+
+        self.over
+            .execute_factory_worker_flush(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_factory_workers(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.factory_workers();
+        self.over
+            .execute_factory_workers(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_get();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over.execute_job_get(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_jobs_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.jobs_get();
+        self.over.execute_jobs_get(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_submit(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_submit();
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.body_map(|body| body.name(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("target") {
+            request = request.body_map(|body| body.target(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::JobSubmit>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over.execute_job_submit(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_cancel(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_cancel();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over.execute_job_cancel(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_upload_chunk(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_upload_chunk();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over
+            .execute_job_upload_chunk(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_events_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_events_get();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
         if let Some(value) = matches.get_one::<u32>("minseq") {
             request = request.minseq(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
         self.over
-            .execute_task_events_get(matches, &mut request)
+            .execute_job_events_get(matches, &mut request)
             .unwrap();
         let result = request.send().await;
         match result {
@@ -496,19 +1996,19 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
 
-    pub async fn execute_task_outputs_get(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.task_outputs_get();
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
+    pub async fn execute_job_outputs_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_outputs_get();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
         }
 
         self.over
-            .execute_task_outputs_get(matches, &mut request)
+            .execute_job_outputs_get(matches, &mut request)
             .unwrap();
         let result = request.send().await;
         match result {
@@ -516,23 +2016,23 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
 
-    pub async fn execute_task_output_download(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.task_output_download();
+    pub async fn execute_job_output_download(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_output_download();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
         if let Some(value) = matches.get_one::<String>("output") {
             request = request.output(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
         self.over
-            .execute_task_output_download(matches, &mut request)
+            .execute_job_output_download(matches, &mut request)
             .unwrap();
         let result = request.send().await;
         match result {
@@ -540,7 +2040,213 @@ impl<T: CliOverride> Cli<T> {
                 todo!()
             }
             Err(r) => {
+                todo!()
+            }
+        }
+    }
+
+    pub async fn execute_job_output_publish(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_output_publish();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.body_map(|body| body.name(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("output") {
+            request = request.output(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("series") {
+            request = request.body_map(|body| body.series(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("version") {
+            request = request.body_map(|body| body.version(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::JobOutputPublish>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_job_output_publish(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
                 println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_output_signed_url(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_output_signed_url();
+        if let Some(value) = matches.get_one::<String>("content-disposition") {
+            request = request.body_map(|body| body.content_disposition(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("content-type") {
+            request = request.body_map(|body| body.content_type(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<u64>("expiry-seconds") {
+            request = request.body_map(|body| body.expiry_seconds(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("output") {
+            request = request.output(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::JobOutputSignedUrl>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_job_output_signed_url(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_store_get_all(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_store_get_all();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over
+            .execute_job_store_get_all(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_store_put(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_store_put();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.name(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<bool>("secret") {
+            request = request.body_map(|body| body.secret(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("value") {
+            request = request.body_map(|body| body.value(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::JobStoreValue>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_job_store_put(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_public_file_download(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.public_file_download();
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.name(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("series") {
+            request = request.series(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("username") {
+            request = request.username(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("version") {
+            request = request.version(value.clone());
+        }
+
+        self.over
+            .execute_public_file_download(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                todo!()
+            }
+            Err(r) => {
+                todo!()
+            }
+        }
+    }
+
+    pub async fn execute_quota(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.quota();
+        self.over.execute_quota(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_users_list(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.users_list();
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.name(value.clone());
+        }
+
+        self.over.execute_users_list(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
             }
         }
     }
@@ -566,7 +2272,73 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_user_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.user_get();
+        if let Some(value) = matches.get_one::<String>("user") {
+            request = request.user(value.clone());
+        }
+
+        self.over.execute_user_get(matches, &mut request).unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
                 println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_user_privilege_grant(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.user_privilege_grant();
+        if let Some(value) = matches.get_one::<String>("privilege") {
+            request = request.privilege(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("user") {
+            request = request.user(value.clone());
+        }
+
+        self.over
+            .execute_user_privilege_grant(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_user_privilege_revoke(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.user_privilege_revoke();
+        if let Some(value) = matches.get_one::<String>("privilege") {
+            request = request.privilege(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("user") {
+            request = request.user(value.clone());
+        }
+
+        self.over
+            .execute_user_privilege_revoke(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
             }
         }
     }
@@ -580,23 +2352,7 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
-    }
-
-    pub async fn execute_whoami_put_name(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.whoami_put_name();
-        self.over
-            .execute_whoami_put_name(matches, &mut request)
-            .unwrap();
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
@@ -626,15 +2382,19 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
 
-    pub async fn execute_worker_ping(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.worker_ping();
+    pub async fn execute_worker_job_upload_chunk(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_job_upload_chunk();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
         self.over
-            .execute_worker_ping(matches, &mut request)
+            .execute_worker_job_upload_chunk(matches, &mut request)
             .unwrap();
         let result = request.send().await;
         match result {
@@ -642,13 +2402,153 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_worker_job_complete(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_job_complete();
+        if let Some(value) = matches.get_one::<bool>("failed") {
+            request = request.body_map(|body| body.failed(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerCompleteJob>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_worker_job_complete(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
                 println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_worker_job_input_download(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_job_input_download();
+        if let Some(value) = matches.get_one::<String>("input") {
+            request = request.input(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over
+            .execute_worker_job_input_download(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                todo!()
+            }
+            Err(r) => {
+                todo!()
+            }
+        }
+    }
+
+    pub async fn execute_worker_job_quota(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_job_quota();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        self.over
+            .execute_worker_job_quota(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_worker_job_store_get(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_job_store_get();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.name(value.clone());
+        }
+
+        self.over
+            .execute_worker_job_store_get(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_worker_job_store_put(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_job_store_put();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.name(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<bool>("secret") {
+            request = request.body_map(|body| body.secret(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("value") {
+            request = request.body_map(|body| body.value(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerJobStoreValue>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_worker_job_store_put(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
             }
         }
     }
 
     pub async fn execute_worker_task_append(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.worker_task_append();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
         if let Some(value) = matches.get_one::<String>("payload") {
             request = request.body_map(|body| body.payload(value.clone()))
         }
@@ -657,7 +2557,7 @@ impl<T: CliOverride> Cli<T> {
             request = request.body_map(|body| body.stream(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<u32>("task") {
             request = request.task(value.clone());
         }
 
@@ -667,7 +2567,7 @@ impl<T: CliOverride> Cli<T> {
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::WorkerAppendTask>(&body_txt).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerAppendJob>(&body_txt).unwrap();
             request = request.body(body_value);
         }
 
@@ -680,27 +2580,7 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
-            }
-        }
-    }
-
-    pub async fn execute_worker_task_upload_chunk(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.worker_task_upload_chunk();
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
-        self.over
-            .execute_worker_task_upload_chunk(matches, &mut request)
-            .unwrap();
-        let result = request.send().await;
-        match result {
-            Ok(r) => {
-                println!("success\n{:#?}", r)
-            }
-            Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
@@ -711,7 +2591,11 @@ impl<T: CliOverride> Cli<T> {
             request = request.body_map(|body| body.failed(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<u32>("task") {
             request = request.task(value.clone());
         }
 
@@ -730,33 +2614,15 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
 
-    pub async fn execute_worker_task_add_output(&self, matches: &clap::ArgMatches) {
-        let mut request = self.client.worker_task_add_output();
-        if let Some(value) = matches.get_one::<String>("path") {
-            request = request.body_map(|body| body.path(value.clone()))
-        }
-
-        if let Some(value) = matches.get_one::<i64>("size") {
-            request = request.body_map(|body| body.size(value.clone()))
-        }
-
-        if let Some(value) = matches.get_one::<String>("task") {
-            request = request.task(value.clone());
-        }
-
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::WorkerAddOutput>(&body_txt).unwrap();
-            request = request.body(body_value);
-        }
-
+    pub async fn execute_worker_ping(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_ping();
         self.over
-            .execute_worker_task_add_output(matches, &mut request)
+            .execute_worker_ping(matches, &mut request)
             .unwrap();
         let result = request.send().await;
         match result {
@@ -764,13 +2630,17 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
 
     pub async fn execute_workers_list(&self, matches: &clap::ArgMatches) {
         let mut request = self.client.workers_list();
+        if let Some(value) = matches.get_one::<bool>("active") {
+            request = request.active(value.clone());
+        }
+
         self.over
             .execute_workers_list(matches, &mut request)
             .unwrap();
@@ -780,7 +2650,7 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                println!("error\n{:#?}", r)
             }
         }
     }
@@ -796,13 +2666,204 @@ impl<T: CliOverride> Cli<T> {
                 println!("success\n{:#?}", r)
             }
             Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_job_add_input(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.job_add_input();
+        if let Some(value) = matches.get_one::<String>("commit-id") {
+            request = request.body_map(|body| body.commit_id(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("name") {
+            request = request.body_map(|body| body.name(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<u64>("size") {
+            request = request.body_map(|body| body.size(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::JobAddInput>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_job_add_input(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
                 println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_worker_job_append(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_job_append();
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value =
+                serde_json::from_str::<Vec<types::WorkerAppendJobOrTask>>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_worker_job_append(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
+            }
+        }
+    }
+
+    pub async fn execute_worker_job_add_output(&self, matches: &clap::ArgMatches) {
+        let mut request = self.client.worker_job_add_output();
+        if let Some(value) = matches.get_one::<String>("commit-id") {
+            request = request.body_map(|body| body.commit_id(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<String>("job") {
+            request = request.job(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<String>("path") {
+            request = request.body_map(|body| body.path(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<u64>("size") {
+            request = request.body_map(|body| body.size(value.clone()))
+        }
+
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::WorkerAddOutput>(&body_txt).unwrap();
+            request = request.body(body_value);
+        }
+
+        self.over
+            .execute_worker_job_add_output(matches, &mut request)
+            .unwrap();
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                println!("success\n{:#?}", r)
+            }
+            Err(r) => {
+                println!("error\n{:#?}", r)
             }
         }
     }
 }
 
 pub trait CliOverride {
+    fn execute_factory_create(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::FactoryCreate,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_admin_jobs_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::AdminJobsGet,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_admin_job_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::AdminJobGet,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_admin_job_archive_request(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::AdminJobArchiveRequest,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_target_create(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::TargetCreate,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_targets_list(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::TargetsList,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_target_redirect(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::TargetRedirect,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_target_rename(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::TargetRename,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_target_require_no_privilege(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::TargetRequireNoPrivilege,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_target_require_privilege(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::TargetRequirePrivilege,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_worker_recycle(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WorkerRecycle,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
     fn execute_control_hold(
         &self,
         matches: &clap::ArgMatches,
@@ -819,50 +2880,202 @@ pub trait CliOverride {
         Ok(())
     }
 
-    fn execute_task_get(
+    fn execute_factory_lease(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::TaskGet,
+        request: &mut builder::FactoryLease,
     ) -> Result<(), String> {
         Ok(())
     }
 
-    fn execute_tasks_get(
+    fn execute_factory_lease_renew(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::TasksGet,
+        request: &mut builder::FactoryLeaseRenew,
     ) -> Result<(), String> {
         Ok(())
     }
 
-    fn execute_task_submit(
+    fn execute_factory_ping(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::TaskSubmit,
+        request: &mut builder::FactoryPing,
     ) -> Result<(), String> {
         Ok(())
     }
 
-    fn execute_task_events_get(
+    fn execute_factory_worker_create(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::TaskEventsGet,
+        request: &mut builder::FactoryWorkerCreate,
     ) -> Result<(), String> {
         Ok(())
     }
 
-    fn execute_task_outputs_get(
+    fn execute_factory_worker_get(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::TaskOutputsGet,
+        request: &mut builder::FactoryWorkerGet,
     ) -> Result<(), String> {
         Ok(())
     }
 
-    fn execute_task_output_download(
+    fn execute_factory_worker_destroy(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::TaskOutputDownload,
+        request: &mut builder::FactoryWorkerDestroy,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_factory_worker_associate(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::FactoryWorkerAssociate,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_factory_worker_append(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::FactoryWorkerAppend,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_factory_worker_flush(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::FactoryWorkerFlush,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_factory_workers(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::FactoryWorkers,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobGet,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_jobs_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobsGet,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_submit(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobSubmit,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_cancel(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobCancel,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_upload_chunk(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobUploadChunk,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_events_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobEventsGet,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_outputs_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobOutputsGet,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_output_download(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobOutputDownload,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_output_publish(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobOutputPublish,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_output_signed_url(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobOutputSignedUrl,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_store_get_all(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobStoreGetAll,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_job_store_put(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobStorePut,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_public_file_download(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::PublicFileDownload,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_quota(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::Quota,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_users_list(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::UsersList,
     ) -> Result<(), String> {
         Ok(())
     }
@@ -875,18 +3088,34 @@ pub trait CliOverride {
         Ok(())
     }
 
-    fn execute_whoami(
+    fn execute_user_get(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::Whoami,
+        request: &mut builder::UserGet,
     ) -> Result<(), String> {
         Ok(())
     }
 
-    fn execute_whoami_put_name(
+    fn execute_user_privilege_grant(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::WhoamiPutName,
+        request: &mut builder::UserPrivilegeGrant,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_user_privilege_revoke(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::UserPrivilegeRevoke,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_whoami(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::Whoami,
     ) -> Result<(), String> {
         Ok(())
     }
@@ -899,10 +3128,50 @@ pub trait CliOverride {
         Ok(())
     }
 
-    fn execute_worker_ping(
+    fn execute_worker_job_upload_chunk(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::WorkerPing,
+        request: &mut builder::WorkerJobUploadChunk,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_worker_job_complete(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WorkerJobComplete,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_worker_job_input_download(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WorkerJobInputDownload,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_worker_job_quota(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WorkerJobQuota,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_worker_job_store_get(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WorkerJobStoreGet,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_worker_job_store_put(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WorkerJobStorePut,
     ) -> Result<(), String> {
         Ok(())
     }
@@ -915,14 +3184,6 @@ pub trait CliOverride {
         Ok(())
     }
 
-    fn execute_worker_task_upload_chunk(
-        &self,
-        matches: &clap::ArgMatches,
-        request: &mut builder::WorkerTaskUploadChunk,
-    ) -> Result<(), String> {
-        Ok(())
-    }
-
     fn execute_worker_task_complete(
         &self,
         matches: &clap::ArgMatches,
@@ -931,10 +3192,10 @@ pub trait CliOverride {
         Ok(())
     }
 
-    fn execute_worker_task_add_output(
+    fn execute_worker_ping(
         &self,
         matches: &clap::ArgMatches,
-        request: &mut builder::WorkerTaskAddOutput,
+        request: &mut builder::WorkerPing,
     ) -> Result<(), String> {
         Ok(())
     }
@@ -954,55 +3215,157 @@ pub trait CliOverride {
     ) -> Result<(), String> {
         Ok(())
     }
+
+    fn execute_job_add_input(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::JobAddInput,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_worker_job_append(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WorkerJobAppend,
+    ) -> Result<(), String> {
+        Ok(())
+    }
+
+    fn execute_worker_job_add_output(
+        &self,
+        matches: &clap::ArgMatches,
+        request: &mut builder::WorkerJobAddOutput,
+    ) -> Result<(), String> {
+        Ok(())
+    }
 }
 
 impl CliOverride for () {}
 
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {
+    FactoryCreate,
+    AdminJobsGet,
+    AdminJobGet,
+    AdminJobArchiveRequest,
+    TargetCreate,
+    TargetsList,
+    TargetRedirect,
+    TargetRename,
+    TargetRequireNoPrivilege,
+    TargetRequirePrivilege,
+    WorkerRecycle,
     ControlHold,
     ControlResume,
-    TaskGet,
-    TasksGet,
-    TaskSubmit,
-    TaskEventsGet,
-    TaskOutputsGet,
-    TaskOutputDownload,
+    FactoryLease,
+    FactoryLeaseRenew,
+    FactoryPing,
+    FactoryWorkerCreate,
+    FactoryWorkerGet,
+    FactoryWorkerDestroy,
+    FactoryWorkerAssociate,
+    FactoryWorkerAppend,
+    FactoryWorkerFlush,
+    FactoryWorkers,
+    JobGet,
+    JobsGet,
+    JobSubmit,
+    JobCancel,
+    JobUploadChunk,
+    JobEventsGet,
+    JobOutputsGet,
+    JobOutputDownload,
+    JobOutputPublish,
+    JobOutputSignedUrl,
+    JobStoreGetAll,
+    JobStorePut,
+    PublicFileDownload,
+    Quota,
+    UsersList,
     UserCreate,
+    UserGet,
+    UserPrivilegeGrant,
+    UserPrivilegeRevoke,
     Whoami,
-    WhoamiPutName,
     WorkerBootstrap,
-    WorkerPing,
+    WorkerJobUploadChunk,
+    WorkerJobComplete,
+    WorkerJobInputDownload,
+    WorkerJobQuota,
+    WorkerJobStoreGet,
+    WorkerJobStorePut,
     WorkerTaskAppend,
-    WorkerTaskUploadChunk,
     WorkerTaskComplete,
-    WorkerTaskAddOutput,
+    WorkerPing,
     WorkersList,
     WorkersRecycle,
+    JobAddInput,
+    WorkerJobAppend,
+    WorkerJobAddOutput,
 }
 
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
         vec![
+            CliCommand::FactoryCreate,
+            CliCommand::AdminJobsGet,
+            CliCommand::AdminJobGet,
+            CliCommand::AdminJobArchiveRequest,
+            CliCommand::TargetCreate,
+            CliCommand::TargetsList,
+            CliCommand::TargetRedirect,
+            CliCommand::TargetRename,
+            CliCommand::TargetRequireNoPrivilege,
+            CliCommand::TargetRequirePrivilege,
+            CliCommand::WorkerRecycle,
             CliCommand::ControlHold,
             CliCommand::ControlResume,
-            CliCommand::TaskGet,
-            CliCommand::TasksGet,
-            CliCommand::TaskSubmit,
-            CliCommand::TaskEventsGet,
-            CliCommand::TaskOutputsGet,
-            CliCommand::TaskOutputDownload,
+            CliCommand::FactoryLease,
+            CliCommand::FactoryLeaseRenew,
+            CliCommand::FactoryPing,
+            CliCommand::FactoryWorkerCreate,
+            CliCommand::FactoryWorkerGet,
+            CliCommand::FactoryWorkerDestroy,
+            CliCommand::FactoryWorkerAssociate,
+            CliCommand::FactoryWorkerAppend,
+            CliCommand::FactoryWorkerFlush,
+            CliCommand::FactoryWorkers,
+            CliCommand::JobGet,
+            CliCommand::JobsGet,
+            CliCommand::JobSubmit,
+            CliCommand::JobCancel,
+            CliCommand::JobUploadChunk,
+            CliCommand::JobEventsGet,
+            CliCommand::JobOutputsGet,
+            CliCommand::JobOutputDownload,
+            CliCommand::JobOutputPublish,
+            CliCommand::JobOutputSignedUrl,
+            CliCommand::JobStoreGetAll,
+            CliCommand::JobStorePut,
+            CliCommand::PublicFileDownload,
+            CliCommand::Quota,
+            CliCommand::UsersList,
             CliCommand::UserCreate,
+            CliCommand::UserGet,
+            CliCommand::UserPrivilegeGrant,
+            CliCommand::UserPrivilegeRevoke,
             CliCommand::Whoami,
-            CliCommand::WhoamiPutName,
             CliCommand::WorkerBootstrap,
-            CliCommand::WorkerPing,
+            CliCommand::WorkerJobUploadChunk,
+            CliCommand::WorkerJobComplete,
+            CliCommand::WorkerJobInputDownload,
+            CliCommand::WorkerJobQuota,
+            CliCommand::WorkerJobStoreGet,
+            CliCommand::WorkerJobStorePut,
             CliCommand::WorkerTaskAppend,
-            CliCommand::WorkerTaskUploadChunk,
             CliCommand::WorkerTaskComplete,
-            CliCommand::WorkerTaskAddOutput,
+            CliCommand::WorkerPing,
             CliCommand::WorkersList,
             CliCommand::WorkersRecycle,
+            CliCommand::JobAddInput,
+            CliCommand::WorkerJobAppend,
+            CliCommand::WorkerJobAddOutput,
         ]
         .into_iter()
     }
