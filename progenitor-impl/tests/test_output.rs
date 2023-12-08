@@ -66,7 +66,7 @@ fn verify_apis(openapi_file: &str) {
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Merged)
-            .with_derive("JsonSchema")
+            .with_derive("schemars::JsonSchema")
             .with_patch("Name", TypePatch::default().with_derive("Hash"))
             .with_conversion(
                 schemars::schema::SchemaObject {
