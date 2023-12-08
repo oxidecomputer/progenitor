@@ -100,15 +100,20 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let crate_ident = format_ident!("{}", crate_name);
+        let crate_path = syn::TypePath {
+            qself: None,
+            path: syn::parse_str(&crate_name).unwrap(),
+        };
 
         let code = quote! {
+            use #crate_path::*;
+
             pub struct Cli<T: CliOverride = ()> {
-                client: #crate_ident::Client,
+                client: Client,
                 over: T,
             }
             impl Cli {
-                pub fn new(client: #crate_ident::Client) -> Self {
+                pub fn new(client: Client) -> Self {
                     Self { client, over: () }
                 }
 
@@ -125,7 +130,7 @@ impl Generator {
 
             impl<T: CliOverride> Cli<T> {
                 pub fn new_with_override(
-                    client: #crate_ident::Client,
+                    client: Client,
                     over: T,
                 ) -> Self {
                     Self { client, over }
