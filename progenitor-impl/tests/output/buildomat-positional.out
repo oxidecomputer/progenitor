@@ -8,12 +8,482 @@ pub mod types {
     #[allow(unused_imports)]
     use std::convert::TryFrom;
     #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct Task {
+    pub struct DependSubmit {
+        pub copy_outputs: bool,
+        pub on_completed: bool,
+        pub on_failed: bool,
+        pub prior_job: String,
+    }
+
+    impl From<&DependSubmit> for DependSubmit {
+        fn from(value: &DependSubmit) -> Self {
+            value.clone()
+        }
+    }
+
+    ///Error information from a response.
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Error {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub error_code: Option<String>,
+        pub message: String,
+        pub request_id: String,
+    }
+
+    impl From<&Error> for Error {
+        fn from(value: &Error) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryAddresses {
+        pub cidr: String,
+        pub count: u32,
+        pub first: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub gateway: Option<String>,
+        pub name: String,
+        pub routed: bool,
+    }
+
+    impl From<&FactoryAddresses> for FactoryAddresses {
+        fn from(value: &FactoryAddresses) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryCreate {
+        pub name: String,
+    }
+
+    impl From<&FactoryCreate> for FactoryCreate {
+        fn from(value: &FactoryCreate) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryCreateResult {
+        pub id: String,
+        pub name: String,
+        pub token: String,
+    }
+
+    impl From<&FactoryCreateResult> for FactoryCreateResult {
+        fn from(value: &FactoryCreateResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryLease {
+        pub job: String,
+        pub target: String,
+    }
+
+    impl From<&FactoryLease> for FactoryLease {
+        fn from(value: &FactoryLease) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryLeaseResult {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub lease: Option<FactoryLease>,
+    }
+
+    impl From<&FactoryLeaseResult> for FactoryLeaseResult {
+        fn from(value: &FactoryLeaseResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[serde(tag = "v")]
+    pub enum FactoryMetadata {
+        #[serde(rename = "1")]
+        _1 {
+            #[serde(default, skip_serializing_if = "Vec::is_empty")]
+            addresses: Vec<FactoryAddresses>,
+        },
+    }
+
+    impl From<&FactoryMetadata> for FactoryMetadata {
+        fn from(value: &FactoryMetadata) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryPingResult {
+        pub ok: bool,
+    }
+
+    impl From<&FactoryPingResult> for FactoryPingResult {
+        fn from(value: &FactoryPingResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryWhatsNext {
+        pub supported_targets: Vec<String>,
+    }
+
+    impl From<&FactoryWhatsNext> for FactoryWhatsNext {
+        fn from(value: &FactoryWhatsNext) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryWorker {
+        pub bootstrap: String,
+        pub id: String,
+        pub online: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub private: Option<String>,
+        pub recycle: bool,
+    }
+
+    impl From<&FactoryWorker> for FactoryWorker {
+        fn from(value: &FactoryWorker) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryWorkerAppend {
+        pub payload: String,
+        pub stream: String,
+        pub time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl From<&FactoryWorkerAppend> for FactoryWorkerAppend {
+        fn from(value: &FactoryWorkerAppend) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryWorkerAppendResult {
+        pub retry: bool,
+    }
+
+    impl From<&FactoryWorkerAppendResult> for FactoryWorkerAppendResult {
+        fn from(value: &FactoryWorkerAppendResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryWorkerAssociate {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub metadata: Option<FactoryMetadata>,
+        pub private: String,
+    }
+
+    impl From<&FactoryWorkerAssociate> for FactoryWorkerAssociate {
+        fn from(value: &FactoryWorkerAssociate) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryWorkerCreate {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub job: Option<String>,
+        pub target: String,
+        #[serde(default)]
+        pub wait_for_flush: bool,
+    }
+
+    impl From<&FactoryWorkerCreate> for FactoryWorkerCreate {
+        fn from(value: &FactoryWorkerCreate) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct FactoryWorkerResult {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub worker: Option<FactoryWorker>,
+    }
+
+    impl From<&FactoryWorkerResult> for FactoryWorkerResult {
+        fn from(value: &FactoryWorkerResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Job {
+        pub cancelled: bool,
         pub id: String,
         pub name: String,
         pub output_rules: Vec<String>,
+        pub owner: String,
+        pub state: String,
+        pub tags: std::collections::HashMap<String, String>,
+        pub target: String,
+        pub target_real: String,
+        pub tasks: Vec<Task>,
+        #[serde(default, skip_serializing_if = "std::collections::HashMap::is_empty")]
+        pub times: std::collections::HashMap<String, chrono::DateTime<chrono::offset::Utc>>,
+    }
+
+    impl From<&Job> for Job {
+        fn from(value: &Job) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobAddInput {
+        pub chunks: Vec<String>,
+        pub commit_id: String,
+        pub name: String,
+        pub size: u64,
+    }
+
+    impl From<&JobAddInput> for JobAddInput {
+        fn from(value: &JobAddInput) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobAddInputResult {
+        pub complete: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub error: Option<String>,
+    }
+
+    impl From<&JobAddInputResult> for JobAddInputResult {
+        fn from(value: &JobAddInputResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobEvent {
+        pub payload: String,
+        pub seq: u32,
+        pub stream: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub task: Option<u32>,
+        pub time: chrono::DateTime<chrono::offset::Utc>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub time_remote: Option<chrono::DateTime<chrono::offset::Utc>>,
+    }
+
+    impl From<&JobEvent> for JobEvent {
+        fn from(value: &JobEvent) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobOutput {
+        pub id: String,
+        pub path: String,
+        pub size: u64,
+    }
+
+    impl From<&JobOutput> for JobOutput {
+        fn from(value: &JobOutput) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobOutputPublish {
+        pub name: String,
+        pub series: String,
+        pub version: String,
+    }
+
+    impl From<&JobOutputPublish> for JobOutputPublish {
+        fn from(value: &JobOutputPublish) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobOutputSignedUrl {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub content_disposition: Option<String>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub content_type: Option<String>,
+        pub expiry_seconds: u64,
+    }
+
+    impl From<&JobOutputSignedUrl> for JobOutputSignedUrl {
+        fn from(value: &JobOutputSignedUrl) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobOutputSignedUrlResult {
+        pub url: String,
+    }
+
+    impl From<&JobOutputSignedUrlResult> for JobOutputSignedUrlResult {
+        fn from(value: &JobOutputSignedUrlResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobStoreValue {
+        pub secret: bool,
+        pub value: String,
+    }
+
+    impl From<&JobStoreValue> for JobStoreValue {
+        fn from(value: &JobStoreValue) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobStoreValueInfo {
+        pub secret: bool,
+        pub source: String,
+        pub time_update: chrono::DateTime<chrono::offset::Utc>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub value: Option<String>,
+    }
+
+    impl From<&JobStoreValueInfo> for JobStoreValueInfo {
+        fn from(value: &JobStoreValueInfo) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobSubmit {
+        #[serde(default, skip_serializing_if = "std::collections::HashMap::is_empty")]
+        pub depends: std::collections::HashMap<String, DependSubmit>,
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        pub inputs: Vec<String>,
+        pub name: String,
+        pub output_rules: Vec<String>,
+        #[serde(default, skip_serializing_if = "std::collections::HashMap::is_empty")]
+        pub tags: std::collections::HashMap<String, String>,
+        pub target: String,
+        pub tasks: Vec<TaskSubmit>,
+    }
+
+    impl From<&JobSubmit> for JobSubmit {
+        fn from(value: &JobSubmit) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct JobSubmitResult {
+        pub id: String,
+    }
+
+    impl From<&JobSubmitResult> for JobSubmitResult {
+        fn from(value: &JobSubmitResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Quota {
+        pub max_bytes_per_input: u64,
+    }
+
+    impl From<&Quota> for Quota {
+        fn from(value: &Quota) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Target {
+        pub desc: String,
+        pub id: String,
+        pub name: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub privilege: Option<String>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub redirect: Option<String>,
+    }
+
+    impl From<&Target> for Target {
+        fn from(value: &Target) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct TargetCreate {
+        pub desc: String,
+        pub name: String,
+    }
+
+    impl From<&TargetCreate> for TargetCreate {
+        fn from(value: &TargetCreate) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct TargetCreateResult {
+        pub id: String,
+    }
+
+    impl From<&TargetCreateResult> for TargetCreateResult {
+        fn from(value: &TargetCreateResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct TargetRedirect {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub redirect: Option<String>,
+    }
+
+    impl From<&TargetRedirect> for TargetRedirect {
+        fn from(value: &TargetRedirect) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct TargetRename {
+        pub new_name: String,
+        pub signpost_description: String,
+    }
+
+    impl From<&TargetRename> for TargetRename {
+        fn from(value: &TargetRename) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct Task {
+        pub env: std::collections::HashMap<String, String>,
+        pub env_clear: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub gid: Option<u32>,
+        pub name: String,
         pub script: String,
         pub state: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub uid: Option<u32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub workdir: Option<String>,
     }
 
     impl From<&Task> for Task {
@@ -23,53 +493,21 @@ pub mod types {
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct TaskEvent {
-        pub payload: String,
-        pub seq: u32,
-        pub stream: String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
-    }
-
-    impl From<&TaskEvent> for TaskEvent {
-        fn from(value: &TaskEvent) -> Self {
-            value.clone()
-        }
-    }
-
-    #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct TaskOutput {
-        pub id: String,
-        pub path: String,
-        pub size: u64,
-    }
-
-    impl From<&TaskOutput> for TaskOutput {
-        fn from(value: &TaskOutput) -> Self {
-            value.clone()
-        }
-    }
-
-    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct TaskSubmit {
+        pub env: std::collections::HashMap<String, String>,
+        pub env_clear: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub gid: Option<u32>,
         pub name: String,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub output_rules: Vec<String>,
         pub script: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub uid: Option<u32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub workdir: Option<String>,
     }
 
     impl From<&TaskSubmit> for TaskSubmit {
         fn from(value: &TaskSubmit) -> Self {
-            value.clone()
-        }
-    }
-
-    #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct TaskSubmitResult {
-        pub id: String,
-    }
-
-    impl From<&TaskSubmitResult> for TaskSubmitResult {
-        fn from(value: &TaskSubmitResult) -> Self {
             value.clone()
         }
     }
@@ -81,6 +519,20 @@ pub mod types {
 
     impl From<&UploadedChunk> for UploadedChunk {
         fn from(value: &UploadedChunk) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct User {
+        pub id: String,
+        pub name: String,
+        pub privileges: Vec<String>,
+        pub time_create: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl From<&User> for User {
+        fn from(value: &User) -> Self {
             value.clone()
         }
     }
@@ -123,14 +575,17 @@ pub mod types {
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Worker {
+        pub bootstrap: bool,
         pub deleted: bool,
-        pub id: String,
+        pub factory: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub instance_id: Option<String>,
+        pub factory_private: Option<String>,
+        pub id: String,
+        pub jobs: Vec<WorkerJob>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub lastping: Option<chrono::DateTime<chrono::offset::Utc>>,
         pub recycle: bool,
-        pub tasks: Vec<WorkerTask>,
+        pub target: String,
     }
 
     impl From<&Worker> for Worker {
@@ -142,8 +597,9 @@ pub mod types {
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerAddOutput {
         pub chunks: Vec<String>,
+        pub commit_id: String,
         pub path: String,
-        pub size: i64,
+        pub size: u64,
     }
 
     impl From<&WorkerAddOutput> for WorkerAddOutput {
@@ -153,14 +609,42 @@ pub mod types {
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct WorkerAppendTask {
+    pub struct WorkerAddOutputResult {
+        pub complete: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub error: Option<String>,
+    }
+
+    impl From<&WorkerAddOutputResult> for WorkerAddOutputResult {
+        fn from(value: &WorkerAddOutputResult) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerAppendJob {
         pub payload: String,
         pub stream: String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&WorkerAppendTask> for WorkerAppendTask {
-        fn from(value: &WorkerAppendTask) -> Self {
+    impl From<&WorkerAppendJob> for WorkerAppendJob {
+        fn from(value: &WorkerAppendJob) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerAppendJobOrTask {
+        pub payload: String,
+        pub stream: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub task: Option<u32>,
+        pub time: chrono::DateTime<chrono::offset::Utc>,
+    }
+
+    impl From<&WorkerAppendJobOrTask> for WorkerAppendJobOrTask {
+        fn from(value: &WorkerAppendJobOrTask) -> Self {
             value.clone()
         }
     }
@@ -189,6 +673,17 @@ pub mod types {
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerCompleteJob {
+        pub failed: bool,
+    }
+
+    impl From<&WorkerCompleteJob> for WorkerCompleteJob {
+        fn from(value: &WorkerCompleteJob) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
     }
@@ -200,10 +695,103 @@ pub mod types {
     }
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct WorkerPingResult {
-        pub poweroff: bool,
+    pub struct WorkerJob {
+        pub id: String,
+        pub name: String,
+        pub owner: String,
+        pub state: String,
+        pub tags: std::collections::HashMap<String, String>,
+    }
+
+    impl From<&WorkerJob> for WorkerJob {
+        fn from(value: &WorkerJob) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerJobQuota {
+        pub max_bytes_per_output: u64,
+    }
+
+    impl From<&WorkerJobQuota> for WorkerJobQuota {
+        fn from(value: &WorkerJobQuota) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerJobStoreGet {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub task: Option<WorkerPingTask>,
+        pub value: Option<WorkerJobStoreValue>,
+    }
+
+    impl From<&WorkerJobStoreGet> for WorkerJobStoreGet {
+        fn from(value: &WorkerJobStoreGet) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerJobStoreValue {
+        pub secret: bool,
+        pub value: String,
+    }
+
+    impl From<&WorkerJobStoreValue> for WorkerJobStoreValue {
+        fn from(value: &WorkerJobStoreValue) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerPingInput {
+        pub id: String,
+        pub name: String,
+    }
+
+    impl From<&WorkerPingInput> for WorkerPingInput {
+        fn from(value: &WorkerPingInput) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerPingJob {
+        pub id: String,
+        pub inputs: Vec<WorkerPingInput>,
+        pub name: String,
+        pub output_rules: Vec<WorkerPingOutputRule>,
+        pub tasks: Vec<WorkerPingTask>,
+    }
+
+    impl From<&WorkerPingJob> for WorkerPingJob {
+        fn from(value: &WorkerPingJob) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerPingOutputRule {
+        pub ignore: bool,
+        pub require_match: bool,
+        pub rule: String,
+        pub size_change_ok: bool,
+    }
+
+    impl From<&WorkerPingOutputRule> for WorkerPingOutputRule {
+        fn from(value: &WorkerPingOutputRule) -> Self {
+            value.clone()
+        }
+    }
+
+    #[derive(Clone, Debug, Deserialize, Serialize)]
+    pub struct WorkerPingResult {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub factory_metadata: Option<FactoryMetadata>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub job: Option<WorkerPingJob>,
+        pub poweroff: bool,
     }
 
     impl From<&WorkerPingResult> for WorkerPingResult {
@@ -214,26 +802,18 @@ pub mod types {
 
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct WorkerPingTask {
-        pub id: String,
-        pub output_rules: Vec<String>,
+        pub env: std::collections::HashMap<String, String>,
+        pub env_clear: bool,
+        pub gid: u32,
+        pub id: u32,
+        pub name: String,
         pub script: String,
+        pub uid: u32,
+        pub workdir: String,
     }
 
     impl From<&WorkerPingTask> for WorkerPingTask {
         fn from(value: &WorkerPingTask) -> Self {
-            value.clone()
-        }
-    }
-
-    #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct WorkerTask {
-        pub id: String,
-        pub name: String,
-        pub owner: String,
-    }
-
-    impl From<&WorkerTask> for WorkerTask {
-        fn from(value: &WorkerTask) -> Self {
             value.clone()
         }
     }
@@ -311,88 +891,12 @@ impl Client {
 }
 
 impl Client {
-    ///Sends a `POST` request to `/v1/control/hold`
-    pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/control/hold", self.baseurl,);
-        let request = self
-            .client
-            .post(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            200u16 => ResponseValue::from_response(response).await,
-            _ => Err(Error::UnexpectedResponse(response)),
-        }
-    }
-
-    ///Sends a `POST` request to `/v1/control/resume`
-    pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/control/resume", self.baseurl,);
-        let request = self.client.post(url).build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
-            _ => Err(Error::UnexpectedResponse(response)),
-        }
-    }
-
-    ///Sends a `GET` request to `/v1/task/{task}`
-    pub async fn task_get<'a>(
+    ///Sends a `POST` request to `/0/admin/factory`
+    pub async fn factory_create<'a>(
         &'a self,
-        task: &'a str,
-    ) -> Result<ResponseValue<types::Task>, Error<()>> {
-        let url = format!(
-            "{}/v1/task/{}",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
-        let request = self
-            .client
-            .get(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            200u16 => ResponseValue::from_response(response).await,
-            _ => Err(Error::UnexpectedResponse(response)),
-        }
-    }
-
-    ///Sends a `GET` request to `/v1/tasks`
-    pub async fn tasks_get<'a>(&'a self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
-        let url = format!("{}/v1/tasks", self.baseurl,);
-        let request = self
-            .client
-            .get(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            200u16 => ResponseValue::from_response(response).await,
-            _ => Err(Error::UnexpectedResponse(response)),
-        }
-    }
-
-    ///Sends a `POST` request to `/v1/tasks`
-    pub async fn task_submit<'a>(
-        &'a self,
-        body: &'a types::TaskSubmit,
-    ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
-        let url = format!("{}/v1/tasks", self.baseurl,);
+        body: &'a types::FactoryCreate,
+    ) -> Result<ResponseValue<types::FactoryCreateResult>, Error<types::Error>> {
+        let url = format!("{}/0/admin/factory", self.baseurl,);
         let request = self
             .client
             .post(url)
@@ -406,20 +910,863 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `GET` request to `/v1/tasks/{task}/events`
-    pub async fn task_events_get<'a>(
+    ///Sends a `GET` request to `/0/admin/jobs`
+    pub async fn admin_jobs_get<'a>(
         &'a self,
-        task: &'a str,
-        minseq: Option<u32>,
-    ) -> Result<ResponseValue<Vec<types::TaskEvent>>, Error<()>> {
+        active: Option<bool>,
+        completed: Option<u64>,
+    ) -> Result<ResponseValue<Vec<types::Job>>, Error<types::Error>> {
+        let url = format!("{}/0/admin/jobs", self.baseurl,);
+        let mut query = Vec::with_capacity(2usize);
+        if let Some(v) = &active {
+            query.push(("active", v.to_string()));
+        }
+
+        if let Some(v) = &completed {
+            query.push(("completed", v.to_string()));
+        }
+
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&query)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/admin/jobs/{job}`
+    pub async fn admin_job_get<'a>(
+        &'a self,
+        job: &'a str,
+    ) -> Result<ResponseValue<types::Job>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/tasks/{}/events",
+            "{}/0/admin/jobs/{}",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&job.to_string()),
+        );
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/admin/jobs/{job}/archive`
+    pub async fn admin_job_archive_request<'a>(
+        &'a self,
+        job: &'a str,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/admin/jobs/{}/archive",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/admin/target`
+    pub async fn target_create<'a>(
+        &'a self,
+        body: &'a types::TargetCreate,
+    ) -> Result<ResponseValue<types::TargetCreateResult>, Error<types::Error>> {
+        let url = format!("{}/0/admin/target", self.baseurl,);
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/admin/targets`
+    pub async fn targets_list<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<Vec<types::Target>>, Error<types::Error>> {
+        let url = format!("{}/0/admin/targets", self.baseurl,);
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `PUT` request to `/0/admin/targets/{target}/redirect`
+    pub async fn target_redirect<'a>(
+        &'a self,
+        target: &'a str,
+        body: &'a types::TargetRedirect,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/admin/targets/{}/redirect",
+            self.baseurl,
+            encode_path(&target.to_string()),
+        );
+        let request = self
+            .client
+            .put(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/admin/targets/{target}/rename`
+    pub async fn target_rename<'a>(
+        &'a self,
+        target: &'a str,
+        body: &'a types::TargetRename,
+    ) -> Result<ResponseValue<types::TargetCreateResult>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/admin/targets/{}/rename",
+            self.baseurl,
+            encode_path(&target.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `DELETE` request to `/0/admin/targets/{target}/require`
+    pub async fn target_require_no_privilege<'a>(
+        &'a self,
+        target: &'a str,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/admin/targets/{}/require",
+            self.baseurl,
+            encode_path(&target.to_string()),
+        );
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `PUT` request to `/0/admin/targets/{target}/require/{privilege}`
+    pub async fn target_require_privilege<'a>(
+        &'a self,
+        target: &'a str,
+        privilege: &'a str,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/admin/targets/{}/require/{}",
+            self.baseurl,
+            encode_path(&target.to_string()),
+            encode_path(&privilege.to_string()),
+        );
+        let request = self
+            .client
+            .put(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/admin/worker/{worker}/recycle`
+    pub async fn worker_recycle<'a>(
+        &'a self,
+        worker: &'a str,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/admin/worker/{}/recycle",
+            self.baseurl,
+            encode_path(&worker.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/control/hold`
+    pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!("{}/0/control/hold", self.baseurl,);
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/control/resume`
+    pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!("{}/0/control/resume", self.baseurl,);
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/factory/lease`
+    pub async fn factory_lease<'a>(
+        &'a self,
+        body: &'a types::FactoryWhatsNext,
+    ) -> Result<ResponseValue<types::FactoryLeaseResult>, Error<types::Error>> {
+        let url = format!("{}/0/factory/lease", self.baseurl,);
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/factory/lease/{job}`
+    pub async fn factory_lease_renew<'a>(
+        &'a self,
+        job: &'a str,
+    ) -> Result<ResponseValue<bool>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/factory/lease/{}",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/factory/ping`
+    pub async fn factory_ping<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<types::FactoryPingResult>, Error<types::Error>> {
+        let url = format!("{}/0/factory/ping", self.baseurl,);
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/factory/worker`
+    pub async fn factory_worker_create<'a>(
+        &'a self,
+        body: &'a types::FactoryWorkerCreate,
+    ) -> Result<ResponseValue<types::FactoryWorker>, Error<types::Error>> {
+        let url = format!("{}/0/factory/worker", self.baseurl,);
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/factory/worker/{worker}`
+    pub async fn factory_worker_get<'a>(
+        &'a self,
+        worker: &'a str,
+    ) -> Result<ResponseValue<types::FactoryWorkerResult>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/factory/worker/{}",
+            self.baseurl,
+            encode_path(&worker.to_string()),
+        );
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `DELETE` request to `/0/factory/worker/{worker}`
+    pub async fn factory_worker_destroy<'a>(
+        &'a self,
+        worker: &'a str,
+    ) -> Result<ResponseValue<bool>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/factory/worker/{}",
+            self.baseurl,
+            encode_path(&worker.to_string()),
+        );
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `PATCH` request to `/0/factory/worker/{worker}`
+    pub async fn factory_worker_associate<'a>(
+        &'a self,
+        worker: &'a str,
+        body: &'a types::FactoryWorkerAssociate,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/factory/worker/{}",
+            self.baseurl,
+            encode_path(&worker.to_string()),
+        );
+        let request = self
+            .client
+            .patch(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/factory/worker/{worker}/append`
+    pub async fn factory_worker_append<'a>(
+        &'a self,
+        worker: &'a str,
+        body: &'a types::FactoryWorkerAppend,
+    ) -> Result<ResponseValue<types::FactoryWorkerAppendResult>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/factory/worker/{}/append",
+            self.baseurl,
+            encode_path(&worker.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/factory/worker/{worker}/flush`
+    pub async fn factory_worker_flush<'a>(
+        &'a self,
+        worker: &'a str,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/factory/worker/{}/flush",
+            self.baseurl,
+            encode_path(&worker.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/factory/workers`
+    pub async fn factory_workers<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<Vec<types::FactoryWorker>>, Error<types::Error>> {
+        let url = format!("{}/0/factory/workers", self.baseurl,);
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/job/{job}`
+    pub async fn job_get<'a>(
+        &'a self,
+        job: &'a str,
+    ) -> Result<ResponseValue<types::Job>, Error<types::Error>> {
+        let url = format!("{}/0/job/{}", self.baseurl, encode_path(&job.to_string()),);
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/jobs`
+    pub async fn jobs_get<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<Vec<types::Job>>, Error<types::Error>> {
+        let url = format!("{}/0/jobs", self.baseurl,);
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/jobs`
+    pub async fn job_submit<'a>(
+        &'a self,
+        body: &'a types::JobSubmit,
+    ) -> Result<ResponseValue<types::JobSubmitResult>, Error<types::Error>> {
+        let url = format!("{}/0/jobs", self.baseurl,);
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/jobs/{job}/cancel`
+    pub async fn job_cancel<'a>(
+        &'a self,
+        job: &'a str,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/jobs/{}/cancel",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/jobs/{job}/chunk`
+    pub async fn job_upload_chunk<'a, B: Into<reqwest::Body>>(
+        &'a self,
+        job: &'a str,
+        body: B,
+    ) -> Result<ResponseValue<types::UploadedChunk>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/jobs/{}/chunk",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .header(
+                reqwest::header::CONTENT_TYPE,
+                reqwest::header::HeaderValue::from_static("application/octet-stream"),
+            )
+            .body(body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/jobs/{job}/events`
+    pub async fn job_events_get<'a>(
+        &'a self,
+        job: &'a str,
+        minseq: Option<u32>,
+    ) -> Result<ResponseValue<Vec<types::JobEvent>>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/jobs/{}/events",
+            self.baseurl,
+            encode_path(&job.to_string()),
         );
         let mut query = Vec::with_capacity(1usize);
         if let Some(v) = &minseq {
@@ -439,19 +1786,25 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
-    pub async fn task_outputs_get<'a>(
+    ///Sends a `GET` request to `/0/jobs/{job}/outputs`
+    pub async fn job_outputs_get<'a>(
         &'a self,
-        task: &'a str,
-    ) -> Result<ResponseValue<Vec<types::TaskOutput>>, Error<()>> {
+        job: &'a str,
+    ) -> Result<ResponseValue<Vec<types::JobOutput>>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/tasks/{}/outputs",
+            "{}/0/jobs/{}/outputs",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&job.to_string()),
         );
         let request = self
             .client
@@ -465,20 +1818,26 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
-    pub async fn task_output_download<'a>(
+    ///Sends a `GET` request to `/0/jobs/{job}/outputs/{output}`
+    pub async fn job_output_download<'a>(
         &'a self,
-        task: &'a str,
+        job: &'a str,
         output: &'a str,
-    ) -> Result<ResponseValue<ByteStream>, Error<()>> {
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!(
-            "{}/v1/tasks/{}/outputs/{}",
+            "{}/0/jobs/{}/outputs/{}",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&job.to_string()),
             encode_path(&output.to_string()),
         );
         let request = self.client.get(url).build()?;
@@ -486,16 +1845,23 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200..=299 => Ok(ResponseValue::stream(response)),
-            _ => Err(Error::UnexpectedResponse(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
         }
     }
 
-    ///Sends a `POST` request to `/v1/users`
-    pub async fn user_create<'a>(
+    ///Sends a `POST` request to `/0/jobs/{job}/outputs/{output}/publish`
+    pub async fn job_output_publish<'a>(
         &'a self,
-        body: &'a types::UserCreate,
-    ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
-        let url = format!("{}/v1/users", self.baseurl,);
+        job: &'a str,
+        output: &'a str,
+        body: &'a types::JobOutputPublish,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/jobs/{}/outputs/{}/publish",
+            self.baseurl,
+            encode_path(&job.to_string()),
+            encode_path(&output.to_string()),
+        );
         let request = self
             .client
             .post(url)
@@ -508,14 +1874,66 @@ impl Client {
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => ResponseValue::from_response(response).await,
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `GET` request to `/v1/whoami`
-    pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
-        let url = format!("{}/v1/whoami", self.baseurl,);
+    ///Sends a `POST` request to `/0/jobs/{job}/outputs/{output}/sign`
+    pub async fn job_output_signed_url<'a>(
+        &'a self,
+        job: &'a str,
+        output: &'a str,
+        body: &'a types::JobOutputSignedUrl,
+    ) -> Result<ResponseValue<types::JobOutputSignedUrlResult>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/jobs/{}/outputs/{}/sign",
+            self.baseurl,
+            encode_path(&job.to_string()),
+            encode_path(&output.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/jobs/{job}/store`
+    pub async fn job_store_get_all<'a>(
+        &'a self,
+        job: &'a str,
+    ) -> Result<
+        ResponseValue<std::collections::HashMap<String, types::JobStoreValueInfo>>,
+        Error<types::Error>,
+    > {
+        let url = format!(
+            "{}/0/jobs/{}/store",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
         let request = self
             .client
             .get(url)
@@ -528,39 +1946,143 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `PUT` request to `/v1/whoami/name`
-    pub async fn whoami_put_name<'a>(
+    ///Sends a `PUT` request to `/0/jobs/{job}/store/{name}`
+    pub async fn job_store_put<'a>(
         &'a self,
-        body: String,
-    ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/whoami/name", self.baseurl,);
+        job: &'a str,
+        name: &'a str,
+        body: &'a types::JobStoreValue,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/jobs/{}/store/{}",
+            self.baseurl,
+            encode_path(&job.to_string()),
+            encode_path(&name.to_string()),
+        );
         let request = self
             .client
             .put(url)
             .header(
-                reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static("text/plain"),
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .body(body)
+            .json(&body)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `POST` request to `/v1/worker/bootstrap`
-    pub async fn worker_bootstrap<'a>(
+    ///Sends a `GET` request to
+    /// `/0/public/file/{username}/{series}/{version}/{name}`
+    pub async fn public_file_download<'a>(
         &'a self,
-        body: &'a types::WorkerBootstrap,
-    ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
-        let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
+        username: &'a str,
+        series: &'a str,
+        version: &'a str,
+        name: &'a str,
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+        let url = format!(
+            "{}/0/public/file/{}/{}/{}/{}",
+            self.baseurl,
+            encode_path(&username.to_string()),
+            encode_path(&series.to_string()),
+            encode_path(&version.to_string()),
+            encode_path(&name.to_string()),
+        );
+        let request = self.client.get(url).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/quota`
+    pub async fn quota<'a>(&'a self) -> Result<ResponseValue<types::Quota>, Error<types::Error>> {
+        let url = format!("{}/0/quota", self.baseurl,);
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/users`
+    pub async fn users_list<'a>(
+        &'a self,
+        name: Option<&'a str>,
+    ) -> Result<ResponseValue<Vec<types::User>>, Error<types::Error>> {
+        let url = format!("{}/0/users", self.baseurl,);
+        let mut query = Vec::with_capacity(1usize);
+        if let Some(v) = &name {
+            query.push(("name", v.to_string()));
+        }
+
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&query)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/users`
+    pub async fn user_create<'a>(
+        &'a self,
+        body: &'a types::UserCreate,
+    ) -> Result<ResponseValue<types::UserCreateResult>, Error<types::Error>> {
+        let url = format!("{}/0/users", self.baseurl,);
         let request = self
             .client
             .post(url)
@@ -574,15 +2096,26 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `GET` request to `/v1/worker/ping`
-    pub async fn worker_ping<'a>(
+    ///Sends a `GET` request to `/0/users/{user}`
+    pub async fn user_get<'a>(
         &'a self,
-    ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
-        let url = format!("{}/v1/worker/ping", self.baseurl,);
+        user: &'a str,
+    ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/users/{}",
+            self.baseurl,
+            encode_path(&user.to_string()),
+        );
         let request = self
             .client
             .get(url)
@@ -595,40 +2128,150 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `POST` request to `/v1/worker/task/{task}/append`
-    pub async fn worker_task_append<'a>(
+    ///Sends a `PUT` request to `/0/users/{user}/privilege/{privilege}`
+    pub async fn user_privilege_grant<'a>(
         &'a self,
-        task: &'a str,
-        body: &'a types::WorkerAppendTask,
-    ) -> Result<ResponseValue<()>, Error<()>> {
+        user: &'a str,
+        privilege: &'a str,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/worker/task/{}/append",
+            "{}/0/users/{}/privilege/{}",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&user.to_string()),
+            encode_path(&privilege.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .put(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
-    pub async fn worker_task_upload_chunk<'a, B: Into<reqwest::Body>>(
+    ///Sends a `DELETE` request to `/0/users/{user}/privilege/{privilege}`
+    pub async fn user_privilege_revoke<'a>(
         &'a self,
-        task: &'a str,
-        body: B,
-    ) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
+        user: &'a str,
+        privilege: &'a str,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/worker/task/{}/chunk",
+            "{}/0/users/{}/privilege/{}",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&user.to_string()),
+            encode_path(&privilege.to_string()),
+        );
+        let request = self
+            .client
+            .delete(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/whoami`
+    pub async fn whoami<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<types::WhoamiResult>, Error<types::Error>> {
+        let url = format!("{}/0/whoami", self.baseurl,);
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/worker/bootstrap`
+    pub async fn worker_bootstrap<'a>(
+        &'a self,
+        body: &'a types::WorkerBootstrap,
+    ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<types::Error>> {
+        let url = format!("{}/0/worker/bootstrap", self.baseurl,);
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/worker/job/{job}/chunk`
+    pub async fn worker_job_upload_chunk<'a, B: Into<reqwest::Body>>(
+        &'a self,
+        job: &'a str,
+        body: B,
+    ) -> Result<ResponseValue<types::UploadedChunk>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/worker/job/{}/chunk",
+            self.baseurl,
+            encode_path(&job.to_string()),
         );
         let request = self
             .client
@@ -647,55 +2290,81 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
-    pub async fn worker_task_complete<'a>(
+    ///Sends a `POST` request to `/0/worker/job/{job}/complete`
+    pub async fn worker_job_complete<'a>(
         &'a self,
-        task: &'a str,
-        body: &'a types::WorkerCompleteTask,
-    ) -> Result<ResponseValue<()>, Error<()>> {
+        job: &'a str,
+        body: &'a types::WorkerCompleteJob,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/worker/task/{}/complete",
+            "{}/0/worker/job/{}/complete",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&job.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `POST` request to `/v1/worker/task/{task}/output`
-    pub async fn worker_task_add_output<'a>(
+    ///Sends a `GET` request to `/0/worker/job/{job}/inputs/{input}`
+    pub async fn worker_job_input_download<'a>(
         &'a self,
-        task: &'a str,
-        body: &'a types::WorkerAddOutput,
-    ) -> Result<ResponseValue<()>, Error<()>> {
+        job: &'a str,
+        input: &'a str,
+    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!(
-            "{}/v1/worker/task/{}/output",
+            "{}/0/worker/job/{}/inputs/{}",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&job.to_string()),
+            encode_path(&input.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        let request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => Ok(ResponseValue::empty(response)),
-            _ => Err(Error::UnexpectedResponse(response)),
+            200..=299 => Ok(ResponseValue::stream(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
         }
     }
 
-    ///Sends a `GET` request to `/v1/workers`
-    pub async fn workers_list<'a>(
+    ///Sends a `GET` request to `/0/worker/job/{job}/quota`
+    pub async fn worker_job_quota<'a>(
         &'a self,
-    ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
-        let url = format!("{}/v1/workers", self.baseurl,);
+        job: &'a str,
+    ) -> Result<ResponseValue<types::WorkerJobQuota>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/worker/job/{}/quota",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
         let request = self
             .client
             .get(url)
@@ -708,18 +2377,342 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
-    ///Sends a `POST` request to `/v1/workers/recycle`
-    pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/workers/recycle", self.baseurl,);
-        let request = self.client.post(url).build()?;
+    ///Sends a `GET` request to `/0/worker/job/{job}/store/{name}`
+    pub async fn worker_job_store_get<'a>(
+        &'a self,
+        job: &'a str,
+        name: &'a str,
+    ) -> Result<ResponseValue<types::WorkerJobStoreGet>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/worker/job/{}/store/{}",
+            self.baseurl,
+            encode_path(&job.to_string()),
+            encode_path(&name.to_string()),
+        );
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `PUT` request to `/0/worker/job/{job}/store/{name}`
+    pub async fn worker_job_store_put<'a>(
+        &'a self,
+        job: &'a str,
+        name: &'a str,
+        body: &'a types::WorkerJobStoreValue,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/worker/job/{}/store/{}",
+            self.baseurl,
+            encode_path(&job.to_string()),
+            encode_path(&name.to_string()),
+        );
+        let request = self
+            .client
+            .put(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/worker/job/{job}/task/{task}/append`
+    pub async fn worker_task_append<'a>(
+        &'a self,
+        job: &'a str,
+        task: u32,
+        body: &'a types::WorkerAppendJob,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/worker/job/{}/task/{}/append",
+            self.baseurl,
+            encode_path(&job.to_string()),
+            encode_path(&task.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/worker/job/{job}/task/{task}/complete`
+    pub async fn worker_task_complete<'a>(
+        &'a self,
+        job: &'a str,
+        task: u32,
+        body: &'a types::WorkerCompleteTask,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/0/worker/job/{}/task/{}/complete",
+            self.baseurl,
+            encode_path(&job.to_string()),
+            encode_path(&task.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/worker/ping`
+    pub async fn worker_ping<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<types::WorkerPingResult>, Error<types::Error>> {
+        let url = format!("{}/0/worker/ping", self.baseurl,);
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/0/workers`
+    pub async fn workers_list<'a>(
+        &'a self,
+        active: Option<bool>,
+    ) -> Result<ResponseValue<types::WorkersResult>, Error<types::Error>> {
+        let url = format!("{}/0/workers", self.baseurl,);
+        let mut query = Vec::with_capacity(1usize);
+        if let Some(v) = &active {
+            query.push(("active", v.to_string()));
+        }
+
+        let request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&query)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/0/workers/recycle`
+    pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!("{}/0/workers/recycle", self.baseurl,);
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/1/jobs/{job}/input`
+    pub async fn job_add_input<'a>(
+        &'a self,
+        job: &'a str,
+        body: &'a types::JobAddInput,
+    ) -> Result<ResponseValue<types::JobAddInputResult>, Error<types::Error>> {
+        let url = format!(
+            "{}/1/jobs/{}/input",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/1/worker/job/{job}/append`
+    pub async fn worker_job_append<'a>(
+        &'a self,
+        job: &'a str,
+        body: &'a Vec<types::WorkerAppendJobOrTask>,
+    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+        let url = format!(
+            "{}/1/worker/job/{}/append",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            204u16 => Ok(ResponseValue::empty(response)),
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `POST` request to `/1/worker/job/{job}/output`
+    pub async fn worker_job_add_output<'a>(
+        &'a self,
+        job: &'a str,
+        body: &'a types::WorkerAddOutput,
+    ) -> Result<ResponseValue<types::WorkerAddOutputResult>, Error<types::Error>> {
+        let url = format!(
+            "{}/1/worker/job/{}/output",
+            self.baseurl,
+            encode_path(&job.to_string()),
+        );
+        let request = self
+            .client
+            .post(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
