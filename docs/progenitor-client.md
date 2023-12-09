@@ -74,7 +74,7 @@ There are five sub-categories of error covered by the error type variants:
 - An expected error response, defined by the OpenAPI document with a 4xx or 5xx
   status code
 
-- An expected status code (whose payload didn't deserialize as expected (this
+- An expected status code whose payload didn't deserialize as expected (this
   could be viewed as a sub-type of communication error), but it is separately
   identified as there's more information; note that this covers both success and
   error status codes
@@ -88,7 +88,8 @@ pub enum Error<E = ()> {
     InvalidRequest(String),
     CommunicationError(reqwest::Error),
     ErrorResponse(ResponseValue<E>),
-    InvalidResponsePayload(reqwest::Error),
+    InvalidResponseBytes(reqwest::Error),
+    InvalidResponsePayload(bytes::Bytes, reqwest::Error),
     UnexpectedResponse(reqwest::Response),
 }
 ```

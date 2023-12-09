@@ -6,7 +6,7 @@
 
 use std::ops::{Deref, DerefMut};
 
-use bytes::Bytes;
+pub use bytes::Bytes;
 use futures_core::Stream;
 use reqwest::RequestBuilder;
 use serde::{de::DeserializeOwned, Serialize};
@@ -68,10 +68,12 @@ impl<T: DeserializeOwned> ResponseValue<T> {
     ) -> Result<Self, Error<E>> {
         let status = response.status();
         let headers = response.headers().clone();
-        let inner = response
-            .json()
+        let full = response
+            .bytes()
             .await
-            .map_err(Error::InvalidResponsePayload)?;
+            .map_err(Error::InvalidResponseBytes)?;
+        let inner = serde_json::from_slice(&full)
+            .map_err(|e| Error::InvalidResponsePayload(full, e))?;
 
         Ok(Self {
             inner,
@@ -90,10 +92,8 @@ impl ResponseValue<reqwest::Upgraded> {
         let status = response.status();
         let headers = response.headers().clone();
         if status == reqwest::StatusCode::SWITCHING_PROTOCOLS {
-            let inner = response
-                .upgrade()
-                .await
-                .map_err(Error::InvalidResponsePayload)?;
+            let inner =
+                response.upgrade().await.map_err(Error::InvalidUpgrade)?;
 
             Ok(Self {
                 inner,
@@ -240,9 +240,14 @@ pub enum Error<E = ()> {
     /// A documented, expected error response.
     ErrorResponse(ResponseValue<E>),
 
+    /// An expected response when upgrading connection.
+    InvalidUpgrade(reqwest::Error),
+
     /// An expected response code whose deserialization failed.
-    // TODO we have stuff from the response; should we include it?
-    InvalidResponsePayload(reqwest::Error),
+    InvalidResponseBytes(reqwest::Error),
+
+    /// An expected response code whose deserialization failed.
+    InvalidResponsePayload(Bytes, serde_json::Error),
 
     /// A response not listed in the API description. This may represent a
     /// success or failure response; check `status().is_success()`.
@@ -256,7 +261,9 @@ impl<E> Error<E> {
             Error::InvalidRequest(_) => None,
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
-            Error::InvalidResponsePayload(e) => e.status(),
+            Error::InvalidUpgrade(e) => e.status(),
+            Error::InvalidResponseBytes(e) => e.status(),
+            Error::InvalidResponsePayload(_, _) => None,
             Error::UnexpectedResponse(r) => Some(r.status()),
         }
     }
@@ -278,8 +285,10 @@ impl<E> Error<E> {
                 status,
                 headers,
             }),
-            Error::InvalidResponsePayload(e) => {
-                Error::InvalidResponsePayload(e)
+            Error::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
+            Error::InvalidResponseBytes(e) => Error::InvalidResponseBytes(e),
+            Error::InvalidResponsePayload(b, e) => {
+                Error::InvalidResponsePayload(b, e)
             }
             Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
         }
@@ -314,7 +323,13 @@ where
                 write!(f, "Error Response: ")?;
                 rve.fmt_info(f)
             }
-            Error::InvalidResponsePayload(e) => {
+            Error::InvalidUpgrade(e) => {
+                write!(f, "Invalid Response Upgrade: {}", e)
+            }
+            Error::InvalidResponseBytes(e) => {
+                write!(f, "Invalid Response Body Bytes: {}", e)
+            }
+            Error::InvalidResponsePayload(_b, e) => {
                 write!(f, "Invalid Response Payload: {}", e)
             }
             Error::UnexpectedResponse(r) => {
@@ -366,7 +381,9 @@ where
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Error::CommunicationError(e) => Some(e),
-            Error::InvalidResponsePayload(e) => Some(e),
+            Error::InvalidUpgrade(e) => Some(e),
+            Error::InvalidResponseBytes(e) => Some(e),
+            Error::InvalidResponsePayload(_b, e) => Some(e),
             _ => None,
         }
     }
