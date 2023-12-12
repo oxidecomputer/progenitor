@@ -21493,11 +21493,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DeviceAuthRequest>,
+            <V as std::convert::TryInto<types::DeviceAuthRequest>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `DeviceAuthRequest` for body failed".to_string());
+                .map_err(|s| format!("conversion to `DeviceAuthRequest` for body failed: {}", s));
             self
         }
 
@@ -21548,11 +21549,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DeviceAuthVerify>,
+            <V as std::convert::TryInto<types::DeviceAuthVerify>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `DeviceAuthVerify` for body failed".to_string());
+                .map_err(|s| format!("conversion to `DeviceAuthVerify` for body failed: {}", s));
             self
         }
 
@@ -21617,9 +21619,13 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DeviceAccessTokenRequest>,
+            <V as std::convert::TryInto<types::DeviceAccessTokenRequest>>::Error: std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `DeviceAccessTokenRequest` for body failed".to_string()
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `DeviceAccessTokenRequest` for body failed: {}",
+                    s
+                )
             });
             self
         }
@@ -21828,11 +21834,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::SpoofLoginBody>,
+            <V as std::convert::TryInto<types::SpoofLoginBody>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `SpoofLoginBody` for body failed".to_string());
+                .map_err(|s| format!("conversion to `SpoofLoginBody` for body failed: {}", s));
             self
         }
 
@@ -21907,9 +21914,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::UsernamePasswordCredentials>,
+            <V as std::convert::TryInto<types::UsernamePasswordCredentials>>::Error:
+                std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `UsernamePasswordCredentials` for body failed".to_string()
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `UsernamePasswordCredentials` for body failed: {}",
+                    s
+                )
             });
             self
         }
@@ -22335,11 +22347,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::OrganizationCreate>,
+            <V as std::convert::TryInto<types::OrganizationCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `OrganizationCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `OrganizationCreate` for body failed: {}", s));
             self
         }
 
@@ -22478,11 +22491,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::OrganizationUpdate>,
+            <V as std::convert::TryInto<types::OrganizationUpdate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `OrganizationUpdate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `OrganizationUpdate` for body failed: {}", s));
             self
         }
 
@@ -22694,11 +22708,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::OrganizationRolePolicy>,
+            <V as std::convert::TryInto<types::OrganizationRolePolicy>>::Error: std::fmt::Display,
         {
-            self.body = value
-                .try_into()
-                .map(From::from)
-                .map_err(|_| "conversion to `OrganizationRolePolicy` for body failed".to_string());
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `OrganizationRolePolicy` for body failed: {}",
+                    s
+                )
+            });
             self
         }
 
@@ -22963,11 +22980,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ProjectCreate>,
+            <V as std::convert::TryInto<types::ProjectCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ProjectCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ProjectCreate` for body failed: {}", s));
             self
         }
 
@@ -23142,11 +23160,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ProjectUpdate>,
+            <V as std::convert::TryInto<types::ProjectUpdate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ProjectUpdate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ProjectUpdate` for body failed: {}", s));
             self
         }
 
@@ -23516,11 +23535,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DiskCreate>,
+            <V as std::convert::TryInto<types::DiskCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `DiskCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `DiskCreate` for body failed: {}", s));
             self
         }
 
@@ -24244,11 +24264,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ImageCreate>,
+            <V as std::convert::TryInto<types::ImageCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ImageCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ImageCreate` for body failed: {}", s));
             self
         }
 
@@ -24730,11 +24751,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceCreate>,
+            <V as std::convert::TryInto<types::InstanceCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `InstanceCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `InstanceCreate` for body failed: {}", s));
             self
         }
 
@@ -25244,11 +25266,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DiskIdentifier>,
+            <V as std::convert::TryInto<types::DiskIdentifier>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `DiskIdentifier` for body failed".to_string());
+                .map_err(|s| format!("conversion to `DiskIdentifier` for body failed: {}", s));
             self
         }
 
@@ -25364,11 +25387,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DiskIdentifier>,
+            <V as std::convert::TryInto<types::DiskIdentifier>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `DiskIdentifier` for body failed".to_string());
+                .map_err(|s| format!("conversion to `DiskIdentifier` for body failed: {}", s));
             self
         }
 
@@ -25580,11 +25604,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceMigrate>,
+            <V as std::convert::TryInto<types::InstanceMigrate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `InstanceMigrate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `InstanceMigrate` for body failed: {}", s));
             self
         }
 
@@ -25910,11 +25935,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::NetworkInterfaceCreate>,
+            <V as std::convert::TryInto<types::NetworkInterfaceCreate>>::Error: std::fmt::Display,
         {
-            self.body = value
-                .try_into()
-                .map(From::from)
-                .map_err(|_| "conversion to `NetworkInterfaceCreate` for body failed".to_string());
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `NetworkInterfaceCreate` for body failed: {}",
+                    s
+                )
+            });
             self
         }
 
@@ -26157,11 +26185,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::NetworkInterfaceUpdate>,
+            <V as std::convert::TryInto<types::NetworkInterfaceUpdate>>::Error: std::fmt::Display,
         {
-            self.body = value
-                .try_into()
-                .map(From::from)
-                .map_err(|_| "conversion to `NetworkInterfaceUpdate` for body failed".to_string());
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `NetworkInterfaceUpdate` for body failed: {}",
+                    s
+                )
+            });
             self
         }
 
@@ -26992,11 +27023,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ProjectRolePolicy>,
+            <V as std::convert::TryInto<types::ProjectRolePolicy>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ProjectRolePolicy` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ProjectRolePolicy` for body failed: {}", s));
             self
         }
 
@@ -27294,11 +27326,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::SnapshotCreate>,
+            <V as std::convert::TryInto<types::SnapshotCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `SnapshotCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `SnapshotCreate` for body failed: {}", s));
             self
         }
 
@@ -27779,11 +27812,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::VpcCreate>,
+            <V as std::convert::TryInto<types::VpcCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `VpcCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `VpcCreate` for body failed: {}", s));
             self
         }
 
@@ -27989,11 +28023,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::VpcUpdate>,
+            <V as std::convert::TryInto<types::VpcUpdate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `VpcUpdate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `VpcUpdate` for body failed: {}", s));
             self
         }
 
@@ -28299,9 +28334,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::VpcFirewallRuleUpdateParams>,
+            <V as std::convert::TryInto<types::VpcFirewallRuleUpdateParams>>::Error:
+                std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `VpcFirewallRuleUpdateParams` for body failed".to_string()
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `VpcFirewallRuleUpdateParams` for body failed: {}",
+                    s
+                )
             });
             self
         }
@@ -28631,11 +28671,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::VpcRouterCreate>,
+            <V as std::convert::TryInto<types::VpcRouterCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `VpcRouterCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `VpcRouterCreate` for body failed: {}", s));
             self
         }
 
@@ -28872,11 +28913,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::VpcRouterUpdate>,
+            <V as std::convert::TryInto<types::VpcRouterUpdate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `VpcRouterUpdate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `VpcRouterUpdate` for body failed: {}", s));
             self
         }
 
@@ -29340,11 +29382,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::RouterRouteCreateParams>,
+            <V as std::convert::TryInto<types::RouterRouteCreateParams>>::Error: std::fmt::Display,
         {
-            self.body = value
-                .try_into()
-                .map(From::from)
-                .map_err(|_| "conversion to `RouterRouteCreateParams` for body failed".to_string());
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `RouterRouteCreateParams` for body failed: {}",
+                    s
+                )
+            });
             self
         }
 
@@ -29613,11 +29658,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::RouterRouteUpdateParams>,
+            <V as std::convert::TryInto<types::RouterRouteUpdateParams>>::Error: std::fmt::Display,
         {
-            self.body = value
-                .try_into()
-                .map(From::from)
-                .map_err(|_| "conversion to `RouterRouteUpdateParams` for body failed".to_string());
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `RouterRouteUpdateParams` for body failed: {}",
+                    s
+                )
+            });
             self
         }
 
@@ -30074,11 +30122,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::VpcSubnetCreate>,
+            <V as std::convert::TryInto<types::VpcSubnetCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `VpcSubnetCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `VpcSubnetCreate` for body failed: {}", s));
             self
         }
 
@@ -30315,11 +30364,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::VpcSubnetUpdate>,
+            <V as std::convert::TryInto<types::VpcSubnetUpdate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `VpcSubnetUpdate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `VpcSubnetUpdate` for body failed: {}", s));
             self
         }
 
@@ -30778,11 +30828,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::SiloRolePolicy>,
+            <V as std::convert::TryInto<types::SiloRolePolicy>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `SiloRolePolicy` for body failed".to_string());
+                .map_err(|s| format!("conversion to `SiloRolePolicy` for body failed: {}", s));
             self
         }
 
@@ -31398,11 +31449,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::SshKeyCreate>,
+            <V as std::convert::TryInto<types::SshKeyCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `SshKeyCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `SshKeyCreate` for body failed: {}", s));
             self
         }
 
@@ -31923,11 +31975,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::CertificateCreate>,
+            <V as std::convert::TryInto<types::CertificateCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `CertificateCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `CertificateCreate` for body failed: {}", s));
             self
         }
 
@@ -33037,11 +33090,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::GlobalImageCreate>,
+            <V as std::convert::TryInto<types::GlobalImageCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `GlobalImageCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `GlobalImageCreate` for body failed: {}", s));
             self
         }
 
@@ -33381,11 +33435,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::IpPoolCreate>,
+            <V as std::convert::TryInto<types::IpPoolCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `IpPoolCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `IpPoolCreate` for body failed: {}", s));
             self
         }
 
@@ -33519,11 +33574,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::IpPoolUpdate>,
+            <V as std::convert::TryInto<types::IpPoolUpdate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `IpPoolUpdate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `IpPoolUpdate` for body failed: {}", s));
             self
         }
 
@@ -34450,11 +34506,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::FleetRolePolicy>,
+            <V as std::convert::TryInto<types::FleetRolePolicy>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `FleetRolePolicy` for body failed".to_string());
+                .map_err(|s| format!("conversion to `FleetRolePolicy` for body failed: {}", s));
             self
         }
 
@@ -34892,11 +34949,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::SiloCreate>,
+            <V as std::convert::TryInto<types::SiloCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `SiloCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `SiloCreate` for body failed: {}", s));
             self
         }
 
@@ -35267,11 +35325,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::UserCreate>,
+            <V as std::convert::TryInto<types::UserCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `UserCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `UserCreate` for body failed: {}", s));
             self
         }
 
@@ -35528,9 +35587,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::SamlIdentityProviderCreate>,
+            <V as std::convert::TryInto<types::SamlIdentityProviderCreate>>::Error:
+                std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `SamlIdentityProviderCreate` for body failed".to_string()
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `SamlIdentityProviderCreate` for body failed: {}",
+                    s
+                )
             });
             self
         }
@@ -35761,11 +35825,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::SiloRolePolicy>,
+            <V as std::convert::TryInto<types::SiloRolePolicy>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `SiloRolePolicy` for body failed".to_string());
+                .map_err(|s| format!("conversion to `SiloRolePolicy` for body failed: {}", s));
             self
         }
 
@@ -36824,11 +36889,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DiskCreate>,
+            <V as std::convert::TryInto<types::DiskCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `DiskCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `DiskCreate` for body failed: {}", s));
             self
         }
 
@@ -37324,11 +37390,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceCreate>,
+            <V as std::convert::TryInto<types::InstanceCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `InstanceCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `InstanceCreate` for body failed: {}", s));
             self
         }
 
@@ -37855,11 +37922,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DiskPath>,
+            <V as std::convert::TryInto<types::DiskPath>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `DiskPath` for body failed".to_string());
+                .map_err(|s| format!("conversion to `DiskPath` for body failed: {}", s));
             self
         }
 
@@ -37981,11 +38049,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::DiskPath>,
+            <V as std::convert::TryInto<types::DiskPath>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `DiskPath` for body failed".to_string());
+                .map_err(|s| format!("conversion to `DiskPath` for body failed: {}", s));
             self
         }
 
@@ -38107,11 +38176,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceMigrate>,
+            <V as std::convert::TryInto<types::InstanceMigrate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `InstanceMigrate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `InstanceMigrate` for body failed: {}", s));
             self
         }
 
@@ -38912,11 +38982,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::OrganizationCreate>,
+            <V as std::convert::TryInto<types::OrganizationCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `OrganizationCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `OrganizationCreate` for body failed: {}", s));
             self
         }
 
@@ -39055,11 +39126,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::OrganizationUpdate>,
+            <V as std::convert::TryInto<types::OrganizationUpdate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `OrganizationUpdate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `OrganizationUpdate` for body failed: {}", s));
             self
         }
 
@@ -39271,11 +39343,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::OrganizationRolePolicy>,
+            <V as std::convert::TryInto<types::OrganizationRolePolicy>>::Error: std::fmt::Display,
         {
-            self.body = value
-                .try_into()
-                .map(From::from)
-                .map_err(|_| "conversion to `OrganizationRolePolicy` for body failed".to_string());
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `OrganizationRolePolicy` for body failed: {}",
+                    s
+                )
+            });
             self
         }
 
@@ -39539,11 +39614,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ProjectCreate>,
+            <V as std::convert::TryInto<types::ProjectCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ProjectCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ProjectCreate` for body failed: {}", s));
             self
         }
 
@@ -39721,11 +39797,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ProjectUpdate>,
+            <V as std::convert::TryInto<types::ProjectUpdate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ProjectUpdate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ProjectUpdate` for body failed: {}", s));
             self
         }
 
@@ -39995,11 +40072,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ProjectRolePolicy>,
+            <V as std::convert::TryInto<types::ProjectRolePolicy>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ProjectRolePolicy` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ProjectRolePolicy` for body failed: {}", s));
             self
         }
 
@@ -40500,11 +40578,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::SystemUpdateStart>,
+            <V as std::convert::TryInto<types::SystemUpdateStart>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `SystemUpdateStart` for body failed".to_string());
+                .map_err(|s| format!("conversion to `SystemUpdateStart` for body failed: {}", s));
             self
         }
 

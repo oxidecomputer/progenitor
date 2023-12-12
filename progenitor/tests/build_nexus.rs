@@ -85,6 +85,8 @@ mod builder_tagged {
 
     use nexus_client::prelude::*;
 
+    use self::nexus_client::types;
+
     async fn _ignore() {
         let client = Client::new("");
         let stream = client
@@ -102,5 +104,16 @@ mod builder_tagged {
             .body(self::nexus_client::types::InstanceCreate::builder())
             .send()
             .await;
+    }
+
+    #[tokio::test]
+    #[should_panic = "called `Result::unwrap()` on an `Err` value: Invalid Request: conversion to `SiloCreate` for body failed: no value supplied for description"]
+    async fn test_decent_error_from_body_builder() {
+        let _ = Client::new("")
+            .silo_create()
+            .body(types::SiloCreate::builder())
+            .send()
+            .await
+            .unwrap();
     }
 }

@@ -2170,11 +2170,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceEnsureRequest>,
+            <V as std::convert::TryInto<types::InstanceEnsureRequest>>::Error: std::fmt::Display,
         {
-            self.body = value
-                .try_into()
-                .map(From::from)
-                .map_err(|_| "conversion to `InstanceEnsureRequest` for body failed".to_string());
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `InstanceEnsureRequest` for body failed: {}",
+                    s
+                )
+            });
             self
         }
 
@@ -2319,9 +2322,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceMigrateStatusRequest>,
+            <V as std::convert::TryInto<types::InstanceMigrateStatusRequest>>::Error:
+                std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `InstanceMigrateStatusRequest` for body failed".to_string()
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `InstanceMigrateStatusRequest` for body failed: {}",
+                    s
+                )
             });
             self
         }
@@ -2489,9 +2497,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceStateMonitorRequest>,
+            <V as std::convert::TryInto<types::InstanceStateMonitorRequest>>::Error:
+                std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `InstanceStateMonitorRequest` for body failed".to_string()
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `InstanceStateMonitorRequest` for body failed: {}",
+                    s
+                )
             });
             self
         }
