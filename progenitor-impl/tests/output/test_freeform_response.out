@@ -8,6 +8,31 @@ pub mod types {
     #[allow(unused_imports)]
     use std::convert::TryFrom;
     ///Error information from a response.
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "description": "Error information from a response.",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "message",
+    ///    "request_id"
+    ///  ],
+    ///  "properties": {
+    ///    "error_code": {
+    ///      "type": "string"
+    ///    },
+    ///    "message": {
+    ///      "type": "string"
+    ///    },
+    ///    "request_id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
