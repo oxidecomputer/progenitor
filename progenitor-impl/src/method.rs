@@ -160,10 +160,8 @@ impl FromStr for BodyContentType {
     }
 }
 
-use std::fmt;
-
-impl fmt::Display for BodyContentType {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl std::fmt::Display for BodyContentType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(match self {
             Self::OctetStream => "application/octet-stream",
             Self::Json => "application/json",
@@ -1593,7 +1591,7 @@ impl Generator {
                                 unreachable!()
                             }
                             (None, true) => {
-                                let ty_ident = ty.ident();
+                                let typ = ty.ident();
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
                                     ty.name(),
@@ -1604,7 +1602,7 @@ impl Generator {
                                         mut self,
                                         value: V,
                                     ) -> Self
-                                        where V: std::convert::TryInto<#ty_ident>,
+                                        where V: std::convert::TryInto<#typ>,
                                     {
                                         self.#param_name = value.try_into()
                                             .map(Some)
@@ -1643,7 +1641,7 @@ impl Generator {
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident();
                                 let err_msg = format!(
-                                    "conversion to `{}` for {} failed",
+                                    "conversion to `{}` for {} failed: {{}}",
                                     ty.name(),
                                     param.name,
                                 );
@@ -1651,10 +1649,12 @@ impl Generator {
                                     pub fn body<V>(mut self, value: V) -> Self
                                     where
                                         V: std::convert::TryInto<#typ>,
+                                        <V as std::convert::TryInto<#typ>>::Error:
+                                            std::fmt::Display,
                                     {
                                         self.body = value.try_into()
                                             .map(From::from)
-                                            .map_err(|_| #err_msg.to_string());
+                                            .map_err(|s| format!(#err_msg, s));
                                         self
                                     }
 
