@@ -3,14 +3,14 @@ pub mod operations {
     #![doc = r" wrappers for each operation. Each can be converted to"]
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
-    use sdk::*;
+    use crate::param_collision_builder::*;
     pub struct KeyGetWhen(httpmock::When);
     impl KeyGetWhen {
         pub fn new(inner: httpmock::When) -> Self {
             Self(
                 inner
                     .method(httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/key$").unwrap()),
+                    .path_matches(regex::Regex::new("^/key/[^/]*$").unwrap()),
             )
         }
 
@@ -18,36 +18,29 @@ pub mod operations {
             self.0
         }
 
-        pub fn key<T>(self, value: T) -> Self
-        where
-            T: Into<Option<bool>>,
-        {
-            if let Some(value) = value.into() {
-                Self(self.0.query_param("key", value.to_string()))
-            } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "key"))
-                        .is_none()
-                }))
-            }
+        pub fn query(self, value: bool) -> Self {
+            let re = regex::Regex::new(&format!("^/key/{}$", value.to_string())).unwrap();
+            Self(self.0.path_matches(re))
         }
 
-        pub fn unique_key<'a, T>(self, value: T) -> Self
-        where
-            T: Into<Option<&'a str>>,
-        {
-            if let Some(value) = value.into() {
-                Self(self.0.query_param("unique_key", value.to_string()))
-            } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "unique_key"))
-                        .is_none()
-                }))
-            }
+        pub fn client(self, value: bool) -> Self {
+            Self(self.0.query_param("client", value.to_string()))
+        }
+
+        pub fn request(self, value: bool) -> Self {
+            Self(self.0.query_param("request", value.to_string()))
+        }
+
+        pub fn response(self, value: bool) -> Self {
+            Self(self.0.query_param("response", value.to_string()))
+        }
+
+        pub fn result(self, value: bool) -> Self {
+            Self(self.0.query_param("result", value.to_string()))
+        }
+
+        pub fn url(self, value: bool) -> Self {
+            Self(self.0.query_param("url", value.to_string()))
         }
     }
 

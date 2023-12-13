@@ -82,7 +82,7 @@ fn test_renamed_parameters() {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}.out", "test_renamed_parameters"),
+        format!("tests/output/src/{}.rs", "test_renamed_parameters"),
         &output,
     )
 }
@@ -115,7 +115,7 @@ fn test_freeform_response() {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}.out", "test_freeform_response"),
+        format!("tests/output/src/{}.rs", "test_freeform_response"),
         &output,
     )
 }
@@ -169,7 +169,7 @@ fn test_default_params() {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}.out", "test_default_params_positional"),
+        format!("tests/output/src/{}.rs", "test_default_params_positional"),
         &output,
     );
 
@@ -178,7 +178,7 @@ fn test_default_params() {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}.out", "test_default_params_builder"),
+        format!("tests/output/src/{}.rs", "test_default_params_builder"),
         &output,
     );
 }

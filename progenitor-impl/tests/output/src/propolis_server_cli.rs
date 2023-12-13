@@ -1,4 +1,4 @@
-use sdk::*;
+use crate::propolis_server_builder::*;
 pub struct Cli<T: CliOverride = ()> {
     client: Client,
     over: T,
