@@ -13,6 +13,11 @@
 
 == Unreleased changes (release date TBD)
 
+* Improve breadth of schema support (#592)
+* Various changes to avoid name collisions (#599)
+* Support for text/plain and text/x-markdown body content types (#593)
+* Upgrade to openapiv3 v2.0.0
+
 https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...HEAD[Full list of commits]
 
 == 0.4.0 (released 2023-09-25)
