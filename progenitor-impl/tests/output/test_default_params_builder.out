@@ -61,7 +61,7 @@ pub mod types {
 
     impl BodyWithDefaults {
         pub fn builder() -> builder::BodyWithDefaults {
-            builder::BodyWithDefaults::default()
+            Default::default()
         }
     }
 
@@ -107,7 +107,7 @@ pub mod types {
 
     impl Error {
         pub fn builder() -> builder::Error {
-            builder::Error::default()
+            Default::default()
         }
     }
 

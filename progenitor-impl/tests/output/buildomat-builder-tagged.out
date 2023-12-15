@@ -61,7 +61,7 @@ pub mod types {
 
     impl Task {
         pub fn builder() -> builder::Task {
-            builder::Task::default()
+            Default::default()
         }
     }
 
@@ -114,7 +114,7 @@ pub mod types {
 
     impl TaskEvent {
         pub fn builder() -> builder::TaskEvent {
-            builder::TaskEvent::default()
+            Default::default()
         }
     }
 
@@ -161,7 +161,7 @@ pub mod types {
 
     impl TaskOutput {
         pub fn builder() -> builder::TaskOutput {
-            builder::TaskOutput::default()
+            Default::default()
         }
     }
 
@@ -209,7 +209,7 @@ pub mod types {
 
     impl TaskSubmit {
         pub fn builder() -> builder::TaskSubmit {
-            builder::TaskSubmit::default()
+            Default::default()
         }
     }
 
@@ -244,7 +244,7 @@ pub mod types {
 
     impl TaskSubmitResult {
         pub fn builder() -> builder::TaskSubmitResult {
-            builder::TaskSubmitResult::default()
+            Default::default()
         }
     }
 
@@ -279,7 +279,7 @@ pub mod types {
 
     impl UploadedChunk {
         pub fn builder() -> builder::UploadedChunk {
-            builder::UploadedChunk::default()
+            Default::default()
         }
     }
 
@@ -314,7 +314,7 @@ pub mod types {
 
     impl UserCreate {
         pub fn builder() -> builder::UserCreate {
-            builder::UserCreate::default()
+            Default::default()
         }
     }
 
@@ -359,7 +359,7 @@ pub mod types {
 
     impl UserCreateResult {
         pub fn builder() -> builder::UserCreateResult {
-            builder::UserCreateResult::default()
+            Default::default()
         }
     }
 
@@ -399,7 +399,7 @@ pub mod types {
 
     impl WhoamiResult {
         pub fn builder() -> builder::WhoamiResult {
-            builder::WhoamiResult::default()
+            Default::default()
         }
     }
 
@@ -463,7 +463,7 @@ pub mod types {
 
     impl Worker {
         pub fn builder() -> builder::Worker {
-            builder::Worker::default()
+            Default::default()
         }
     }
 
@@ -512,7 +512,7 @@ pub mod types {
 
     impl WorkerAddOutput {
         pub fn builder() -> builder::WorkerAddOutput {
-            builder::WorkerAddOutput::default()
+            Default::default()
         }
     }
 
@@ -558,7 +558,7 @@ pub mod types {
 
     impl WorkerAppendTask {
         pub fn builder() -> builder::WorkerAppendTask {
-            builder::WorkerAppendTask::default()
+            Default::default()
         }
     }
 
@@ -598,7 +598,7 @@ pub mod types {
 
     impl WorkerBootstrap {
         pub fn builder() -> builder::WorkerBootstrap {
-            builder::WorkerBootstrap::default()
+            Default::default()
         }
     }
 
@@ -633,7 +633,7 @@ pub mod types {
 
     impl WorkerBootstrapResult {
         pub fn builder() -> builder::WorkerBootstrapResult {
-            builder::WorkerBootstrapResult::default()
+            Default::default()
         }
     }
 
@@ -668,7 +668,7 @@ pub mod types {
 
     impl WorkerCompleteTask {
         pub fn builder() -> builder::WorkerCompleteTask {
-            builder::WorkerCompleteTask::default()
+            Default::default()
         }
     }
 
@@ -708,7 +708,7 @@ pub mod types {
 
     impl WorkerPingResult {
         pub fn builder() -> builder::WorkerPingResult {
-            builder::WorkerPingResult::default()
+            Default::default()
         }
     }
 
@@ -756,7 +756,7 @@ pub mod types {
 
     impl WorkerPingTask {
         pub fn builder() -> builder::WorkerPingTask {
-            builder::WorkerPingTask::default()
+            Default::default()
         }
     }
 
@@ -801,7 +801,7 @@ pub mod types {
 
     impl WorkerTask {
         pub fn builder() -> builder::WorkerTask {
-            builder::WorkerTask::default()
+            Default::default()
         }
     }
 
@@ -839,7 +839,7 @@ pub mod types {
 
     impl WorkersResult {
         pub fn builder() -> builder::WorkersResult {
-            builder::WorkersResult::default()
+            Default::default()
         }
     }
 

@@ -44,7 +44,7 @@ pub mod types {
 
     impl EnrolBody {
         pub fn builder() -> builder::EnrolBody {
-            builder::EnrolBody::default()
+            Default::default()
         }
     }
 
@@ -83,7 +83,7 @@ pub mod types {
 
     impl GlobalJobsResult {
         pub fn builder() -> builder::GlobalJobsResult {
-            builder::GlobalJobsResult::default()
+            Default::default()
         }
     }
 
@@ -129,7 +129,7 @@ pub mod types {
 
     impl OutputRecord {
         pub fn builder() -> builder::OutputRecord {
-            builder::OutputRecord::default()
+            Default::default()
         }
     }
 
@@ -170,7 +170,7 @@ pub mod types {
 
     impl PingResult {
         pub fn builder() -> builder::PingResult {
-            builder::PingResult::default()
+            Default::default()
         }
     }
 
@@ -224,7 +224,7 @@ pub mod types {
 
     impl ReportFinishBody {
         pub fn builder() -> builder::ReportFinishBody {
-            builder::ReportFinishBody::default()
+            Default::default()
         }
     }
 
@@ -282,7 +282,7 @@ pub mod types {
 
     impl ReportId {
         pub fn builder() -> builder::ReportId {
-            builder::ReportId::default()
+            Default::default()
         }
     }
 
@@ -323,7 +323,7 @@ pub mod types {
 
     impl ReportOutputBody {
         pub fn builder() -> builder::ReportOutputBody {
-            builder::ReportOutputBody::default()
+            Default::default()
         }
     }
 
@@ -359,7 +359,7 @@ pub mod types {
 
     impl ReportResult {
         pub fn builder() -> builder::ReportResult {
-            builder::ReportResult::default()
+            Default::default()
         }
     }
 
@@ -406,7 +406,7 @@ pub mod types {
 
     impl ReportStartBody {
         pub fn builder() -> builder::ReportStartBody {
-            builder::ReportStartBody::default()
+            Default::default()
         }
     }
 
@@ -470,7 +470,7 @@ pub mod types {
 
     impl ReportSummary {
         pub fn builder() -> builder::ReportSummary {
-            builder::ReportSummary::default()
+            Default::default()
         }
     }
 
