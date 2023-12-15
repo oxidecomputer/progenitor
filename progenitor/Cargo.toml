@@ -1,6 +1,6 @@
 [package]
 name = "progenitor"
-version = "0.4.0"
+version = "0.4.1"
 edition = "2021"
 license = "MPL-2.0"
 description = "An OpenAPI client generator"
@@ -10,9 +10,9 @@ keywords = ["openapi", "openapiv3", "sdk", "generator", "proc_macro"]
 categories = ["api-bindings", "compilers"]
 
 [dependencies]
-progenitor-client = { version = "0.4.0", path = "../progenitor-client" }
-progenitor-impl = { version = "0.4.0", path = "../progenitor-impl" }
-progenitor-macro = { version = "0.4.0", path = "../progenitor-macro" }
+progenitor-client = { version = "0.4.1", path = "../progenitor-client" }
+progenitor-impl = { version = "0.4.1", path = "../progenitor-impl" }
+progenitor-macro = { version = "0.4.1", path = "../progenitor-macro" }
 serde_json = "1.0"
 
 [dev-dependencies]

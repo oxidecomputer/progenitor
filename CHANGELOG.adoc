@@ -13,7 +13,15 @@
 
 == Unreleased changes (release date TBD)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.4.1\...HEAD[Full list of commits]
+
+== 0.4.1 (released 2023-12-15)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.4.1\...v0.4.1[Full list of commits]
+
+== 0.4.1 (released 2023-12-15)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...v0.4.1[Full list of commits]
 
 == 0.4.0 (released 2023-09-25)
 
