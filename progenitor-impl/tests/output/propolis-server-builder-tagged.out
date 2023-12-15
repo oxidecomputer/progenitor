@@ -7,6 +7,78 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
+    ///CrucibleOpts
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "lossy",
+    ///    "read_only",
+    ///    "target"
+    ///  ],
+    ///  "properties": {
+    ///    "cert_pem": {
+    ///      "type": [
+    ///        "string",
+    ///        "null"
+    ///      ]
+    ///    },
+    ///    "control": {
+    ///      "type": [
+    ///        "string",
+    ///        "null"
+    ///      ]
+    ///    },
+    ///    "flush_timeout": {
+    ///      "type": [
+    ///        "integer",
+    ///        "null"
+    ///      ],
+    ///      "format": "uint32",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "id": {
+    ///      "type": "string",
+    ///      "format": "uuid"
+    ///    },
+    ///    "key": {
+    ///      "type": [
+    ///        "string",
+    ///        "null"
+    ///      ]
+    ///    },
+    ///    "key_pem": {
+    ///      "type": [
+    ///        "string",
+    ///        "null"
+    ///      ]
+    ///    },
+    ///    "lossy": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "read_only": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "root_cert_pem": {
+    ///      "type": [
+    ///        "string",
+    ///        "null"
+    ///      ]
+    ///    },
+    ///    "target": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct CrucibleOpts {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -39,6 +111,35 @@ pub mod types {
         }
     }
 
+    ///DiskAttachment
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "disk_id",
+    ///    "generation_id",
+    ///    "state"
+    ///  ],
+    ///  "properties": {
+    ///    "disk_id": {
+    ///      "type": "string",
+    ///      "format": "uuid"
+    ///    },
+    ///    "generation_id": {
+    ///      "type": "integer",
+    ///      "format": "uint64",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "state": {
+    ///      "$ref": "#/components/schemas/DiskAttachmentState"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct DiskAttachment {
         pub disk_id: uuid::Uuid,
@@ -58,6 +159,38 @@ pub mod types {
         }
     }
 
+    ///DiskAttachmentState
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "oneOf": [
+    ///    {
+    ///      "type": "string",
+    ///      "enum": [
+    ///        "Detached",
+    ///        "Destroyed",
+    ///        "Faulted"
+    ///      ]
+    ///    },
+    ///    {
+    ///      "type": "object",
+    ///      "required": [
+    ///        "Attached"
+    ///      ],
+    ///      "properties": {
+    ///        "Attached": {
+    ///          "type": "string",
+    ///          "format": "uuid"
+    ///        }
+    ///      },
+    ///      "additionalProperties": false
+    ///    }
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub enum DiskAttachmentState {
         Detached,
@@ -78,6 +211,46 @@ pub mod types {
         }
     }
 
+    ///DiskRequest
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "device",
+    ///    "gen",
+    ///    "name",
+    ///    "read_only",
+    ///    "slot",
+    ///    "volume_construction_request"
+    ///  ],
+    ///  "properties": {
+    ///    "device": {
+    ///      "type": "string"
+    ///    },
+    ///    "gen": {
+    ///      "type": "integer",
+    ///      "format": "uint64",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "read_only": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "slot": {
+    ///      "$ref": "#/components/schemas/Slot"
+    ///    },
+    ///    "volume_construction_request": {
+    ///      "$ref": "#/components/schemas/VolumeConstructionRequest"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct DiskRequest {
         pub device: String,
@@ -101,6 +274,31 @@ pub mod types {
     }
 
     ///Error information from a response.
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "description": "Error information from a response.",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "message",
+    ///    "request_id"
+    ///  ],
+    ///  "properties": {
+    ///    "error_code": {
+    ///      "type": "string"
+    ///    },
+    ///    "message": {
+    ///      "type": "string"
+    ///    },
+    ///    "request_id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -121,6 +319,42 @@ pub mod types {
         }
     }
 
+    ///Instance
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "disks",
+    ///    "nics",
+    ///    "properties",
+    ///    "state"
+    ///  ],
+    ///  "properties": {
+    ///    "disks": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/DiskAttachment"
+    ///      }
+    ///    },
+    ///    "nics": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/NetworkInterface"
+    ///      }
+    ///    },
+    ///    "properties": {
+    ///      "$ref": "#/components/schemas/InstanceProperties"
+    ///    },
+    ///    "state": {
+    ///      "$ref": "#/components/schemas/InstanceState"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Instance {
         pub disks: Vec<DiskAttachment>,
@@ -141,6 +375,51 @@ pub mod types {
         }
     }
 
+    ///InstanceEnsureRequest
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "properties"
+    ///  ],
+    ///  "properties": {
+    ///    "cloud_init_bytes": {
+    ///      "type": [
+    ///        "string",
+    ///        "null"
+    ///      ]
+    ///    },
+    ///    "disks": {
+    ///      "default": [],
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/DiskRequest"
+    ///      }
+    ///    },
+    ///    "migrate": {
+    ///      "allOf": [
+    ///        {
+    ///          "$ref": "#/components/schemas/InstanceMigrateInitiateRequest"
+    ///        }
+    ///      ]
+    ///    },
+    ///    "nics": {
+    ///      "default": [],
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/NetworkInterfaceRequest"
+    ///      }
+    ///    },
+    ///    "properties": {
+    ///      "$ref": "#/components/schemas/InstanceProperties"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceEnsureRequest {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -166,6 +445,25 @@ pub mod types {
         }
     }
 
+    ///InstanceEnsureResponse
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "properties": {
+    ///    "migrate": {
+    ///      "allOf": [
+    ///        {
+    ///          "$ref": "#/components/schemas/InstanceMigrateInitiateResponse"
+    ///        }
+    ///      ]
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceEnsureResponse {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -184,6 +482,24 @@ pub mod types {
         }
     }
 
+    ///InstanceGetResponse
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "instance"
+    ///  ],
+    ///  "properties": {
+    ///    "instance": {
+    ///      "$ref": "#/components/schemas/Instance"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceGetResponse {
         pub instance: Instance,
@@ -201,6 +517,34 @@ pub mod types {
         }
     }
 
+    ///InstanceMigrateInitiateRequest
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "migration_id",
+    ///    "src_addr",
+    ///    "src_uuid"
+    ///  ],
+    ///  "properties": {
+    ///    "migration_id": {
+    ///      "type": "string",
+    ///      "format": "uuid"
+    ///    },
+    ///    "src_addr": {
+    ///      "type": "string"
+    ///    },
+    ///    "src_uuid": {
+    ///      "type": "string",
+    ///      "format": "uuid"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceMigrateInitiateRequest {
         pub migration_id: uuid::Uuid,
@@ -220,6 +564,25 @@ pub mod types {
         }
     }
 
+    ///InstanceMigrateInitiateResponse
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "migration_id"
+    ///  ],
+    ///  "properties": {
+    ///    "migration_id": {
+    ///      "type": "string",
+    ///      "format": "uuid"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceMigrateInitiateResponse {
         pub migration_id: uuid::Uuid,
@@ -237,6 +600,25 @@ pub mod types {
         }
     }
 
+    ///InstanceMigrateStatusRequest
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "migration_id"
+    ///  ],
+    ///  "properties": {
+    ///    "migration_id": {
+    ///      "type": "string",
+    ///      "format": "uuid"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceMigrateStatusRequest {
         pub migration_id: uuid::Uuid,
@@ -254,6 +636,24 @@ pub mod types {
         }
     }
 
+    ///InstanceMigrateStatusResponse
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "state"
+    ///  ],
+    ///  "properties": {
+    ///    "state": {
+    ///      "$ref": "#/components/schemas/MigrationState"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceMigrateStatusResponse {
         pub state: MigrationState,
@@ -271,6 +671,62 @@ pub mod types {
         }
     }
 
+    ///InstanceProperties
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "bootrom_id",
+    ///    "description",
+    ///    "id",
+    ///    "image_id",
+    ///    "memory",
+    ///    "name",
+    ///    "vcpus"
+    ///  ],
+    ///  "properties": {
+    ///    "bootrom_id": {
+    ///      "description": "ID of the bootrom used to initialize this
+    /// Instance.",      "type": "string",
+    ///      "format": "uuid"
+    ///    },
+    ///    "description": {
+    ///      "description": "Free-form text description of an Instance.",
+    ///      "type": "string"
+    ///    },
+    ///    "id": {
+    ///      "description": "Unique identifier for this Instance.",
+    ///      "type": "string",
+    ///      "format": "uuid"
+    ///    },
+    ///    "image_id": {
+    ///      "description": "ID of the image used to initialize this Instance.",
+    ///      "type": "string",
+    ///      "format": "uuid"
+    ///    },
+    ///    "memory": {
+    ///      "description": "Size of memory allocated to the Instance, in MiB.",
+    ///      "type": "integer",
+    ///      "format": "uint64",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "name": {
+    ///      "description": "Human-readable name of the Instance.",
+    ///      "type": "string"
+    ///    },
+    ///    "vcpus": {
+    ///      "description": "Number of vCPUs to be allocated to the Instance.",
+    ///      "type": "integer",
+    ///      "format": "uint8",
+    ///      "minimum": 0.0
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
@@ -302,6 +758,28 @@ pub mod types {
     }
 
     ///Current state of an Instance.
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "description": "Current state of an Instance.",
+    ///  "type": "string",
+    ///  "enum": [
+    ///    "Creating",
+    ///    "Starting",
+    ///    "Running",
+    ///    "Stopping",
+    ///    "Stopped",
+    ///    "Rebooting",
+    ///    "Migrating",
+    ///    "Repairing",
+    ///    "Failed",
+    ///    "Destroyed"
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum InstanceState {
         Creating,
@@ -379,6 +857,26 @@ pub mod types {
         }
     }
 
+    ///InstanceStateMonitorRequest
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "gen"
+    ///  ],
+    ///  "properties": {
+    ///    "gen": {
+    ///      "type": "integer",
+    ///      "format": "uint64",
+    ///      "minimum": 0.0
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceStateMonitorRequest {
         pub gen: u64,
@@ -396,6 +894,30 @@ pub mod types {
         }
     }
 
+    ///InstanceStateMonitorResponse
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "gen",
+    ///    "state"
+    ///  ],
+    ///  "properties": {
+    ///    "gen": {
+    ///      "type": "integer",
+    ///      "format": "uint64",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "state": {
+    ///      "$ref": "#/components/schemas/InstanceState"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct InstanceStateMonitorResponse {
         pub gen: u64,
@@ -414,6 +936,22 @@ pub mod types {
         }
     }
 
+    ///InstanceStateRequested
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "string",
+    ///  "enum": [
+    ///    "Run",
+    ///    "Stop",
+    ///    "Reboot",
+    ///    "MigrateStart"
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum InstanceStateRequested {
         Run,
@@ -473,6 +1011,28 @@ pub mod types {
         }
     }
 
+    ///MigrationState
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "string",
+    ///  "enum": [
+    ///    "Sync",
+    ///    "RamPush",
+    ///    "Pause",
+    ///    "RamPushDirty",
+    ///    "Device",
+    ///    "Arch",
+    ///    "Resume",
+    ///    "RamPull",
+    ///    "Finish",
+    ///    "Error"
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
     pub enum MigrationState {
         Sync,
@@ -550,6 +1110,28 @@ pub mod types {
         }
     }
 
+    ///NetworkInterface
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "attachment",
+    ///    "name"
+    ///  ],
+    ///  "properties": {
+    ///    "attachment": {
+    ///      "$ref": "#/components/schemas/NetworkInterfaceAttachmentState"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct NetworkInterface {
         pub attachment: NetworkInterfaceAttachmentState,
@@ -568,6 +1150,36 @@ pub mod types {
         }
     }
 
+    ///NetworkInterfaceAttachmentState
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "oneOf": [
+    ///    {
+    ///      "type": "string",
+    ///      "enum": [
+    ///        "Detached",
+    ///        "Faulted"
+    ///      ]
+    ///    },
+    ///    {
+    ///      "type": "object",
+    ///      "required": [
+    ///        "Attached"
+    ///      ],
+    ///      "properties": {
+    ///        "Attached": {
+    ///          "$ref": "#/components/schemas/Slot"
+    ///        }
+    ///      },
+    ///      "additionalProperties": false
+    ///    }
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub enum NetworkInterfaceAttachmentState {
         Detached,
@@ -587,6 +1199,28 @@ pub mod types {
         }
     }
 
+    ///NetworkInterfaceRequest
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "name",
+    ///    "slot"
+    ///  ],
+    ///  "properties": {
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "slot": {
+    ///      "$ref": "#/components/schemas/Slot"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct NetworkInterfaceRequest {
         pub name: String,
@@ -607,6 +1241,18 @@ pub mod types {
 
     ///A stable index which is translated by Propolis into a PCI BDF, visible
     /// to the guest.
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "description": "A stable index which is translated by Propolis into a
+    /// PCI BDF, visible to the guest.",  "type": "integer",
+    ///  "format": "uint8",
+    ///  "minimum": 0.0
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Slot(pub u8);
     impl std::ops::Deref for Slot {
@@ -668,6 +1314,144 @@ pub mod types {
         }
     }
 
+    ///VolumeConstructionRequest
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "oneOf": [
+    ///    {
+    ///      "type": "object",
+    ///      "required": [
+    ///        "block_size",
+    ///        "id",
+    ///        "sub_volumes",
+    ///        "type"
+    ///      ],
+    ///      "properties": {
+    ///        "block_size": {
+    ///          "type": "integer",
+    ///          "format": "uint64",
+    ///          "minimum": 0.0
+    ///        },
+    ///        "id": {
+    ///          "type": "string",
+    ///          "format": "uuid"
+    ///        },
+    ///        "read_only_parent": {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/VolumeConstructionRequest"
+    ///            }
+    ///          ]
+    ///        },
+    ///        "sub_volumes": {
+    ///          "type": "array",
+    ///          "items": {
+    ///            "$ref": "#/components/schemas/VolumeConstructionRequest"
+    ///          }
+    ///        },
+    ///        "type": {
+    ///          "type": "string",
+    ///          "enum": [
+    ///            "volume"
+    ///          ]
+    ///        }
+    ///      }
+    ///    },
+    ///    {
+    ///      "type": "object",
+    ///      "required": [
+    ///        "block_size",
+    ///        "id",
+    ///        "type",
+    ///        "url"
+    ///      ],
+    ///      "properties": {
+    ///        "block_size": {
+    ///          "type": "integer",
+    ///          "format": "uint64",
+    ///          "minimum": 0.0
+    ///        },
+    ///        "id": {
+    ///          "type": "string",
+    ///          "format": "uuid"
+    ///        },
+    ///        "type": {
+    ///          "type": "string",
+    ///          "enum": [
+    ///            "url"
+    ///          ]
+    ///        },
+    ///        "url": {
+    ///          "type": "string"
+    ///        }
+    ///      }
+    ///    },
+    ///    {
+    ///      "type": "object",
+    ///      "required": [
+    ///        "block_size",
+    ///        "gen",
+    ///        "opts",
+    ///        "type"
+    ///      ],
+    ///      "properties": {
+    ///        "block_size": {
+    ///          "type": "integer",
+    ///          "format": "uint64",
+    ///          "minimum": 0.0
+    ///        },
+    ///        "gen": {
+    ///          "type": "integer",
+    ///          "format": "uint64",
+    ///          "minimum": 0.0
+    ///        },
+    ///        "opts": {
+    ///          "$ref": "#/components/schemas/CrucibleOpts"
+    ///        },
+    ///        "type": {
+    ///          "type": "string",
+    ///          "enum": [
+    ///            "region"
+    ///          ]
+    ///        }
+    ///      }
+    ///    },
+    ///    {
+    ///      "type": "object",
+    ///      "required": [
+    ///        "block_size",
+    ///        "id",
+    ///        "path",
+    ///        "type"
+    ///      ],
+    ///      "properties": {
+    ///        "block_size": {
+    ///          "type": "integer",
+    ///          "format": "uint64",
+    ///          "minimum": 0.0
+    ///        },
+    ///        "id": {
+    ///          "type": "string",
+    ///          "format": "uuid"
+    ///        },
+    ///        "path": {
+    ///          "type": "string"
+    ///        },
+    ///        "type": {
+    ///          "type": "string",
+    ///          "enum": [
+    ///            "file"
+    ///          ]
+    ///        }
+    ///      }
+    ///    }
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     #[serde(tag = "type")]
     pub enum VolumeConstructionRequest {
@@ -2170,11 +2954,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceEnsureRequest>,
+            <V as std::convert::TryInto<types::InstanceEnsureRequest>>::Error: std::fmt::Display,
         {
-            self.body = value
-                .try_into()
-                .map(From::from)
-                .map_err(|_| "conversion to `InstanceEnsureRequest` for body failed".to_string());
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `InstanceEnsureRequest` for body failed: {}",
+                    s
+                )
+            });
             self
         }
 
@@ -2319,9 +3106,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceMigrateStatusRequest>,
+            <V as std::convert::TryInto<types::InstanceMigrateStatusRequest>>::Error:
+                std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `InstanceMigrateStatusRequest` for body failed".to_string()
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `InstanceMigrateStatusRequest` for body failed: {}",
+                    s
+                )
             });
             self
         }
@@ -2489,9 +3281,14 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceStateMonitorRequest>,
+            <V as std::convert::TryInto<types::InstanceStateMonitorRequest>>::Error:
+                std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|_| {
-                "conversion to `InstanceStateMonitorRequest` for body failed".to_string()
+            self.body = value.try_into().map(From::from).map_err(|s| {
+                format!(
+                    "conversion to `InstanceStateMonitorRequest` for body failed: {}",
+                    s
+                )
             });
             self
         }

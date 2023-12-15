@@ -7,7 +7,44 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///Task
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "name",
+    ///    "output_rules",
+    ///    "script",
+    ///    "state"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "output_rules": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    },
+    ///    "script": {
+    ///      "type": "string"
+    ///    },
+    ///    "state": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct Task {
         pub id: String,
         pub name: String,
@@ -28,7 +65,40 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///TaskEvent
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "payload",
+    ///    "seq",
+    ///    "stream",
+    ///    "time"
+    ///  ],
+    ///  "properties": {
+    ///    "payload": {
+    ///      "type": "string"
+    ///    },
+    ///    "seq": {
+    ///      "type": "integer",
+    ///      "format": "uint",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "stream": {
+    ///      "type": "string"
+    ///    },
+    ///    "time": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct TaskEvent {
         pub payload: String,
         pub seq: u32,
@@ -48,7 +118,35 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///TaskOutput
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "path",
+    ///    "size"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "path": {
+    ///      "type": "string"
+    ///    },
+    ///    "size": {
+    ///      "type": "integer",
+    ///      "format": "uint64",
+    ///      "minimum": 0.0
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct TaskOutput {
         pub id: String,
         pub path: String,
@@ -67,7 +165,35 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///TaskSubmit
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "name",
+    ///    "script"
+    ///  ],
+    ///  "properties": {
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "output_rules": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    },
+    ///    "script": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct TaskSubmit {
         pub name: String,
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -87,7 +213,25 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///TaskSubmitResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct TaskSubmitResult {
         pub id: String,
     }
@@ -104,7 +248,25 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///UploadedChunk
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct UploadedChunk {
         pub id: String,
     }
@@ -121,7 +283,25 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///UserCreate
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "name"
+    ///  ],
+    ///  "properties": {
+    ///    "name": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct UserCreate {
         pub name: String,
     }
@@ -138,7 +318,33 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///UserCreateResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "name",
+    ///    "token"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "token": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct UserCreateResult {
         pub id: String,
         pub name: String,
@@ -157,7 +363,29 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WhoamiResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "name"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WhoamiResult {
         pub id: String,
         pub name: String,
@@ -175,7 +403,47 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///Worker
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "deleted",
+    ///    "id",
+    ///    "recycle",
+    ///    "tasks"
+    ///  ],
+    ///  "properties": {
+    ///    "deleted": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "instance_id": {
+    ///      "type": "string"
+    ///    },
+    ///    "lastping": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    },
+    ///    "recycle": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "tasks": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/WorkerTask"
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct Worker {
         pub deleted: bool,
         pub id: String,
@@ -199,7 +467,37 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerAddOutput
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "chunks",
+    ///    "path",
+    ///    "size"
+    ///  ],
+    ///  "properties": {
+    ///    "chunks": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    },
+    ///    "path": {
+    ///      "type": "string"
+    ///    },
+    ///    "size": {
+    ///      "type": "integer",
+    ///      "format": "int64"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerAddOutput {
         pub chunks: Vec<String>,
         pub path: String,
@@ -218,7 +516,34 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerAppendTask
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "payload",
+    ///    "stream",
+    ///    "time"
+    ///  ],
+    ///  "properties": {
+    ///    "payload": {
+    ///      "type": "string"
+    ///    },
+    ///    "stream": {
+    ///      "type": "string"
+    ///    },
+    ///    "time": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerAppendTask {
         pub payload: String,
         pub stream: String,
@@ -237,7 +562,29 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerBootstrap
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "bootstrap",
+    ///    "token"
+    ///  ],
+    ///  "properties": {
+    ///    "bootstrap": {
+    ///      "type": "string"
+    ///    },
+    ///    "token": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerBootstrap {
         pub bootstrap: String,
         pub token: String,
@@ -255,7 +602,25 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerBootstrapResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerBootstrapResult {
         pub id: String,
     }
@@ -272,7 +637,25 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerCompleteTask
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "failed"
+    ///  ],
+    ///  "properties": {
+    ///    "failed": {
+    ///      "type": "boolean"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
     }
@@ -289,7 +672,28 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerPingResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "poweroff"
+    ///  ],
+    ///  "properties": {
+    ///    "poweroff": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "task": {
+    ///      "$ref": "#/components/schemas/WorkerPingTask"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerPingResult {
         pub poweroff: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -308,7 +712,36 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerPingTask
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "output_rules",
+    ///    "script"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "output_rules": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    },
+    ///    "script": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerPingTask {
         pub id: String,
         pub output_rules: Vec<String>,
@@ -327,7 +760,33 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerTask
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "name",
+    ///    "owner"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "owner": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerTask {
         pub id: String,
         pub name: String,
@@ -346,7 +805,28 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkersResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "workers"
+    ///  ],
+    ///  "properties": {
+    ///    "workers": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/Worker"
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkersResult {
         pub workers: Vec<Worker>,
     }
@@ -2038,11 +2518,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::TaskSubmit>,
+            <V as std::convert::TryInto<types::TaskSubmit>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `TaskSubmit` for body failed".to_string());
+                .map_err(|s| format!("conversion to `TaskSubmit` for body failed: {}", s));
             self
         }
 
@@ -2292,11 +2773,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::UserCreate>,
+            <V as std::convert::TryInto<types::UserCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `UserCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `UserCreate` for body failed: {}", s));
             self
         }
 
@@ -2438,11 +2920,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerBootstrap>,
+            <V as std::convert::TryInto<types::WorkerBootstrap>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `WorkerBootstrap` for body failed".to_string());
+                .map_err(|s| format!("conversion to `WorkerBootstrap` for body failed: {}", s));
             self
         }
 
@@ -2545,11 +3028,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerAppendTask>,
+            <V as std::convert::TryInto<types::WorkerAppendTask>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `WorkerAppendTask` for body failed".to_string());
+                .map_err(|s| format!("conversion to `WorkerAppendTask` for body failed: {}", s));
             self
         }
 
@@ -2688,11 +3172,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerCompleteTask>,
+            <V as std::convert::TryInto<types::WorkerCompleteTask>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `WorkerCompleteTask` for body failed".to_string());
+                .map_err(|s| format!("conversion to `WorkerCompleteTask` for body failed: {}", s));
             self
         }
 
@@ -2760,11 +3245,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerAddOutput>,
+            <V as std::convert::TryInto<types::WorkerAddOutput>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `WorkerAddOutput` for body failed".to_string());
+                .map_err(|s| format!("conversion to `WorkerAddOutput` for body failed: {}", s));
             self
         }
 

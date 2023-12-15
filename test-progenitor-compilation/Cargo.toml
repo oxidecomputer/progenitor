@@ -14,7 +14,7 @@ dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features
 expectorate = "1.1"
 http = "0.2.9"
 hyper = "0.14.27"
-openapiv3 = "1.0.3"
+openapiv3 = "2.0.0"
 proc-macro2 = "1.0"
 progenitor-impl = { path = "../progenitor-impl" }
 quote = "1.0"

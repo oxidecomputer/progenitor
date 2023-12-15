@@ -7,7 +7,30 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///EnrolBody
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "title": "EnrolBody",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "host",
+    ///    "key"
+    ///  ],
+    ///  "properties": {
+    ///    "host": {
+    ///      "type": "string"
+    ///    },
+    ///    "key": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct EnrolBody {
         pub host: String,
         pub key: String,
@@ -25,7 +48,29 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///GlobalJobsResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "title": "GlobalJobsResult",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "summary"
+    ///  ],
+    ///  "properties": {
+    ///    "summary": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/ReportSummary"
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct GlobalJobsResult {
         pub summary: Vec<ReportSummary>,
     }
@@ -42,7 +87,34 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///OutputRecord
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "msg",
+    ///    "stream",
+    ///    "time"
+    ///  ],
+    ///  "properties": {
+    ///    "msg": {
+    ///      "type": "string"
+    ///    },
+    ///    "stream": {
+    ///      "type": "string"
+    ///    },
+    ///    "time": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct OutputRecord {
         pub msg: String,
         pub stream: String,
@@ -61,7 +133,30 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///PingResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "title": "PingResult",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "host",
+    ///    "ok"
+    ///  ],
+    ///  "properties": {
+    ///    "host": {
+    ///      "type": "string"
+    ///    },
+    ///    "ok": {
+    ///      "type": "boolean"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct PingResult {
         pub host: String,
         pub ok: bool,
@@ -79,7 +174,41 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///ReportFinishBody
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "title": "ReportFinishBody",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "duration_millis",
+    ///    "end_time",
+    ///    "exit_status",
+    ///    "id"
+    ///  ],
+    ///  "properties": {
+    ///    "duration_millis": {
+    ///      "type": "integer",
+    ///      "format": "int32"
+    ///    },
+    ///    "end_time": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    },
+    ///    "exit_status": {
+    ///      "type": "integer",
+    ///      "format": "int32"
+    ///    },
+    ///    "id": {
+    ///      "$ref": "#/components/schemas/ReportId"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct ReportFinishBody {
         pub duration_millis: usize,
         pub end_time: chrono::DateTime<chrono::offset::Utc>,
@@ -99,7 +228,44 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///ReportId
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "host",
+    ///    "job",
+    ///    "pid",
+    ///    "time",
+    ///    "uuid"
+    ///  ],
+    ///  "properties": {
+    ///    "host": {
+    ///      "type": "string"
+    ///    },
+    ///    "job": {
+    ///      "type": "string"
+    ///    },
+    ///    "pid": {
+    ///      "type": "integer",
+    ///      "format": "uint64",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "time": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    },
+    ///    "uuid": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct ReportId {
         pub host: String,
         pub job: String,
@@ -120,7 +286,30 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///ReportOutputBody
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "title": "ReportOutputBody",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "record"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "$ref": "#/components/schemas/ReportId"
+    ///    },
+    ///    "record": {
+    ///      "$ref": "#/components/schemas/OutputRecord"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
@@ -138,7 +327,26 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///ReportResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "title": "ReportResult",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "existed_already"
+    ///  ],
+    ///  "properties": {
+    ///    "existed_already": {
+    ///      "type": "boolean"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct ReportResult {
         pub existed_already: bool,
     }
@@ -155,7 +363,35 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///ReportStartBody
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "title": "ReportStartBody",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "script",
+    ///    "start_time"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "$ref": "#/components/schemas/ReportId"
+    ///    },
+    ///    "script": {
+    ///      "type": "string"
+    ///    },
+    ///    "start_time": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: String,
@@ -174,7 +410,49 @@ pub mod types {
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///ReportSummary
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "age_seconds",
+    ///    "duration_seconds",
+    ///    "host",
+    ///    "job",
+    ///    "status",
+    ///    "when"
+    ///  ],
+    ///  "properties": {
+    ///    "age_seconds": {
+    ///      "type": "integer",
+    ///      "format": "int32"
+    ///    },
+    ///    "duration_seconds": {
+    ///      "type": "integer",
+    ///      "format": "int32"
+    ///    },
+    ///    "host": {
+    ///      "type": "string"
+    ///    },
+    ///    "job": {
+    ///      "type": "string"
+    ///    },
+    ///    "status": {
+    ///      "type": "integer",
+    ///      "format": "int32"
+    ///    },
+    ///    "when": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct ReportSummary {
         pub age_seconds: usize,
         pub duration_seconds: usize,
@@ -1092,11 +1370,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::EnrolBody>,
+            <V as std::convert::TryInto<types::EnrolBody>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `EnrolBody` for body failed".to_string());
+                .map_err(|s| format!("conversion to `EnrolBody` for body failed: {}", s));
             self
         }
 
@@ -1279,11 +1558,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ReportFinishBody>,
+            <V as std::convert::TryInto<types::ReportFinishBody>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ReportFinishBody` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ReportFinishBody` for body failed: {}", s));
             self
         }
 
@@ -1362,11 +1642,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ReportOutputBody>,
+            <V as std::convert::TryInto<types::ReportOutputBody>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ReportOutputBody` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ReportOutputBody` for body failed: {}", s));
             self
         }
 
@@ -1445,11 +1726,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ReportStartBody>,
+            <V as std::convert::TryInto<types::ReportStartBody>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `ReportStartBody` for body failed".to_string());
+                .map_err(|s| format!("conversion to `ReportStartBody` for body failed: {}", s));
             self
         }
 

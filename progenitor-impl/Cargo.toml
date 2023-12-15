@@ -11,11 +11,11 @@ readme = "../README.md"
 heck = "0.4.1"
 http = "0.2.9"
 getopts = "0.2"
-indexmap = "2.0.2"
-openapiv3 = "1.0.3"
+indexmap = "2.1.0"
+openapiv3 = "2.0.0"
 proc-macro2 = "1.0"
 quote = "1.0"
-regex = "1.9"
+regex = "1.10"
 schemars = { version = "0.8.12", features = ["chrono", "uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -39,8 +39,8 @@ progenitor-client = { path = "../progenitor-client" }
 rand = "0.8"
 regress = "0.7.1"
 reqwest = { version = "0.11.22", features = ["json", "stream"] }
-rustfmt-wrapper = "0.2.0"
+rustfmt-wrapper = "0.2.1"
 serde_yaml = "0.9"
-serde_json = "1.0.107"
+serde_json = "1.0.108"
 test-progenitor-compilation = { path = "../test-progenitor-compilation" }
-uuid = { version = "1.4", features = ["serde", "v4"] }
+uuid = { version = "1.6", features = ["serde", "v4"] }
