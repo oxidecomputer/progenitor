@@ -107,7 +107,7 @@ pub mod types {
 
     impl CrucibleOpts {
         pub fn builder() -> builder::CrucibleOpts {
-            builder::CrucibleOpts::default()
+            Default::default()
         }
     }
 
@@ -155,7 +155,7 @@ pub mod types {
 
     impl DiskAttachment {
         pub fn builder() -> builder::DiskAttachment {
-            builder::DiskAttachment::default()
+            Default::default()
         }
     }
 
@@ -269,7 +269,7 @@ pub mod types {
 
     impl DiskRequest {
         pub fn builder() -> builder::DiskRequest {
-            builder::DiskRequest::default()
+            Default::default()
         }
     }
 
@@ -315,7 +315,7 @@ pub mod types {
 
     impl Error {
         pub fn builder() -> builder::Error {
-            builder::Error::default()
+            Default::default()
         }
     }
 
@@ -371,7 +371,7 @@ pub mod types {
 
     impl Instance {
         pub fn builder() -> builder::Instance {
-            builder::Instance::default()
+            Default::default()
         }
     }
 
@@ -441,7 +441,7 @@ pub mod types {
 
     impl InstanceEnsureRequest {
         pub fn builder() -> builder::InstanceEnsureRequest {
-            builder::InstanceEnsureRequest::default()
+            Default::default()
         }
     }
 
@@ -478,7 +478,7 @@ pub mod types {
 
     impl InstanceEnsureResponse {
         pub fn builder() -> builder::InstanceEnsureResponse {
-            builder::InstanceEnsureResponse::default()
+            Default::default()
         }
     }
 
@@ -513,7 +513,7 @@ pub mod types {
 
     impl InstanceGetResponse {
         pub fn builder() -> builder::InstanceGetResponse {
-            builder::InstanceGetResponse::default()
+            Default::default()
         }
     }
 
@@ -560,7 +560,7 @@ pub mod types {
 
     impl InstanceMigrateInitiateRequest {
         pub fn builder() -> builder::InstanceMigrateInitiateRequest {
-            builder::InstanceMigrateInitiateRequest::default()
+            Default::default()
         }
     }
 
@@ -596,7 +596,7 @@ pub mod types {
 
     impl InstanceMigrateInitiateResponse {
         pub fn builder() -> builder::InstanceMigrateInitiateResponse {
-            builder::InstanceMigrateInitiateResponse::default()
+            Default::default()
         }
     }
 
@@ -632,7 +632,7 @@ pub mod types {
 
     impl InstanceMigrateStatusRequest {
         pub fn builder() -> builder::InstanceMigrateStatusRequest {
-            builder::InstanceMigrateStatusRequest::default()
+            Default::default()
         }
     }
 
@@ -667,7 +667,7 @@ pub mod types {
 
     impl InstanceMigrateStatusResponse {
         pub fn builder() -> builder::InstanceMigrateStatusResponse {
-            builder::InstanceMigrateStatusResponse::default()
+            Default::default()
         }
     }
 
@@ -753,7 +753,7 @@ pub mod types {
 
     impl InstanceProperties {
         pub fn builder() -> builder::InstanceProperties {
-            builder::InstanceProperties::default()
+            Default::default()
         }
     }
 
@@ -902,7 +902,7 @@ pub mod types {
 
     impl InstanceStateMonitorRequest {
         pub fn builder() -> builder::InstanceStateMonitorRequest {
-            builder::InstanceStateMonitorRequest::default()
+            Default::default()
         }
     }
 
@@ -944,7 +944,7 @@ pub mod types {
 
     impl InstanceStateMonitorResponse {
         pub fn builder() -> builder::InstanceStateMonitorResponse {
-            builder::InstanceStateMonitorResponse::default()
+            Default::default()
         }
     }
 
@@ -1182,7 +1182,7 @@ pub mod types {
 
     impl NetworkInterface {
         pub fn builder() -> builder::NetworkInterface {
-            builder::NetworkInterface::default()
+            Default::default()
         }
     }
 
@@ -1271,7 +1271,7 @@ pub mod types {
 
     impl NetworkInterfaceRequest {
         pub fn builder() -> builder::NetworkInterfaceRequest {
-            builder::NetworkInterfaceRequest::default()
+            Default::default()
         }
     }
 

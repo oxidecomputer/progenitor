@@ -50,7 +50,7 @@ pub mod types {
 
     impl Baseboard {
         pub fn builder() -> builder::Baseboard {
-            builder::Baseboard::default()
+            Default::default()
         }
     }
 
@@ -309,7 +309,7 @@ pub mod types {
 
     impl Bindouble {
         pub fn builder() -> builder::Bindouble {
-            builder::Bindouble::default()
+            Default::default()
         }
     }
 
@@ -360,7 +360,7 @@ pub mod types {
 
     impl Binint64 {
         pub fn builder() -> builder::Binint64 {
-            builder::Binint64::default()
+            Default::default()
         }
     }
 
@@ -581,7 +581,7 @@ pub mod types {
 
     impl Certificate {
         pub fn builder() -> builder::Certificate {
-            builder::Certificate::default()
+            Default::default()
         }
     }
 
@@ -659,7 +659,7 @@ pub mod types {
 
     impl CertificateCreate {
         pub fn builder() -> builder::CertificateCreate {
-            builder::CertificateCreate::default()
+            Default::default()
         }
     }
 
@@ -710,7 +710,7 @@ pub mod types {
 
     impl CertificateResultsPage {
         pub fn builder() -> builder::CertificateResultsPage {
-            builder::CertificateResultsPage::default()
+            Default::default()
         }
     }
 
@@ -777,7 +777,7 @@ pub mod types {
 
     impl ComponentUpdate {
         pub fn builder() -> builder::ComponentUpdate {
-            builder::ComponentUpdate::default()
+            Default::default()
         }
     }
 
@@ -828,7 +828,7 @@ pub mod types {
 
     impl ComponentUpdateResultsPage {
         pub fn builder() -> builder::ComponentUpdateResultsPage {
-            builder::ComponentUpdateResultsPage::default()
+            Default::default()
         }
     }
 
@@ -871,7 +871,7 @@ pub mod types {
 
     impl Cumulativedouble {
         pub fn builder() -> builder::Cumulativedouble {
-            builder::Cumulativedouble::default()
+            Default::default()
         }
     }
 
@@ -914,7 +914,7 @@ pub mod types {
 
     impl Cumulativeint64 {
         pub fn builder() -> builder::Cumulativeint64 {
-            builder::Cumulativeint64::default()
+            Default::default()
         }
     }
 
@@ -1321,7 +1321,7 @@ pub mod types {
 
     impl DerEncodedKeyPair {
         pub fn builder() -> builder::DerEncodedKeyPair {
-            builder::DerEncodedKeyPair::default()
+            Default::default()
         }
     }
 
@@ -1367,7 +1367,7 @@ pub mod types {
 
     impl DeviceAccessTokenRequest {
         pub fn builder() -> builder::DeviceAccessTokenRequest {
-            builder::DeviceAccessTokenRequest::default()
+            Default::default()
         }
     }
 
@@ -1403,7 +1403,7 @@ pub mod types {
 
     impl DeviceAuthRequest {
         pub fn builder() -> builder::DeviceAuthRequest {
-            builder::DeviceAuthRequest::default()
+            Default::default()
         }
     }
 
@@ -1438,7 +1438,7 @@ pub mod types {
 
     impl DeviceAuthVerify {
         pub fn builder() -> builder::DeviceAuthVerify {
-            builder::DeviceAuthVerify::default()
+            Default::default()
         }
     }
 
@@ -1597,7 +1597,7 @@ pub mod types {
 
     impl Disk {
         pub fn builder() -> builder::Disk {
-            builder::Disk::default()
+            Default::default()
         }
     }
 
@@ -1661,7 +1661,7 @@ pub mod types {
 
     impl DiskCreate {
         pub fn builder() -> builder::DiskCreate {
-            builder::DiskCreate::default()
+            Default::default()
         }
     }
 
@@ -1700,7 +1700,7 @@ pub mod types {
 
     impl DiskIdentifier {
         pub fn builder() -> builder::DiskIdentifier {
-            builder::DiskIdentifier::default()
+            Default::default()
         }
     }
 
@@ -1824,7 +1824,7 @@ pub mod types {
 
     impl DiskPath {
         pub fn builder() -> builder::DiskPath {
-            builder::DiskPath::default()
+            Default::default()
         }
     }
 
@@ -1875,7 +1875,7 @@ pub mod types {
 
     impl DiskResultsPage {
         pub fn builder() -> builder::DiskResultsPage {
-            builder::DiskResultsPage::default()
+            Default::default()
         }
     }
 
@@ -2207,7 +2207,7 @@ pub mod types {
 
     impl Distribution {
         pub fn builder() -> builder::Distribution {
-            builder::Distribution::default()
+            Default::default()
         }
     }
 
@@ -2253,7 +2253,7 @@ pub mod types {
 
     impl Error {
         pub fn builder() -> builder::Error {
-            builder::Error::default()
+            Default::default()
         }
     }
 
@@ -2294,7 +2294,7 @@ pub mod types {
 
     impl ExternalIp {
         pub fn builder() -> builder::ExternalIp {
-            builder::ExternalIp::default()
+            Default::default()
         }
     }
 
@@ -2399,7 +2399,7 @@ pub mod types {
 
     impl ExternalIpResultsPage {
         pub fn builder() -> builder::ExternalIpResultsPage {
-            builder::ExternalIpResultsPage::default()
+            Default::default()
         }
     }
 
@@ -2445,7 +2445,7 @@ pub mod types {
 
     impl FieldSchema {
         pub fn builder() -> builder::FieldSchema {
-            builder::FieldSchema::default()
+            Default::default()
         }
     }
 
@@ -2723,7 +2723,7 @@ pub mod types {
 
     impl FleetRolePolicy {
         pub fn builder() -> builder::FleetRolePolicy {
-            builder::FleetRolePolicy::default()
+            Default::default()
         }
     }
 
@@ -2778,7 +2778,7 @@ pub mod types {
 
     impl FleetRoleRoleAssignment {
         pub fn builder() -> builder::FleetRoleRoleAssignment {
-            builder::FleetRoleRoleAssignment::default()
+            Default::default()
         }
     }
 
@@ -2908,7 +2908,7 @@ pub mod types {
 
     impl GlobalImage {
         pub fn builder() -> builder::GlobalImage {
-            builder::GlobalImage::default()
+            Default::default()
         }
     }
 
@@ -2984,7 +2984,7 @@ pub mod types {
 
     impl GlobalImageCreate {
         pub fn builder() -> builder::GlobalImageCreate {
-            builder::GlobalImageCreate::default()
+            Default::default()
         }
     }
 
@@ -3035,7 +3035,7 @@ pub mod types {
 
     impl GlobalImageResultsPage {
         pub fn builder() -> builder::GlobalImageResultsPage {
-            builder::GlobalImageResultsPage::default()
+            Default::default()
         }
     }
 
@@ -3087,7 +3087,7 @@ pub mod types {
 
     impl Group {
         pub fn builder() -> builder::Group {
-            builder::Group::default()
+            Default::default()
         }
     }
 
@@ -3138,7 +3138,7 @@ pub mod types {
 
     impl GroupResultsPage {
         pub fn builder() -> builder::GroupResultsPage {
-            builder::GroupResultsPage::default()
+            Default::default()
         }
     }
 
@@ -3261,7 +3261,7 @@ pub mod types {
 
     impl Histogramdouble {
         pub fn builder() -> builder::Histogramdouble {
-            builder::Histogramdouble::default()
+            Default::default()
         }
     }
 
@@ -3384,7 +3384,7 @@ pub mod types {
 
     impl Histogramint64 {
         pub fn builder() -> builder::Histogramint64 {
-            builder::Histogramint64::default()
+            Default::default()
         }
     }
 
@@ -3542,7 +3542,7 @@ pub mod types {
 
     impl IdentityProvider {
         pub fn builder() -> builder::IdentityProvider {
-            builder::IdentityProvider::default()
+            Default::default()
         }
     }
 
@@ -3593,7 +3593,7 @@ pub mod types {
 
     impl IdentityProviderResultsPage {
         pub fn builder() -> builder::IdentityProviderResultsPage {
-            builder::IdentityProviderResultsPage::default()
+            Default::default()
         }
     }
 
@@ -3929,7 +3929,7 @@ pub mod types {
 
     impl Image {
         pub fn builder() -> builder::Image {
-            builder::Image::default()
+            Default::default()
         }
     }
 
@@ -3993,7 +3993,7 @@ pub mod types {
 
     impl ImageCreate {
         pub fn builder() -> builder::ImageCreate {
-            builder::ImageCreate::default()
+            Default::default()
         }
     }
 
@@ -4044,7 +4044,7 @@ pub mod types {
 
     impl ImageResultsPage {
         pub fn builder() -> builder::ImageResultsPage {
-            builder::ImageResultsPage::default()
+            Default::default()
         }
     }
 
@@ -4246,7 +4246,7 @@ pub mod types {
 
     impl Instance {
         pub fn builder() -> builder::Instance {
-            builder::Instance::default()
+            Default::default()
         }
     }
 
@@ -4443,7 +4443,7 @@ pub mod types {
 
     impl InstanceCreate {
         pub fn builder() -> builder::InstanceCreate {
-            builder::InstanceCreate::default()
+            Default::default()
         }
     }
 
@@ -4586,7 +4586,7 @@ pub mod types {
 
     impl InstanceMigrate {
         pub fn builder() -> builder::InstanceMigrate {
-            builder::InstanceMigrate::default()
+            Default::default()
         }
     }
 
@@ -4733,7 +4733,7 @@ pub mod types {
 
     impl InstanceResultsPage {
         pub fn builder() -> builder::InstanceResultsPage {
-            builder::InstanceResultsPage::default()
+            Default::default()
         }
     }
 
@@ -4790,7 +4790,7 @@ pub mod types {
 
     impl InstanceSerialConsoleData {
         pub fn builder() -> builder::InstanceSerialConsoleData {
-            builder::InstanceSerialConsoleData::default()
+            Default::default()
         }
     }
 
@@ -5218,7 +5218,7 @@ pub mod types {
 
     impl IpPool {
         pub fn builder() -> builder::IpPool {
-            builder::IpPool::default()
+            Default::default()
         }
     }
 
@@ -5261,7 +5261,7 @@ pub mod types {
 
     impl IpPoolCreate {
         pub fn builder() -> builder::IpPoolCreate {
-            builder::IpPoolCreate::default()
+            Default::default()
         }
     }
 
@@ -5308,7 +5308,7 @@ pub mod types {
 
     impl IpPoolRange {
         pub fn builder() -> builder::IpPoolRange {
-            builder::IpPoolRange::default()
+            Default::default()
         }
     }
 
@@ -5359,7 +5359,7 @@ pub mod types {
 
     impl IpPoolRangeResultsPage {
         pub fn builder() -> builder::IpPoolRangeResultsPage {
-            builder::IpPoolRangeResultsPage::default()
+            Default::default()
         }
     }
 
@@ -5410,7 +5410,7 @@ pub mod types {
 
     impl IpPoolResultsPage {
         pub fn builder() -> builder::IpPoolResultsPage {
-            builder::IpPoolResultsPage::default()
+            Default::default()
         }
     }
 
@@ -5456,7 +5456,7 @@ pub mod types {
 
     impl IpPoolUpdate {
         pub fn builder() -> builder::IpPoolUpdate {
-            builder::IpPoolUpdate::default()
+            Default::default()
         }
     }
 
@@ -5646,7 +5646,7 @@ pub mod types {
 
     impl Ipv4Range {
         pub fn builder() -> builder::Ipv4Range {
-            builder::Ipv4Range::default()
+            Default::default()
         }
     }
 
@@ -5783,7 +5783,7 @@ pub mod types {
 
     impl Ipv6Range {
         pub fn builder() -> builder::Ipv6Range {
-            builder::Ipv6Range::default()
+            Default::default()
         }
     }
 
@@ -6008,7 +6008,7 @@ pub mod types {
 
     impl Measurement {
         pub fn builder() -> builder::Measurement {
-            builder::Measurement::default()
+            Default::default()
         }
     }
 
@@ -6059,7 +6059,7 @@ pub mod types {
 
     impl MeasurementResultsPage {
         pub fn builder() -> builder::MeasurementResultsPage {
-            builder::MeasurementResultsPage::default()
+            Default::default()
         }
     }
 
@@ -6531,7 +6531,7 @@ pub mod types {
 
     impl NetworkInterface {
         pub fn builder() -> builder::NetworkInterface {
-            builder::NetworkInterface::default()
+            Default::default()
         }
     }
 
@@ -6607,7 +6607,7 @@ pub mod types {
 
     impl NetworkInterfaceCreate {
         pub fn builder() -> builder::NetworkInterfaceCreate {
-            builder::NetworkInterfaceCreate::default()
+            Default::default()
         }
     }
 
@@ -6658,7 +6658,7 @@ pub mod types {
 
     impl NetworkInterfaceResultsPage {
         pub fn builder() -> builder::NetworkInterfaceResultsPage {
-            builder::NetworkInterfaceResultsPage::default()
+            Default::default()
         }
     }
 
@@ -6735,7 +6735,7 @@ pub mod types {
 
     impl NetworkInterfaceUpdate {
         pub fn builder() -> builder::NetworkInterfaceUpdate {
-            builder::NetworkInterfaceUpdate::default()
+            Default::default()
         }
     }
 
@@ -6867,7 +6867,7 @@ pub mod types {
 
     impl Organization {
         pub fn builder() -> builder::Organization {
-            builder::Organization::default()
+            Default::default()
         }
     }
 
@@ -6910,7 +6910,7 @@ pub mod types {
 
     impl OrganizationCreate {
         pub fn builder() -> builder::OrganizationCreate {
-            builder::OrganizationCreate::default()
+            Default::default()
         }
     }
 
@@ -6961,7 +6961,7 @@ pub mod types {
 
     impl OrganizationResultsPage {
         pub fn builder() -> builder::OrganizationResultsPage {
-            builder::OrganizationResultsPage::default()
+            Default::default()
         }
     }
 
@@ -7084,7 +7084,7 @@ pub mod types {
 
     impl OrganizationRolePolicy {
         pub fn builder() -> builder::OrganizationRolePolicy {
-            builder::OrganizationRolePolicy::default()
+            Default::default()
         }
     }
 
@@ -7139,7 +7139,7 @@ pub mod types {
 
     impl OrganizationRoleRoleAssignment {
         pub fn builder() -> builder::OrganizationRoleRoleAssignment {
-            builder::OrganizationRoleRoleAssignment::default()
+            Default::default()
         }
     }
 
@@ -7187,7 +7187,7 @@ pub mod types {
 
     impl OrganizationUpdate {
         pub fn builder() -> builder::OrganizationUpdate {
-            builder::OrganizationUpdate::default()
+            Default::default()
         }
     }
 
@@ -7349,7 +7349,7 @@ pub mod types {
 
     impl PhysicalDisk {
         pub fn builder() -> builder::PhysicalDisk {
-            builder::PhysicalDisk::default()
+            Default::default()
         }
     }
 
@@ -7400,7 +7400,7 @@ pub mod types {
 
     impl PhysicalDiskResultsPage {
         pub fn builder() -> builder::PhysicalDiskResultsPage {
-            builder::PhysicalDiskResultsPage::default()
+            Default::default()
         }
     }
 
@@ -7548,7 +7548,7 @@ pub mod types {
 
     impl Project {
         pub fn builder() -> builder::Project {
-            builder::Project::default()
+            Default::default()
         }
     }
 
@@ -7590,7 +7590,7 @@ pub mod types {
 
     impl ProjectCreate {
         pub fn builder() -> builder::ProjectCreate {
-            builder::ProjectCreate::default()
+            Default::default()
         }
     }
 
@@ -7641,7 +7641,7 @@ pub mod types {
 
     impl ProjectResultsPage {
         pub fn builder() -> builder::ProjectResultsPage {
-            builder::ProjectResultsPage::default()
+            Default::default()
         }
     }
 
@@ -7764,7 +7764,7 @@ pub mod types {
 
     impl ProjectRolePolicy {
         pub fn builder() -> builder::ProjectRolePolicy {
-            builder::ProjectRolePolicy::default()
+            Default::default()
         }
     }
 
@@ -7819,7 +7819,7 @@ pub mod types {
 
     impl ProjectRoleRoleAssignment {
         pub fn builder() -> builder::ProjectRoleRoleAssignment {
-            builder::ProjectRoleRoleAssignment::default()
+            Default::default()
         }
     }
 
@@ -7866,7 +7866,7 @@ pub mod types {
 
     impl ProjectUpdate {
         pub fn builder() -> builder::ProjectUpdate {
-            builder::ProjectUpdate::default()
+            Default::default()
         }
     }
 
@@ -7921,7 +7921,7 @@ pub mod types {
 
     impl Rack {
         pub fn builder() -> builder::Rack {
-            builder::Rack::default()
+            Default::default()
         }
     }
 
@@ -7972,7 +7972,7 @@ pub mod types {
 
     impl RackResultsPage {
         pub fn builder() -> builder::RackResultsPage {
-            builder::RackResultsPage::default()
+            Default::default()
         }
     }
 
@@ -8013,7 +8013,7 @@ pub mod types {
 
     impl Role {
         pub fn builder() -> builder::Role {
-            builder::Role::default()
+            Default::default()
         }
     }
 
@@ -8148,7 +8148,7 @@ pub mod types {
 
     impl RoleResultsPage {
         pub fn builder() -> builder::RoleResultsPage {
-            builder::RoleResultsPage::default()
+            Default::default()
         }
     }
 
@@ -8524,7 +8524,7 @@ pub mod types {
 
     impl RouterRoute {
         pub fn builder() -> builder::RouterRoute {
-            builder::RouterRoute::default()
+            Default::default()
         }
     }
 
@@ -8575,7 +8575,7 @@ pub mod types {
 
     impl RouterRouteCreateParams {
         pub fn builder() -> builder::RouterRouteCreateParams {
-            builder::RouterRouteCreateParams::default()
+            Default::default()
         }
     }
 
@@ -8749,7 +8749,7 @@ pub mod types {
 
     impl RouterRouteResultsPage {
         pub fn builder() -> builder::RouterRouteResultsPage {
-            builder::RouterRouteResultsPage::default()
+            Default::default()
         }
     }
 
@@ -8807,7 +8807,7 @@ pub mod types {
 
     impl RouterRouteUpdateParams {
         pub fn builder() -> builder::RouterRouteUpdateParams {
-            builder::RouterRouteUpdateParams::default()
+            Default::default()
         }
     }
 
@@ -8848,7 +8848,7 @@ pub mod types {
 
     impl Saga {
         pub fn builder() -> builder::Saga {
-            builder::Saga::default()
+            Default::default()
         }
     }
 
@@ -9015,7 +9015,7 @@ pub mod types {
 
     impl SagaResultsPage {
         pub fn builder() -> builder::SagaResultsPage {
-            builder::SagaResultsPage::default()
+            Default::default()
         }
     }
 
@@ -9216,7 +9216,7 @@ pub mod types {
 
     impl SamlIdentityProvider {
         pub fn builder() -> builder::SamlIdentityProvider {
-            builder::SamlIdentityProvider::default()
+            Default::default()
         }
     }
 
@@ -9328,7 +9328,7 @@ pub mod types {
 
     impl SamlIdentityProviderCreate {
         pub fn builder() -> builder::SamlIdentityProviderCreate {
-            builder::SamlIdentityProviderCreate::default()
+            Default::default()
         }
     }
 
@@ -9569,7 +9569,7 @@ pub mod types {
 
     impl Silo {
         pub fn builder() -> builder::Silo {
-            builder::Silo::default()
+            Default::default()
         }
     }
 
@@ -9642,7 +9642,7 @@ pub mod types {
 
     impl SiloCreate {
         pub fn builder() -> builder::SiloCreate {
-            builder::SiloCreate::default()
+            Default::default()
         }
     }
 
@@ -9784,7 +9784,7 @@ pub mod types {
 
     impl SiloResultsPage {
         pub fn builder() -> builder::SiloResultsPage {
-            builder::SiloResultsPage::default()
+            Default::default()
         }
     }
 
@@ -9907,7 +9907,7 @@ pub mod types {
 
     impl SiloRolePolicy {
         pub fn builder() -> builder::SiloRolePolicy {
-            builder::SiloRolePolicy::default()
+            Default::default()
         }
     }
 
@@ -9962,7 +9962,7 @@ pub mod types {
 
     impl SiloRoleRoleAssignment {
         pub fn builder() -> builder::SiloRoleRoleAssignment {
-            builder::SiloRoleRoleAssignment::default()
+            Default::default()
         }
     }
 
@@ -10027,7 +10027,7 @@ pub mod types {
 
     impl Sled {
         pub fn builder() -> builder::Sled {
-            builder::Sled::default()
+            Default::default()
         }
     }
 
@@ -10078,7 +10078,7 @@ pub mod types {
 
     impl SledResultsPage {
         pub fn builder() -> builder::SledResultsPage {
-            builder::SledResultsPage::default()
+            Default::default()
         }
     }
 
@@ -10173,7 +10173,7 @@ pub mod types {
 
     impl Snapshot {
         pub fn builder() -> builder::Snapshot {
-            builder::Snapshot::default()
+            Default::default()
         }
     }
 
@@ -10227,7 +10227,7 @@ pub mod types {
 
     impl SnapshotCreate {
         pub fn builder() -> builder::SnapshotCreate {
-            builder::SnapshotCreate::default()
+            Default::default()
         }
     }
 
@@ -10278,7 +10278,7 @@ pub mod types {
 
     impl SnapshotResultsPage {
         pub fn builder() -> builder::SnapshotResultsPage {
-            builder::SnapshotResultsPage::default()
+            Default::default()
         }
     }
 
@@ -10392,7 +10392,7 @@ pub mod types {
 
     impl SpoofLoginBody {
         pub fn builder() -> builder::SpoofLoginBody {
-            builder::SpoofLoginBody::default()
+            Default::default()
         }
     }
 
@@ -10480,7 +10480,7 @@ pub mod types {
 
     impl SshKey {
         pub fn builder() -> builder::SshKey {
-            builder::SshKey::default()
+            Default::default()
         }
     }
 
@@ -10529,7 +10529,7 @@ pub mod types {
 
     impl SshKeyCreate {
         pub fn builder() -> builder::SshKeyCreate {
-            builder::SshKeyCreate::default()
+            Default::default()
         }
     }
 
@@ -10580,7 +10580,7 @@ pub mod types {
 
     impl SshKeyResultsPage {
         pub fn builder() -> builder::SshKeyResultsPage {
-            builder::SshKeyResultsPage::default()
+            Default::default()
         }
     }
 
@@ -10716,7 +10716,7 @@ pub mod types {
 
     impl SystemUpdate {
         pub fn builder() -> builder::SystemUpdate {
-            builder::SystemUpdate::default()
+            Default::default()
         }
     }
 
@@ -10767,7 +10767,7 @@ pub mod types {
 
     impl SystemUpdateResultsPage {
         pub fn builder() -> builder::SystemUpdateResultsPage {
-            builder::SystemUpdateResultsPage::default()
+            Default::default()
         }
     }
 
@@ -10802,7 +10802,7 @@ pub mod types {
 
     impl SystemUpdateStart {
         pub fn builder() -> builder::SystemUpdateStart {
-            builder::SystemUpdateStart::default()
+            Default::default()
         }
     }
 
@@ -10842,7 +10842,7 @@ pub mod types {
 
     impl SystemVersion {
         pub fn builder() -> builder::SystemVersion {
-            builder::SystemVersion::default()
+            Default::default()
         }
     }
 
@@ -10990,7 +10990,7 @@ pub mod types {
 
     impl TimeseriesSchema {
         pub fn builder() -> builder::TimeseriesSchema {
-            builder::TimeseriesSchema::default()
+            Default::default()
         }
     }
 
@@ -11041,7 +11041,7 @@ pub mod types {
 
     impl TimeseriesSchemaResultsPage {
         pub fn builder() -> builder::TimeseriesSchemaResultsPage {
-            builder::TimeseriesSchemaResultsPage::default()
+            Default::default()
         }
     }
 
@@ -11108,7 +11108,7 @@ pub mod types {
 
     impl UpdateDeployment {
         pub fn builder() -> builder::UpdateDeployment {
-            builder::UpdateDeployment::default()
+            Default::default()
         }
     }
 
@@ -11159,7 +11159,7 @@ pub mod types {
 
     impl UpdateDeploymentResultsPage {
         pub fn builder() -> builder::UpdateDeploymentResultsPage {
-            builder::UpdateDeploymentResultsPage::default()
+            Default::default()
         }
     }
 
@@ -11336,7 +11336,7 @@ pub mod types {
 
     impl UpdateableComponent {
         pub fn builder() -> builder::UpdateableComponent {
-            builder::UpdateableComponent::default()
+            Default::default()
         }
     }
 
@@ -11387,7 +11387,7 @@ pub mod types {
 
     impl UpdateableComponentResultsPage {
         pub fn builder() -> builder::UpdateableComponentResultsPage {
-            builder::UpdateableComponentResultsPage::default()
+            Default::default()
         }
     }
 
@@ -11558,7 +11558,7 @@ pub mod types {
 
     impl User {
         pub fn builder() -> builder::User {
-            builder::User::default()
+            Default::default()
         }
     }
 
@@ -11631,7 +11631,7 @@ pub mod types {
 
     impl UserBuiltin {
         pub fn builder() -> builder::UserBuiltin {
-            builder::UserBuiltin::default()
+            Default::default()
         }
     }
 
@@ -11682,7 +11682,7 @@ pub mod types {
 
     impl UserBuiltinResultsPage {
         pub fn builder() -> builder::UserBuiltinResultsPage {
-            builder::UserBuiltinResultsPage::default()
+            Default::default()
         }
     }
 
@@ -11735,7 +11735,7 @@ pub mod types {
 
     impl UserCreate {
         pub fn builder() -> builder::UserCreate {
-            builder::UserCreate::default()
+            Default::default()
         }
     }
 
@@ -11937,7 +11937,7 @@ pub mod types {
 
     impl UserResultsPage {
         pub fn builder() -> builder::UserResultsPage {
-            builder::UserResultsPage::default()
+            Default::default()
         }
     }
 
@@ -11978,7 +11978,7 @@ pub mod types {
 
     impl UsernamePasswordCredentials {
         pub fn builder() -> builder::UsernamePasswordCredentials {
-            builder::UsernamePasswordCredentials::default()
+            Default::default()
         }
     }
 
@@ -12018,7 +12018,7 @@ pub mod types {
 
     impl VersionRange {
         pub fn builder() -> builder::VersionRange {
-            builder::VersionRange::default()
+            Default::default()
         }
     }
 
@@ -12129,7 +12129,7 @@ pub mod types {
 
     impl Vpc {
         pub fn builder() -> builder::Vpc {
-            builder::Vpc::default()
+            Default::default()
         }
     }
 
@@ -12193,7 +12193,7 @@ pub mod types {
 
     impl VpcCreate {
         pub fn builder() -> builder::VpcCreate {
-            builder::VpcCreate::default()
+            Default::default()
         }
     }
 
@@ -12337,7 +12337,7 @@ pub mod types {
 
     impl VpcFirewallRule {
         pub fn builder() -> builder::VpcFirewallRule {
-            builder::VpcFirewallRule::default()
+            Default::default()
         }
     }
 
@@ -12548,7 +12548,7 @@ pub mod types {
 
     impl VpcFirewallRuleFilter {
         pub fn builder() -> builder::VpcFirewallRuleFilter {
-            builder::VpcFirewallRuleFilter::default()
+            Default::default()
         }
     }
 
@@ -13099,7 +13099,7 @@ pub mod types {
 
     impl VpcFirewallRuleUpdate {
         pub fn builder() -> builder::VpcFirewallRuleUpdate {
-            builder::VpcFirewallRuleUpdate::default()
+            Default::default()
         }
     }
 
@@ -13141,7 +13141,7 @@ pub mod types {
 
     impl VpcFirewallRuleUpdateParams {
         pub fn builder() -> builder::VpcFirewallRuleUpdateParams {
-            builder::VpcFirewallRuleUpdateParams::default()
+            Default::default()
         }
     }
 
@@ -13180,7 +13180,7 @@ pub mod types {
 
     impl VpcFirewallRules {
         pub fn builder() -> builder::VpcFirewallRules {
-            builder::VpcFirewallRules::default()
+            Default::default()
         }
     }
 
@@ -13231,7 +13231,7 @@ pub mod types {
 
     impl VpcResultsPage {
         pub fn builder() -> builder::VpcResultsPage {
-            builder::VpcResultsPage::default()
+            Default::default()
         }
     }
 
@@ -13319,7 +13319,7 @@ pub mod types {
 
     impl VpcRouter {
         pub fn builder() -> builder::VpcRouter {
-            builder::VpcRouter::default()
+            Default::default()
         }
     }
 
@@ -13362,7 +13362,7 @@ pub mod types {
 
     impl VpcRouterCreate {
         pub fn builder() -> builder::VpcRouterCreate {
-            builder::VpcRouterCreate::default()
+            Default::default()
         }
     }
 
@@ -13482,7 +13482,7 @@ pub mod types {
 
     impl VpcRouterResultsPage {
         pub fn builder() -> builder::VpcRouterResultsPage {
-            builder::VpcRouterResultsPage::default()
+            Default::default()
         }
     }
 
@@ -13530,7 +13530,7 @@ pub mod types {
 
     impl VpcRouterUpdate {
         pub fn builder() -> builder::VpcRouterUpdate {
-            builder::VpcRouterUpdate::default()
+            Default::default()
         }
     }
 
@@ -13636,7 +13636,7 @@ pub mod types {
 
     impl VpcSubnet {
         pub fn builder() -> builder::VpcSubnet {
-            builder::VpcSubnet::default()
+            Default::default()
         }
     }
 
@@ -13713,7 +13713,7 @@ pub mod types {
 
     impl VpcSubnetCreate {
         pub fn builder() -> builder::VpcSubnetCreate {
-            builder::VpcSubnetCreate::default()
+            Default::default()
         }
     }
 
@@ -13764,7 +13764,7 @@ pub mod types {
 
     impl VpcSubnetResultsPage {
         pub fn builder() -> builder::VpcSubnetResultsPage {
-            builder::VpcSubnetResultsPage::default()
+            Default::default()
         }
     }
 
@@ -13812,7 +13812,7 @@ pub mod types {
 
     impl VpcSubnetUpdate {
         pub fn builder() -> builder::VpcSubnetUpdate {
-            builder::VpcSubnetUpdate::default()
+            Default::default()
         }
     }
 
@@ -13867,7 +13867,7 @@ pub mod types {
 
     impl VpcUpdate {
         pub fn builder() -> builder::VpcUpdate {
-            builder::VpcUpdate::default()
+            Default::default()
         }
     }
 
