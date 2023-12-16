@@ -16,9 +16,16 @@
 * Improve breadth of schema support (#592)
 * Various changes to avoid name collisions (#599)
 * Support for text/plain and text/x-markdown body content types (#593)
-* Upgrade to openapiv3 v2.0.0
+* Upgrade to `openapiv3` v2.0.0
+* Various type generation changes from `typify` 0.0.15
 
 https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...HEAD[Full list of commits]
+
+== 0.4.1 (released 2023-12-15)
+
+* Fixed an issue with `openapiv3` and `indexmap` dependencies
+
+https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...v0.4.1[Full list of commits]
 
 == 0.4.0 (released 2023-09-25)
 
