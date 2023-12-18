@@ -618,7 +618,8 @@ pub mod types {
     ///  "properties": {
     ///    "bootrom_id": {
     ///      "description": "ID of the bootrom used to initialize this
-    /// Instance.",      "type": "string",
+    /// Instance.",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "description": {
@@ -1145,7 +1146,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "A stable index which is translated by Propolis into a
-    /// PCI BDF, visible to the guest.",  "type": "integer",
+    /// PCI BDF, visible to the guest.",
+    ///  "type": "integer",
     ///  "format": "uint8",
     ///  "minimum": 0.0
     ///}
