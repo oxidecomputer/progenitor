@@ -14,7 +14,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Describes properties that should uniquely identify a
-    /// Gimlet.",  "type": "object",
+    /// Gimlet.",
+    ///  "type": "object",
     ///  "required": [
     ///    "part",
     ///    "revision",
@@ -67,10 +68,12 @@ pub mod types {
     ///  "description": "A type storing a range over `T`.\n\nThis type supports
     /// ranges similar to the `RangeTo`, `Range` and `RangeFrom` types in the
     /// standard library. Those cover `(..end)`, `(start..end)`, and `(start..)`
-    /// respectively.",  "oneOf": [
+    /// respectively.",
+    ///  "oneOf": [
     ///    {
     ///      "description": "A range unbounded below and exclusively above,
-    /// `..end`.",      "type": "object",
+    /// `..end`.",
+    ///      "type": "object",
     ///      "required": [
     ///        "end",
     ///        "type"
@@ -90,7 +93,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "A range bounded inclusively below and exclusively
-    /// above, `start..end`.",      "type": "object",
+    /// above, `start..end`.",
+    ///      "type": "object",
     ///      "required": [
     ///        "end",
     ///        "start",
@@ -115,7 +119,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "A range bounded inclusively below and unbounded
-    /// above, `start..`.",      "type": "object",
+    /// above, `start..`.",
+    ///      "type": "object",
     ///      "required": [
     ///        "start",
     ///        "type"
@@ -171,10 +176,12 @@ pub mod types {
     ///  "description": "A type storing a range over `T`.\n\nThis type supports
     /// ranges similar to the `RangeTo`, `Range` and `RangeFrom` types in the
     /// standard library. Those cover `(..end)`, `(start..end)`, and `(start..)`
-    /// respectively.",  "oneOf": [
+    /// respectively.",
+    ///  "oneOf": [
     ///    {
     ///      "description": "A range unbounded below and exclusively above,
-    /// `..end`.",      "type": "object",
+    /// `..end`.",
+    ///      "type": "object",
     ///      "required": [
     ///        "end",
     ///        "type"
@@ -194,7 +201,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "A range bounded inclusively below and exclusively
-    /// above, `start..end`.",      "type": "object",
+    /// above, `start..end`.",
+    ///      "type": "object",
     ///      "required": [
     ///        "end",
     ///        "start",
@@ -219,7 +227,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "A range bounded inclusively below and unbounded
-    /// above, `start..`.",      "type": "object",
+    /// above, `start..`.",
+    ///      "type": "object",
     ///      "required": [
     ///        "start",
     ///        "type"
@@ -269,7 +278,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Type storing bin edges and a count of samples within
-    /// it.",  "type": "object",
+    /// it.",
+    ///  "type": "object",
     ///  "required": [
     ///    "count",
     ///    "range"
@@ -320,7 +330,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Type storing bin edges and a count of samples within
-    /// it.",  "type": "object",
+    /// it.",
+    ///  "type": "object",
     ///  "required": [
     ///    "count",
     ///    "range"
@@ -440,7 +451,8 @@ pub mod types {
     /// constructor can be infallible, but an i64 constructor can fail (if the
     /// value is negative) and a u64 constructor can fail (if the value is
     /// larger than i64::MAX).  We provide all of these for consumers'
-    /// convenience.",  "type": "integer",
+    /// convenience.",
+    ///  "type": "integer",
     ///  "format": "uint64",
     ///  "minimum": 0.0
     ///}
@@ -530,12 +542,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -684,7 +698,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -737,7 +752,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "time_created": {
@@ -802,7 +818,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -925,7 +942,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "A `Datum` is a single sampled data point from a
-    /// metric.",  "oneOf": [
+    /// metric.",
+    ///  "oneOf": [
     ///    {
     ///      "type": "object",
     ///      "required": [
@@ -1307,11 +1325,13 @@ pub mod types {
     ///  "properties": {
     ///    "private_key": {
     ///      "description": "request signing private key (base64 encoded der
-    /// file)",      "type": "string"
+    /// file)",
+    ///      "type": "string"
     ///    },
     ///    "public_cert": {
     ///      "description": "request signing public certificate (base64 encoded
-    /// der file)",      "type": "string"
+    /// der file)",
+    ///      "type": "string"
     ///    }
     ///  }
     ///}
@@ -1529,7 +1549,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "image_id": {
@@ -1541,7 +1562,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -1621,7 +1643,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Create-time parameters for a
-    /// [`Disk`](omicron_common::api::external::Disk)",  "type": "object",
+    /// [`Disk`](omicron_common::api::external::Disk)",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "disk_source",
@@ -1687,7 +1710,8 @@ pub mod types {
     ///{
     ///  "description": "TODO-v1: Delete this Parameters for the
     /// [`Disk`](omicron_common::api::external::Disk) to be attached or detached
-    /// to an instance",  "type": "object",
+    /// to an instance",
+    ///  "type": "object",
     ///  "required": [
     ///    "name"
     ///  ],
@@ -1873,7 +1897,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -1921,7 +1946,8 @@ pub mod types {
     ///      "properties": {
     ///        "block_size": {
     ///          "description": "size of blocks for this Disk. valid values are:
-    /// 512, 2048, or 4096",          "allOf": [
+    /// 512, 2048, or 4096",
+    ///          "allOf": [
     ///            {
     ///              "$ref": "#/components/schemas/BlockSize"
     ///            }
@@ -2201,7 +2227,8 @@ pub mod types {
     ///  "properties": {
     ///    "name": {
     ///      "description": "The name of the distribution (e.g. \"alpine\" or
-    /// \"ubuntu\")",      "allOf": [
+    /// \"ubuntu\")",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -2209,7 +2236,8 @@ pub mod types {
     ///    },
     ///    "version": {
     ///      "description": "The version of the distribution (e.g. \"3.10\" or
-    /// \"18.04\")",      "type": "string"
+    /// \"18.04\")",
+    ///      "type": "string"
     ///    }
     ///  }
     ///}
@@ -2329,11 +2357,13 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Parameters for creating an external IP address for
-    /// instances.",  "oneOf": [
+    /// instances.",
+    ///  "oneOf": [
     ///    {
     ///      "description": "An IP address providing both inbound and outbound
     /// access. The address is automatically-assigned from the provided IP Pool,
-    /// or all available pools if not specified.",      "type": "object",
+    /// or all available pools if not specified.",
+    ///      "type": "object",
     ///      "required": [
     ///        "type"
     ///      ],
@@ -2397,7 +2427,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -2434,7 +2465,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "The name and type information for a field of a
-    /// timeseries schema.",  "type": "object",
+    /// timeseries schema.",
+    ///  "type": "object",
     ///  "required": [
     ///    "name",
     ///    "source",
@@ -2480,7 +2512,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "The source from which a field is derived, the target or
-    /// metric.",  "type": "string",
+    /// metric.",
+    ///  "type": "string",
     ///  "enum": [
     ///    "target",
     ///    "metric"
@@ -2562,7 +2595,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "The `FieldType` identifies the data type of a target or
-    /// metric field.",  "type": "string",
+    /// metric field.",
+    ///  "type": "string",
     ///  "enum": [
     ///    "string",
     ///    "i64",
@@ -2802,7 +2836,8 @@ pub mod types {
     /// particular resource to a particular identity (user, group, etc.)\n\nThe
     /// resource is not part of this structure.  Rather, [`RoleAssignment`]s are
     /// put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.",  "type": "object",
+    /// resource.",
+    ///  "type": "object",
     ///  "required": [
     ///    "identity_id",
     ///    "identity_type",
@@ -2888,12 +2923,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -3069,7 +3106,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -3172,7 +3210,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -3280,7 +3319,8 @@ pub mod types {
     /// first bin of a histogram is _always_ a `Bin::Range` or a
     /// `Bin::RangeFrom` after construction. In fact, every bin is one of those
     /// variants, the `BinRange::RangeTo` is only provided as a convenience
-    /// during construction.",  "type": "object",
+    /// during construction.",
+    ///  "type": "object",
     ///  "required": [
     ///    "bins",
     ///    "n_samples",
@@ -3403,7 +3443,8 @@ pub mod types {
     /// first bin of a histogram is _always_ a `Bin::Range` or a
     /// `Bin::RangeFrom` after construction. In fact, every bin is one of those
     /// variants, the `BinRange::RangeTo` is only provided as a convenience
-    /// during construction.",  "type": "object",
+    /// during construction.",
+    ///  "type": "object",
     ///  "required": [
     ///    "bins",
     ///    "n_samples",
@@ -3557,12 +3598,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -3639,7 +3682,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -3936,12 +3980,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -4037,7 +4083,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Create-time parameters for an
-    /// [`Image`](crate::external_api::views::Image)",  "type": "object",
+    /// [`Image`](crate::external_api::views::Image)",
+    ///  "type": "object",
     ///  "required": [
     ///    "block_size",
     ///    "description",
@@ -4114,7 +4161,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -4191,8 +4239,9 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "Boot the Alpine ISO that ships with the Propolis
-    /// zone. Intended for development purposes only.",      "type":
-    /// "object",      "required": [
+    /// zone. Intended for development purposes only.",
+    ///      "type": "object",
+    ///      "required": [
     ///        "type"
     ///      ],
     ///      "properties": {
@@ -4257,7 +4306,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "memory": {
@@ -4270,7 +4320,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -4443,7 +4494,8 @@ pub mod types {
     ///    },
     ///    "disks": {
     ///      "description": "The disks to be created or attached for this
-    /// instance.",      "default": [],
+    /// instance.",
+    ///      "default": [],
     ///      "type": "array",
     ///      "items": {
     ///        "$ref": "#/components/schemas/InstanceDiskAttachment"
@@ -4454,7 +4506,8 @@ pub mod types {
     /// instance.\n\nBy default, all instances have outbound connectivity, but
     /// no inbound connectivity. These external addresses can be used to provide
     /// a fixed, known IP address for making inbound connections to the
-    /// instance.",      "default": [],
+    /// instance.",
+    ///      "default": [],
     ///      "type": "array",
     ///      "items": {
     ///        "$ref": "#/components/schemas/ExternalIpCreate"
@@ -4474,25 +4527,29 @@ pub mod types {
     ///    },
     ///    "network_interfaces": {
     ///      "description": "The network interfaces to be created for this
-    /// instance.",      "default": {
+    /// instance.",
+    ///      "default": {
     ///        "type": "default"
     ///      },
     ///      "allOf": [
     ///        {
     ///          "$ref":
-    /// "#/components/schemas/InstanceNetworkInterfaceAttachment"        }
+    /// "#/components/schemas/InstanceNetworkInterfaceAttachment"
+    ///        }
     ///      ]
     ///    },
     ///    "start": {
     ///      "description": "Should this instance be started upon creation; true
-    /// by default.",      "default": true,
+    /// by default.",
+    ///      "default": true,
     ///      "type": "boolean"
     ///    },
     ///    "user_data": {
     ///      "description": "User data for instance initialization systems (such
     /// as cloud-init). Must be a Base64-encoded string, as specified in RFC
     /// 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded
-    /// data.",      "default": "",
+    /// data.",
+    ///      "default": "",
     ///      "type": "string",
     ///      "format": "byte"
     ///    }
@@ -4694,7 +4751,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Describes an attachment of a `NetworkInterface` to an
-    /// `Instance`, at the time the instance is created.",  "oneOf": [
+    /// `Instance`, at the time the instance is created.",
+    ///  "oneOf": [
     ///    {
     ///      "description": "Create one or more `NetworkInterface`s for the
     /// `Instance`.\n\nIf more than one interface is provided, then the first
@@ -4723,7 +4781,8 @@ pub mod types {
     ///      "description": "The default networking configuration for an
     /// instance is to create a single primary interface with an
     /// automatically-assigned IP address. The IP will be pulled from the
-    /// Project's default VPC / VPC Subnet.",      "type": "object",
+    /// Project's default VPC / VPC Subnet.",
+    ///      "type": "object",
     ///      "required": [
     ///        "type"
     ///      ],
@@ -4738,7 +4797,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "No network interfaces at all will be created for
-    /// the instance.",      "type": "object",
+    /// the instance.",
+    ///      "type": "object",
     ///      "required": [
     ///        "type"
     ///      ],
@@ -4803,7 +4863,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -4849,8 +4910,9 @@ pub mod types {
     ///    "data": {
     ///      "description": "The bytes starting from the requested offset up to
     /// either the end of the buffer or the request's `max_bytes`. Provided as a
-    /// u8 array rather than a string, as it may not be UTF-8.",      "type"
-    /// : "array",      "items": {
+    /// u8 array rather than a string, as it may not be UTF-8.",
+    ///      "type": "array",
+    ///      "items": {
     ///        "type": "integer",
     ///        "format": "uint8",
     ///        "minimum": 0.0
@@ -4859,7 +4921,8 @@ pub mod types {
     ///    "last_byte_offset": {
     ///      "description": "The absolute offset since boot (suitable for use as
     /// `byte_offset` in a subsequent request) of the last byte returned in
-    /// `data`.",      "type": "integer",
+    /// `data`.",
+    ///      "type": "integer",
     ///      "format": "uint64",
     ///      "minimum": 0.0
     ///    }
@@ -4902,7 +4965,8 @@ pub mod types {
     ///  "description": "Running state of an Instance (primarily: booted or
     /// stopped)\n\nThis typically reflects whether it's starting, running,
     /// stopping, or stopped, but also includes states related to the Instance's
-    /// lifecycle",  "oneOf": [
+    /// lifecycle",
+    ///  "oneOf": [
     ///    {
     ///      "description": "The instance is being created.",
     ///      "type": "string",
@@ -4926,7 +4990,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "The instance has been requested to stop and a
-    /// transition to \"Stopped\" is imminent.",      "type": "string",
+    /// transition to \"Stopped\" is imminent.",
+    ///      "type": "string",
     ///      "enum": [
     ///        "stopping"
     ///      ]
@@ -4941,7 +5006,8 @@ pub mod types {
     ///    {
     ///      "description": "The instance is in the process of rebooting - it
     /// will remain in the \"rebooting\" state until the VM is starting once
-    /// more.",      "type": "string",
+    /// more.",
+    ///      "type": "string",
     ///      "enum": [
     ///        "rebooting"
     ///      ]
@@ -4955,7 +5021,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "The instance is attempting to recover from a
-    /// failure.",      "type": "string",
+    /// failure.",
+    ///      "type": "string",
     ///      "enum": [
     ///        "repairing"
     ///      ]
@@ -5276,7 +5343,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Identity-related metadata that's included in nearly all
-    /// public API objects",  "type": "object",
+    /// public API objects",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "id",
@@ -5291,12 +5359,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -5351,7 +5421,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Create-time parameters for an IP Pool.\n\nSee
-    /// [`IpPool`](crate::external_api::views::IpPool)",  "type": "object",
+    /// [`IpPool`](crate::external_api::views::IpPool)",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "name"
@@ -5453,7 +5524,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -5504,7 +5576,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -5647,7 +5720,8 @@ pub mod types {
     ///  "pattern":
     /// "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.
     /// ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/
-    /// ([8-9]|1[0-9]|2[0-9]|3[0-2])$" }
+    /// ([8-9]|1[0-9]|2[0-9]|3[0-2])$"
+    ///}
     /// ```
     /// </details>
     #[derive(
@@ -5736,7 +5810,8 @@ pub mod types {
     ///{
     ///  "description": "A non-decreasing IPv4 address range, inclusive of both
     /// ends.\n\nThe first address must be less than or equal to the last
-    /// address.",  "type": "object",
+    /// address.",
+    ///  "type": "object",
     ///  "required": [
     ///    "first",
     ///    "last"
@@ -5787,7 +5862,7 @@ pub mod types {
     ///  "pattern":
     /// "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,
     /// 4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$"
-    /// }
+    ///}
     /// ```
     /// </details>
     #[derive(
@@ -5875,7 +5950,8 @@ pub mod types {
     ///{
     ///  "description": "A non-decreasing IPv6 address range, inclusive of both
     /// ends.\n\nThe first address must be less than or equal to the last
-    /// address.",  "type": "object",
+    /// address.",
+    ///  "type": "object",
     ///  "required": [
     ///    "first",
     ///    "last"
@@ -5920,7 +5996,8 @@ pub mod types {
     ///{
     ///  "title": "A range of IP ports",
     ///  "description": "An inclusive-inclusive range of IP ports. The second
-    /// port may be omitted to represent a single port",  "examples": [
+    /// port may be omitted to represent a single port",
+    ///  "examples": [
     ///    "22"
     ///  ],
     ///  "type": "string",
@@ -6105,7 +6182,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "A `Measurement` is a timestamped datum from a single
-    /// metric",  "type": "object",
+    /// metric",
+    ///  "type": "object",
     ///  "required": [
     ///    "datum",
     ///    "timestamp"
@@ -6161,7 +6239,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -6203,11 +6282,13 @@ pub mod types {
     ///  "description": "Names must begin with a lower case ASCII letter, be
     /// composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and
     /// '-', and may not end with a '-'. Names cannot be a UUID though they may
-    /// contain a UUID.",  "type": "string",
+    /// contain a UUID.",
+    ///  "type": "string",
     ///  "maxLength": 63,
     ///  "pattern":
     /// "^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*
-    /// [a-zA-Z0-9]$" }
+    /// [a-zA-Z0-9]$"
+    ///}
     /// ```
     /// </details>
     #[derive(
@@ -6379,7 +6460,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Supported set of sort modes for scanning by name or
-    /// id",  "oneOf": [
+    /// id",
+    ///  "oneOf": [
     ///    {
     ///      "description": "sort in increasing order of \"name\"",
     ///      "type": "string",
@@ -6572,7 +6654,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "A `NetworkInterface` represents a virtual network
-    /// interface device.",  "type": "object",
+    /// interface device.",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "id",
@@ -6593,7 +6676,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "instance_id": {
@@ -6616,7 +6700,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -6624,7 +6709,8 @@ pub mod types {
     ///    },
     ///    "primary": {
     ///      "description": "True if this interface is the primary for the
-    /// instance to which it's attached.",      "type": "boolean"
+    /// instance to which it's attached.",
+    ///      "type": "boolean"
     ///    },
     ///    "subnet_id": {
     ///      "description": "The subnet to which the interface belongs.",
@@ -6710,7 +6796,8 @@ pub mod types {
     ///    },
     ///    "ip": {
     ///      "description": "The IP address for the interface. One will be
-    /// auto-assigned if not provided.",      "type": [
+    /// auto-assigned if not provided.",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ],
@@ -6786,7 +6873,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -6853,7 +6941,8 @@ pub mod types {
     /// interface will be on a distinct subnet from the previous primary
     /// interface.\n\nNote that this can only be used to select a new primary
     /// interface for an instance. Requests to change the primary interface into
-    /// a secondary will return an error.",      "default": false,
+    /// a secondary will return an error.",
+    ///      "default": false,
     ///      "type": "boolean"
     ///    }
     ///  }
@@ -6985,12 +7074,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -7100,7 +7191,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -7280,7 +7372,8 @@ pub mod types {
     /// particular resource to a particular identity (user, group, etc.)\n\nThe
     /// resource is not part of this structure.  Rather, [`RoleAssignment`]s are
     /// put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.",  "type": "object",
+    /// resource.",
+    ///  "type": "object",
     ///  "required": [
     ///    "identity_id",
     ///    "identity_type",
@@ -7469,7 +7562,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "model": {
@@ -7553,7 +7647,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -7687,12 +7782,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -7751,8 +7848,9 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Create-time parameters for a
-    /// [`Project`](crate::external_api::views::Project)",  "type": "object"
-    /// ,  "required": [
+    /// [`Project`](crate::external_api::views::Project)",
+    ///  "type": "object",
+    ///  "required": [
     ///    "description",
     ///    "name"
     ///  ],
@@ -7806,7 +7904,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -7986,7 +8085,8 @@ pub mod types {
     /// particular resource to a particular identity (user, group, etc.)\n\nThe
     /// resource is not part of this structure.  Rather, [`RoleAssignment`]s are
     /// put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.",  "type": "object",
+    /// resource.",
+    ///  "type": "object",
     ///  "required": [
     ///    "identity_id",
     ///    "identity_type",
@@ -8034,8 +8134,9 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Updateable properties of a
-    /// [`Project`](crate::external_api::views::Project)",  "type": "object"
-    /// ,  "properties": {
+    /// [`Project`](crate::external_api::views::Project)",
+    ///  "type": "object",
+    ///  "properties": {
     ///    "description": {
     ///      "type": [
     ///        "string",
@@ -8089,7 +8190,8 @@ pub mod types {
     ///  "properties": {
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "time_created": {
@@ -8149,7 +8251,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -8228,7 +8331,8 @@ pub mod types {
     ///{
     ///  "title": "A name for a built-in role",
     ///  "description": "Role names consist of two string components separated
-    /// by dot (\".\").",  "type": "string",
+    /// by dot (\".\").",
+    ///  "type": "string",
     ///  "maxLength": 63,
     ///  "pattern": "[a-z-]+\\.[a-z-]+"
     ///}
@@ -8327,7 +8431,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -8372,10 +8477,12 @@ pub mod types {
     /// routing rule, on the destination of that traffic.\n\nWhen traffic is to
     /// be sent to a destination that is within a given `RouteDestination`, the
     /// corresponding [`RouterRoute`] applies, and traffic will be forward to
-    /// the [`RouteTarget`] for that rule.",  "oneOf": [
+    /// the [`RouteTarget`] for that rule.",
+    ///  "oneOf": [
     ///    {
     ///      "description": "Route applies to traffic destined for a specific IP
-    /// address",      "type": "object",
+    /// address",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -8395,7 +8502,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "Route applies to traffic destined for a specific IP
-    /// subnet",      "type": "object",
+    /// subnet",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -8414,7 +8522,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "Route applies to traffic destined for the given
-    /// VPC.",      "type": "object",
+    /// VPC.",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -8497,7 +8606,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "A `RouteTarget` describes the possible locations that
-    /// traffic matching a route destination can be sent.",  "oneOf": [
+    /// traffic matching a route destination can be sent.",
+    ///  "oneOf": [
     ///    {
     ///      "description": "Forward traffic to a particular IP address.",
     ///      "type": "object",
@@ -8638,7 +8748,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "A route defines a rule that governs where traffic
-    /// should be sent based on its destination.",  "type": "object",
+    /// should be sent based on its destination.",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "destination",
@@ -8660,12 +8771,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "kind": {
     ///      "description": "Describes the kind of router. Set at creation.
-    /// `read-only`",      "allOf": [
+    /// `read-only`",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/RouterRouteKind"
     ///        }
@@ -8673,7 +8786,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -8799,15 +8913,17 @@ pub mod types {
     ///    {
     ///      "description": "Determines the default destination of traffic, such
     /// as whether it goes to the internet or not.\n\n`Destination: An Internet
-    /// Gateway` `Modifiable: true`",      "type": "string",
+    /// Gateway` `Modifiable: true`",
+    ///      "type": "string",
     ///      "enum": [
     ///        "default"
     ///      ]
     ///    },
     ///    {
     ///      "description": "Automatically added for each VPC Subnet in the
-    /// VPC\n\n`Destination: A VPC Subnet` `Modifiable: false`",      "type"
-    /// : "string",      "enum": [
+    /// VPC\n\n`Destination: A VPC Subnet` `Modifiable: false`",
+    ///      "type": "string",
+    ///      "enum": [
     ///        "vpc_subnet"
     ///      ]
     ///    },
@@ -8940,7 +9056,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -9206,7 +9323,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -9325,7 +9443,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Identity-related metadata that's included in nearly all
-    /// public API objects",  "type": "object",
+    /// public API objects",
+    ///  "type": "object",
     ///  "required": [
     ///    "acs_url",
     ///    "description",
@@ -9341,7 +9460,8 @@ pub mod types {
     ///  "properties": {
     ///    "acs_url": {
     ///      "description": "service provider endpoint where the response will
-    /// be sent",      "type": "string"
+    /// be sent",
+    ///      "type": "string"
     ///    },
     ///    "description": {
     ///      "description": "human-readable free-form text about a resource",
@@ -9349,7 +9469,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "idp_entity_id": {
@@ -9358,7 +9479,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -9366,14 +9488,16 @@ pub mod types {
     ///    },
     ///    "public_cert": {
     ///      "description": "optional request signing public certificate (base64
-    /// encoded der file)",      "type": [
+    /// encoded der file)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
     ///    },
     ///    "slo_url": {
     ///      "description": "service provider endpoint where the idp should send
-    /// log out requests",      "type": "string"
+    /// log out requests",
+    ///      "type": "string"
     ///    },
     ///    "sp_client_id": {
     ///      "description": "sp's client id",
@@ -9381,7 +9505,8 @@ pub mod types {
     ///    },
     ///    "technical_contact_email": {
     ///      "description": "customer's technical contact for saml
-    /// configuration",      "type": "string"
+    /// configuration",
+    ///      "type": "string"
     ///    },
     ///    "time_created": {
     ///      "description": "timestamp when this resource was created",
@@ -9458,7 +9583,8 @@ pub mod types {
     ///  "properties": {
     ///    "acs_url": {
     ///      "description": "service provider endpoint where the response will
-    /// be sent",      "type": "string"
+    /// be sent",
+    ///      "type": "string"
     ///    },
     ///    "description": {
     ///      "type": "string"
@@ -9478,7 +9604,8 @@ pub mod types {
     ///    },
     ///    "idp_metadata_source": {
     ///      "description": "the source of an identity provider metadata
-    /// descriptor",      "allOf": [
+    /// descriptor",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/IdpMetadataSource"
     ///        }
@@ -9497,7 +9624,8 @@ pub mod types {
     ///    },
     ///    "slo_url": {
     ///      "description": "service provider endpoint where the idp should send
-    /// log out requests",      "type": "string"
+    /// log out requests",
+    ///      "type": "string"
     ///    },
     ///    "sp_client_id": {
     ///      "description": "sp's client id",
@@ -9505,7 +9633,8 @@ pub mod types {
     ///    },
     ///    "technical_contact_email": {
     ///      "description": "customer's technical contact for saml
-    /// configuration",      "type": "string"
+    /// configuration",
+    ///      "type": "string"
     ///    }
     ///  }
     ///}
@@ -9639,7 +9768,8 @@ pub mod types {
     ///  "oneOf": [
     ///    {
     ///      "description": "This certificate is intended for access to the
-    /// external API.",      "type": "string",
+    /// external API.",
+    ///      "type": "string",
     ///      "enum": [
     ///        "external_api"
     ///      ]
@@ -9740,7 +9870,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "identity_mode": {
@@ -9753,7 +9884,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -9811,7 +9943,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Create-time parameters for a
-    /// [`Silo`](crate::external_api::views::Silo)",  "type": "object",
+    /// [`Silo`](crate::external_api::views::Silo)",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "discoverable",
@@ -9826,7 +9959,8 @@ pub mod types {
     /// further initialize the Silo.\n\nNote that if configuring a SAML based
     /// identity provider, group_attribute_name must be set for users to be
     /// considered part of a group. See [`SamlIdentityProviderCreate`] for more
-    /// information.",      "type": [
+    /// information.",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -9885,12 +10019,14 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Describes how identities are managed and users are
-    /// authenticated in this Silo",  "oneOf": [
+    /// authenticated in this Silo",
+    ///  "oneOf": [
     ///    {
     ///      "description": "Users are authenticated with SAML using an external
     /// authentication provider.  The system updates information about users and
     /// groups only during successful authentication (i.e,. \"JIT provisioning\"
-    /// of users and groups).",      "type": "string",
+    /// of users and groups).",
+    ///      "type": "string",
     ///      "enum": [
     ///        "saml_jit"
     ///      ]
@@ -9898,7 +10034,8 @@ pub mod types {
     ///    {
     ///      "description": "The system is the source of truth about users.
     /// There is no linkage to an external authentication provider or identity
-    /// provider.",      "type": "string",
+    /// provider.",
+    ///      "type": "string",
     ///      "enum": [
     ///        "local_only"
     ///      ]
@@ -10001,7 +10138,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -10181,7 +10319,8 @@ pub mod types {
     /// particular resource to a particular identity (user, group, etc.)\n\nThe
     /// resource is not part of this structure.  Rather, [`RoleAssignment`]s are
     /// put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.",  "type": "object",
+    /// resource.",
+    ///  "type": "object",
     ///  "required": [
     ///    "identity_id",
     ///    "identity_type",
@@ -10242,7 +10381,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "service_address": {
@@ -10307,7 +10447,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -10367,12 +10508,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -10507,7 +10650,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -10687,12 +10831,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -10700,7 +10846,8 @@ pub mod types {
     ///    },
     ///    "public_key": {
     ///      "description": "SSH public key, e.g., `\"ssh-ed25519
-    /// AAAAC3NzaC...\"`",      "type": "string"
+    /// AAAAC3NzaC...\"`",
+    ///      "type": "string"
     ///    },
     ///    "silo_user_id": {
     ///      "description": "The user to whom this key belongs",
@@ -10759,7 +10906,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Create-time parameters for an
-    /// [`SshKey`](crate::external_api::views::SshKey)",  "type": "object",
+    /// [`SshKey`](crate::external_api::views::SshKey)",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "name",
@@ -10774,7 +10922,8 @@ pub mod types {
     ///    },
     ///    "public_key": {
     ///      "description": "SSH public key, e.g., `\"ssh-ed25519
-    /// AAAAC3NzaC...\"`",      "type": "string"
+    /// AAAAC3NzaC...\"`",
+    ///      "type": "string"
     ///    }
     ///  }
     ///}
@@ -10821,7 +10970,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -10956,7 +11106,8 @@ pub mod types {
     ///  "properties": {
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "time_created": {
@@ -11020,7 +11171,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -11140,7 +11292,7 @@ pub mod types {
     ///  "type": "string",
     ///  "pattern":
     /// "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)"
-    /// }
+    ///}
     /// ```
     /// </details>
     #[derive(
@@ -11227,7 +11379,8 @@ pub mod types {
     ///{
     ///  "description": "The schema for a timeseries.\n\nThis includes the name
     /// of the timeseries, as well as the datum type of its metric and the
-    /// schema for each field.",  "type": "object",
+    /// schema for each field.",
+    ///  "type": "object",
     ///  "required": [
     ///    "created",
     ///    "datum_type",
@@ -11296,7 +11449,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -11346,7 +11500,8 @@ pub mod types {
     ///  "properties": {
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "status": {
@@ -11414,7 +11569,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -11580,7 +11736,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "status": {
@@ -11654,7 +11811,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -11889,12 +12047,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -11961,7 +12121,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -11998,7 +12159,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Create-time parameters for a
-    /// [`User`](crate::external_api::views::User)",  "type": "object",
+    /// [`User`](crate::external_api::views::User)",
+    ///  "type": "object",
     ///  "required": [
     ///    "external_id",
     ///    "password"
@@ -12056,11 +12218,13 @@ pub mod types {
     ///  "description": "Names must begin with a lower case ASCII letter, be
     /// composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and
     /// '-', and may not end with a '-'. Names cannot be a UUID though they may
-    /// contain a UUID.",  "type": "string",
+    /// contain a UUID.",
+    ///  "type": "string",
     ///  "maxLength": 63,
     ///  "pattern":
     /// "^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*
-    /// [a-zA-Z0-9]$" }
+    /// [a-zA-Z0-9]$"
+    ///}
     /// ```
     /// </details>
     #[derive(
@@ -12158,7 +12322,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "Invalidates any current password (disabling
-    /// password authentication)",      "type": "object",
+    /// password authentication)",
+    ///      "type": "object",
     ///      "required": [
     ///        "user_password_value"
     ///      ],
@@ -12218,7 +12383,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -12363,12 +12529,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "ipv6_prefix": {
     ///      "description": "The unique local IPv6 address range for subnets in
-    /// this VPC",      "allOf": [
+    /// this VPC",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Ipv6Net"
     ///        }
@@ -12376,7 +12544,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -12389,7 +12558,8 @@ pub mod types {
     ///    },
     ///    "system_router_id": {
     ///      "description": "id for the system router where subnet default
-    /// routes are registered",      "type": "string",
+    /// routes are registered",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "time_created": {
@@ -12447,7 +12617,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Create-time parameters for a
-    /// [`Vpc`](crate::external_api::views::Vpc)",  "type": "object",
+    /// [`Vpc`](crate::external_api::views::Vpc)",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "dns_name",
@@ -12464,7 +12635,8 @@ pub mod types {
     ///      "description": "The IPv6 prefix for this VPC.\n\nAll IPv6 subnets
     /// created from this VPC must be taken from this range, which sould be a
     /// Unique Local Address in the range `fd00::/48`. The default VPC Subnet
-    /// will have the first `/64` range from this prefix.",      "allOf": [
+    /// will have the first `/64` range from this prefix.",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Ipv6Net"
     ///        }
@@ -12529,7 +12701,8 @@ pub mod types {
     ///  "properties": {
     ///    "action": {
     ///      "description": "whether traffic matching the rule should be allowed
-    /// or dropped",      "allOf": [
+    /// or dropped",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/VpcFirewallRuleAction"
     ///        }
@@ -12541,7 +12714,8 @@ pub mod types {
     ///    },
     ///    "direction": {
     ///      "description": "whether this rule is for incoming or outgoing
-    /// traffic",      "allOf": [
+    /// traffic",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/VpcFirewallRuleDirection"
     ///        }
@@ -12557,12 +12731,14 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -12584,7 +12760,8 @@ pub mod types {
     ///    },
     ///    "targets": {
     ///      "description": "list of sets of instances that the rule applies
-    /// to",      "type": "array",
+    /// to",
+    ///      "type": "array",
     ///      "items": {
     ///        "$ref": "#/components/schemas/VpcFirewallRuleTarget"
     ///      }
@@ -12825,7 +13002,8 @@ pub mod types {
     ///  "properties": {
     ///    "hosts": {
     ///      "description": "If present, the sources (if incoming) or
-    /// destinations (if outgoing) this rule applies to.",      "type": [
+    /// destinations (if outgoing) this rule applies to.",
+    ///      "type": [
     ///        "array",
     ///        "null"
     ///      ],
@@ -12835,7 +13013,8 @@ pub mod types {
     ///    },
     ///    "ports": {
     ///      "description": "If present, the destination ports this rule applies
-    /// to.",      "type": [
+    /// to.",
+    ///      "type": [
     ///        "array",
     ///        "null"
     ///      ],
@@ -12845,7 +13024,8 @@ pub mod types {
     ///    },
     ///    "protocols": {
     ///      "description": "If present, the networking protocols this rule
-    /// applies to.",      "type": [
+    /// applies to.",
+    ///      "type": [
     ///        "array",
     ///        "null"
     ///      ],
@@ -12895,7 +13075,8 @@ pub mod types {
     ///  "oneOf": [
     ///    {
     ///      "description": "The rule applies to traffic from/to all instances
-    /// in the VPC",      "type": "object",
+    /// in the VPC",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -12914,7 +13095,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "The rule applies to traffic from/to all instances
-    /// in the VPC Subnet",      "type": "object",
+    /// in the VPC Subnet",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -12933,7 +13115,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "The rule applies to traffic from/to this specific
-    /// instance",      "type": "object",
+    /// instance",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -12952,7 +13135,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "The rule applies to traffic from/to a specific IP
-    /// address",      "type": "object",
+    /// address",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -12972,7 +13156,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "The rule applies to traffic from/to a specific IP
-    /// subnet",      "type": "object",
+    /// subnet",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -13038,7 +13223,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "The protocols that may be specified in a firewall
-    /// rule's filter",  "type": "string",
+    /// rule's filter",
+    ///  "type": "string",
     ///  "enum": [
     ///    "TCP",
     ///    "UDP",
@@ -13207,7 +13393,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "A `VpcFirewallRuleTarget` is used to specify the set of
-    /// [`Instance`]s to which a firewall rule applies.",  "oneOf": [
+    /// [`Instance`]s to which a firewall rule applies.",
+    ///  "oneOf": [
     ///    {
     ///      "description": "The rule applies to all instances in the VPC",
     ///      "type": "object",
@@ -13229,7 +13416,8 @@ pub mod types {
     ///    },
     ///    {
     ///      "description": "The rule applies to all instances in the VPC
-    /// Subnet",      "type": "object",
+    /// Subnet",
+    ///      "type": "object",
     ///      "required": [
     ///        "type",
     ///        "value"
@@ -13367,7 +13555,8 @@ pub mod types {
     ///  "properties": {
     ///    "action": {
     ///      "description": "whether traffic matching the rule should be allowed
-    /// or dropped",      "allOf": [
+    /// or dropped",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/VpcFirewallRuleAction"
     ///        }
@@ -13379,7 +13568,8 @@ pub mod types {
     ///    },
     ///    "direction": {
     ///      "description": "whether this rule is for incoming or outgoing
-    /// traffic",      "allOf": [
+    /// traffic",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/VpcFirewallRuleDirection"
     ///        }
@@ -13417,7 +13607,8 @@ pub mod types {
     ///    },
     ///    "targets": {
     ///      "description": "list of sets of instances that the rule applies
-    /// to",      "type": "array",
+    /// to",
+    ///      "type": "array",
     ///      "items": {
     ///        "$ref": "#/components/schemas/VpcFirewallRuleTarget"
     ///      }
@@ -13468,7 +13659,8 @@ pub mod types {
     ///{
     ///  "description": "Updateable properties of a `Vpc`'s firewall Note that
     /// VpcFirewallRules are implicitly created along with a Vpc, so there is no
-    /// explicit creation.",  "type": "object",
+    /// explicit creation.",
+    ///  "type": "object",
     ///  "required": [
     ///    "rules"
     ///  ],
@@ -13560,7 +13752,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -13616,7 +13809,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "kind": {
@@ -13624,7 +13818,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -13823,7 +14018,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -13911,7 +14107,8 @@ pub mod types {
     ///{
     ///  "description": "A VPC subnet represents a logical grouping for
     /// instances that allows network traffic between them, within a IPv4
-    /// subnetwork or optionall an IPv6 subnetwork.",  "type": "object",
+    /// subnetwork or optionall an IPv6 subnetwork.",
+    ///  "type": "object",
     ///  "required": [
     ///    "description",
     ///    "id",
@@ -13929,7 +14126,8 @@ pub mod types {
     ///    },
     ///    "id": {
     ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",      "type": "string",
+    /// each resource",
+    ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "ipv4_block": {
@@ -13950,7 +14148,8 @@ pub mod types {
     ///    },
     ///    "name": {
     ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",      "allOf": [
+    /// each resource",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
     ///        }
@@ -14029,7 +14228,8 @@ pub mod types {
     ///    "ipv4_block": {
     ///      "description": "The IPv4 address range for this subnet.\n\nIt must
     /// be allocated from an RFC 1918 private address range, and must not
-    /// overlap with any other existing subnet in the VPC.",      "allOf": [
+    /// overlap with any other existing subnet in the VPC.",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Ipv4Net"
     ///        }
@@ -14040,7 +14240,8 @@ pub mod types {
     /// be allocated from the RFC 4193 Unique Local Address range, with the
     /// prefix equal to the parent VPC's prefix. A random `/64` block will be
     /// assigned if one is not provided. It must not overlap with any existing
-    /// subnet in the VPC.",      "allOf": [
+    /// subnet in the VPC.",
+    ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Ipv6Net"
     ///        }
@@ -14105,7 +14306,8 @@ pub mod types {
     ///    },
     ///    "next_page": {
     ///      "description": "token used to fetch the next page of results (if
-    /// any)",      "type": [
+    /// any)",
+    ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
@@ -14190,7 +14392,8 @@ pub mod types {
     /// ```json
     ///{
     ///  "description": "Updateable properties of a
-    /// [`Vpc`](crate::external_api::views::Vpc)",  "type": "object",
+    /// [`Vpc`](crate::external_api::views::Vpc)",
+    ///  "type": "object",
     ///  "properties": {
     ///    "description": {
     ///      "type": [
