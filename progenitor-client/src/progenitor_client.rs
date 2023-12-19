@@ -6,7 +6,7 @@
 
 use std::ops::{Deref, DerefMut};
 
-pub use bytes::Bytes;
+use bytes::Bytes;
 use futures_core::Stream;
 use reqwest::RequestBuilder;
 use serde::{de::DeserializeOwned, Serialize};
@@ -68,10 +68,7 @@ impl<T: DeserializeOwned> ResponseValue<T> {
     ) -> Result<Self, Error<E>> {
         let status = response.status();
         let headers = response.headers().clone();
-        let full = response
-            .bytes()
-            .await
-            .map_err(Error::InvalidResponseBytes)?;
+        let full = response.bytes().await.map_err(Error::ResponseBodyError)?;
         let inner = serde_json::from_slice(&full)
             .map_err(|e| Error::InvalidResponsePayload(full, e))?;
 
@@ -237,14 +234,14 @@ pub enum Error<E = ()> {
     /// A server error either due to the data, or with the connection.
     CommunicationError(reqwest::Error),
 
-    /// A documented, expected error response.
-    ErrorResponse(ResponseValue<E>),
-
     /// An expected response when upgrading connection.
     InvalidUpgrade(reqwest::Error),
 
-    /// An expected response code whose deserialization failed.
-    InvalidResponseBytes(reqwest::Error),
+    /// A documented, expected error response.
+    ErrorResponse(ResponseValue<E>),
+
+    /// Encountered an error reading the body for an expected response.
+    ResponseBodyError(reqwest::Error),
 
     /// An expected response code whose deserialization failed.
     InvalidResponsePayload(Bytes, serde_json::Error),
@@ -262,7 +259,7 @@ impl<E> Error<E> {
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
             Error::InvalidUpgrade(e) => e.status(),
-            Error::InvalidResponseBytes(e) => e.status(),
+            Error::ResponseBodyError(e) => e.status(),
             Error::InvalidResponsePayload(_, _) => None,
             Error::UnexpectedResponse(r) => Some(r.status()),
         }
@@ -286,7 +283,7 @@ impl<E> Error<E> {
                 headers,
             }),
             Error::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
-            Error::InvalidResponseBytes(e) => Error::InvalidResponseBytes(e),
+            Error::ResponseBodyError(e) => Error::ResponseBodyError(e),
             Error::InvalidResponsePayload(b, e) => {
                 Error::InvalidResponsePayload(b, e)
             }
@@ -326,11 +323,11 @@ where
             Error::InvalidUpgrade(e) => {
                 write!(f, "Invalid Response Upgrade: {}", e)
             }
-            Error::InvalidResponseBytes(e) => {
+            Error::ResponseBodyError(e) => {
                 write!(f, "Invalid Response Body Bytes: {}", e)
             }
-            Error::InvalidResponsePayload(_b, e) => {
-                write!(f, "Invalid Response Payload: {}", e)
+            Error::InvalidResponsePayload(b, e) => {
+                write!(f, "Invalid Response Payload ({:?}): {}", b, e)
             }
             Error::UnexpectedResponse(r) => {
                 write!(f, "Unexpected Response: {:?}", r)
@@ -382,7 +379,7 @@ where
         match self {
             Error::CommunicationError(e) => Some(e),
             Error::InvalidUpgrade(e) => Some(e),
-            Error::InvalidResponseBytes(e) => Some(e),
+            Error::ResponseBodyError(e) => Some(e),
             Error::InvalidResponsePayload(_b, e) => Some(e),
             _ => None,
         }
