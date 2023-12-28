@@ -58,6 +58,7 @@ pub struct GenerationSettings {
     patch: HashMap<String, TypePatch>,
     replace: HashMap<String, (String, Vec<TypeImpl>)>,
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
+    sections: Sections,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
@@ -84,9 +85,46 @@ impl Default for TagStyle {
     }
 }
 
+/// A section of the generated code, corresponding to a particular purpose, such as schema objects,
+/// the client itself, etc.
+#[derive(Clone, Copy, Hash, PartialEq, Eq)]
+pub enum GeneratableSection {
+    Types,
+    ReqwestClient,
+}
+
+#[derive(Clone)]
+struct Sections {
+    sections: HashSet<GeneratableSection>,
+}
+
+impl Sections {
+    pub fn insert(&mut self, section: GeneratableSection) {
+        self.sections.insert(section);
+    }
+}
+
+impl Default for Sections {
+    fn default() -> Self {
+        Self {
+            sections: HashSet::from([GeneratableSection::Types]),
+        }
+    }
+}
+
 impl GenerationSettings {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    /// Bare settings will not generate any code until [GeneratableSection]s are added.
+    pub fn bare() -> Self {
+        Self {
+            sections: Sections {
+                sections: HashSet::default(),
+            },
+            ..Default::default()
+        }
     }
 
     pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
@@ -154,6 +192,15 @@ impl GenerationSettings {
     ) -> &mut Self {
         self.convert
             .push((schema, type_name.to_string(), impls.collect()));
+        self
+    }
+
+    pub fn with_generatable_section(
+        &mut self,
+        section: GeneratableSection,
+    ) -> &mut Self {
+        self.sections.insert(section);
+
         self
     }
 }
