@@ -309,7 +309,7 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
-        let file = quote! {
+        let preamble = quote! {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
@@ -317,7 +317,9 @@ impl Generator {
             use progenitor_client::{encode_path, RequestBuilderExt};
             #[allow(unused_imports)]
             use reqwest::header::{HeaderMap, HeaderValue};
+        };
 
+        let types_module = quote! {
             pub mod types {
                 use serde::{Deserialize, Serialize};
 
@@ -327,7 +329,9 @@ impl Generator {
 
                 #types
             }
+        };
 
+        let client_decl = quote! {
             #[derive(Clone, Debug)]
             #[doc = #client_docstring]
             pub struct Client {
@@ -335,7 +339,9 @@ impl Generator {
                 pub(crate) client: reqwest::Client,
                 #inner_property
             }
+        };
 
+        let client_impl = quote! {
             impl Client {
                 /// Create a new client.
                 ///
@@ -398,6 +404,16 @@ impl Generator {
 
                 #maybe_inner
             }
+        };
+
+        let file = quote! {
+            #preamble
+
+            #types_module
+
+            #client_decl
+
+            #client_impl
 
             #operation_code
         };
