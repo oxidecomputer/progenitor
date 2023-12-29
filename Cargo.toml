@@ -2,6 +2,7 @@
 members = [
 	"cargo-progenitor",
 	"example-build",
+	"example-only-types",
 	"example-macro",
 	"example-wasm",
 	"progenitor",
