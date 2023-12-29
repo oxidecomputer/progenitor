@@ -332,3 +332,9 @@ let result = client
 
 Consumers do not need to specify parameters and struct properties that are not
 required or for which the API specifies defaults. Neat!
+
+## Generating only types
+Progenitor can optionally generate only the types specified in the `components`
+section of the OpenAPI document. The generated code does not have a `Client`,
+which makes it suitable to use in contexts other than HTTP APIs, such as
+message queues and blob storage.

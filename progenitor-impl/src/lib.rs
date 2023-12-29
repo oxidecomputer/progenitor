@@ -58,7 +58,8 @@ pub struct GenerationSettings {
     patch: HashMap<String, TypePatch>,
     replace: HashMap<String, (String, Vec<TypeImpl>)>,
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
-    sections: Sections,
+
+    types_only: bool,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Eq)]
@@ -85,46 +86,9 @@ impl Default for TagStyle {
     }
 }
 
-/// A section of the generated code, corresponding to a particular purpose, such as schema objects,
-/// the client itself, etc.
-#[derive(Clone, Copy, Hash, PartialEq, Eq)]
-pub enum GeneratableSection {
-    Types,
-    ReqwestClient,
-}
-
-#[derive(Clone)]
-struct Sections {
-    sections: HashSet<GeneratableSection>,
-}
-
-impl Sections {
-    pub fn insert(&mut self, section: GeneratableSection) {
-        self.sections.insert(section);
-    }
-}
-
-impl Default for Sections {
-    fn default() -> Self {
-        Self {
-            sections: HashSet::from([GeneratableSection::Types]),
-        }
-    }
-}
-
 impl GenerationSettings {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    /// Bare settings will not generate any code until [GeneratableSection]s are added.
-    pub fn bare() -> Self {
-        Self {
-            sections: Sections {
-                sections: HashSet::default(),
-            },
-            ..Default::default()
-        }
     }
 
     pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
@@ -195,12 +159,8 @@ impl GenerationSettings {
         self
     }
 
-    pub fn with_generatable_section(
-        &mut self,
-        section: GeneratableSection,
-    ) -> &mut Self {
-        self.sections.insert(section);
-
+    pub fn types_only(&mut self) -> &mut Self {
+        self.types_only = true;
         self
     }
 }
@@ -290,6 +250,27 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
+        let types = self.type_space.to_stream();
+
+        let types_module = quote! {
+            pub mod types {
+                use serde::{Deserialize, Serialize};
+
+                // This may be used by some impl Deserialize, but not all.
+                #[allow(unused_imports)]
+                use std::convert::TryFrom;
+
+                #types
+            }
+        };
+
+        // Bail out early if we're only generating types.
+        if self.settings.types_only {
+            return Ok(quote! {
+                #types_module
+            });
+        }
+
         let operation_code = match (
             &self.settings.interface,
             &self.settings.tag,
@@ -307,8 +288,6 @@ impl Generator {
                 self.generate_tokens_builder_separate(&raw_methods)
             }
         }?;
-
-        let types = self.type_space.to_stream();
 
         // Generate an implementation of a `Self::as_inner` method, if an inner
         // type is defined.
@@ -364,18 +343,6 @@ impl Generator {
             use progenitor_client::{encode_path, RequestBuilderExt};
             #[allow(unused_imports)]
             use reqwest::header::{HeaderMap, HeaderValue};
-        };
-
-        let types_module = quote! {
-            pub mod types {
-                use serde::{Deserialize, Serialize};
-
-                // This may be used by some impl Deserialize, but not all.
-                #[allow(unused_imports)]
-                use std::convert::TryFrom;
-
-                #types
-            }
         };
 
         let client_decl = quote! {
