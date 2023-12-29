@@ -264,7 +264,7 @@ impl Generator {
             }
         };
 
-        // Bail out early if we're only generating types.
+        // Return early with just the types if we're only generating types.
         if self.settings.types_only {
             return Ok(quote! {
                 #types_module
