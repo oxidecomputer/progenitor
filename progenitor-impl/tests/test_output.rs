@@ -61,11 +61,11 @@ fn verify_apis(openapi_file: &str) {
         &output,
     );
 
-    // Positional, granular generation.
+    // Types only generation.
     let mut generator = Generator::new(GenerationSettings::new().types_only());
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}-granular-types.out", openapi_stem),
+        format!("tests/output/{}-types-only.out", openapi_stem),
         &output,
     );
 
