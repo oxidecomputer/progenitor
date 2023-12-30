@@ -16,6 +16,7 @@ pub use typify::TypeSpacePatch as TypePatch;
 
 mod cli;
 mod httpmock;
+mod map;
 mod method;
 mod template;
 mod to_schema;

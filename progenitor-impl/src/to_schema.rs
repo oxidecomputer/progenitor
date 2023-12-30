@@ -837,9 +837,6 @@ where
     }
 }
 
-pub struct TypifiedSchema {
-}
-
 #[cfg(test)]
 mod tests {
     use serde_json::json;
