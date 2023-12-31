@@ -40,7 +40,7 @@ impl Generator {
             })
         });
 
-        self.type_space.add_ref_types(schemas)?;
+        self.types_generator.type_space.add_ref_types(schemas)?;
 
         let raw_methods = spec
             .paths
@@ -162,6 +162,7 @@ impl Generator {
              }| {
                 let arg_type_name = match typ {
                     OperationParameterType::Type(arg_type_id) => self
+                        .types_generator
                         .type_space
                         .get_type(arg_type_id)
                         .unwrap()
@@ -294,7 +295,7 @@ impl Generator {
                 let (value_param, value_use) = match typ {
                     crate::method::OperationResponseType::Type(arg_type_id) => {
                         let arg_type =
-                            self.type_space.get_type(arg_type_id).unwrap();
+                            self.types_generator.type_space.get_type(arg_type_id).unwrap();
                         let arg_type_ident = arg_type.parameter_ident();
                         (
                             quote! {

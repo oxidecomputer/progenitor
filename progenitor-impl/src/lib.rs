@@ -39,8 +39,12 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub struct Generator {
+pub struct TypesGenerator {
     type_space: TypeSpace,
+}
+
+pub struct Generator {
+    types_generator: TypesGenerator,
     settings: GenerationSettings,
     uses_futures: bool,
     uses_websockets: bool,
@@ -160,10 +164,9 @@ impl GenerationSettings {
 
 impl Default for Generator {
     fn default() -> Self {
+        let def_settings = GenerationSettings::default();
         Self {
-            type_space: TypeSpace::new(
-                TypeSpaceSettings::default().with_type_mod("types"),
-            ),
+            types_generator: TypesGenerator::new(&def_settings),
             settings: Default::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
@@ -171,8 +174,8 @@ impl Default for Generator {
     }
 }
 
-impl Generator {
-    pub fn new(settings: &GenerationSettings) -> Self {
+impl TypesGenerator {
+    fn new(settings: &GenerationSettings) -> Self {
         let mut type_settings = TypeSpaceSettings::default();
         type_settings
             .with_type_mod("types")
@@ -202,8 +205,17 @@ impl Generator {
                     impls.iter().cloned(),
                 );
             });
+
         Self {
             type_space: TypeSpace::new(&type_settings),
+        }
+    }
+}
+
+impl Generator {
+    pub fn new(settings: &GenerationSettings) -> Self {
+        Self {
+            types_generator: TypesGenerator::new(&settings),
             settings: settings.clone(),
             uses_futures: false,
             uses_websockets: false,
@@ -220,7 +232,7 @@ impl Generator {
             })
         });
 
-        self.type_space.add_ref_types(schemas)?;
+        self.types_generator.type_space.add_ref_types(schemas)?;
 
         let raw_methods = spec
             .paths
@@ -261,7 +273,7 @@ impl Generator {
             }
         }?;
 
-        let types = self.type_space.to_stream();
+        let types = self.types_generator.type_space.to_stream();
 
         // Generate an implementation of a `Self::as_inner` method, if an inner
         // type is defined.
@@ -511,7 +523,7 @@ impl Generator {
 
     // TODO deprecate?
     pub fn get_type_space(&self) -> &TypeSpace {
-        &self.type_space
+        &self.types_generator.type_space
     }
 
     pub fn uses_futures(&self) -> bool {

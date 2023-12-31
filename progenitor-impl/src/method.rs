@@ -326,6 +326,7 @@ impl Generator {
                             Case::Pascal,
                         );
                         let typ = self
+                            .types_generator
                             .type_space
                             .add_type_with_name(&schema, Some(name))?;
 
@@ -354,10 +355,15 @@ impl Generator {
                         );
 
                         let type_id = self
+                            .types_generator
                             .type_space
                             .add_type_with_name(&schema, Some(name))?;
 
-                        let ty = self.type_space.get_type(&type_id).unwrap();
+                        let ty = self
+                            .types_generator
+                            .type_space
+                            .get_type(&type_id)
+                            .unwrap();
 
                         // If the type is itself optional, then we'll treat it
                         // as optional (irrespective of the `required` field on
@@ -395,6 +401,7 @@ impl Generator {
                         );
 
                         let typ = self
+                            .types_generator
                             .type_space
                             .add_type_with_name(&schema, Some(name))?;
 
@@ -502,7 +509,8 @@ impl Generator {
                             ),
                             Case::Pascal,
                         );
-                        self.type_space
+                        self.types_generator
+                            .type_space
                             .add_type_with_name(&schema, Some(name))?
                     } else {
                         todo!("media type encoding, no schema: {:#?}", mt);
@@ -603,12 +611,14 @@ impl Generator {
                 let name = format_ident!("{}", param.name);
                 let typ = match (&param.typ, param.kind.is_optional()) {
                     (OperationParameterType::Type(type_id), false) => self
+                        .types_generator
                         .type_space
                         .get_type(type_id)
                         .unwrap()
                         .parameter_ident_with_lifetime("a"),
                     (OperationParameterType::Type(type_id), true) => {
                         let t = self
+                            .types_generator
                             .type_space
                             .get_type(type_id)
                             .unwrap()
@@ -726,7 +736,11 @@ impl Generator {
             // The item type that we've saved (by picking apart the original
             // function's return type) will be the Item type parameter for the
             // Stream type we return.
-            let item = self.type_space.get_type(&page_data.item).unwrap();
+            let item = self
+                .types_generator
+                .type_space
+                .get_type(&page_data.item)
+                .unwrap();
             let item_type = item.ident();
 
             let doc_comment = make_stream_doc_comment(method);
@@ -1209,8 +1223,9 @@ impl Generator {
         };
 
         Ok(MethodSigBody {
-            success: response_type.into_tokens(&self.type_space),
-            error: error_type.into_tokens(&self.type_space),
+            success: response_type
+                .into_tokens(&self.types_generator.type_space),
+            error: error_type.into_tokens(&self.types_generator.type_space),
             body: body_impl,
         })
     }
@@ -1337,7 +1352,11 @@ impl Generator {
             (Some(success), None) => success,
         };
 
-        let typ = self.type_space.get_type(success_response).ok()?;
+        let typ = self
+            .types_generator
+            .type_space
+            .get_type(success_response)
+            .ok()?;
         let details = match typ.details() {
             typify::TypeDetails::Struct(details) => details,
             _ => return None,
@@ -1352,13 +1371,18 @@ impl Generator {
 
         // We need a next_page property that's an Option<String>.
         if let typify::TypeDetails::Option(ref opt_id) = self
+            .types_generator
             .type_space
             .get_type(properties.get("next_page")?)
             .ok()?
             .details()
         {
             if !matches!(
-                self.type_space.get_type(opt_id).ok()?.details(),
+                self.types_generator
+                    .type_space
+                    .get_type(opt_id)
+                    .ok()?
+                    .details(),
                 typify::TypeDetails::String
             ) {
                 return None;
@@ -1368,6 +1392,7 @@ impl Generator {
         }
 
         match self
+            .types_generator
             .type_space
             .get_type(properties.get("items")?)
             .ok()?
@@ -1492,7 +1517,8 @@ impl Generator {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
+                    let ty =
+                        self.types_generator.type_space.get_type(type_id)?;
 
                     // For body parameters only, if there's a builder we'll
                     // nest that within this builder.
@@ -1527,7 +1553,8 @@ impl Generator {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
+                    let ty =
+                        self.types_generator.type_space.get_type(type_id)?;
                     let optional = param.kind.is_optional();
                     if optional {
                         Ok(quote! { Ok(None) })
@@ -1558,7 +1585,8 @@ impl Generator {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
+                    let ty =
+                        self.types_generator.type_space.get_type(type_id)?;
                     if ty.builder().is_some() {
                         let type_name = ty.ident();
                         Ok(quote! {
@@ -1583,7 +1611,7 @@ impl Generator {
                 let param_name = format_ident!("{}", param.name);
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
-                        let ty = self.type_space.get_type(type_id)?;
+                        let ty = self.types_generator.type_space.get_type(type_id)?;
                         match (ty.builder(), param.kind.is_optional()) {
                             // TODO right now optional body parameters are not
                             // addressed
@@ -1771,7 +1799,11 @@ impl Generator {
             // The item type that we've saved (by picking apart the original
             // function's return type) will be the Item type parameter for the
             // Stream impl we return.
-            let item = self.type_space.get_type(&page_data.item).unwrap();
+            let item = self
+                .types_generator
+                .type_space
+                .get_type(&page_data.item)
+                .unwrap();
             let item_type = item.ident();
 
             let stream_doc = format!(
@@ -2220,6 +2252,7 @@ impl Generator {
                     Case::Pascal,
                 );
                 let typ = self
+                    .types_generator
                     .type_space
                     .add_type_with_name(&schema.to_schema(), Some(name))?;
                 OperationParameterType::Type(typ)

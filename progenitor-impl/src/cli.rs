@@ -39,7 +39,7 @@ impl Generator {
             })
         });
 
-        self.type_space.add_ref_types(schemas)?;
+        self.types_generator.type_space.add_ref_types(schemas)?;
 
         let raw_methods = spec
             .paths
@@ -358,7 +358,11 @@ impl Generator {
             let OperationParameterType::Type(arg_type_id) = &param.typ else {
                 unreachable!("query and path parameters must be typed")
             };
-            let arg_type = self.type_space.get_type(arg_type_id).unwrap();
+            let arg_type = self
+                .types_generator
+                .type_space
+                .get_type(arg_type_id)
+                .unwrap();
 
             let arg_name = param.name.to_kebab_case();
 
@@ -377,7 +381,11 @@ impl Generator {
             let OperationParameterType::Type(arg_type_id) = &param.typ else {
                 panic!()
             };
-            let arg_type = self.type_space.get_type(arg_type_id).unwrap();
+            let arg_type = self
+                .types_generator
+                .type_space
+                .get_type(arg_type_id)
+                .unwrap();
             let arg_type_name = arg_type.ident();
 
             let consumer = quote! {
@@ -412,7 +420,11 @@ impl Generator {
 
         if let Some(body_type_id) = maybe_body_type_id {
             args.body_present();
-            let body_type = self.type_space.get_type(body_type_id).unwrap();
+            let body_type = self
+                .types_generator
+                .type_space
+                .get_type(body_type_id)
+                .unwrap();
             let details = body_type.details();
 
             match details {
@@ -473,7 +485,11 @@ impl Generator {
             args.args.values().map(|CliArg { consumer, .. }| consumer);
 
         let body_json_consumer = maybe_body_type_id.map(|body_type_id| {
-            let body_type = self.type_space.get_type(body_type_id).unwrap();
+            let body_type = self
+                .types_generator
+                .type_space
+                .get_type(body_type_id)
+                .unwrap();
             let body_type_ident = body_type.ident();
             quote! {
                 if let Some(value) =
@@ -512,7 +528,8 @@ impl Generator {
             type_id,
         } = prop_info;
 
-        let prop_type = self.type_space.get_type(&type_id).unwrap();
+        let prop_type =
+            self.types_generator.type_space.get_type(&type_id).unwrap();
 
         // TODO this is maybe a kludge--not completely sure of the right way to
         // handle option types. On one hand, we could want types from this
@@ -526,8 +543,11 @@ impl Generator {
             if let typify::TypeDetails::Option(inner_type_id) =
                 prop_type.details()
             {
-                let inner_type =
-                    self.type_space.get_type(&inner_type_id).unwrap();
+                let inner_type = self
+                    .types_generator
+                    .type_space
+                    .get_type(&inner_type_id)
+                    .unwrap();
                 Some(inner_type)
             } else {
                 None
