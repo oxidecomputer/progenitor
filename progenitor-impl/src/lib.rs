@@ -175,7 +175,7 @@ impl Default for Generator {
 }
 
 impl TypesGenerator {
-    fn new(settings: &GenerationSettings) -> Self {
+    pub fn new(settings: &GenerationSettings) -> Self {
         let mut type_settings = TypeSpaceSettings::default();
         type_settings
             .with_type_mod("types")
@@ -210,6 +210,34 @@ impl TypesGenerator {
             type_space: TypeSpace::new(&type_settings),
         }
     }
+
+    pub fn add_ref_types_from_spec(&mut self, spec: &OpenAPI) -> Result<()> {
+        // Convert our components dictionary to schemars
+        let schemas = spec.components.iter().flat_map(|components| {
+            components.schemas.iter().map(|(name, ref_or_schema)| {
+                (name.clone(), ref_or_schema.to_schema())
+            })
+        });
+
+        self.type_space.add_ref_types(schemas)?;
+
+        Ok(())
+    }
+
+    pub fn generate_types_module_tokens(&self) -> TokenStream {
+        let types = self.type_space.to_stream();
+        quote! {
+            pub mod types {
+                use serde::{Deserialize, Serialize};
+
+                // This may be used by some impl Deserialize, but not all.
+                #[allow(unused_imports)]
+                use std::convert::TryFrom;
+
+                #types
+            }
+        }
+    }
 }
 
 impl Generator {
@@ -225,14 +253,7 @@ impl Generator {
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
-        // Convert our components dictionary to schemars
-        let schemas = spec.components.iter().flat_map(|components| {
-            components.schemas.iter().map(|(name, ref_or_schema)| {
-                (name.clone(), ref_or_schema.to_schema())
-            })
-        });
-
-        self.types_generator.type_space.add_ref_types(schemas)?;
+        self.types_generator.add_ref_types_from_spec(spec)?;
 
         let raw_methods = spec
             .paths
@@ -272,8 +293,6 @@ impl Generator {
                 self.generate_tokens_builder_separate(&raw_methods)
             }
         }?;
-
-        let types = self.types_generator.type_space.to_stream();
 
         // Generate an implementation of a `Self::as_inner` method, if an inner
         // type is defined.
@@ -321,6 +340,8 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
+        let types_module = self.types_generator.generate_types_module_tokens();
+
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
@@ -330,15 +351,7 @@ impl Generator {
             #[allow(unused_imports)]
             use reqwest::header::{HeaderMap, HeaderValue};
 
-            pub mod types {
-                use serde::{Deserialize, Serialize};
-
-                // This may be used by some impl Deserialize, but not all.
-                #[allow(unused_imports)]
-                use std::convert::TryFrom;
-
-                #types
-            }
+            #types_module
 
             #[derive(Clone, Debug)]
             #[doc = #client_docstring]
