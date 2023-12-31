@@ -39,6 +39,7 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
+/// Client-agnostic generator of only the components used in an OpenAPI document.
 pub struct TypesGenerator {
     type_space: TypeSpace,
 }
@@ -175,6 +176,7 @@ impl Default for Generator {
 }
 
 impl TypesGenerator {
+    /// Settings that apply to clients only will have no effect.
     pub fn new(settings: &GenerationSettings) -> Self {
         let mut type_settings = TypeSpaceSettings::default();
         type_settings
@@ -224,6 +226,8 @@ impl TypesGenerator {
         Ok(())
     }
 
+    /// Generates the tokens for a module called 'types' which contains Rust items corresponding to the ref types
+    /// from the OpenAPI document.
     pub fn generate_types_module_tokens(&self) -> TokenStream {
         let types = self.type_space.to_stream();
         quote! {
