@@ -7,51 +7,14 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
-    ///Error information from a response.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "Error information from a response.",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "message",
-    ///    "request_id"
-    ///  ],
-    ///  "properties": {
-    ///    "error_code": {
-    ///      "type": "string"
-    ///    },
-    ///    "message": {
-    ///      "type": "string"
-    ///    },
-    ///    "request_id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
-    pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
-    }
-
-    impl From<&Error> for Error {
-        fn from(value: &Error) -> Self {
-            value.clone()
-        }
-    }
 }
 
 #[derive(Clone, Debug)]
-///Client for pagination-demo
+///Client for Parameter name collision test
 ///
-///Version: 9000
+///Minimal API for testing collision between parameter names and generated code
+///
+///Version: v1
 pub struct Client {
     pub(crate) baseurl: String,
     pub(crate) client: reqwest::Client,
@@ -104,22 +67,44 @@ impl Client {
     /// This string is pulled directly from the source OpenAPI
     /// document and may be in any format the API selects.
     pub fn api_version(&self) -> &'static str {
-        "9000"
+        "v1"
     }
 }
 
 impl Client {
-    ///Sends a `GET` request to `/`
-    pub async fn freeform_response<'a>(
+    ///Gets a key
+    ///
+    ///Sends a `GET` request to `/key/{query}`
+    ///
+    ///Arguments:
+    /// - `query`: Parameter name that was previously colliding
+    /// - `client`: Parameter name that was previously colliding
+    /// - `request`: Parameter name that was previously colliding
+    /// - `response`: Parameter name that was previously colliding
+    /// - `result`: Parameter name that was previously colliding
+    /// - `url`: Parameter name that was previously colliding
+    pub async fn key_get<'a>(
         &'a self,
-    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/", self.baseurl,);
-        let request = self.client.get(url).build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            200..=299 => Ok(ResponseValue::stream(response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+        query: bool,
+        client: bool,
+        request: bool,
+        response: bool,
+        result: bool,
+        url: bool,
+    ) -> Result<ResponseValue<()>, Error<()>> {
+        let _url = format!("{}/key/{}", self.baseurl, encode_path(&query.to_string()),);
+        let mut _query = Vec::with_capacity(5usize);
+        _query.push(("client", client.to_string()));
+        _query.push(("request", request.to_string()));
+        _query.push(("response", response.to_string()));
+        _query.push(("result", result.to_string()));
+        _query.push(("url", url.to_string()));
+        let _request = self.client.get(_url).query(&_query).build()?;
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            200u16 => Ok(ResponseValue::empty(_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 }

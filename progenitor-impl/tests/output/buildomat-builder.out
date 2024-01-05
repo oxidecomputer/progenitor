@@ -7,7 +7,44 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///Task
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "name",
+    ///    "output_rules",
+    ///    "script",
+    ///    "state"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "output_rules": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    },
+    ///    "script": {
+    ///      "type": "string"
+    ///    },
+    ///    "state": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct Task {
         pub id: String,
         pub name: String,
@@ -24,11 +61,44 @@ pub mod types {
 
     impl Task {
         pub fn builder() -> builder::Task {
-            builder::Task::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///TaskEvent
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "payload",
+    ///    "seq",
+    ///    "stream",
+    ///    "time"
+    ///  ],
+    ///  "properties": {
+    ///    "payload": {
+    ///      "type": "string"
+    ///    },
+    ///    "seq": {
+    ///      "type": "integer",
+    ///      "format": "uint",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "stream": {
+    ///      "type": "string"
+    ///    },
+    ///    "time": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct TaskEvent {
         pub payload: String,
         pub seq: u32,
@@ -44,11 +114,39 @@ pub mod types {
 
     impl TaskEvent {
         pub fn builder() -> builder::TaskEvent {
-            builder::TaskEvent::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///TaskOutput
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "path",
+    ///    "size"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "path": {
+    ///      "type": "string"
+    ///    },
+    ///    "size": {
+    ///      "type": "integer",
+    ///      "format": "uint64",
+    ///      "minimum": 0.0
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct TaskOutput {
         pub id: String,
         pub path: String,
@@ -63,11 +161,39 @@ pub mod types {
 
     impl TaskOutput {
         pub fn builder() -> builder::TaskOutput {
-            builder::TaskOutput::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///TaskSubmit
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "name",
+    ///    "script"
+    ///  ],
+    ///  "properties": {
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "output_rules": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    },
+    ///    "script": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct TaskSubmit {
         pub name: String,
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -83,11 +209,29 @@ pub mod types {
 
     impl TaskSubmit {
         pub fn builder() -> builder::TaskSubmit {
-            builder::TaskSubmit::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///TaskSubmitResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct TaskSubmitResult {
         pub id: String,
     }
@@ -100,11 +244,29 @@ pub mod types {
 
     impl TaskSubmitResult {
         pub fn builder() -> builder::TaskSubmitResult {
-            builder::TaskSubmitResult::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///UploadedChunk
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct UploadedChunk {
         pub id: String,
     }
@@ -117,11 +279,29 @@ pub mod types {
 
     impl UploadedChunk {
         pub fn builder() -> builder::UploadedChunk {
-            builder::UploadedChunk::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///UserCreate
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "name"
+    ///  ],
+    ///  "properties": {
+    ///    "name": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct UserCreate {
         pub name: String,
     }
@@ -134,11 +314,37 @@ pub mod types {
 
     impl UserCreate {
         pub fn builder() -> builder::UserCreate {
-            builder::UserCreate::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///UserCreateResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "name",
+    ///    "token"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "token": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct UserCreateResult {
         pub id: String,
         pub name: String,
@@ -153,11 +359,33 @@ pub mod types {
 
     impl UserCreateResult {
         pub fn builder() -> builder::UserCreateResult {
-            builder::UserCreateResult::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WhoamiResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "name"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WhoamiResult {
         pub id: String,
         pub name: String,
@@ -171,11 +399,51 @@ pub mod types {
 
     impl WhoamiResult {
         pub fn builder() -> builder::WhoamiResult {
-            builder::WhoamiResult::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///Worker
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "deleted",
+    ///    "id",
+    ///    "recycle",
+    ///    "tasks"
+    ///  ],
+    ///  "properties": {
+    ///    "deleted": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "instance_id": {
+    ///      "type": "string"
+    ///    },
+    ///    "lastping": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    },
+    ///    "recycle": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "tasks": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/WorkerTask"
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct Worker {
         pub deleted: bool,
         pub id: String,
@@ -195,11 +463,41 @@ pub mod types {
 
     impl Worker {
         pub fn builder() -> builder::Worker {
-            builder::Worker::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerAddOutput
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "chunks",
+    ///    "path",
+    ///    "size"
+    ///  ],
+    ///  "properties": {
+    ///    "chunks": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    },
+    ///    "path": {
+    ///      "type": "string"
+    ///    },
+    ///    "size": {
+    ///      "type": "integer",
+    ///      "format": "int64"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerAddOutput {
         pub chunks: Vec<String>,
         pub path: String,
@@ -214,11 +512,38 @@ pub mod types {
 
     impl WorkerAddOutput {
         pub fn builder() -> builder::WorkerAddOutput {
-            builder::WorkerAddOutput::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerAppendTask
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "payload",
+    ///    "stream",
+    ///    "time"
+    ///  ],
+    ///  "properties": {
+    ///    "payload": {
+    ///      "type": "string"
+    ///    },
+    ///    "stream": {
+    ///      "type": "string"
+    ///    },
+    ///    "time": {
+    ///      "type": "string",
+    ///      "format": "date-time"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerAppendTask {
         pub payload: String,
         pub stream: String,
@@ -233,11 +558,33 @@ pub mod types {
 
     impl WorkerAppendTask {
         pub fn builder() -> builder::WorkerAppendTask {
-            builder::WorkerAppendTask::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerBootstrap
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "bootstrap",
+    ///    "token"
+    ///  ],
+    ///  "properties": {
+    ///    "bootstrap": {
+    ///      "type": "string"
+    ///    },
+    ///    "token": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerBootstrap {
         pub bootstrap: String,
         pub token: String,
@@ -251,11 +598,29 @@ pub mod types {
 
     impl WorkerBootstrap {
         pub fn builder() -> builder::WorkerBootstrap {
-            builder::WorkerBootstrap::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerBootstrapResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerBootstrapResult {
         pub id: String,
     }
@@ -268,11 +633,29 @@ pub mod types {
 
     impl WorkerBootstrapResult {
         pub fn builder() -> builder::WorkerBootstrapResult {
-            builder::WorkerBootstrapResult::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerCompleteTask
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "failed"
+    ///  ],
+    ///  "properties": {
+    ///    "failed": {
+    ///      "type": "boolean"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
     }
@@ -285,11 +668,32 @@ pub mod types {
 
     impl WorkerCompleteTask {
         pub fn builder() -> builder::WorkerCompleteTask {
-            builder::WorkerCompleteTask::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerPingResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "poweroff"
+    ///  ],
+    ///  "properties": {
+    ///    "poweroff": {
+    ///      "type": "boolean"
+    ///    },
+    ///    "task": {
+    ///      "$ref": "#/components/schemas/WorkerPingTask"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerPingResult {
         pub poweroff: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -304,11 +708,40 @@ pub mod types {
 
     impl WorkerPingResult {
         pub fn builder() -> builder::WorkerPingResult {
-            builder::WorkerPingResult::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerPingTask
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "output_rules",
+    ///    "script"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "output_rules": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    },
+    ///    "script": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerPingTask {
         pub id: String,
         pub output_rules: Vec<String>,
@@ -323,11 +756,37 @@ pub mod types {
 
     impl WorkerPingTask {
         pub fn builder() -> builder::WorkerPingTask {
-            builder::WorkerPingTask::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkerTask
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "id",
+    ///    "name",
+    ///    "owner"
+    ///  ],
+    ///  "properties": {
+    ///    "id": {
+    ///      "type": "string"
+    ///    },
+    ///    "name": {
+    ///      "type": "string"
+    ///    },
+    ///    "owner": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkerTask {
         pub id: String,
         pub name: String,
@@ -342,11 +801,32 @@ pub mod types {
 
     impl WorkerTask {
         pub fn builder() -> builder::WorkerTask {
-            builder::WorkerTask::default()
+            Default::default()
         }
     }
 
-    #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
+    ///WorkersResult
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "workers"
+    ///  ],
+    ///  "properties": {
+    ///    "workers": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "$ref": "#/components/schemas/Worker"
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
     pub struct WorkersResult {
         pub workers: Vec<Worker>,
     }
@@ -359,7 +839,7 @@ pub mod types {
 
     impl WorkersResult {
         pub fn builder() -> builder::WorkersResult {
-            builder::WorkersResult::default()
+            Default::default()
         }
     }
 
@@ -1754,6 +2234,18 @@ impl Client {
         builder::Whoami::new(self)
     }
 
+    ///Sends a `PUT` request to `/v1/whoami/name`
+    ///
+    ///```ignore
+    /// let response = client.whoami_put_name()
+    ///    .body(body)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn whoami_put_name(&self) -> builder::WhoamiPutName {
+        builder::WhoamiPutName::new(self)
+    }
+
     ///Sends a `POST` request to `/v1/worker/bootstrap`
     ///
     ///```ignore
@@ -1868,7 +2360,7 @@ pub mod builder {
 
     impl<'a> ControlHold<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self { client: client }
         }
 
         ///Sends a `POST` request to `/v1/control/hold`
@@ -1902,7 +2394,7 @@ pub mod builder {
 
     impl<'a> ControlResume<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self { client: client }
         }
 
         ///Sends a `POST` request to `/v1/control/resume`
@@ -1931,7 +2423,7 @@ pub mod builder {
     impl<'a> TaskGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 task: Err("task was not initialized".to_string()),
             }
         }
@@ -1982,7 +2474,7 @@ pub mod builder {
 
     impl<'a> TasksGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self { client: client }
         }
 
         ///Sends a `GET` request to `/v1/tasks`
@@ -2018,7 +2510,7 @@ pub mod builder {
     impl<'a> TaskSubmit<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 body: Ok(types::builder::TaskSubmit::default()),
             }
         }
@@ -2026,11 +2518,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::TaskSubmit>,
+            <V as std::convert::TryInto<types::TaskSubmit>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `TaskSubmit` for body failed".to_string());
+                .map_err(|s| format!("conversion to `TaskSubmit` for body failed: {}", s));
             self
         }
 
@@ -2080,7 +2573,7 @@ pub mod builder {
     impl<'a> TaskEventsGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 task: Err("task was not initialized".to_string()),
                 minseq: Ok(None),
             }
@@ -2155,7 +2648,7 @@ pub mod builder {
     impl<'a> TaskOutputsGet<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 task: Err("task was not initialized".to_string()),
             }
         }
@@ -2209,7 +2702,7 @@ pub mod builder {
     impl<'a> TaskOutputDownload<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 task: Err("task was not initialized".to_string()),
                 output: Err("output was not initialized".to_string()),
             }
@@ -2272,7 +2765,7 @@ pub mod builder {
     impl<'a> UserCreate<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 body: Ok(types::builder::UserCreate::default()),
             }
         }
@@ -2280,11 +2773,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::UserCreate>,
+            <V as std::convert::TryInto<types::UserCreate>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `UserCreate` for body failed".to_string());
+                .map_err(|s| format!("conversion to `UserCreate` for body failed: {}", s));
             self
         }
 
@@ -2331,7 +2825,7 @@ pub mod builder {
 
     impl<'a> Whoami<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self { client: client }
         }
 
         ///Sends a `GET` request to `/v1/whoami`
@@ -2355,6 +2849,57 @@ pub mod builder {
         }
     }
 
+    ///Builder for [`Client::whoami_put_name`]
+    ///
+    ///[`Client::whoami_put_name`]: super::Client::whoami_put_name
+    #[derive(Debug)]
+    pub struct WhoamiPutName<'a> {
+        client: &'a super::Client,
+        body: Result<reqwest::Body, String>,
+    }
+
+    impl<'a> WhoamiPutName<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client: client,
+                body: Err("body was not initialized".to_string()),
+            }
+        }
+
+        pub fn body<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<String>,
+        {
+            self.body = value
+                .try_into()
+                .map_err(|_| "conversion to `String` for body failed".to_string())
+                .map(|v| v.into());
+            self
+        }
+
+        ///Sends a `PUT` request to `/v1/whoami/name`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self { client, body } = self;
+            let body = body.map_err(Error::InvalidRequest)?;
+            let url = format!("{}/v1/whoami/name", client.baseurl,);
+            let request = client
+                .client
+                .put(url)
+                .header(
+                    reqwest::header::CONTENT_TYPE,
+                    reqwest::header::HeaderValue::from_static("text/plain"),
+                )
+                .body(body)
+                .build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
     ///Builder for [`Client::worker_bootstrap`]
     ///
     ///[`Client::worker_bootstrap`]: super::Client::worker_bootstrap
@@ -2367,7 +2912,7 @@ pub mod builder {
     impl<'a> WorkerBootstrap<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 body: Ok(types::builder::WorkerBootstrap::default()),
             }
         }
@@ -2375,11 +2920,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerBootstrap>,
+            <V as std::convert::TryInto<types::WorkerBootstrap>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `WorkerBootstrap` for body failed".to_string());
+                .map_err(|s| format!("conversion to `WorkerBootstrap` for body failed: {}", s));
             self
         }
 
@@ -2426,7 +2972,7 @@ pub mod builder {
 
     impl<'a> WorkerPing<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self { client: client }
         }
 
         ///Sends a `GET` request to `/v1/worker/ping`
@@ -2463,7 +3009,7 @@ pub mod builder {
     impl<'a> WorkerTaskAppend<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(types::builder::WorkerAppendTask::default()),
             }
@@ -2482,11 +3028,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerAppendTask>,
+            <V as std::convert::TryInto<types::WorkerAppendTask>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `WorkerAppendTask` for body failed".to_string());
+                .map_err(|s| format!("conversion to `WorkerAppendTask` for body failed: {}", s));
             self
         }
 
@@ -2535,7 +3082,7 @@ pub mod builder {
     impl<'a> WorkerTaskUploadChunk<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 task: Err("task was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
@@ -2606,7 +3153,7 @@ pub mod builder {
     impl<'a> WorkerTaskComplete<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(types::builder::WorkerCompleteTask::default()),
             }
@@ -2625,11 +3172,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerCompleteTask>,
+            <V as std::convert::TryInto<types::WorkerCompleteTask>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `WorkerCompleteTask` for body failed".to_string());
+                .map_err(|s| format!("conversion to `WorkerCompleteTask` for body failed: {}", s));
             self
         }
 
@@ -2678,7 +3226,7 @@ pub mod builder {
     impl<'a> WorkerTaskAddOutput<'a> {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client,
+                client: client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(types::builder::WorkerAddOutput::default()),
             }
@@ -2697,11 +3245,12 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerAddOutput>,
+            <V as std::convert::TryInto<types::WorkerAddOutput>>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|_| "conversion to `WorkerAddOutput` for body failed".to_string());
+                .map_err(|s| format!("conversion to `WorkerAddOutput` for body failed: {}", s));
             self
         }
 
@@ -2745,7 +3294,7 @@ pub mod builder {
 
     impl<'a> WorkersList<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self { client: client }
         }
 
         ///Sends a `GET` request to `/v1/workers`
@@ -2779,7 +3328,7 @@ pub mod builder {
 
     impl<'a> WorkersRecycle<'a> {
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client }
+            Self { client: client }
         }
 
         ///Sends a `POST` request to `/v1/workers/recycle`

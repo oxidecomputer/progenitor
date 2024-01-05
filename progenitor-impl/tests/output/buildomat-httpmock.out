@@ -403,6 +403,40 @@ pub mod operations {
         }
     }
 
+    pub struct WhoamiPutNameWhen(httpmock::When);
+    impl WhoamiPutNameWhen {
+        pub fn new(inner: httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(httpmock::Method::PUT)
+                    .path_matches(regex::Regex::new("^/v1/whoami/name$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> httpmock::When {
+            self.0
+        }
+
+        pub fn body(self, value: String) -> Self {
+            Self(self.0.body(value))
+        }
+    }
+
+    pub struct WhoamiPutNameThen(httpmock::Then);
+    impl WhoamiPutNameThen {
+        pub fn new(inner: httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self) -> Self {
+            Self(self.0.status(200u16))
+        }
+    }
+
     pub struct WorkerBootstrapWhen(httpmock::When);
     impl WorkerBootstrapWhen {
         pub fn new(inner: httpmock::When) -> Self {
@@ -743,6 +777,9 @@ pub trait MockServerExt {
     fn whoami<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WhoamiWhen, operations::WhoamiThen);
+    fn whoami_put_name<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WhoamiPutNameWhen, operations::WhoamiPutNameThen);
     fn worker_bootstrap<F>(&self, config_fn: F) -> httpmock::Mock
     where
         F: FnOnce(operations::WorkerBootstrapWhen, operations::WorkerBootstrapThen);
@@ -886,6 +923,18 @@ impl MockServerExt for httpmock::MockServer {
             config_fn(
                 operations::WhoamiWhen::new(when),
                 operations::WhoamiThen::new(then),
+            )
+        })
+    }
+
+    fn whoami_put_name<F>(&self, config_fn: F) -> httpmock::Mock
+    where
+        F: FnOnce(operations::WhoamiPutNameWhen, operations::WhoamiPutNameThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::WhoamiPutNameWhen::new(when),
+                operations::WhoamiPutNameThen::new(then),
             )
         })
     }

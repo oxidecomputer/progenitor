@@ -1,0 +1,78 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "Minimal API for testing collision between parameter names and generated code",
+        "title": "Parameter name collision test",
+        "version": "v1"
+    },
+    "paths": {
+        "/key/{query}": {
+            "get": {
+                "description": "Gets a key",
+                "operationId": "key.get",
+                "parameters": [
+                    {
+                        "description": "Parameter name that was previously colliding",
+                        "in": "path",
+                        "name": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Parameter name that was previously colliding",
+                        "in": "query",
+                        "name": "url",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Parameter name that was previously colliding",
+                        "in": "query",
+                        "name": "request",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Parameter name that was previously colliding",
+                        "in": "query",
+                        "name": "response",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Parameter name that was previously colliding",
+                        "in": "query",
+                        "name": "result",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Parameter name that was previously colliding",
+                        "in": "query",
+                        "name": "client",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "type": "string",
+                        "description": "Successful response"
+                    }
+                }
+            }
+        }
+    }
+}

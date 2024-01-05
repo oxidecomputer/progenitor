@@ -13,7 +13,7 @@ use typify::{TypeId, TypeSpace};
 
 use crate::{
     template::PathTemplate,
-    util::{items, parameter_map, sanitize, Case},
+    util::{items, parameter_map, sanitize, unique_ident_from, Case},
     Error, Generator, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
@@ -137,6 +137,7 @@ pub enum BodyContentType {
     OctetStream,
     Json,
     FormUrlencoded,
+    Text(String),
 }
 
 impl FromStr for BodyContentType {
@@ -148,11 +149,25 @@ impl FromStr for BodyContentType {
             "application/octet-stream" => Ok(Self::OctetStream),
             "application/json" => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
+            "text/plain" | "text/x-markdown" => {
+                Ok(Self::Text(String::from(&s[..offset])))
+            }
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
                 s
             ))),
         }
+    }
+}
+
+impl std::fmt::Display for BodyContentType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
+            Self::OctetStream => "application/octet-stream",
+            Self::Json => "application/json",
+            Self::FormUrlencoded => "application/x-www-form-urlencoded",
+            Self::Text(typ) => &typ,
+        })
     }
 }
 
@@ -601,7 +616,19 @@ impl Generator {
                         quote! { Option<#t> }
                     }
                     (OperationParameterType::RawBody, false) => {
-                        quote! { B }
+                        match &param.kind {
+                            OperationParameterKind::Body(
+                                BodyContentType::OctetStream,
+                            ) => {
+                                quote! { B }
+                            }
+                            OperationParameterKind::Body(
+                                BodyContentType::Text(_),
+                            ) => {
+                                quote! { String }
+                            }
+                            _ => unreachable!(),
+                        }
                     }
                     (OperationParameterType::RawBody, true) => unreachable!(),
                 };
@@ -611,10 +638,13 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let raw_body_param = method
-            .params
-            .iter()
-            .any(|param| param.typ == OperationParameterType::RawBody);
+        let raw_body_param = method.params.iter().any(|param| {
+            param.typ == OperationParameterType::RawBody
+                && param.kind
+                    == OperationParameterKind::Body(
+                        BodyContentType::OctetStream,
+                    )
+        });
 
         let bounds = if raw_body_param {
             quote! { <'a, B: Into<reqwest::Body> > }
@@ -792,6 +822,19 @@ impl Generator {
         method: &OperationMethod,
         client: TokenStream,
     ) -> Result<MethodSigBody> {
+        let param_names = method
+            .params
+            .iter()
+            .map(|param| format_ident!("{}", param.name))
+            .collect::<Vec<_>>();
+
+        // Generate a unique Ident for internal variables
+        let url_ident = unique_ident_from("url", &param_names);
+        let query_ident = unique_ident_from("query", &param_names);
+        let request_ident = unique_ident_from("request", &param_names);
+        let response_ident = unique_ident_from("response", &param_names);
+        let result_ident = unique_ident_from("result", &param_names);
+
         // Generate code for query parameters.
         let query_items = method
             .params
@@ -802,12 +845,12 @@ impl Generator {
                     let qn_ident = format_ident!("{}", &param.name);
                     let res = if *required {
                         quote! {
-                            query.push((#qn, #qn_ident .to_string()));
+                            #query_ident.push((#qn, #qn_ident .to_string()));
                         }
                     } else {
                         quote! {
                             if let Some(v) = & #qn_ident {
-                                query.push((#qn, v.to_string()));
+                                #query_ident.push((#qn, v.to_string()));
                             }
                         }
                     };
@@ -823,11 +866,11 @@ impl Generator {
         } else {
             let size = query_items.len();
             let query_build = quote! {
-                let mut query = Vec::with_capacity(#size);
+                let mut #query_ident = Vec::with_capacity(#size);
                 #(#query_items)*
             };
             let query_use = quote! {
-                .query(&query)
+                .query(&#query_ident)
             };
 
             (query_build, query_use)
@@ -903,6 +946,9 @@ impl Generator {
             .collect();
 
         let url_path = method.path.compile(url_renames, client.clone());
+        let url_path = quote! {
+            let #url_ident = #url_path;
+        };
 
         // Generate code to handle the body param.
         let body_func = method.params.iter().filter_map(|param| {
@@ -916,6 +962,18 @@ impl Generator {
                     .header(
                         reqwest::header::CONTENT_TYPE,
                         reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    )
+                    .body(body)
+                }),
+                (
+                    OperationParameterKind::Body(BodyContentType::Text(mime_type)),
+                    OperationParameterType::RawBody,
+                ) => Some(quote! {
+                    // Set the content type (this is handled by helper
+                    // functions for other MIME types).
+                    .header(
+                        reqwest::header::CONTENT_TYPE,
+                        reqwest::header::HeaderValue::from_static(#mime_type),
                     )
                     .body(body)
                 }),
@@ -963,22 +1021,22 @@ impl Generator {
                 let decode = match &response.typ {
                     OperationResponseType::Type(_) => {
                         quote! {
-                            ResponseValue::from_response(response).await
+                            ResponseValue::from_response(#response_ident).await
                         }
                     }
                     OperationResponseType::None => {
                         quote! {
-                            Ok(ResponseValue::empty(response))
+                            Ok(ResponseValue::empty(#response_ident))
                         }
                     }
                     OperationResponseType::Raw => {
                         quote! {
-                            Ok(ResponseValue::stream(response))
+                            Ok(ResponseValue::stream(#response_ident))
                         }
                     }
                     OperationResponseType::Upgrade => {
                         quote! {
-                            ResponseValue::upgrade(response).await
+                            ResponseValue::upgrade(#response_ident).await
                         }
                     }
                 };
@@ -1013,7 +1071,7 @@ impl Generator {
                     OperationResponseType::Type(_) => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::from_response(response)
+                                ResponseValue::from_response(#response_ident)
                                     .await?
                             ))
                         }
@@ -1021,14 +1079,14 @@ impl Generator {
                     OperationResponseType::None => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::empty(response)
+                                ResponseValue::empty(#response_ident)
                             ))
                         }
                     }
                     OperationResponseType::Raw => {
                         quote! {
                             Err(Error::ErrorResponse(
-                                ResponseValue::stream(response)
+                                ResponseValue::stream(#response_ident)
                             ))
                         }
                     }
@@ -1073,17 +1131,19 @@ impl Generator {
         // API description.
         let default_response = match method.responses.iter().last() {
             Some(response) if response.status_code.is_default() => quote! {},
-            _ => quote! { _ => Err(Error::UnexpectedResponse(response)), },
+            _ => {
+                quote! { _ => Err(Error::UnexpectedResponse(#response_ident)), }
+            }
         };
 
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &request);
+                (#hook)(&#client.inner, &#request_ident);
             }
         });
         let post_hook = self.settings.post_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &result);
+                (#hook)(&#client.inner, &#result_ident);
             }
         });
 
@@ -1095,8 +1155,8 @@ impl Generator {
 
             #headers_build
 
-            let request = #client.client
-                . #method_func (url)
+            let #request_ident = #client.client
+                . #method_func (#url_ident)
                 #accept_header
                 #(#body_func)*
                 #query_use
@@ -1105,14 +1165,14 @@ impl Generator {
                 .build()?;
 
             #pre_hook
-            let result = #client.client
-                .execute(request)
+            let #result_ident = #client.client
+                .execute(#request_ident)
                 .await;
             #post_hook
 
-            let response = result?;
+            let #response_ident = #result_ident?;
 
-            match response.status().as_u16() {
+            match #response_ident.status().as_u16() {
                 // These will be of the form...
                 // 201 => ResponseValue::from_response(response).await,
                 // 200..299 => ResponseValue::empty(response),
@@ -1422,6 +1482,8 @@ impl Generator {
             .map(|param| format_ident!("{}", param.name))
             .collect::<Vec<_>>();
 
+        let client_ident = unique_ident_from("client", &param_names);
+
         let mut cloneable = true;
 
         // Generate the type for each parameter.
@@ -1529,7 +1591,7 @@ impl Generator {
                                 unreachable!()
                             }
                             (None, true) => {
-                                let ty_ident = ty.ident();
+                                let typ = ty.ident();
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
                                     ty.name(),
@@ -1540,7 +1602,7 @@ impl Generator {
                                         mut self,
                                         value: V,
                                     ) -> Self
-                                        where V: std::convert::TryInto<#ty_ident>,
+                                        where V: std::convert::TryInto<#typ>,
                                     {
                                         self.#param_name = value.try_into()
                                             .map(Some)
@@ -1579,7 +1641,7 @@ impl Generator {
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident();
                                 let err_msg = format!(
-                                    "conversion to `{}` for {} failed",
+                                    "conversion to `{}` for {} failed: {{}}",
                                     ty.name(),
                                     param.name,
                                 );
@@ -1587,10 +1649,12 @@ impl Generator {
                                     pub fn body<V>(mut self, value: V) -> Self
                                     where
                                         V: std::convert::TryInto<#typ>,
+                                        <V as std::convert::TryInto<#typ>>::Error:
+                                            std::fmt::Display,
                                     {
                                         self.body = value.try_into()
                                             .map(From::from)
-                                            .map_err(|_| #err_msg.to_string());
+                                            .map_err(|s| format!(#err_msg, s));
                                         self
                                     }
 
@@ -1607,21 +1671,42 @@ impl Generator {
                         }
                     }
 
-                    OperationParameterType::RawBody => {
-                        let err_msg = format!(
-                            "conversion to `reqwest::Body` for {} failed",
-                            param.name,
-                        );
+                    OperationParameterType::RawBody => match param.kind {
+                        OperationParameterKind::Body(BodyContentType::OctetStream) => {
+                            let err_msg = format!(
+                                "conversion to `reqwest::Body` for {} failed",
+                                param.name,
+                            );
 
-                        Ok(quote! {
-                            pub fn #param_name<B>(mut self, value: B) -> Self
-                                where B: std::convert::TryInto<reqwest::Body>
-                            {
-                                self.#param_name = value.try_into()
-                                    .map_err(|_| #err_msg.to_string());
-                                self
-                            }
-                        })
+                            Ok(quote! {
+                                pub fn #param_name<B>(mut self, value: B) -> Self
+                                    where B: std::convert::TryInto<reqwest::Body>
+                                {
+                                    self.#param_name = value.try_into()
+                                        .map_err(|_| #err_msg.to_string());
+                                    self
+                                }
+                            })
+                        },
+                        OperationParameterKind::Body(BodyContentType::Text(_)) => {
+                            let err_msg = format!(
+                                "conversion to `String` for {} failed",
+                                param.name,
+                            );
+
+                            Ok(quote! {
+                                pub fn #param_name<V>(mut self, value: V) -> Self
+                                    where V: std::convert::TryInto<String>
+                                {
+                                    self.#param_name = value
+                                        .try_into()
+                                        .map_err(|_| #err_msg.to_string())
+                                        .map(|v| v.into());
+                                    self
+                                }
+                            })
+                        },
+                        _ => unreachable!(),
                     }
                 }
             })
@@ -1631,7 +1716,7 @@ impl Generator {
             success,
             error,
             body,
-        } = self.method_sig_body(method, quote! { client})?;
+        } = self.method_sig_body(method, quote! { #client_ident })?;
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
@@ -1646,7 +1731,7 @@ impl Generator {
             > {
                 // Destructure the builder for convenience.
                 let Self {
-                    client,
+                    #client_ident,
                     #( #param_names, )*
                 } = self;
 
@@ -1848,14 +1933,14 @@ impl Generator {
             #[doc = #struct_doc]
             #derive
             pub struct #struct_ident<'a> {
-                client: &'a super::Client,
+                #client_ident: &'a super::Client,
                 #( #param_names: #param_types, )*
             }
 
             impl<'a> #struct_ident<'a> {
                 pub fn new(client: &'a super::Client) -> Self {
                     Self {
-                        client,
+                        #client_ident: client,
                         #( #param_names: #param_values, )*
                     }
                 }
@@ -2081,6 +2166,41 @@ impl Generator {
                     _ => Err(Error::UnexpectedFormat(format!(
                         "invalid schema for application/octet-stream: {:?}",
                         schema
+                    ))),
+                }?;
+                OperationParameterType::RawBody
+            }
+            BodyContentType::Text(_) => {
+                // For a plain text body, we expect a simple, specific schema:
+                // "schema": {
+                //     "type": "string",
+                // }
+                match schema.item(components)? {
+                    openapiv3::Schema {
+                        schema_data:
+                            openapiv3::SchemaData {
+                                nullable: false,
+                                discriminator: None,
+                                default: None,
+                                // Other fields that describe or document the
+                                // schema are fine.
+                                ..
+                            },
+                        schema_kind:
+                            openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                openapiv3::StringType {
+                                    format:
+                                        openapiv3::VariantOrUnknownOrEmpty::Empty,
+                                    pattern: None,
+                                    enumeration,
+                                    min_length: None,
+                                    max_length: None,
+                                },
+                            )),
+                    } if enumeration.is_empty() => Ok(()),
+                    _ => Err(Error::UnexpectedFormat(format!(
+                        "invalid schema for {}: {:?}",
+                        content_type, schema
                     ))),
                 }?;
                 OperationParameterType::RawBody

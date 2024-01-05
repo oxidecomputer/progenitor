@@ -7,6 +7,41 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
+    ///BodyWithDefaults
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "s"
+    ///  ],
+    ///  "properties": {
+    ///    "forty-two": {
+    ///      "default": 42,
+    ///      "type": "integer",
+    ///      "format": "uint32",
+    ///      "minimum": 0.0
+    ///    },
+    ///    "s": {
+    ///      "type": "string"
+    ///    },
+    ///    "something": {
+    ///      "default": true,
+    ///      "type": [
+    ///        "boolean",
+    ///        "null"
+    ///      ]
+    ///    },
+    ///    "yes": {
+    ///      "default": false,
+    ///      "type": "boolean"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct BodyWithDefaults {
         #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
@@ -25,6 +60,31 @@ pub mod types {
     }
 
     ///Error information from a response.
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "description": "Error information from a response.",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "message",
+    ///    "request_id"
+    ///  ],
+    ///  "properties": {
+    ///    "error_code": {
+    ///      "type": "string"
+    ///    },
+    ///    "message": {
+    ///      "type": "string"
+    ///    },
+    ///    "request_id": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
     #[derive(Clone, Debug, Deserialize, Serialize)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]

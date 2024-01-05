@@ -13,15 +13,33 @@
 
 == Unreleased changes (release date TBD)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.3.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.5.0\...HEAD[Full list of commits]
+
+== 0.5.0 (released 2023-12-16)
+
+* Improve breadth of schema support (#592)
+* Various changes to avoid name collisions (#599)
+* Support for text/plain and text/x-markdown body content types (#593)
+* Upgrade to `openapiv3` v2.0.0
+* Various type generation changes from `typify` 0.0.15
+
+https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...v0.5.0[Full list of commits]
+
+== 0.4.1 (released 2023-12-15)
+
+* Fixed an issue with `openapiv3` and `indexmap` dependencies
+
+https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...v0.4.1[Full list of commits]
+
+== 0.4.0 (released 2023-09-25)
+
+* Support for updated dropshot pagination extension (#465)
+* Many CLI and http mock generation improvements (beta)
+* Add cargo-progenitor (#476)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.3.0\...v0.4.0[Full list of commits]
 
 == 0.3.0 (released 2023-05-03)
-
-https://github.com/oxidecomputer/progenitor/compare/v0.3.0\...v0.3.0[Full list of commits]
-
-== 0.3.0 (released 2023-05-03)
-
-https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...v0.3.0[Full list of commits]
 
 * Add support for header parameters (#210)
 * Add support for YAML input (#227)
@@ -33,9 +51,9 @@ https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...v0.3.0[Full list o
 * Path-level parameter handling
 * Many options for augmenting type generation
 
-== 0.2.0 (released 2022-09-11)
+https://github.com/oxidecomputer/progenitor/compare/v0.2.0\...v0.3.0[Full list of commits]
 
-https://github.com/oxidecomputer/progenitor/compare/v0.1.1\...v0.2.0[Full list of commits]
+== 0.2.0 (released 2022-09-11)
 
 * Add support for a builder-style generation in addition to the positional style (#86)
 * Add support for body parameters with application/x-www-form-urlencoded media type (#109)
@@ -43,6 +61,8 @@ https://github.com/oxidecomputer/progenitor/compare/v0.1.1\...v0.2.0[Full list o
 * Builders for `struct` types (#171)
 * Add a prelude that include the `Client` and any extension traits (#176)
 * Add support for upgrading connections, which requires a version bump to reqwest. (#183)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.1.1\...v0.2.0[Full list of commits]
 
 == 0.1.1 (released 2022-05-13)
 

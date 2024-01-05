@@ -252,6 +252,25 @@
         }
       }
     },
+    "/v1/whoami/name": {
+      "put": {
+        "operationId": "whoami_put_name",
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
     "/v1/worker/bootstrap": {
       "post": {
         "operationId": "worker_bootstrap",

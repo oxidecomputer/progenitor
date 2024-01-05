@@ -2,6 +2,7 @@
 
 use indexmap::IndexMap;
 use openapiv3::AnySchema;
+use schemars::schema::SingleOrVec;
 use serde_json::Value;
 
 pub trait ToSchema {
@@ -298,17 +299,18 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 ..Default::default()
             },
 
-            openapiv3::SchemaKind::Type(openapiv3::Type::Boolean {}) => {
-                schemars::schema::SchemaObject {
-                    metadata,
-                    instance_type: instance_type(
-                        schemars::schema::InstanceType::Boolean,
-                        nullable,
-                    ),
-                    extensions,
-                    ..Default::default()
-                }
-            }
+            openapiv3::SchemaKind::Type(openapiv3::Type::Boolean(
+                openapiv3::BooleanType { enumeration },
+            )) => schemars::schema::SchemaObject {
+                metadata,
+                instance_type: instance_type(
+                    schemars::schema::InstanceType::Boolean,
+                    nullable,
+                ),
+                enum_values: enumeration.convert(),
+                extensions,
+                ..Default::default()
+            },
 
             openapiv3::SchemaKind::OneOf { one_of } => {
                 schemars::schema::SchemaObject {
@@ -402,7 +404,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 schemars::schema::SchemaObject {
                     metadata,
                     extensions,
-                    ..schemars::schema::Schema::Bool(true).into_object()
+                    ..Default::default()
                 }
             }
 
@@ -450,170 +452,220 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 }
             }
 
-            // Malformed object with 'type' not set.
             openapiv3::SchemaKind::Any(AnySchema {
-                typ: None,
-                pattern: None,
-                multiple_of: None,
-                exclusive_minimum: None,
-                exclusive_maximum: None,
-                minimum: None,
-                maximum: None,
-                properties,
-                required,
-                additional_properties,
-                min_properties,
-                max_properties,
-                items: None,
-                min_items: None,
-                max_items: None,
-                unique_items: None,
-                format: None,
-                enumeration,
-                min_length: None,
-                max_length: None,
-                one_of,
-                all_of,
-                any_of,
-                not: None,
-            }) if enumeration.is_empty()
-                && one_of.is_empty()
-                && all_of.is_empty()
-                && any_of.is_empty() =>
-            {
-                let object = openapiv3::Schema {
-                    schema_data: self.schema_data.clone(),
-                    schema_kind: openapiv3::SchemaKind::Type(
-                        openapiv3::Type::Object(openapiv3::ObjectType {
-                            properties: properties.clone(),
-                            required: required.clone(),
-                            additional_properties: additional_properties
-                                .clone(),
-                            min_properties: *min_properties,
-                            max_properties: *max_properties,
-                        }),
-                    ),
-                };
-                object.convert().into()
-            }
-
-            // Malformed array with 'type' not set.
-            openapiv3::SchemaKind::Any(AnySchema {
-                typ: None,
-                pattern: None,
-                multiple_of: None,
-                exclusive_minimum: None,
-                exclusive_maximum: None,
-                minimum: None,
-                maximum: None,
-                properties,
-                required,
-                additional_properties: None,
-                min_properties: None,
-                max_properties: None,
-                items: items @ Some(_),
-                min_items,
-                max_items,
-                unique_items,
-                format: None,
-                enumeration,
-                min_length: None,
-                max_length: None,
-                one_of,
-                all_of,
-                any_of,
-                not: None,
-            }) if properties.is_empty()
-                && required.is_empty()
-                && enumeration.is_empty()
-                && one_of.is_empty()
-                && all_of.is_empty()
-                && any_of.is_empty() =>
-            {
-                let array = openapiv3::Schema {
-                    schema_data: self.schema_data.clone(),
-                    schema_kind: openapiv3::SchemaKind::Type(
-                        openapiv3::Type::Array(openapiv3::ArrayType {
-                            items: items.clone(),
-                            min_items: *min_items,
-                            max_items: *max_items,
-                            unique_items: unique_items.unwrap_or(false),
-                        }),
-                    ),
-                };
-                array.convert().into()
-            }
-
-            // Handle integers with floating-point constraint values
-            // (multiple_of, minimum, or maximum). We could check that these
-            // values are integers... but schemars::schema::NumberValidation
-            // doesn't care so neither do we.
-            openapiv3::SchemaKind::Any(AnySchema {
-                typ: Some(typ),
-                pattern: _,
+                typ,
+                pattern,
                 multiple_of,
                 exclusive_minimum,
                 exclusive_maximum,
                 minimum,
                 maximum,
-                properties: _,
-                required: _,
-                additional_properties: _,
-                min_properties: _,
-                max_properties: _,
-                items: _,
-                min_items: _,
-                max_items: _,
-                unique_items: _,
+                properties,
+                required,
+                additional_properties,
+                min_properties,
+                max_properties,
+                items,
+                min_items,
+                max_items,
+                unique_items,
                 enumeration,
                 format,
-                min_length: _,
-                max_length: _,
+                min_length,
+                max_length,
                 one_of,
                 all_of,
                 any_of,
-                not: None,
-            }) if typ == "integer"
-                && one_of.is_empty()
-                && all_of.is_empty()
-                && any_of.is_empty() =>
-            {
-                let (maximum, exclusive_maximum) =
-                    match (maximum, exclusive_maximum) {
-                        (v, Some(true)) => (None, *v),
-                        (v, _) => (*v, None),
-                    };
-                let (minimum, exclusive_minimum) =
-                    match (minimum, exclusive_minimum) {
-                        (v, Some(true)) => (None, *v),
-                        (v, _) => (*v, None),
-                    };
-                schemars::schema::SchemaObject {
+                not,
+            }) => {
+                let mut so = schemars::schema::SchemaObject {
                     metadata,
-                    instance_type: instance_type(
-                        schemars::schema::InstanceType::Integer,
-                        nullable,
-                    ),
-                    format: format.clone(),
-                    enum_values: (!enumeration.is_empty())
-                        .then(|| enumeration.clone()),
-                    number: Some(Box::new(
-                        schemars::schema::NumberValidation {
-                            multiple_of: *multiple_of,
-                            maximum,
-                            exclusive_maximum,
-                            minimum,
-                            exclusive_minimum,
-                        },
-                    ))
-                    .reduce(),
                     extensions,
                     ..Default::default()
-                }
-            }
+                };
 
-            openapiv3::SchemaKind::Any(_) => {
-                panic!("not clear what we could usefully do here {:#?}", self)
+                // General
+                if let Some(format) = format {
+                    so.format = Some(format.clone());
+                }
+                if !enumeration.is_empty() {
+                    so.enum_values = Some(enumeration.clone());
+                }
+
+                // String
+                if let Some(pattern) = pattern {
+                    so.string().pattern = Some(pattern.clone());
+                }
+                if let Some(min_length) = min_length {
+                    so.string().min_length = Some(*min_length as u32);
+                }
+                if let Some(max_length) = max_length {
+                    so.string().max_length = Some(*max_length as u32);
+                }
+
+                // Number
+                if let Some(multiple_of) = multiple_of {
+                    so.number().multiple_of = Some(*multiple_of);
+                }
+                match (minimum, exclusive_minimum) {
+                    (None, Some(true)) => {
+                        todo!("exclusive_minimum set without minimum");
+                    }
+                    (None, _) => (),
+                    (Some(minimum), Some(true)) => {
+                        so.number().exclusive_minimum = Some(*minimum);
+                    }
+                    (Some(minimum), _) => {
+                        so.number().minimum = Some(*minimum);
+                    }
+                }
+                match (maximum, exclusive_maximum) {
+                    (None, Some(true)) => {
+                        todo!("exclusive_maximum set without maximum");
+                    }
+                    (None, _) => (),
+                    (Some(maximum), Some(true)) => {
+                        so.number().exclusive_maximum = Some(*maximum);
+                    }
+                    (Some(maximum), _) => {
+                        so.number().maximum = Some(*maximum);
+                    }
+                }
+
+                // Object
+                if !properties.is_empty() {
+                    so.object().properties = properties.convert();
+                }
+                if !required.is_empty() {
+                    so.object().required = required.convert();
+                }
+                if additional_properties.is_some() {
+                    so.object().additional_properties =
+                        additional_properties.convert();
+                }
+                if let Some(min_properties) = min_properties {
+                    so.object().min_properties = Some(*min_properties as u32);
+                }
+                if let Some(max_properties) = max_properties {
+                    so.object().max_properties = Some(*max_properties as u32);
+                }
+
+                // Array
+                if items.is_some() {
+                    so.array().items =
+                        items.convert().clone().map(SingleOrVec::Single);
+                }
+                if let Some(min_items) = min_items {
+                    so.array().min_items = Some(*min_items as u32);
+                }
+                if let Some(max_items) = max_items {
+                    so.array().max_items = Some(*max_items as u32);
+                }
+                if let Some(unique_items) = unique_items {
+                    so.array().unique_items = Some(*unique_items);
+                }
+
+                // Subschemas
+                if !one_of.is_empty() {
+                    so.subschemas().one_of = one_of.convert();
+                }
+                if !all_of.is_empty() {
+                    so.subschemas().all_of = all_of.convert();
+                }
+                if !any_of.is_empty() {
+                    so.subschemas().any_of = any_of.convert();
+                }
+                if not.is_some() {
+                    so.subschemas().not = not.convert();
+                }
+
+                // We do this last so we can infer types if none are specified.
+                match (typ.as_deref(), nullable) {
+                    (Some("boolean"), _) => {
+                        so.instance_type = instance_type(
+                            schemars::schema::InstanceType::Boolean,
+                            nullable,
+                        );
+                    }
+                    (Some("object"), _) => {
+                        so.instance_type = instance_type(
+                            schemars::schema::InstanceType::Object,
+                            nullable,
+                        );
+                    }
+                    (Some("array"), _) => {
+                        so.instance_type = instance_type(
+                            schemars::schema::InstanceType::Array,
+                            nullable,
+                        );
+                    }
+                    (Some("number"), _) => {
+                        so.instance_type = instance_type(
+                            schemars::schema::InstanceType::Number,
+                            nullable,
+                        );
+                    }
+                    (Some("string"), _) => {
+                        so.instance_type = instance_type(
+                            schemars::schema::InstanceType::String,
+                            nullable,
+                        );
+                    }
+                    (Some("integer"), _) => {
+                        so.instance_type = instance_type(
+                            schemars::schema::InstanceType::Integer,
+                            nullable,
+                        );
+                    }
+
+                    (Some(typ), _) => todo!("invalid type: {}", typ),
+
+                    // No types
+                    (None, false) => (),
+
+                    // We only try to infer types if we need to add in an
+                    // additional null type; otherwise we can leave the type
+                    // implied.
+                    (None, true) => {
+                        let instance_types = [
+                            so.object.is_some().then_some(
+                                schemars::schema::InstanceType::Object,
+                            ),
+                            so.array.is_some().then_some(
+                                schemars::schema::InstanceType::Array,
+                            ),
+                            so.number.is_some().then_some(
+                                schemars::schema::InstanceType::Array,
+                            ),
+                            so.string.is_some().then_some(
+                                schemars::schema::InstanceType::Array,
+                            ),
+                            nullable.then_some(
+                                schemars::schema::InstanceType::Null,
+                            ),
+                        ]
+                        .into_iter()
+                        .flatten()
+                        .collect::<Vec<_>>();
+
+                        // TODO we could also look at enumerated values.
+
+                        so.instance_type = match (
+                            instance_types.first(),
+                            instance_types.len(),
+                        ) {
+                            (Some(typ), 1) => {
+                                Some(SingleOrVec::Single(Box::new(*typ)))
+                            }
+                            (Some(_), _) => {
+                                Some(SingleOrVec::Vec(instance_types))
+                            }
+                            (None, _) => None,
+                        };
+                    }
+                };
+
+                so
             }
         }
         .into()
@@ -689,6 +741,14 @@ impl Convert<Value> for Option<i64> {
     fn convert(&self) -> Value {
         match self {
             Some(value) => Value::Number(serde_json::Number::from(*value)),
+            None => Value::Null,
+        }
+    }
+}
+impl Convert<Value> for Option<bool> {
+    fn convert(&self) -> Value {
+        match self {
+            Some(value) => Value::Bool(*value),
             None => Value::Null,
         }
     }
@@ -803,6 +863,72 @@ mod tests {
         let schema_value = json!({
             "type": "integer",
             "minimum": 0.0,
+        });
+        let oa_schema =
+            serde_json::from_value::<openapiv3::Schema>(schema_value.clone())
+                .unwrap();
+        let js_schema =
+            serde_json::from_value::<schemars::schema::Schema>(schema_value)
+                .unwrap();
+
+        let conv_schema = oa_schema.convert();
+        assert_eq!(conv_schema, js_schema);
+    }
+
+    #[test]
+    fn test_object_no_type() {
+        let schema_value = json!({
+            "properties": {
+                "foo": {}
+            }
+        });
+        let oa_schema =
+            serde_json::from_value::<openapiv3::Schema>(schema_value.clone())
+                .unwrap();
+        let js_schema =
+            serde_json::from_value::<schemars::schema::Schema>(schema_value)
+                .unwrap();
+
+        let conv_schema = oa_schema.convert();
+        assert_eq!(conv_schema, js_schema);
+    }
+
+    #[test]
+    fn test_array_no_type() {
+        let schema_value = json!({
+            "items": {}
+        });
+        let oa_schema =
+            serde_json::from_value::<openapiv3::Schema>(schema_value.clone())
+                .unwrap();
+        let js_schema =
+            serde_json::from_value::<schemars::schema::Schema>(schema_value)
+                .unwrap();
+
+        let conv_schema = oa_schema.convert();
+        assert_eq!(conv_schema, js_schema);
+    }
+
+    #[test]
+    fn test_number_no_type() {
+        let schema_value = json!({
+            "minimum": 100.0
+        });
+        let oa_schema =
+            serde_json::from_value::<openapiv3::Schema>(schema_value.clone())
+                .unwrap();
+        let js_schema =
+            serde_json::from_value::<schemars::schema::Schema>(schema_value)
+                .unwrap();
+
+        let conv_schema = oa_schema.convert();
+        assert_eq!(conv_schema, js_schema);
+    }
+
+    #[test]
+    fn test_solo_enum() {
+        let schema_value = json!({
+            "enum": ["one"]
         });
         let oa_schema =
             serde_json::from_value::<openapiv3::Schema>(schema_value.clone())
