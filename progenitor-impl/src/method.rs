@@ -1,4 +1,4 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
 use std::{
     cmp::Ordering,
@@ -2010,6 +2010,7 @@ impl Generator {
     pub(crate) fn builder_tags(
         &self,
         methods: &[OperationMethod],
+        tag_info: &BTreeMap<&String, &openapiv3::Tag>,
     ) -> (TokenStream, TokenStream) {
         let mut base = Vec::new();
         let mut ext = BTreeMap::new();
@@ -2055,6 +2056,10 @@ impl Generator {
         let (ext_impl, ext_use): (Vec<_>, Vec<_>) = ext
             .into_iter()
             .map(|(tag, trait_methods)| {
+                let desc = tag_info
+                    .get(&tag)
+                    .and_then(|tag| tag.description.as_ref())
+                    .map(|d| quote! { #[doc = #d] });
                 let tr =
                     format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));
                 let (trait_methods, trait_impls): (
@@ -2063,6 +2068,7 @@ impl Generator {
                 ) = trait_methods.into_iter().unzip();
                 (
                     quote! {
+                        #desc
                         pub trait #tr {
                             #(#trait_methods)*
                         }
