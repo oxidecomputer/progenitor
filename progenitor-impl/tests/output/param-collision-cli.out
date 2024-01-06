@@ -1,10 +1,11 @@
+use sdk::*;
 pub struct Cli<T: CliOverride = ()> {
-    client: sdk::Client,
+    client: Client,
     over: T,
 }
 
 impl Cli {
-    pub fn new(client: sdk::Client) -> Self {
+    pub fn new(client: Client) -> Self {
         Self { client, over: () }
     }
 
@@ -63,7 +64,7 @@ impl Cli {
 }
 
 impl<T: CliOverride> Cli<T> {
-    pub fn new_with_override(client: sdk::Client, over: T) -> Self {
+    pub fn new_with_override(client: Client, over: T) -> Self {
         Self { client, over }
     }
 

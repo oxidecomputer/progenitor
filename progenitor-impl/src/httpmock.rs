@@ -79,7 +79,10 @@ impl Generator {
         let then_impl =
             methods.iter().map(|op| &op.then_impl).collect::<Vec<_>>();
 
-        let crate_ident = format_ident!("{}", crate_name);
+        let crate_path = syn::TypePath {
+            qself: None,
+            path: syn::parse_str(&crate_name).unwrap(),
+        };
 
         let code = quote! {
             pub mod operations {
@@ -89,7 +92,7 @@ impl Generator {
                 //! its inner type with a call to `into_inner()`. This can
                 //! be used to explicitly deviate from permitted values.
 
-                use #crate_ident::*;
+                use #crate_path::*;
 
                 #(
                     pub struct #when(httpmock::When);
