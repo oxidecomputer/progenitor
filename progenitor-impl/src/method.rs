@@ -1550,7 +1550,7 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
-        // For builders we map `Ok` values to perform a `try_into` to attempt
+        // For builders we map `Ok` values to perform a `try_from` to attempt
         // to convert the builder into the desired type. No "finalization" is
         // required for non-builders (required or optional).
         let param_finalize = method
@@ -1562,9 +1562,8 @@ impl Generator {
                     if ty.builder().is_some() {
                         let type_name = ty.ident();
                         Ok(quote! {
-                            .and_then(
-                                std::convert::TryInto::<#type_name>::try_into
-                            )
+                            .and_then(|v| #type_name::try_from(v)
+                                .map_err(|e| e.to_string()))
                         })
                     } else {
                         Ok(quote! {})
