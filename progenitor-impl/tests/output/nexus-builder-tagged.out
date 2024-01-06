@@ -3,6 +3,7 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 #[allow(unused_imports)]
 use reqwest::header::{HeaderMap, HeaderValue};
+/// Types used as operation parameters and responses.
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -24534,6 +24535,8 @@ impl Client {
     }
 }
 
+///Virtual disks are used to store instance-local data which includes the
+/// operating system.
 pub trait ClientDisksExt {
     ///Fetch a disk by id
     ///
@@ -24758,6 +24761,7 @@ impl ClientDisksExt for Client {
     }
 }
 
+///TODO operations that will not ship to customers
 pub trait ClientHiddenExt {
     ///Start an OAuth 2.0 Device Authorization Grant
     ///
@@ -24881,6 +24885,7 @@ impl ClientHiddenExt for Client {
     }
 }
 
+///Images are read-only Virtual Disks that may be used to boot Virtual Machines
 pub trait ClientImagesExt {
     ///Fetch an image by id
     ///
@@ -24999,6 +25004,8 @@ impl ClientImagesExt for Client {
     }
 }
 
+///Virtual machine instances are the basic unit of computation. These
+/// operations are used for provisioning, controlling, and destroying instances.
 pub trait ClientInstancesExt {
     ///Fetch an instance by id
     ///
@@ -25744,6 +25751,7 @@ impl ClientInstancesExt for Client {
     }
 }
 
+///Authentication endpoints
 pub trait ClientLoginExt {
     ///Authenticate a user (i.e., log in) via username and password
     ///
@@ -25801,6 +25809,9 @@ impl ClientLoginExt for Client {
     }
 }
 
+///Metrics provide insight into the operation of the Oxide deployment. These
+/// include telemetry on hardware and software components that can be used to
+/// understand the current state as well as to diagnose issues.
 pub trait ClientMetricsExt {
     ///List timeseries schema
     ///
@@ -25826,6 +25837,8 @@ impl ClientMetricsExt for Client {
     }
 }
 
+///Organizations represent a subset of users and projects in an Oxide
+/// deployment.
 pub trait ClientOrganizationsExt {
     ///Fetch an organization by id
     ///
@@ -26102,6 +26115,7 @@ impl ClientOrganizationsExt for Client {
     }
 }
 
+///System-wide IAM policy
 pub trait ClientPolicyExt {
     ///Fetch the top-level IAM policy
     ///
@@ -26136,6 +26150,8 @@ impl ClientPolicyExt for Client {
     }
 }
 
+///Projects are a grouping of associated resources such as instances and disks
+/// within an organization for purposes of billing and access control.
 pub trait ClientProjectsExt {
     ///Fetch a project by id
     ///
@@ -26439,6 +26455,8 @@ impl ClientProjectsExt for Client {
     }
 }
 
+///Roles are a component of Identity and Access Management (IAM) that allow a
+/// user or agent account access to additional permissions.
 pub trait ClientRolesExt {
     ///List built-in roles
     ///
@@ -26481,6 +26499,7 @@ impl ClientRolesExt for Client {
     }
 }
 
+///Information pertaining to the current session.
 pub trait ClientSessionExt {
     ///List SSH public keys
     ///
@@ -26563,6 +26582,7 @@ impl ClientSessionExt for Client {
     }
 }
 
+///Silos represent a logical partition of users and resources.
 pub trait ClientSilosExt {
     ///List groups
     ///
@@ -26641,6 +26661,7 @@ impl ClientSilosExt for Client {
     }
 }
 
+///Snapshots of Virtual Disks at a particular point in time.
 pub trait ClientSnapshotsExt {
     ///Fetch a snapshot by id
     ///
@@ -26750,6 +26771,7 @@ impl ClientSnapshotsExt for Client {
     }
 }
 
+///Internal system information
 pub trait ClientSystemExt {
     ///Fetch a system-wide image by id
     ///
@@ -27852,6 +27874,8 @@ impl ClientSystemExt for Client {
     }
 }
 
+///A Virtual Private Cloud (VPC) is an isolated network environment that should
+/// probaby be moved into a more generic networking tag
 pub trait ClientVpcsExt {
     ///Fetch a route by id
     ///
@@ -28436,6 +28460,7 @@ impl ClientVpcsExt for Client {
     }
 }
 
+/// Types for composing operation parameters.
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
@@ -29137,7 +29162,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::DeviceAuthRequest>::try_into)
+                .and_then(|v| types::DeviceAuthRequest::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/device/auth", client.baseurl,);
             let request = client.client.post(url).form_urlencoded(&body)?.build()?;
@@ -29193,7 +29218,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::DeviceAuthVerify>::try_into)
+                .and_then(|v| types::DeviceAuthVerify::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/device/confirm", client.baseurl,);
             let request = client
@@ -29265,7 +29290,9 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::DeviceAccessTokenRequest>::try_into)
+                .and_then(|v| {
+                    types::DeviceAccessTokenRequest::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/device/token", client.baseurl,);
             let request = client.client.post(url).form_urlencoded(&body)?.build()?;
@@ -29476,7 +29503,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::SpoofLoginBody>::try_into)
+                .and_then(|v| types::SpoofLoginBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/login", client.baseurl,);
             let request = client
@@ -29566,7 +29593,9 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::UsernamePasswordCredentials>::try_into)
+                .and_then(|v| {
+                    types::UsernamePasswordCredentials::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/login/{}/local",
@@ -29991,7 +30020,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::OrganizationCreate>::try_into)
+                .and_then(|v| types::OrganizationCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/organizations", client.baseurl,);
             let request = client
@@ -30140,7 +30169,7 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::OrganizationUpdate>::try_into)
+                .and_then(|v| types::OrganizationUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}",
@@ -30361,7 +30390,7 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::OrganizationRolePolicy>::try_into)
+                .and_then(|v| types::OrganizationRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/policy",
@@ -30628,7 +30657,7 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ProjectCreate>::try_into)
+                .and_then(|v| types::ProjectCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects",
@@ -30810,7 +30839,7 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ProjectUpdate>::try_into)
+                .and_then(|v| types::ProjectUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}",
@@ -31185,7 +31214,7 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::DiskCreate>::try_into)
+                .and_then(|v| types::DiskCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/disks",
@@ -31914,7 +31943,7 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ImageCreate>::try_into)
+                .and_then(|v| types::ImageCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/images",
@@ -32402,7 +32431,7 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::InstanceCreate>::try_into)
+                .and_then(|v| types::InstanceCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/instances",
@@ -32919,7 +32948,7 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::DiskIdentifier>::try_into)
+                .and_then(|v| types::DiskIdentifier::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
@@ -33040,7 +33069,7 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::DiskIdentifier>::try_into)
+                .and_then(|v| types::DiskIdentifier::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
@@ -33257,7 +33286,7 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::InstanceMigrate>::try_into)
+                .and_then(|v| types::InstanceMigrate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/instances/{}/migrate",
@@ -33594,7 +33623,7 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::NetworkInterfaceCreate>::try_into)
+                .and_then(|v| types::NetworkInterfaceCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
@@ -33846,7 +33875,7 @@ pub mod builder {
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let interface_name = interface_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::NetworkInterfaceUpdate>::try_into)
+                .and_then(|v| types::NetworkInterfaceUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
@@ -34677,7 +34706,7 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ProjectRolePolicy>::try_into)
+                .and_then(|v| types::ProjectRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/policy",
@@ -34977,7 +35006,7 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::SnapshotCreate>::try_into)
+                .and_then(|v| types::SnapshotCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/snapshots",
@@ -35462,7 +35491,7 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::VpcCreate>::try_into)
+                .and_then(|v| types::VpcCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs",
@@ -35676,7 +35705,7 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::VpcUpdate>::try_into)
+                .and_then(|v| types::VpcUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs/{}",
@@ -35994,7 +36023,9 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::VpcFirewallRuleUpdateParams>::try_into)
+                .and_then(|v| {
+                    types::VpcFirewallRuleUpdateParams::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
@@ -36324,7 +36355,7 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::VpcRouterCreate>::try_into)
+                .and_then(|v| types::VpcRouterCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs/{}/routers",
@@ -36568,7 +36599,7 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::VpcRouterUpdate>::try_into)
+                .and_then(|v| types::VpcRouterUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
@@ -37041,7 +37072,9 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::RouterRouteCreateParams>::try_into)
+                .and_then(|v| {
+                    types::RouterRouteCreateParams::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
@@ -37319,7 +37352,9 @@ pub mod builder {
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let route_name = route_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::RouterRouteUpdateParams>::try_into)
+                .and_then(|v| {
+                    types::RouterRouteUpdateParams::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
@@ -37775,7 +37810,7 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::VpcSubnetCreate>::try_into)
+                .and_then(|v| types::VpcSubnetCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
@@ -38019,7 +38054,7 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let subnet_name = subnet_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::VpcSubnetUpdate>::try_into)
+                .and_then(|v| types::VpcSubnetUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
@@ -38472,7 +38507,7 @@ pub mod builder {
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::SiloRolePolicy>::try_into)
+                .and_then(|v| types::SiloRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/policy", client.baseurl,);
             let request = client
@@ -39091,7 +39126,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::SshKeyCreate>::try_into)
+                .and_then(|v| types::SshKeyCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/session/me/sshkeys", client.baseurl,);
             let request = client
@@ -39619,7 +39654,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::CertificateCreate>::try_into)
+                .and_then(|v| types::CertificateCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/certificates", client.baseurl,);
             let request = client
@@ -40734,7 +40769,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::GlobalImageCreate>::try_into)
+                .and_then(|v| types::GlobalImageCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/images", client.baseurl,);
             let request = client
@@ -41077,7 +41112,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::IpPoolCreate>::try_into)
+                .and_then(|v| types::IpPoolCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/ip-pools", client.baseurl,);
             let request = client
@@ -41221,7 +41256,7 @@ pub mod builder {
             } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::IpPoolUpdate>::try_into)
+                .and_then(|v| types::IpPoolUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/ip-pools/{}",
@@ -42150,7 +42185,7 @@ pub mod builder {
         ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::FleetRolePolicy>::try_into)
+                .and_then(|v| types::FleetRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/policy", client.baseurl,);
             let request = client
@@ -42591,7 +42626,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::SiloCreate>::try_into)
+                .and_then(|v| types::SiloCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/silos", client.baseurl,);
             let request = client
@@ -42973,7 +43008,7 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::UserCreate>::try_into)
+                .and_then(|v| types::UserCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/silos/{}/identity-providers/local/users",
@@ -43242,7 +43277,9 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::SamlIdentityProviderCreate>::try_into)
+                .and_then(|v| {
+                    types::SamlIdentityProviderCreate::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/silos/{}/identity-providers/saml",
@@ -43474,7 +43511,7 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::SiloRolePolicy>::try_into)
+                .and_then(|v| types::SiloRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/silos/{}/policy",
@@ -44538,7 +44575,7 @@ pub mod builder {
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::DiskCreate>::try_into)
+                .and_then(|v| types::DiskCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/disks", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
@@ -45039,7 +45076,7 @@ pub mod builder {
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::InstanceCreate>::try_into)
+                .and_then(|v| types::InstanceCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/instances", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
@@ -45573,7 +45610,7 @@ pub mod builder {
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::DiskPath>::try_into)
+                .and_then(|v| types::DiskPath::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/instances/{}/disks/attach",
@@ -45700,7 +45737,7 @@ pub mod builder {
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::DiskPath>::try_into)
+                .and_then(|v| types::DiskPath::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/instances/{}/disks/detach",
@@ -45827,7 +45864,7 @@ pub mod builder {
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::InstanceMigrate>::try_into)
+                .and_then(|v| types::InstanceMigrate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/instances/{}/migrate",
@@ -46626,7 +46663,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::OrganizationCreate>::try_into)
+                .and_then(|v| types::OrganizationCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/organizations", client.baseurl,);
             let request = client
@@ -46775,7 +46812,7 @@ pub mod builder {
             } = self;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::OrganizationUpdate>::try_into)
+                .and_then(|v| types::OrganizationUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/organizations/{}",
@@ -46996,7 +47033,7 @@ pub mod builder {
             } = self;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::OrganizationRolePolicy>::try_into)
+                .and_then(|v| types::OrganizationRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/organizations/{}/policy",
@@ -47261,7 +47298,7 @@ pub mod builder {
             } = self;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ProjectCreate>::try_into)
+                .and_then(|v| types::ProjectCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/projects", client.baseurl,);
             let mut query = Vec::with_capacity(1usize);
@@ -47446,7 +47483,7 @@ pub mod builder {
             let project = project.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ProjectUpdate>::try_into)
+                .and_then(|v| types::ProjectUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/projects/{}",
@@ -47725,7 +47762,7 @@ pub mod builder {
             let project = project.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ProjectRolePolicy>::try_into)
+                .and_then(|v| types::ProjectRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/projects/{}/policy",
@@ -48224,7 +48261,7 @@ pub mod builder {
         ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::SystemUpdateStart>::try_into)
+                .and_then(|v| types::SystemUpdateStart::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/system/update/start", client.baseurl,);
             let request = client
@@ -48612,6 +48649,8 @@ pub mod builder {
     }
 }
 
+/// Items consumers will typically use such as the Client and
+/// extension traits.
 pub mod prelude {
     pub use super::Client;
     pub use super::ClientDisksExt;

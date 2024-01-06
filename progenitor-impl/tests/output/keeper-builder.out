@@ -3,6 +3,7 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 #[allow(unused_imports)]
 use reqwest::header::{HeaderMap, HeaderValue};
+/// Types used as operation parameters and responses.
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -1332,6 +1333,7 @@ impl Client {
     }
 }
 
+/// Types for composing operation parameters.
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
@@ -1396,7 +1398,7 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::EnrolBody>::try_into)
+                .and_then(|v| types::EnrolBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/enrol", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
@@ -1586,7 +1588,7 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ReportFinishBody>::try_into)
+                .and_then(|v| types::ReportFinishBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/finish", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
@@ -1670,7 +1672,7 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ReportOutputBody>::try_into)
+                .and_then(|v| types::ReportOutputBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/output", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
@@ -1752,7 +1754,7 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::ReportStartBody>::try_into)
+                .and_then(|v| types::ReportStartBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/start", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
@@ -1777,6 +1779,7 @@ pub mod builder {
     }
 }
 
+/// Items consumers will typically use such as the Client.
 pub mod prelude {
     pub use self::super::Client;
 }

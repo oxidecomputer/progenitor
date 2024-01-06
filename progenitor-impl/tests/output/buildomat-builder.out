@@ -3,6 +3,7 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 #[allow(unused_imports)]
 use reqwest::header::{HeaderMap, HeaderValue};
+/// Types used as operation parameters and responses.
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -2344,6 +2345,7 @@ impl Client {
     }
 }
 
+/// Types for composing operation parameters.
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
@@ -2539,7 +2541,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::TaskSubmit>::try_into)
+                .and_then(|v| types::TaskSubmit::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/tasks", client.baseurl,);
             let request = client
@@ -2794,7 +2796,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::UserCreate>::try_into)
+                .and_then(|v| types::UserCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/users", client.baseurl,);
             let request = client
@@ -2941,7 +2943,7 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(std::convert::TryInto::<types::WorkerBootstrap>::try_into)
+                .and_then(|v| types::WorkerBootstrap::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
             let request = client
@@ -3052,7 +3054,7 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::WorkerAppendTask>::try_into)
+                .and_then(|v| types::WorkerAppendTask::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/append",
@@ -3196,7 +3198,7 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::WorkerCompleteTask>::try_into)
+                .and_then(|v| types::WorkerCompleteTask::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/complete",
@@ -3267,7 +3269,7 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(std::convert::TryInto::<types::WorkerAddOutput>::try_into)
+                .and_then(|v| types::WorkerAddOutput::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/worker/task/{}/output",
@@ -3346,6 +3348,7 @@ pub mod builder {
     }
 }
 
+/// Items consumers will typically use such as the Client.
 pub mod prelude {
     pub use self::super::Client;
 }
