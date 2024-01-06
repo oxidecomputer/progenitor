@@ -1,5 +1,6 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
+use std::collections::BTreeMap;
 use std::collections::{HashMap, HashSet};
 
 use openapiv3::OpenAPI;
@@ -257,7 +258,12 @@ impl Generator {
                 self.generate_tokens_builder_merged(&raw_methods)
             }
             (InterfaceStyle::Builder, TagStyle::Separate) => {
-                self.generate_tokens_builder_separate(&raw_methods)
+                let tag_info = spec
+                    .tags
+                    .iter()
+                    .map(|tag| (&tag.name, tag))
+                    .collect::<BTreeMap<_, _>>();
+                self.generate_tokens_builder_separate(&raw_methods, tag_info)
             }
         }?;
 
@@ -318,6 +324,7 @@ impl Generator {
             #[allow(unused_imports)]
             use reqwest::header::{HeaderMap, HeaderValue};
 
+            /// Types used as operation parameters and responses.
             pub mod types {
                 use serde::{Deserialize, Serialize};
 
@@ -418,6 +425,7 @@ impl Generator {
                 #(#methods)*
             }
 
+            /// Items consumers will typically use such as the Client.
             pub mod prelude {
                 pub use super::Client;
             }
@@ -444,6 +452,7 @@ impl Generator {
                 #(#builder_methods)*
             }
 
+            /// Types for composing operation parameters.
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
@@ -460,6 +469,7 @@ impl Generator {
                 #(#builder_struct)*
             }
 
+            /// Items consumers will typically use such as the Client.
             pub mod prelude {
                 pub use self::super::Client;
             }
@@ -471,6 +481,7 @@ impl Generator {
     fn generate_tokens_builder_separate(
         &mut self,
         input_methods: &[method::OperationMethod],
+        tag_info: BTreeMap<&String, &openapiv3::Tag>,
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
             .iter()
@@ -478,11 +489,12 @@ impl Generator {
             .collect::<Result<Vec<_>>>()?;
 
         let (traits_and_impls, trait_preludes) =
-            self.builder_tags(input_methods);
+            self.builder_tags(input_methods, &tag_info);
 
         let out = quote! {
             #traits_and_impls
 
+            /// Types for composing operation parameters.
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
@@ -497,9 +509,10 @@ impl Generator {
                 };
 
                 #(#builder_struct)*
-
             }
 
+            /// Items consumers will typically use such as the Client and
+            /// extension traits.
             pub mod prelude {
                 pub use super::Client;
                 #trait_preludes

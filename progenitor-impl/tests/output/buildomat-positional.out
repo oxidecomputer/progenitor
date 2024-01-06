@@ -3,6 +3,7 @@ use progenitor_client::{encode_path, RequestBuilderExt};
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
 #[allow(unused_imports)]
 use reqwest::header::{HeaderMap, HeaderValue};
+/// Types used as operation parameters and responses.
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -1205,6 +1206,7 @@ impl Client {
     }
 }
 
+/// Items consumers will typically use such as the Client.
 pub mod prelude {
     pub use super::Client;
 }
