@@ -401,6 +401,7 @@ const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
     .add(b'%');
 
 #[doc(hidden)]
+/// Percent encode input string.
 pub fn encode_path(pc: &str) -> String {
     percent_encoding::utf8_percent_encode(pc, PATH_SET).to_string()
 }
