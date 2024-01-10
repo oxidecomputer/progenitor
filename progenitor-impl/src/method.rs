@@ -30,6 +30,7 @@ pub(crate) struct OperationMethod {
     pub responses: Vec<OperationResponse>,
     pub dropshot_paginated: Option<DropshotPagination>,
     dropshot_websocket: bool,
+    no_send: bool,
 }
 
 pub enum HttpMethod {
@@ -436,6 +437,8 @@ impl Generator {
             self.uses_websockets = true;
         }
 
+        let no_send = operation.extensions.get("x-dropshot-nosend").is_some();
+
         if let Some(body_param) = self.get_body_param(operation, components)? {
             params.push(body_param);
         }
@@ -586,6 +589,7 @@ impl Generator {
             responses,
             dropshot_paginated,
             dropshot_websocket,
+            no_send,
         })
     }
 
@@ -1722,33 +1726,39 @@ impl Generator {
             method.method.as_str().to_ascii_uppercase(),
             method.path.to_string(),
         );
-        let send_impl = quote! {
-            #[doc = #send_doc]
-            pub async fn send(self) -> Result<
-                ResponseValue<#success>,
-                Error<#error>,
-            > {
-                // Destructure the builder for convenience.
-                let Self {
-                    #client_ident,
-                    #( #param_names, )*
-                } = self;
+        let send_impl = if method.no_send {
+            quote! {
+                // The send() method is omitted for this function intentionally
+            }
+        } else {
+            quote! {
+                #[doc = #send_doc]
+                pub async fn send(self) -> Result<
+                    ResponseValue<#success>,
+                    Error<#error>,
+                > {
+                    // Destructure the builder for convenience.
+                    let Self {
+                        #client_ident,
+                        #( #param_names, )*
+                    } = self;
 
-                // Extract parameters into variables, returning an error if
-                // a value has not been provided or there was a conversion
-                // error.
-                //
-                // TODO we could do something a bit nicer by collecting all
-                // errors rather than just reporting the first one.
-                #(
-                let #param_names =
-                    #param_names
-                        #param_finalize
-                        .map_err(Error::InvalidRequest)?;
-                )*
+                    // Extract parameters into variables, returning an error if
+                    // a value has not been provided or there was a conversion
+                    // error.
+                    //
+                    // TODO we could do something a bit nicer by collecting all
+                    // errors rather than just reporting the first one.
+                    #(
+                    let #param_names =
+                        #param_names
+                            #param_finalize
+                            .map_err(Error::InvalidRequest)?;
+                    )*
 
-                // Do the work.
-                #body
+                    // Do the work.
+                    #body
+                }
             }
         };
 
