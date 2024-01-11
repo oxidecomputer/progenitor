@@ -8,6 +8,36 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
+    /// Error types.
+    pub mod error {
+        /// Error from a TryFrom or FromStr implementation.
+        pub struct ConversionError(std::borrow::Cow<'static, str>);
+        impl std::error::Error for ConversionError {}
+        impl std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+                std::fmt::Display::fmt(&self.0, f)
+            }
+        }
+
+        impl std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+                std::fmt::Debug::fmt(&self.0, f)
+            }
+        }
+
+        impl From<&'static str> for ConversionError {
+            fn from(value: &'static str) -> Self {
+                Self(value.into())
+            }
+        }
+
+        impl From<String> for ConversionError {
+            fn from(value: String) -> Self {
+                Self(value.into())
+            }
+        }
+    }
+
     ///EnrolBody
     ///
     /// <details><summary>JSON schema</summary>
@@ -475,6 +505,7 @@ pub mod types {
         }
     }
 
+    /// Types for composing complex structures.
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct EnrolBody {
@@ -515,8 +546,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<EnrolBody> for super::EnrolBody {
-            type Error = String;
-            fn try_from(value: EnrolBody) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: EnrolBody) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     host: value.host?,
                     key: value.key?,
@@ -560,8 +591,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<GlobalJobsResult> for super::GlobalJobsResult {
-            type Error = String;
-            fn try_from(value: GlobalJobsResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: GlobalJobsResult) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     summary: value.summary?,
                 })
@@ -627,8 +658,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<OutputRecord> for super::OutputRecord {
-            type Error = String;
-            fn try_from(value: OutputRecord) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: OutputRecord) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     msg: value.msg?,
                     stream: value.stream?,
@@ -686,8 +717,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<PingResult> for super::PingResult {
-            type Error = String;
-            fn try_from(value: PingResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: PingResult) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     host: value.host?,
                     ok: value.ok?,
@@ -767,8 +798,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<ReportFinishBody> for super::ReportFinishBody {
-            type Error = String;
-            fn try_from(value: ReportFinishBody) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: ReportFinishBody) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     duration_millis: value.duration_millis?,
                     end_time: value.end_time?,
@@ -864,8 +895,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<ReportId> for super::ReportId {
-            type Error = String;
-            fn try_from(value: ReportId) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: ReportId) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     host: value.host?,
                     job: value.job?,
@@ -927,8 +958,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<ReportOutputBody> for super::ReportOutputBody {
-            type Error = String;
-            fn try_from(value: ReportOutputBody) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: ReportOutputBody) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     record: value.record?,
@@ -972,8 +1003,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<ReportResult> for super::ReportResult {
-            type Error = String;
-            fn try_from(value: ReportResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: ReportResult) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     existed_already: value.existed_already?,
                 })
@@ -1039,8 +1070,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<ReportStartBody> for super::ReportStartBody {
-            type Error = String;
-            fn try_from(value: ReportStartBody) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: ReportStartBody) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     script: value.script?,
@@ -1149,8 +1180,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<ReportSummary> for super::ReportSummary {
-            type Error = String;
-            fn try_from(value: ReportSummary) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: ReportSummary) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     age_seconds: value.age_seconds?,
                     duration_seconds: value.duration_seconds?,
