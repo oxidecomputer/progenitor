@@ -3,7 +3,7 @@ pub mod operations {
     #![doc = r" wrappers for each operation. Each can be converted to"]
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
-    use sdk::*;
+    use crate::nexus_builder::*;
     pub struct DiskViewByIdWhen(httpmock::When);
     impl DiskViewByIdWhen {
         pub fn new(inner: httpmock::When) -> Self {

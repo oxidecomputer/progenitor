@@ -3,7 +3,7 @@ pub mod operations {
     #![doc = r" wrappers for each operation. Each can be converted to"]
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
-    use sdk::*;
+    use crate::keeper_builder::*;
     pub struct EnrolWhen(httpmock::When);
     impl EnrolWhen {
         pub fn new(inner: httpmock::When) -> Self {

@@ -1,0 +1,37 @@
+[workspace]
+
+[package]
+name = "test-output"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = "0.21"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4", features = ["string"] }
+futures = "0.3"
+httpmock = "0.7"
+progenitor-client = { path = "../../../progenitor-client" }
+rand = { version = "0.8", features = ["serde1"] }
+regex = "1.10"
+regress = "0.7"
+reqwest = "0.11"
+schemars = { version = "0.8", features = ["chrono", "uuid1"] }
+serde = { features = ["derive"], version = "1" }
+serde_json = "1"
+uuid = { features = ["serde", "v4"], version = "1" }
+
+[lints.rust]
+unused_imports = "allow"
+unused_variables= "allow"
+
+[lints.clippy]
+needless_lifetimes = "allow"
+redundant_field_names = "allow"
+vec_init_then_push = "allow"
+clone_on_copy = "allow"
+unnecessary_to_owned = "allow"
+to_string_in_format_args = "allow"
+len_zero = "allow"
+ptr_arg = "allow"
+too_many_arguments = "allow"

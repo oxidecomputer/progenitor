@@ -49,7 +49,8 @@ fn reformat_code(content: TokenStream) -> String {
 fn verify_apis(openapi_file: &str) {
     let mut in_path = PathBuf::from("../sample_openapi");
     in_path.push(openapi_file);
-    let openapi_stem = openapi_file.split('.').next().unwrap();
+    let openapi_stem =
+        openapi_file.split('.').next().unwrap().replace('-', "_");
 
     let spec = load_api(in_path);
 
@@ -57,7 +58,7 @@ fn verify_apis(openapi_file: &str) {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}-positional.out", openapi_stem),
+        format!("tests/output/src/{}_positional.rs", openapi_stem),
         &output,
     );
 
@@ -82,7 +83,7 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}-builder.out", openapi_stem),
+        format!("tests/output/src/{}_builder.rs", openapi_stem),
         &output,
     );
 
@@ -94,21 +95,25 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}-builder-tagged.out", openapi_stem),
+        format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
         &output,
     );
 
     // CLI generation.
-    let tokens = generator.cli(&spec, "sdk").unwrap();
+    let tokens = generator
+        .cli(&spec, &format!("crate::{openapi_stem}_builder"))
+        .unwrap();
     let output = reformat_code(tokens);
 
     expectorate::assert_contents(
-        format!("tests/output/{}-cli.out", openapi_stem),
+        format!("tests/output/src/{}_cli.rs", openapi_stem),
         &output,
     );
 
     // httpmock generation.
-    let code = generator.httpmock(&spec, "sdk").unwrap();
+    let code = generator
+        .httpmock(&spec, &format!("crate::{openapi_stem}_builder"))
+        .unwrap();
 
     // TODO pending #368
     let output = rustfmt_wrapper::rustfmt_config(
@@ -122,7 +127,7 @@ fn verify_apis(openapi_file: &str) {
 
     let output = progenitor_impl::space_out_items(output).unwrap();
     expectorate::assert_contents(
-        format!("tests/output/{}-httpmock.out", openapi_stem),
+        format!("tests/output/src/{}_httpmock.rs", openapi_stem),
         &output,
     );
 }
