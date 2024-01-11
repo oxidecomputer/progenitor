@@ -8,6 +8,36 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
+    /// Error types.
+    pub mod error {
+        /// Error from a TryFrom or FromStr implementation.
+        pub struct ConversionError(std::borrow::Cow<'static, str>);
+        impl std::error::Error for ConversionError {}
+        impl std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+                std::fmt::Display::fmt(&self.0, f)
+            }
+        }
+
+        impl std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+                std::fmt::Debug::fmt(&self.0, f)
+            }
+        }
+
+        impl From<&'static str> for ConversionError {
+            fn from(value: &'static str) -> Self {
+                Self(value.into())
+            }
+        }
+
+        impl From<String> for ConversionError {
+            fn from(value: String) -> Self {
+                Self(value.into())
+            }
+        }
+    }
+
     ///Describes properties that should uniquely identify a Gimlet.
     ///
     /// <details><summary>JSON schema</summary>
@@ -396,10 +426,10 @@ pub mod types {
     }
 
     impl std::convert::TryFrom<i64> for BlockSize {
-        type Error = &'static str;
-        fn try_from(value: i64) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: i64) -> Result<Self, self::error::ConversionError> {
             if ![512_i64, 2048_i64, 4096_i64].contains(&value) {
-                Err("invalid value")
+                Err("invalid value".into())
             } else {
                 Ok(Self(value))
             }
@@ -1202,8 +1232,8 @@ pub mod types {
     }
 
     impl std::str::FromStr for DatumType {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "bool" => Ok(Self::Bool),
                 "i64" => Ok(Self::I64),
@@ -1214,28 +1244,28 @@ pub mod types {
                 "cumulative_f64" => Ok(Self::CumulativeF64),
                 "histogram_i64" => Ok(Self::HistogramI64),
                 "histogram_f64" => Ok(Self::HistogramF64),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for DatumType {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for DatumType {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for DatumType {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1681,8 +1711,8 @@ pub mod types {
     }
 
     impl std::str::FromStr for DiskMetricName {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "activated" => Ok(Self::Activated),
                 "flush" => Ok(Self::Flush),
@@ -1690,28 +1720,28 @@ pub mod types {
                 "read_bytes" => Ok(Self::ReadBytes),
                 "write" => Ok(Self::Write),
                 "write_bytes" => Ok(Self::WriteBytes),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for DiskMetricName {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for DiskMetricName {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for DiskMetricName {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2378,33 +2408,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for FieldSource {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "target" => Ok(Self::Target),
                 "metric" => Ok(Self::Metric),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for FieldSource {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for FieldSource {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for FieldSource {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2461,36 +2491,36 @@ pub mod types {
     }
 
     impl std::str::FromStr for FieldType {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "string" => Ok(Self::String),
                 "i64" => Ok(Self::I64),
                 "ip_addr" => Ok(Self::IpAddr),
                 "uuid" => Ok(Self::Uuid),
                 "bool" => Ok(Self::Bool),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for FieldType {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for FieldType {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for FieldType {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2537,34 +2567,34 @@ pub mod types {
     }
 
     impl std::str::FromStr for FleetRole {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
                 "viewer" => Ok(Self::Viewer),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for FleetRole {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for FleetRole {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for FleetRole {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3276,32 +3306,32 @@ pub mod types {
     }
 
     impl std::str::FromStr for IdSortMode {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "id_ascending" => Ok(Self::IdAscending),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for IdSortMode {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for IdSortMode {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for IdSortMode {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3472,32 +3502,32 @@ pub mod types {
     }
 
     impl std::str::FromStr for IdentityProviderType {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "saml" => Ok(Self::Saml),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for IdentityProviderType {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for IdentityProviderType {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for IdentityProviderType {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3541,33 +3571,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for IdentityType {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "silo_user" => Ok(Self::SiloUser),
                 "silo_group" => Ok(Self::SiloGroup),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for IdentityType {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for IdentityType {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for IdentityType {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -4754,8 +4784,8 @@ pub mod types {
     }
 
     impl std::str::FromStr for InstanceState {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "creating" => Ok(Self::Creating),
                 "starting" => Ok(Self::Starting),
@@ -4767,28 +4797,28 @@ pub mod types {
                 "repairing" => Ok(Self::Repairing),
                 "failed" => Ok(Self::Failed),
                 "destroyed" => Ok(Self::Destroyed),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for InstanceState {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for InstanceState {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for InstanceState {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -4832,33 +4862,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for IpKind {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "ephemeral" => Ok(Self::Ephemeral),
                 "floating" => Ok(Self::Floating),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for IpKind {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for IpKind {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for IpKind {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -4904,35 +4934,35 @@ pub mod types {
     }
 
     impl std::str::FromStr for IpNet {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if let Ok(v) = value.parse() {
                 Ok(Self::V4(v))
             } else if let Ok(v) = value.parse() {
                 Ok(Self::V6(v))
             } else {
-                Err("string conversion failed for all variants")
+                Err("string conversion failed for all variants".into())
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for IpNet {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for IpNet {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for IpNet {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5333,8 +5363,8 @@ pub mod types {
     }
 
     impl std::str::FromStr for Ipv4Net {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if regress::Regex::new(
                 "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
                  ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
@@ -5347,29 +5377,30 @@ pub mod types {
                 return Err("doesn't match pattern \
                             \"^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
                             ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
-                            ([8-9]|1[0-9]|2[0-9]|3[0-2])$\"");
+                            ([8-9]|1[0-9]|2[0-9]|3[0-2])$\""
+                    .into());
             }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for Ipv4Net {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for Ipv4Net {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for Ipv4Net {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5381,7 +5412,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -5466,8 +5499,8 @@ pub mod types {
     }
 
     impl std::str::FromStr for Ipv6Net {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if regress::Regex::new(
                 "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,\
                  4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
@@ -5479,29 +5512,30 @@ pub mod types {
                 return Err("doesn't match pattern \
                             \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,\
                             4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/\
-                            ([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\"");
+                            ([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\""
+                    .into());
             }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for Ipv6Net {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for Ipv6Net {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for Ipv6Net {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5513,7 +5547,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -5600,42 +5636,42 @@ pub mod types {
     }
 
     impl std::str::FromStr for L4PortRange {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if value.len() > 11usize {
-                return Err("longer than 11 characters");
+                return Err("longer than 11 characters".into());
             }
             if value.len() < 1usize {
-                return Err("shorter than 1 characters");
+                return Err("shorter than 1 characters".into());
             }
             if regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$")
                 .unwrap()
                 .find(value)
                 .is_none()
             {
-                return Err("doesn't match pattern \"^[0-9]{1,5}(-[0-9]{1,5})?$\"");
+                return Err("doesn't match pattern \"^[0-9]{1,5}(-[0-9]{1,5})?$\"".into());
             }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for L4PortRange {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for L4PortRange {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for L4PortRange {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5647,7 +5683,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -5691,42 +5729,44 @@ pub mod types {
     }
 
     impl std::str::FromStr for MacAddr {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if value.len() > 17usize {
-                return Err("longer than 17 characters");
+                return Err("longer than 17 characters".into());
             }
             if value.len() < 17usize {
-                return Err("shorter than 17 characters");
+                return Err("shorter than 17 characters".into());
             }
             if regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$")
                 .unwrap()
                 .find(value)
                 .is_none()
             {
-                return Err("doesn't match pattern \"^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$\"");
+                return Err(
+                    "doesn't match pattern \"^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$\"".into(),
+                );
             }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for MacAddr {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for MacAddr {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for MacAddr {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5738,7 +5778,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -5868,33 +5910,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for Name {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if value.len() > 63usize {
-                return Err("longer than 63 characters");
+                return Err("longer than 63 characters".into());
             }
-            if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"") ; }
+            if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ; }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for Name {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for Name {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for Name {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5906,7 +5948,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -5952,35 +5996,35 @@ pub mod types {
     }
 
     impl std::str::FromStr for NameOrId {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if let Ok(v) = value.parse() {
                 Ok(Self::Id(v))
             } else if let Ok(v) = value.parse() {
                 Ok(Self::Name(v))
             } else {
-                Err("string conversion failed for all variants")
+                Err("string conversion failed for all variants".into())
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for NameOrId {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for NameOrId {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for NameOrId {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6070,34 +6114,34 @@ pub mod types {
     }
 
     impl std::str::FromStr for NameOrIdSortMode {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "name_ascending" => Ok(Self::NameAscending),
                 "name_descending" => Ok(Self::NameDescending),
                 "id_ascending" => Ok(Self::IdAscending),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for NameOrIdSortMode {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for NameOrIdSortMode {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for NameOrIdSortMode {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6146,32 +6190,32 @@ pub mod types {
     }
 
     impl std::str::FromStr for NameSortMode {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "name_ascending" => Ok(Self::NameAscending),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for NameSortMode {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for NameSortMode {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for NameSortMode {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6740,34 +6784,34 @@ pub mod types {
     }
 
     impl std::str::FromStr for OrganizationRole {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
                 "viewer" => Ok(Self::Viewer),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for OrganizationRole {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for OrganizationRole {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for OrganizationRole {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6942,32 +6986,32 @@ pub mod types {
     }
 
     impl std::str::FromStr for Password {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if value.len() > 512usize {
-                return Err("longer than 512 characters");
+                return Err("longer than 512 characters".into());
             }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for Password {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for Password {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for Password {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6979,7 +7023,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -7148,33 +7194,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for PhysicalDiskType {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "internal" => Ok(Self::Internal),
                 "external" => Ok(Self::External),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for PhysicalDiskType {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for PhysicalDiskType {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for PhysicalDiskType {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -7379,34 +7425,34 @@ pub mod types {
     }
 
     impl std::str::FromStr for ProjectRole {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
                 "viewer" => Ok(Self::Viewer),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for ProjectRole {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for ProjectRole {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for ProjectRole {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -7714,39 +7760,39 @@ pub mod types {
     }
 
     impl std::str::FromStr for RoleName {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if value.len() > 63usize {
-                return Err("longer than 63 characters");
+                return Err("longer than 63 characters".into());
             }
             if regress::Regex::new("[a-z-]+\\.[a-z-]+")
                 .unwrap()
                 .find(value)
                 .is_none()
             {
-                return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"");
+                return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"".into());
             }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for RoleName {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for RoleName {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for RoleName {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -7758,7 +7804,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -8324,35 +8372,35 @@ pub mod types {
     }
 
     impl std::str::FromStr for RouterRouteKind {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "default" => Ok(Self::Default),
                 "vpc_subnet" => Ok(Self::VpcSubnet),
                 "vpc_peering" => Ok(Self::VpcPeering),
                 "custom" => Ok(Self::Custom),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for RouterRouteKind {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for RouterRouteKind {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for RouterRouteKind {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -8997,36 +9045,36 @@ pub mod types {
     }
 
     impl std::str::FromStr for SemverVersion {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if regress::Regex::new("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$")
                 .unwrap()
                 .find(value)
                 .is_none()
             {
-                return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$\"");
+                return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$\"".into());
             }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for SemverVersion {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for SemverVersion {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for SemverVersion {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9038,7 +9086,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -9084,32 +9134,32 @@ pub mod types {
     }
 
     impl std::str::FromStr for ServiceUsingCertificate {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "external_api" => Ok(Self::ExternalApi),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for ServiceUsingCertificate {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for ServiceUsingCertificate {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for ServiceUsingCertificate {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9334,33 +9384,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for SiloIdentityMode {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "saml_jit" => Ok(Self::SamlJit),
                 "local_only" => Ok(Self::LocalOnly),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for SiloIdentityMode {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for SiloIdentityMode {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for SiloIdentityMode {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9453,34 +9503,34 @@ pub mod types {
     }
 
     impl std::str::FromStr for SiloRole {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
                 "viewer" => Ok(Self::Viewer),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for SiloRole {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for SiloRole {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for SiloRole {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9915,35 +9965,35 @@ pub mod types {
     }
 
     impl std::str::FromStr for SnapshotState {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "creating" => Ok(Self::Creating),
                 "ready" => Ok(Self::Ready),
                 "faulted" => Ok(Self::Faulted),
                 "destroyed" => Ok(Self::Destroyed),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for SnapshotState {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for SnapshotState {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for SnapshotState {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10195,34 +10245,34 @@ pub mod types {
     }
 
     impl std::str::FromStr for SystemMetricName {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "virtual_disk_space_provisioned" => Ok(Self::VirtualDiskSpaceProvisioned),
                 "cpus_provisioned" => Ok(Self::CpusProvisioned),
                 "ram_provisioned" => Ok(Self::RamProvisioned),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for SystemMetricName {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for SystemMetricName {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for SystemMetricName {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10433,8 +10483,8 @@ pub mod types {
     }
 
     impl std::str::FromStr for TimeseriesName {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if regress::Regex::new(
                 "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)",
             )
@@ -10444,29 +10494,30 @@ pub mod types {
             {
                 return Err("doesn't match pattern \
                             \"(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*\
-                            )(_([a-z0-9]+))*)\"");
+                            )(_([a-z0-9]+))*)\""
+                    .into());
             }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for TimeseriesName {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for TimeseriesName {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for TimeseriesName {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10478,7 +10529,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -10754,33 +10807,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for UpdateStatus {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "updating" => Ok(Self::Updating),
                 "steady" => Ok(Self::Steady),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for UpdateStatus {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for UpdateStatus {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for UpdateStatus {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10986,8 +11039,8 @@ pub mod types {
     }
 
     impl std::str::FromStr for UpdateableComponentType {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "bootloader_for_rot" => Ok(Self::BootloaderForRot),
                 "bootloader_for_sp" => Ok(Self::BootloaderForSp),
@@ -11001,28 +11054,28 @@ pub mod types {
                 "helios_host_phase1" => Ok(Self::HeliosHostPhase1),
                 "helios_host_phase2" => Ok(Self::HeliosHostPhase2),
                 "host_omicron" => Ok(Self::HostOmicron),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for UpdateableComponentType {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for UpdateableComponentType {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for UpdateableComponentType {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11279,33 +11332,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for UserId {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             if value.len() > 63usize {
-                return Err("longer than 63 characters");
+                return Err("longer than 63 characters".into());
             }
-            if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"") ; }
+            if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ; }
             Ok(Self(value.to_string()))
         }
     }
 
     impl std::convert::TryFrom<&str> for UserId {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for UserId {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for UserId {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11317,7 +11370,9 @@ pub mod types {
         {
             String::deserialize(deserializer)?
                 .parse()
-                .map_err(|e: &'static str| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as serde::de::Error>::custom(e.to_string())
+                })
         }
     }
 
@@ -11855,33 +11910,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for VpcFirewallRuleAction {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "allow" => Ok(Self::Allow),
                 "deny" => Ok(Self::Deny),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for VpcFirewallRuleAction {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for VpcFirewallRuleAction {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for VpcFirewallRuleAction {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11924,33 +11979,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for VpcFirewallRuleDirection {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "inbound" => Ok(Self::Inbound),
                 "outbound" => Ok(Self::Outbound),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for VpcFirewallRuleDirection {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for VpcFirewallRuleDirection {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for VpcFirewallRuleDirection {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -12222,34 +12277,34 @@ pub mod types {
     }
 
     impl std::str::FromStr for VpcFirewallRuleProtocol {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "TCP" => Ok(Self::Tcp),
                 "UDP" => Ok(Self::Udp),
                 "ICMP" => Ok(Self::Icmp),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for VpcFirewallRuleProtocol {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for VpcFirewallRuleProtocol {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for VpcFirewallRuleProtocol {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -12292,33 +12347,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for VpcFirewallRuleStatus {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "disabled" => Ok(Self::Disabled),
                 "enabled" => Ok(Self::Enabled),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for VpcFirewallRuleStatus {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for VpcFirewallRuleStatus {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for VpcFirewallRuleStatus {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -12856,33 +12911,33 @@ pub mod types {
     }
 
     impl std::str::FromStr for VpcRouterKind {
-        type Err = &'static str;
-        fn from_str(value: &str) -> Result<Self, &'static str> {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
             match value {
                 "system" => Ok(Self::System),
                 "custom" => Ok(Self::Custom),
-                _ => Err("invalid value"),
+                _ => Err("invalid value".into()),
             }
         }
     }
 
     impl std::convert::TryFrom<&str> for VpcRouterKind {
-        type Error = &'static str;
-        fn try_from(value: &str) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for VpcRouterKind {
-        type Error = &'static str;
-        fn try_from(value: &String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for VpcRouterKind {
-        type Error = &'static str;
-        fn try_from(value: String) -> Result<Self, &'static str> {
+        type Error = self::error::ConversionError;
+        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -13289,6 +13344,7 @@ pub mod types {
         }
     }
 
+    /// Generation of default values for serde.
     pub mod defaults {
         pub(super) fn default_bool<const V: bool>() -> bool {
             V

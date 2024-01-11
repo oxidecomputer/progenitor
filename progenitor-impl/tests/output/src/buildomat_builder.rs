@@ -8,6 +8,36 @@ pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
     use std::convert::TryFrom;
+    /// Error types.
+    pub mod error {
+        /// Error from a TryFrom or FromStr implementation.
+        pub struct ConversionError(std::borrow::Cow<'static, str>);
+        impl std::error::Error for ConversionError {}
+        impl std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+                std::fmt::Display::fmt(&self.0, f)
+            }
+        }
+
+        impl std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+                std::fmt::Debug::fmt(&self.0, f)
+            }
+        }
+
+        impl From<&'static str> for ConversionError {
+            fn from(value: &'static str) -> Self {
+                Self(value.into())
+            }
+        }
+
+        impl From<String> for ConversionError {
+            fn from(value: String) -> Self {
+                Self(value.into())
+            }
+        }
+    }
+
     ///Task
     ///
     /// <details><summary>JSON schema</summary>
@@ -844,6 +874,7 @@ pub mod types {
         }
     }
 
+    /// Types for composing complex structures.
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct Task {
@@ -920,8 +951,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<Task> for super::Task {
-            type Error = String;
-            fn try_from(value: Task) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: Task) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -1007,8 +1038,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<TaskEvent> for super::TaskEvent {
-            type Error = String;
-            fn try_from(value: TaskEvent) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: TaskEvent) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     payload: value.payload?,
                     seq: value.seq?,
@@ -1080,8 +1111,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<TaskOutput> for super::TaskOutput {
-            type Error = String;
-            fn try_from(value: TaskOutput) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: TaskOutput) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     path: value.path?,
@@ -1151,8 +1182,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<TaskSubmit> for super::TaskSubmit {
-            type Error = String;
-            fn try_from(value: TaskSubmit) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: TaskSubmit) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     name: value.name?,
                     output_rules: value.output_rules?,
@@ -1198,8 +1229,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<TaskSubmitResult> for super::TaskSubmitResult {
-            type Error = String;
-            fn try_from(value: TaskSubmitResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: TaskSubmitResult) -> Result<Self, super::error::ConversionError> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -1237,8 +1268,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<UploadedChunk> for super::UploadedChunk {
-            type Error = String;
-            fn try_from(value: UploadedChunk) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: UploadedChunk) -> Result<Self, super::error::ConversionError> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -1276,8 +1307,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<UserCreate> for super::UserCreate {
-            type Error = String;
-            fn try_from(value: UserCreate) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: UserCreate) -> Result<Self, super::error::ConversionError> {
                 Ok(Self { name: value.name? })
             }
         }
@@ -1341,8 +1372,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<UserCreateResult> for super::UserCreateResult {
-            type Error = String;
-            fn try_from(value: UserCreateResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: UserCreateResult) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -1400,8 +1431,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WhoamiResult> for super::WhoamiResult {
-            type Error = String;
-            fn try_from(value: WhoamiResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WhoamiResult) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -1505,8 +1536,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<Worker> for super::Worker {
-            type Error = String;
-            fn try_from(value: Worker) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: Worker) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     deleted: value.deleted?,
                     id: value.id?,
@@ -1582,8 +1613,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkerAddOutput> for super::WorkerAddOutput {
-            type Error = String;
-            fn try_from(value: WorkerAddOutput) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WorkerAddOutput) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     chunks: value.chunks?,
                     path: value.path?,
@@ -1653,8 +1684,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkerAppendTask> for super::WorkerAppendTask {
-            type Error = String;
-            fn try_from(value: WorkerAppendTask) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WorkerAppendTask) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     payload: value.payload?,
                     stream: value.stream?,
@@ -1712,8 +1743,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkerBootstrap> for super::WorkerBootstrap {
-            type Error = String;
-            fn try_from(value: WorkerBootstrap) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WorkerBootstrap) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     bootstrap: value.bootstrap?,
                     token: value.token?,
@@ -1757,8 +1788,10 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkerBootstrapResult> for super::WorkerBootstrapResult {
-            type Error = String;
-            fn try_from(value: WorkerBootstrapResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(
+                value: WorkerBootstrapResult,
+            ) -> Result<Self, super::error::ConversionError> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -1796,8 +1829,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkerCompleteTask> for super::WorkerCompleteTask {
-            type Error = String;
-            fn try_from(value: WorkerCompleteTask) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WorkerCompleteTask) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     failed: value.failed?,
                 })
@@ -1851,8 +1884,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkerPingResult> for super::WorkerPingResult {
-            type Error = String;
-            fn try_from(value: WorkerPingResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WorkerPingResult) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     poweroff: value.poweroff?,
                     task: value.task?,
@@ -1920,8 +1953,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkerPingTask> for super::WorkerPingTask {
-            type Error = String;
-            fn try_from(value: WorkerPingTask) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WorkerPingTask) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     output_rules: value.output_rules?,
@@ -1991,8 +2024,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkerTask> for super::WorkerTask {
-            type Error = String;
-            fn try_from(value: WorkerTask) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WorkerTask) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -2038,8 +2071,8 @@ pub mod types {
         }
 
         impl std::convert::TryFrom<WorkersResult> for super::WorkersResult {
-            type Error = String;
-            fn try_from(value: WorkersResult) -> Result<Self, String> {
+            type Error = super::error::ConversionError;
+            fn try_from(value: WorkersResult) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     workers: value.workers?,
                 })
