@@ -1217,7 +1217,7 @@ impl Generator {
 
     /// Extract responses that match criteria specified by the `filter`. The
     /// result is a `Vec<OperationResponse>` that enumerates the cases matching
-    /// the filter, and a `TokenStream` that respresents the generated type for
+    /// the filter, and a `TokenStream` that represents the generated type for
     /// those cases.
     pub(crate) fn extract_responses<'a>(
         &self,
