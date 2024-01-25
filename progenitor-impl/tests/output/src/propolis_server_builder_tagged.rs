@@ -4,6 +4,7 @@ pub use progenitor_client::{ByteStream, Error, ResponseValue};
 #[allow(unused_imports)]
 use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
+#[allow(clippy::all)]
 pub mod types {
     use serde::{Deserialize, Serialize};
     #[allow(unused_imports)]
@@ -2939,6 +2940,7 @@ impl Client {
 }
 
 /// Types for composing operation parameters.
+#[allow(clippy::all)]
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]

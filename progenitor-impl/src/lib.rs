@@ -353,6 +353,7 @@ impl Generator {
             use reqwest::header::{HeaderMap, HeaderValue};
 
             /// Types used as operation parameters and responses.
+            #[allow(clippy::all)]
             pub mod types {
                 use serde::{Deserialize, Serialize};
 
@@ -449,6 +450,7 @@ impl Generator {
             .map(|method| self.positional_method(method))
             .collect::<Result<Vec<_>>>()?;
         let out = quote! {
+            #[allow(clippy::all)]
             impl Client {
                 #(#methods)*
             }
@@ -481,6 +483,7 @@ impl Generator {
             }
 
             /// Types for composing operation parameters.
+            #[allow(clippy::all)]
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
@@ -523,6 +526,7 @@ impl Generator {
             #traits_and_impls
 
             /// Types for composing operation parameters.
+            #[allow(clippy::all)]
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
