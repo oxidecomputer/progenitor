@@ -524,7 +524,8 @@ impl Client {
         let url = format!("{}/enrol", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .json(&body)
@@ -549,7 +550,8 @@ impl Client {
         let url = format!("{}/global/jobs", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -577,7 +579,8 @@ impl Client {
         let url = format!("{}/ping", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -607,7 +610,8 @@ impl Client {
         let url = format!("{}/report/finish", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -638,7 +642,8 @@ impl Client {
         let url = format!("{}/report/output", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -669,7 +674,8 @@ impl Client {
         let url = format!("{}/report/start", self.baseurl,);
         let mut header_map = HeaderMap::with_capacity(1usize);
         header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(

@@ -128,7 +128,8 @@ impl Client {
             query.push(("uniqueKey", v.to_string()));
         }
 
-        let request = self.client.get(url).query(&query).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.get(url).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

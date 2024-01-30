@@ -827,7 +827,8 @@ impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -846,7 +847,8 @@ impl Client {
     ///Sends a `POST` request to `/v1/control/resume`
     pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/resume", self.baseurl,);
-        let request = self.client.post(url).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -865,7 +867,8 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -884,7 +887,8 @@ impl Client {
     ///Sends a `GET` request to `/v1/tasks`
     pub async fn tasks_get<'a>(&'a self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -906,7 +910,8 @@ impl Client {
         body: &'a types::TaskSubmit,
     ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -939,7 +944,8 @@ impl Client {
             query.push(("minseq", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -966,7 +972,8 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -994,7 +1001,8 @@ impl Client {
             encode_path(&task.to_string()),
             encode_path(&output.to_string()),
         );
-        let request = self.client.get(url).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1009,7 +1017,8 @@ impl Client {
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
         let url = format!("{}/v1/users", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -1029,7 +1038,8 @@ impl Client {
     ///Sends a `GET` request to `/v1/whoami`
     pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
         let url = format!("{}/v1/whoami", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -1051,7 +1061,8 @@ impl Client {
         body: String,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/whoami/name", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -1074,7 +1085,8 @@ impl Client {
         body: &'a types::WorkerBootstrap,
     ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
         let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -1096,7 +1108,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
         let url = format!("{}/v1/worker/ping", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -1123,7 +1136,8 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1143,7 +1157,8 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -1175,7 +1190,8 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1195,7 +1211,8 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1209,7 +1226,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
         let url = format!("{}/v1/workers", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -1228,7 +1246,8 @@ impl Client {
     ///Sends a `POST` request to `/v1/workers/recycle`
     pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/workers/recycle", self.baseurl,);
-        let request = self.client.post(url).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

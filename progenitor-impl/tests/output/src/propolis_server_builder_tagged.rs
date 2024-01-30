@@ -2966,7 +2966,8 @@ pub mod builder {
         ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/instance", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -3039,7 +3040,8 @@ pub mod builder {
                 .and_then(|v| types::InstanceEnsureRequest::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -3118,7 +3120,8 @@ pub mod builder {
                 encode_path(&id.to_string()),
                 encode_path(&snapshot_id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -3195,7 +3198,8 @@ pub mod builder {
                 })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/migrate/status", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -3238,7 +3242,8 @@ pub mod builder {
         ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
             let Self { client } = self;
             let url = format!("{}/instance/serial", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(reqwest::header::CONNECTION, "Upgrade")
@@ -3294,7 +3299,8 @@ pub mod builder {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -3372,7 +3378,8 @@ pub mod builder {
                 })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state-monitor", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(

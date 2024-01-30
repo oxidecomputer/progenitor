@@ -190,7 +190,8 @@ pub mod builder {
             if let Some(v) = &unique_key {
                 query.push(("uniqueKey", v.to_string()));
             }
-            let request = client.client.get(url).query(&query).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.get(url).query(&query).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

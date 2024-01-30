@@ -163,7 +163,8 @@ impl Client {
         query.push(("if", if_.to_string()));
         query.push(("in", in_.to_string()));
         query.push(("use", use_.to_string()));
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(

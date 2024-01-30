@@ -1436,7 +1436,8 @@ pub mod builder {
             let url = format!("{}/enrol", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .json(&body)
@@ -1488,7 +1489,8 @@ pub mod builder {
             let url = format!("{}/global/jobs", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -1543,7 +1545,8 @@ pub mod builder {
             let url = format!("{}/ping", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -1626,7 +1629,8 @@ pub mod builder {
             let url = format!("{}/report/finish", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -1710,7 +1714,8 @@ pub mod builder {
             let url = format!("{}/report/output", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -1792,7 +1797,8 @@ pub mod builder {
             let url = format!("{}/report/start", client.baseurl,);
             let mut header_map = HeaderMap::with_capacity(1usize);
             header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
