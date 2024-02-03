@@ -1,12 +1,12 @@
 use crate::buildomat_builder::*;
-pub struct Cli<T: CliOverride = ()> {
+pub struct Cli<T: CliConfig> {
     client: Client,
-    over: T,
+    config: T,
 }
 
-impl Cli {
-    pub fn new(client: Client) -> Self {
-        Self { client, over: () }
+impl<T: CliConfig> Cli<T> {
+    pub fn new(client: Client, config: T) -> Self {
+        Self { client, config }
     }
 
     pub fn get_command(cmd: CliCommand) -> clap::Command {
@@ -315,140 +315,102 @@ impl Cli {
     pub fn cli_workers_recycle() -> clap::Command {
         clap::Command::new("")
     }
-}
 
-impl<T: CliOverride> Cli<T> {
-    pub fn new_with_override(client: Client, over: T) -> Self {
-        Self { client, over }
-    }
-
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         match cmd {
-            CliCommand::ControlHold => {
-                self.execute_control_hold(matches).await;
-            }
-            CliCommand::ControlResume => {
-                self.execute_control_resume(matches).await;
-            }
-            CliCommand::TaskGet => {
-                self.execute_task_get(matches).await;
-            }
-            CliCommand::TasksGet => {
-                self.execute_tasks_get(matches).await;
-            }
-            CliCommand::TaskSubmit => {
-                self.execute_task_submit(matches).await;
-            }
-            CliCommand::TaskEventsGet => {
-                self.execute_task_events_get(matches).await;
-            }
-            CliCommand::TaskOutputsGet => {
-                self.execute_task_outputs_get(matches).await;
-            }
-            CliCommand::TaskOutputDownload => {
-                self.execute_task_output_download(matches).await;
-            }
-            CliCommand::UserCreate => {
-                self.execute_user_create(matches).await;
-            }
-            CliCommand::Whoami => {
-                self.execute_whoami(matches).await;
-            }
-            CliCommand::WhoamiPutName => {
-                self.execute_whoami_put_name(matches).await;
-            }
-            CliCommand::WorkerBootstrap => {
-                self.execute_worker_bootstrap(matches).await;
-            }
-            CliCommand::WorkerPing => {
-                self.execute_worker_ping(matches).await;
-            }
-            CliCommand::WorkerTaskAppend => {
-                self.execute_worker_task_append(matches).await;
-            }
+            CliCommand::ControlHold => self.execute_control_hold(matches).await,
+            CliCommand::ControlResume => self.execute_control_resume(matches).await,
+            CliCommand::TaskGet => self.execute_task_get(matches).await,
+            CliCommand::TasksGet => self.execute_tasks_get(matches).await,
+            CliCommand::TaskSubmit => self.execute_task_submit(matches).await,
+            CliCommand::TaskEventsGet => self.execute_task_events_get(matches).await,
+            CliCommand::TaskOutputsGet => self.execute_task_outputs_get(matches).await,
+            CliCommand::TaskOutputDownload => self.execute_task_output_download(matches).await,
+            CliCommand::UserCreate => self.execute_user_create(matches).await,
+            CliCommand::Whoami => self.execute_whoami(matches).await,
+            CliCommand::WhoamiPutName => self.execute_whoami_put_name(matches).await,
+            CliCommand::WorkerBootstrap => self.execute_worker_bootstrap(matches).await,
+            CliCommand::WorkerPing => self.execute_worker_ping(matches).await,
+            CliCommand::WorkerTaskAppend => self.execute_worker_task_append(matches).await,
             CliCommand::WorkerTaskUploadChunk => {
-                self.execute_worker_task_upload_chunk(matches).await;
+                self.execute_worker_task_upload_chunk(matches).await
             }
-            CliCommand::WorkerTaskComplete => {
-                self.execute_worker_task_complete(matches).await;
-            }
-            CliCommand::WorkerTaskAddOutput => {
-                self.execute_worker_task_add_output(matches).await;
-            }
-            CliCommand::WorkersList => {
-                self.execute_workers_list(matches).await;
-            }
-            CliCommand::WorkersRecycle => {
-                self.execute_workers_recycle(matches).await;
-            }
+            CliCommand::WorkerTaskComplete => self.execute_worker_task_complete(matches).await,
+            CliCommand::WorkerTaskAddOutput => self.execute_worker_task_add_output(matches).await,
+            CliCommand::WorkersList => self.execute_workers_list(matches).await,
+            CliCommand::WorkersRecycle => self.execute_workers_recycle(matches).await,
         }
     }
 
-    pub async fn execute_control_hold(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_control_hold(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.control_hold();
-        self.over
-            .execute_control_hold(matches, &mut request)
-            .unwrap();
+        self.config.execute_control_hold(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_control_resume(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_control_resume(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.control_resume();
-        self.over
-            .execute_control_resume(matches, &mut request)
-            .unwrap();
+        self.config.execute_control_resume(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_task_get(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_task_get(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_get();
         if let Some(value) = matches.get_one::<String>("task") {
             request = request.task(value.clone());
         }
 
-        self.over.execute_task_get(matches, &mut request).unwrap();
+        self.config.execute_task_get(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_tasks_get(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_tasks_get(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.tasks_get();
-        self.over.execute_tasks_get(matches, &mut request).unwrap();
+        self.config.execute_tasks_get(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_task_submit(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_task_submit(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_submit();
         if let Some(value) = matches.get_one::<String>("name") {
             request = request.body_map(|body| body.name(value.clone()))
@@ -464,21 +426,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_task_submit(matches, &mut request)
-            .unwrap();
+        self.config.execute_task_submit(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_task_events_get(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_task_events_get(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_events_get();
         if let Some(value) = matches.get_one::<u32>("minseq") {
             request = request.minseq(value.clone());
@@ -488,41 +450,45 @@ impl<T: CliOverride> Cli<T> {
             request = request.task(value.clone());
         }
 
-        self.over
-            .execute_task_events_get(matches, &mut request)
-            .unwrap();
+        self.config.execute_task_events_get(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_task_outputs_get(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_task_outputs_get(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_outputs_get();
         if let Some(value) = matches.get_one::<String>("task") {
             request = request.task(value.clone());
         }
 
-        self.over
-            .execute_task_outputs_get(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_task_outputs_get(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_task_output_download(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_task_output_download(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.task_output_download();
         if let Some(value) = matches.get_one::<String>("output") {
             request = request.output(value.clone());
@@ -532,21 +498,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.task(value.clone());
         }
 
-        self.over
-            .execute_task_output_download(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_task_output_download(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
                 todo!()
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_user_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_user_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.user_create();
         if let Some(value) = matches.get_one::<String>("name") {
             request = request.body_map(|body| body.name(value.clone()))
@@ -558,51 +524,53 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_user_create(matches, &mut request)
-            .unwrap();
+        self.config.execute_user_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_whoami(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_whoami(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.whoami();
-        self.over.execute_whoami(matches, &mut request).unwrap();
+        self.config.execute_whoami(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_whoami_put_name(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_whoami_put_name(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.whoami_put_name();
-        self.over
-            .execute_whoami_put_name(matches, &mut request)
-            .unwrap();
+        self.config.execute_whoami_put_name(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_worker_bootstrap(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_worker_bootstrap(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.worker_bootstrap();
         if let Some(value) = matches.get_one::<String>("bootstrap") {
             request = request.body_map(|body| body.bootstrap(value.clone()))
@@ -618,37 +586,41 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_worker_bootstrap(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_worker_bootstrap(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_worker_ping(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_worker_ping(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.worker_ping();
-        self.over
-            .execute_worker_ping(matches, &mut request)
-            .unwrap();
+        self.config.execute_worker_ping(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_worker_task_append(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_worker_task_append(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_append();
         if let Some(value) = matches.get_one::<String>("payload") {
             request = request.body_map(|body| body.payload(value.clone()))
@@ -672,41 +644,49 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_worker_task_append(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_worker_task_append(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_worker_task_upload_chunk(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_worker_task_upload_chunk(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_upload_chunk();
         if let Some(value) = matches.get_one::<String>("task") {
             request = request.task(value.clone());
         }
 
-        self.over
-            .execute_worker_task_upload_chunk(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_worker_task_upload_chunk(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_worker_task_complete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_worker_task_complete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_complete();
         if let Some(value) = matches.get_one::<bool>("failed") {
             request = request.body_map(|body| body.failed(value.clone()))
@@ -722,21 +702,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_worker_task_complete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_worker_task_complete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_worker_task_add_output(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_worker_task_add_output(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_add_output();
         if let Some(value) = matches.get_one::<String>("path") {
             request = request.body_map(|body| body.path(value.clone()))
@@ -756,59 +740,78 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_worker_task_add_output(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_worker_task_add_output(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_workers_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_workers_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.workers_list();
-        self.over
-            .execute_workers_list(matches, &mut request)
-            .unwrap();
+        self.config.execute_workers_list(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_workers_recycle(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_workers_recycle(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.workers_recycle();
-        self.over
-            .execute_workers_recycle(matches, &mut request)
-            .unwrap();
+        self.config.execute_workers_recycle(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 }
 
-pub trait CliOverride {
+pub trait CliConfig {
+    fn item_success<T>(&self, value: &ResponseValue<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn item_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_start<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_item<T>(&self, value: &T)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_success<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_control_hold(
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ControlHold,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -816,7 +819,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ControlResume,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -824,7 +827,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::TaskGet,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -832,7 +835,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::TasksGet,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -840,7 +843,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::TaskSubmit,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -848,7 +851,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::TaskEventsGet,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -856,7 +859,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::TaskOutputsGet,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -864,7 +867,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::TaskOutputDownload,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -872,7 +875,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::UserCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -880,7 +883,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::Whoami,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -888,7 +891,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WhoamiPutName,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -896,7 +899,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WorkerBootstrap,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -904,7 +907,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WorkerPing,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -912,7 +915,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WorkerTaskAppend,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -920,7 +923,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WorkerTaskUploadChunk,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -928,7 +931,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WorkerTaskComplete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -936,7 +939,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WorkerTaskAddOutput,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -944,7 +947,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WorkersList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -952,12 +955,11 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::WorkersRecycle,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 }
 
-impl CliOverride for () {}
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {
     ControlHold,
