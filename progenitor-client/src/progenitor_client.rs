@@ -249,6 +249,9 @@ pub enum Error<E = ()> {
     /// A response not listed in the API description. This may represent a
     /// success or failure response; check `status().is_success()`.
     UnexpectedResponse(reqwest::Response),
+
+    /// An error occurred in the processing of a request pre-hook.
+    PreHookError(String),
 }
 
 impl<E> Error<E> {
@@ -256,6 +259,7 @@ impl<E> Error<E> {
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
             Error::InvalidRequest(_) => None,
+            Error::PreHookError(_) => None,
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
             Error::InvalidUpgrade(e) => e.status(),
@@ -272,6 +276,7 @@ impl<E> Error<E> {
     pub fn into_untyped(self) -> Error {
         match self {
             Error::InvalidRequest(s) => Error::InvalidRequest(s),
+            Error::PreHookError(s) => Error::PreHookError(s),
             Error::CommunicationError(e) => Error::CommunicationError(e),
             Error::ErrorResponse(ResponseValue {
                 inner: _,
@@ -331,6 +336,9 @@ where
             }
             Error::UnexpectedResponse(r) => {
                 write!(f, "Unexpected Response: {:?}", r)
+            }
+            Error::PreHookError(s) => {
+                write!(f, "Pre-hook Error: {}", s)
             }
         }
     }

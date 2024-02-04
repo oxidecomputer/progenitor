@@ -147,7 +147,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/", self.baseurl,);
-        let request = self.client.get(url).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

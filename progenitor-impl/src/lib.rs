@@ -60,6 +60,7 @@ pub struct GenerationSettings {
     tag: TagStyle,
     inner_type: Option<TokenStream>,
     pre_hook: Option<TokenStream>,
+    pre_hook_async: Option<TokenStream>,
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
 
@@ -125,6 +126,12 @@ impl GenerationSettings {
     /// Hook invoked before issuing the HTTP request.
     pub fn with_pre_hook(&mut self, pre_hook: TokenStream) -> &mut Self {
         self.pre_hook = Some(pre_hook);
+        self
+    }
+
+    /// Hook invoked before issuing the HTTP request.
+    pub fn with_pre_hook_async(&mut self, pre_hook: TokenStream) -> &mut Self {
+        self.pre_hook_async = Some(pre_hook);
         self
     }
 

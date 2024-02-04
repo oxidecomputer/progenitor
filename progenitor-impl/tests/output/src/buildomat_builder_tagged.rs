@@ -2404,7 +2404,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/control/hold", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -2438,7 +2439,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/control/resume", client.baseurl,);
-            let request = client.client.post(url).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.post(url).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2484,7 +2486,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -2518,7 +2521,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/tasks", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -2579,7 +2583,8 @@ pub mod builder {
                 .and_then(|v| types::TaskSubmit::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/tasks", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -2655,7 +2660,8 @@ pub mod builder {
             if let Some(v) = &minseq {
                 query.push(("minseq", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -2709,7 +2715,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -2780,7 +2787,8 @@ pub mod builder {
                 encode_path(&task.to_string()),
                 encode_path(&output.to_string()),
             );
-            let request = client.client.get(url).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.get(url).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -2834,7 +2842,8 @@ pub mod builder {
                 .and_then(|v| types::UserCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/users", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -2869,7 +2878,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/whoami", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -2919,7 +2929,8 @@ pub mod builder {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/whoami/name", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -2981,7 +2992,8 @@ pub mod builder {
                 .and_then(|v| types::WorkerBootstrap::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -3016,7 +3028,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/worker/ping", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -3096,7 +3109,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let request = client.client.post(url).json(&body).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -3155,7 +3169,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -3240,7 +3255,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let request = client.client.post(url).json(&body).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -3311,7 +3327,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let request = client.client.post(url).json(&body).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -3338,7 +3355,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/workers", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -3372,7 +3390,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/workers/recycle", client.baseurl,);
-            let request = client.client.post(url).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.post(url).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

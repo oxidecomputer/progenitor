@@ -1491,7 +1491,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
         let url = format!("{}/instance", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -1519,7 +1520,8 @@ impl Client {
         body: &'a types::InstanceEnsureRequest,
     ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
         let url = format!("{}/instance", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -1556,7 +1558,8 @@ impl Client {
             encode_path(&id.to_string()),
             encode_path(&snapshot_id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -1584,7 +1587,8 @@ impl Client {
         body: &'a types::InstanceMigrateStatusRequest,
     ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>> {
         let url = format!("{}/instance/migrate/status", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -1612,7 +1616,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
         let url = format!("{}/instance/serial", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(reqwest::header::CONNECTION, "Upgrade")
@@ -1641,7 +1646,8 @@ impl Client {
         body: types::InstanceStateRequested,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/instance/state", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -1670,7 +1676,8 @@ impl Client {
         body: &'a types::InstanceStateMonitorRequest,
     ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>> {
         let url = format!("{}/instance/state-monitor", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(

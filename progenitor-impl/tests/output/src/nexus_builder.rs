@@ -28713,7 +28713,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -28772,7 +28773,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -28831,7 +28833,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -28892,7 +28895,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -28951,7 +28955,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -29010,7 +29015,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -29069,7 +29075,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -29128,7 +29135,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -29187,7 +29195,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -29246,7 +29255,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -29305,7 +29315,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -29374,7 +29385,8 @@ pub mod builder {
                 .and_then(|v| types::DeviceAuthRequest::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/device/auth", client.baseurl,);
-            let request = client.client.post(url).form_urlencoded(&body)?.build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.post(url).form_urlencoded(&body)?.build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -29430,7 +29442,8 @@ pub mod builder {
                 .and_then(|v| types::DeviceAuthVerify::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/device/confirm", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -29504,7 +29517,8 @@ pub mod builder {
                 })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/device/token", client.baseurl,);
-            let request = client.client.post(url).form_urlencoded(&body)?.build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.post(url).form_urlencoded(&body)?.build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -29591,7 +29605,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -29715,7 +29730,8 @@ pub mod builder {
                 .and_then(|v| types::SpoofLoginBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/login", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -29811,7 +29827,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let request = client.client.post(url).json(&body).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.post(url).json(&body).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -29881,7 +29898,8 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
                 encode_path(&provider_name.to_string()),
             );
-            let request = client.client.get(url).build()?;
+            #[allow(unused_mut)]
+            let mut request = client.client.get(url).build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {
@@ -29965,7 +29983,8 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
                 encode_path(&provider_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -30006,7 +30025,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/logout", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -30106,7 +30126,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -30232,7 +30253,8 @@ pub mod builder {
                 .and_then(|v| types::OrganizationCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/organizations", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -30295,7 +30317,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -30385,7 +30408,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -30448,7 +30472,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -30512,7 +30537,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -30606,7 +30632,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -30726,7 +30753,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -30873,7 +30901,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -30952,7 +30981,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -31056,7 +31086,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -31135,7 +31166,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -31269,7 +31301,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -31431,7 +31464,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -31526,7 +31560,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&disk_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -31620,7 +31655,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&disk_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -31804,7 +31840,8 @@ pub mod builder {
             if let Some(v) = &start_time {
                 query.push(("start_time", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -31998,7 +32035,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -32160,7 +32198,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -32255,7 +32294,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&image_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -32349,7 +32389,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&image_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -32484,7 +32525,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -32648,7 +32690,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -32743,7 +32786,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -32837,7 +32881,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -32987,7 +33032,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -33166,7 +33212,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -33287,7 +33334,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -33384,7 +33432,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -33504,7 +33553,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -33656,7 +33706,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -33841,7 +33892,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -33953,7 +34005,8 @@ pub mod builder {
                 encode_path(&instance_name.to_string()),
                 encode_path(&interface_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -34094,7 +34147,8 @@ pub mod builder {
                 encode_path(&instance_name.to_string()),
                 encode_path(&interface_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -34204,7 +34258,8 @@ pub mod builder {
                 encode_path(&instance_name.to_string()),
                 encode_path(&interface_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -34298,7 +34353,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -34449,7 +34505,8 @@ pub mod builder {
             if let Some(v) = &most_recent {
                 query.push(("most_recent", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -34546,7 +34603,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(reqwest::header::CONNECTION, "Upgrade")
@@ -34641,7 +34699,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -34735,7 +34794,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -34815,7 +34875,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -34923,7 +34984,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -35059,7 +35121,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -35223,7 +35286,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -35318,7 +35382,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&snapshot_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -35412,7 +35477,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&snapshot_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -35546,7 +35612,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -35708,7 +35775,8 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -35803,7 +35871,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -35923,7 +35992,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -36018,7 +36088,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -36114,7 +36185,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -36243,7 +36315,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -36394,7 +36467,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -36573,7 +36647,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -36683,7 +36758,8 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -36818,7 +36894,8 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -36928,7 +37005,8 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -37093,7 +37171,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -37293,7 +37372,8 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -37418,7 +37498,8 @@ pub mod builder {
                 encode_path(&router_name.to_string()),
                 encode_path(&route_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -37574,7 +37655,8 @@ pub mod builder {
                 encode_path(&router_name.to_string()),
                 encode_path(&route_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -37699,7 +37781,8 @@ pub mod builder {
                 encode_path(&router_name.to_string()),
                 encode_path(&route_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -37849,7 +37932,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -38028,7 +38112,8 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -38138,7 +38223,8 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&subnet_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -38273,7 +38359,8 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&subnet_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -38383,7 +38470,8 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
                 encode_path(&subnet_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -38549,7 +38637,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -38650,7 +38739,8 @@ pub mod builder {
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/policy", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -38719,7 +38809,8 @@ pub mod builder {
                 .and_then(|v| types::SiloRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/policy", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -38802,7 +38893,8 @@ pub mod builder {
             if let Some(v) = &page_token {
                 query.push(("page_token", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -38917,7 +39009,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&role_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -38957,7 +39050,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/session/me", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39057,7 +39151,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39214,7 +39309,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39338,7 +39434,8 @@ pub mod builder {
                 .and_then(|v| types::SshKeyCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/session/me/sshkeys", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -39401,7 +39498,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&ssh_key_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39463,7 +39561,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&ssh_key_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -39522,7 +39621,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39581,7 +39681,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39640,7 +39741,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39740,7 +39842,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39866,7 +39969,8 @@ pub mod builder {
                 .and_then(|v| types::CertificateCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/certificates", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -39929,7 +40033,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&certificate.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -39991,7 +40096,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&certificate.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -40091,7 +40197,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -40248,7 +40355,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -40364,7 +40472,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&rack_id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -40464,7 +40573,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -40580,7 +40690,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&sled_id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -40698,7 +40809,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -40855,7 +40967,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -40981,7 +41094,8 @@ pub mod builder {
                 .and_then(|v| types::GlobalImageCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/images", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -41041,7 +41155,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&image_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -41100,7 +41215,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&image_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -41200,7 +41316,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -41324,7 +41441,8 @@ pub mod builder {
                 .and_then(|v| types::IpPoolCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/ip-pools", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -41384,7 +41502,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&pool_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -41472,7 +41591,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&pool_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -41532,7 +41652,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&pool_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -41632,7 +41753,8 @@ pub mod builder {
             if let Some(v) = &page_token {
                 query.push(("page_token", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -41764,7 +41886,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&pool_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -41842,7 +41965,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&pool_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -41883,7 +42007,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/system/ip-pools-service", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -41965,7 +42090,8 @@ pub mod builder {
             if let Some(v) = &page_token {
                 query.push(("page_token", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -42076,7 +42202,8 @@ pub mod builder {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/ip-pools-service/ranges/add", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -42132,7 +42259,8 @@ pub mod builder {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/ip-pools-service/ranges/remove", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -42285,7 +42413,8 @@ pub mod builder {
             if let Some(v) = &start_time {
                 query.push(("start_time", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -42328,7 +42457,8 @@ pub mod builder {
         ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/system/policy", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -42397,7 +42527,8 @@ pub mod builder {
                 .and_then(|v| types::FleetRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/policy", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -42498,7 +42629,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -42614,7 +42746,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&saga_id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -42714,7 +42847,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -42838,7 +42972,8 @@ pub mod builder {
                 .and_then(|v| types::SiloCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/silos", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -42898,7 +43033,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -42957,7 +43093,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -43077,7 +43214,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -43224,7 +43362,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -43303,7 +43442,8 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
                 encode_path(&user_id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -43396,7 +43536,8 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
                 encode_path(&user_id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -43495,7 +43636,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -43576,7 +43718,8 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
                 encode_path(&provider_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -43637,7 +43780,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -43727,7 +43871,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -43846,7 +43991,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -43981,7 +44127,8 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
                 encode_path(&user_id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -44081,7 +44228,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -44197,7 +44345,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&user_name.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -44280,7 +44429,8 @@ pub mod builder {
             if let Some(v) = &page_token {
                 query.push(("page_token", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -44436,7 +44586,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -44629,7 +44780,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -44792,7 +44944,8 @@ pub mod builder {
                 query.push(("organization", v.to_string()));
             }
             query.push(("project", project.to_string()));
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -44893,7 +45046,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -44993,7 +45147,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -45130,7 +45285,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -45293,7 +45449,8 @@ pub mod builder {
                 query.push(("organization", v.to_string()));
             }
             query.push(("project", project.to_string()));
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -45394,7 +45551,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -45494,7 +45652,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -45649,7 +45808,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -45833,7 +45993,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -45960,7 +46121,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -46087,7 +46249,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -46188,7 +46351,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -46344,7 +46508,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -46447,7 +46612,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .query(&query)
@@ -46548,7 +46714,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -46648,7 +46815,8 @@ pub mod builder {
             if let Some(v) = &project {
                 query.push(("project", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -46749,7 +46917,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -46875,7 +47044,8 @@ pub mod builder {
                 .and_then(|v| types::OrganizationCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/organizations", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -46938,7 +47108,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -47028,7 +47199,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -47091,7 +47263,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -47155,7 +47328,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -47249,7 +47423,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -47368,7 +47543,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -47512,7 +47688,8 @@ pub mod builder {
             let url = format!("{}/v1/projects", client.baseurl,);
             let mut query = Vec::with_capacity(1usize);
             query.push(("organization", organization.to_string()));
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -47595,7 +47772,8 @@ pub mod builder {
             if let Some(v) = &organization {
                 query.push(("organization", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -47703,7 +47881,8 @@ pub mod builder {
             if let Some(v) = &organization {
                 query.push(("organization", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -47786,7 +47965,8 @@ pub mod builder {
             if let Some(v) = &organization {
                 query.push(("organization", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .delete(url)
                 .header(
@@ -47870,7 +48050,8 @@ pub mod builder {
             if let Some(v) = &organization {
                 query.push(("organization", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -47982,7 +48163,8 @@ pub mod builder {
             if let Some(v) = &organization {
                 query.push(("organization", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .put(url)
                 .header(
@@ -48085,7 +48267,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -48244,7 +48427,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -48362,7 +48546,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&id.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -48402,7 +48587,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/v1/system/update/refresh", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -48473,7 +48659,8 @@ pub mod builder {
                 .and_then(|v| types::SystemUpdateStart::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/system/update/start", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -48514,7 +48701,8 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/v1/system/update/stop", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .post(url)
                 .header(
@@ -48614,7 +48802,8 @@ pub mod builder {
             if let Some(v) = &sort_by {
                 query.push(("sort_by", v.to_string()));
             }
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -48730,7 +48919,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&version.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -48792,7 +48982,8 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&version.to_string()),
             );
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(
@@ -48834,7 +49025,8 @@ pub mod builder {
         ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/v1/system/update/version", client.baseurl,);
-            let request = client
+            #[allow(unused_mut)]
+            let mut request = client
                 .client
                 .get(url)
                 .header(

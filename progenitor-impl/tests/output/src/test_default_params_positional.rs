@@ -215,7 +215,8 @@ impl Client {
         body: &'a types::BodyWithDefaults,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/", self.baseurl,);
-        let request = self.client.post(url).json(&body).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

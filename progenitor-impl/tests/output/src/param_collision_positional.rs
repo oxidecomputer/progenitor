@@ -131,7 +131,8 @@ impl Client {
         _query.push(("response", response.to_string()));
         _query.push(("result", result.to_string()));
         _query.push(("url", url.to_string()));
-        let _request = self.client.get(_url).query(&_query).build()?;
+        #[allow(unused_mut)]
+        let mut _request = self.client.get(_url).query(&_query).build()?;
         let _result = self.client.execute(_request).await;
         let _response = _result?;
         match _response.status().as_u16() {

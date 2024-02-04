@@ -13436,7 +13436,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13470,7 +13471,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13504,7 +13506,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13538,7 +13541,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13574,7 +13578,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13610,7 +13615,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13644,7 +13650,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13678,7 +13685,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13712,7 +13720,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13746,7 +13755,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13780,7 +13790,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13814,7 +13825,8 @@ impl Client {
         body: &'a types::DeviceAuthRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/device/auth", self.baseurl,);
-        let request = self.client.post(url).form_urlencoded(&body)?.build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).form_urlencoded(&body)?.build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -13836,7 +13848,8 @@ impl Client {
         body: &'a types::DeviceAuthVerify,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/device/confirm", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -13870,7 +13883,8 @@ impl Client {
         body: &'a types::DeviceAccessTokenRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/device/token", self.baseurl,);
-        let request = self.client.post(url).form_urlencoded(&body)?.build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).form_urlencoded(&body)?.build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -13908,7 +13922,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -13982,7 +13997,8 @@ impl Client {
         body: &'a types::SpoofLoginBody,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/login", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -14018,7 +14034,8 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let request = self.client.post(url).json(&body).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.post(url).json(&body).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -14050,7 +14067,8 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&provider_name.to_string()),
         );
-        let request = self.client.get(url).build()?;
+        #[allow(unused_mut)]
+        let mut request = self.client.get(url).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -14080,7 +14098,8 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&provider_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -14106,7 +14125,8 @@ impl Client {
     ///Sends a `POST` request to `/logout`
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/logout", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -14159,7 +14179,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -14240,7 +14261,8 @@ impl Client {
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -14280,7 +14302,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -14321,7 +14344,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -14361,7 +14385,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -14400,7 +14425,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -14441,7 +14467,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -14501,7 +14528,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -14593,7 +14621,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -14637,7 +14666,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -14682,7 +14712,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -14726,7 +14757,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -14789,7 +14821,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -14891,7 +14924,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -14934,7 +14968,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&disk_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -14974,7 +15009,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&disk_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -15048,7 +15084,8 @@ impl Client {
             query.push(("start_time", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -15188,7 +15225,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -15293,7 +15331,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -15336,7 +15375,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&image_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -15380,7 +15420,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&image_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -15441,7 +15482,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -15544,7 +15586,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -15587,7 +15630,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -15627,7 +15671,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -15694,7 +15739,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -15806,7 +15852,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -15850,7 +15897,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -15891,7 +15939,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -15934,7 +15983,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -16000,7 +16050,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -16109,7 +16160,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -16152,7 +16204,8 @@ impl Client {
             encode_path(&instance_name.to_string()),
             encode_path(&interface_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -16195,7 +16248,8 @@ impl Client {
             encode_path(&instance_name.to_string()),
             encode_path(&interface_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -16243,7 +16297,8 @@ impl Client {
             encode_path(&instance_name.to_string()),
             encode_path(&interface_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -16285,7 +16340,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -16359,7 +16415,8 @@ impl Client {
             query.push(("most_recent", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -16402,7 +16459,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(reqwest::header::CONNECTION, "Upgrade")
@@ -16445,7 +16503,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -16487,7 +16546,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -16530,7 +16590,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -16573,7 +16634,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -16635,7 +16697,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -16738,7 +16801,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -16779,7 +16843,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&snapshot_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -16819,7 +16884,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&snapshot_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -16880,7 +16946,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -16980,7 +17047,8 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -17021,7 +17089,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -17062,7 +17131,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -17103,7 +17173,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -17143,7 +17214,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -17184,7 +17256,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -17250,7 +17323,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -17359,7 +17433,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -17402,7 +17477,8 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -17445,7 +17521,8 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -17488,7 +17565,8 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -17558,7 +17636,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -17676,7 +17755,8 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -17721,7 +17801,8 @@ impl Client {
             encode_path(&router_name.to_string()),
             encode_path(&route_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -17766,7 +17847,8 @@ impl Client {
             encode_path(&router_name.to_string()),
             encode_path(&route_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -17811,7 +17893,8 @@ impl Client {
             encode_path(&router_name.to_string()),
             encode_path(&route_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -17876,7 +17959,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -17985,7 +18069,8 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -18028,7 +18113,8 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18071,7 +18157,8 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -18114,7 +18201,8 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -18182,7 +18270,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18284,7 +18373,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18314,7 +18404,8 @@ impl Client {
         body: &'a types::SiloRolePolicy,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -18360,7 +18451,8 @@ impl Client {
             query.push(("page_token", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18441,7 +18533,8 @@ impl Client {
             self.baseurl,
             encode_path(&role_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18470,7 +18563,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!("{}/session/me", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18521,7 +18615,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18620,7 +18715,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18700,7 +18796,8 @@ impl Client {
         body: &'a types::SshKeyCreate,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
         let url = format!("{}/session/me/sshkeys", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -18738,7 +18835,8 @@ impl Client {
             self.baseurl,
             encode_path(&ssh_key_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18775,7 +18873,8 @@ impl Client {
             self.baseurl,
             encode_path(&ssh_key_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -18809,7 +18908,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18843,7 +18943,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18877,7 +18978,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -18932,7 +19034,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19016,7 +19119,8 @@ impl Client {
         body: &'a types::CertificateCreate,
     ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
         let url = format!("{}/system/certificates", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -19053,7 +19157,8 @@ impl Client {
             self.baseurl,
             encode_path(&certificate.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19089,7 +19194,8 @@ impl Client {
             self.baseurl,
             encode_path(&certificate.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -19140,7 +19246,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19238,7 +19345,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19321,7 +19429,8 @@ impl Client {
             self.baseurl,
             encode_path(&rack_id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19372,7 +19481,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19455,7 +19565,8 @@ impl Client {
             self.baseurl,
             encode_path(&sled_id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19512,7 +19623,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19617,7 +19729,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19701,7 +19814,8 @@ impl Client {
         body: &'a types::GlobalImageCreate,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
         let url = format!("{}/system/images", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -19738,7 +19852,8 @@ impl Client {
             self.baseurl,
             encode_path(&image_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19776,7 +19891,8 @@ impl Client {
             self.baseurl,
             encode_path(&image_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -19827,7 +19943,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19903,7 +20020,8 @@ impl Client {
         body: &'a types::IpPoolCreate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -19938,7 +20056,8 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -19973,7 +20092,8 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -20008,7 +20128,8 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -20061,7 +20182,8 @@ impl Client {
             query.push(("page_token", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20145,7 +20267,8 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -20181,7 +20304,8 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -20211,7 +20335,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20258,7 +20383,8 @@ impl Client {
             query.push(("page_token", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20335,7 +20461,8 @@ impl Client {
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges/add", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -20366,7 +20493,8 @@ impl Client {
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges/remove", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -20433,7 +20561,8 @@ impl Client {
             query.push(("start_time", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20463,7 +20592,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/system/policy", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20493,7 +20623,8 @@ impl Client {
         body: &'a types::FleetRolePolicy,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/system/policy", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -20545,7 +20676,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20625,7 +20757,8 @@ impl Client {
             self.baseurl,
             encode_path(&saga_id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20678,7 +20811,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20756,7 +20890,8 @@ impl Client {
         body: &'a types::SiloCreate,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
         let url = format!("{}/system/silos", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -20796,7 +20931,8 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20835,7 +20971,8 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -20892,7 +21029,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -20986,7 +21124,8 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -21028,7 +21167,8 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&user_id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -21075,7 +21215,8 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&user_id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -21116,7 +21257,8 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -21158,7 +21300,8 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&provider_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21195,7 +21338,8 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21234,7 +21378,8 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -21292,7 +21437,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21380,7 +21526,8 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&user_id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21431,7 +21578,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21515,7 +21663,8 @@ impl Client {
             self.baseurl,
             encode_path(&user_name.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21560,7 +21709,8 @@ impl Client {
             query.push(("page_token", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21656,7 +21806,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21765,7 +21916,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21853,7 +22005,8 @@ impl Client {
         }
 
         query.push(("project", project.to_string()));
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -21900,7 +22053,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -21946,7 +22100,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -22010,7 +22165,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -22099,7 +22255,8 @@ impl Client {
         }
 
         query.push(("project", project.to_string()));
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -22146,7 +22303,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -22192,7 +22350,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -22262,7 +22421,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -22367,7 +22527,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -22415,7 +22576,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -22463,7 +22625,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -22510,7 +22673,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -22587,7 +22751,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -22634,7 +22799,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .query(&query)
@@ -22681,7 +22847,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -22727,7 +22894,8 @@ impl Client {
             query.push(("project", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -22779,7 +22947,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -22856,7 +23025,8 @@ impl Client {
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!("{}/v1/organizations", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -22891,7 +23061,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -22926,7 +23097,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -22961,7 +23133,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -22995,7 +23168,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23030,7 +23204,8 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -23088,7 +23263,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23169,7 +23345,8 @@ impl Client {
         let url = format!("{}/v1/projects", self.baseurl,);
         let mut query = Vec::with_capacity(1usize);
         query.push(("organization", organization.to_string()));
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -23211,7 +23388,8 @@ impl Client {
             query.push(("organization", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23253,7 +23431,8 @@ impl Client {
             query.push(("organization", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -23295,7 +23474,8 @@ impl Client {
             query.push(("organization", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .delete(url)
             .header(
@@ -23336,7 +23516,8 @@ impl Client {
             query.push(("organization", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23378,7 +23559,8 @@ impl Client {
             query.push(("organization", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .put(url)
             .header(
@@ -23431,7 +23613,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23529,7 +23712,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23610,7 +23794,8 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23639,7 +23824,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/refresh", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -23669,7 +23855,8 @@ impl Client {
         body: &'a types::SystemUpdateStart,
     ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/start", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -23701,7 +23888,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/stop", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .post(url)
             .header(
@@ -23752,7 +23940,8 @@ impl Client {
             query.push(("sort_by", v.to_string()));
         }
 
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23833,7 +24022,8 @@ impl Client {
             self.baseurl,
             encode_path(&version.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23868,7 +24058,8 @@ impl Client {
             self.baseurl,
             encode_path(&version.to_string()),
         );
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(
@@ -23897,7 +24088,8 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/version", self.baseurl,);
-        let request = self
+        #[allow(unused_mut)]
+        let mut request = self
             .client
             .get(url)
             .header(

@@ -1141,6 +1141,14 @@ impl Generator {
                 (#hook)(&#client.inner, &#request_ident);
             }
         });
+        let pre_hook_async = self.settings.pre_hook_async.as_ref().map(|hook| {
+            quote! {
+                match (#hook)(&#client.inner, &mut #request_ident).await {
+                    Ok(_) => (),
+                    Err(e) => return Err(Error::PreHookError(e.to_string())),
+                }
+            }
+        });
         let post_hook = self.settings.post_hook.as_ref().map(|hook| {
             quote! {
                 (#hook)(&#client.inner, &#result_ident);
@@ -1155,7 +1163,8 @@ impl Generator {
 
             #headers_build
 
-            let #request_ident = #client.client
+            #[allow(unused_mut)]
+            let mut #request_ident = #client.client
                 . #method_func (#url_ident)
                 #accept_header
                 #(#body_func)*
@@ -1165,6 +1174,7 @@ impl Generator {
                 .build()?;
 
             #pre_hook
+            #pre_hook_async
             let #result_ident = #client.client
                 .execute(#request_ident)
                 .await;
