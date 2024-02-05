@@ -102,19 +102,22 @@ impl Generator {
 
         let crate_path = syn::TypePath {
             qself: None,
-            path: syn::parse_str(&crate_name).unwrap(),
+            path: syn::parse_str(crate_name).unwrap(),
         };
 
         let code = quote! {
             use #crate_path::*;
 
-            pub struct Cli<T: CliOverride = ()> {
+            pub struct Cli<T: CliConfig> {
                 client: Client,
-                over: T,
+                config: T,
             }
-            impl Cli {
-                pub fn new(client: Client) -> Self {
-                    Self { client, over: () }
+            impl<T: CliConfig> Cli<T> {
+                pub fn new(
+                    client: Client,
+                    config: T,
+                ) -> Self {
+                    Self { client, config }
                 }
 
                 pub fn get_command(cmd: CliCommand) -> clap::Command {
@@ -126,26 +129,17 @@ impl Generator {
                 }
 
                 #(#cli_ops)*
-            }
-
-            impl<T: CliOverride> Cli<T> {
-                pub fn new_with_override(
-                    client: Client,
-                    over: T,
-                ) -> Self {
-                    Self { client, over }
-                }
 
                 pub async fn execute(
                     &self,
                     cmd: CliCommand,
                     matches: &clap::ArgMatches,
-                ) {
+                ) -> anyhow::Result<()> {
                     match cmd {
                         #(
                             CliCommand::#cli_variants => {
                                 // TODO ... do something with output
-                                self.#execute_fns(matches).await;
+                                self.#execute_fns(matches).await
                             }
                         )*
                     }
@@ -154,11 +148,29 @@ impl Generator {
                 #(#execute_ops)*
             }
 
-            pub trait CliOverride {
+            pub trait CliConfig {
+                fn item_success<T>(&self, value: &ResponseValue<T>)
+                where
+                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                fn item_error<T>(&self, value: &Error<T>)
+                where
+                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+
+                fn list_start<T>(&self)
+                where
+                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                fn list_item<T>(&self, value: &T)
+                where
+                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                fn list_end_success<T>(&self)
+                where
+                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                fn list_end_error<T>(&self, value: &Error<T>)
+                where
+                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+
                 #(#trait_ops)*
             }
-
-            impl CliOverride for () {}
 
             #[derive(Copy, Clone, Debug)]
             pub enum CliCommand {
@@ -216,67 +228,111 @@ impl Generator {
         let fn_name = format_ident!("execute_{}", &method.operation_id);
         let op_name = format_ident!("{}", &method.operation_id);
 
-        let (_, success_type) = self.extract_responses(
+        let (_, success_kind) = self.extract_responses(
             method,
             OperationResponseStatus::is_success_or_default,
         );
-        let (_, error_type) = self.extract_responses(
+        let (_, error_kind) = self.extract_responses(
             method,
             OperationResponseStatus::is_error_or_default,
         );
 
-        let success_output = match success_type {
-            crate::method::OperationResponseType::Type(_) => {
-                quote! { println!("success\n{:#?}", r) }
-            }
-            crate::method::OperationResponseType::None => {
-                quote! { println!("success\n{:#?}", r) }
-            }
-            crate::method::OperationResponseType::Raw => quote! { todo!() },
-            crate::method::OperationResponseType::Upgrade => quote! { todo!() },
-        };
-
-        let error_output = match error_type {
-            crate::method::OperationResponseType::Type(_) => {
-                quote! { println!("error\n{:#?}", r) }
-            }
-            crate::method::OperationResponseType::None => {
-                quote! { println!("success\n{:#?}", r) }
-            }
-            crate::method::OperationResponseType::Raw => quote! { todo!() },
-            crate::method::OperationResponseType::Upgrade => quote! { todo!() },
-        };
-
         let execute_and_output = match method.dropshot_paginated {
+            // Normal, one-shot API calls.
             None => {
+                let success_output = match success_kind {
+                    crate::method::OperationResponseKind::Type(_)
+                    | crate::method::OperationResponseKind::None => {
+                        quote! {
+                            {
+                                self.config.item_success(&r);
+                                Ok(())
+                            }
+                        }
+                    }
+                    crate::method::OperationResponseKind::Raw
+                    | crate::method::OperationResponseKind::Upgrade => {
+                        quote! {
+                            {
+                                todo!()
+                            }
+                        }
+                    }
+                };
+
+                let error_output = match error_kind {
+                    crate::method::OperationResponseKind::Type(_)
+                    | crate::method::OperationResponseKind::None => {
+                        quote! {
+                            {
+                                self.config.item_error(&r);
+                                Err(anyhow::Error::new(r))
+                            }
+                        }
+                    }
+                    crate::method::OperationResponseKind::Raw
+                    | crate::method::OperationResponseKind::Upgrade => {
+                        quote! {
+                            {
+                                todo!()
+                            }
+                        }
+                    }
+                };
+
                 quote! {
                     let result = request.send().await;
 
                     match result {
-                        Ok(r) => {
-                            #success_output
-                        }
-                        Err(r) => {
-                            #error_output
-                        }
+                        Ok(r) => #success_output
+                        Err(r) => #error_output
                     }
                 }
             }
+
+            // Paginated APIs for which we iterate over each item.
             Some(_) => {
+                let success_type = match success_kind {
+                    crate::method::OperationResponseKind::Type(type_id) => {
+                        self.type_space.get_type(&type_id).unwrap().ident()
+                    }
+                    crate::method::OperationResponseKind::None => quote! { () },
+                    crate::method::OperationResponseKind::Raw => todo!(),
+                    crate::method::OperationResponseKind::Upgrade => todo!(),
+                };
+                let error_output = match error_kind {
+                    crate::method::OperationResponseKind::Type(_)
+                    | crate::method::OperationResponseKind::None => {
+                        quote! {
+                            {
+                                self.config.list_end_error(&r);
+                                return Err(anyhow::Error::new(r))
+                            }
+                        }
+                    }
+                    crate::method::OperationResponseKind::Raw
+                    | crate::method::OperationResponseKind::Upgrade => {
+                        quote! {
+                            {
+                                todo!()
+                            }
+                        }
+                    }
+                };
                 quote! {
+                    self.config.list_start::<#success_type>();
+
                     let mut stream = request.stream();
 
                     loop {
                         match futures::TryStreamExt::try_next(&mut stream).await {
-                            Err(r) => {
-                                #error_output;
-                                break;
-                            }
+                            Err(r) => #error_output
                             Ok(None) => {
-                                break;
+                                self.config.list_end_success::<#success_type>();
+                                return Ok(());
                             }
                             Ok(Some(value)) => {
-                                println!("{:#?}", value);
+                                self.config.list_item(&value);
                             }
                         }
                     }
@@ -286,17 +342,13 @@ impl Generator {
 
         let execute_fn = quote! {
             pub async fn #fn_name(&self, matches: &clap::ArgMatches)
-                // ->
-                // Result<ResponseValue<#success_type>, Error<#error_type>>
+                -> anyhow::Result<()>
             {
                 let mut request = self.client.#op_name();
                 #consumer_args
 
                 // Call the override function.
-                // TODO don't want to unwrap.
-                self.over
-                    .#fn_name(matches, &mut request)
-                    .unwrap();
+                self.config.#fn_name(matches, &mut request)?;
 
                 #execute_and_output
             }
@@ -311,7 +363,7 @@ impl Generator {
                 &self,
                 matches: &clap::ArgMatches,
                 request: &mut builder :: #struct_ident,
-            ) -> Result<(), String> {
+            ) -> anyhow::Result<()> {
                 Ok(())
             }
         };

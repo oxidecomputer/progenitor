@@ -1,12 +1,12 @@
 use crate::param_overrides_builder::*;
-pub struct Cli<T: CliOverride = ()> {
+pub struct Cli<T: CliConfig> {
     client: Client,
-    over: T,
+    config: T,
 }
 
-impl Cli {
-    pub fn new(client: Client) -> Self {
-        Self { client, over: () }
+impl<T: CliConfig> Cli<T> {
+    pub fn new(client: Client, config: T) -> Self {
+        Self { client, config }
     }
 
     pub fn get_command(cmd: CliCommand) -> clap::Command {
@@ -33,22 +33,14 @@ impl Cli {
             )
             .long_about("Gets a key")
     }
-}
 
-impl<T: CliOverride> Cli<T> {
-    pub fn new_with_override(client: Client, over: T) -> Self {
-        Self { client, over }
-    }
-
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         match cmd {
-            CliCommand::KeyGet => {
-                self.execute_key_get(matches).await;
-            }
+            CliCommand::KeyGet => self.execute_key_get(matches).await,
         }
     }
 
-    pub async fn execute_key_get(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_key_get(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.key_get();
         if let Some(value) = matches.get_one::<bool>("key") {
             request = request.key(value.clone());
@@ -58,30 +50,49 @@ impl<T: CliOverride> Cli<T> {
             request = request.unique_key(value.clone());
         }
 
-        self.over.execute_key_get(matches, &mut request).unwrap();
+        self.config.execute_key_get(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 }
 
-pub trait CliOverride {
+pub trait CliConfig {
+    fn item_success<T>(&self, value: &ResponseValue<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn item_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_start<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_item<T>(&self, value: &T)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_success<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_key_get(
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::KeyGet,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 }
 
-impl CliOverride for () {}
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {
     KeyGet,

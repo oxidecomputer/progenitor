@@ -1,12 +1,12 @@
 use crate::keeper_builder::*;
-pub struct Cli<T: CliOverride = ()> {
+pub struct Cli<T: CliConfig> {
     client: Client,
-    over: T,
+    config: T,
 }
 
-impl Cli {
-    pub fn new(client: Client) -> Self {
-        Self { client, over: () }
+impl<T: CliConfig> Cli<T> {
+    pub fn new(client: Client, config: T) -> Self {
+        Self { client, config }
     }
 
     pub fn get_command(cmd: CliCommand) -> clap::Command {
@@ -181,37 +181,19 @@ impl Cli {
                     .help("XXX"),
             )
     }
-}
 
-impl<T: CliOverride> Cli<T> {
-    pub fn new_with_override(client: Client, over: T) -> Self {
-        Self { client, over }
-    }
-
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         match cmd {
-            CliCommand::Enrol => {
-                self.execute_enrol(matches).await;
-            }
-            CliCommand::GlobalJobs => {
-                self.execute_global_jobs(matches).await;
-            }
-            CliCommand::Ping => {
-                self.execute_ping(matches).await;
-            }
-            CliCommand::ReportFinish => {
-                self.execute_report_finish(matches).await;
-            }
-            CliCommand::ReportOutput => {
-                self.execute_report_output(matches).await;
-            }
-            CliCommand::ReportStart => {
-                self.execute_report_start(matches).await;
-            }
+            CliCommand::Enrol => self.execute_enrol(matches).await,
+            CliCommand::GlobalJobs => self.execute_global_jobs(matches).await,
+            CliCommand::Ping => self.execute_ping(matches).await,
+            CliCommand::ReportFinish => self.execute_report_finish(matches).await,
+            CliCommand::ReportOutput => self.execute_report_output(matches).await,
+            CliCommand::ReportStart => self.execute_report_start(matches).await,
         }
     }
 
-    pub async fn execute_enrol(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_enrol(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.enrol();
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
@@ -231,57 +213,61 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over.execute_enrol(matches, &mut request).unwrap();
+        self.config.execute_enrol(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_global_jobs(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_global_jobs(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.global_jobs();
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
         }
 
-        self.over
-            .execute_global_jobs(matches, &mut request)
-            .unwrap();
+        self.config.execute_global_jobs(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ping(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ping(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ping();
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
         }
 
-        self.over.execute_ping(matches, &mut request).unwrap();
+        self.config.execute_ping(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_report_finish(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_report_finish(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_finish();
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
@@ -305,21 +291,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_report_finish(matches, &mut request)
-            .unwrap();
+        self.config.execute_report_finish(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_report_output(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_report_output(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_output();
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
@@ -331,21 +317,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_report_output(matches, &mut request)
-            .unwrap();
+        self.config.execute_report_output(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_report_start(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_report_start(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_start();
         if let Some(value) = matches.get_one::<String>("authorization") {
             request = request.authorization(value.clone());
@@ -366,27 +352,45 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_report_start(matches, &mut request)
-            .unwrap();
+        self.config.execute_report_start(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 }
 
-pub trait CliOverride {
+pub trait CliConfig {
+    fn item_success<T>(&self, value: &ResponseValue<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn item_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_start<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_item<T>(&self, value: &T)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_success<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_enrol(
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::Enrol,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -394,7 +398,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::GlobalJobs,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -402,7 +406,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::Ping,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -410,7 +414,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ReportFinish,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -418,7 +422,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ReportOutput,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -426,12 +430,11 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ReportStart,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 }
 
-impl CliOverride for () {}
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {
     Enrol,

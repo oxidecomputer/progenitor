@@ -81,7 +81,7 @@ impl Generator {
 
         let crate_path = syn::TypePath {
             qself: None,
-            path: syn::parse_str(&crate_name).unwrap(),
+            path: syn::parse_str(crate_name).unwrap(),
         };
 
         let code = quote! {
@@ -295,7 +295,7 @@ impl Generator {
                  status_code, typ, ..
              }| {
                 let (value_param, value_use) = match typ {
-                    crate::method::OperationResponseType::Type(arg_type_id) => {
+                    crate::method::OperationResponseKind::Type(arg_type_id) => {
                         let arg_type =
                             self.type_space.get_type(arg_type_id).unwrap();
                         let arg_type_ident = arg_type.parameter_ident();
@@ -309,10 +309,10 @@ impl Generator {
                             },
                         )
                     }
-                    crate::method::OperationResponseType::None => {
+                    crate::method::OperationResponseKind::None => {
                         Default::default()
                     }
-                    crate::method::OperationResponseType::Raw => (
+                    crate::method::OperationResponseKind::Raw => (
                         quote! {
                             value: serde_json::Value,
                         },
@@ -321,7 +321,7 @@ impl Generator {
                             .json_body(value)
                         },
                     ),
-                    crate::method::OperationResponseType::Upgrade => {
+                    crate::method::OperationResponseKind::Upgrade => {
                         Default::default()
                     }
                 };

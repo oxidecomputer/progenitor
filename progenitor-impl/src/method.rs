@@ -166,7 +166,7 @@ impl std::fmt::Display for BodyContentType {
             Self::OctetStream => "application/octet-stream",
             Self::Json => "application/json",
             Self::FormUrlencoded => "application/x-www-form-urlencoded",
-            Self::Text(typ) => &typ,
+            Self::Text(typ) => typ,
         })
     }
 }
@@ -174,7 +174,7 @@ impl std::fmt::Display for BodyContentType {
 #[derive(Debug)]
 pub(crate) struct OperationResponse {
     pub status_code: OperationResponseStatus,
-    pub typ: OperationResponseType,
+    pub typ: OperationResponseKind,
     // TODO this isn't currently used because dropshot doesn't give us a
     // particularly useful message here.
     #[allow(dead_code)]
@@ -257,27 +257,27 @@ impl PartialOrd for OperationResponseStatus {
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
-pub(crate) enum OperationResponseType {
+pub(crate) enum OperationResponseKind {
     Type(TypeId),
     None,
     Raw,
     Upgrade,
 }
 
-impl OperationResponseType {
+impl OperationResponseKind {
     pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
         match self {
-            OperationResponseType::Type(ref type_id) => {
+            OperationResponseKind::Type(ref type_id) => {
                 let type_name = type_space.get_type(type_id).unwrap().ident();
                 quote! { #type_name }
             }
-            OperationResponseType::None => {
+            OperationResponseKind::None => {
                 quote! { () }
             }
-            OperationResponseType::Raw => {
+            OperationResponseKind::Raw => {
                 quote! { ByteStream }
             }
-            OperationResponseType::Upgrade => {
+            OperationResponseKind::Upgrade => {
                 quote! { reqwest::Upgraded }
             }
         }
@@ -508,13 +508,13 @@ impl Generator {
                         todo!("media type encoding, no schema: {:#?}", mt);
                     };
 
-                    OperationResponseType::Type(typ)
+                    OperationResponseKind::Type(typ)
                 } else if dropshot_websocket {
-                    OperationResponseType::Upgrade
+                    OperationResponseKind::Upgrade
                 } else if response.content.first().is_some() {
-                    OperationResponseType::Raw
+                    OperationResponseKind::Raw
                 } else {
-                    OperationResponseType::None
+                    OperationResponseKind::None
                 };
 
                 // See if there's a status code that covers success cases.
@@ -548,7 +548,7 @@ impl Generator {
         if !success {
             responses.push(OperationResponse {
                 status_code: OperationResponseStatus::Range(2),
-                typ: OperationResponseType::Raw,
+                typ: OperationResponseKind::Raw,
                 description: None,
             });
         }
@@ -557,7 +557,7 @@ impl Generator {
         if dropshot_websocket {
             responses.push(OperationResponse {
                 status_code: OperationResponseStatus::Code(101),
-                typ: OperationResponseType::Upgrade,
+                typ: OperationResponseKind::Upgrade,
                 description: None,
             })
         }
@@ -1019,22 +1019,22 @@ impl Generator {
                 };
 
                 let decode = match &response.typ {
-                    OperationResponseType::Type(_) => {
+                    OperationResponseKind::Type(_) => {
                         quote! {
                             ResponseValue::from_response(#response_ident).await
                         }
                     }
-                    OperationResponseType::None => {
+                    OperationResponseKind::None => {
                         quote! {
                             Ok(ResponseValue::empty(#response_ident))
                         }
                     }
-                    OperationResponseType::Raw => {
+                    OperationResponseKind::Raw => {
                         quote! {
                             Ok(ResponseValue::stream(#response_ident))
                         }
                     }
-                    OperationResponseType::Upgrade => {
+                    OperationResponseKind::Upgrade => {
                         quote! {
                             ResponseValue::upgrade(#response_ident).await
                         }
@@ -1068,7 +1068,7 @@ impl Generator {
                 };
 
                 let decode = match &response.typ {
-                    OperationResponseType::Type(_) => {
+                    OperationResponseKind::Type(_) => {
                         quote! {
                             Err(Error::ErrorResponse(
                                 ResponseValue::from_response(#response_ident)
@@ -1076,21 +1076,21 @@ impl Generator {
                             ))
                         }
                     }
-                    OperationResponseType::None => {
+                    OperationResponseKind::None => {
                         quote! {
                             Err(Error::ErrorResponse(
                                 ResponseValue::empty(#response_ident)
                             ))
                         }
                     }
-                    OperationResponseType::Raw => {
+                    OperationResponseKind::Raw => {
                         quote! {
                             Err(Error::ErrorResponse(
                                 ResponseValue::stream(#response_ident)
                             ))
                         }
                     }
-                    OperationResponseType::Upgrade => {
+                    OperationResponseKind::Upgrade => {
                         if response.status_code
                             == OperationResponseStatus::Default
                         {
@@ -1109,8 +1109,8 @@ impl Generator {
 
         let accept_header = matches!(
             (&response_type, &error_type),
-            (OperationResponseType::Type(_), _)
-                | (OperationResponseType::None, OperationResponseType::Type(_))
+            (OperationResponseKind::Type(_), _)
+                | (OperationResponseKind::None, OperationResponseKind::Type(_))
         )
         .then(|| {
             quote! {
@@ -1233,7 +1233,7 @@ impl Generator {
         &self,
         method: &'a OperationMethod,
         filter: fn(&OperationResponseStatus) -> bool,
-    ) -> (Vec<&'a OperationResponse>, OperationResponseType) {
+    ) -> (Vec<&'a OperationResponse>, OperationResponseKind) {
         let mut response_items = method
             .responses
             .iter()
@@ -1273,7 +1273,7 @@ impl Generator {
             .into_iter()
             .next()
             // TODO should this be OperationResponseType::Raw?
-            .unwrap_or(OperationResponseType::None);
+            .unwrap_or(OperationResponseKind::None);
         (response_items, response_type)
     }
 
@@ -1333,7 +1333,7 @@ impl Generator {
                     (
                         OperationResponseStatus::Code(200..=299)
                         | OperationResponseStatus::Range(2),
-                        OperationResponseType::Type(type_id),
+                        OperationResponseKind::Type(type_id),
                     ) => Some(type_id),
                     _ => None,
                 }

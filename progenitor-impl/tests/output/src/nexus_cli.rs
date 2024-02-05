@@ -1,12 +1,12 @@
 use crate::nexus_builder::*;
-pub struct Cli<T: CliOverride = ()> {
+pub struct Cli<T: CliConfig> {
     client: Client,
-    over: T,
+    config: T,
 }
 
-impl Cli {
-    pub fn new(client: Client) -> Self {
-        Self { client, over: () }
+impl<T: CliConfig> Cli<T> {
+    pub fn new(client: Client, config: T) -> Self {
+        Self { client, config }
     }
 
     pub fn get_command(cmd: CliCommand) -> clap::Command {
@@ -5606,821 +5606,525 @@ impl Cli {
     pub fn cli_system_version() -> clap::Command {
         clap::Command::new("").about("View system version and update status")
     }
-}
 
-impl<T: CliOverride> Cli<T> {
-    pub fn new_with_override(client: Client, over: T) -> Self {
-        Self { client, over }
-    }
-
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         match cmd {
-            CliCommand::DiskViewById => {
-                self.execute_disk_view_by_id(matches).await;
-            }
-            CliCommand::ImageViewById => {
-                self.execute_image_view_by_id(matches).await;
-            }
-            CliCommand::InstanceViewById => {
-                self.execute_instance_view_by_id(matches).await;
-            }
+            CliCommand::DiskViewById => self.execute_disk_view_by_id(matches).await,
+            CliCommand::ImageViewById => self.execute_image_view_by_id(matches).await,
+            CliCommand::InstanceViewById => self.execute_instance_view_by_id(matches).await,
             CliCommand::InstanceNetworkInterfaceViewById => {
                 self.execute_instance_network_interface_view_by_id(matches)
-                    .await;
+                    .await
             }
-            CliCommand::OrganizationViewById => {
-                self.execute_organization_view_by_id(matches).await;
-            }
-            CliCommand::ProjectViewById => {
-                self.execute_project_view_by_id(matches).await;
-            }
-            CliCommand::SnapshotViewById => {
-                self.execute_snapshot_view_by_id(matches).await;
-            }
+            CliCommand::OrganizationViewById => self.execute_organization_view_by_id(matches).await,
+            CliCommand::ProjectViewById => self.execute_project_view_by_id(matches).await,
+            CliCommand::SnapshotViewById => self.execute_snapshot_view_by_id(matches).await,
             CliCommand::VpcRouterRouteViewById => {
-                self.execute_vpc_router_route_view_by_id(matches).await;
+                self.execute_vpc_router_route_view_by_id(matches).await
             }
-            CliCommand::VpcRouterViewById => {
-                self.execute_vpc_router_view_by_id(matches).await;
-            }
-            CliCommand::VpcSubnetViewById => {
-                self.execute_vpc_subnet_view_by_id(matches).await;
-            }
-            CliCommand::VpcViewById => {
-                self.execute_vpc_view_by_id(matches).await;
-            }
-            CliCommand::DeviceAuthRequest => {
-                self.execute_device_auth_request(matches).await;
-            }
-            CliCommand::DeviceAuthConfirm => {
-                self.execute_device_auth_confirm(matches).await;
-            }
-            CliCommand::DeviceAccessToken => {
-                self.execute_device_access_token(matches).await;
-            }
-            CliCommand::GroupList => {
-                self.execute_group_list(matches).await;
-            }
-            CliCommand::LoginSpoof => {
-                self.execute_login_spoof(matches).await;
-            }
-            CliCommand::LoginLocal => {
-                self.execute_login_local(matches).await;
-            }
-            CliCommand::LoginSamlBegin => {
-                self.execute_login_saml_begin(matches).await;
-            }
-            CliCommand::LoginSaml => {
-                self.execute_login_saml(matches).await;
-            }
-            CliCommand::Logout => {
-                self.execute_logout(matches).await;
-            }
-            CliCommand::OrganizationList => {
-                self.execute_organization_list(matches).await;
-            }
-            CliCommand::OrganizationCreate => {
-                self.execute_organization_create(matches).await;
-            }
-            CliCommand::OrganizationView => {
-                self.execute_organization_view(matches).await;
-            }
-            CliCommand::OrganizationUpdate => {
-                self.execute_organization_update(matches).await;
-            }
-            CliCommand::OrganizationDelete => {
-                self.execute_organization_delete(matches).await;
-            }
+            CliCommand::VpcRouterViewById => self.execute_vpc_router_view_by_id(matches).await,
+            CliCommand::VpcSubnetViewById => self.execute_vpc_subnet_view_by_id(matches).await,
+            CliCommand::VpcViewById => self.execute_vpc_view_by_id(matches).await,
+            CliCommand::DeviceAuthRequest => self.execute_device_auth_request(matches).await,
+            CliCommand::DeviceAuthConfirm => self.execute_device_auth_confirm(matches).await,
+            CliCommand::DeviceAccessToken => self.execute_device_access_token(matches).await,
+            CliCommand::GroupList => self.execute_group_list(matches).await,
+            CliCommand::LoginSpoof => self.execute_login_spoof(matches).await,
+            CliCommand::LoginLocal => self.execute_login_local(matches).await,
+            CliCommand::LoginSamlBegin => self.execute_login_saml_begin(matches).await,
+            CliCommand::LoginSaml => self.execute_login_saml(matches).await,
+            CliCommand::Logout => self.execute_logout(matches).await,
+            CliCommand::OrganizationList => self.execute_organization_list(matches).await,
+            CliCommand::OrganizationCreate => self.execute_organization_create(matches).await,
+            CliCommand::OrganizationView => self.execute_organization_view(matches).await,
+            CliCommand::OrganizationUpdate => self.execute_organization_update(matches).await,
+            CliCommand::OrganizationDelete => self.execute_organization_delete(matches).await,
             CliCommand::OrganizationPolicyView => {
-                self.execute_organization_policy_view(matches).await;
+                self.execute_organization_policy_view(matches).await
             }
             CliCommand::OrganizationPolicyUpdate => {
-                self.execute_organization_policy_update(matches).await;
+                self.execute_organization_policy_update(matches).await
             }
-            CliCommand::ProjectList => {
-                self.execute_project_list(matches).await;
-            }
-            CliCommand::ProjectCreate => {
-                self.execute_project_create(matches).await;
-            }
-            CliCommand::ProjectView => {
-                self.execute_project_view(matches).await;
-            }
-            CliCommand::ProjectUpdate => {
-                self.execute_project_update(matches).await;
-            }
-            CliCommand::ProjectDelete => {
-                self.execute_project_delete(matches).await;
-            }
-            CliCommand::DiskList => {
-                self.execute_disk_list(matches).await;
-            }
-            CliCommand::DiskCreate => {
-                self.execute_disk_create(matches).await;
-            }
-            CliCommand::DiskView => {
-                self.execute_disk_view(matches).await;
-            }
-            CliCommand::DiskDelete => {
-                self.execute_disk_delete(matches).await;
-            }
-            CliCommand::DiskMetricsList => {
-                self.execute_disk_metrics_list(matches).await;
-            }
-            CliCommand::ImageList => {
-                self.execute_image_list(matches).await;
-            }
-            CliCommand::ImageCreate => {
-                self.execute_image_create(matches).await;
-            }
-            CliCommand::ImageView => {
-                self.execute_image_view(matches).await;
-            }
-            CliCommand::ImageDelete => {
-                self.execute_image_delete(matches).await;
-            }
-            CliCommand::InstanceList => {
-                self.execute_instance_list(matches).await;
-            }
-            CliCommand::InstanceCreate => {
-                self.execute_instance_create(matches).await;
-            }
-            CliCommand::InstanceView => {
-                self.execute_instance_view(matches).await;
-            }
-            CliCommand::InstanceDelete => {
-                self.execute_instance_delete(matches).await;
-            }
-            CliCommand::InstanceDiskList => {
-                self.execute_instance_disk_list(matches).await;
-            }
-            CliCommand::InstanceDiskAttach => {
-                self.execute_instance_disk_attach(matches).await;
-            }
-            CliCommand::InstanceDiskDetach => {
-                self.execute_instance_disk_detach(matches).await;
-            }
+            CliCommand::ProjectList => self.execute_project_list(matches).await,
+            CliCommand::ProjectCreate => self.execute_project_create(matches).await,
+            CliCommand::ProjectView => self.execute_project_view(matches).await,
+            CliCommand::ProjectUpdate => self.execute_project_update(matches).await,
+            CliCommand::ProjectDelete => self.execute_project_delete(matches).await,
+            CliCommand::DiskList => self.execute_disk_list(matches).await,
+            CliCommand::DiskCreate => self.execute_disk_create(matches).await,
+            CliCommand::DiskView => self.execute_disk_view(matches).await,
+            CliCommand::DiskDelete => self.execute_disk_delete(matches).await,
+            CliCommand::DiskMetricsList => self.execute_disk_metrics_list(matches).await,
+            CliCommand::ImageList => self.execute_image_list(matches).await,
+            CliCommand::ImageCreate => self.execute_image_create(matches).await,
+            CliCommand::ImageView => self.execute_image_view(matches).await,
+            CliCommand::ImageDelete => self.execute_image_delete(matches).await,
+            CliCommand::InstanceList => self.execute_instance_list(matches).await,
+            CliCommand::InstanceCreate => self.execute_instance_create(matches).await,
+            CliCommand::InstanceView => self.execute_instance_view(matches).await,
+            CliCommand::InstanceDelete => self.execute_instance_delete(matches).await,
+            CliCommand::InstanceDiskList => self.execute_instance_disk_list(matches).await,
+            CliCommand::InstanceDiskAttach => self.execute_instance_disk_attach(matches).await,
+            CliCommand::InstanceDiskDetach => self.execute_instance_disk_detach(matches).await,
             CliCommand::InstanceExternalIpList => {
-                self.execute_instance_external_ip_list(matches).await;
+                self.execute_instance_external_ip_list(matches).await
             }
-            CliCommand::InstanceMigrate => {
-                self.execute_instance_migrate(matches).await;
-            }
+            CliCommand::InstanceMigrate => self.execute_instance_migrate(matches).await,
             CliCommand::InstanceNetworkInterfaceList => {
-                self.execute_instance_network_interface_list(matches).await;
+                self.execute_instance_network_interface_list(matches).await
             }
             CliCommand::InstanceNetworkInterfaceCreate => {
                 self.execute_instance_network_interface_create(matches)
-                    .await;
+                    .await
             }
             CliCommand::InstanceNetworkInterfaceView => {
-                self.execute_instance_network_interface_view(matches).await;
+                self.execute_instance_network_interface_view(matches).await
             }
             CliCommand::InstanceNetworkInterfaceUpdate => {
                 self.execute_instance_network_interface_update(matches)
-                    .await;
+                    .await
             }
             CliCommand::InstanceNetworkInterfaceDelete => {
                 self.execute_instance_network_interface_delete(matches)
-                    .await;
+                    .await
             }
-            CliCommand::InstanceReboot => {
-                self.execute_instance_reboot(matches).await;
-            }
+            CliCommand::InstanceReboot => self.execute_instance_reboot(matches).await,
             CliCommand::InstanceSerialConsole => {
-                self.execute_instance_serial_console(matches).await;
+                self.execute_instance_serial_console(matches).await
             }
             CliCommand::InstanceSerialConsoleStream => {
-                self.execute_instance_serial_console_stream(matches).await;
+                self.execute_instance_serial_console_stream(matches).await
             }
-            CliCommand::InstanceStart => {
-                self.execute_instance_start(matches).await;
-            }
-            CliCommand::InstanceStop => {
-                self.execute_instance_stop(matches).await;
-            }
-            CliCommand::ProjectPolicyView => {
-                self.execute_project_policy_view(matches).await;
-            }
-            CliCommand::ProjectPolicyUpdate => {
-                self.execute_project_policy_update(matches).await;
-            }
-            CliCommand::SnapshotList => {
-                self.execute_snapshot_list(matches).await;
-            }
-            CliCommand::SnapshotCreate => {
-                self.execute_snapshot_create(matches).await;
-            }
-            CliCommand::SnapshotView => {
-                self.execute_snapshot_view(matches).await;
-            }
-            CliCommand::SnapshotDelete => {
-                self.execute_snapshot_delete(matches).await;
-            }
-            CliCommand::VpcList => {
-                self.execute_vpc_list(matches).await;
-            }
-            CliCommand::VpcCreate => {
-                self.execute_vpc_create(matches).await;
-            }
-            CliCommand::VpcView => {
-                self.execute_vpc_view(matches).await;
-            }
-            CliCommand::VpcUpdate => {
-                self.execute_vpc_update(matches).await;
-            }
-            CliCommand::VpcDelete => {
-                self.execute_vpc_delete(matches).await;
-            }
-            CliCommand::VpcFirewallRulesView => {
-                self.execute_vpc_firewall_rules_view(matches).await;
-            }
+            CliCommand::InstanceStart => self.execute_instance_start(matches).await,
+            CliCommand::InstanceStop => self.execute_instance_stop(matches).await,
+            CliCommand::ProjectPolicyView => self.execute_project_policy_view(matches).await,
+            CliCommand::ProjectPolicyUpdate => self.execute_project_policy_update(matches).await,
+            CliCommand::SnapshotList => self.execute_snapshot_list(matches).await,
+            CliCommand::SnapshotCreate => self.execute_snapshot_create(matches).await,
+            CliCommand::SnapshotView => self.execute_snapshot_view(matches).await,
+            CliCommand::SnapshotDelete => self.execute_snapshot_delete(matches).await,
+            CliCommand::VpcList => self.execute_vpc_list(matches).await,
+            CliCommand::VpcCreate => self.execute_vpc_create(matches).await,
+            CliCommand::VpcView => self.execute_vpc_view(matches).await,
+            CliCommand::VpcUpdate => self.execute_vpc_update(matches).await,
+            CliCommand::VpcDelete => self.execute_vpc_delete(matches).await,
+            CliCommand::VpcFirewallRulesView => self.execute_vpc_firewall_rules_view(matches).await,
             CliCommand::VpcFirewallRulesUpdate => {
-                self.execute_vpc_firewall_rules_update(matches).await;
+                self.execute_vpc_firewall_rules_update(matches).await
             }
-            CliCommand::VpcRouterList => {
-                self.execute_vpc_router_list(matches).await;
-            }
-            CliCommand::VpcRouterCreate => {
-                self.execute_vpc_router_create(matches).await;
-            }
-            CliCommand::VpcRouterView => {
-                self.execute_vpc_router_view(matches).await;
-            }
-            CliCommand::VpcRouterUpdate => {
-                self.execute_vpc_router_update(matches).await;
-            }
-            CliCommand::VpcRouterDelete => {
-                self.execute_vpc_router_delete(matches).await;
-            }
-            CliCommand::VpcRouterRouteList => {
-                self.execute_vpc_router_route_list(matches).await;
-            }
-            CliCommand::VpcRouterRouteCreate => {
-                self.execute_vpc_router_route_create(matches).await;
-            }
-            CliCommand::VpcRouterRouteView => {
-                self.execute_vpc_router_route_view(matches).await;
-            }
-            CliCommand::VpcRouterRouteUpdate => {
-                self.execute_vpc_router_route_update(matches).await;
-            }
-            CliCommand::VpcRouterRouteDelete => {
-                self.execute_vpc_router_route_delete(matches).await;
-            }
-            CliCommand::VpcSubnetList => {
-                self.execute_vpc_subnet_list(matches).await;
-            }
-            CliCommand::VpcSubnetCreate => {
-                self.execute_vpc_subnet_create(matches).await;
-            }
-            CliCommand::VpcSubnetView => {
-                self.execute_vpc_subnet_view(matches).await;
-            }
-            CliCommand::VpcSubnetUpdate => {
-                self.execute_vpc_subnet_update(matches).await;
-            }
-            CliCommand::VpcSubnetDelete => {
-                self.execute_vpc_subnet_delete(matches).await;
-            }
+            CliCommand::VpcRouterList => self.execute_vpc_router_list(matches).await,
+            CliCommand::VpcRouterCreate => self.execute_vpc_router_create(matches).await,
+            CliCommand::VpcRouterView => self.execute_vpc_router_view(matches).await,
+            CliCommand::VpcRouterUpdate => self.execute_vpc_router_update(matches).await,
+            CliCommand::VpcRouterDelete => self.execute_vpc_router_delete(matches).await,
+            CliCommand::VpcRouterRouteList => self.execute_vpc_router_route_list(matches).await,
+            CliCommand::VpcRouterRouteCreate => self.execute_vpc_router_route_create(matches).await,
+            CliCommand::VpcRouterRouteView => self.execute_vpc_router_route_view(matches).await,
+            CliCommand::VpcRouterRouteUpdate => self.execute_vpc_router_route_update(matches).await,
+            CliCommand::VpcRouterRouteDelete => self.execute_vpc_router_route_delete(matches).await,
+            CliCommand::VpcSubnetList => self.execute_vpc_subnet_list(matches).await,
+            CliCommand::VpcSubnetCreate => self.execute_vpc_subnet_create(matches).await,
+            CliCommand::VpcSubnetView => self.execute_vpc_subnet_view(matches).await,
+            CliCommand::VpcSubnetUpdate => self.execute_vpc_subnet_update(matches).await,
+            CliCommand::VpcSubnetDelete => self.execute_vpc_subnet_delete(matches).await,
             CliCommand::VpcSubnetListNetworkInterfaces => {
                 self.execute_vpc_subnet_list_network_interfaces(matches)
-                    .await;
+                    .await
             }
-            CliCommand::PolicyView => {
-                self.execute_policy_view(matches).await;
-            }
-            CliCommand::PolicyUpdate => {
-                self.execute_policy_update(matches).await;
-            }
-            CliCommand::RoleList => {
-                self.execute_role_list(matches).await;
-            }
-            CliCommand::RoleView => {
-                self.execute_role_view(matches).await;
-            }
-            CliCommand::SessionMe => {
-                self.execute_session_me(matches).await;
-            }
-            CliCommand::SessionMeGroups => {
-                self.execute_session_me_groups(matches).await;
-            }
-            CliCommand::SessionSshkeyList => {
-                self.execute_session_sshkey_list(matches).await;
-            }
-            CliCommand::SessionSshkeyCreate => {
-                self.execute_session_sshkey_create(matches).await;
-            }
-            CliCommand::SessionSshkeyView => {
-                self.execute_session_sshkey_view(matches).await;
-            }
-            CliCommand::SessionSshkeyDelete => {
-                self.execute_session_sshkey_delete(matches).await;
-            }
-            CliCommand::SystemImageViewById => {
-                self.execute_system_image_view_by_id(matches).await;
-            }
-            CliCommand::IpPoolViewById => {
-                self.execute_ip_pool_view_by_id(matches).await;
-            }
-            CliCommand::SiloViewById => {
-                self.execute_silo_view_by_id(matches).await;
-            }
-            CliCommand::CertificateList => {
-                self.execute_certificate_list(matches).await;
-            }
-            CliCommand::CertificateCreate => {
-                self.execute_certificate_create(matches).await;
-            }
-            CliCommand::CertificateView => {
-                self.execute_certificate_view(matches).await;
-            }
-            CliCommand::CertificateDelete => {
-                self.execute_certificate_delete(matches).await;
-            }
-            CliCommand::PhysicalDiskList => {
-                self.execute_physical_disk_list(matches).await;
-            }
-            CliCommand::RackList => {
-                self.execute_rack_list(matches).await;
-            }
-            CliCommand::RackView => {
-                self.execute_rack_view(matches).await;
-            }
-            CliCommand::SledList => {
-                self.execute_sled_list(matches).await;
-            }
-            CliCommand::SledView => {
-                self.execute_sled_view(matches).await;
-            }
-            CliCommand::SledPhysicalDiskList => {
-                self.execute_sled_physical_disk_list(matches).await;
-            }
-            CliCommand::SystemImageList => {
-                self.execute_system_image_list(matches).await;
-            }
-            CliCommand::SystemImageCreate => {
-                self.execute_system_image_create(matches).await;
-            }
-            CliCommand::SystemImageView => {
-                self.execute_system_image_view(matches).await;
-            }
-            CliCommand::SystemImageDelete => {
-                self.execute_system_image_delete(matches).await;
-            }
-            CliCommand::IpPoolList => {
-                self.execute_ip_pool_list(matches).await;
-            }
-            CliCommand::IpPoolCreate => {
-                self.execute_ip_pool_create(matches).await;
-            }
-            CliCommand::IpPoolView => {
-                self.execute_ip_pool_view(matches).await;
-            }
-            CliCommand::IpPoolUpdate => {
-                self.execute_ip_pool_update(matches).await;
-            }
-            CliCommand::IpPoolDelete => {
-                self.execute_ip_pool_delete(matches).await;
-            }
-            CliCommand::IpPoolRangeList => {
-                self.execute_ip_pool_range_list(matches).await;
-            }
-            CliCommand::IpPoolRangeAdd => {
-                self.execute_ip_pool_range_add(matches).await;
-            }
-            CliCommand::IpPoolRangeRemove => {
-                self.execute_ip_pool_range_remove(matches).await;
-            }
-            CliCommand::IpPoolServiceView => {
-                self.execute_ip_pool_service_view(matches).await;
-            }
+            CliCommand::PolicyView => self.execute_policy_view(matches).await,
+            CliCommand::PolicyUpdate => self.execute_policy_update(matches).await,
+            CliCommand::RoleList => self.execute_role_list(matches).await,
+            CliCommand::RoleView => self.execute_role_view(matches).await,
+            CliCommand::SessionMe => self.execute_session_me(matches).await,
+            CliCommand::SessionMeGroups => self.execute_session_me_groups(matches).await,
+            CliCommand::SessionSshkeyList => self.execute_session_sshkey_list(matches).await,
+            CliCommand::SessionSshkeyCreate => self.execute_session_sshkey_create(matches).await,
+            CliCommand::SessionSshkeyView => self.execute_session_sshkey_view(matches).await,
+            CliCommand::SessionSshkeyDelete => self.execute_session_sshkey_delete(matches).await,
+            CliCommand::SystemImageViewById => self.execute_system_image_view_by_id(matches).await,
+            CliCommand::IpPoolViewById => self.execute_ip_pool_view_by_id(matches).await,
+            CliCommand::SiloViewById => self.execute_silo_view_by_id(matches).await,
+            CliCommand::CertificateList => self.execute_certificate_list(matches).await,
+            CliCommand::CertificateCreate => self.execute_certificate_create(matches).await,
+            CliCommand::CertificateView => self.execute_certificate_view(matches).await,
+            CliCommand::CertificateDelete => self.execute_certificate_delete(matches).await,
+            CliCommand::PhysicalDiskList => self.execute_physical_disk_list(matches).await,
+            CliCommand::RackList => self.execute_rack_list(matches).await,
+            CliCommand::RackView => self.execute_rack_view(matches).await,
+            CliCommand::SledList => self.execute_sled_list(matches).await,
+            CliCommand::SledView => self.execute_sled_view(matches).await,
+            CliCommand::SledPhysicalDiskList => self.execute_sled_physical_disk_list(matches).await,
+            CliCommand::SystemImageList => self.execute_system_image_list(matches).await,
+            CliCommand::SystemImageCreate => self.execute_system_image_create(matches).await,
+            CliCommand::SystemImageView => self.execute_system_image_view(matches).await,
+            CliCommand::SystemImageDelete => self.execute_system_image_delete(matches).await,
+            CliCommand::IpPoolList => self.execute_ip_pool_list(matches).await,
+            CliCommand::IpPoolCreate => self.execute_ip_pool_create(matches).await,
+            CliCommand::IpPoolView => self.execute_ip_pool_view(matches).await,
+            CliCommand::IpPoolUpdate => self.execute_ip_pool_update(matches).await,
+            CliCommand::IpPoolDelete => self.execute_ip_pool_delete(matches).await,
+            CliCommand::IpPoolRangeList => self.execute_ip_pool_range_list(matches).await,
+            CliCommand::IpPoolRangeAdd => self.execute_ip_pool_range_add(matches).await,
+            CliCommand::IpPoolRangeRemove => self.execute_ip_pool_range_remove(matches).await,
+            CliCommand::IpPoolServiceView => self.execute_ip_pool_service_view(matches).await,
             CliCommand::IpPoolServiceRangeList => {
-                self.execute_ip_pool_service_range_list(matches).await;
+                self.execute_ip_pool_service_range_list(matches).await
             }
             CliCommand::IpPoolServiceRangeAdd => {
-                self.execute_ip_pool_service_range_add(matches).await;
+                self.execute_ip_pool_service_range_add(matches).await
             }
             CliCommand::IpPoolServiceRangeRemove => {
-                self.execute_ip_pool_service_range_remove(matches).await;
+                self.execute_ip_pool_service_range_remove(matches).await
             }
-            CliCommand::SystemMetric => {
-                self.execute_system_metric(matches).await;
-            }
-            CliCommand::SystemPolicyView => {
-                self.execute_system_policy_view(matches).await;
-            }
-            CliCommand::SystemPolicyUpdate => {
-                self.execute_system_policy_update(matches).await;
-            }
-            CliCommand::SagaList => {
-                self.execute_saga_list(matches).await;
-            }
-            CliCommand::SagaView => {
-                self.execute_saga_view(matches).await;
-            }
-            CliCommand::SiloList => {
-                self.execute_silo_list(matches).await;
-            }
-            CliCommand::SiloCreate => {
-                self.execute_silo_create(matches).await;
-            }
-            CliCommand::SiloView => {
-                self.execute_silo_view(matches).await;
-            }
-            CliCommand::SiloDelete => {
-                self.execute_silo_delete(matches).await;
-            }
+            CliCommand::SystemMetric => self.execute_system_metric(matches).await,
+            CliCommand::SystemPolicyView => self.execute_system_policy_view(matches).await,
+            CliCommand::SystemPolicyUpdate => self.execute_system_policy_update(matches).await,
+            CliCommand::SagaList => self.execute_saga_list(matches).await,
+            CliCommand::SagaView => self.execute_saga_view(matches).await,
+            CliCommand::SiloList => self.execute_silo_list(matches).await,
+            CliCommand::SiloCreate => self.execute_silo_create(matches).await,
+            CliCommand::SiloView => self.execute_silo_view(matches).await,
+            CliCommand::SiloDelete => self.execute_silo_delete(matches).await,
             CliCommand::SiloIdentityProviderList => {
-                self.execute_silo_identity_provider_list(matches).await;
+                self.execute_silo_identity_provider_list(matches).await
             }
-            CliCommand::LocalIdpUserCreate => {
-                self.execute_local_idp_user_create(matches).await;
-            }
-            CliCommand::LocalIdpUserDelete => {
-                self.execute_local_idp_user_delete(matches).await;
-            }
+            CliCommand::LocalIdpUserCreate => self.execute_local_idp_user_create(matches).await,
+            CliCommand::LocalIdpUserDelete => self.execute_local_idp_user_delete(matches).await,
             CliCommand::LocalIdpUserSetPassword => {
-                self.execute_local_idp_user_set_password(matches).await;
+                self.execute_local_idp_user_set_password(matches).await
             }
             CliCommand::SamlIdentityProviderCreate => {
-                self.execute_saml_identity_provider_create(matches).await;
+                self.execute_saml_identity_provider_create(matches).await
             }
             CliCommand::SamlIdentityProviderView => {
-                self.execute_saml_identity_provider_view(matches).await;
+                self.execute_saml_identity_provider_view(matches).await
             }
-            CliCommand::SiloPolicyView => {
-                self.execute_silo_policy_view(matches).await;
-            }
-            CliCommand::SiloPolicyUpdate => {
-                self.execute_silo_policy_update(matches).await;
-            }
-            CliCommand::SiloUsersList => {
-                self.execute_silo_users_list(matches).await;
-            }
-            CliCommand::SiloUserView => {
-                self.execute_silo_user_view(matches).await;
-            }
-            CliCommand::SystemUserList => {
-                self.execute_system_user_list(matches).await;
-            }
-            CliCommand::SystemUserView => {
-                self.execute_system_user_view(matches).await;
-            }
-            CliCommand::TimeseriesSchemaGet => {
-                self.execute_timeseries_schema_get(matches).await;
-            }
-            CliCommand::UserList => {
-                self.execute_user_list(matches).await;
-            }
-            CliCommand::DiskListV1 => {
-                self.execute_disk_list_v1(matches).await;
-            }
-            CliCommand::DiskCreateV1 => {
-                self.execute_disk_create_v1(matches).await;
-            }
-            CliCommand::DiskViewV1 => {
-                self.execute_disk_view_v1(matches).await;
-            }
-            CliCommand::DiskDeleteV1 => {
-                self.execute_disk_delete_v1(matches).await;
-            }
-            CliCommand::InstanceListV1 => {
-                self.execute_instance_list_v1(matches).await;
-            }
-            CliCommand::InstanceCreateV1 => {
-                self.execute_instance_create_v1(matches).await;
-            }
-            CliCommand::InstanceViewV1 => {
-                self.execute_instance_view_v1(matches).await;
-            }
-            CliCommand::InstanceDeleteV1 => {
-                self.execute_instance_delete_v1(matches).await;
-            }
-            CliCommand::InstanceDiskListV1 => {
-                self.execute_instance_disk_list_v1(matches).await;
-            }
-            CliCommand::InstanceDiskAttachV1 => {
-                self.execute_instance_disk_attach_v1(matches).await;
-            }
-            CliCommand::InstanceDiskDetachV1 => {
-                self.execute_instance_disk_detach_v1(matches).await;
-            }
-            CliCommand::InstanceMigrateV1 => {
-                self.execute_instance_migrate_v1(matches).await;
-            }
-            CliCommand::InstanceRebootV1 => {
-                self.execute_instance_reboot_v1(matches).await;
-            }
+            CliCommand::SiloPolicyView => self.execute_silo_policy_view(matches).await,
+            CliCommand::SiloPolicyUpdate => self.execute_silo_policy_update(matches).await,
+            CliCommand::SiloUsersList => self.execute_silo_users_list(matches).await,
+            CliCommand::SiloUserView => self.execute_silo_user_view(matches).await,
+            CliCommand::SystemUserList => self.execute_system_user_list(matches).await,
+            CliCommand::SystemUserView => self.execute_system_user_view(matches).await,
+            CliCommand::TimeseriesSchemaGet => self.execute_timeseries_schema_get(matches).await,
+            CliCommand::UserList => self.execute_user_list(matches).await,
+            CliCommand::DiskListV1 => self.execute_disk_list_v1(matches).await,
+            CliCommand::DiskCreateV1 => self.execute_disk_create_v1(matches).await,
+            CliCommand::DiskViewV1 => self.execute_disk_view_v1(matches).await,
+            CliCommand::DiskDeleteV1 => self.execute_disk_delete_v1(matches).await,
+            CliCommand::InstanceListV1 => self.execute_instance_list_v1(matches).await,
+            CliCommand::InstanceCreateV1 => self.execute_instance_create_v1(matches).await,
+            CliCommand::InstanceViewV1 => self.execute_instance_view_v1(matches).await,
+            CliCommand::InstanceDeleteV1 => self.execute_instance_delete_v1(matches).await,
+            CliCommand::InstanceDiskListV1 => self.execute_instance_disk_list_v1(matches).await,
+            CliCommand::InstanceDiskAttachV1 => self.execute_instance_disk_attach_v1(matches).await,
+            CliCommand::InstanceDiskDetachV1 => self.execute_instance_disk_detach_v1(matches).await,
+            CliCommand::InstanceMigrateV1 => self.execute_instance_migrate_v1(matches).await,
+            CliCommand::InstanceRebootV1 => self.execute_instance_reboot_v1(matches).await,
             CliCommand::InstanceSerialConsoleV1 => {
-                self.execute_instance_serial_console_v1(matches).await;
+                self.execute_instance_serial_console_v1(matches).await
             }
             CliCommand::InstanceSerialConsoleStreamV1 => {
                 self.execute_instance_serial_console_stream_v1(matches)
-                    .await;
+                    .await
             }
-            CliCommand::InstanceStartV1 => {
-                self.execute_instance_start_v1(matches).await;
-            }
-            CliCommand::InstanceStopV1 => {
-                self.execute_instance_stop_v1(matches).await;
-            }
-            CliCommand::OrganizationListV1 => {
-                self.execute_organization_list_v1(matches).await;
-            }
-            CliCommand::OrganizationCreateV1 => {
-                self.execute_organization_create_v1(matches).await;
-            }
-            CliCommand::OrganizationViewV1 => {
-                self.execute_organization_view_v1(matches).await;
-            }
-            CliCommand::OrganizationUpdateV1 => {
-                self.execute_organization_update_v1(matches).await;
-            }
-            CliCommand::OrganizationDeleteV1 => {
-                self.execute_organization_delete_v1(matches).await;
-            }
+            CliCommand::InstanceStartV1 => self.execute_instance_start_v1(matches).await,
+            CliCommand::InstanceStopV1 => self.execute_instance_stop_v1(matches).await,
+            CliCommand::OrganizationListV1 => self.execute_organization_list_v1(matches).await,
+            CliCommand::OrganizationCreateV1 => self.execute_organization_create_v1(matches).await,
+            CliCommand::OrganizationViewV1 => self.execute_organization_view_v1(matches).await,
+            CliCommand::OrganizationUpdateV1 => self.execute_organization_update_v1(matches).await,
+            CliCommand::OrganizationDeleteV1 => self.execute_organization_delete_v1(matches).await,
             CliCommand::OrganizationPolicyViewV1 => {
-                self.execute_organization_policy_view_v1(matches).await;
+                self.execute_organization_policy_view_v1(matches).await
             }
             CliCommand::OrganizationPolicyUpdateV1 => {
-                self.execute_organization_policy_update_v1(matches).await;
+                self.execute_organization_policy_update_v1(matches).await
             }
-            CliCommand::ProjectListV1 => {
-                self.execute_project_list_v1(matches).await;
-            }
-            CliCommand::ProjectCreateV1 => {
-                self.execute_project_create_v1(matches).await;
-            }
-            CliCommand::ProjectViewV1 => {
-                self.execute_project_view_v1(matches).await;
-            }
-            CliCommand::ProjectUpdateV1 => {
-                self.execute_project_update_v1(matches).await;
-            }
-            CliCommand::ProjectDeleteV1 => {
-                self.execute_project_delete_v1(matches).await;
-            }
-            CliCommand::ProjectPolicyViewV1 => {
-                self.execute_project_policy_view_v1(matches).await;
-            }
+            CliCommand::ProjectListV1 => self.execute_project_list_v1(matches).await,
+            CliCommand::ProjectCreateV1 => self.execute_project_create_v1(matches).await,
+            CliCommand::ProjectViewV1 => self.execute_project_view_v1(matches).await,
+            CliCommand::ProjectUpdateV1 => self.execute_project_update_v1(matches).await,
+            CliCommand::ProjectDeleteV1 => self.execute_project_delete_v1(matches).await,
+            CliCommand::ProjectPolicyViewV1 => self.execute_project_policy_view_v1(matches).await,
             CliCommand::ProjectPolicyUpdateV1 => {
-                self.execute_project_policy_update_v1(matches).await;
+                self.execute_project_policy_update_v1(matches).await
             }
             CliCommand::SystemComponentVersionList => {
-                self.execute_system_component_version_list(matches).await;
+                self.execute_system_component_version_list(matches).await
             }
             CliCommand::UpdateDeploymentsList => {
-                self.execute_update_deployments_list(matches).await;
+                self.execute_update_deployments_list(matches).await
             }
-            CliCommand::UpdateDeploymentView => {
-                self.execute_update_deployment_view(matches).await;
-            }
-            CliCommand::SystemUpdateRefresh => {
-                self.execute_system_update_refresh(matches).await;
-            }
-            CliCommand::SystemUpdateStart => {
-                self.execute_system_update_start(matches).await;
-            }
-            CliCommand::SystemUpdateStop => {
-                self.execute_system_update_stop(matches).await;
-            }
-            CliCommand::SystemUpdateList => {
-                self.execute_system_update_list(matches).await;
-            }
-            CliCommand::SystemUpdateView => {
-                self.execute_system_update_view(matches).await;
-            }
+            CliCommand::UpdateDeploymentView => self.execute_update_deployment_view(matches).await,
+            CliCommand::SystemUpdateRefresh => self.execute_system_update_refresh(matches).await,
+            CliCommand::SystemUpdateStart => self.execute_system_update_start(matches).await,
+            CliCommand::SystemUpdateStop => self.execute_system_update_stop(matches).await,
+            CliCommand::SystemUpdateList => self.execute_system_update_list(matches).await,
+            CliCommand::SystemUpdateView => self.execute_system_update_view(matches).await,
             CliCommand::SystemUpdateComponentsList => {
-                self.execute_system_update_components_list(matches).await;
+                self.execute_system_update_components_list(matches).await
             }
-            CliCommand::SystemVersion => {
-                self.execute_system_version(matches).await;
-            }
+            CliCommand::SystemVersion => self.execute_system_version(matches).await,
         }
     }
 
-    pub async fn execute_disk_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_view_by_id(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_disk_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config.execute_disk_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_image_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_image_view_by_id(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_image_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_image_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_instance_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_network_interface_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_network_interface_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_instance_network_interface_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_network_interface_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_organization_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.project_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_project_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_project_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_snapshot_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_snapshot_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_snapshot_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_snapshot_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_route_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_route_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_vpc_router_route_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_route_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_vpc_router_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_subnet_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_subnet_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_vpc_subnet_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_subnet_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_view_by_id(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_vpc_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config.execute_vpc_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_device_auth_request(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_device_auth_request(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.device_auth_request();
         if let Some(value) = matches.get_one::<uuid::Uuid>("client-id") {
             request = request.body_map(|body| body.client_id(value.clone()))
@@ -6432,9 +6136,8 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_device_auth_request(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_device_auth_request(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -6446,7 +6149,10 @@ impl<T: CliOverride> Cli<T> {
         }
     }
 
-    pub async fn execute_device_auth_confirm(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_device_auth_confirm(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.device_auth_confirm();
         if let Some(value) = matches.get_one::<String>("user-code") {
             request = request.body_map(|body| body.user_code(value.clone()))
@@ -6458,21 +6164,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_device_auth_confirm(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_device_auth_confirm(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_device_access_token(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_device_access_token(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.device_access_token();
         if let Some(value) = matches.get_one::<uuid::Uuid>("client-id") {
             request = request.body_map(|body| body.client_id(value.clone()))
@@ -6493,9 +6203,8 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_device_access_token(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_device_access_token(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -6507,7 +6216,7 @@ impl<T: CliOverride> Cli<T> {
         }
     }
 
-    pub async fn execute_group_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_group_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.group_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -6517,25 +6226,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_group_list(matches, &mut request).unwrap();
+        self.config.execute_group_list(matches, &mut request)?;
+        self.config.list_start::<types::GroupResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::GroupResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_login_spoof(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_login_spoof(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.login_spoof();
         if let Some(value) = matches.get_one::<String>("username") {
             request = request.body_map(|body| body.username(value.clone()))
@@ -6547,21 +6258,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_login_spoof(matches, &mut request)
-            .unwrap();
+        self.config.execute_login_spoof(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_login_local(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_login_local(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.login_local();
         if let Some(value) = matches.get_one::<types::Password>("password") {
             request = request.body_map(|body| body.password(value.clone()))
@@ -6582,21 +6293,20 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_login_local(matches, &mut request)
-            .unwrap();
+        self.config.execute_login_local(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
                 todo!()
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_login_saml_begin(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_login_saml_begin(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.login_saml_begin();
         if let Some(value) = matches.get_one::<types::Name>("provider-name") {
             request = request.provider_name(value.clone());
@@ -6606,21 +6316,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.silo_name(value.clone());
         }
 
-        self.over
-            .execute_login_saml_begin(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_login_saml_begin(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
                 todo!()
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_login_saml(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_login_saml(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.login_saml();
         if let Some(value) = matches.get_one::<types::Name>("provider-name") {
             request = request.provider_name(value.clone());
@@ -6630,33 +6340,39 @@ impl<T: CliOverride> Cli<T> {
             request = request.silo_name(value.clone());
         }
 
-        self.over.execute_login_saml(matches, &mut request).unwrap();
+        self.config.execute_login_saml(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
                 todo!()
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_logout(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_logout(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.logout();
-        self.over.execute_logout(matches, &mut request).unwrap();
+        self.config.execute_logout(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -6666,27 +6382,32 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_organization_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_list(matches, &mut request)?;
+        self.config.list_start::<types::OrganizationResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::OrganizationResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_organization_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -6702,41 +6423,49 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_organization_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
         }
 
-        self.over
-            .execute_organization_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_update();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -6756,61 +6485,73 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_organization_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_delete();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
         }
 
-        self.over
-            .execute_organization_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_policy_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_policy_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_policy_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
         }
 
-        self.over
-            .execute_organization_policy_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_policy_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_policy_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_policy_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_policy_update();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -6823,21 +6564,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_organization_policy_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_policy_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -6851,27 +6593,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_project_list(matches, &mut request)
-            .unwrap();
+        self.config.execute_project_list(matches, &mut request)?;
+        self.config.list_start::<types::ProjectResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::ProjectResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_project_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -6891,21 +6633,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_project_create(matches, &mut request)
-            .unwrap();
+        self.config.execute_project_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -6915,21 +6657,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_project_view(matches, &mut request)
-            .unwrap();
+        self.config.execute_project_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_update(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_update();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -6953,21 +6695,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_project_update(matches, &mut request)
-            .unwrap();
+        self.config.execute_project_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_delete(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_delete();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -6977,21 +6719,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_project_delete(matches, &mut request)
-            .unwrap();
+        self.config.execute_project_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_disk_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -7009,25 +6751,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_disk_list(matches, &mut request).unwrap();
+        self.config.execute_disk_list(matches, &mut request)?;
+        self.config.list_start::<types::DiskResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::DiskResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_disk_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -7055,21 +6799,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_disk_create(matches, &mut request)
-            .unwrap();
+        self.config.execute_disk_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_disk_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_view();
         if let Some(value) = matches.get_one::<types::Name>("disk-name") {
             request = request.disk_name(value.clone());
@@ -7083,19 +6827,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over.execute_disk_view(matches, &mut request).unwrap();
+        self.config.execute_disk_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_disk_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_delete(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_delete();
         if let Some(value) = matches.get_one::<types::Name>("disk-name") {
             request = request.disk_name(value.clone());
@@ -7109,21 +6855,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_disk_delete(matches, &mut request)
-            .unwrap();
+        self.config.execute_disk_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_disk_metrics_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_metrics_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.disk_metrics_list();
         if let Some(value) = matches.get_one::<types::Name>("disk-name") {
             request = request.disk_name(value.clone());
@@ -7154,27 +6903,29 @@ impl<T: CliOverride> Cli<T> {
             request = request.start_time(value.clone());
         }
 
-        self.over
-            .execute_disk_metrics_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_disk_metrics_list(matches, &mut request)?;
+        self.config.list_start::<types::MeasurementResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::MeasurementResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_image_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_image_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -7192,25 +6943,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_image_list(matches, &mut request).unwrap();
+        self.config.execute_image_list(matches, &mut request)?;
+        self.config.list_start::<types::ImageResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::ImageResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_image_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_image_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -7234,21 +6987,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_image_create(matches, &mut request)
-            .unwrap();
+        self.config.execute_image_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_image_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_image_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_view();
         if let Some(value) = matches.get_one::<types::Name>("image-name") {
             request = request.image_name(value.clone());
@@ -7262,19 +7015,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over.execute_image_view(matches, &mut request).unwrap();
+        self.config.execute_image_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_image_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_image_delete(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_delete();
         if let Some(value) = matches.get_one::<types::Name>("image-name") {
             request = request.image_name(value.clone());
@@ -7288,21 +7043,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_image_delete(matches, &mut request)
-            .unwrap();
+        self.config.execute_image_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -7320,27 +7075,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_instance_list(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_list(matches, &mut request)?;
+        self.config.list_start::<types::InstanceResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::InstanceResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_instance_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -7384,21 +7139,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_create(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_view();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7412,21 +7167,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_view(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_delete(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_delete();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7440,21 +7195,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_delete(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_disk_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_disk_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_disk_list();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7476,27 +7234,31 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_instance_disk_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_disk_list(matches, &mut request)?;
+        self.config.list_start::<types::DiskResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::DiskResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_instance_disk_attach(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_disk_attach(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_disk_attach();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7520,21 +7282,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_disk_attach(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_disk_attach(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_disk_detach(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_disk_detach(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_disk_detach();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7558,21 +7324,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_disk_detach(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_disk_detach(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_external_ip_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_external_ip_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_external_ip_list();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7586,21 +7356,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_external_ip_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_external_ip_list(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_migrate(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_migrate(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate();
         if let Some(value) = matches.get_one::<uuid::Uuid>("dst-sled-id") {
             request = request.body_map(|body| body.dst_sled_id(value.clone()))
@@ -7624,21 +7395,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_migrate(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_migrate(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_network_interface_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_network_interface_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_list();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7660,27 +7435,33 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_instance_network_interface_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_network_interface_list(matches, &mut request)?;
+        self.config
+            .list_start::<types::NetworkInterfaceResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::NetworkInterfaceResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_instance_network_interface_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_network_interface_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -7721,21 +7502,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_network_interface_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_network_interface_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_network_interface_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_network_interface_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_view();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7753,21 +7538,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_network_interface_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_network_interface_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_network_interface_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_network_interface_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_update();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -7804,21 +7593,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_network_interface_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_network_interface_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_network_interface_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_network_interface_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_delete();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7836,21 +7629,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_network_interface_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_network_interface_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_reboot(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_reboot(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_reboot();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7864,21 +7658,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_reboot(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_reboot(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_serial_console(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_serial_console(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_serial_console();
         if let Some(value) = matches.get_one::<u64>("from-start") {
             request = request.from_start(value.clone());
@@ -7904,21 +7701,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_serial_console(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_serial_console(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_serial_console_stream(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_serial_console_stream(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_serial_console_stream();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7932,9 +7733,8 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_serial_console_stream(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_serial_console_stream(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -7946,7 +7746,7 @@ impl<T: CliOverride> Cli<T> {
         }
     }
 
-    pub async fn execute_instance_start(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_start(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_start();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7960,21 +7760,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_start(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_start(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_stop(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_stop(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_stop();
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
             request = request.instance_name(value.clone());
@@ -7988,21 +7788,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_instance_stop(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_stop(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_policy_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_policy_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.project_policy_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8012,21 +7815,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project_name(value.clone());
         }
 
-        self.over
-            .execute_project_policy_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_project_policy_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_policy_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_policy_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.project_policy_update();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8042,21 +7849,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_project_policy_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_project_policy_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_snapshot_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_snapshot_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -8074,27 +7882,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_snapshot_list(matches, &mut request)
-            .unwrap();
+        self.config.execute_snapshot_list(matches, &mut request)?;
+        self.config.list_start::<types::SnapshotResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::SnapshotResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_snapshot_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_snapshot_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8122,21 +7930,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_snapshot_create(matches, &mut request)
-            .unwrap();
+        self.config.execute_snapshot_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_snapshot_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_snapshot_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8150,21 +7958,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.snapshot_name(value.clone());
         }
 
-        self.over
-            .execute_snapshot_view(matches, &mut request)
-            .unwrap();
+        self.config.execute_snapshot_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_snapshot_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_snapshot_delete(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_delete();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8178,21 +7986,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.snapshot_name(value.clone());
         }
 
-        self.over
-            .execute_snapshot_delete(matches, &mut request)
-            .unwrap();
+        self.config.execute_snapshot_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -8210,25 +8018,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_vpc_list(matches, &mut request).unwrap();
+        self.config.execute_vpc_list(matches, &mut request)?;
+        self.config.list_start::<types::VpcResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::VpcResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_vpc_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8260,19 +8070,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over.execute_vpc_create(matches, &mut request).unwrap();
+        self.config.execute_vpc_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8286,19 +8098,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over.execute_vpc_view(matches, &mut request).unwrap();
+        self.config.execute_vpc_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_update(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_update();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8330,19 +8144,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over.execute_vpc_update(matches, &mut request).unwrap();
+        self.config.execute_vpc_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_delete(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_delete();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8356,19 +8172,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over.execute_vpc_delete(matches, &mut request).unwrap();
+        self.config.execute_vpc_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_firewall_rules_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_firewall_rules_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_firewall_rules_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8382,21 +8203,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_firewall_rules_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_firewall_rules_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_firewall_rules_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_firewall_rules_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_firewall_rules_update();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8417,21 +8242,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_vpc_firewall_rules_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_firewall_rules_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -8453,27 +8279,31 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_router_list(matches, &mut request)
-            .unwrap();
+        self.config.execute_vpc_router_list(matches, &mut request)?;
+        self.config.list_start::<types::VpcRouterResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::VpcRouterResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_vpc_router_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8501,21 +8331,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_vpc_router_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8533,21 +8364,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_router_view(matches, &mut request)
-            .unwrap();
+        self.config.execute_vpc_router_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_update();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8579,21 +8413,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_vpc_router_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_delete();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8611,21 +8449,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_router_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_route_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_route_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -8651,27 +8493,32 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_router_route_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_route_list(matches, &mut request)?;
+        self.config.list_start::<types::RouterRouteResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::RouterRouteResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_vpc_router_route_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_route_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8704,21 +8551,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_vpc_router_route_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_route_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_route_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_route_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8740,21 +8591,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_router_route_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_route_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_route_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_route_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_update();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8791,21 +8646,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_vpc_router_route_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_route_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_router_route_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_router_route_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_delete();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8827,21 +8686,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_router_route_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_router_route_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_subnet_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_subnet_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -8863,27 +8723,31 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_subnet_list(matches, &mut request)
-            .unwrap();
+        self.config.execute_vpc_subnet_list(matches, &mut request)?;
+        self.config.list_start::<types::VpcSubnetResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::VpcSubnetResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_vpc_subnet_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_subnet_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8919,21 +8783,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_vpc_subnet_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_subnet_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_subnet_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_subnet_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_view();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -8951,21 +8816,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_subnet_view(matches, &mut request)
-            .unwrap();
+        self.config.execute_vpc_subnet_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_subnet_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_subnet_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_update();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -8997,21 +8865,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_vpc_subnet_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_subnet_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_subnet_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_subnet_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_delete();
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
@@ -9029,21 +8901,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_subnet_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_subnet_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_vpc_subnet_list_network_interfaces(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_vpc_subnet_list_network_interfaces(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_list_network_interfaces();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9069,43 +8945,46 @@ impl<T: CliOverride> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
-        self.over
-            .execute_vpc_subnet_list_network_interfaces(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_vpc_subnet_list_network_interfaces(matches, &mut request)?;
+        self.config
+            .list_start::<types::NetworkInterfaceResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::NetworkInterfaceResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_policy_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_policy_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.policy_view();
-        self.over
-            .execute_policy_view(matches, &mut request)
-            .unwrap();
+        self.config.execute_policy_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_policy_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_policy_update(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.policy_update();
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
@@ -9113,77 +8992,86 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_policy_update(matches, &mut request)
-            .unwrap();
+        self.config.execute_policy_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_role_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_role_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.role_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
         }
 
-        self.over.execute_role_list(matches, &mut request).unwrap();
+        self.config.execute_role_list(matches, &mut request)?;
+        self.config.list_start::<types::RoleResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::RoleResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_role_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_role_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.role_view();
         if let Some(value) = matches.get_one::<String>("role-name") {
             request = request.role_name(value.clone());
         }
 
-        self.over.execute_role_view(matches, &mut request).unwrap();
+        self.config.execute_role_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_session_me(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_session_me(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.session_me();
-        self.over.execute_session_me(matches, &mut request).unwrap();
+        self.config.execute_session_me(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_session_me_groups(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_session_me_groups(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.session_me_groups();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9193,27 +9081,31 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_session_me_groups(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_session_me_groups(matches, &mut request)?;
+        self.config.list_start::<types::GroupResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::GroupResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_session_sshkey_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_session_sshkey_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.session_sshkey_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9223,27 +9115,31 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_session_sshkey_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_session_sshkey_list(matches, &mut request)?;
+        self.config.list_start::<types::SshKeyResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::SshKeyResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_session_sshkey_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_session_sshkey_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.session_sshkey_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -9263,121 +9159,138 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_session_sshkey_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_session_sshkey_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_session_sshkey_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_session_sshkey_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.session_sshkey_view();
         if let Some(value) = matches.get_one::<types::Name>("ssh-key-name") {
             request = request.ssh_key_name(value.clone());
         }
 
-        self.over
-            .execute_session_sshkey_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_session_sshkey_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_session_sshkey_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_session_sshkey_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.session_sshkey_delete();
         if let Some(value) = matches.get_one::<types::Name>("ssh-key-name") {
             request = request.ssh_key_name(value.clone());
         }
 
-        self.over
-            .execute_session_sshkey_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_session_sshkey_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_image_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_image_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_system_image_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_image_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_view_by_id(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_ip_pool_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_ip_pool_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_silo_view_by_id(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_view_by_id(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_view_by_id();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_silo_view_by_id(matches, &mut request)
-            .unwrap();
+        self.config.execute_silo_view_by_id(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_certificate_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_certificate_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.certificate_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9387,27 +9300,32 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_certificate_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_certificate_list(matches, &mut request)?;
+        self.config.list_start::<types::CertificateResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::CertificateResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_certificate_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_certificate_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.certificate_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -9427,61 +9345,70 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_certificate_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_certificate_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_certificate_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_certificate_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.certificate_view();
         if let Some(value) = matches.get_one::<types::NameOrId>("certificate") {
             request = request.certificate(value.clone());
         }
 
-        self.over
-            .execute_certificate_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_certificate_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_certificate_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_certificate_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.certificate_delete();
         if let Some(value) = matches.get_one::<types::NameOrId>("certificate") {
             request = request.certificate(value.clone());
         }
 
-        self.over
-            .execute_certificate_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_certificate_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_physical_disk_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_physical_disk_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.physical_disk_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9491,27 +9418,29 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_physical_disk_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_physical_disk_list(matches, &mut request)?;
+        self.config.list_start::<types::PhysicalDiskResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::PhysicalDiskResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_rack_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_rack_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.rack_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9521,43 +9450,47 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_rack_list(matches, &mut request).unwrap();
+        self.config.execute_rack_list(matches, &mut request)?;
+        self.config.list_start::<types::RackResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::RackResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_rack_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_rack_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.rack_view();
         if let Some(value) = matches.get_one::<uuid::Uuid>("rack-id") {
             request = request.rack_id(value.clone());
         }
 
-        self.over.execute_rack_view(matches, &mut request).unwrap();
+        self.config.execute_rack_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_sled_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_sled_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.sled_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9567,43 +9500,50 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_sled_list(matches, &mut request).unwrap();
+        self.config.execute_sled_list(matches, &mut request)?;
+        self.config.list_start::<types::SledResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::SledResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_sled_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_sled_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.sled_view();
         if let Some(value) = matches.get_one::<uuid::Uuid>("sled-id") {
             request = request.sled_id(value.clone());
         }
 
-        self.over.execute_sled_view(matches, &mut request).unwrap();
+        self.config.execute_sled_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_sled_physical_disk_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_sled_physical_disk_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.sled_physical_disk_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9617,27 +9557,32 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_sled_physical_disk_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_sled_physical_disk_list(matches, &mut request)?;
+        self.config.list_start::<types::PhysicalDiskResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::PhysicalDiskResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_system_image_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_image_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9647,27 +9592,32 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_system_image_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_image_list(matches, &mut request)?;
+        self.config.list_start::<types::GlobalImageResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::GlobalImageResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_system_image_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_image_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -9683,61 +9633,70 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_system_image_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_image_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_image_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_image_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_view();
         if let Some(value) = matches.get_one::<types::Name>("image-name") {
             request = request.image_name(value.clone());
         }
 
-        self.over
-            .execute_system_image_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_image_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_image_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_image_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_delete();
         if let Some(value) = matches.get_one::<types::Name>("image-name") {
             request = request.image_name(value.clone());
         }
 
-        self.over
-            .execute_system_image_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_image_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9747,27 +9706,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_ip_pool_list(matches, &mut request)
-            .unwrap();
+        self.config.execute_ip_pool_list(matches, &mut request)?;
+        self.config.list_start::<types::IpPoolResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::IpPoolResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_ip_pool_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_create();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -9783,41 +9742,41 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_ip_pool_create(matches, &mut request)
-            .unwrap();
+        self.config.execute_ip_pool_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_view();
         if let Some(value) = matches.get_one::<types::Name>("pool-name") {
             request = request.pool_name(value.clone());
         }
 
-        self.over
-            .execute_ip_pool_view(matches, &mut request)
-            .unwrap();
+        self.config.execute_ip_pool_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_update(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_update();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -9837,41 +9796,44 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_ip_pool_update(matches, &mut request)
-            .unwrap();
+        self.config.execute_ip_pool_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_delete(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_delete();
         if let Some(value) = matches.get_one::<types::Name>("pool-name") {
             request = request.pool_name(value.clone());
         }
 
-        self.over
-            .execute_ip_pool_delete(matches, &mut request)
-            .unwrap();
+        self.config.execute_ip_pool_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_range_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_range_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_range_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -9881,27 +9843,32 @@ impl<T: CliOverride> Cli<T> {
             request = request.pool_name(value.clone());
         }
 
-        self.over
-            .execute_ip_pool_range_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_ip_pool_range_list(matches, &mut request)?;
+        self.config.list_start::<types::IpPoolRangeResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::IpPoolRangeResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_ip_pool_range_add(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_range_add(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_range_add();
         if let Some(value) = matches.get_one::<types::Name>("pool-name") {
             request = request.pool_name(value.clone());
@@ -9913,21 +9880,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_ip_pool_range_add(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_ip_pool_range_add(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_range_remove(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_range_remove(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_range_remove();
         if let Some(value) = matches.get_one::<types::Name>("pool-name") {
             request = request.pool_name(value.clone());
@@ -9939,63 +9910,76 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_ip_pool_range_remove(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_ip_pool_range_remove(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_service_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_service_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_service_view();
-        self.over
-            .execute_ip_pool_service_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_ip_pool_service_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_service_range_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_service_range_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_service_range_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
         }
 
-        self.over
-            .execute_ip_pool_service_range_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_ip_pool_service_range_list(matches, &mut request)?;
+        self.config.list_start::<types::IpPoolRangeResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::IpPoolRangeResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_ip_pool_service_range_add(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_service_range_add(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_service_range_add();
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
@@ -10003,21 +9987,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_ip_pool_service_range_add(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_ip_pool_service_range_add(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_ip_pool_service_range_remove(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_ip_pool_service_range_remove(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_service_range_remove();
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
@@ -10025,21 +10013,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_ip_pool_service_range_remove(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_ip_pool_service_range_remove(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_metric(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_metric(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.system_metric();
         if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("end-time") {
             request = request.end_time(value.clone());
@@ -10066,37 +10055,44 @@ impl<T: CliOverride> Cli<T> {
             request = request.start_time(value.clone());
         }
 
-        self.over
-            .execute_system_metric(matches, &mut request)
-            .unwrap();
+        self.config.execute_system_metric(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_policy_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_policy_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_policy_view();
-        self.over
-            .execute_system_policy_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_policy_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_policy_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_policy_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_policy_update();
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
@@ -10104,21 +10100,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_system_policy_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_policy_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_saga_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_saga_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.saga_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -10128,43 +10125,47 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_saga_list(matches, &mut request).unwrap();
+        self.config.execute_saga_list(matches, &mut request)?;
+        self.config.list_start::<types::SagaResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::SagaResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_saga_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_saga_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.saga_view();
         if let Some(value) = matches.get_one::<uuid::Uuid>("saga-id") {
             request = request.saga_id(value.clone());
         }
 
-        self.over.execute_saga_view(matches, &mut request).unwrap();
+        self.config.execute_saga_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_silo_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -10174,25 +10175,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_silo_list(matches, &mut request).unwrap();
+        self.config.execute_silo_list(matches, &mut request)?;
+        self.config.list_start::<types::SiloResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::SiloResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_silo_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_create(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_create();
         if let Some(value) = matches.get_one::<String>("admin-group-name") {
             request = request.body_map(|body| body.admin_group_name(value.clone()))
@@ -10220,59 +10223,64 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_silo_create(matches, &mut request)
-            .unwrap();
+        self.config.execute_silo_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_silo_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_view();
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
             request = request.silo_name(value.clone());
         }
 
-        self.over.execute_silo_view(matches, &mut request).unwrap();
+        self.config.execute_silo_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_silo_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_delete(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_delete();
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
             request = request.silo_name(value.clone());
         }
 
-        self.over
-            .execute_silo_delete(matches, &mut request)
-            .unwrap();
+        self.config.execute_silo_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_silo_identity_provider_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_identity_provider_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.silo_identity_provider_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -10286,27 +10294,33 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_silo_identity_provider_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_silo_identity_provider_list(matches, &mut request)?;
+        self.config
+            .list_start::<types::IdentityProviderResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::IdentityProviderResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_local_idp_user_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_local_idp_user_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.local_idp_user_create();
         if let Some(value) = matches.get_one::<types::UserId>("external-id") {
             request = request.body_map(|body| body.external_id(value.clone()))
@@ -10322,21 +10336,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_local_idp_user_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_local_idp_user_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_local_idp_user_delete(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_local_idp_user_delete(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.local_idp_user_delete();
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
             request = request.silo_name(value.clone());
@@ -10346,21 +10364,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.user_id(value.clone());
         }
 
-        self.over
-            .execute_local_idp_user_delete(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_local_idp_user_delete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_local_idp_user_set_password(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_local_idp_user_set_password(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.local_idp_user_set_password();
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
             request = request.silo_name(value.clone());
@@ -10376,21 +10398,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_local_idp_user_set_password(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_local_idp_user_set_password(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_saml_identity_provider_create(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_saml_identity_provider_create(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.saml_identity_provider_create();
         if let Some(value) = matches.get_one::<String>("acs-url") {
             request = request.body_map(|body| body.acs_url(value.clone()))
@@ -10435,21 +10461,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_saml_identity_provider_create(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_saml_identity_provider_create(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_saml_identity_provider_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_saml_identity_provider_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.saml_identity_provider_view();
         if let Some(value) = matches.get_one::<types::Name>("provider-name") {
             request = request.provider_name(value.clone());
@@ -10459,41 +10489,46 @@ impl<T: CliOverride> Cli<T> {
             request = request.silo_name(value.clone());
         }
 
-        self.over
-            .execute_saml_identity_provider_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_saml_identity_provider_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_silo_policy_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_policy_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_policy_view();
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
             request = request.silo_name(value.clone());
         }
 
-        self.over
-            .execute_silo_policy_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_silo_policy_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_silo_policy_update(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_policy_update(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.silo_policy_update();
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
             request = request.silo_name(value.clone());
@@ -10505,21 +10540,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_silo_policy_update(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_silo_policy_update(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_silo_users_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_users_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_users_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -10533,27 +10569,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_silo_users_list(matches, &mut request)
-            .unwrap();
+        self.config.execute_silo_users_list(matches, &mut request)?;
+        self.config.list_start::<types::UserResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::UserResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_silo_user_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_silo_user_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_user_view();
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
             request = request.silo_name(value.clone());
@@ -10563,21 +10599,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.user_id(value.clone());
         }
 
-        self.over
-            .execute_silo_user_view(matches, &mut request)
-            .unwrap();
+        self.config.execute_silo_user_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_user_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_user_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.system_user_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -10587,73 +10623,82 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_system_user_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_user_list(matches, &mut request)?;
+        self.config.list_start::<types::UserBuiltinResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::UserBuiltinResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_system_user_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_user_view(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.system_user_view();
         if let Some(value) = matches.get_one::<types::Name>("user-name") {
             request = request.user_name(value.clone());
         }
 
-        self.over
-            .execute_system_user_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_user_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_timeseries_schema_get(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_timeseries_schema_get(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.timeseries_schema_get();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
         }
 
-        self.over
-            .execute_timeseries_schema_get(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_timeseries_schema_get(matches, &mut request)?;
+        self.config
+            .list_start::<types::TimeseriesSchemaResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::TimeseriesSchemaResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_user_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_user_list(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.user_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -10663,25 +10708,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over.execute_user_list(matches, &mut request).unwrap();
+        self.config.execute_user_list(matches, &mut request)?;
+        self.config.list_start::<types::UserResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::UserResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_disk_list_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_list_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_list_v1();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -10699,27 +10746,27 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_disk_list_v1(matches, &mut request)
-            .unwrap();
+        self.config.execute_disk_list_v1(matches, &mut request)?;
+        self.config.list_start::<types::DiskResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::DiskResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_disk_create_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_create_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_create_v1();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -10747,21 +10794,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_disk_create_v1(matches, &mut request)
-            .unwrap();
+        self.config.execute_disk_create_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_disk_view_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_view_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_view_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("disk") {
             request = request.disk(value.clone());
@@ -10775,21 +10822,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_disk_view_v1(matches, &mut request)
-            .unwrap();
+        self.config.execute_disk_view_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_disk_delete_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_disk_delete_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_delete_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("disk") {
             request = request.disk(value.clone());
@@ -10803,21 +10850,21 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_disk_delete_v1(matches, &mut request)
-            .unwrap();
+        self.config.execute_disk_delete_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_list_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_list_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_list_v1();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -10835,27 +10882,31 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_instance_list_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_list_v1(matches, &mut request)?;
+        self.config.list_start::<types::InstanceResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::InstanceResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_instance_create_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_create_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_create_v1();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -10899,21 +10950,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_create_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_create_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_view_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_view_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_view_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
             request = request.instance(value.clone());
@@ -10927,21 +10979,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_instance_view_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_view_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_delete_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_delete_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_delete_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
             request = request.instance(value.clone());
@@ -10955,21 +11011,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_instance_delete_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_delete_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_disk_list_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_disk_list_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_disk_list_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
             request = request.instance(value.clone());
@@ -10991,27 +11051,31 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_instance_disk_list_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_disk_list_v1(matches, &mut request)?;
+        self.config.list_start::<types::DiskResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::DiskResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_instance_disk_attach_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_disk_attach_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_disk_attach_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("disk") {
             request = request.body_map(|body| body.disk(value.clone()))
@@ -11035,21 +11099,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_disk_attach_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_disk_attach_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_disk_detach_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_disk_detach_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_disk_detach_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("disk") {
             request = request.body_map(|body| body.disk(value.clone()))
@@ -11073,21 +11141,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_disk_detach_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_disk_detach_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_migrate_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_migrate_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate_v1();
         if let Some(value) = matches.get_one::<uuid::Uuid>("dst-sled-id") {
             request = request.body_map(|body| body.dst_sled_id(value.clone()))
@@ -11111,21 +11183,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_migrate_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_migrate_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_reboot_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_reboot_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_reboot_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
             request = request.instance(value.clone());
@@ -11139,21 +11215,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_instance_reboot_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_reboot_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_serial_console_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_serial_console_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_serial_console_v1();
         if let Some(value) = matches.get_one::<u64>("from-start") {
             request = request.from_start(value.clone());
@@ -11179,21 +11259,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_instance_serial_console_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_serial_console_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_serial_console_stream_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_serial_console_stream_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_serial_console_stream_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
             request = request.instance(value.clone());
@@ -11207,9 +11291,8 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_instance_serial_console_stream_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_serial_console_stream_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -11221,7 +11304,10 @@ impl<T: CliOverride> Cli<T> {
         }
     }
 
-    pub async fn execute_instance_start_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_start_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_start_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
             request = request.instance(value.clone());
@@ -11235,21 +11321,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_instance_start_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_start_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_stop_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_stop_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_stop_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
             request = request.instance(value.clone());
@@ -11263,21 +11350,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_instance_stop_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_stop_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_list_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_list_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_list_v1();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -11287,27 +11378,32 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_organization_list_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_list_v1(matches, &mut request)?;
+        self.config.list_start::<types::OrganizationResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::OrganizationResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_organization_create_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_create_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_create_v1();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -11323,41 +11419,49 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_organization_create_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_create_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_view_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_view_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_view_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
         }
 
-        self.over
-            .execute_organization_view_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_view_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_update_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_update_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_update_v1();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -11377,61 +11481,73 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_organization_update_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_update_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_delete_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_delete_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_delete_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
         }
 
-        self.over
-            .execute_organization_delete_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_delete_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_policy_view_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_policy_view_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_policy_view_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
         }
 
-        self.over
-            .execute_organization_policy_view_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_policy_view_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_organization_policy_update_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_organization_policy_update_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.organization_policy_update_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
@@ -11444,21 +11560,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_organization_policy_update_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_organization_policy_update_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_list_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_list_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_list_v1();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -11472,27 +11589,30 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_project_list_v1(matches, &mut request)
-            .unwrap();
+        self.config.execute_project_list_v1(matches, &mut request)?;
+        self.config.list_start::<types::ProjectResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config.list_end_success::<types::ProjectResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_project_create_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_create_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.project_create_v1();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -11512,21 +11632,22 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_project_create_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_project_create_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_view_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_view_v1(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_view_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
@@ -11536,21 +11657,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_project_view_v1(matches, &mut request)
-            .unwrap();
+        self.config.execute_project_view_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_update_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_update_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.project_update_v1();
         if let Some(value) = matches.get_one::<String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
@@ -11574,21 +11698,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_project_update_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_project_update_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_delete_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_delete_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.project_delete_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
@@ -11598,21 +11726,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_project_delete_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_project_delete_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_policy_view_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_policy_view_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.project_policy_view_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
@@ -11622,21 +11754,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.project(value.clone());
         }
 
-        self.over
-            .execute_project_policy_view_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_project_policy_view_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_project_policy_update_v1(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_project_policy_update_v1(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.project_policy_update_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
@@ -11652,21 +11788,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_project_policy_update_v1(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_project_policy_update_v1(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_component_version_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_component_version_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_component_version_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -11676,27 +11816,33 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_system_component_version_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_component_version_list(matches, &mut request)?;
+        self.config
+            .list_start::<types::UpdateableComponentResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::UpdateableComponentResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_update_deployments_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_update_deployments_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.update_deployments_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -11706,63 +11852,77 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_update_deployments_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_update_deployments_list(matches, &mut request)?;
+        self.config
+            .list_start::<types::UpdateDeploymentResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::UpdateDeploymentResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_update_deployment_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_update_deployment_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.update_deployment_view();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        self.over
-            .execute_update_deployment_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_update_deployment_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_update_refresh(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_update_refresh(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_update_refresh();
-        self.over
-            .execute_system_update_refresh(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_update_refresh(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_update_start(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_update_start(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_update_start();
         if let Some(value) = matches.get_one::<types::SemverVersion>("version") {
             request = request.body_map(|body| body.version(value.clone()))
@@ -11774,37 +11934,45 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_system_update_start(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_update_start(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_update_stop(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_update_stop(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_update_stop();
-        self.over
-            .execute_system_update_stop(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_update_stop(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_update_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_update_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_update_list();
         if let Some(value) = matches.get_one::<std::num::NonZeroU32>("limit") {
             request = request.limit(value.clone());
@@ -11814,89 +11982,117 @@ impl<T: CliOverride> Cli<T> {
             request = request.sort_by(value.clone());
         }
 
-        self.over
-            .execute_system_update_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_update_list(matches, &mut request)?;
+        self.config.list_start::<types::SystemUpdateResultsPage>();
         let mut stream = request.stream();
         loop {
             match futures::TryStreamExt::try_next(&mut stream).await {
                 Err(r) => {
-                    println!("error\n{:#?}", r);
-                    break;
+                    self.config.list_end_error(&r);
+                    return Err(anyhow::Error::new(r));
                 }
                 Ok(None) => {
-                    break;
+                    self.config
+                        .list_end_success::<types::SystemUpdateResultsPage>();
+                    return Ok(());
                 }
                 Ok(Some(value)) => {
-                    println!("{:#?}", value);
+                    self.config.list_item(&value);
                 }
             }
         }
     }
 
-    pub async fn execute_system_update_view(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_update_view(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_update_view();
         if let Some(value) = matches.get_one::<types::SemverVersion>("version") {
             request = request.version(value.clone());
         }
 
-        self.over
-            .execute_system_update_view(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_update_view(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_update_components_list(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_update_components_list(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.system_update_components_list();
         if let Some(value) = matches.get_one::<types::SemverVersion>("version") {
             request = request.version(value.clone());
         }
 
-        self.over
-            .execute_system_update_components_list(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_system_update_components_list(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_system_version(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_system_version(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.system_version();
-        self.over
-            .execute_system_version(matches, &mut request)
-            .unwrap();
+        self.config.execute_system_version(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 }
 
-pub trait CliOverride {
+pub trait CliConfig {
+    fn item_success<T>(&self, value: &ResponseValue<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn item_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_start<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_item<T>(&self, value: &T)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_success<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_disk_view_by_id(
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11904,7 +12100,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ImageViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11912,7 +12108,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11920,7 +12116,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceNetworkInterfaceViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11928,7 +12124,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11936,7 +12132,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11944,7 +12140,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SnapshotViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11952,7 +12148,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterRouteViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11960,7 +12156,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11968,7 +12164,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcSubnetViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11976,7 +12172,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11984,7 +12180,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DeviceAuthRequest,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -11992,7 +12188,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DeviceAuthConfirm,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12000,7 +12196,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DeviceAccessToken,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12008,7 +12204,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::GroupList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12016,7 +12212,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::LoginSpoof,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12024,7 +12220,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::LoginLocal,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12032,7 +12228,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::LoginSamlBegin,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12040,7 +12236,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::LoginSaml,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12048,7 +12244,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::Logout,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12056,7 +12252,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12064,7 +12260,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12072,7 +12268,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12080,7 +12276,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12088,7 +12284,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12096,7 +12292,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationPolicyView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12104,7 +12300,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationPolicyUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12112,7 +12308,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12120,7 +12316,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12128,7 +12324,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12136,7 +12332,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12144,7 +12340,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12152,7 +12348,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12160,7 +12356,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12168,7 +12364,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12176,7 +12372,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12184,7 +12380,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskMetricsList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12192,7 +12388,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ImageList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12200,7 +12396,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ImageCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12208,7 +12404,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ImageView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12216,7 +12412,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ImageDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12224,7 +12420,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12232,7 +12428,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12240,7 +12436,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12248,7 +12444,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12256,7 +12452,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceDiskList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12264,7 +12460,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceDiskAttach,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12272,7 +12468,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceDiskDetach,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12280,7 +12476,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceExternalIpList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12288,7 +12484,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceMigrate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12296,7 +12492,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceNetworkInterfaceList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12304,7 +12500,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceNetworkInterfaceCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12312,7 +12508,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceNetworkInterfaceView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12320,7 +12516,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceNetworkInterfaceUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12328,7 +12524,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceNetworkInterfaceDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12336,7 +12532,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceReboot,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12344,7 +12540,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceSerialConsole,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12352,7 +12548,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceSerialConsoleStream,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12360,7 +12556,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceStart,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12368,7 +12564,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceStop,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12376,7 +12572,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectPolicyView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12384,7 +12580,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectPolicyUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12392,7 +12588,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SnapshotList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12400,7 +12596,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SnapshotCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12408,7 +12604,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SnapshotView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12416,7 +12612,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SnapshotDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12424,7 +12620,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12432,7 +12628,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12440,7 +12636,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12448,7 +12644,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12456,7 +12652,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12464,7 +12660,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcFirewallRulesView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12472,7 +12668,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcFirewallRulesUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12480,7 +12676,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12488,7 +12684,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12496,7 +12692,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12504,7 +12700,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12512,7 +12708,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12520,7 +12716,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterRouteList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12528,7 +12724,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterRouteCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12536,7 +12732,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterRouteView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12544,7 +12740,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterRouteUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12552,7 +12748,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcRouterRouteDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12560,7 +12756,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcSubnetList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12568,7 +12764,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcSubnetCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12576,7 +12772,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcSubnetView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12584,7 +12780,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcSubnetUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12592,7 +12788,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcSubnetDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12600,7 +12796,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::VpcSubnetListNetworkInterfaces,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12608,7 +12804,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::PolicyView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12616,7 +12812,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::PolicyUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12624,7 +12820,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::RoleList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12632,7 +12828,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::RoleView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12640,7 +12836,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SessionMe,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12648,7 +12844,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SessionMeGroups,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12656,7 +12852,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SessionSshkeyList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12664,7 +12860,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SessionSshkeyCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12672,7 +12868,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SessionSshkeyView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12680,7 +12876,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SessionSshkeyDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12688,7 +12884,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemImageViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12696,7 +12892,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12704,7 +12900,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloViewById,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12712,7 +12908,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::CertificateList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12720,7 +12916,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::CertificateCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12728,7 +12924,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::CertificateView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12736,7 +12932,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::CertificateDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12744,7 +12940,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::PhysicalDiskList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12752,7 +12948,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::RackList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12760,7 +12956,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::RackView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12768,7 +12964,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SledList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12776,7 +12972,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SledView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12784,7 +12980,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SledPhysicalDiskList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12792,7 +12988,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemImageList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12800,7 +12996,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemImageCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12808,7 +13004,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemImageView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12816,7 +13012,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemImageDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12824,7 +13020,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12832,7 +13028,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12840,7 +13036,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12848,7 +13044,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12856,7 +13052,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12864,7 +13060,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolRangeList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12872,7 +13068,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolRangeAdd,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12880,7 +13076,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolRangeRemove,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12888,7 +13084,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolServiceView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12896,7 +13092,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolServiceRangeList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12904,7 +13100,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolServiceRangeAdd,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12912,7 +13108,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::IpPoolServiceRangeRemove,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12920,7 +13116,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemMetric,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12928,7 +13124,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemPolicyView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12936,7 +13132,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemPolicyUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12944,7 +13140,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SagaList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12952,7 +13148,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SagaView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12960,7 +13156,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12968,7 +13164,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12976,7 +13172,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12984,7 +13180,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -12992,7 +13188,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloIdentityProviderList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13000,7 +13196,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::LocalIdpUserCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13008,7 +13204,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::LocalIdpUserDelete,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13016,7 +13212,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::LocalIdpUserSetPassword,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13024,7 +13220,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SamlIdentityProviderCreate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13032,7 +13228,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SamlIdentityProviderView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13040,7 +13236,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloPolicyView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13048,7 +13244,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloPolicyUpdate,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13056,7 +13252,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloUsersList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13064,7 +13260,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SiloUserView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13072,7 +13268,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemUserList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13080,7 +13276,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemUserView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13088,7 +13284,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::TimeseriesSchemaGet,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13096,7 +13292,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::UserList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13104,7 +13300,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskListV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13112,7 +13308,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskCreateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13120,7 +13316,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskViewV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13128,7 +13324,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::DiskDeleteV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13136,7 +13332,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceListV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13144,7 +13340,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceCreateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13152,7 +13348,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceViewV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13160,7 +13356,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceDeleteV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13168,7 +13364,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceDiskListV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13176,7 +13372,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceDiskAttachV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13184,7 +13380,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceDiskDetachV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13192,7 +13388,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceMigrateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13200,7 +13396,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceRebootV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13208,7 +13404,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceSerialConsoleV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13216,7 +13412,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceSerialConsoleStreamV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13224,7 +13420,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceStartV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13232,7 +13428,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceStopV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13240,7 +13436,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationListV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13248,7 +13444,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationCreateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13256,7 +13452,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationViewV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13264,7 +13460,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationUpdateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13272,7 +13468,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationDeleteV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13280,7 +13476,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationPolicyViewV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13288,7 +13484,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::OrganizationPolicyUpdateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13296,7 +13492,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectListV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13304,7 +13500,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectCreateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13312,7 +13508,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectViewV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13320,7 +13516,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectUpdateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13328,7 +13524,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectDeleteV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13336,7 +13532,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectPolicyViewV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13344,7 +13540,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::ProjectPolicyUpdateV1,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13352,7 +13548,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemComponentVersionList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13360,7 +13556,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::UpdateDeploymentsList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13368,7 +13564,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::UpdateDeploymentView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13376,7 +13572,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemUpdateRefresh,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13384,7 +13580,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemUpdateStart,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13392,7 +13588,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemUpdateStop,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13400,7 +13596,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemUpdateList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13408,7 +13604,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemUpdateView,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13416,7 +13612,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemUpdateComponentsList,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -13424,12 +13620,11 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::SystemVersion,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 }
 
-impl CliOverride for () {}
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {
     DiskViewById,

@@ -1,12 +1,12 @@
 use crate::propolis_server_builder::*;
-pub struct Cli<T: CliOverride = ()> {
+pub struct Cli<T: CliConfig> {
     client: Client,
-    over: T,
+    config: T,
 }
 
-impl Cli {
-    pub fn new(client: Client) -> Self {
-        Self { client, over: () }
+impl<T: CliConfig> Cli<T> {
+    pub fn new(client: Client, config: T) -> Self {
+        Self { client, config }
     }
 
     pub fn get_command(cmd: CliCommand) -> clap::Command {
@@ -137,57 +137,41 @@ impl Cli {
                     .help("XXX"),
             )
     }
-}
 
-impl<T: CliOverride> Cli<T> {
-    pub fn new_with_override(client: Client, over: T) -> Self {
-        Self { client, over }
-    }
-
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) {
+    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         match cmd {
-            CliCommand::InstanceGet => {
-                self.execute_instance_get(matches).await;
-            }
-            CliCommand::InstanceEnsure => {
-                self.execute_instance_ensure(matches).await;
-            }
+            CliCommand::InstanceGet => self.execute_instance_get(matches).await,
+            CliCommand::InstanceEnsure => self.execute_instance_ensure(matches).await,
             CliCommand::InstanceIssueCrucibleSnapshotRequest => {
                 self.execute_instance_issue_crucible_snapshot_request(matches)
-                    .await;
+                    .await
             }
             CliCommand::InstanceMigrateStatus => {
-                self.execute_instance_migrate_status(matches).await;
+                self.execute_instance_migrate_status(matches).await
             }
-            CliCommand::InstanceSerial => {
-                self.execute_instance_serial(matches).await;
-            }
-            CliCommand::InstanceStatePut => {
-                self.execute_instance_state_put(matches).await;
-            }
-            CliCommand::InstanceStateMonitor => {
-                self.execute_instance_state_monitor(matches).await;
-            }
+            CliCommand::InstanceSerial => self.execute_instance_serial(matches).await,
+            CliCommand::InstanceStatePut => self.execute_instance_state_put(matches).await,
+            CliCommand::InstanceStateMonitor => self.execute_instance_state_monitor(matches).await,
         }
     }
 
-    pub async fn execute_instance_get(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_get(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_get();
-        self.over
-            .execute_instance_get(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_get(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_ensure(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_ensure(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_ensure();
         if let Some(value) = matches.get_one::<String>("cloud-init-bytes") {
             request = request.body_map(|body| body.cloud_init_bytes(value.clone()))
@@ -200,16 +184,16 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_ensure(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_ensure(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
@@ -217,7 +201,7 @@ impl<T: CliOverride> Cli<T> {
     pub async fn execute_instance_issue_crucible_snapshot_request(
         &self,
         matches: &clap::ArgMatches,
-    ) {
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_issue_crucible_snapshot_request();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
             request = request.id(value.clone());
@@ -227,21 +211,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.snapshot_id(value.clone());
         }
 
-        self.over
-            .execute_instance_issue_crucible_snapshot_request(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_issue_crucible_snapshot_request(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_migrate_status(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_migrate_status(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate_status();
         if let Some(value) = matches.get_one::<uuid::Uuid>("migration-id") {
             request = request.body_map(|body| body.migration_id(value.clone()))
@@ -254,25 +242,24 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_migrate_status(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_migrate_status(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_serial(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_serial(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_serial();
-        self.over
-            .execute_instance_serial(matches, &mut request)
-            .unwrap();
+        self.config.execute_instance_serial(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -284,7 +271,10 @@ impl<T: CliOverride> Cli<T> {
         }
     }
 
-    pub async fn execute_instance_state_put(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_state_put(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_put();
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value).unwrap();
@@ -293,21 +283,25 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_state_put(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_state_put(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_state_monitor(&self, matches: &clap::ArgMatches) {
+    pub async fn execute_instance_state_monitor(
+        &self,
+        matches: &clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_monitor();
         if let Some(value) = matches.get_one::<u64>("gen") {
             request = request.body_map(|body| body.gen(value.clone()))
@@ -320,27 +314,46 @@ impl<T: CliOverride> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.over
-            .execute_instance_state_monitor(matches, &mut request)
-            .unwrap();
+        self.config
+            .execute_instance_state_monitor(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                println!("success\n{:#?}", r)
+                self.config.item_success(&r);
+                Ok(())
             }
             Err(r) => {
-                println!("error\n{:#?}", r)
+                self.config.item_error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
 }
 
-pub trait CliOverride {
+pub trait CliConfig {
+    fn item_success<T>(&self, value: &ResponseValue<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn item_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_start<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_item<T>(&self, value: &T)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_success<T>(&self)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn list_end_error<T>(&self, value: &Error<T>)
+    where
+        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_instance_get(
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceGet,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -348,7 +361,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceEnsure,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -356,7 +369,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceIssueCrucibleSnapshotRequest,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -364,7 +377,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceMigrateStatus,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -372,7 +385,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceSerial,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -380,7 +393,7 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceStatePut,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -388,12 +401,11 @@ pub trait CliOverride {
         &self,
         matches: &clap::ArgMatches,
         request: &mut builder::InstanceStateMonitor,
-    ) -> Result<(), String> {
+    ) -> anyhow::Result<()> {
         Ok(())
     }
 }
 
-impl CliOverride for () {}
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {
     InstanceGet,
