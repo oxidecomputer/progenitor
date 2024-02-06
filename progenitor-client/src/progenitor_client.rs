@@ -216,6 +216,12 @@ impl<T> DerefMut for ResponseValue<T> {
     }
 }
 
+impl<T> AsRef<T> for ResponseValue<T> {
+    fn as_ref(&self) -> &T {
+        &self.inner
+    }
+}
+
 impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         self.inner.fmt(f)
