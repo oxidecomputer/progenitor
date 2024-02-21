@@ -350,9 +350,13 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
+        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
+        // generated file is not at the top level of the crate.
+
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
+            #[allow(unused_imports)]
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
             #[allow(unused_imports)]
             use progenitor_client::{encode_path, RequestBuilderExt};
@@ -456,6 +460,10 @@ impl Generator {
             .iter()
             .map(|method| self.positional_method(method))
             .collect::<Result<Vec<_>>>()?;
+
+        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
+        // generated file is not at the top level of the crate.
+
         let out = quote! {
             #[allow(clippy::all)]
             impl Client {
@@ -464,6 +472,7 @@ impl Generator {
 
             /// Items consumers will typically use such as the Client.
             pub mod prelude {
+                #[allow(unused_imports)]
                 pub use super::Client;
             }
         };
@@ -529,6 +538,9 @@ impl Generator {
         let (traits_and_impls, trait_preludes) =
             self.builder_tags(input_methods, &tag_info);
 
+        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
+        // generated file is not at the top level of the crate.
+
         let out = quote! {
             #traits_and_impls
 
@@ -553,6 +565,7 @@ impl Generator {
             /// Items consumers will typically use such as the Client and
             /// extension traits.
             pub mod prelude {
+                #[allow(unused_imports)]
                 pub use super::Client;
                 #trait_preludes
             }
