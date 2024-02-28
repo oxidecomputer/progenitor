@@ -13,6 +13,11 @@
 
 == Unreleased changes (release date TBD)
 
+* Include payload in error when there's a deserialization failure (#655)
+* Conversion error type
+* Rustdoc for mods and extension traits (#677)
+* Ignore clippy in generated code (#702)
+
 https://github.com/oxidecomputer/progenitor/compare/v0.5.0\...HEAD[Full list of commits]
 
 == 0.5.0 (released 2023-12-16)
