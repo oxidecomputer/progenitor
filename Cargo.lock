@@ -845,15 +845,6 @@ dependencies = [
 
 [[package]]
 name = "hashbrown"
-version = "0.13.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43a3c133739dddd0d2990f9a4bdf8eb4b21ef50e4851ca85ab661199821d510e"
-dependencies = [
- "ahash",
-]
-
-[[package]]
-name = "hashbrown"
 version = "0.14.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "290f1a1d9242c78d09ce40a5e87e7554ee637af1351968159f4952f028f75604"
@@ -1023,7 +1014,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "233cf39063f058ea2caae4091bf4a3ef70a653afbc026f5c4a4135d114e3c177"
 dependencies = [
  "equivalent",
- "hashbrown 0.14.3",
+ "hashbrown",
  "serde",
 ]
 
@@ -1408,7 +1399,7 @@ dependencies = [
  "progenitor-impl",
  "progenitor-macro",
  "rand",
- "regress 0.7.1",
+ "regress",
  "reqwest",
  "schemars",
  "serde",
@@ -1576,21 +1567,11 @@ checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
 name = "regress"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ed9969cad8051328011596bf549629f1b800cf1731e7964b1eef8dfc480d2c2"
-dependencies = [
- "hashbrown 0.13.2",
- "memchr",
-]
-
-[[package]]
-name = "regress"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4f5f39ba4513916c1b2657b72af6ec671f091cd637992f58d0ede5cae4e5dea0"
 dependencies = [
- "hashbrown 0.14.3",
+ "hashbrown",
  "memchr",
 ]
 
@@ -2417,7 +2398,7 @@ dependencies = [
  "log",
  "proc-macro2",
  "quote",
- "regress 0.8.0",
+ "regress",
  "schemars",
  "serde_json",
  "syn 2.0.52",
