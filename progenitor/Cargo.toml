@@ -16,7 +16,7 @@ progenitor-macro = { version = "0.6.0", path = "../progenitor-macro" }
 serde_json = "1.0"
 
 [dev-dependencies]
-base64 = "0.21"
+base64 = "0.22"
 chrono = { version = "0.4", features = ["serde"] }
 futures = "0.3.30"
 percent-encoding = "2.3"
