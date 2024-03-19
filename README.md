@@ -36,42 +36,42 @@ generate_api!("path/to/openapi_document.json");
 
 You'll need to add the following to `Cargo.toml`:
 
-```diff
+```toml
 [dependencies]
-+futures = "0.3"
-+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-+reqwest = { version = "0.11", features = ["json", "stream"] }
-+serde = { version = "1.0", features = ["derive"] }
+futures = "0.3"
+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
+reqwest = { version = "0.11", features = ["json", "stream"] }
+serde = { version = "1.0", features = ["derive"] }
 ```
 
 In addition, if the OpenAPI document contains string types with the `format`
 field set to `date` or `date-time`, include
 
-```diff
+```toml
 [dependencies]
-+chrono = { version = "0.4", features = ["serde"] }
+chrono = { version = "0.4", features = ["serde"] }
 ```
 
 Similarly, if there is a `format` field set to `uuid`:
 
-```diff
+```toml
 [dependencies]
-+uuid = { version = "1.0.0", features = ["serde", "v4"] }
+uuid = { version = "1.0.0", features = ["serde", "v4"] }
 ```
 
 And if there are any websocket channel endpoints:
 
-```diff
+```toml
 [dependencies]
-+base64 = "0.21"
-+rand = "0.8"
+base64 = "0.21"
+rand = "0.8"
 ```
 
 If types include regular expression validation:
 
-```diff
+```toml
 [dependencies]
-+regress = "0.4.1"
+regress = "0.4.1"
 ```
 
 The macro has some additional fancy options to control the generated code:
@@ -129,18 +129,18 @@ include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 
 You'll need to add the following to `Cargo.toml`:
 
-```diff
+```toml
 [dependencies]
-+futures = "0.3"
-+progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
-+reqwest = { version = "0.11", features = ["json", "stream"] }
-+serde = { version = "1.0", features = ["derive"] }
+futures = "0.3"
+progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
+reqwest = { version = "0.11", features = ["json", "stream"] }
+serde = { version = "1.0", features = ["derive"] }
 
 [build-dependencies]
-+prettyplease = "0.1.25"
-+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-+serde_json = "1.0"
-+syn = "1.0"
+prettyplease = "0.1.25"
+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
+serde_json = "1.0"
+syn = "1.0"
 ```
 
 (`chrono`, `uuid`, `base64`, and `rand` as above)
