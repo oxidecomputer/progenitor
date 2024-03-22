@@ -9,7 +9,7 @@ use std::{
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
-use typify::{TypeId, TypeSpace};
+use typify::{TypeDetails, TypeId, TypeSpace};
 
 use crate::{
     template::PathTemplate,
@@ -843,16 +843,39 @@ impl Generator {
                 OperationParameterKind::Query(required) => {
                     let qn = &param.api_name;
                     let qn_ident = format_ident!("{}", &param.name);
-                    let res = if *required {
-                        quote! {
-                            #query_ident.push((#qn, #qn_ident .to_string()));
-                        }
-                    } else {
-                        quote! {
-                            if let Some(v) = & #qn_ident {
-                                #query_ident.push((#qn, v.to_string()));
+
+                    let res = match &param.typ {
+                        OperationParameterType::Type(type_id) => {
+                            match self.type_space.get_type(type_id).unwrap().details() {
+                                TypeDetails::Vec(_) | TypeDetails::Set(_) => {
+                                    // Though Typify specifies we would get HashSet<T> the code seems to generate a Vec<T> so we can use the same code.
+                                    if *required {
+                                        quote! {
+                                            #query_ident.append(&mut #qn_ident .into_iter().map(|x| (#qn, x.to_string())).collect());
+                                        }
+                                    } else {
+                                        quote! {
+                                            if let Some(v) = & #qn_ident {
+                                                #query_ident.append(&mut v.into_iter().map(|x| (#qn, x.to_string())).collect());
+                                            }
+                                        }
+                                    }
+                                }
+                                _ => {
+                                    if *required {
+                                        quote! { #query_ident.push((#qn, #qn_ident .to_string())); }
+                                    } else {
+                                        quote! {
+                                           if let Some(v) = & #qn_ident {
+                                                #query_ident.push((#qn, v.to_string()));
+                                           }
+                                        }
+                                    }
+                                }
                             }
                         }
+                        // Is this path even reachable? Do not think RawBody is allowed in Query
+                        _ => unreachable!(),
                     };
 
                     Some(res)
