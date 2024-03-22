@@ -1,6 +1,7 @@
 // Copyright 2024 Oxide Computer Company
 
 use std::{
+    borrow::BorrowMut,
     cmp::Ordering,
     collections::{BTreeMap, BTreeSet},
     str::FromStr,
@@ -100,6 +101,7 @@ pub struct OperationParameter {
     pub description: Option<String>,
     pub typ: OperationParameterType,
     pub kind: OperationParameterKind,
+    pub array: bool,
 }
 
 #[derive(Eq, PartialEq)]
@@ -335,6 +337,7 @@ impl Generator {
                             description: parameter_data.description.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Path,
+                            array: false,
                         })
                     }
                     openapiv3::Parameter::Query {
@@ -372,12 +375,20 @@ impl Generator {
                                 (type_id, parameter_data.required)
                             };
 
+                        let array = match schema {
+                            schemars::schema::Schema::Object(o) => {
+                                o.array.is_some()
+                            }
+                            _ => false,
+                        };
+
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
                             api_name: parameter_data.name.clone(),
                             description: parameter_data.description.clone(),
                             typ: OperationParameterType::Type(type_id),
                             kind: OperationParameterKind::Query(required),
+                            array,
                         })
                     }
                     openapiv3::Parameter::Header {
@@ -406,6 +417,7 @@ impl Generator {
                             kind: OperationParameterKind::Header(
                                 parameter_data.required,
                             ),
+                            array: false,
                         })
                     }
                     openapiv3::Parameter::Path { style, .. } => {
@@ -846,6 +858,14 @@ impl Generator {
                     let res = if *required {
                         quote! {
                             #query_ident.push((#qn, #qn_ident .to_string()));
+                        }
+                    } else if param.array {
+                        quote! {
+                            if let Some(arr) = & #qn_ident {
+                                for v in arr {
+                                    #query_ident.push((#qn, v.to_string()));
+                                }
+                            }
                         }
                     } else {
                         quote! {
@@ -2247,6 +2267,7 @@ impl Generator {
             description: body.description.clone(),
             typ,
             kind: OperationParameterKind::Body(content_type),
+            array: false,
         }))
     }
 }
