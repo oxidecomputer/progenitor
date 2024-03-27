@@ -1491,16 +1491,16 @@ impl Client {
     pub async fn instance_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
-        let url = format!("{}/instance", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
+        let mut request = {
+            let url = format!("{}/instance", self.baseurl,);
+            self.client.get(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1520,17 +1520,19 @@ impl Client {
         &'a self,
         body: &'a types::InstanceEnsureRequest,
     ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
-        let url = format!("{}/instance", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/instance", self.baseurl,);
+            self.client
+                .put(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1553,21 +1555,21 @@ impl Client {
         id: &'a uuid::Uuid,
         snapshot_id: &'a uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/instance/disk/{}/snapshot/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-            encode_path(&snapshot_id.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
+        let mut request = {
+            let url = format!(
+                "{}/instance/disk/{}/snapshot/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+                encode_path(&snapshot_id.to_string()),
+            );
+            self.client.post(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1587,17 +1589,19 @@ impl Client {
         &'a self,
         body: &'a types::InstanceMigrateStatusRequest,
     ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>> {
-        let url = format!("{}/instance/migrate/status", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/instance/migrate/status", self.baseurl,);
+            self.client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1616,22 +1620,24 @@ impl Client {
     pub async fn instance_serial<'a>(
         &'a self,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
-        let url = format!("{}/instance/serial", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(reqwest::header::CONNECTION, "Upgrade")
-            .header(reqwest::header::UPGRADE, "websocket")
-            .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
-            .header(
-                reqwest::header::SEC_WEBSOCKET_KEY,
-                base64::Engine::encode(
-                    &base64::engine::general_purpose::STANDARD,
-                    rand::random::<[u8; 16]>(),
-                ),
-            )
-            .build()?;
+        let mut request = {
+            let url = format!("{}/instance/serial", self.baseurl,);
+            self.client
+                .get(url)
+                .header(reqwest::header::CONNECTION, "Upgrade")
+                .header(reqwest::header::UPGRADE, "websocket")
+                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(
+                    reqwest::header::SEC_WEBSOCKET_KEY,
+                    base64::Engine::encode(
+                        &base64::engine::general_purpose::STANDARD,
+                        rand::random::<[u8; 16]>(),
+                    ),
+                )
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1646,17 +1652,19 @@ impl Client {
         &'a self,
         body: types::InstanceStateRequested,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/instance/state", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/instance/state", self.baseurl,);
+            self.client
+                .put(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1676,17 +1684,19 @@ impl Client {
         &'a self,
         body: &'a types::InstanceStateMonitorRequest,
     ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>> {
-        let url = format!("{}/instance/state-monitor", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/instance/state-monitor", self.baseurl,);
+            self.client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

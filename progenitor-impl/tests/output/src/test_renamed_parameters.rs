@@ -153,27 +153,29 @@ impl Client {
         in_: &'a str,
         use_: &'a str,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/{}/{}/{}",
-            self.baseurl,
-            encode_path(&ref_.to_string()),
-            encode_path(&type_.to_string()),
-            encode_path(&trait_.to_string()),
-        );
-        let mut query = Vec::with_capacity(3usize);
-        query.push(("if", if_.to_string()));
-        query.push(("in", in_.to_string()));
-        query.push(("use", use_.to_string()));
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&query)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/{}/{}/{}",
+                self.baseurl,
+                encode_path(&ref_.to_string()),
+                encode_path(&type_.to_string()),
+                encode_path(&trait_.to_string()),
+            );
+            let mut query = Vec::with_capacity(3usize);
+            query.push(("if", if_.to_string()));
+            query.push(("in", in_.to_string()));
+            query.push(("use", use_.to_string()));
+            self.client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&query)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
