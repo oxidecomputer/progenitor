@@ -350,8 +350,9 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
-        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
-        // generated file is not at the top level of the crate.
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
 
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
@@ -461,8 +462,9 @@ impl Generator {
             .map(|method| self.positional_method(method))
             .collect::<Result<Vec<_>>>()?;
 
-        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
-        // generated file is not at the top level of the crate.
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
 
         let out = quote! {
             #[allow(clippy::all)]
@@ -483,15 +485,24 @@ impl Generator {
         &mut self,
         input_methods: &[method::OperationMethod],
     ) -> Result<TokenStream> {
-        let builder_struct = input_methods
+        let (builder_struct, built_struct): (
+            Vec<TokenStream>,
+            Vec<TokenStream>,
+        ) = input_methods
             .iter()
             .map(|method| self.builder_struct(method, TagStyle::Merged))
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Result<Vec<_>>>()?
+            .into_iter()
+            .unzip();
 
         let builder_methods = input_methods
             .iter()
             .map(|method| self.builder_impl(method))
             .collect::<Vec<_>>();
+
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
 
         let out = quote! {
             impl Client {
@@ -513,6 +524,21 @@ impl Generator {
                     ResponseValue,
                 };
 
+                pub mod built {
+                    use super::super::types;
+                    #[allow(unused_imports)]
+                    use super::super::{
+                        encode_path,
+                        ByteStream,
+                        Error,
+                        HeaderMap,
+                        HeaderValue,
+                        RequestBuilderExt,
+                        ResponseValue,
+                    };
+                    #(#built_struct)*
+                }
+
                 #(#builder_struct)*
             }
 
@@ -530,16 +556,22 @@ impl Generator {
         input_methods: &[method::OperationMethod],
         tag_info: BTreeMap<&String, &openapiv3::Tag>,
     ) -> Result<TokenStream> {
-        let builder_struct = input_methods
+        let (builder_struct, built_struct): (
+            Vec<TokenStream>,
+            Vec<TokenStream>,
+        ) = input_methods
             .iter()
-            .map(|method| self.builder_struct(method, TagStyle::Separate))
-            .collect::<Result<Vec<_>>>()?;
+            .map(|method| self.builder_struct(method, TagStyle::Merged))
+            .collect::<Result<Vec<_>>>()?
+            .into_iter()
+            .unzip();
 
         let (traits_and_impls, trait_preludes) =
             self.builder_tags(input_methods, &tag_info);
 
-        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
-        // generated file is not at the top level of the crate.
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
 
         let out = quote! {
             #traits_and_impls
@@ -558,6 +590,21 @@ impl Generator {
                     RequestBuilderExt,
                     ResponseValue,
                 };
+
+                pub mod built {
+                    use super::super::types;
+                    #[allow(unused_imports)]
+                    use super::super::{
+                        encode_path,
+                        ByteStream,
+                        Error,
+                        HeaderMap,
+                        HeaderValue,
+                        RequestBuilderExt,
+                        ResponseValue,
+                    };
+                    #(#built_struct)*
+                }
 
                 #(#builder_struct)*
             }
