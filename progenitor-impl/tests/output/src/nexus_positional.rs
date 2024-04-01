@@ -13963,11 +13963,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.group_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -13976,7 +13971,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.group_list(None, state.as_deref(), None)
+                        self.group_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -13988,7 +13983,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -14223,11 +14217,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.organization_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -14236,7 +14225,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.organization_list(None, state.as_deref(), None)
+                        self.organization_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -14248,7 +14237,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -14574,11 +14562,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.project_list(organization_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -14587,7 +14570,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_list(organization_name, None, state.as_deref(), None)
+                        self.project_list(organization_name, limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -14599,7 +14582,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -14869,11 +14851,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.disk_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -14885,7 +14862,7 @@ impl Client {
                         self.disk_list(
                             organization_name,
                             project_name,
-                            None,
+                            limit,
                             state.as_deref(),
                             None,
                         )
@@ -14900,7 +14877,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -15137,11 +15113,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.disk_metrics_list(
             organization_name,
             project_name,
@@ -15165,7 +15136,7 @@ impl Client {
                         disk_name,
                         metric_name,
                         None,
-                        None,
+                        limit,
                         state.as_deref(),
                         None,
                     )
@@ -15180,7 +15151,6 @@ impl Client {
             first.chain(rest)
         })
         .try_flatten_stream()
-        .take(final_stream_limit)
         .boxed()
     }
 
@@ -15274,11 +15244,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.image_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -15290,7 +15255,7 @@ impl Client {
                         self.image_list(
                             organization_name,
                             project_name,
-                            None,
+                            limit,
                             state.as_deref(),
                             None,
                         )
@@ -15305,7 +15270,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -15529,11 +15493,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.instance_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -15545,7 +15504,7 @@ impl Client {
                         self.instance_list(
                             organization_name,
                             project_name,
-                            None,
+                            limit,
                             state.as_deref(),
                             None,
                         )
@@ -15560,7 +15519,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -15789,11 +15747,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.instance_disk_list(
             organization_name,
             project_name,
@@ -15813,7 +15766,7 @@ impl Client {
                         organization_name,
                         project_name,
                         instance_name,
-                        None,
+                        limit,
                         state.as_deref(),
                         None,
                     )
@@ -15828,7 +15781,6 @@ impl Client {
             first.chain(rest)
         })
         .try_flatten_stream()
-        .take(final_stream_limit)
         .boxed()
     }
 
@@ -16099,11 +16051,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.instance_network_interface_list(
             organization_name,
             project_name,
@@ -16123,7 +16070,7 @@ impl Client {
                         organization_name,
                         project_name,
                         instance_name,
-                        None,
+                        limit,
                         state.as_deref(),
                         None,
                     )
@@ -16138,7 +16085,6 @@ impl Client {
             first.chain(rest)
         })
         .try_flatten_stream()
-        .take(final_stream_limit)
         .boxed()
     }
 
@@ -16744,11 +16690,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.snapshot_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -16760,7 +16701,7 @@ impl Client {
                         self.snapshot_list(
                             organization_name,
                             project_name,
-                            None,
+                            limit,
                             state.as_deref(),
                             None,
                         )
@@ -16775,7 +16716,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -16992,11 +16932,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.vpc_list(organization_name, project_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -17008,7 +16943,7 @@ impl Client {
                         self.vpc_list(
                             organization_name,
                             project_name,
-                            None,
+                            limit,
                             state.as_deref(),
                             None,
                         )
@@ -17023,7 +16958,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -17372,11 +17306,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.vpc_router_list(
             organization_name,
             project_name,
@@ -17396,7 +17325,7 @@ impl Client {
                         organization_name,
                         project_name,
                         vpc_name,
-                        None,
+                        limit,
                         state.as_deref(),
                         None,
                     )
@@ -17411,7 +17340,6 @@ impl Client {
             first.chain(rest)
         })
         .try_flatten_stream()
-        .take(final_stream_limit)
         .boxed()
     }
 
@@ -17690,11 +17618,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.vpc_router_route_list(
             organization_name,
             project_name,
@@ -17716,7 +17639,7 @@ impl Client {
                         project_name,
                         vpc_name,
                         router_name,
-                        None,
+                        limit,
                         state.as_deref(),
                         None,
                     )
@@ -17731,7 +17654,6 @@ impl Client {
             first.chain(rest)
         })
         .try_flatten_stream()
-        .take(final_stream_limit)
         .boxed()
     }
 
@@ -18008,11 +17930,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.vpc_subnet_list(
             organization_name,
             project_name,
@@ -18032,7 +17949,7 @@ impl Client {
                         organization_name,
                         project_name,
                         vpc_name,
-                        None,
+                        limit,
                         state.as_deref(),
                         None,
                     )
@@ -18047,7 +17964,6 @@ impl Client {
             first.chain(rest)
         })
         .try_flatten_stream()
-        .take(final_stream_limit)
         .boxed()
     }
 
@@ -18322,11 +18238,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.vpc_subnet_list_network_interfaces(
             organization_name,
             project_name,
@@ -18348,7 +18259,7 @@ impl Client {
                         project_name,
                         vpc_name,
                         subnet_name,
-                        None,
+                        limit,
                         state.as_deref(),
                         None,
                     )
@@ -18363,7 +18274,6 @@ impl Client {
             first.chain(rest)
         })
         .try_flatten_stream()
-        .take(final_stream_limit)
         .boxed()
     }
 
@@ -18490,11 +18400,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.role_list(limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -18503,7 +18408,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.role_list(None, state.as_deref())
+                        self.role_list(limit, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -18515,7 +18420,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -18656,11 +18560,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.session_me_groups(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -18669,7 +18568,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.session_me_groups(None, state.as_deref(), None)
+                        self.session_me_groups(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -18681,7 +18580,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -18758,11 +18656,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.session_sshkey_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -18771,7 +18664,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.session_sshkey_list(None, state.as_deref(), None)
+                        self.session_sshkey_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -18783,7 +18676,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -19080,11 +18972,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.certificate_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -19093,7 +18980,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.certificate_list(None, state.as_deref(), None)
+                        self.certificate_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -19105,7 +18992,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -19288,11 +19174,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.physical_disk_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -19301,7 +19182,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.physical_disk_list(None, state.as_deref(), None)
+                        self.physical_disk_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -19313,7 +19194,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -19386,11 +19266,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.rack_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -19399,7 +19274,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.rack_list(None, state.as_deref(), None)
+                        self.rack_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -19411,7 +19286,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -19522,11 +19396,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.sled_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -19535,7 +19404,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.sled_list(None, state.as_deref(), None)
+                        self.sled_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -19547,7 +19416,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -19668,11 +19536,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.sled_physical_disk_list(sled_id, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -19681,7 +19544,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.sled_physical_disk_list(sled_id, None, state.as_deref(), None)
+                        self.sled_physical_disk_list(sled_id, limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -19693,7 +19556,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -19775,11 +19637,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.system_image_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -19788,7 +19645,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.system_image_list(None, state.as_deref(), None)
+                        self.system_image_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -19800,7 +19657,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -19984,11 +19840,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.ip_pool_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -19997,7 +19848,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.ip_pool_list(None, state.as_deref(), None)
+                        self.ip_pool_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -20009,7 +19860,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -20226,11 +20076,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.ip_pool_range_list(pool_name, limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -20239,7 +20084,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.ip_pool_range_list(pool_name, None, state.as_deref())
+                        self.ip_pool_range_list(pool_name, limit, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -20251,7 +20096,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -20425,11 +20269,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.ip_pool_service_range_list(limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -20438,7 +20277,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.ip_pool_service_range_list(None, state.as_deref())
+                        self.ip_pool_service_range_list(limit, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -20450,7 +20289,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -20717,11 +20555,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.saga_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -20730,7 +20563,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.saga_list(None, state.as_deref(), None)
+                        self.saga_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -20742,7 +20575,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -20854,11 +20686,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.silo_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -20867,7 +20694,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.silo_list(None, state.as_deref(), None)
+                        self.silo_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -20879,7 +20706,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -21074,11 +20900,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.silo_identity_provider_list(silo_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -21087,7 +20908,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.silo_identity_provider_list(silo_name, None, state.as_deref(), None)
+                        self.silo_identity_provider_list(silo_name, limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -21099,7 +20920,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -21480,11 +21300,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.silo_users_list(silo_name, limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -21493,7 +21308,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.silo_users_list(silo_name, None, state.as_deref(), None)
+                        self.silo_users_list(silo_name, limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -21505,7 +21320,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -21620,11 +21434,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.system_user_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -21633,7 +21442,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.system_user_list(None, state.as_deref(), None)
+                        self.system_user_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -21645,7 +21454,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -21749,11 +21557,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.timeseries_schema_get(limit, None)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -21762,7 +21565,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.timeseries_schema_get(None, state.as_deref())
+                        self.timeseries_schema_get(limit, state.as_deref())
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -21774,7 +21577,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -21847,11 +21649,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.user_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -21860,7 +21657,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.user_list(None, state.as_deref(), None)
+                        self.user_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -21872,7 +21669,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -21961,11 +21757,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.disk_list_v1(limit, organization, None, project, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -21974,7 +21765,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.disk_list_v1(None, None, state.as_deref(), None, None)
+                        self.disk_list_v1(limit, None, state.as_deref(), None, None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -21986,7 +21777,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -22211,11 +22001,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.instance_list_v1(limit, organization, None, project, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -22224,7 +22009,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.instance_list_v1(None, None, state.as_deref(), None, None)
+                        self.instance_list_v1(limit, None, state.as_deref(), None, None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -22236,7 +22021,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -22468,11 +22252,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.instance_disk_list_v1(instance, limit, organization, None, project, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -22483,7 +22262,7 @@ impl Client {
                     } else {
                         self.instance_disk_list_v1(
                             instance,
-                            None,
+                            limit,
                             None,
                             state.as_deref(),
                             None,
@@ -22500,7 +22279,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -22989,11 +22767,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.organization_list_v1(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -23002,7 +22775,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.organization_list_v1(None, state.as_deref(), None)
+                        self.organization_list_v1(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -23014,7 +22787,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -23306,11 +23078,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.project_list_v1(limit, organization, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -23319,7 +23086,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_list_v1(None, None, state.as_deref(), None)
+                        self.project_list_v1(limit, None, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -23331,7 +23098,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -23655,11 +23421,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.system_component_version_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -23668,7 +23429,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.system_component_version_list(None, state.as_deref(), None)
+                        self.system_component_version_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -23680,7 +23441,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -23754,11 +23514,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.update_deployments_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -23767,7 +23522,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.update_deployments_list(None, state.as_deref(), None)
+                        self.update_deployments_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -23779,7 +23534,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 
@@ -23982,11 +23736,6 @@ impl Client {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
-        let final_stream_limit = limit
-            .clone()
-            .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-            .map(std::num::NonZeroUsize::get)
-            .unwrap_or(usize::MAX);
         self.system_update_list(limit, None, sort_by)
             .map_ok(move |page| {
                 let page = page.into_inner();
@@ -23995,7 +23744,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.system_update_list(None, state.as_deref(), None)
+                        self.system_update_list(limit, state.as_deref(), None)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -24007,7 +23756,6 @@ impl Client {
                 first.chain(rest)
             })
             .try_flatten_stream()
-            .take(final_stream_limit)
             .boxed()
     }
 

@@ -710,9 +710,12 @@ impl Generator {
             let step_params = method.params.iter().map(|param| {
                 if param.api_name.as_str() == "page_token" {
                     quote! { state.as_deref() }
-                } else if let OperationParameterKind::Query(_) = param.kind {
-                    // Query parameters are None; having page_token as Some(_)
-                    // is mutually exclusive with other query parameters.
+                } else if param.api_name.as_str() != "limit"
+                    && matches!(param.kind, OperationParameterKind::Query(_))
+                {
+                    // Query parameters (other than "page_token" and "limit")
+                    // are None; having page_token as Some(_) is mutually
+                    // exclusive with other query parameters.
                     quote! { None }
                 } else {
                     // Non-query parameters are passed in; this is necessary
@@ -743,15 +746,6 @@ impl Generator {
                     use futures::StreamExt;
                     use futures::TryFutureExt;
                     use futures::TryStreamExt;
-
-                    // Grab the limit. This is intended to be agnostic to the
-                    // specific type for the limit input which is why it's a
-                    // bit convoluted.
-                    let final_stream_limit = limit
-                        .clone()
-                        .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                        .map(std::num::NonZeroUsize::get)
-                        .unwrap_or(usize::MAX);
 
                     // Execute the operation with the basic parameters
                     // (omitting page_token) to get the first page.
@@ -800,7 +794,6 @@ impl Generator {
                             first.chain(rest)
                         })
                         .try_flatten_stream()
-                        .take(final_stream_limit)
                         .boxed()
                 }
             }

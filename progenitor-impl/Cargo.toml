@@ -29,8 +29,13 @@ unicode-ident = "1.0.12"
 [dev-dependencies]
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
 expectorate = "1.1"
+futures = "0.3.30"
 http = "0.2.9"
 hyper = "0.14.27"
+reqwest = "0.12.2"
 rustfmt-wrapper = "0.2.1"
 serde_yaml = "0.9"
 serde_json = "1.0.113"
+tokio = { version = "1.37.0", features = ["rt", "net"] }
+
+progenitor-client.path = "../progenitor-client"

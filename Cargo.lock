@@ -1544,6 +1544,7 @@ version = "0.6.0"
 dependencies = [
  "dropshot",
  "expectorate",
+ "futures",
  "getopts",
  "heck 0.4.1",
  "http 0.2.9",
@@ -1551,8 +1552,10 @@ dependencies = [
  "indexmap",
  "openapiv3",
  "proc-macro2",
+ "progenitor-client",
  "quote",
  "regex",
+ "reqwest",
  "rustfmt-wrapper",
  "schemars",
  "serde",
@@ -1560,6 +1563,7 @@ dependencies = [
  "serde_yaml",
  "syn 2.0.52",
  "thiserror",
+ "tokio",
  "typify",
  "unicode-ident",
 ]
@@ -1704,9 +1708,9 @@ dependencies = [
 
 [[package]]
 name = "reqwest"
-version = "0.12.1"
+version = "0.12.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e333b1eb9fe677f6893a9efcb0d277a2d3edd83f358a236b657c32301dc6e5f6"
+checksum = "2d66674f2b6fb864665eea7a3c1ac4e3dfacd2fda83cf6f935a612e01b0e3338"
 dependencies = [
  "base64 0.21.7",
  "bytes",
@@ -2337,9 +2341,9 @@ checksum = "cda74da7e1a664f795bb1f8a87ec406fb89a02522cf6e50620d016add6dbbf5c"
 
 [[package]]
 name = "tokio"
-version = "1.36.0"
+version = "1.37.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61285f6515fa018fb2d1e46eb21223fff441ee8db5d0f1435e8ab4f5cdb80931"
+checksum = "1adbebffeca75fcfd058afa480fb6c0b81e165a0323f9c9d39c9697e37c46787"
 dependencies = [
  "backtrace",
  "bytes",
