@@ -243,26 +243,23 @@ async fn test_stream_pagination() {
     let out = from_utf8(&out).unwrap();
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
-    let mut generator = Generator::default();
+    // Test both interface styles.
+    let mut generator = Generator::new(
+        GenerationSettings::new().with_interface(InterfaceStyle::Positional),
+    );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{TEST_NAME}.rs"),
+        format!("tests/output/src/{TEST_NAME}_positional.rs"),
         &output,
     );
-
-    #[allow(dead_code)]
-    mod gen_client {
-        // This is weird: we're now `include!`ing the file we just used to
-        // confirm the generated code is what we expect. If changes are made to
-        // progenitor that affect this generated code, keep in mind that when
-        // this test executes, the above check is against what we _currently_
-        // produce, while this `include!` is what was on disk before the test
-        // ran. This can be surprising if you're running the test with
-        // `EXPECTORATE=overwrite`, because the above check will overwrite the
-        // file on disk, but then the test proceeds and gets to this point,
-        // where it uses what was on disk _before_ expectorate overwrote it.
-        include!("output/src/test_stream_pagination.rs");
-    }
+    let mut generator = Generator::new(
+        GenerationSettings::new().with_interface(InterfaceStyle::Builder),
+    );
+    let output = generate_formatted(&mut generator, &spec);
+    expectorate::assert_contents(
+        format!("tests/output/src/{TEST_NAME}_builder.rs"),
+        &output,
+    );
 
     // Run the Dropshot server.
     let config_dropshot = ConfigDropshot {
@@ -289,10 +286,70 @@ async fn test_stream_pagination() {
     .start();
 
     let server_addr = format!("http://{}", server.local_addr());
-    let client = gen_client::Client::new(&server_addr);
+
+    // Test the positional client.
+    #[allow(dead_code)]
+    mod gen_client_positional {
+        // This is weird: we're now `include!`ing the file we just used to
+        // confirm the generated code is what we expect. If changes are made to
+        // progenitor that affect this generated code, keep in mind that when
+        // this test executes, the above check is against what we _currently_
+        // produce, while this `include!` is what was on disk before the test
+        // ran. This can be surprising if you're running the test with
+        // `EXPECTORATE=overwrite`, because the above check will overwrite the
+        // file on disk, but then the test proceeds and gets to this point,
+        // where it uses what was on disk _before_ expectorate overwrote it.
+        include!("output/src/test_stream_pagination_positional.rs");
+    }
+
+    let client = gen_client_positional::Client::new(&server_addr);
 
     let page_limit = 10.try_into().unwrap();
     let mut stream = client.paginated_u32s_stream(Some(page_limit));
+
+    let mut all_values = Vec::new();
+    while let Some(result) = stream.next().await {
+        match result {
+            Ok(value) => {
+                all_values.push(value);
+            }
+            Err(err) => {
+                panic!("unexpected error: {err}");
+            }
+        }
+    }
+
+    // Ensure we got all the results we expected.
+    let expected_values = (0..35).collect::<Vec<_>>();
+    assert_eq!(expected_values, all_values);
+
+    // Ensure the server saw the page requests we expect: we should always see a
+    // limit of 10, and we should see offsets increasing by 10 until we get to
+    // (30, 10); that will return 5 items, so we should see one final (35, 10)
+    // for the client to confirm there are no more results.
+    let expected_pages = vec![(0, 10), (10, 10), (20, 10), (30, 10), (35, 10)];
+    assert_eq!(expected_pages, *server_ctx.page_pairs.lock().unwrap());
+
+    // Repeat the test with the builder client.
+    server_ctx.page_pairs.lock().unwrap().clear();
+
+    #[allow(dead_code, unused_imports)]
+    mod gen_client_builder {
+        // This is weird: we're now `include!`ing the file we just used to
+        // confirm the generated code is what we expect. If changes are made to
+        // progenitor that affect this generated code, keep in mind that when
+        // this test executes, the above check is against what we _currently_
+        // produce, while this `include!` is what was on disk before the test
+        // ran. This can be surprising if you're running the test with
+        // `EXPECTORATE=overwrite`, because the above check will overwrite the
+        // file on disk, but then the test proceeds and gets to this point,
+        // where it uses what was on disk _before_ expectorate overwrote it.
+        include!("output/src/test_stream_pagination_builder.rs");
+    }
+
+    let client = gen_client_builder::Client::new(&server_addr);
+
+    let mut stream = client.paginated_u32s().limit(page_limit).stream();
 
     let mut all_values = Vec::new();
     while let Some(result) = stream.next().await {
