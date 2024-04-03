@@ -322,7 +322,15 @@ impl Generator {
                 quote! {
                     self.config.list_start::<#success_type>();
 
-                    let mut stream = request.stream();
+                    // We're using "limit" as both the maximum page size and
+                    // as the full limit. It's not ideal in that we could
+                    // reduce the limit with each iteration and we might get a
+                    // bunch of results we don't display... but it's fine.
+                    let mut stream = futures::StreamExt::take(
+                        request.stream(),
+                        matches
+                            .get_one::<std::num::NonZeroU32>("limit")
+                            .map_or(usize::MAX, |x| x.get() as usize));
 
                     loop {
                         match futures::TryStreamExt::try_next(&mut stream).await {
