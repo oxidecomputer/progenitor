@@ -21,7 +21,7 @@ chrono = { version = "0.4", features = ["serde"] }
 futures = "0.3.30"
 percent-encoding = "2.3"
 rand = "0.8"
-regress = "0.9.0"
+regress = "0.9.1"
 reqwest = { version = "0.11.27", features = ["json", "stream"] }
 schemars = { version = "0.8.16", features = ["uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
