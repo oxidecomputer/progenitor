@@ -298,7 +298,7 @@ impl Generator {
                             pub fn as_form<'f>(&'f self) -> impl std::iter::Iterator<Item=(&'static str, &'f [u8])> {
                                 [#properties]
                                     .into_iter()
-                                    .filter_map(|(name, val)| val.as_ref().map(|val| (name, val.as_slice())))
+                                    .filter_map(|(name, val)| val.as_ref().map(|val| (name, val.as_bytes())))
                             }
                         }
                     }
