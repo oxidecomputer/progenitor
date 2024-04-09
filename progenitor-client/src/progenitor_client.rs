@@ -8,7 +8,7 @@ use std::ops::{Deref, DerefMut};
 
 use bytes::Bytes;
 use futures_core::Stream;
-use reqwest::RequestBuilder;
+use reqwest::{multipart::Part, RequestBuilder};
 use serde::{de::DeserializeOwned, Serialize};
 
 type InnerByteStream =

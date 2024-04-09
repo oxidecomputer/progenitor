@@ -6,11 +6,11 @@ use std::{
     str::FromStr,
 };
 
-use indexmap::{IndexMap, IndexSet};
+use indexmap::IndexSet;
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
-use typify::{TypeId, TypeSpace, TypeSpacePatch};
+use typify::{TypeId, TypeSpace};
 
 use crate::{
     template::PathTemplate,
@@ -1288,10 +1288,10 @@ impl Generator {
             .ok()?
             .details()
         {
-            typify::TypeDetails::Array(item) => {
+            typify::TypeDetails::Array(item, _) => {
                 Some(DropshotPagination { item })
             }
-            _ => None,
+            _ => None
         }
     }
 
@@ -1567,22 +1567,6 @@ impl Generator {
                                 })
                             }
                         }
-                    }
-                    OperationParameterType::Form(_type_id) => {
-                        let err_msg = format!(
-                            "conversion to `reqwest::Body` for {} failed",
-                            param.name,
-                        );
-
-                        Ok(quote! {
-                            pub fn #param_name<B>(mut self, value: B) -> Self
-                                where B: std::convert::TryInto<reqwest::Body>
-                            {
-                                self.#param_name = value.try_into()
-                                    .map_err(|_| #err_msg.to_string());
-                                self
-                            }
-                        })
                     }
                     OperationParameterType::RawBody => {
                         let err_msg = format!(
@@ -2113,7 +2097,7 @@ impl Generator {
                                                     max_length: None,
                                                 },
                                             )) if enumeration.is_empty() => {
-                                                Ok((name.to_owned()))
+                                                Ok(name.to_owned())
                                             }
                                             schema => {
                                                 Err(Error::UnexpectedFormat(format!(
