@@ -1,12 +1,16 @@
 [workspace]
 members = [
+	"cargo-progenitor",
 	"example-build",
 	"example-macro",
+	"example-wasm",
 	"progenitor",
 	"progenitor-client",
 	"progenitor-impl",
 	"progenitor-macro",
 ]
+
+resolver = "2"
 
 #[patch."https://github.com/oxidecomputer/dropshot"]
 #dropshot = { path = "../dropshot/dropshot" }

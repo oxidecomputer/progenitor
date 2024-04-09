@@ -11,8 +11,13 @@ use futures_core::Stream;
 use reqwest::{multipart::Part, RequestBuilder};
 use serde::{de::DeserializeOwned, Serialize};
 
+#[cfg(not(target_arch = "wasm32"))]
 type InnerByteStream =
     std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
+
+#[cfg(target_arch = "wasm32")]
+type InnerByteStream =
+    std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>>>>;
 
 /// Untyped byte stream used for both success and error responses.
 pub struct ByteStream(InnerByteStream);
@@ -63,10 +68,9 @@ impl<T: DeserializeOwned> ResponseValue<T> {
     ) -> Result<Self, Error<E>> {
         let status = response.status();
         let headers = response.headers().clone();
-        let inner = response
-            .json()
-            .await
-            .map_err(Error::InvalidResponsePayload)?;
+        let full = response.bytes().await.map_err(Error::ResponseBodyError)?;
+        let inner = serde_json::from_slice(&full)
+            .map_err(|e| Error::InvalidResponsePayload(full, e))?;
 
         Ok(Self {
             inner,
@@ -76,6 +80,7 @@ impl<T: DeserializeOwned> ResponseValue<T> {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl ResponseValue<reqwest::Upgraded> {
     #[doc(hidden)]
     pub async fn upgrade<E: std::fmt::Debug>(
@@ -84,10 +89,8 @@ impl ResponseValue<reqwest::Upgraded> {
         let status = response.status();
         let headers = response.headers().clone();
         if status == reqwest::StatusCode::SWITCHING_PROTOCOLS {
-            let inner = response
-                .upgrade()
-                .await
-                .map_err(Error::InvalidResponsePayload)?;
+            let inner =
+                response.upgrade().await.map_err(Error::InvalidUpgrade)?;
 
             Ok(Self {
                 inner,
@@ -213,6 +216,12 @@ impl<T> DerefMut for ResponseValue<T> {
     }
 }
 
+impl<T> AsRef<T> for ResponseValue<T> {
+    fn as_ref(&self) -> &T {
+        &self.inner
+    }
+}
+
 impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         self.inner.fmt(f)
@@ -231,16 +240,24 @@ pub enum Error<E = ()> {
     /// A server error either due to the data, or with the connection.
     CommunicationError(reqwest::Error),
 
+    /// An expected response when upgrading connection.
+    InvalidUpgrade(reqwest::Error),
+
     /// A documented, expected error response.
     ErrorResponse(ResponseValue<E>),
 
+    /// Encountered an error reading the body for an expected response.
+    ResponseBodyError(reqwest::Error),
+
     /// An expected response code whose deserialization failed.
-    // TODO we have stuff from the response; should we include it?
-    InvalidResponsePayload(reqwest::Error),
+    InvalidResponsePayload(Bytes, serde_json::Error),
 
     /// A response not listed in the API description. This may represent a
     /// success or failure response; check `status().is_success()`.
     UnexpectedResponse(reqwest::Response),
+
+    /// An error occurred in the processing of a request pre-hook.
+    PreHookError(String),
 }
 
 impl<E> Error<E> {
@@ -248,9 +265,12 @@ impl<E> Error<E> {
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
             Error::InvalidRequest(_) => None,
+            Error::PreHookError(_) => None,
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
-            Error::InvalidResponsePayload(e) => e.status(),
+            Error::InvalidUpgrade(e) => e.status(),
+            Error::ResponseBodyError(e) => e.status(),
+            Error::InvalidResponsePayload(_, _) => None,
             Error::UnexpectedResponse(r) => Some(r.status()),
         }
     }
@@ -262,6 +282,7 @@ impl<E> Error<E> {
     pub fn into_untyped(self) -> Error {
         match self {
             Error::InvalidRequest(s) => Error::InvalidRequest(s),
+            Error::PreHookError(s) => Error::PreHookError(s),
             Error::CommunicationError(e) => Error::CommunicationError(e),
             Error::ErrorResponse(ResponseValue {
                 inner: _,
@@ -272,8 +293,10 @@ impl<E> Error<E> {
                 status,
                 headers,
             }),
-            Error::InvalidResponsePayload(e) => {
-                Error::InvalidResponsePayload(e)
+            Error::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
+            Error::ResponseBodyError(e) => Error::ResponseBodyError(e),
+            Error::InvalidResponsePayload(b, e) => {
+                Error::InvalidResponsePayload(b, e)
             }
             Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
         }
@@ -308,11 +331,20 @@ where
                 write!(f, "Error Response: ")?;
                 rve.fmt_info(f)
             }
-            Error::InvalidResponsePayload(e) => {
-                write!(f, "Invalid Response Payload: {}", e)
+            Error::InvalidUpgrade(e) => {
+                write!(f, "Invalid Response Upgrade: {}", e)
+            }
+            Error::ResponseBodyError(e) => {
+                write!(f, "Invalid Response Body Bytes: {}", e)
+            }
+            Error::InvalidResponsePayload(b, e) => {
+                write!(f, "Invalid Response Payload ({:?}): {}", b, e)
             }
             Error::UnexpectedResponse(r) => {
                 write!(f, "Unexpected Response: {:?}", r)
+            }
+            Error::PreHookError(s) => {
+                write!(f, "Pre-hook Error: {}", s)
             }
         }
     }
@@ -360,7 +392,9 @@ where
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Error::CommunicationError(e) => Some(e),
-            Error::InvalidResponsePayload(e) => Some(e),
+            Error::InvalidUpgrade(e) => Some(e),
+            Error::ResponseBodyError(e) => Some(e),
+            Error::InvalidResponsePayload(_b, e) => Some(e),
             _ => None,
         }
     }
@@ -381,6 +415,7 @@ const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
     .add(b'%');
 
 #[doc(hidden)]
+/// Percent encode input string.
 pub fn encode_path(pc: &str) -> String {
     percent_encoding::utf8_percent_encode(pc, PATH_SET).to_string()
 }

@@ -6,11 +6,12 @@ use std::{
 };
 
 use progenitor_impl::{
-    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl,
-    TypePatch,
+    space_out_items, GenerationSettings, Generator, InterfaceStyle, TagStyle,
+    TypeImpl, TypePatch,
 };
 
 use openapiv3::OpenAPI;
+use proc_macro2::TokenStream;
 
 fn load_api<P>(p: P) -> OpenAPI
 where
@@ -26,19 +27,38 @@ where
     }
 }
 
+fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
+    let content = generator.generate_tokens(&spec).unwrap();
+    reformat_code(content)
+}
+
+fn reformat_code(content: TokenStream) -> String {
+    let rustfmt_config = rustfmt_wrapper::config::Config {
+        format_strings: Some(true),
+        normalize_doc_attributes: Some(true),
+        wrap_comments: Some(true),
+        ..Default::default()
+    };
+    space_out_items(
+        rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap(),
+    )
+    .unwrap()
+}
+
 #[track_caller]
 fn verify_apis(openapi_file: &str) {
     let mut in_path = PathBuf::from("../sample_openapi");
     in_path.push(openapi_file);
-    let openapi_stem = openapi_file.split('.').next().unwrap();
+    let openapi_stem =
+        openapi_file.split('.').next().unwrap().replace('-', "_");
 
     let spec = load_api(in_path);
 
     // Positional generation.
     let mut generator = Generator::default();
-    let output = generator.generate_text_normalize_comments(&spec).unwrap();
+    let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}-positional.out", openapi_stem),
+        format!("tests/output/src/{}_positional.rs", openapi_stem),
         &output,
     );
 
@@ -47,7 +67,7 @@ fn verify_apis(openapi_file: &str) {
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Merged)
-            .with_derive("JsonSchema")
+            .with_derive("schemars::JsonSchema")
             .with_patch("Name", TypePatch::default().with_derive("Hash"))
             .with_conversion(
                 schemars::schema::SchemaObject {
@@ -61,9 +81,9 @@ fn verify_apis(openapi_file: &str) {
                 [TypeImpl::Display].into_iter(),
             ),
     );
-    let output = generator.generate_text_normalize_comments(&spec).unwrap();
+    let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}-builder.out", openapi_stem),
+        format!("tests/output/src/{}_builder.rs", openapi_stem),
         &output,
     );
 
@@ -73,16 +93,41 @@ fn verify_apis(openapi_file: &str) {
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Separate),
     );
-    let output = generator.generate_text_normalize_comments(&spec).unwrap();
+    let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/{}-builder-tagged.out", openapi_stem),
+        format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
         &output,
     );
 
     // CLI generation.
-    let output = generator.cli_text(&spec, "sdk").unwrap();
+    let tokens = generator
+        .cli(&spec, &format!("crate::{openapi_stem}_builder"))
+        .unwrap();
+    let output = reformat_code(tokens);
+
     expectorate::assert_contents(
-        format!("tests/output/{}-cli.out", openapi_stem),
+        format!("tests/output/src/{}_cli.rs", openapi_stem),
+        &output,
+    );
+
+    // httpmock generation.
+    let code = generator
+        .httpmock(&spec, &format!("crate::{openapi_stem}_builder"))
+        .unwrap();
+
+    // TODO pending #368
+    let output = rustfmt_wrapper::rustfmt_config(
+        rustfmt_wrapper::config::Config {
+            format_strings: Some(true),
+            ..Default::default()
+        },
+        code,
+    )
+    .unwrap();
+
+    let output = progenitor_impl::space_out_items(output).unwrap();
+    expectorate::assert_contents(
+        format!("tests/output/src/{}_httpmock.rs", openapi_stem),
         &output,
     );
 }
@@ -115,6 +160,11 @@ fn test_param_override() {
 #[test]
 fn test_yaml() {
     verify_apis("param-overrides.yaml");
+}
+
+#[test]
+fn test_param_collision() {
+    verify_apis("param-collision.json");
 }
 
 // TODO this file is full of inconsistencies and incorrectly specified types.

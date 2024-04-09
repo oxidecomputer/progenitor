@@ -51,7 +51,7 @@ impl PathTemplate {
         });
 
         quote! {
-            let url = format!(#fmt, #client.baseurl, #(#components,)*);
+            format!(#fmt, #client.baseurl, #(#components,)*)
         }
     }
 
@@ -63,6 +63,31 @@ impl PathTemplate {
                 Component::Constant(_) => None,
             })
             .collect()
+    }
+
+    pub fn as_wildcard(&self) -> String {
+        let inner = self
+            .components
+            .iter()
+            .map(|c| match c {
+                Component::Constant(name) => name.clone(),
+                Component::Parameter(_) => "[^/]*".to_string(),
+            })
+            .collect::<String>();
+        format!("^{}$", inner)
+    }
+
+    pub fn as_wildcard_param(&self, param: &str) -> String {
+        let inner = self
+            .components
+            .iter()
+            .map(|c| match c {
+                Component::Constant(name) => name.clone(),
+                Component::Parameter(p) if p == param => "{}".to_string(),
+                Component::Parameter(_) => ".*".to_string(),
+            })
+            .collect::<String>();
+        format!("^{}$", inner)
     }
 }
 
@@ -282,10 +307,10 @@ mod tests {
         let t = parse("/measure/{number}").unwrap();
         let out = t.compile(rename, quote::quote! { self });
         let want = quote::quote! {
-            let url = format!("{}/measure/{}",
+            format!("{}/measure/{}",
                 self.baseurl,
                 encode_path(&number.to_string()),
-            );
+            )
         };
         assert_eq!(want.to_string(), out.to_string());
     }
@@ -302,12 +327,12 @@ mod tests {
         let t = parse("/abc/def:{one}:jkl/{two}/a:{three}").unwrap();
         let out = t.compile(rename, quote::quote! { self });
         let want = quote::quote! {
-            let url = format!("{}/abc/def:{}:jkl/{}/a:{}",
+            format!("{}/abc/def:{}:jkl/{}/a:{}",
                 self.baseurl,
                 encode_path(&one.to_string()),
                 encode_path(&two.to_string()),
                 encode_path(&three.to_string()),
-            );
+            )
         };
         assert_eq!(want.to_string(), out.to_string());
     }

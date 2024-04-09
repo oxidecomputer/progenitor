@@ -12,7 +12,7 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "enum": [
                     null
@@ -52,7 +52,7 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "$ref": "#/components/schemas/Task"
                 }
@@ -69,7 +69,7 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "title": "Array_of_Task",
                   "type": "array",
@@ -86,7 +86,7 @@
         "operationId": "task_submit",
         "requestBody": {
           "content": {
-            "application/json": {
+            "application/json; charset=utf-8": {
               "schema": {
                 "$ref": "#/components/schemas/TaskSubmit"
               }
@@ -98,7 +98,7 @@
           "201": {
             "description": "successful creation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskSubmitResult"
                 }
@@ -136,7 +136,7 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "title": "Array_of_TaskEvent",
                   "type": "array",
@@ -168,7 +168,7 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "title": "Array_of_TaskOutput",
                   "type": "array",
@@ -213,7 +213,7 @@
         "operationId": "user_create",
         "requestBody": {
           "content": {
-            "application/json": {
+            "application/json; charset=utf-8": {
               "schema": {
                 "$ref": "#/components/schemas/UserCreate"
               }
@@ -225,7 +225,7 @@
           "201": {
             "description": "successful creation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "$ref": "#/components/schemas/UserCreateResult"
                 }
@@ -242,7 +242,7 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "$ref": "#/components/schemas/WhoamiResult"
                 }
@@ -252,12 +252,31 @@
         }
       }
     },
+    "/v1/whoami/name": {
+      "put": {
+        "operationId": "whoami_put_name",
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
     "/v1/worker/bootstrap": {
       "post": {
         "operationId": "worker_bootstrap",
         "requestBody": {
           "content": {
-            "application/json": {
+            "application/json; charset=utf-8": {
               "schema": {
                 "$ref": "#/components/schemas/WorkerBootstrap"
               }
@@ -269,7 +288,7 @@
           "201": {
             "description": "successful creation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "$ref": "#/components/schemas/WorkerBootstrapResult"
                 }
@@ -286,7 +305,7 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "$ref": "#/components/schemas/WorkerPingResult"
                 }
@@ -312,7 +331,7 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "application/json; charset=utf-8": {
               "schema": {
                 "$ref": "#/components/schemas/WorkerAppendTask"
               }
@@ -356,7 +375,7 @@
           "201": {
             "description": "successful creation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "$ref": "#/components/schemas/UploadedChunk"
                 }
@@ -382,7 +401,7 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "application/json; charset=utf-8": {
               "schema": {
                 "$ref": "#/components/schemas/WorkerCompleteTask"
               }
@@ -413,7 +432,7 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "application/json; charset=utf-8": {
               "schema": {
                 "$ref": "#/components/schemas/WorkerAddOutput"
               }
@@ -435,7 +454,7 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
+              "application/json; charset=utf-8": {
                 "schema": {
                   "$ref": "#/components/schemas/WorkersResult"
                 }

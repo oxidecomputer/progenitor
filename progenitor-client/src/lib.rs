@@ -1,5 +1,9 @@
 // Copyright 2022 Oxide Computer Company
 
+//! Support for generated clients.
+
+#![deny(missing_docs)]
+
 mod progenitor_client;
 
 pub use crate::progenitor_client::*;

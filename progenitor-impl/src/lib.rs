@@ -1,6 +1,10 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
-use std::collections::{HashMap, HashSet};
+//! Core implementation for the progenitor OpenAPI client generator.
+
+#![deny(missing_docs)]
+
+use std::collections::{BTreeMap, HashMap, HashSet};
 
 use indexmap::IndexSet;
 use openapiv3::OpenAPI;
@@ -17,11 +21,13 @@ pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
 
 mod cli;
+mod httpmock;
 mod method;
 mod template;
 mod to_schema;
 mod util;
 
+#[allow(missing_docs)]
 #[derive(Error, Debug)]
 pub enum Error {
     #[error("unexpected value type {0}: {1}")]
@@ -38,8 +44,10 @@ pub enum Error {
     InternalError(String),
 }
 
+#[allow(missing_docs)]
 pub type Result<T> = std::result::Result<T, Error>;
 
+/// OpenAPI generator.
 pub struct Generator {
     type_space: TypeSpace,
     forms: IndexSet<TypeId>,
@@ -48,12 +56,14 @@ pub struct Generator {
     uses_websockets: bool,
 }
 
+/// Settings for [Generator].
 #[derive(Default, Clone)]
 pub struct GenerationSettings {
     interface: InterfaceStyle,
     tag: TagStyle,
     inner_type: Option<TokenStream>,
     pre_hook: Option<TokenStream>,
+    pre_hook_async: Option<TokenStream>,
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
 
@@ -62,9 +72,12 @@ pub struct GenerationSettings {
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
 }
 
+/// Style of generated client.
 #[derive(Clone, Deserialize, PartialEq, Eq)]
 pub enum InterfaceStyle {
+    /// Use positional style.
     Positional,
+    /// Use builder style.
     Builder,
 }
 
@@ -74,9 +87,12 @@ impl Default for InterfaceStyle {
     }
 }
 
+/// Style for using the OpenAPI tags when generating names in the client.
 #[derive(Clone, Deserialize)]
 pub enum TagStyle {
+    /// Merge tags to create names in the generated client.
     Merged,
+    /// Use each tag name to create separate names in the generated client.
     Separate,
 }
 
@@ -87,40 +103,55 @@ impl Default for TagStyle {
 }
 
 impl GenerationSettings {
+    /// Create new generator settings with default values.
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Set the [InterfaceStyle].
     pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
         self.interface = interface;
         self
     }
 
+    /// Set the [TagStyle].
     pub fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
         self.tag = tag;
         self
     }
 
+    /// Client inner type available to pre and post hooks.
     pub fn with_inner_type(&mut self, inner_type: TokenStream) -> &mut Self {
         self.inner_type = Some(inner_type);
         self
     }
 
+    /// Hook invoked before issuing the HTTP request.
     pub fn with_pre_hook(&mut self, pre_hook: TokenStream) -> &mut Self {
         self.pre_hook = Some(pre_hook);
         self
     }
 
+    /// Hook invoked before issuing the HTTP request.
+    pub fn with_pre_hook_async(&mut self, pre_hook: TokenStream) -> &mut Self {
+        self.pre_hook_async = Some(pre_hook);
+        self
+    }
+
+    /// Hook invoked prior to receiving the HTTP response.
     pub fn with_post_hook(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook = Some(post_hook);
         self
     }
 
+    /// Additional derive macros applied to generated types.
     pub fn with_derive(&mut self, derive: impl ToString) -> &mut Self {
         self.extra_derives.push(derive.to_string());
         self
     }
 
+    /// Modify a type with the given name.
+    /// See [typify::TypeSpaceSettings::with_patch].
     pub fn with_patch<S: AsRef<str>>(
         &mut self,
         type_name: S,
@@ -131,6 +162,8 @@ impl GenerationSettings {
         self
     }
 
+    /// Replace a referenced type with a named type.
+    /// See [typify::TypeSpaceSettings::with_replacement].
     pub fn with_replacement<
         TS: ToString,
         RS: ToString,
@@ -148,6 +181,8 @@ impl GenerationSettings {
         self
     }
 
+    /// Replace a given schema with a named type.
+    /// See [typify::TypeSpaceSettings::with_conversion].
     pub fn with_conversion<S: ToString, I: Iterator<Item = TypeImpl>>(
         &mut self,
         schema: schemars::schema::SchemaObject,
@@ -175,6 +210,7 @@ impl Default for Generator {
 }
 
 impl Generator {
+    /// Create a new generator with default values.
     pub fn new(settings: &GenerationSettings) -> Self {
         let mut type_settings = TypeSpaceSettings::default();
         type_settings
@@ -214,6 +250,7 @@ impl Generator {
         }
     }
 
+    /// Emit a [TokenStream] containing the generated client code.
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -261,7 +298,12 @@ impl Generator {
                 self.generate_tokens_builder_merged(&raw_methods)
             }
             (InterfaceStyle::Builder, TagStyle::Separate) => {
-                self.generate_tokens_builder_separate(&raw_methods)
+                let tag_info = spec
+                    .tags
+                    .iter()
+                    .map(|tag| (&tag.name, tag))
+                    .collect::<BTreeMap<_, _>>();
+                self.generate_tokens_builder_separate(&raw_methods, tag_info)
             }
         }?;
 
@@ -349,15 +391,21 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
+        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
+        // generated file is not at the top level of the crate.
+
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
             // public interface of Client.
+            #[allow(unused_imports)]
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
             #[allow(unused_imports)]
             use progenitor_client::{encode_path, RequestBuilderExt};
             #[allow(unused_imports)]
             use reqwest::header::{HeaderMap, HeaderValue};
 
+            /// Types used as operation parameters and responses.
+            #[allow(clippy::all)]
             pub mod types {
                 use serde::{Deserialize, Serialize};
 
@@ -388,13 +436,18 @@ impl Generator {
                     baseurl: &str,
                     #inner_parameter
                 ) -> Self {
-                    let dur = std::time::Duration::from_secs(15);
-                    let client = reqwest::ClientBuilder::new()
-                        .connect_timeout(dur)
-                        .timeout(dur)
-                        .build()
-                        .unwrap();
-                    Self::new_with_client(baseurl, client, #inner_value)
+                    #[cfg(not(target_arch = "wasm32"))]
+                    let client = {
+                        let dur = std::time::Duration::from_secs(15);
+
+                        reqwest::ClientBuilder::new()
+                            .connect_timeout(dur)
+                            .timeout(dur)
+                    };
+                    #[cfg(target_arch = "wasm32")]
+                    let client = reqwest::ClientBuilder::new();
+
+                    Self::new_with_client(baseurl, client.build().unwrap(), #inner_value)
                 }
 
                 /// Construct a new client with an existing `reqwest::Client`,
@@ -450,12 +503,19 @@ impl Generator {
             .iter()
             .map(|method| self.positional_method(method))
             .collect::<Result<Vec<_>>>()?;
+
+        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
+        // generated file is not at the top level of the crate.
+
         let out = quote! {
+            #[allow(clippy::all)]
             impl Client {
                 #(#methods)*
             }
 
+            /// Items consumers will typically use such as the Client.
             pub mod prelude {
+                #[allow(unused_imports)]
                 pub use super::Client;
             }
         };
@@ -481,6 +541,8 @@ impl Generator {
                 #(#builder_methods)*
             }
 
+            /// Types for composing operation parameters.
+            #[allow(clippy::all)]
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
@@ -497,6 +559,7 @@ impl Generator {
                 #(#builder_struct)*
             }
 
+            /// Items consumers will typically use such as the Client.
             pub mod prelude {
                 pub use self::super::Client;
             }
@@ -508,6 +571,7 @@ impl Generator {
     fn generate_tokens_builder_separate(
         &mut self,
         input_methods: &[method::OperationMethod],
+        tag_info: BTreeMap<&String, &openapiv3::Tag>,
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
             .iter()
@@ -515,11 +579,16 @@ impl Generator {
             .collect::<Result<Vec<_>>>()?;
 
         let (traits_and_impls, trait_preludes) =
-            self.builder_tags(input_methods);
+            self.builder_tags(input_methods, &tag_info);
+
+        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
+        // generated file is not at the top level of the crate.
 
         let out = quote! {
             #traits_and_impls
 
+            /// Types for composing operation parameters.
+            #[allow(clippy::all)]
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
@@ -534,10 +603,12 @@ impl Generator {
                 };
 
                 #(#builder_struct)*
-
             }
 
+            /// Items consumers will typically use such as the Client and
+            /// extension traits.
             pub mod prelude {
+                #[allow(unused_imports)]
                 pub use super::Client;
                 #trait_preludes
             }
@@ -546,70 +617,34 @@ impl Generator {
         Ok(out)
     }
 
-    /// Render text output.
-    pub fn generate_text(&mut self, spec: &OpenAPI) -> Result<String> {
-        self.generate_text_impl(
-            spec,
-            rustfmt_wrapper::config::Config::default(),
-        )
-    }
-
-    /// Render text output and normalize doc comments
-    ///
-    /// Requires a nightly install of `rustfmt` (even if the target project is
-    /// not using nightly).
-    pub fn generate_text_normalize_comments(
-        &mut self,
-        spec: &OpenAPI,
-    ) -> Result<String> {
-        self.generate_text_impl(
-            spec,
-            rustfmt_wrapper::config::Config {
-                normalize_doc_attributes: Some(true),
-                wrap_comments: Some(true),
-                ..Default::default()
-            },
-        )
-    }
-
-    fn generate_text_impl(
-        &mut self,
-        spec: &OpenAPI,
-        config: rustfmt_wrapper::config::Config,
-    ) -> Result<String> {
-        let output = self.generate_tokens(spec)?;
-
-        // Format the file with rustfmt.
-        let content = rustfmt_wrapper::rustfmt_config(config, output).unwrap();
-
-        space_out_items(content)
-    }
-
-    // TODO deprecate?
+    /// Get the [TypeSpace] for schemas present in the OpenAPI specification.
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
     }
 
+    /// Whether the generated client needs to use additional crates to support futures.
     pub fn uses_futures(&self) -> bool {
         self.uses_futures
     }
 
+    /// Whether the generated client needs to use additional crates to support websockets.
     pub fn uses_websockets(&self) -> bool {
         self.uses_websockets
     }
 }
 
-pub(crate) fn space_out_items(content: String) -> Result<String> {
-    // Add newlines after end-braces at <= two levels of indentation.
+/// Add newlines after end-braces at <= two levels of indentation.
+pub fn space_out_items(content: String) -> Result<String> {
     Ok(if cfg!(not(windows)) {
-        let regex = regex::Regex::new(r#"(})(\n\s{0,8}[^} ])"#).unwrap();
+        let regex = regex::Regex::new(r#"(\n\s*})(\n\s{0,8}[^} ])"#).unwrap();
         regex.replace_all(&content, "$1\n$2").to_string()
     } else {
-        let regex = regex::Regex::new(r#"(})(\r\n\s{0,8}[^} ])"#).unwrap();
+        let regex = regex::Regex::new(r#"(\n\s*})(\r\n\s{0,8}[^} ])"#).unwrap();
         regex.replace_all(&content, "$1\r\n$2").to_string()
     })
 }
 
+/// Do some very basic checks of the OpenAPI documents.
 pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     match spec.openapi.as_str() {
         "3.0.0" | "3.0.1" | "3.0.2" | "3.0.3" => (),

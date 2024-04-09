@@ -6,7 +6,9 @@ mod positional {
     progenitor::generate_api!("../sample_openapi/sevdesk-san-sub.yaml");
 
     fn _ignore() {
-        let _ = Client::new("").voucher_upload_file(&VoucherUploadFileForm { file: Some("foo".to_owned()) });
+        let _ = Client::new("").voucher_upload_file(&VoucherUploadFileForm {
+            file: Some("foo".to_owned()),
+        });
     }
 }
 
@@ -22,7 +24,9 @@ mod builder_untagged {
     fn _ignore() {
         let _ = Client::new("")
             .voucher_upload_file()
-            .body(&VoucherUploadFileForm { file: Some("foo".to_owned()) })
+            .body(&VoucherUploadFileForm {
+                file: Some("foo".to_owned()),
+            })
             .send();
     }
 }
@@ -39,7 +43,9 @@ mod builder_tagged {
     fn _ignore() {
         let _ = Client::new("")
             .voucher_upload_file()
-            .body(&VoucherUploadFileForm { file: Some("foo".to_owned()) })
+            .body(&VoucherUploadFileForm {
+                file: Some("foo".to_owned()),
+            })
             .send();
     }
 }

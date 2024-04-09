@@ -7,6 +7,10 @@ futures for `async` API calls and `Streams` for paginated interfaces.
 It generates a type called `Client` with methods that correspond to the
 operations specified in the OpenAPI document.
 
+Progenitor can also generate a CLI to interact with an OpenAPI service
+instance, and [`httpmock`](https://crates.io/crates/httpmock) helpers to
+create a strongly typed mock of the OpenAPI service.
+
 The primary target is OpenAPI documents emitted by
 [Dropshot](https://github.com/oxidecomputer/dropshot)-generated APIs, but it
 can be used for many OpenAPI documents. As OpenAPI covers a wide range of APIs,
@@ -32,40 +36,42 @@ generate_api!("path/to/openapi_document.json");
 
 You'll need to add the following to `Cargo.toml`:
 
-```diff
+```toml
 [dependencies]
-+futures = "0.3"
-+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-+reqwest = { version = "0.11", features = ["json", "stream", "multipart"] }
-+serde = { version = "1.0", features = ["derive"] }
+futures = "0.3"
+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
+reqwest = { version = "0.11", features = ["json", "stream", "multipart"] }
+serde = { version = "1.0", features = ["derive"] }
 ```
 
 In addition, if the OpenAPI document contains string types with the `format`
 field set to `date` or `date-time`, include
 
-```diff
+```toml
 [dependencies]
-+chrono = { version = "0.4", features = ["serde"] }
+chrono = { version = "0.4", features = ["serde"] }
 ```
 
 Similarly, if there is a `format` field set to `uuid`:
 
-```diff
+```toml
 [dependencies]
-+uuid = { version = "1.0.0", features = ["serde", "v4"] }
+uuid = { version = "1.0.0", features = ["serde", "v4"] }
 ```
 
 And if there are any websocket channel endpoints:
-```diff
+
+```toml
 [dependencies]
-+base64 = "0.21"
-+rand = "0.8"
+base64 = "0.21"
+rand = "0.8"
 ```
 
 If types include regular expression validation:
-```diff
+
+```toml
 [dependencies]
-+regress = "0.4.1"
+regress = "0.4.1"
 ```
 
 The macro has some additional fancy options to control the generated code:
@@ -90,6 +96,8 @@ changes (when its mtime is updated).
 Progenitor includes an interface appropriate for use in a
 [`build.rs`](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
 file. While slightly more onerous than the macro, a builder has the advantage of making the generated code visible.
+The capability of generating a CLI and `httpmock` helpers is only available using `build.rs`
+and the `Generator` functions `cli` and `httpmock` respectively.
 
 The `build.rs` file should look something like this:
 
@@ -101,7 +109,9 @@ fn main() {
     let spec = serde_json::from_reader(file).unwrap();
     let mut generator = progenitor::Generator::default();
 
-    let content = generator.generate_text(&spec).unwrap();
+    let tokens = generator.generate_tokens(&spec).unwrap();
+    let ast = syn::parse2(tokens).unwrap();
+    let content = prettyplease::unparse(&ast);
 
     let mut out_file = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).to_path_buf();
     out_file.push("codegen.rs");
@@ -119,23 +129,24 @@ include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 
 You'll need to add the following to `Cargo.toml`:
 
-```diff
+```toml
 [dependencies]
-+futures = "0.3"
-+progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
-+reqwest = { version = "0.11", features = ["json", "stream", "multipart"] }
-+serde = { version = "1.0", features = ["derive"] }
+futures = "0.3"
+progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
+reqwest = { version = "0.11", features = ["json", "stream","multipart"] }
+serde = { version = "1.0", features = ["derive"] }
 
 [build-dependencies]
-+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-+serde_json = "1.0"
+prettyplease = "0.1.25"
+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
+serde_json = "1.0"
+syn = "1.0"
 ```
 
 (`chrono`, `uuid`, `base64`, and `rand` as above)
 
 Note that `progenitor` is used by `build.rs`, but the generated code required
 `progenitor-client`.
-
 
 ### Static Crate
 
@@ -146,7 +157,7 @@ however, the most manual way to use Progenitor.
 Usage:
 
 ```
-progenitor
+cargo progenitor
 
 Options:
     -i INPUT            OpenAPI definition document (JSON or YAML)
@@ -157,7 +168,15 @@ Options:
 
 For example:
 
-`cargo run --bin progenitor -- -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0`
+```
+cargo install cargo-progenitor
+cargo progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
+```
+
+... or within the repo:
+```
+cargo run --bin cargo-progenitor -- progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
+```
 
 This will produce a package in the specified directory.
 
@@ -183,7 +202,6 @@ percent-encoding = "2.2.0"
 reqwest = { version = "0.11.13", default-features=false, features = ["json", "stream", "multipart"] }
 serde = { version = "1.0.152", features = ["derive"] }
 serde_urlencoded = "0.7.1"
-
 ```
 
 The dependency versions in the generated `Cargo.toml` are the same as the
@@ -295,7 +313,7 @@ let result = client
     .await?;
 ```
 
-The string parameters are will implicitly have `TryFrom::try_from()` invoked on
+The string parameters will implicitly have `TryFrom::try_from()` invoked on
 them. Failed conversions or missing required parameters will result in an
 `Error` result from the `send()` call.
 

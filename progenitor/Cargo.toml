@@ -1,6 +1,6 @@
 [package]
 name = "progenitor"
-version = "0.2.1-dev"
+version = "0.6.0"
 edition = "2021"
 license = "MPL-2.0"
 description = "An OpenAPI client generator"
@@ -8,31 +8,25 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"
 keywords = ["openapi", "openapiv3", "sdk", "generator", "proc_macro"]
 categories = ["api-bindings", "compilers"]
-build = "build.rs"
 
 [dependencies]
-progenitor-client = { version = "0.2.1-dev", path = "../progenitor-client" }
-progenitor-impl = { version = "0.2.1-dev", path = "../progenitor-impl" }
-progenitor-macro = { version = "0.2.1-dev", path = "../progenitor-macro" }
-anyhow = "1.0"
-openapiv3 = "1.0.0"
-serde = { version = "1.0", features = ["derive"] }
+progenitor-client = { version = "0.6.0", path = "../progenitor-client" }
+progenitor-impl = { version = "0.6.0", path = "../progenitor-impl" }
+progenitor-macro = { version = "0.6.0", path = "../progenitor-macro" }
 serde_json = "1.0"
 serde_yaml = "0.9"
 clap = { version = "4.1.14", features = ["derive"] }
 expander = "2.1.0"
 
-[build-dependencies]
-built = { version = "0.6", features = ["git2"] }
-project-root = "0.2"
-
 [dev-dependencies]
-base64 = "0.21"
+base64 = "0.22"
 chrono = { version = "0.4", features = ["serde"] }
-futures = "0.3.27"
-percent-encoding = "2.2"
+futures = "0.3.30"
+percent-encoding = "2.3"
 rand = "0.8"
-regress = "0.5.0"
-reqwest = { version = "0.11.16", features = ["json", "stream", "multipart"] }
-schemars = { version = "0.8.12", features = ["uuid1"] }
-uuid = { version = "1.3", features = ["serde", "v4"] }
+regress = "0.9.1"
+reqwest = { version = "0.11.27", features = ["json", "stream", "multipart"] }
+schemars = { version = "0.8.16", features = ["uuid1"] }
+serde = { version = "1.0", features = ["derive"] }
+uuid = { version = "1.8", features = ["serde", "v4"] }
+tokio = "1.36.0"

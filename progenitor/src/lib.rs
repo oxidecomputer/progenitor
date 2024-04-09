@@ -8,7 +8,9 @@
 //! operations specified in the OpenAPI document.
 //!
 //! For details see the [repo
-//! README](https://github.com/oxidecomputer/progenitor/README.md)
+//! README](https://github.com/oxidecomputer/progenitor/blob/main/README.md)
+
+#![deny(missing_docs)]
 
 pub use progenitor_client;
 pub use progenitor_impl::Error;

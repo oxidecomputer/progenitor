@@ -579,7 +579,9 @@
             "$ref": "#/components/responses/Error"
           }
         },
-        "x-dropshot-pagination": true
+        "x-dropshot-pagination": {
+          "required": []
+        }
       }
     },
     "/login": {
@@ -1681,7 +1683,12 @@
             "$ref": "#/components/responses/Error"
           }
         },
-        "x-dropshot-pagination": true
+        "x-dropshot-pagination": {
+          "required": [
+            "end_time",
+            "start_time"
+          ]
+        }
       }
     },
     "/organizations/{organization_name}/projects/{project_name}/images": {

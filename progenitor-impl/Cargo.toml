@@ -1,6 +1,6 @@
 [package]
 name = "progenitor-impl"
-version = "0.2.1-dev"
+version = "0.6.0"
 edition = "2021"
 license = "MPL-2.0"
 description = "An OpenAPI client generator - core implementation"
@@ -8,29 +8,34 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"
 
 [dependencies]
-heck = "0.4.1"
+heck = "0.5.0"
+http = "0.2.9"
 getopts = "0.2"
-indexmap = "1.9"
-itertools = "0.10"
-openapiv3 = "1.0.0"
+indexmap = "2.2.6"
+openapiv3 = "2.0.0"
 proc-macro2 = "1.0"
 quote = "1.0"
-regex = "1.7"
-rustfmt-wrapper = "0.2.0"
-schemars = { version = "0.8.12", features = ["chrono", "uuid1"] }
+regex = "1.10"
+schemars = { version = "0.8.16", features = ["chrono", "uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 syn = { version = "2.0", features = ["parsing"] }
 thiserror = "1.0"
-# To publish, use a numbered version
-#typify = "0.0.10"
+# change when publishing
+#typify = { version = "0.0.16" }
 typify = { git = "https://github.com/oxidecomputer/typify" }
-unicode-ident = "1.0.8"
+unicode-ident = "1.0.12"
 
 [dev-dependencies]
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
-expectorate = "1.0"
+expectorate = "1.1"
+futures = "0.3.30"
 http = "0.2.9"
-hyper = "0.14.25"
+hyper = "0.14.27"
+reqwest = "0.11.27"
+rustfmt-wrapper = "0.2.1"
 serde_yaml = "0.9"
-serde_json = "1.0.95"
+serde_json = "1.0.115"
+tokio = { version = "1.37.0", features = ["rt", "net"] }
+
+progenitor-client.path = "../progenitor-client"
