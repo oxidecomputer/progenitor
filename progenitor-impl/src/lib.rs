@@ -3,6 +3,7 @@
 use std::collections::{HashMap, HashSet};
 
 use openapiv3::OpenAPI;
+use indexmap::{IndexMap, IndexSet};
 use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
@@ -41,7 +42,7 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 pub struct Generator {
     type_space: TypeSpace,
-    forms: HashSet<TypeId>,
+    forms: IndexSet<TypeId>,
     settings: GenerationSettings,
     uses_futures: bool,
     uses_websockets: bool,
@@ -271,7 +272,6 @@ impl Generator {
                 .iter()
                 .map(|type_id| {
                     let typ = self.get_type_space().get_type(type_id).unwrap();
-                    let form_name = typ.name();
                     let td = typ.details();
                     let TypeDetails::Struct(tstru) = td else { unreachable!() };
                     let properties = indexmap::IndexMap::<&'_ str, _>::from_iter(
