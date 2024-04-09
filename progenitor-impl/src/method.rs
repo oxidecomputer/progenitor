@@ -1291,7 +1291,7 @@ impl Generator {
             typify::TypeDetails::Array(item, _) => {
                 Some(DropshotPagination { item })
             }
-            _ => None
+            _ => None,
         }
     }
 

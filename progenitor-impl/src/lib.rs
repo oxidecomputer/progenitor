@@ -2,8 +2,8 @@
 
 use std::collections::{HashMap, HashSet};
 
-use openapiv3::OpenAPI;
 use indexmap::IndexSet;
+use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;

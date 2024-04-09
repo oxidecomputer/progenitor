@@ -432,7 +432,7 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
         self,
         iter: I,
     ) -> Result<Self, Error<E>> {
-        use reqwest::multipart::{Form};
+        use reqwest::multipart::Form;
 
         let mut form = Form::new();
         for (name, value) in iter {

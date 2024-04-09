@@ -37,9 +37,10 @@ impl PathTemplate {
             if let Component::Parameter(n) = &component {
                 let param = format_ident!(
                     "{}",
-                    rename
-                        .get(&n)
-                        .unwrap_or_else(|| panic!("missing path name mapping {}", n)),
+                    rename.get(&n).unwrap_or_else(|| panic!(
+                        "missing path name mapping {}",
+                        n
+                    )),
                 );
                 Some(quote! {
                     encode_path(&#param.to_string())

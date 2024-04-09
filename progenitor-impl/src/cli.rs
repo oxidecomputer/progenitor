@@ -315,19 +315,19 @@ impl Generator {
                     OperationParameterKind::Body(_) => unreachable!(),
                 };
 
-                let OperationParameterType::Type(arg_type_id) = &param.typ else {
+                let OperationParameterType::Type(arg_type_id) = &param.typ
+                else {
                     panic!()
                 };
                 let arg_type = self.type_space.get_type(arg_type_id).unwrap();
                 let arg_details = arg_type.details();
-                let arg_type_name = match &arg_details{
+                let arg_type_name = match &arg_details {
                     typify::TypeDetails::Option(opt_id) => {
-                        let inner_type = self.type_space.get_type(opt_id).unwrap();
+                        let inner_type =
+                            self.type_space.get_type(opt_id).unwrap();
                         inner_type.ident()
                     }
-                    _ => {
-                        arg_type.ident()
-                    }
+                    _ => arg_type.ident(),
                 };
 
                 let help = param.description.as_ref().map(|description| {
@@ -410,21 +410,21 @@ impl Generator {
                 let arg_name = param.name.to_kebab_case();
                 let arg_fn_name = sanitize(&param.name, Case::Snake);
                 let arg_fn = format_ident!("{}", arg_fn_name);
-                let OperationParameterType::Type(arg_type_id) = &param.typ else {
+                let OperationParameterType::Type(arg_type_id) = &param.typ
+                else {
                     panic!()
                 };
                 let arg_type = self.type_space.get_type(arg_type_id).unwrap();
 
                 // TODO this really should be simpler.
                 let arg_details = arg_type.details();
-                let arg_type_name = match &arg_details{
+                let arg_type_name = match &arg_details {
                     typify::TypeDetails::Option(opt_id) => {
-                        let inner_type = self.type_space.get_type(opt_id).unwrap();
+                        let inner_type =
+                            self.type_space.get_type(opt_id).unwrap();
                         inner_type.ident()
                     }
-                    _ => {
-                        arg_type.ident()
-                    }
+                    _ => arg_type.ident(),
                 };
 
                 quote! {
