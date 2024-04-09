@@ -9,6 +9,7 @@ use std::{
     fmt::Display,
     fs::File,
     path::{Path, PathBuf},
+    str::FromStr,
 };
 
 use openapiv3::OpenAPI;
@@ -405,5 +406,17 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         const _: &str = include_str!(#path_str);
     };
 
+    let output = if let Some(dest) = std::env::var("PROGENITOR_OUTPUT_DEBUG")
+        .map(|ref s| {std::path::PathBuf::from_str(s).expect("Environment var `PROGENITOR_OUTPUT_DEBUG` must contain a valid path")}).ok()
+    {
+        eprintln!("Writing generated output to {}", path.display());
+        expander::Expander::new(dest.file_name().expect("Environment var `PROGENITOR_OUTPUT_DEBUG` must contain path with filename").to_string_lossy())
+        .fmt(expander::Edition::_2021)
+        .verbose(true)
+        .write_to(output, dest.parent().expect("If path has filename, parent must be root / drive at least. qed"))
+        .expect("Writing file works. qed")
+    } else {
+        output
+    };
     Ok(output.into())
 }
