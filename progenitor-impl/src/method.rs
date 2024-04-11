@@ -1006,7 +1006,8 @@ impl Generator {
                     OperationParameterType::Form(_),
                 ) => {
                     Some(quote! {
-                    // This uses progenitor_client::RequestBuilderExt which sets up a simple form data based on bytes
+                    // This uses `progenitor_client::RequestBuilderExt` which
+                    // sets up a simple form data based on bytes
                     .form_from_raw(body.as_form())?
                 })},
                 (OperationParameterKind::Body(_), _) => {
@@ -1708,10 +1709,10 @@ impl Generator {
                             );
 
                             Ok(quote! {
-                                pub fn #param_name<B>(mut self, value: B) -> Self
+                                pub fn #param_name<B>(mut self, body: B) -> Self
                                     where B: std::convert::TryInto<reqwest::Body>
                                 {
-                                    self.#param_name = value.try_into()
+                                    self.#param_name = body.try_into()
                                         .map_err(|_| #err_msg.to_string());
                                     self
                                 }
