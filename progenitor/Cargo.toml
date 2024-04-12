@@ -13,10 +13,6 @@ categories = ["api-bindings", "compilers"]
 progenitor-client = { version = "0.6.0", path = "../progenitor-client" }
 progenitor-impl = { version = "0.6.0", path = "../progenitor-impl" }
 progenitor-macro = { version = "0.6.0", path = "../progenitor-macro" }
-serde_json = "1.0"
-serde_yaml = "0.9"
-clap = { version = "4.1.14", features = ["derive"] }
-expander = "2.1.0"
 
 [dev-dependencies]
 base64 = "0.22"

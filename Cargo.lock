@@ -1436,8 +1436,6 @@ version = "0.6.0"
 dependencies = [
  "base64 0.22.0",
  "chrono",
- "clap",
- "expander",
  "futures",
  "percent-encoding",
  "progenitor-client",
@@ -1448,8 +1446,6 @@ dependencies = [
  "reqwest",
  "schemars",
  "serde",
- "serde_json",
- "serde_yaml",
  "tokio",
  "uuid",
 ]

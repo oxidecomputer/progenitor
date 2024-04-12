@@ -1,5 +1,12 @@
 // Copyright 2023 Oxide Computer Company
 
+//! The cargo tool to generate a rust representation of an OpenAPI spec.
+
+#![deny(missing_docs)]
+#![deny(unused_crate_dependencies)]
+#![deny(unused_imports)]
+#![deny(unused_import_braces)]
+
 use std::{
     collections::HashMap,
     fs::{File, OpenOptions},
@@ -13,6 +20,7 @@ use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use progenitor_impl::space_out_items;
 
+/// Include the artifact created by `build.rs`.
 pub mod built_info {
     // The file has been placed there by the build script.
     include!(concat!(env!("OUT_DIR"), "/built.rs"));
@@ -225,6 +233,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+/// List of dependencies required when including the generated code.
 pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let dependency_versions: HashMap<String, String> = built_info::DEPENDENCIES
         .iter()
