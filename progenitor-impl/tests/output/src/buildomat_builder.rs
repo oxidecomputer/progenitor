@@ -3154,7 +3154,7 @@ pub mod builder {
         where
             B: std::convert::TryInto<reqwest::Body>,
         {
-            self.body = value
+            self.body = body
                 .try_into()
                 .map_err(|_| "conversion to `reqwest::Body` for body failed".to_string());
             self
