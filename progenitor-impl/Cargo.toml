@@ -10,7 +10,6 @@ readme = "../README.md"
 [dependencies]
 heck = "0.5.0"
 http = "0.2.9"
-getopts = "0.2"
 indexmap = "2.2.6"
 openapiv3 = "2.0.0"
 proc-macro2 = "1.0"
