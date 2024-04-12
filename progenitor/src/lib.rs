@@ -11,7 +11,7 @@
 //! README](https://github.com/oxidecomputer/progenitor/blob/main/README.md)
 
 #![deny(missing_docs)]
-#![deny(unused_crate_dependencies)]
+#![cfg_attr(not(test),deny(unused_crate_dependencies))]
 #![deny(unused_imports)]
 #![deny(unused_import_braces)]
 

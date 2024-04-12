@@ -3,9 +3,9 @@
 //! Core implementation for the progenitor OpenAPI client generator.
 
 #![deny(missing_docs)]
-#![deny(unused_crate_dependencies)]
-#![deny(unused_imports)]
+#![cfg_attr(not(test),deny(unused_crate_dependencies))]
 #![deny(unused_import_braces)]
+#![deny(unused_imports)]
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 
