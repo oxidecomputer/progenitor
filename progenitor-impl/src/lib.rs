@@ -3,7 +3,7 @@
 //! Core implementation for the progenitor OpenAPI client generator.
 
 #![deny(missing_docs)]
-#![cfg_attr(not(test),deny(unused_crate_dependencies))]
+#![cfg_attr(not(test), deny(unused_crate_dependencies))]
 #![deny(unused_import_braces)]
 #![deny(unused_imports)]
 
