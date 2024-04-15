@@ -3150,11 +3150,11 @@ pub mod builder {
             self
         }
 
-        pub fn body<B>(mut self, value: B) -> Self
+        pub fn body<B>(mut self, body: B) -> Self
         where
             B: std::convert::TryInto<reqwest::Body>,
         {
-            self.body = value
+            self.body = body
                 .try_into()
                 .map_err(|_| "conversion to `reqwest::Body` for body failed".to_string());
             self

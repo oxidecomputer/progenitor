@@ -3,6 +3,9 @@
 //! Support for generated clients.
 
 #![deny(missing_docs)]
+#![deny(unused_crate_dependencies)]
+#![deny(unused_imports)]
+#![deny(unused_import_braces)]
 
 mod progenitor_client;
 

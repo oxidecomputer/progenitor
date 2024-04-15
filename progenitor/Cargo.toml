@@ -13,7 +13,6 @@ categories = ["api-bindings", "compilers"]
 progenitor-client = { version = "0.6.0", path = "../progenitor-client" }
 progenitor-impl = { version = "0.6.0", path = "../progenitor-impl" }
 progenitor-macro = { version = "0.6.0", path = "../progenitor-macro" }
-serde_json = "1.0"
 
 [dev-dependencies]
 base64 = "0.22"
@@ -22,8 +21,12 @@ futures = "0.3.30"
 percent-encoding = "2.3"
 rand = "0.8"
 regress = "0.9.1"
-reqwest = { version = "0.11.27", features = ["json", "stream"] }
+reqwest = { version = "0.11.27", features = ["json", "stream", "multipart"] }
 schemars = { version = "0.8.16", features = ["uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.8", features = ["serde", "v4"] }
 tokio = "1.36.0"
+serde_json = "1.0"
+serde_yaml = "0.9"
+clap = { version = "4.1.14", features = ["derive"] }
+expander = "2.1.0"

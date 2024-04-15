@@ -11,6 +11,9 @@
 //! README](https://github.com/oxidecomputer/progenitor/blob/main/README.md)
 
 #![deny(missing_docs)]
+#![cfg_attr(not(test), deny(unused_crate_dependencies))]
+#![deny(unused_imports)]
+#![deny(unused_import_braces)]
 
 pub use progenitor_client;
 pub use progenitor_impl::Error;
