@@ -2174,7 +2174,7 @@ impl Client {
         builder::ControlResume::new(self)
     }
 
-    ///Sends a `GET` request to `/v1/task/{task}`
+    ///Sends a `GET` request to `/v1/task/{Task}`
     ///
     ///```ignore
     /// let response = client.task_get()
@@ -2478,7 +2478,7 @@ pub mod builder {
             self
         }
 
-        ///Sends a `GET` request to `/v1/task/{task}`
+        ///Sends a `GET` request to `/v1/task/{Task}`
         pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
             let Self { client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;

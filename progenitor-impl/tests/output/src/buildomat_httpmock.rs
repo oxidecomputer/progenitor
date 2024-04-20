@@ -84,7 +84,7 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/task/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/task/.*$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }

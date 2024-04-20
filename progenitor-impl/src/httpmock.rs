@@ -161,7 +161,11 @@ impl Generator {
         // can specify a prescribed value for that parameter.
         let when_methods = method.params.iter().map(
             |OperationParameter {
-                 name, typ, kind, ..
+                 name,
+                 typ,
+                 kind,
+                 api_name,
+                 description: _,
              }| {
                 let arg_type_name = match typ {
                     OperationParameterType::Type(arg_type_id) => self
