@@ -191,7 +191,7 @@ impl Generator {
                 let name_ident = format_ident!("{}", name);
                 let handler = match kind {
                     OperationParameterKind::Path => {
-                        let re_fmt = method.path.as_wildcard_param(name);
+                        let re_fmt = method.path.as_wildcard_param(api_name);
                         quote! {
                             let re = regex::Regex::new(
                                 &format!(#re_fmt, value.to_string())
