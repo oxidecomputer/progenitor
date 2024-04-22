@@ -34,13 +34,13 @@
         }
       }
     },
-    "/v1/task/{task}": {
+    "/v1/task/{Task}": {
       "get": {
         "operationId": "task_get",
         "parameters": [
           {
             "in": "path",
-            "name": "task",
+            "name": "Task",
             "required": true,
             "schema": {
               "type": "string"

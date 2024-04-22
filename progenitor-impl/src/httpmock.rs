@@ -161,7 +161,11 @@ impl Generator {
         // can specify a prescribed value for that parameter.
         let when_methods = method.params.iter().map(
             |OperationParameter {
-                 name, typ, kind, ..
+                 name,
+                 typ,
+                 kind,
+                 api_name,
+                 description: _,
              }| {
                 let arg_type_name = match typ {
                     OperationParameterType::Type(arg_type_id) => self
@@ -187,7 +191,7 @@ impl Generator {
                 let name_ident = format_ident!("{}", name);
                 let handler = match kind {
                     OperationParameterKind::Path => {
-                        let re_fmt = method.path.as_wildcard_param(name);
+                        let re_fmt = method.path.as_wildcard_param(api_name);
                         quote! {
                             let re = regex::Regex::new(
                                 &format!(#re_fmt, value.to_string())

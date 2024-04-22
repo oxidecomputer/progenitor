@@ -858,7 +858,7 @@ impl Client {
         }
     }
 
-    ///Sends a `GET` request to `/v1/task/{task}`
+    ///Sends a `GET` request to `/v1/task/{Task}`
     pub async fn task_get<'a>(
         &'a self,
         task: &'a str,
