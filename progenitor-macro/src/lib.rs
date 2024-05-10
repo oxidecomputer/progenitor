@@ -14,7 +14,8 @@ use std::{
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
 use progenitor_impl::{
-    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch,
+    CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle,
+    TypePatch, UnknownPolicy,
 };
 use quote::{quote, ToTokens};
 use schemars::schema::SchemaObject;
@@ -41,12 +42,21 @@ mod token_utils;
 ///     [ tags = ( Merged | Separate ), ]
 ///     [ pre_hook = closure::or::path::to::function, ]
 ///     [ post_hook = closure::or::path::to::function, ]
+///
 ///     [ derives = [ path::to::DeriveMacro ], ]
+///
+///     [ unknown_crates = (Generate | Allow | Deny ), ]
+///     [ crates = { "<crate-name>" = ("<version>" | "*" | "!" ) } ]
+///
+///     [ patch = { TypeName = { [rename = NewTypeName], [derives = []] }, } ]
+///     [ replace = { TypeName = full_path::to::other::TypeName, }]
+///     [ convert = { { <schema> } = full_path::to::TypeName, }]
+///
 /// );
 /// ```
 ///
-/// The `spec` key is required; it is the OpenAPI document (JSON or YAML) from which the
-/// client is derived.
+/// The `spec` key is required; it is the OpenAPI document (JSON or YAML) from
+/// which the client is derived.
 ///
 /// The optional `interface` lets you specify either a `Positional` argument or
 /// `Builder` argument style; `Positional` is the default.
@@ -71,8 +81,39 @@ mod token_utils;
 /// `&Result<reqwest::Response, reqwest::Error>`. This allows clients to
 /// examine responses, for example to log them.
 ///
-/// The optional `derives` array allows consumers to specify additional derive
-/// macros to apply to generated types.
+/// Additional options control type generation:
+/// - `derives`: optional array of derive macro paths; the derive macros to be
+///   applied to all generated types
+///
+/// - `struct_builder`: optional boolean; (if true) generates a `::builder()`
+///   method for each generated struct that can be used to specify each
+///   property and construct the struct
+///
+/// - `unknown_crates`: optional policy regarding the handling of schemas that
+///   contain the `x-rust-type` extension whose crates are not explicitly named
+///   in the `crates` section. The options are `generate` to ignore the
+///   extension and generate a *de novo* type, `allow` to use the named type
+///   (which may require the addition of a new dependency to compile, and which
+///   ignores version compatibility checks), or `deny` to produce a
+///   compile-time error (requiring the user to specify the crate's disposition
+///   in the `crates` section).
+///
+/// - `crates`: optional map from crate name to the version of the crate in
+///   use. Types encountered with the Rust type extension (`x-rust-type`) will
+///   use types from the specified crates rather than generating them (within
+///   the constraints of type compatibility).
+///
+/// - `patch`: optional map from type to an object with the optional members
+///   `rename` and `derives`. This may be used to renamed generated types or
+///   to apply additional (non-default) derive macros to them.
+///
+/// - `replace`: optional map from definition name to a replacement type. This
+///   may be used to skip generation of the named type and use a existing Rust
+///   type.
+///
+/// - `convert`: optional map from a JSON schema type defined in `$defs` to a
+///   replacement type. This may be used to skip generation of the schema and
+///   use an existing Rust type.
 #[proc_macro]
 pub fn generate_api(item: TokenStream) -> TokenStream {
     match do_generate_api(item) {
@@ -96,6 +137,11 @@ struct MacroSettings {
 
     #[serde(default)]
     derives: Vec<ParseWrapper<syn::Path>>,
+
+    #[serde(default)]
+    unknown_crates: UnknownPolicy,
+    #[serde(default)]
+    crates: HashMap<CrateName, MacroCrateSpec>,
 
     #[serde(default)]
     patch: HashMap<ParseWrapper<syn::Ident>, MacroPatch>,
@@ -173,6 +219,68 @@ impl syn::parse::Parse for ClosureOrPath {
     }
 }
 
+struct MacroCrateSpec {
+    original: Option<String>,
+    version: CrateVers,
+}
+
+impl<'de> Deserialize<'de> for MacroCrateSpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let ss = String::deserialize(deserializer)?;
+
+        let (original, vers_str) = if let Some(ii) = ss.find('@') {
+            let original_str = &ss[..ii];
+            let rest = &ss[ii + 1..];
+            if !is_crate(original_str) {
+                return Err(<D::Error as serde::de::Error>::invalid_value(
+                    serde::de::Unexpected::Str(&ss),
+                    &"valid crate name",
+                ));
+            }
+
+            (Some(original_str.to_string()), rest)
+        } else {
+            (None, ss.as_ref())
+        };
+
+        let Some(version) = CrateVers::parse(vers_str) else {
+            return Err(<D::Error as serde::de::Error>::invalid_value(
+                serde::de::Unexpected::Str(&ss),
+                &"valid version",
+            ));
+        };
+
+        Ok(Self { original, version })
+    }
+}
+
+#[derive(Hash, PartialEq, Eq)]
+struct CrateName(String);
+impl<'de> Deserialize<'de> for CrateName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let ss = String::deserialize(deserializer)?;
+
+        if is_crate(&ss) {
+            Ok(Self(ss))
+        } else {
+            Err(<D::Error as serde::de::Error>::invalid_value(
+                serde::de::Unexpected::Str(&ss),
+                &"valid crate name",
+            ))
+        }
+    }
+}
+
+fn is_crate(s: &str) -> bool {
+    !s.contains(|cc: char| !cc.is_alphanumeric() && cc != '_' && cc != '-')
+}
+
 fn open_file(
     path: PathBuf,
     span: proc_macro2::Span,
@@ -196,6 +304,8 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             pre_hook,
             pre_hook_async,
             post_hook,
+            unknown_crates,
+            crates,
             derives,
             patch,
             replace,
@@ -214,6 +324,21 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         });
         post_hook
             .map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
+
+        settings.with_unknown_crates(unknown_crates);
+        crates.into_iter().for_each(
+            |(CrateName(crate_name), MacroCrateSpec { original, version })| {
+                if let Some(original_crate) = original {
+                    settings.with_crate(
+                        original_crate,
+                        version,
+                        Some(&crate_name),
+                    );
+                } else {
+                    settings.with_crate(crate_name, version, None);
+                }
+            },
+        );
 
         derives.into_iter().for_each(|derive| {
             settings.with_derive(derive.to_token_stream());

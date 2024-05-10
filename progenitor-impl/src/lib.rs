@@ -15,8 +15,10 @@ use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
+pub use typify::CrateVers;
 pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
+pub use typify::UnknownPolicy;
 
 mod cli;
 mod httpmock;
@@ -64,9 +66,18 @@ pub struct GenerationSettings {
     post_hook: Option<TokenStream>,
     extra_derives: Vec<String>,
 
+    unknown_crates: UnknownPolicy,
+    crates: BTreeMap<String, CrateSpec>,
+
     patch: HashMap<String, TypePatch>,
     replace: HashMap<String, (String, Vec<TypeImpl>)>,
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
+}
+
+#[derive(Debug, Clone)]
+struct CrateSpec {
+    version: CrateVers,
+    rename: Option<String>,
 }
 
 /// Style of generated client.
@@ -190,6 +201,34 @@ impl GenerationSettings {
             .push((schema, type_name.to_string(), impls.collect()));
         self
     }
+
+    /// Policy regarding crates referenced by the schema extension
+    /// `x-rust-type` not explicitly specified via [Self::with_crate].
+    /// See [typify::TypeSpaceSettings::with_unknown_crates].
+    pub fn with_unknown_crates(&mut self, policy: UnknownPolicy) -> &mut Self {
+        self.unknown_crates = policy;
+        self
+    }
+
+    /// Explicitly named crates whose types may be used during generation
+    /// rather than generating new types based on their schemas (base on the
+    /// presence of the x-rust-type extension).
+    /// See [typify::TypeSpaceSettings::with_crate].
+    pub fn with_crate<S1: ToString>(
+        &mut self,
+        crate_name: S1,
+        version: CrateVers,
+        rename: Option<&String>,
+    ) -> &mut Self {
+        self.crates.insert(
+            crate_name.to_string(),
+            CrateSpec {
+                version,
+                rename: rename.cloned(),
+            },
+        );
+        self
+    }
 }
 
 impl Default for Generator {
@@ -215,6 +254,20 @@ impl Generator {
         settings.extra_derives.iter().for_each(|derive| {
             let _ = type_settings.with_derive(derive.clone());
         });
+
+        // Control use of crates found in x-rust-type extension
+        type_settings.with_unknown_crates(settings.unknown_crates);
+        settings.crates.iter().for_each(
+            |(crate_name, CrateSpec { version, rename })| {
+                type_settings.with_crate(
+                    crate_name,
+                    version.clone(),
+                    rename.as_ref(),
+                );
+            },
+        );
+
+        // Adjust generation by type, name, or schema.
         settings.patch.iter().for_each(|(type_name, patch)| {
             type_settings.with_patch(type_name, patch);
         });
@@ -237,6 +290,7 @@ impl Generator {
                     impls.iter().cloned(),
                 );
             });
+
         Self {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
