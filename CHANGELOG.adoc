@@ -13,10 +13,14 @@
 
 == Unreleased changes (release date TBD)
 
+https://github.com/oxidecomputer/progenitor/compare/v0.7.0\...HEAD[Full list of commits]
+
+== 0.7.0 (released 2024-05-15)
+
 * Minor fixes
 * Support for `x-rust-types`` via typify (#804)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.6.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.6.0\...v0.7.0[Full list of commits]
 
 == 0.6.0 (released 2024-02-28)
 

@@ -1,6 +1,6 @@
 [package]
 name = "cargo-progenitor"
-version = "0.6.0"
+version = "0.7.0"
 edition = "2021"
 license = "MPL-2.0"
 description = "A cargo command to generate a Rust client SDK from OpenAPI"
@@ -13,9 +13,9 @@ build = "build.rs"
 default-run = "cargo-progenitor"
 
 [dependencies]
-progenitor = { version = "0.6.0", path = "../progenitor" }
-progenitor-client = { version = "0.6.0", path = "../progenitor-client" }
-progenitor-impl = { version = "0.6.0", path = "../progenitor-impl" }
+progenitor = { version = "0.7.0", path = "../progenitor" }
+progenitor-client = { version = "0.7.0", path = "../progenitor-client" }
+progenitor-impl = { version = "0.7.0", path = "../progenitor-impl" }
 anyhow = "1.0"
 clap = { version = "4.5.4", features = ["derive"] }
 env_logger = "0.10.2"
