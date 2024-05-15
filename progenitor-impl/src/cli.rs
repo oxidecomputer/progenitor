@@ -1,4 +1,4 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
 use std::collections::BTreeMap;
 
@@ -149,10 +149,11 @@ impl Generator {
             }
 
             pub trait CliConfig {
-                fn item_success<T>(&self, value: &ResponseValue<T>)
+                fn success_item<T>(&self, value: &ResponseValue<T>)
                 where
                     T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
-                fn item_error<T>(&self, value: &Error<T>)
+                fn success_no_item(&self, value: &ResponseValue<()>);
+                fn error<T>(&self, value: &Error<T>)
                 where
                     T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
 
@@ -241,11 +242,18 @@ impl Generator {
             // Normal, one-shot API calls.
             None => {
                 let success_output = match success_kind {
-                    crate::method::OperationResponseKind::Type(_)
-                    | crate::method::OperationResponseKind::None => {
+                    crate::method::OperationResponseKind::Type(_) => {
                         quote! {
                             {
-                                self.config.item_success(&r);
+                                self.config.success_item(&r);
+                                Ok(())
+                            }
+                        }
+                    }
+                    crate::method::OperationResponseKind::None => {
+                        quote! {
+                            {
+                                self.config.success_no_item(&r);
                                 Ok(())
                             }
                         }
@@ -265,7 +273,7 @@ impl Generator {
                     | crate::method::OperationResponseKind::None => {
                         quote! {
                             {
-                                self.config.item_error(&r);
+                                self.config.error(&r);
                                 Err(anyhow::Error::new(r))
                             }
                         }

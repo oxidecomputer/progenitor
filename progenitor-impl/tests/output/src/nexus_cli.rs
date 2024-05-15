@@ -5878,11 +5878,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -5899,11 +5899,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -5923,11 +5923,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -5947,11 +5947,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -5971,11 +5971,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -5995,11 +5995,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6019,11 +6019,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6043,11 +6043,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6067,11 +6067,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6091,11 +6091,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6111,11 +6111,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6169,11 +6169,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6267,11 +6267,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6305,7 +6305,7 @@ impl<T: CliConfig> Cli<T> {
                 todo!()
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6329,7 +6329,7 @@ impl<T: CliConfig> Cli<T> {
                 todo!()
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6352,7 +6352,7 @@ impl<T: CliConfig> Cli<T> {
                 todo!()
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6364,11 +6364,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6438,11 +6438,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6462,11 +6462,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6500,11 +6500,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6524,11 +6524,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6548,11 +6548,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6579,11 +6579,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6652,11 +6652,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6676,11 +6676,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6714,11 +6714,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6738,11 +6738,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6823,11 +6823,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6851,11 +6851,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -6879,11 +6879,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7021,11 +7021,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7049,11 +7049,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7077,11 +7077,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7178,11 +7178,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7206,11 +7206,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7234,11 +7234,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7327,11 +7327,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7369,11 +7369,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7401,11 +7401,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7440,11 +7440,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7552,11 +7552,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7588,11 +7588,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7643,11 +7643,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7679,11 +7679,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7707,11 +7707,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7751,11 +7751,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7809,11 +7809,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7837,11 +7837,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7865,11 +7865,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7899,11 +7899,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -7984,11 +7984,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8012,11 +8012,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8040,11 +8040,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8129,11 +8129,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8157,11 +8157,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8203,11 +8203,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8231,11 +8231,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8263,11 +8263,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8302,11 +8302,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8396,11 +8396,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8428,11 +8428,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8478,11 +8478,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8514,11 +8514,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8621,11 +8621,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8661,11 +8661,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8716,11 +8716,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8756,11 +8756,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8858,11 +8858,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8890,11 +8890,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8940,11 +8940,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -8976,11 +8976,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9049,11 +9049,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9071,11 +9071,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9122,11 +9122,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9138,11 +9138,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9254,11 +9254,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9278,11 +9278,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9302,11 +9302,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9326,11 +9326,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9350,11 +9350,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9370,11 +9370,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9445,11 +9445,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9466,11 +9466,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9490,11 +9490,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9585,11 +9585,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9640,11 +9640,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9758,11 +9758,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9782,11 +9782,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9806,11 +9806,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9871,11 +9871,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9891,11 +9891,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9925,11 +9925,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -9945,11 +9945,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10015,11 +10015,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10045,11 +10045,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10065,11 +10065,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10127,11 +10127,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10153,11 +10153,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10194,11 +10194,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10214,11 +10214,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10240,11 +10240,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10295,11 +10295,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10372,11 +10372,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10392,11 +10392,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10412,11 +10412,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10491,11 +10491,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10519,11 +10519,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10553,11 +10553,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10616,11 +10616,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10644,11 +10644,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10665,11 +10665,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10695,11 +10695,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10758,11 +10758,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10816,11 +10816,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -10973,11 +10973,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11001,11 +11001,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11029,11 +11029,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11135,11 +11135,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11164,11 +11164,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11196,11 +11196,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11289,11 +11289,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11331,11 +11331,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11373,11 +11373,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11405,11 +11405,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11449,11 +11449,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11511,11 +11511,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11540,11 +11540,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11614,11 +11614,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11638,11 +11638,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11676,11 +11676,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11700,11 +11700,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11724,11 +11724,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11755,11 +11755,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11832,11 +11832,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11856,11 +11856,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11898,11 +11898,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11926,11 +11926,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11954,11 +11954,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -11988,11 +11988,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -12094,11 +12094,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -12114,11 +12114,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -12144,11 +12144,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -12164,11 +12164,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -12228,11 +12228,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -12252,11 +12252,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -12268,11 +12268,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -12280,10 +12280,11 @@ impl<T: CliConfig> Cli<T> {
 }
 
 pub trait CliConfig {
-    fn item_success<T>(&self, value: &ResponseValue<T>)
+    fn success_item<T>(&self, value: &ResponseValue<T>)
     where
         T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
-    fn item_error<T>(&self, value: &Error<T>)
+    fn success_no_item(&self, value: &ResponseValue<()>);
+    fn error<T>(&self, value: &Error<T>)
     where
         T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_start<T>(&self)
