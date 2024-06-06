@@ -1134,6 +1134,11 @@ impl Generator {
                 (#hook)(&#client.inner, &#request_ident);
             }
         });
+        let pre_hook_mut = self.settings.pre_hook_mut.as_ref().map(|hook| {
+            quote! {
+                (#hook)(&#client.inner, &mut #request_ident);
+            }
+        });
         let pre_hook_async = self.settings.pre_hook_async.as_ref().map(|hook| {
             quote! {
                 match (#hook)(&#client.inner, &mut #request_ident).await {
@@ -1167,6 +1172,7 @@ impl Generator {
                 .build()?;
 
             #pre_hook
+            #pre_hook_mut
             #pre_hook_async
             let #result_ident = #client.client
                 .execute(#request_ident)
