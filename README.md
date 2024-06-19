@@ -40,7 +40,7 @@ You'll need to add the following to `Cargo.toml`:
 [dependencies]
 futures = "0.3"
 progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-reqwest = { version = "0.11", features = ["json", "stream"] }
+reqwest = { version = "0.12", features = ["json", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 ```
 
@@ -133,7 +133,7 @@ You'll need to add the following to `Cargo.toml`:
 [dependencies]
 futures = "0.3"
 progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
-reqwest = { version = "0.11", features = ["json", "stream"] }
+reqwest = { version = "0.12", features = ["json", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 
 [build-dependencies]
@@ -199,7 +199,7 @@ bytes = "1.3.0"
 chrono = { version = "0.4.23", default-features=false, features = ["serde"] }
 futures-core = "0.3.25"
 percent-encoding = "2.2.0"
-reqwest = { version = "0.11.13", default-features=false, features = ["json", "stream"] }
+reqwest = { version = "0.12.5", default-features=false, features = ["json", "stream"] }
 serde = { version = "1.0.152", features = ["derive"] }
 serde_urlencoded = "0.7.1"
 ```
