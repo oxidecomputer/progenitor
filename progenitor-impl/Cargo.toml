@@ -8,34 +8,30 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"
 
 [dependencies]
-heck = "0.5.0"
-http = "0.2.9"
-getopts = "0.2"
-indexmap = "2.2.6"
-openapiv3 = "2.0.0"
-proc-macro2 = "1.0"
-quote = "1.0"
-regex = "1.10"
-schemars = { version = "0.8.21", features = ["chrono", "uuid1"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-syn = { version = "2.0", features = ["parsing"] }
-thiserror = "1.0"
-# change when publishing
-# typify = { version = "0.1.0" }
-typify = { git = "https://github.com/oxidecomputer/typify" }
-unicode-ident = "1.0.12"
+heck = { workspace = true }
+http = { workspace = true }
+indexmap = { workspace = true }
+openapiv3 = { workspace = true }
+proc-macro2 = { workspace = true }
+quote = { workspace = true }
+regex = { workspace = true }
+schemars = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+syn = { workspace = true }
+thiserror = { workspace = true }
+typify = { workspace = true }
+unicode-ident = { workspace = true }
 
 [dev-dependencies]
-dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
-expectorate = "1.1"
-futures = "0.3.30"
-http = "0.2.9"
-hyper = "0.14.27"
-reqwest = "0.11.27"
-rustfmt-wrapper = "0.2.1"
-serde_yaml = "0.9"
-serde_json = "1.0.117"
-tokio = { version = "1.37.0", features = ["rt", "net"] }
+dropshot = { workspace = true }
+expectorate = { workspace = true }
+futures = { workspace = true }
+http = { workspace = true }
+hyper = { workspace = true }
+reqwest = { workspace = true }
+rustfmt-wrapper = { workspace = true }
+serde_yaml = { workspace = true }
+tokio = { workspace = true }
 
 progenitor-client.path = "../progenitor-client"

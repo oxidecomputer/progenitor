@@ -13,17 +13,18 @@ build = "build.rs"
 default-run = "cargo-progenitor"
 
 [dependencies]
-progenitor = { version = "0.7.0", path = "../progenitor" }
-progenitor-client = { version = "0.7.0", path = "../progenitor-client" }
-progenitor-impl = { version = "0.7.0", path = "../progenitor-impl" }
-anyhow = "1.0"
-clap = { version = "4.5.4", features = ["derive"] }
-env_logger = "0.10.2"
-openapiv3 = "2.0.0"
-rustfmt-wrapper = "0.2.1"
-serde_json = "1.0"
-serde_yaml = "0.9"
+progenitor = { workspace = true }
+progenitor-client = { workspace = true }
+progenitor-impl = { workspace = true }
+
+anyhow = { workspace = true }
+clap = { workspace = true }
+env_logger = { workspace = true }
+openapiv3 = { workspace = true }
+rustfmt-wrapper = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
 
 [build-dependencies]
-built = { version = "0.7.2", features = ["cargo-lock", "git2"] }
-project-root = "0.2"
+built = { workspace = true }
+project-root = { workspace = true }
