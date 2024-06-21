@@ -21,3 +21,4 @@ serde_json = "1.0"
 serde_yaml = "0.9"
 serde_tokenstream = "0.2.0"
 syn = { version = "2.0", features = ["full", "extra-traits"] }
+expander = "2.2.1"
