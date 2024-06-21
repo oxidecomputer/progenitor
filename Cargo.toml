@@ -12,6 +12,51 @@ members = [
 
 resolver = "2"
 
+[workspace.dependencies]
+progenitor = { version = "0.7.0", path = "progenitor" }
+progenitor-client = { version = "0.7.0", path = "progenitor-client" }
+progenitor-impl = { version = "0.7.0", path = "progenitor-impl" }
+progenitor-macro = { version = "0.7.0", path = "progenitor-macro" }
+
+anyhow = "1.0.86"
+base64 = "0.22.1"
+built = { version = "0.7.2", features = ["cargo-lock", "git2"] }
+bytes = "1.6.0"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.5.7", features = ["derive"] }
+dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
+env_logger = "0.10.2"
+expectorate = "1.1.0"
+futures = "0.3.30"
+futures-core = "0.3.30"
+heck = "0.5.0"
+http = "0.2.9"
+hyper = "0.14.27"
+indexmap = "2.2.6"
+openapiv3 = "2.0.0"
+percent-encoding = "2.3"
+proc-macro2 = "1.0.86"
+project-root = "0.2.2"
+quote = "1.0.36"
+rand = "0.8.5"
+regex = "1.10.5"
+regress = "0.10.0"
+reqwest = { version = "0.11.27", features = ["json", "stream"] }
+rustfmt-wrapper = "0.2.1"
+schemars = { version = "0.8.21", features = ["chrono", "uuid1"] }
+serde = { version = "1.0.203", features = ["derive"] }
+serde_json = "1.0.117"
+serde_urlencoded = "0.7.1"
+serde_yaml = "0.9"
+syn = { version = "2.0.67", features = ["parsing"] }
+thiserror = "1.0.61"
+tokio = { version = "1.37.0", features = ["rt", "net"] }
+# change when publishing
+# typify = { version = "0.1.0" }
+typify = { git = "https://github.com/oxidecomputer/typify" }
+unicode-ident = "1.0.12"
+uuid = { version = "1.8.0", features = ["serde", "v4"] }
+
 #[patch."https://github.com/oxidecomputer/dropshot"]
 #dropshot = { path = "../dropshot/dropshot" }
 
