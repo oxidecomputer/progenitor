@@ -1396,7 +1396,7 @@ dependencies = [
  "progenitor-impl",
  "progenitor-macro",
  "rand",
- "regress 0.10.0",
+ "regress",
  "reqwest",
  "schemars",
  "serde",
@@ -1564,16 +1564,6 @@ name = "regex-syntax"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
-
-[[package]]
-name = "regress"
-version = "0.9.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0eae2a1ebfecc58aff952ef8ccd364329abe627762f5bf09ff42eb9d98522479"
-dependencies = [
- "hashbrown",
- "memchr",
-]
 
 [[package]]
 name = "regress"
@@ -1887,9 +1877,9 @@ dependencies = [
 
 [[package]]
 name = "serde_tokenstream"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a00ffd23fd882d096f09fcaae2a9de8329a328628e86027e049ee051dc1621f"
+checksum = "8790a7c3fe883e443eaa2af6f705952bc5d6e8671a220b9335c8cae92c037e74"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2393,7 +2383,7 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 [[package]]
 name = "typify"
 version = "0.1.0"
-source = "git+https://github.com/oxidecomputer/typify#dc2047f7d8fde7d6269c8e19de2751557629fc14"
+source = "git+https://github.com/oxidecomputer/typify#66f11c64a70f6611c3c8863eb5d9327150817645"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -2402,13 +2392,13 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.1.0"
-source = "git+https://github.com/oxidecomputer/typify#dc2047f7d8fde7d6269c8e19de2751557629fc14"
+source = "git+https://github.com/oxidecomputer/typify#66f11c64a70f6611c3c8863eb5d9327150817645"
 dependencies = [
  "heck",
  "log",
  "proc-macro2",
  "quote",
- "regress 0.9.1",
+ "regress",
  "schemars",
  "semver",
  "serde",
@@ -2421,7 +2411,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.1.0"
-source = "git+https://github.com/oxidecomputer/typify#dc2047f7d8fde7d6269c8e19de2751557629fc14"
+source = "git+https://github.com/oxidecomputer/typify#66f11c64a70f6611c3c8863eb5d9327150817645"
 dependencies = [
  "proc-macro2",
  "quote",
