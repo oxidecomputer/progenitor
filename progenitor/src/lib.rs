@@ -1,4 +1,4 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
 //! Progenitor is a Rust crate for generating opinionated clients from API
 //! descriptions specified in the OpenAPI 3.0.x format. It makes use of Rust
@@ -13,6 +13,7 @@
 #![deny(missing_docs)]
 
 pub use progenitor_client;
+pub use progenitor_impl::CrateVers;
 pub use progenitor_impl::Error;
 pub use progenitor_impl::GenerationSettings;
 pub use progenitor_impl::Generator;
