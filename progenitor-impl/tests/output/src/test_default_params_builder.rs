@@ -401,6 +401,42 @@ pub mod builder {
     use super::{
         encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
+            ResponseValue,
+        };
+        pub struct DefaultParams<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DefaultParams<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::default_params`]
     ///
     ///[`Client::default_params`]: super::Client::default_params
@@ -442,19 +478,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DefaultParams<'a>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::BodyWithDefaults::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client.client.post(url).json(&body).build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
-            }
+            let request = {
+                let url = format!("{}/", client.baseurl,);
+                client.client.post(url).json(&body)
+            };
+            Ok(built::DefaultParams {
+                client: client,
+                request,
+            })
         }
     }
 }
