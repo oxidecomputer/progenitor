@@ -63,6 +63,14 @@ impl Client {
         let client = {
             let dur = std::time::Duration::from_secs(15);
             reqwest::ClientBuilder::new()
+                .default_headers(
+                    [(
+                        reqwest::header::HeaderName::from_static("api-version"),
+                        reqwest::header::HeaderValue::from_static("v1"),
+                    )]
+                    .into_iter()
+                    .collect(),
+                )
                 .connect_timeout(dur)
                 .timeout(dur)
         };
