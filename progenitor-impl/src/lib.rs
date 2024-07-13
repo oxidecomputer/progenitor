@@ -357,6 +357,7 @@ impl Generator {
         }?;
 
         let types = self.type_space.to_stream();
+        let multi_types = self.generate_multi_types_stream(&raw_methods, &self.type_space);
 
         // Generate an implementation of a `Self::as_inner` method, if an inner
         // type is defined.
@@ -427,6 +428,7 @@ impl Generator {
                 use std::convert::TryFrom;
 
                 #types
+                #multi_types
             }
 
             #[derive(Clone, Debug)]
