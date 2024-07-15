@@ -55,7 +55,7 @@ tokio = { version = "1.38.0", features = ["rt", "net"] }
 # typify = { version = "0.1.0" }
 typify = { git = "https://github.com/oxidecomputer/typify" }
 unicode-ident = "1.0.12"
-uuid = { version = "1.9.1", features = ["serde", "v4"] }
+uuid = { version = "1.10.0", features = ["serde", "v4"] }
 
 #[patch."https://github.com/oxidecomputer/dropshot"]
 #dropshot = { path = "../dropshot/dropshot" }
