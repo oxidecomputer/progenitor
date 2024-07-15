@@ -137,9 +137,9 @@ dependencies = [
 
 [[package]]
 name = "async-trait"
-version = "0.1.80"
+version = "0.1.81"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6fa2087f2753a7da8cc1c0dbfcf89579dd57458e36769de5ac750b4671737ca"
+checksum = "6e0c28dcc82d7c8ead5cb13beb15405b57b8546e93215673ff8ca0349a028107"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -471,7 +471,7 @@ dependencies = [
 [[package]]
 name = "dropshot"
 version = "0.10.2-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#6a3f84ca5fd8d0c5c010cfe837efbe6b5d117d9d"
+source = "git+https://github.com/oxidecomputer/dropshot#fb254ad92bbbc29d249fa514486a9217d027f4a5"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -516,7 +516,7 @@ dependencies = [
 [[package]]
 name = "dropshot_endpoint"
 version = "0.10.2-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#6a3f84ca5fd8d0c5c010cfe837efbe6b5d117d9d"
+source = "git+https://github.com/oxidecomputer/dropshot#fb254ad92bbbc29d249fa514486a9217d027f4a5"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -1847,9 +1847,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.119"
+version = "1.0.120"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8eddb61f0697cc3989c5d64b452f5488e2b8a60fd7d5076a3045076ffef8cb0"
+checksum = "4e0d21c9a8cae1235ad58a00c11cb40d4b1e5c784f1ef2c537876ed6ffd8b7c5"
 dependencies = [
  "itoa",
  "ryu",
