@@ -214,6 +214,8 @@ impl Generator {
             }
         });
 
+        let display_order = quote! { .display_order(0) };
+
         let fn_name = format_ident!("cli_{}", &method.operation_id);
 
         let cli_fn = quote! {
@@ -223,6 +225,7 @@ impl Generator {
                 #parser_args
                 #about
                 #long_about
+                #display_order
             }
         };
 
