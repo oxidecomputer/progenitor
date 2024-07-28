@@ -121,12 +121,12 @@ impl Client {
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/key", self.baseurl,);
         let mut query = Vec::with_capacity(2usize);
-        if let Some(v) = &key {
-            query.push(("key", v.to_string()));
+        if let Some(key) = &key {
+            query.push(("key", key.to_string()));
         }
 
-        if let Some(v) = &unique_key {
-            query.push(("uniqueKey", v.to_string()));
+        if let Some(unique_key) = &unique_key {
+            query.push(("uniqueKey", unique_key.to_string()));
         }
 
         #[allow(unused_mut)]

@@ -836,14 +836,17 @@ impl Generator {
                 OperationParameterKind::Query(required) => {
                     let qn = &param.api_name;
                     let qn_ident = format_ident!("{}", &param.name);
+
+                    let assignment = quote! {
+                        #query_ident.push((#qn, #qn_ident .to_string()));
+                    };
+
                     let res = if *required {
-                        quote! {
-                            #query_ident.push((#qn, #qn_ident .to_string()));
-                        }
+                        assignment
                     } else {
                         quote! {
-                            if let Some(v) = & #qn_ident {
-                                #query_ident.push((#qn, v.to_string()));
+                            if let Some(#qn_ident) = & #qn_ident {
+                                #assignment
                             }
                         }
                     };
