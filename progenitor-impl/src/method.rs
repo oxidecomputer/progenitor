@@ -837,9 +837,31 @@ impl Generator {
                     let qn = &param.api_name;
                     let qn_ident = format_ident!("{}", &param.name);
 
-                    let assignment = quote! {
-                        #query_ident.push((#qn, #qn_ident .to_string()));
+                    let typ = if let OperationParameterType::Type(type_id) = &param.typ {
+                        self.type_space.get_type(type_id).ok()
+                    } else {
+                        None
                     };
+
+                    let assignment = typ
+                        .and_then(|typ| {
+                            match typ.details() {
+                                typify::TypeDetails::Vec(_) => {
+                                    // Assume explode = true.
+                                    Some(quote! {
+                                        #qn_ident.iter().for_each(|item| {
+                                            #query_ident.push((#qn, item.to_string()));
+                                        })
+                                    })
+                                }
+                                _ => None,
+                            }
+                        })
+                        .unwrap_or_else(|| {
+                            quote! {
+                                #query_ident.push((#qn, #qn_ident .to_string()));
+                            }
+                        });
 
                     let res = if *required {
                         assignment
