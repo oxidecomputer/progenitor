@@ -1374,6 +1374,182 @@ pub mod builder {
     use super::{
         encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
+            ResponseValue,
+        };
+        pub struct Enrol<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> Enrol<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct GlobalJobs<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> GlobalJobs<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct Ping<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> Ping<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ReportFinish<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ReportFinish<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ReportOutput<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ReportOutput<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ReportStart<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ReportStart<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::enrol`]
     ///
     ///[`Client::enrol`]: super::Client::enrol
@@ -1425,6 +1601,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/enrol`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::Enrol<'a>, Error<()>> {
             let Self {
                 client,
                 authorization,
@@ -1434,22 +1614,16 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::EnrolBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/enrol", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/enrol", client.baseurl,);
+                let mut header_map = HeaderMap::with_capacity(1usize);
+                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                client.client.post(url).json(&body).headers(header_map)
+            };
+            Ok(built::Enrol {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -1482,30 +1656,32 @@ pub mod builder {
 
         ///Sends a `GET` request to `/global/jobs`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::GlobalJobs<'a>, Error<()>> {
             let Self {
                 client,
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/global/jobs", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/global/jobs", client.baseurl,);
+                let mut header_map = HeaderMap::with_capacity(1usize);
+                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
+            };
+            Ok(built::GlobalJobs {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -1538,30 +1714,32 @@ pub mod builder {
 
         ///Sends a `GET` request to `/ping`
         pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::Ping<'a>, Error<()>> {
             let Self {
                 client,
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/ping", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/ping", client.baseurl,);
+                let mut header_map = HeaderMap::with_capacity(1usize);
+                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
+            };
+            Ok(built::Ping {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -1618,6 +1796,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/report/finish`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ReportFinish<'a>, Error<()>> {
             let Self {
                 client,
                 authorization,
@@ -1627,26 +1809,24 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ReportFinishBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/finish", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/report/finish", client.baseurl,);
+                let mut header_map = HeaderMap::with_capacity(1usize);
+                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .headers(header_map)
+            };
+            Ok(built::ReportFinish {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -1703,6 +1883,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/report/output`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ReportOutput<'a>, Error<()>> {
             let Self {
                 client,
                 authorization,
@@ -1712,26 +1896,24 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ReportOutputBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/output", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/report/output", client.baseurl,);
+                let mut header_map = HeaderMap::with_capacity(1usize);
+                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .headers(header_map)
+            };
+            Ok(built::ReportOutput {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -1786,6 +1968,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/report/start`
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ReportStart<'a>, Error<()>> {
             let Self {
                 client,
                 authorization,
@@ -1795,26 +1981,24 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ReportStartBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/start", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/report/start", client.baseurl,);
+                let mut header_map = HeaderMap::with_capacity(1usize);
+                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .headers(header_map)
+            };
+            Ok(built::ReportStart {
+                client: client,
+                request,
+            })
         }
     }
 }

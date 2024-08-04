@@ -133,6 +133,42 @@ pub mod builder {
     use super::{
         encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
+            ResponseValue,
+        };
+        pub struct KeyGet<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> KeyGet<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::key_get`]
     ///
     ///[`Client::key_get`]: super::Client::key_get
@@ -176,6 +212,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/key`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::KeyGet<'a>, Error<()>> {
             let Self {
                 client,
                 key,
@@ -183,22 +223,21 @@ pub mod builder {
             } = self;
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/key", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &key {
-                query.push(("key", v.to_string()));
-            }
-            if let Some(v) = &unique_key {
-                query.push(("uniqueKey", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client.client.get(url).query(&query).build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/key", client.baseurl,);
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &key {
+                    query.push(("key", v.to_string()));
+                }
+                if let Some(v) = &unique_key {
+                    query.push(("uniqueKey", v.to_string()));
+                }
+                client.client.get(url).query(&query)
+            };
+            Ok(built::KeyGet {
+                client: client,
+                request,
+            })
         }
     }
 }

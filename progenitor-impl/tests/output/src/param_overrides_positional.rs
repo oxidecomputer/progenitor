@@ -119,18 +119,20 @@ impl Client {
         key: Option<bool>,
         unique_key: Option<&'a str>,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/key", self.baseurl,);
-        let mut query = Vec::with_capacity(2usize);
-        if let Some(v) = &key {
-            query.push(("key", v.to_string()));
-        }
-
-        if let Some(v) = &unique_key {
-            query.push(("uniqueKey", v.to_string()));
-        }
-
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).query(&query).build()?;
+        let mut request = {
+            let url = format!("{}/key", self.baseurl,);
+            let mut query = Vec::with_capacity(2usize);
+            if let Some(v) = &key {
+                query.push(("key", v.to_string()));
+            }
+            if let Some(v) = &unique_key {
+                query.push(("uniqueKey", v.to_string()));
+            }
+            self.client.get(url).query(&query)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
