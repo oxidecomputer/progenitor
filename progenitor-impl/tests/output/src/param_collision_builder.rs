@@ -7,9 +7,6 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.

@@ -7,9 +7,6 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
@@ -63,7 +60,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct EnrolBody {
         pub host: String,
         pub key: String,
@@ -97,7 +94,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct GlobalJobsResult {
         pub summary: Vec<ReportSummary>,
     }
@@ -135,7 +132,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct OutputRecord {
         pub msg: String,
         pub stream: String,
@@ -171,7 +168,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct PingResult {
         pub host: String,
         pub ok: bool,
@@ -217,7 +214,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct ReportFinishBody {
         pub duration_millis: i32,
         pub end_time: chrono::DateTime<chrono::offset::Utc>,
@@ -268,7 +265,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct ReportId {
         pub host: String,
         pub job: String,
@@ -306,7 +303,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
@@ -337,7 +334,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct ReportResult {
         pub existed_already: bool,
     }
@@ -376,7 +373,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: String,
@@ -431,7 +428,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct ReportSummary {
         pub age_seconds: i32,
         pub duration_seconds: i32,

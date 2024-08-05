@@ -7,9 +7,6 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
@@ -75,7 +72,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct BodyWithDefaults {
         #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
         pub forty_two: u32,
@@ -118,7 +115,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub error_code: Option<String>,

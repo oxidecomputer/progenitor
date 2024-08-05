@@ -7,9 +7,6 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
@@ -77,7 +74,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct Task {
         pub id: String,
         pub name: String,
@@ -131,7 +128,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct TaskEvent {
         pub payload: String,
         pub seq: u32,
@@ -179,7 +176,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct TaskOutput {
         pub id: String,
         pub path: String,
@@ -226,7 +223,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct TaskSubmit {
         pub name: String,
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -264,7 +261,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct TaskSubmitResult {
         pub id: String,
     }
@@ -299,7 +296,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct UploadedChunk {
         pub id: String,
     }
@@ -334,7 +331,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct UserCreate {
         pub name: String,
     }
@@ -377,7 +374,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct UserCreateResult {
         pub id: String,
         pub name: String,
@@ -418,7 +415,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WhoamiResult {
         pub id: String,
         pub name: String,
@@ -476,7 +473,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct Worker {
         pub deleted: bool,
         pub id: String,
@@ -530,7 +527,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkerAddOutput {
         pub chunks: Vec<String>,
         pub path: String,
@@ -576,7 +573,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkerAppendTask {
         pub payload: String,
         pub stream: String,
@@ -617,7 +614,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkerBootstrap {
         pub bootstrap: String,
         pub token: String,
@@ -653,7 +650,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkerBootstrapResult {
         pub id: String,
     }
@@ -688,7 +685,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
     }
@@ -726,7 +723,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkerPingResult {
         pub poweroff: bool,
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -774,7 +771,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkerPingTask {
         pub id: String,
         pub output_rules: Vec<String>,
@@ -819,7 +816,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkerTask {
         pub id: String,
         pub name: String,
@@ -859,7 +856,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(Clone, Debug, schemars :: JsonSchema, serde :: Deserialize, serde :: Serialize)]
     pub struct WorkersResult {
         pub workers: Vec<Worker>,
     }
