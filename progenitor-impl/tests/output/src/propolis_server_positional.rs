@@ -7,9 +7,6 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
@@ -112,7 +109,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct CrucibleOpts {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub cert_pem: Option<String>,
@@ -167,7 +164,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct DiskAttachment {
         pub disk_id: uuid::Uuid,
         pub generation_id: u64,
@@ -212,7 +209,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub enum DiskAttachmentState {
         Detached,
         Destroyed,
@@ -272,7 +269,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct DiskRequest {
         pub device: String,
         pub gen: u64,
@@ -314,7 +311,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub error_code: Option<String>,
@@ -364,7 +361,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct Instance {
         pub disks: Vec<DiskAttachment>,
         pub nics: Vec<NetworkInterface>,
@@ -423,7 +420,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceEnsureRequest {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub cloud_init_bytes: Option<String>,
@@ -461,7 +458,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceEnsureResponse {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub migrate: Option<InstanceMigrateInitiateResponse>,
@@ -491,7 +488,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceGetResponse {
         pub instance: Instance,
     }
@@ -530,7 +527,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceMigrateInitiateRequest {
         pub migration_id: uuid::Uuid,
         pub src_addr: String,
@@ -562,7 +559,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceMigrateInitiateResponse {
         pub migration_id: uuid::Uuid,
     }
@@ -592,7 +589,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceMigrateStatusRequest {
         pub migration_id: uuid::Uuid,
     }
@@ -621,7 +618,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceMigrateStatusResponse {
         pub state: MigrationState,
     }
@@ -689,7 +686,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
         pub bootrom_id: uuid::Uuid,
@@ -736,7 +733,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        serde :: Deserialize,
+        serde :: Serialize,
+    )]
     pub enum InstanceState {
         Creating,
         Starting,
@@ -833,7 +841,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceStateMonitorRequest {
         pub gen: u64,
     }
@@ -868,7 +876,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct InstanceStateMonitorResponse {
         pub gen: u64,
         pub state: InstanceState,
@@ -896,7 +904,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        serde :: Deserialize,
+        serde :: Serialize,
+    )]
     pub enum InstanceStateRequested {
         Run,
         Stop,
@@ -977,7 +996,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        serde :: Deserialize,
+        serde :: Serialize,
+    )]
     pub enum MigrationState {
         Sync,
         RamPush,
@@ -1076,7 +1106,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct NetworkInterface {
         pub attachment: NetworkInterfaceAttachmentState,
         pub name: String,
@@ -1118,7 +1148,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub enum NetworkInterfaceAttachmentState {
         Detached,
         Faulted,
@@ -1159,7 +1189,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct NetworkInterfaceRequest {
         pub name: String,
         pub slot: Slot,
@@ -1186,7 +1216,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     pub struct Slot(pub u8);
     impl std::ops::Deref for Slot {
         type Target = u8;
@@ -1385,7 +1415,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(Clone, Debug, serde :: Deserialize, serde :: Serialize)]
     #[serde(tag = "type")]
     pub enum VolumeConstructionRequest {
         #[serde(rename = "volume")]
