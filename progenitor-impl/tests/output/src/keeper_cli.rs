@@ -55,26 +55,31 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_global_jobs() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("authorization")
-                .long("authorization")
-                .value_parser(clap::value_parser!(String))
-                .required(true)
-                .help("Authorization header (bearer token)"),
-        )
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("authorization")
+                    .long("authorization")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true)
+                    .help("Authorization header (bearer token)"),
+            )
+            .display_order(0)
     }
 
     pub fn cli_ping() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("authorization")
-                .long("authorization")
-                .value_parser(clap::value_parser!(String))
-                .required(true)
-                .help("Authorization header (bearer token)"),
-        )
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("authorization")
+                    .long("authorization")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true)
+                    .help("Authorization header (bearer token)"),
+            )
+            .display_order(0)
     }
 
     pub fn cli_report_finish() -> clap::Command {
@@ -118,6 +123,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_report_output() -> clap::Command {
@@ -143,6 +149,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_report_start() -> clap::Command {
@@ -180,6 +187,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {

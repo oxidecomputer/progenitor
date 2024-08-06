@@ -32,6 +32,7 @@ impl<T: CliConfig> Cli<T> {
                     .help("A key parameter that will not be overridden by the path spec"),
             )
             .long_about("Gets a key")
+            .display_order(0)
     }
 
     pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {

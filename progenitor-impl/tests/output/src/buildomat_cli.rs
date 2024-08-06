@@ -34,24 +34,26 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_control_hold() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_control_resume() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_task_get() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("task")
-                .long("task")
-                .value_parser(clap::value_parser!(String))
-                .required(true),
-        )
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .display_order(0)
     }
 
     pub fn cli_tasks_get() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_task_submit() -> clap::Command {
@@ -82,6 +84,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_task_events_get() -> clap::Command {
@@ -98,15 +101,18 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(clap::value_parser!(String))
                     .required(true),
             )
+            .display_order(0)
     }
 
     pub fn cli_task_outputs_get() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("task")
-                .long("task")
-                .value_parser(clap::value_parser!(String))
-                .required(true),
-        )
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .display_order(0)
     }
 
     pub fn cli_task_output_download() -> clap::Command {
@@ -123,6 +129,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(clap::value_parser!(String))
                     .required(true),
             )
+            .display_order(0)
     }
 
     pub fn cli_user_create() -> clap::Command {
@@ -147,14 +154,15 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_whoami() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_whoami_put_name() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_worker_bootstrap() -> clap::Command {
@@ -185,10 +193,11 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_worker_ping() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_worker_task_append() -> clap::Command {
@@ -231,15 +240,18 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_worker_task_upload_chunk() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("task")
-                .long("task")
-                .value_parser(clap::value_parser!(String))
-                .required(true),
-        )
+        clap::Command::new("")
+            .arg(
+                clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(clap::value_parser!(String))
+                    .required(true),
+            )
+            .display_order(0)
     }
 
     pub fn cli_worker_task_complete() -> clap::Command {
@@ -270,6 +282,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_worker_task_add_output() -> clap::Command {
@@ -306,14 +319,15 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_workers_list() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_workers_recycle() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {

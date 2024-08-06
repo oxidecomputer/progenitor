@@ -60,6 +60,7 @@ impl<T: CliConfig> Cli<T> {
                     .help("Parameter name that was previously colliding"),
             )
             .long_about("Gets a key")
+            .display_order(0)
     }
 
     pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {

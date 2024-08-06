@@ -24,7 +24,7 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_instance_get() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_instance_ensure() -> clap::Command {
@@ -49,6 +49,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_instance_issue_crucible_snapshot_request() -> clap::Command {
@@ -66,6 +67,7 @@ impl<T: CliConfig> Cli<T> {
                     .required(true),
             )
             .about("Issue a snapshot request to a crucible backend")
+            .display_order(0)
     }
 
     pub fn cli_instance_migrate_status() -> clap::Command {
@@ -90,10 +92,11 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_instance_serial() -> clap::Command {
-        clap::Command::new("")
+        clap::Command::new("").display_order(0)
     }
 
     pub fn cli_instance_state_put() -> clap::Command {
@@ -112,6 +115,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub fn cli_instance_state_monitor() -> clap::Command {
@@ -136,6 +140,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
+            .display_order(0)
     }
 
     pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
