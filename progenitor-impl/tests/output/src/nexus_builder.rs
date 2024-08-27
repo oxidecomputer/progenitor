@@ -29063,6 +29063,6758 @@ pub mod builder {
     use super::{
         encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
+            ResponseValue,
+        };
+        pub struct DiskViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskViewById<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ImageViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ImageViewById<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceViewById<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceNetworkInterfaceViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceNetworkInterfaceViewById<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationViewById<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectViewById<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SnapshotViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SnapshotViewById<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterRouteViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterRouteViewById<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterViewById<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcSubnetViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcSubnetViewById<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcViewById<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DeviceAuthRequest<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DeviceAuthRequest<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DeviceAuthConfirm<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DeviceAuthConfirm<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DeviceAccessToken<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DeviceAccessToken<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct GroupList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> GroupList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct LoginSpoof<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> LoginSpoof<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct LoginLocal<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> LoginLocal<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct LoginSamlBegin<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> LoginSamlBegin<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct LoginSaml<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> LoginSaml<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct Logout<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> Logout<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationCreate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationPolicyView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationPolicyView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationPolicyUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationPolicyUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectUpdate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskMetricsList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskMetricsList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ImageList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ImageList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ImageCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ImageCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ImageView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ImageView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ImageDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ImageDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceDiskList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceDiskList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceDiskAttach<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceDiskAttach<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceDiskDetach<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceDiskDetach<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceExternalIpList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceExternalIpList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ExternalIpResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceMigrate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceMigrate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceNetworkInterfaceList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceNetworkInterfaceList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceNetworkInterfaceCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceNetworkInterfaceCreate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceNetworkInterfaceView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceNetworkInterfaceView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceNetworkInterfaceUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceNetworkInterfaceUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceNetworkInterfaceDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceNetworkInterfaceDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceReboot<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceReboot<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceSerialConsole<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceSerialConsole<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceSerialConsoleStream<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceSerialConsoleStream<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    101u16 => ResponseValue::upgrade(response).await,
+                    200..=299 => ResponseValue::upgrade(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceStart<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceStart<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceStop<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceStop<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectPolicyView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectPolicyView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectPolicyUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectPolicyUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SnapshotList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SnapshotList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SnapshotCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SnapshotCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SnapshotView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SnapshotView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SnapshotDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SnapshotDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcUpdate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcFirewallRulesView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcFirewallRulesView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcFirewallRulesUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcFirewallRulesUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterCreate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterRouteList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterRouteList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterRouteCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterRouteCreate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterRouteView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterRouteView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterRouteUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterRouteUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcRouterRouteDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcRouterRouteDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcSubnetList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcSubnetList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcSubnetCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcSubnetCreate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcSubnetView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcSubnetView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcSubnetUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcSubnetUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcSubnetDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcSubnetDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct VpcSubnetListNetworkInterfaces<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> VpcSubnetListNetworkInterfaces<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct PolicyView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> PolicyView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct PolicyUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> PolicyUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct RoleList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> RoleList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct RoleView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> RoleView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SessionMe<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SessionMe<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SessionMeGroups<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SessionMeGroups<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SessionSshkeyList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SessionSshkeyList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SessionSshkeyCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SessionSshkeyCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SessionSshkeyView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SessionSshkeyView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SessionSshkeyDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SessionSshkeyDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemImageViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemImageViewById<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolViewById<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloViewById<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloViewById<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct CertificateList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> CertificateList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::CertificateResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct CertificateCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> CertificateCreate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct CertificateView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> CertificateView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct CertificateDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> CertificateDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct PhysicalDiskList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> PhysicalDiskList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct RackList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> RackList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct RackView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> RackView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SledList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SledList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SledView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SledView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SledPhysicalDiskList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SledPhysicalDiskList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemImageList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemImageList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemImageCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemImageCreate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemImageView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemImageView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemImageDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemImageDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolUpdate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolRangeList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolRangeList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolRangeAdd<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolRangeAdd<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolRangeRemove<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolRangeRemove<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolServiceView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolServiceView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolServiceRangeList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolServiceRangeList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolServiceRangeAdd<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolServiceRangeAdd<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct IpPoolServiceRangeRemove<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> IpPoolServiceRangeRemove<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemMetric<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemMetric<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemPolicyView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemPolicyView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemPolicyUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemPolicyUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SagaList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SagaList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SagaView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SagaView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloIdentityProviderList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloIdentityProviderList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct LocalIdpUserCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> LocalIdpUserCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct LocalIdpUserDelete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> LocalIdpUserDelete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct LocalIdpUserSetPassword<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> LocalIdpUserSetPassword<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SamlIdentityProviderCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SamlIdentityProviderCreate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SamlIdentityProviderView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SamlIdentityProviderView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloPolicyView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloPolicyView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloPolicyUpdate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloPolicyUpdate<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloUsersList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloUsersList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SiloUserView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SiloUserView<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemUserList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemUserList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemUserView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemUserView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::UserBuiltin>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct TimeseriesSchemaGet<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> TimeseriesSchemaGet<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct UserList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> UserList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskListV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskListV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskCreateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskCreateV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskViewV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskViewV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct DiskDeleteV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DiskDeleteV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceListV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceListV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceCreateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceCreateV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceViewV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceViewV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceDeleteV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceDeleteV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceDiskListV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceDiskListV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceDiskAttachV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceDiskAttachV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceDiskDetachV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceDiskDetachV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceMigrateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceMigrateV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceRebootV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceRebootV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceSerialConsoleV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceSerialConsoleV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceSerialConsoleStreamV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceSerialConsoleStreamV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    101u16 => ResponseValue::upgrade(response).await,
+                    200..=299 => ResponseValue::upgrade(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceStartV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceStartV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct InstanceStopV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> InstanceStopV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationListV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationListV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationCreateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationCreateV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationViewV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationViewV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationUpdateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationUpdateV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationDeleteV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationDeleteV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationPolicyViewV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationPolicyViewV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct OrganizationPolicyUpdateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> OrganizationPolicyUpdateV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectListV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectListV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectCreateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectCreateV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectViewV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectViewV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectUpdateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectUpdateV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectDeleteV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectDeleteV1<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectPolicyViewV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectPolicyViewV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ProjectPolicyUpdateV1<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ProjectPolicyUpdateV1<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemComponentVersionList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemComponentVersionList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::UpdateableComponentResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct UpdateDeploymentsList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> UpdateDeploymentsList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::UpdateDeploymentResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct UpdateDeploymentView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> UpdateDeploymentView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemUpdateRefresh<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemUpdateRefresh<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemUpdateStart<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemUpdateStart<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    202u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemUpdateStop<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemUpdateStop<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    204u16 => Ok(ResponseValue::empty(response)),
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemUpdateList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemUpdateList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SystemUpdateResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemUpdateView<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemUpdateView<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SystemUpdate>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemUpdateComponentsList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemUpdateComponentsList<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::ComponentUpdateResultsPage>, Error<types::Error>>
+            {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct SystemVersion<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> SystemVersion<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::disk_view_by_id`]
     ///
     ///[`Client::disk_view_by_id`]: super::Client::disk_view_by_id
@@ -29092,34 +35844,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/disks/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/disks/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/disks/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::DiskViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29152,34 +35897,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/images/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ImageViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/images/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/images/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::ImageViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29212,34 +35950,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/instances/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/instances/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/instances/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29274,34 +36005,29 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(
+            self,
+        ) -> Result<built::InstanceNetworkInterfaceViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/network-interfaces/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/network-interfaces/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceNetworkInterfaceViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29334,34 +36060,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/organizations/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/organizations/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/organizations/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::OrganizationViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29394,34 +36113,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/projects/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/projects/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/projects/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::ProjectViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29454,34 +36166,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/snapshots/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SnapshotViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/snapshots/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/snapshots/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SnapshotViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29514,34 +36219,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterRouteViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/vpc-router-routes/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/vpc-router-routes/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcRouterRouteViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29574,34 +36272,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/vpc-routers/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/vpc-routers/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcRouterViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29634,34 +36325,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcSubnetViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/vpc-subnets/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/vpc-subnets/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcSubnetViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29694,34 +36378,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/by-id/vpcs/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/by-id/vpcs/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/by-id/vpcs/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29766,19 +36443,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/device/auth`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DeviceAuthRequest<'a>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::DeviceAuthRequest::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/auth", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client.client.post(url).form_urlencoded(&body)?.build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
-            }
+            let request = {
+                let url = format!("{}/device/auth", client.baseurl,);
+                client.client.post(url).form_urlencoded(&body)?
+            };
+            Ok(built::DeviceAuthRequest {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29823,33 +36503,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/device/confirm`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DeviceAuthConfirm<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::DeviceAuthVerify::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/confirm", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/device/confirm", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::DeviceAuthConfirm {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29896,21 +36572,24 @@ pub mod builder {
 
         ///Sends a `POST` request to `/device/token`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DeviceAccessToken<'a>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| {
                     types::DeviceAccessTokenRequest::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/token", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client.client.post(url).form_urlencoded(&body)?.build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
-            }
+            let request = {
+                let url = format!("{}/device/token", client.baseurl,);
+                client.client.post(url).form_urlencoded(&body)?
+            };
+            Ok(built::DeviceAccessToken {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -29971,6 +36650,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::GroupList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -29980,39 +36663,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/groups", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/groups", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::GroupList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/groups`
@@ -30101,33 +36776,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/login`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::LoginSpoof<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::SpoofLoginBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/login", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/login", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::LoginSpoof {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30187,6 +36858,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/login/{silo_name}/local`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::LoginLocal<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -30198,25 +36873,18 @@ pub mod builder {
                     types::UsernamePasswordCredentials::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/login/{}/local",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client.client.post(url).json(&body).build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/login/{}/local",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                client.client.post(url).json(&body)
+            };
+            Ok(built::LoginLocal {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30261,6 +36929,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/login/{silo_name}/saml/{provider_name}`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::LoginSamlBegin<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -30268,26 +36940,19 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let provider_name = provider_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/login/{}/saml/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client.client.get(url).build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/login/{}/saml/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&provider_name.to_string()),
+                );
+                client.client.get(url)
+            };
+            Ok(built::LoginSamlBegin {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30344,6 +37009,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/login/{silo_name}/saml/{provider_name}`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::LoginSaml<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -30353,34 +37022,26 @@ pub mod builder {
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let provider_name = provider_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/login/{}/saml/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::CONTENT_TYPE,
-                    reqwest::header::HeaderValue::from_static("application/octet-stream"),
-                )
-                .body(body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/login/{}/saml/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&provider_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::CONTENT_TYPE,
+                        reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    )
+                    .body(body)
+            };
+            Ok(built::LoginSaml {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30399,29 +37060,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/logout`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::Logout<'a>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/logout", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
+            let request = {
+                let url = format!("{}/logout", client.baseurl,);
+                client.client.post(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::Logout {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30482,6 +37136,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -30491,39 +37149,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/organizations", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/organizations", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::OrganizationList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/organizations`
@@ -30614,33 +37264,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/organizations`
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationCreate<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::OrganizationCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/organizations", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/organizations", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::OrganizationCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30673,37 +37319,30 @@ pub mod builder {
 
         ///Sends a `GET` request to `/organizations/{organization_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::OrganizationView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30760,6 +37399,10 @@ pub mod builder {
 
         ///Sends a `PUT` request to `/organizations/{organization_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -30769,33 +37412,25 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::OrganizationUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::OrganizationUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30828,37 +37463,30 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/organizations/{organization_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::OrganizationDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30893,37 +37521,30 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationPolicyView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/policy",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::OrganizationPolicyView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -30984,6 +37605,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationPolicyUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -30993,33 +37618,25 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::OrganizationRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/policy",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::OrganizationPolicyUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -31093,6 +37710,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31104,43 +37725,35 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::ProjectList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -31243,6 +37856,10 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31252,33 +37869,25 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ProjectCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::ProjectCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -31324,6 +37933,10 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31331,33 +37944,22 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::ProjectView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -31425,6 +38027,10 @@ pub mod builder {
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31436,34 +38042,26 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ProjectUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::ProjectUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -31509,6 +38107,10 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31516,33 +38118,22 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::ProjectDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -31628,6 +38219,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31641,44 +38236,36 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/disks",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::DiskList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -31793,6 +38380,10 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/disks`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31804,34 +38395,26 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::DiskCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/disks",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::DiskCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -31890,6 +38473,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/disks/
         /// {disk_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31899,34 +38486,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let disk_name = disk_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&disk_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/disks/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&disk_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::DiskView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -31985,6 +38561,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/disks/
         /// {disk_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -31994,34 +38574,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let disk_name = disk_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&disk_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/disks/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&disk_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::DiskDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -32146,6 +38715,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskMetricsList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -32165,49 +38738,41 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let start_time = start_time.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&disk_name.to_string()),
-                encode_path(&metric_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(4usize);
-            if let Some(v) = &end_time {
-                query.push(("end_time", v.to_string()));
-            }
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &start_time {
-                query.push(("start_time", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&disk_name.to_string()),
+                    encode_path(&metric_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(4usize);
+                if let Some(v) = &end_time {
+                    query.push(("end_time", v.to_string()));
+                }
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &start_time {
+                    query.push(("start_time", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::DiskMetricsList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -32342,6 +38907,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ImageList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -32355,44 +38924,36 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/images",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/images",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::ImageList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -32507,6 +39068,10 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/images`
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ImageCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -32518,34 +39083,26 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ImageCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/images",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/images",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::ImageCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -32604,6 +39161,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/images/
         /// {image_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ImageView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -32613,34 +39174,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/images/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&image_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/images/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&image_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::ImageView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -32699,6 +39249,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/images/
         /// {image_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ImageDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -32708,34 +39262,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/images/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&image_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/images/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&image_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::ImageDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -32822,6 +39365,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -32835,44 +39382,36 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -32989,6 +39528,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33000,34 +39543,26 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::InstanceCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::InstanceCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -33086,6 +39621,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33095,34 +39634,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -33181,6 +39709,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33190,34 +39722,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -33316,6 +39837,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceDiskList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33331,45 +39856,37 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/disks",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/disks",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceDiskList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -33498,6 +40015,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/disks/attach`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceDiskAttach<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33511,35 +40032,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::DiskIdentifier::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::InstanceDiskAttach {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -33620,6 +40133,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/disks/detach`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceDiskDetach<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33633,35 +40150,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::DiskIdentifier::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::InstanceDiskDetach {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -33722,6 +40231,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ExternalIpResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceExternalIpList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33731,34 +40244,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/external-ips",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/external-ips",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceExternalIpList {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -33839,6 +40341,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/migrate`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceMigrate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33852,35 +40358,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::InstanceMigrate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/migrate",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/migrate",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::InstanceMigrate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -33980,6 +40478,10 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>>
         {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceNetworkInterfaceList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -33995,45 +40497,37 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceNetworkInterfaceList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -34168,6 +40662,12 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(
+            self,
+        ) -> Result<built::InstanceNetworkInterfaceCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -34181,35 +40681,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::NetworkInterfaceCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::InstanceNetworkInterfaceCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -34282,6 +40774,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceNetworkInterfaceView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -34293,35 +40789,24 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let interface_name = interface_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                    encode_path(&interface_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceNetworkInterfaceView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -34420,6 +40905,12 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(
+            self,
+        ) -> Result<built::InstanceNetworkInterfaceUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -34435,36 +40926,28 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::NetworkInterfaceUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                    encode_path(&interface_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::InstanceNetworkInterfaceUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -34535,6 +41018,12 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/network-interfaces/{interface_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(
+            self,
+        ) -> Result<built::InstanceNetworkInterfaceDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -34546,35 +41035,24 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
             let interface_name = interface_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                    encode_path(&interface_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceNetworkInterfaceDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -34633,6 +41111,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/reboot`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceReboot<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -34642,34 +41124,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/reboot",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/reboot",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client.client.post(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceReboot {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -34769,6 +41240,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceSerialConsole<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -34784,45 +41259,37 @@ pub mod builder {
             let from_start = from_start.map_err(Error::InvalidRequest)?;
             let max_bytes = max_bytes.map_err(Error::InvalidRequest)?;
             let most_recent = most_recent.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/serial-console",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &from_start {
-                query.push(("from_start", v.to_string()));
-            }
-            if let Some(v) = &max_bytes {
-                query.push(("max_bytes", v.to_string()));
-            }
-            if let Some(v) = &most_recent {
-                query.push(("most_recent", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/serial-console",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &from_start {
+                    query.push(("from_start", v.to_string()));
+                }
+                if let Some(v) = &max_bytes {
+                    query.push(("max_bytes", v.to_string()));
+                }
+                if let Some(v) = &most_recent {
+                    query.push(("most_recent", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceSerialConsole {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -34883,6 +41350,12 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(
+            self,
+        ) -> Result<built::InstanceSerialConsoleStream<'a>, Error<reqwest::Upgraded>> {
             let Self {
                 client,
                 organization_name,
@@ -34892,35 +41365,32 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(reqwest::header::CONNECTION, "Upgrade")
-                .header(reqwest::header::UPGRADE, "websocket")
-                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
-                .header(
-                    reqwest::header::SEC_WEBSOCKET_KEY,
-                    base64::Engine::encode(
-                        &base64::engine::general_purpose::STANDARD,
-                        rand::random::<[u8; 16]>(),
-                    ),
-                )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                101u16 => ResponseValue::upgrade(response).await,
-                200..=299 => ResponseValue::upgrade(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(reqwest::header::CONNECTION, "Upgrade")
+                    .header(reqwest::header::UPGRADE, "websocket")
+                    .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                    .header(
+                        reqwest::header::SEC_WEBSOCKET_KEY,
+                        base64::Engine::encode(
+                            &base64::engine::general_purpose::STANDARD,
+                            rand::random::<[u8; 16]>(),
+                        ),
+                    )
+            };
+            Ok(built::InstanceSerialConsoleStream {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -34979,6 +41449,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/start`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceStart<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -34988,34 +41462,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/start",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/start",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client.client.post(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceStart {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -35074,6 +41537,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/stop`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceStop<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35083,34 +41550,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let instance_name = instance_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/instances/{}/stop",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/instances/{}/stop",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&instance_name.to_string()),
+                );
+                client.client.post(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::InstanceStop {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -35158,6 +41614,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectPolicyView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35165,33 +41625,22 @@ pub mod builder {
             } = self;
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/policy",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::ProjectPolicyView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -35263,6 +41712,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectPolicyUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35274,34 +41727,26 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ProjectRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/policy",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::ProjectPolicyUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -35388,6 +41833,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SnapshotList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35401,44 +41850,36 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/snapshots",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/snapshots",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SnapshotList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -35555,6 +41996,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// snapshots`
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SnapshotCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35566,34 +42011,26 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::SnapshotCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/snapshots",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/snapshots",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::SnapshotCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -35652,6 +42089,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// snapshots/{snapshot_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SnapshotView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35661,34 +42102,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let snapshot_name = snapshot_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/snapshots/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&snapshot_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/snapshots/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&snapshot_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SnapshotView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -35747,6 +42177,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// snapshots/{snapshot_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SnapshotDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35756,34 +42190,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let snapshot_name = snapshot_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/snapshots/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&snapshot_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/snapshots/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&snapshot_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SnapshotDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -35869,6 +42292,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35882,44 +42309,36 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::VpcList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -36034,6 +42453,10 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -36045,34 +42468,26 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::VpcCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -36131,6 +42546,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -36140,34 +42559,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -36248,6 +42656,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -36261,35 +42673,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::VpcUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -36348,6 +42752,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -36357,34 +42765,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -36445,6 +42842,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcFirewallRulesView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -36454,34 +42855,23 @@ pub mod builder {
             let organization_name = organization_name.map_err(Error::InvalidRequest)?;
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcFirewallRulesView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -36569,6 +42959,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcFirewallRulesUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -36584,35 +42978,27 @@ pub mod builder {
                     types::VpcFirewallRuleUpdateParams::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcFirewallRulesUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -36711,6 +43097,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -36726,45 +43116,37 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::VpcRouterList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -36893,6 +43275,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers`
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -36906,35 +43292,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::VpcRouterCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcRouterCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -37005,6 +43383,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -37016,35 +43398,24 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcRouterView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -37137,6 +43508,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -37152,36 +43527,28 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::VpcRouterUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcRouterUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -37252,6 +43619,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -37263,35 +43634,24 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcRouterDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -37402,6 +43762,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterRouteList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -37419,46 +43783,38 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::VpcRouterRouteList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -37603,6 +43959,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes`
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterRouteCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -37620,36 +43980,28 @@ pub mod builder {
                     types::RouterRouteCreateParams::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcRouterRouteCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -37732,6 +44084,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes/{route_name}`
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterRouteView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -37745,36 +44101,25 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let route_name = route_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                    encode_path(&route_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcRouterRouteView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -37883,6 +44228,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes/{route_name}`
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterRouteUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -37902,37 +44251,29 @@ pub mod builder {
                     types::RouterRouteUpdateParams::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                    encode_path(&route_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcRouterRouteUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -38015,6 +44356,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes/{route_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcRouterRouteDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -38028,36 +44373,25 @@ pub mod builder {
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let router_name = router_name.map_err(Error::InvalidRequest)?;
             let route_name = route_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&router_name.to_string()),
+                    encode_path(&route_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcRouterRouteDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -38156,6 +44490,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcSubnetList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -38171,45 +44509,37 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::VpcSubnetList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -38338,6 +44668,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets`
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcSubnetCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -38351,35 +44685,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::VpcSubnetCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcSubnetCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -38450,6 +44776,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets/{subnet_name}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcSubnetView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -38461,35 +44791,24 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let subnet_name = subnet_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&subnet_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcSubnetView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -38582,6 +44901,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets/{subnet_name}`
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcSubnetUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -38597,36 +44920,28 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::VpcSubnetUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&subnet_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::VpcSubnetUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -38697,6 +45012,10 @@ pub mod builder {
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets/{subnet_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::VpcSubnetDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -38708,35 +45027,24 @@ pub mod builder {
             let project_name = project_name.map_err(Error::InvalidRequest)?;
             let vpc_name = vpc_name.map_err(Error::InvalidRequest)?;
             let subnet_name = subnet_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&subnet_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::VpcSubnetDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -38848,6 +45156,12 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>>
         {
+            self.build()?.send().await
+        }
+
+        pub fn build(
+            self,
+        ) -> Result<built::VpcSubnetListNetworkInterfaces<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -38865,46 +45179,38 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
-                client.baseurl,
-                encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
+                    client.baseurl,
+                    encode_path(&organization_name.to_string()),
+                    encode_path(&project_name.to_string()),
+                    encode_path(&vpc_name.to_string()),
+                    encode_path(&subnet_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::VpcSubnetListNetworkInterfaces {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -38973,29 +45279,22 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::PolicyView<'a>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/policy", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!("{}/policy", client.baseurl,);
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::PolicyView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39040,33 +45339,29 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::PolicyUpdate<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::SiloRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/policy", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/policy", client.baseurl,);
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::PolicyUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39114,6 +45409,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::RoleList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -39121,36 +45420,28 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/roles", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/roles", client.baseurl,);
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::RoleList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/roles`
@@ -39228,34 +45519,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/roles/{role_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::RoleView<'a>, Error<types::Error>> {
             let Self { client, role_name } = self;
             let role_name = role_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/roles/{}",
-                client.baseurl,
-                encode_path(&role_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/roles/{}",
+                    client.baseurl,
+                    encode_path(&role_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::RoleView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39274,29 +45558,22 @@ pub mod builder {
 
         ///Sends a `GET` request to `/session/me`
         pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SessionMe<'a>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/session/me", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!("{}/session/me", client.baseurl,);
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SessionMe {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39357,6 +45634,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SessionMeGroups<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -39366,39 +45647,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/session/me/groups", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/session/me/groups", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SessionMeGroups {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/session/me/groups`
@@ -39505,6 +45778,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SessionSshkeyList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -39514,39 +45791,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/session/me/sshkeys", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/session/me/sshkeys", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SessionSshkeyList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/session/me/sshkeys`
@@ -39635,33 +45904,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/session/me/sshkeys`
         pub async fn send(self) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SessionSshkeyCreate<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::SshKeyCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/session/me/sshkeys", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/session/me/sshkeys", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::SessionSshkeyCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39694,37 +45959,30 @@ pub mod builder {
 
         ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
         pub async fn send(self) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SessionSshkeyView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 ssh_key_name,
             } = self;
             let ssh_key_name = ssh_key_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/session/me/sshkeys/{}",
-                client.baseurl,
-                encode_path(&ssh_key_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/session/me/sshkeys/{}",
+                    client.baseurl,
+                    encode_path(&ssh_key_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SessionSshkeyView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39757,37 +46015,30 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SessionSshkeyDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 ssh_key_name,
             } = self;
             let ssh_key_name = ssh_key_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/session/me/sshkeys/{}",
-                client.baseurl,
-                encode_path(&ssh_key_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/session/me/sshkeys/{}",
+                    client.baseurl,
+                    encode_path(&ssh_key_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SessionSshkeyDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39820,34 +46071,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/by-id/images/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemImageViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/by-id/images/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/by-id/images/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemImageViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39880,34 +46124,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/by-id/ip-pools/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/by-id/ip-pools/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/by-id/ip-pools/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::IpPoolViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -39940,34 +46177,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/by-id/silos/{id}`
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloViewById<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/by-id/silos/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/by-id/silos/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SiloViewById {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -40028,6 +46258,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::CertificateResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::CertificateList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -40037,39 +46271,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/certificates", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/certificates", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::CertificateList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/certificates`
@@ -40160,33 +46386,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/system/certificates`
         pub async fn send(self) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::CertificateCreate<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::CertificateCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/certificates", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/certificates", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::CertificateCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -40219,37 +46441,30 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/certificates/{certificate}`
         pub async fn send(self) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::CertificateView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 certificate,
             } = self;
             let certificate = certificate.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/certificates/{}",
-                client.baseurl,
-                encode_path(&certificate.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/certificates/{}",
+                    client.baseurl,
+                    encode_path(&certificate.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::CertificateView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -40282,37 +46497,30 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/system/certificates/{certificate}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::CertificateDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 certificate,
             } = self;
             let certificate = certificate.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/certificates/{}",
-                client.baseurl,
-                encode_path(&certificate.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/certificates/{}",
+                    client.baseurl,
+                    encode_path(&certificate.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::CertificateDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -40373,6 +46581,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::PhysicalDiskList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -40382,39 +46594,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/hardware/disks", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/hardware/disks", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::PhysicalDiskList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/hardware/disks`
@@ -40521,6 +46725,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::RackList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -40530,39 +46738,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/hardware/racks", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/hardware/racks", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::RackList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/hardware/racks`
@@ -40641,34 +46841,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/hardware/racks/{rack_id}`
         pub async fn send(self) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::RackView<'a>, Error<types::Error>> {
             let Self { client, rack_id } = self;
             let rack_id = rack_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/hardware/racks/{}",
-                client.baseurl,
-                encode_path(&rack_id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/hardware/racks/{}",
+                    client.baseurl,
+                    encode_path(&rack_id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::RackView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -40729,6 +46922,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SledList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -40738,39 +46935,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/hardware/sleds", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/hardware/sleds", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SledList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/hardware/sleds`
@@ -40849,34 +47038,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/hardware/sleds/{sled_id}`
         pub async fn send(self) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SledView<'a>, Error<types::Error>> {
             let Self { client, sled_id } = self;
             let sled_id = sled_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/hardware/sleds/{}",
-                client.baseurl,
-                encode_path(&sled_id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/hardware/sleds/{}",
+                    client.baseurl,
+                    encode_path(&sled_id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SledView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -40949,6 +47131,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SledPhysicalDiskList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 sled_id,
@@ -40960,43 +47146,35 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/hardware/sleds/{}/disks",
-                client.baseurl,
-                encode_path(&sled_id.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/hardware/sleds/{}/disks",
+                    client.baseurl,
+                    encode_path(&sled_id.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SledPhysicalDiskList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/hardware/sleds/{sled_id}/disks`
@@ -41103,6 +47281,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemImageList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -41112,39 +47294,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/images", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/images", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SystemImageList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/images`
@@ -41235,33 +47409,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/system/images`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemImageCreate<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::GlobalImageCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/images", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/images", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::SystemImageCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -41294,34 +47464,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/images/{image_name}`
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemImageView<'a>, Error<types::Error>> {
             let Self { client, image_name } = self;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/images/{}",
-                client.baseurl,
-                encode_path(&image_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/images/{}",
+                    client.baseurl,
+                    encode_path(&image_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemImageView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -41354,34 +47517,27 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/system/images/{image_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemImageDelete<'a>, Error<types::Error>> {
             let Self { client, image_name } = self;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/images/{}",
-                client.baseurl,
-                encode_path(&image_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/images/{}",
+                    client.baseurl,
+                    encode_path(&image_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemImageDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -41442,6 +47598,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -41451,39 +47611,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/ip-pools", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::IpPoolList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/ip-pools`
@@ -41572,33 +47724,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/system/ip-pools`
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolCreate<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::IpPoolCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/ip-pools", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::IpPoolCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -41631,34 +47779,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/ip-pools/{pool_name}`
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolView<'a>, Error<types::Error>> {
             let Self { client, pool_name } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/ip-pools/{}",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/ip-pools/{}",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::IpPoolView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -41713,6 +47854,10 @@ pub mod builder {
 
         ///Sends a `PUT` request to `/system/ip-pools/{pool_name}`
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 pool_name,
@@ -41722,33 +47867,25 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::IpPoolUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/ip-pools/{}",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/ip-pools/{}",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::IpPoolUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -41781,34 +47918,27 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/system/ip-pools/{pool_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolDelete<'a>, Error<types::Error>> {
             let Self { client, pool_name } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/ip-pools/{}",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/ip-pools/{}",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::IpPoolDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -41868,6 +47998,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolRangeList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 pool_name,
@@ -41877,40 +48011,32 @@ pub mod builder {
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/ip-pools/{}/ranges",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/ip-pools/{}/ranges",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::IpPoolRangeList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/ip-pools/{pool_name}/ranges`
@@ -42000,6 +48126,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/add`
         pub async fn send(self) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolRangeAdd<'a>, Error<types::Error>> {
             let Self {
                 client,
                 pool_name,
@@ -42007,33 +48137,25 @@ pub mod builder {
             } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/ip-pools/{}/ranges/add",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/ip-pools/{}/ranges/add",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::IpPoolRangeAdd {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42079,6 +48201,10 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/system/ip-pools/{pool_name}/ranges/remove`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolRangeRemove<'a>, Error<types::Error>> {
             let Self {
                 client,
                 pool_name,
@@ -42086,33 +48212,25 @@ pub mod builder {
             } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/ip-pools/{}/ranges/remove",
-                client.baseurl,
-                encode_path(&pool_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/ip-pools/{}/ranges/remove",
+                    client.baseurl,
+                    encode_path(&pool_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::IpPoolRangeRemove {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42131,29 +48249,22 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/ip-pools-service`
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolServiceView<'a>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/system/ip-pools-service", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!("{}/system/ip-pools-service", client.baseurl,);
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::IpPoolServiceView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42201,6 +48312,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolServiceRangeList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -42208,36 +48323,28 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools-service/ranges", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/ip-pools-service/ranges", client.baseurl,);
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::IpPoolServiceRangeList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/ip-pools-service/ranges`
@@ -42315,31 +48422,27 @@ pub mod builder {
 
         ///Sends a `POST` request to `/system/ip-pools-service/ranges/add`
         pub async fn send(self) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolServiceRangeAdd<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools-service/ranges/add", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/ip-pools-service/ranges/add", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::IpPoolServiceRangeAdd {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42372,31 +48475,27 @@ pub mod builder {
 
         ///Sends a `POST` request to `/system/ip-pools-service/ranges/remove`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::IpPoolServiceRangeRemove<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools-service/ranges/remove", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/ip-pools-service/ranges/remove", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::IpPoolServiceRangeRemove {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42495,6 +48594,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemMetric<'a>, Error<types::Error>> {
             let Self {
                 client,
                 metric_name,
@@ -42510,47 +48613,39 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let start_time = start_time.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/metrics/{}",
-                client.baseurl,
-                encode_path(&metric_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &end_time {
-                query.push(("end_time", v.to_string()));
-            }
-            query.push(("id", id.to_string()));
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &start_time {
-                query.push(("start_time", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/metrics/{}",
+                    client.baseurl,
+                    encode_path(&metric_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(5usize);
+                if let Some(v) = &end_time {
+                    query.push(("end_time", v.to_string()));
+                }
+                query.push(("id", id.to_string()));
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &start_time {
+                    query.push(("start_time", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SystemMetric {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42571,29 +48666,22 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemPolicyView<'a>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/system/policy", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!("{}/system/policy", client.baseurl,);
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemPolicyView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42638,33 +48726,29 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemPolicyUpdate<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::FleetRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/policy", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/policy", client.baseurl,);
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::SystemPolicyUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42725,6 +48809,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SagaList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -42734,39 +48822,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/sagas", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/sagas", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SagaList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/sagas`
@@ -42845,34 +48925,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/sagas/{saga_id}`
         pub async fn send(self) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SagaView<'a>, Error<types::Error>> {
             let Self { client, saga_id } = self;
             let saga_id = saga_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/sagas/{}",
-                client.baseurl,
-                encode_path(&saga_id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/sagas/{}",
+                    client.baseurl,
+                    encode_path(&saga_id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SagaView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -42933,6 +49006,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -42942,39 +49019,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/silos", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/silos", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SiloList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/silos`
@@ -43063,33 +49132,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/system/silos`
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloCreate<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::SiloCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/silos", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/silos", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::SiloCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43122,34 +49187,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/silos/{silo_name}`
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloView<'a>, Error<types::Error>> {
             let Self { client, silo_name } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SiloView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43182,34 +49240,27 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/system/silos/{silo_name}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloDelete<'a>, Error<types::Error>> {
             let Self { client, silo_name } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SiloDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43284,6 +49335,10 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>>
         {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloIdentityProviderList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -43295,43 +49350,35 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/identity-providers",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/identity-providers",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SiloIdentityProviderList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to
@@ -43434,6 +49481,10 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/system/silos/{silo_name}/identity-providers/local/users`
         pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::LocalIdpUserCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -43443,33 +49494,25 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::UserCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/identity-providers/local/users",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/identity-providers/local/users",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::LocalIdpUserCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43515,6 +49558,10 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/system/silos/{silo_name}/identity-providers/local/users/{user_id}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::LocalIdpUserDelete<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -43522,33 +49569,22 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let user_id = user_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/identity-providers/local/users/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&user_id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/identity-providers/local/users/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&user_id.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::LocalIdpUserDelete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43607,6 +49643,10 @@ pub mod builder {
         /// `/system/silos/{silo_name}/identity-providers/local/users/{user_id}/
         /// set-password`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::LocalIdpUserSetPassword<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -43616,34 +49656,26 @@ pub mod builder {
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let user_id = user_id.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/identity-providers/local/users/{}/set-password",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&user_id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/identity-providers/local/users/{}/set-password",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&user_id.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::LocalIdpUserSetPassword {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43706,6 +49738,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SamlIdentityProviderCreate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -43717,33 +49753,25 @@ pub mod builder {
                     types::SamlIdentityProviderCreate::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/identity-providers/saml",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/identity-providers/saml",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::SamlIdentityProviderCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43791,6 +49819,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SamlIdentityProviderView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -43798,33 +49830,22 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let provider_name = provider_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/identity-providers/saml/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/identity-providers/saml/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&provider_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SamlIdentityProviderView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43859,34 +49880,27 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloPolicyView<'a>, Error<types::Error>> {
             let Self { client, silo_name } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/policy",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/policy",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SiloPolicyView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -43943,6 +49957,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloPolicyUpdate<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -43952,33 +49970,25 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::SiloRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/policy",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/policy",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::SiloPolicyUpdate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -44051,6 +50061,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloUsersList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -44062,43 +50076,35 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/users/all",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-            );
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/users/all",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                );
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SiloUsersList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/silos/{silo_name}/users/all`
@@ -44190,6 +50196,10 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/system/silos/{silo_name}/users/id/{user_id}`
         pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SiloUserView<'a>, Error<types::Error>> {
             let Self {
                 client,
                 silo_name,
@@ -44197,33 +50207,22 @@ pub mod builder {
             } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let user_id = user_id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/silos/{}/users/id/{}",
-                client.baseurl,
-                encode_path(&silo_name.to_string()),
-                encode_path(&user_id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/silos/{}/users/id/{}",
+                    client.baseurl,
+                    encode_path(&silo_name.to_string()),
+                    encode_path(&user_id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SiloUserView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -44284,6 +50283,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemUserList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -44293,39 +50296,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/user", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/system/user", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SystemUserList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/system/user`
@@ -44404,34 +50399,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/system/user/{user_name}`
         pub async fn send(self) -> Result<ResponseValue<types::UserBuiltin>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemUserView<'a>, Error<types::Error>> {
             let Self { client, user_name } = self;
             let user_name = user_name.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/system/user/{}",
-                client.baseurl,
-                encode_path(&user_name.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/system/user/{}",
+                    client.baseurl,
+                    encode_path(&user_name.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemUserView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -44480,6 +50468,10 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>>
         {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::TimeseriesSchemaGet<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -44487,36 +50479,28 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/timeseries/schema", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/timeseries/schema", client.baseurl,);
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::TimeseriesSchemaGet {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/timeseries/schema`
@@ -44622,6 +50606,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::UserList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -44631,39 +50619,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/users", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/users", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::UserList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/users`
@@ -44796,6 +50776,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskListV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -44809,45 +50793,37 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/disks", client.baseurl,);
-            let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/disks", client.baseurl,);
+                let mut query = Vec::with_capacity(5usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::DiskListV1 {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/v1/disks`
@@ -44963,6 +50939,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/disks`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskCreateV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization,
@@ -44974,35 +50954,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::DiskCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/disks", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            query.push(("project", project.to_string()));
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/disks", client.baseurl,);
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                query.push(("project", project.to_string()));
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .query(&query)
+            };
+            Ok(built::DiskCreateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -45061,6 +51033,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/disks/{disk}`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskViewV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 disk,
@@ -45070,40 +51046,32 @@ pub mod builder {
             let disk = disk.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/disks/{}",
-                client.baseurl,
-                encode_path(&disk.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/disks/{}",
+                    client.baseurl,
+                    encode_path(&disk.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::DiskViewV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -45162,6 +51130,10 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/v1/disks/{disk}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DiskDeleteV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 disk,
@@ -45171,40 +51143,32 @@ pub mod builder {
             let disk = disk.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/disks/{}",
-                client.baseurl,
-                encode_path(&disk.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/disks/{}",
+                    client.baseurl,
+                    encode_path(&disk.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .delete(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::DiskDeleteV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -45291,6 +51255,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceListV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -45304,45 +51272,37 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/instances", client.baseurl,);
-            let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/instances", client.baseurl,);
+                let mut query = Vec::with_capacity(5usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceListV1 {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/v1/instances`
@@ -45458,6 +51418,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/instances`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceCreateV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization,
@@ -45469,35 +51433,27 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::InstanceCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/instances", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            query.push(("project", project.to_string()));
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/instances", client.baseurl,);
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                query.push(("project", project.to_string()));
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .query(&query)
+            };
+            Ok(built::InstanceCreateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -45556,6 +51512,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/instances/{instance}`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceViewV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -45565,40 +51525,32 @@ pub mod builder {
             let instance = instance.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceViewV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -45657,6 +51609,10 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/v1/instances/{instance}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceDeleteV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -45666,40 +51622,32 @@ pub mod builder {
             let instance = instance.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .delete(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceDeleteV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -45798,6 +51746,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceDiskListV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -45813,49 +51765,41 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/disks",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/disks",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(5usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceDiskListV1 {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/v1/instances/{instance}/disks`
@@ -45984,6 +51928,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/instances/{instance}/disks/attach`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceDiskAttachV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -45997,41 +51945,33 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::DiskPath::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/disks/attach",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/disks/attach",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .query(&query)
+            };
+            Ok(built::InstanceDiskAttachV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -46112,6 +52052,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/instances/{instance}/disks/detach`
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceDiskDetachV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -46125,41 +52069,33 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::DiskPath::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/disks/detach",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/disks/detach",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .query(&query)
+            };
+            Ok(built::InstanceDiskDetachV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -46240,6 +52176,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/instances/{instance}/migrate`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceMigrateV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -46253,41 +52193,33 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::InstanceMigrate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/migrate",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/migrate",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .query(&query)
+            };
+            Ok(built::InstanceMigrateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -46346,6 +52278,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/instances/{instance}/reboot`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceRebootV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -46355,40 +52291,32 @@ pub mod builder {
             let instance = instance.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/reboot",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/reboot",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceRebootV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -46488,6 +52416,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceSerialConsoleV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -46503,49 +52435,41 @@ pub mod builder {
             let most_recent = most_recent.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/serial-console",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &from_start {
-                query.push(("from_start", v.to_string()));
-            }
-            if let Some(v) = &max_bytes {
-                query.push(("max_bytes", v.to_string()));
-            }
-            if let Some(v) = &most_recent {
-                query.push(("most_recent", v.to_string()));
-            }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/serial-console",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(5usize);
+                if let Some(v) = &from_start {
+                    query.push(("from_start", v.to_string()));
+                }
+                if let Some(v) = &max_bytes {
+                    query.push(("max_bytes", v.to_string()));
+                }
+                if let Some(v) = &most_recent {
+                    query.push(("most_recent", v.to_string()));
+                }
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceSerialConsoleV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -46607,6 +52531,12 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(
+            self,
+        ) -> Result<built::InstanceSerialConsoleStreamV1<'a>, Error<reqwest::Upgraded>> {
             let Self {
                 client,
                 instance,
@@ -46616,41 +52546,38 @@ pub mod builder {
             let instance = instance.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/serial-console/stream",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .query(&query)
-                .header(reqwest::header::CONNECTION, "Upgrade")
-                .header(reqwest::header::UPGRADE, "websocket")
-                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
-                .header(
-                    reqwest::header::SEC_WEBSOCKET_KEY,
-                    base64::Engine::encode(
-                        &base64::engine::general_purpose::STANDARD,
-                        rand::random::<[u8; 16]>(),
-                    ),
-                )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                101u16 => ResponseValue::upgrade(response).await,
-                200..=299 => ResponseValue::upgrade(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/serial-console/stream",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .query(&query)
+                    .header(reqwest::header::CONNECTION, "Upgrade")
+                    .header(reqwest::header::UPGRADE, "websocket")
+                    .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                    .header(
+                        reqwest::header::SEC_WEBSOCKET_KEY,
+                        base64::Engine::encode(
+                            &base64::engine::general_purpose::STANDARD,
+                            rand::random::<[u8; 16]>(),
+                        ),
+                    )
+            };
+            Ok(built::InstanceSerialConsoleStreamV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -46709,6 +52636,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/instances/{instance}/start`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceStartV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -46718,40 +52649,32 @@ pub mod builder {
             let instance = instance.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/start",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/start",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceStartV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -46810,6 +52733,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/instances/{instance}/stop`
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::InstanceStopV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -46819,40 +52746,32 @@ pub mod builder {
             let instance = instance.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/instances/{}/stop",
-                client.baseurl,
-                encode_path(&instance.to_string()),
-            );
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/instances/{}/stop",
+                    client.baseurl,
+                    encode_path(&instance.to_string()),
+                );
+                let mut query = Vec::with_capacity(2usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &project {
+                    query.push(("project", v.to_string()));
+                }
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::InstanceStopV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -46913,6 +52832,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationListV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -46922,39 +52845,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/organizations", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/organizations", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::OrganizationListV1 {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/v1/organizations`
@@ -47045,33 +52960,29 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/organizations`
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationCreateV1<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::OrganizationCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/organizations", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/organizations", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::OrganizationCreateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47104,37 +53015,30 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/organizations/{organization}`
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationViewV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization,
             } = self;
             let organization = organization.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/organizations/{}",
-                client.baseurl,
-                encode_path(&organization.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/v1/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::OrganizationViewV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47191,6 +53095,10 @@ pub mod builder {
 
         ///Sends a `PUT` request to `/v1/organizations/{organization}`
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationUpdateV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization,
@@ -47200,33 +53108,25 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::OrganizationUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/organizations/{}",
-                client.baseurl,
-                encode_path(&organization.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::OrganizationUpdateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47259,37 +53159,30 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/v1/organizations/{organization}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationDeleteV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization,
             } = self;
             let organization = organization.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/organizations/{}",
-                client.baseurl,
-                encode_path(&organization.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/v1/organizations/{}",
+                    client.baseurl,
+                    encode_path(&organization.to_string()),
+                );
+                client.client.delete(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::OrganizationDeleteV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47324,37 +53217,30 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationPolicyViewV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization,
             } = self;
             let organization = organization.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/organizations/{}/policy",
-                client.baseurl,
-                encode_path(&organization.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/v1/organizations/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::OrganizationPolicyViewV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47415,6 +53301,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::OrganizationPolicyUpdateV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization,
@@ -47424,33 +53314,25 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::OrganizationRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/organizations/{}/policy",
-                client.baseurl,
-                encode_path(&organization.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/organizations/{}/policy",
+                    client.baseurl,
+                    encode_path(&organization.to_string()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::OrganizationPolicyUpdateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47524,6 +53406,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectListV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -47535,42 +53421,34 @@ pub mod builder {
             let organization = organization.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/projects", client.baseurl,);
-            let mut query = Vec::with_capacity(4usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/projects", client.baseurl,);
+                let mut query = Vec::with_capacity(4usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::ProjectListV1 {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/v1/projects`
@@ -47672,6 +53550,10 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/projects`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectCreateV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 organization,
@@ -47681,32 +53563,24 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ProjectCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/projects", client.baseurl,);
-            let mut query = Vec::with_capacity(1usize);
-            query.push(("organization", organization.to_string()));
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/projects", client.baseurl,);
+                let mut query = Vec::with_capacity(1usize);
+                query.push(("organization", organization.to_string()));
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .query(&query)
+            };
+            Ok(built::ProjectCreateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47752,6 +53626,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/projects/{project}`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectViewV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 project,
@@ -47759,37 +53637,29 @@ pub mod builder {
             } = self;
             let project = project.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/projects/{}",
-                client.baseurl,
-                encode_path(&project.to_string()),
-            );
-            let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/projects/{}",
+                    client.baseurl,
+                    encode_path(&project.to_string()),
+                );
+                let mut query = Vec::with_capacity(1usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::ProjectViewV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47857,6 +53727,10 @@ pub mod builder {
 
         ///Sends a `PUT` request to `/v1/projects/{project}`
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectUpdateV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 project,
@@ -47868,38 +53742,30 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ProjectUpdate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/projects/{}",
-                client.baseurl,
-                encode_path(&project.to_string()),
-            );
-            let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/projects/{}",
+                    client.baseurl,
+                    encode_path(&project.to_string()),
+                );
+                let mut query = Vec::with_capacity(1usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .query(&query)
+            };
+            Ok(built::ProjectUpdateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -47945,6 +53811,10 @@ pub mod builder {
 
         ///Sends a `DELETE` request to `/v1/projects/{project}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectDeleteV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 project,
@@ -47952,37 +53822,29 @@ pub mod builder {
             } = self;
             let project = project.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/projects/{}",
-                client.baseurl,
-                encode_path(&project.to_string()),
-            );
-            let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .delete(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/projects/{}",
+                    client.baseurl,
+                    encode_path(&project.to_string()),
+                );
+                let mut query = Vec::with_capacity(1usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                client
+                    .client
+                    .delete(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::ProjectDeleteV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48030,6 +53892,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectPolicyViewV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 project,
@@ -48037,37 +53903,29 @@ pub mod builder {
             } = self;
             let project = project.map_err(Error::InvalidRequest)?;
             let organization = organization.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/projects/{}/policy",
-                client.baseurl,
-                encode_path(&project.to_string()),
-            );
-            let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/projects/{}/policy",
+                    client.baseurl,
+                    encode_path(&project.to_string()),
+                );
+                let mut query = Vec::with_capacity(1usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::ProjectPolicyViewV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48139,6 +53997,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ProjectPolicyUpdateV1<'a>, Error<types::Error>> {
             let Self {
                 client,
                 project,
@@ -48150,38 +54012,30 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ProjectRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/projects/{}/policy",
-                client.baseurl,
-                encode_path(&project.to_string()),
-            );
-            let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!(
+                    "{}/v1/projects/{}/policy",
+                    client.baseurl,
+                    encode_path(&project.to_string()),
+                );
+                let mut query = Vec::with_capacity(1usize);
+                if let Some(v) = &organization {
+                    query.push(("organization", v.to_string()));
+                }
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .query(&query)
+            };
+            Ok(built::ProjectPolicyUpdateV1 {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48243,6 +54097,10 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::UpdateableComponentResultsPage>, Error<types::Error>>
         {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemComponentVersionList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -48252,39 +54110,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/system/update/components", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/system/update/components", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SystemComponentVersionList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/v1/system/update/components`
@@ -48393,6 +54243,10 @@ pub mod builder {
             self,
         ) -> Result<ResponseValue<types::UpdateDeploymentResultsPage>, Error<types::Error>>
         {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::UpdateDeploymentsList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -48402,39 +54256,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/system/update/deployments", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/system/update/deployments", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::UpdateDeploymentsList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/v1/system/update/deployments`
@@ -48515,34 +54361,27 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::UpdateDeploymentView<'a>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/system/update/deployments/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/v1/system/update/deployments/{}",
+                    client.baseurl,
+                    encode_path(&id.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::UpdateDeploymentView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48561,29 +54400,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/system/update/refresh`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemUpdateRefresh<'a>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/v1/system/update/refresh", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
+            let request = {
+                let url = format!("{}/v1/system/update/refresh", client.baseurl,);
+                client.client.post(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemUpdateRefresh {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48630,33 +54462,29 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemUpdateStart<'a>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::SystemUpdateStart::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/system/update/start", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                202u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/system/update/start", client.baseurl,);
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+            };
+            Ok(built::SystemUpdateStart {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48675,29 +54503,22 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/system/update/stop`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemUpdateStop<'a>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/v1/system/update/stop", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
+            let request = {
+                let url = format!("{}/v1/system/update/stop", client.baseurl,);
+                client.client.post(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemUpdateStop {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48758,6 +54579,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SystemUpdateResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemUpdateList<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -48767,39 +54592,31 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/system/update/updates", client.baseurl,);
-            let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
-            }
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&query)
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/v1/system/update/updates", client.baseurl,);
+                let mut query = Vec::with_capacity(3usize);
+                if let Some(v) = &limit {
+                    query.push(("limit", v.to_string()));
+                }
+                if let Some(v) = &page_token {
+                    query.push(("page_token", v.to_string()));
+                }
+                if let Some(v) = &sort_by {
+                    query.push(("sort_by", v.to_string()));
+                }
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&query)
+            };
+            Ok(built::SystemUpdateList {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/v1/system/update/updates`
@@ -48878,34 +54695,27 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/system/update/updates/{version}`
         pub async fn send(self) -> Result<ResponseValue<types::SystemUpdate>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemUpdateView<'a>, Error<types::Error>> {
             let Self { client, version } = self;
             let version = version.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/system/update/updates/{}",
-                client.baseurl,
-                encode_path(&version.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/v1/system/update/updates/{}",
+                    client.baseurl,
+                    encode_path(&version.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemUpdateView {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48941,34 +54751,27 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ComponentUpdateResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemUpdateComponentsList<'a>, Error<types::Error>> {
             let Self { client, version } = self;
             let version = version.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/system/update/updates/{}/components",
-                client.baseurl,
-                encode_path(&version.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!(
+                    "{}/v1/system/update/updates/{}/components",
+                    client.baseurl,
+                    encode_path(&version.to_string()),
+                );
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemUpdateComponentsList {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -48989,29 +54792,22 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::SystemVersion<'a>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/v1/system/update/version", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
+            let request = {
+                let url = format!("{}/v1/system/update/version", client.baseurl,);
+                client.client.get(url).header(
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            };
+            Ok(built::SystemVersion {
+                client: client,
+                request,
+            })
         }
     }
 }
