@@ -1131,7 +1131,7 @@ impl Generator {
 
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &#request_ident);
+                (#hook)(&#client.inner, &mut #request_ident);
             }
         });
         let pre_hook_async = self.settings.pre_hook_async.as_ref().map(|hook| {
