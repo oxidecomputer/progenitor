@@ -2326,7 +2326,7 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 [[package]]
 name = "typify"
 version = "0.1.0"
-source = "git+https://github.com/oxidecomputer/typify#4070232ea6d8dd94e0275d56d6cc503e104c7692"
+source = "git+https://github.com/oxidecomputer/typify#49f07469b6bdc4d98e00bfe2d12a55372e07e9a6"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -2335,7 +2335,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.1.0"
-source = "git+https://github.com/oxidecomputer/typify#4070232ea6d8dd94e0275d56d6cc503e104c7692"
+source = "git+https://github.com/oxidecomputer/typify#49f07469b6bdc4d98e00bfe2d12a55372e07e9a6"
 dependencies = [
  "heck",
  "log",
@@ -2354,7 +2354,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.1.0"
-source = "git+https://github.com/oxidecomputer/typify#4070232ea6d8dd94e0275d56d6cc503e104c7692"
+source = "git+https://github.com/oxidecomputer/typify#49f07469b6bdc4d98e00bfe2d12a55372e07e9a6"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2375,9 +2375,9 @@ checksum = "1a01404663e3db436ed2746d9fefef640d868edae3cceb81c3b8d5732fda678f"
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.12"
+version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
+checksum = "e91b56cd4cadaeb79bbf1a5645f6b4f8dc5bde8834ad5894a8db35fda9efa1fe"
 
 [[package]]
 name = "unicode-normalization"
