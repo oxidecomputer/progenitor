@@ -50,6 +50,14 @@ impl DerefMut for ByteStream {
     }
 }
 
+impl std::fmt::Debug for ByteStream {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ByteStream")
+            .field("inner", &"<Stream>")
+            .finish()
+    }
+}
+
 /// Typed value returned by generated client methods.
 ///
 /// This is used for successful responses and may appear in error responses
@@ -363,16 +371,6 @@ where
             f,
             "status: {}; headers: {:?}; value: {:?}",
             self.status, self.headers, self.inner,
-        )
-    }
-}
-
-impl ErrorFormat for ResponseValue<ByteStream> {
-    fn fmt_info(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "status: {}; headers: {:?}; value: <stream>",
-            self.status, self.headers,
         )
     }
 }
