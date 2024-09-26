@@ -1471,7 +1471,7 @@ dependencies = [
  "futures",
  "heck",
  "http 0.2.9",
- "hyper 0.14.30",
+ "hyper 1.4.1",
  "indexmap",
  "openapiv3",
  "proc-macro2",
