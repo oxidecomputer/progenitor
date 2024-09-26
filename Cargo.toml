@@ -23,7 +23,7 @@ base64 = "0.22.1"
 built = { version = "0.7.4", features = ["cargo-lock", "git2"] }
 bytes = "1.7.1"
 chrono = { version = "0.4.0", default-features = false, features = ["serde"] }
-clap = { version = "4.5.17", default-features = false, features = ["derive", "std"] }
+clap = { version = "4.5.18", default-features = false, features = ["derive", "std"] }
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
 env_logger = "0.10.2"
 expectorate = "1.1.0"
