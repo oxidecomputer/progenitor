@@ -240,7 +240,7 @@ const DEPENDENCIES: Dependencies = Dependencies {
     percent_encoding: "2.3",
     rand: "0.8",
     regress: "0.10",
-    reqwest: "0.11",
+    reqwest: "0.12",
     serde: "1.0",
     serde_json: "1.0",
     serde_urlencoded: "0.7",

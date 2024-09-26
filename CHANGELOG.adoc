@@ -15,6 +15,10 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.7.0\...HEAD[Full list of commits]
 
+* Update to `hyper` 1.0, `reqwest` 0.12 -- these are likely breaking changes
+* Improvements to CLI generation
+* Changes to type generation and traits in `typify` 0.2.0
+
 == 0.7.0 (released 2024-05-15)
 
 * Minor fixes

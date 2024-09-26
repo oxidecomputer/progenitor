@@ -6,6 +6,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0"
 base64 = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4", features = ["string"] }
@@ -15,7 +16,7 @@ progenitor-client = { path = "../../../progenitor-client" }
 rand = { version = "0.8", features = ["serde1"] }
 regex = "1.10"
 regress = "0.7"
-reqwest = "0.11"
+reqwest = "0.12"
 schemars = { version = "0.8", features = ["chrono", "uuid1"] }
 serde = { features = ["derive"], version = "1" }
 serde_json = "1"
