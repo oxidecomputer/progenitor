@@ -1,14 +1,13 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
 use dropshot::{
-    endpoint, ApiDescription, ConfigDropshot, ConfigLogging,
+    endpoint, ApiDescription, Body, ConfigDropshot, ConfigLogging,
     ConfigLoggingLevel, EmptyScanParams, HttpError, HttpResponseOk,
     HttpResponseUpdatedNoContent, HttpServerStarter, PaginationParams, Path,
     Query, RequestContext, ResultsPage, TypedBody,
 };
 use futures::StreamExt;
 use http::Response;
-use hyper::Body;
 use openapiv3::OpenAPI;
 use progenitor_impl::{
     space_out_items, GenerationSettings, Generator, InterfaceStyle,
