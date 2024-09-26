@@ -203,7 +203,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-progenitor"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "anyhow",
  "built",
@@ -1368,7 +1368,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "base64",
  "chrono",
@@ -1389,7 +1389,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-client"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "bytes",
  "futures-core",
@@ -1402,7 +1402,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-impl"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "dropshot",
  "expectorate",
@@ -1431,7 +1431,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-macro"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "openapiv3",
  "proc-macro2",

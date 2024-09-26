@@ -1,6 +1,6 @@
 [package]
 name = "progenitor-macro"
-version = "0.7.0"
+version = "0.8.0"
 edition = "2021"
 license = "MPL-2.0"
 description = "An OpenAPI client generator - macros"
@@ -13,7 +13,7 @@ proc-macro = true
 [dependencies]
 openapiv3 = "2.0.0"
 proc-macro2 = "1.0"
-progenitor-impl = { version = "0.7.0", path = "../progenitor-impl" }
+progenitor-impl = { version = "0.8.0", path = "../progenitor-impl" }
 quote = "1.0"
 schemars = "0.8.21"
 serde = { version = "1.0", features = ["derive"] }
