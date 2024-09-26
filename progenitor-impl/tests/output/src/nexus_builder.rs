@@ -555,9 +555,9 @@ pub mod types {
         }
     }
 
-    impl ToString for ByteCount {
-        fn to_string(&self) -> String {
-            self.0.to_string()
+    impl ::std::fmt::Display for ByteCount {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
         }
     }
 
@@ -1314,18 +1314,18 @@ pub mod types {
         }
     }
 
-    impl ToString for DatumType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for DatumType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Bool => "bool".to_string(),
-                Self::I64 => "i64".to_string(),
-                Self::F64 => "f64".to_string(),
-                Self::String => "string".to_string(),
-                Self::Bytes => "bytes".to_string(),
-                Self::CumulativeI64 => "cumulative_i64".to_string(),
-                Self::CumulativeF64 => "cumulative_f64".to_string(),
-                Self::HistogramI64 => "histogram_i64".to_string(),
-                Self::HistogramF64 => "histogram_f64".to_string(),
+                Self::Bool => write!(f, "bool"),
+                Self::I64 => write!(f, "i64"),
+                Self::F64 => write!(f, "f64"),
+                Self::String => write!(f, "string"),
+                Self::Bytes => write!(f, "bytes"),
+                Self::CumulativeI64 => write!(f, "cumulative_i64"),
+                Self::CumulativeF64 => write!(f, "cumulative_f64"),
+                Self::HistogramI64 => write!(f, "histogram_i64"),
+                Self::HistogramF64 => write!(f, "histogram_f64"),
             }
         }
     }
@@ -1866,15 +1866,15 @@ pub mod types {
         }
     }
 
-    impl ToString for DiskMetricName {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for DiskMetricName {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Activated => "activated".to_string(),
-                Self::Flush => "flush".to_string(),
-                Self::Read => "read".to_string(),
-                Self::ReadBytes => "read_bytes".to_string(),
-                Self::Write => "write".to_string(),
-                Self::WriteBytes => "write_bytes".to_string(),
+                Self::Activated => write!(f, "activated"),
+                Self::Flush => write!(f, "flush"),
+                Self::Read => write!(f, "read"),
+                Self::ReadBytes => write!(f, "read_bytes"),
+                Self::Write => write!(f, "write"),
+                Self::WriteBytes => write!(f, "write_bytes"),
             }
         }
     }
@@ -2641,11 +2641,11 @@ pub mod types {
         }
     }
 
-    impl ToString for FieldSource {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for FieldSource {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Target => "target".to_string(),
-                Self::Metric => "metric".to_string(),
+                Self::Target => write!(f, "target"),
+                Self::Metric => write!(f, "metric"),
             }
         }
     }
@@ -2733,14 +2733,14 @@ pub mod types {
         }
     }
 
-    impl ToString for FieldType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for FieldType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::String => "string".to_string(),
-                Self::I64 => "i64".to_string(),
-                Self::IpAddr => "ip_addr".to_string(),
-                Self::Uuid => "uuid".to_string(),
-                Self::Bool => "bool".to_string(),
+                Self::String => write!(f, "string"),
+                Self::I64 => write!(f, "i64"),
+                Self::IpAddr => write!(f, "ip_addr"),
+                Self::Uuid => write!(f, "uuid"),
+                Self::Bool => write!(f, "bool"),
             }
         }
     }
@@ -2823,12 +2823,12 @@ pub mod types {
         }
     }
 
-    impl ToString for FleetRole {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for FleetRole {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => "admin".to_string(),
-                Self::Collaborator => "collaborator".to_string(),
-                Self::Viewer => "viewer".to_string(),
+                Self::Admin => write!(f, "admin"),
+                Self::Collaborator => write!(f, "collaborator"),
+                Self::Viewer => write!(f, "viewer"),
             }
         }
     }
@@ -3648,10 +3648,10 @@ pub mod types {
         }
     }
 
-    impl ToString for IdSortMode {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IdSortMode {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::IdAscending => "id_ascending".to_string(),
+                Self::IdAscending => write!(f, "id_ascending"),
             }
         }
     }
@@ -3872,10 +3872,10 @@ pub mod types {
         }
     }
 
-    impl ToString for IdentityProviderType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IdentityProviderType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Saml => "saml".to_string(),
+                Self::Saml => write!(f, "saml"),
             }
         }
     }
@@ -3952,11 +3952,11 @@ pub mod types {
         }
     }
 
-    impl ToString for IdentityType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IdentityType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::SiloUser => "silo_user".to_string(),
-                Self::SiloGroup => "silo_group".to_string(),
+                Self::SiloUser => write!(f, "silo_user"),
+                Self::SiloGroup => write!(f, "silo_group"),
             }
         }
     }
@@ -4595,9 +4595,9 @@ pub mod types {
         }
     }
 
-    impl ToString for InstanceCpuCount {
-        fn to_string(&self) -> String {
-            self.0.to_string()
+    impl ::std::fmt::Display for InstanceCpuCount {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
         }
     }
 
@@ -5243,19 +5243,19 @@ pub mod types {
         }
     }
 
-    impl ToString for InstanceState {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for InstanceState {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => "creating".to_string(),
-                Self::Starting => "starting".to_string(),
-                Self::Running => "running".to_string(),
-                Self::Stopping => "stopping".to_string(),
-                Self::Stopped => "stopped".to_string(),
-                Self::Rebooting => "rebooting".to_string(),
-                Self::Migrating => "migrating".to_string(),
-                Self::Repairing => "repairing".to_string(),
-                Self::Failed => "failed".to_string(),
-                Self::Destroyed => "destroyed".to_string(),
+                Self::Creating => write!(f, "creating"),
+                Self::Starting => write!(f, "starting"),
+                Self::Running => write!(f, "running"),
+                Self::Stopping => write!(f, "stopping"),
+                Self::Stopped => write!(f, "stopped"),
+                Self::Rebooting => write!(f, "rebooting"),
+                Self::Migrating => write!(f, "migrating"),
+                Self::Repairing => write!(f, "repairing"),
+                Self::Failed => write!(f, "failed"),
+                Self::Destroyed => write!(f, "destroyed"),
             }
         }
     }
@@ -5341,11 +5341,11 @@ pub mod types {
         }
     }
 
-    impl ToString for IpKind {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IpKind {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Ephemeral => "ephemeral".to_string(),
-                Self::Floating => "floating".to_string(),
+                Self::Ephemeral => write!(f, "ephemeral"),
+                Self::Floating => write!(f, "floating"),
             }
         }
     }
@@ -5458,11 +5458,11 @@ pub mod types {
         }
     }
 
-    impl ToString for IpNet {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IpNet {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
-                Self::V4(x) => x.to_string(),
-                Self::V6(x) => x.to_string(),
+                Self::V4(x) => x.fmt(f),
+                Self::V6(x) => x.fmt(f),
             }
         }
     }
@@ -6654,11 +6654,11 @@ pub mod types {
         }
     }
 
-    impl ToString for NameOrId {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for NameOrId {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
-                Self::Id(x) => x.to_string(),
-                Self::Name(x) => x.to_string(),
+                Self::Id(x) => x.fmt(f),
+                Self::Name(x) => x.fmt(f),
             }
         }
     }
@@ -6740,12 +6740,12 @@ pub mod types {
         }
     }
 
-    impl ToString for NameOrIdSortMode {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for NameOrIdSortMode {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::NameAscending => "name_ascending".to_string(),
-                Self::NameDescending => "name_descending".to_string(),
-                Self::IdAscending => "id_ascending".to_string(),
+                Self::NameAscending => write!(f, "name_ascending"),
+                Self::NameDescending => write!(f, "name_descending"),
+                Self::IdAscending => write!(f, "id_ascending"),
             }
         }
     }
@@ -6830,10 +6830,10 @@ pub mod types {
         }
     }
 
-    impl ToString for NameSortMode {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for NameSortMode {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::NameAscending => "name_ascending".to_string(),
+                Self::NameAscending => write!(f, "name_ascending"),
             }
         }
     }
@@ -7276,9 +7276,9 @@ pub mod types {
         }
     }
 
-    impl ToString for NodeName {
-        fn to_string(&self) -> String {
-            self.0.to_string()
+    impl ::std::fmt::Display for NodeName {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
         }
     }
 
@@ -7501,12 +7501,12 @@ pub mod types {
         }
     }
 
-    impl ToString for OrganizationRole {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for OrganizationRole {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => "admin".to_string(),
-                Self::Collaborator => "collaborator".to_string(),
-                Self::Viewer => "viewer".to_string(),
+                Self::Admin => write!(f, "admin"),
+                Self::Collaborator => write!(f, "collaborator"),
+                Self::Viewer => write!(f, "viewer"),
             }
         }
     }
@@ -7974,11 +7974,11 @@ pub mod types {
         }
     }
 
-    impl ToString for PhysicalDiskType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for PhysicalDiskType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Internal => "internal".to_string(),
-                Self::External => "external".to_string(),
+                Self::Internal => write!(f, "internal"),
+                Self::External => write!(f, "external"),
             }
         }
     }
@@ -8240,12 +8240,12 @@ pub mod types {
         }
     }
 
-    impl ToString for ProjectRole {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for ProjectRole {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => "admin".to_string(),
-                Self::Collaborator => "collaborator".to_string(),
-                Self::Viewer => "viewer".to_string(),
+                Self::Admin => write!(f, "admin"),
+                Self::Collaborator => write!(f, "collaborator"),
+                Self::Viewer => write!(f, "viewer"),
             }
         }
     }
@@ -9284,13 +9284,13 @@ pub mod types {
         }
     }
 
-    impl ToString for RouterRouteKind {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for RouterRouteKind {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Default => "default".to_string(),
-                Self::VpcSubnet => "vpc_subnet".to_string(),
-                Self::VpcPeering => "vpc_peering".to_string(),
-                Self::Custom => "custom".to_string(),
+                Self::Default => write!(f, "default"),
+                Self::VpcSubnet => write!(f, "vpc_subnet"),
+                Self::VpcPeering => write!(f, "vpc_peering"),
+                Self::Custom => write!(f, "custom"),
             }
         }
     }
@@ -10123,10 +10123,10 @@ pub mod types {
         }
     }
 
-    impl ToString for ServiceUsingCertificate {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for ServiceUsingCertificate {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::ExternalApi => "external_api".to_string(),
+                Self::ExternalApi => write!(f, "external_api"),
             }
         }
     }
@@ -10400,11 +10400,11 @@ pub mod types {
         }
     }
 
-    impl ToString for SiloIdentityMode {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for SiloIdentityMode {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::SamlJit => "saml_jit".to_string(),
-                Self::LocalOnly => "local_only".to_string(),
+                Self::SamlJit => write!(f, "saml_jit"),
+                Self::LocalOnly => write!(f, "local_only"),
             }
         }
     }
@@ -10538,12 +10538,12 @@ pub mod types {
         }
     }
 
-    impl ToString for SiloRole {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for SiloRole {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => "admin".to_string(),
-                Self::Collaborator => "collaborator".to_string(),
-                Self::Viewer => "viewer".to_string(),
+                Self::Admin => write!(f, "admin"),
+                Self::Collaborator => write!(f, "collaborator"),
+                Self::Viewer => write!(f, "viewer"),
             }
         }
     }
@@ -11067,13 +11067,13 @@ pub mod types {
         }
     }
 
-    impl ToString for SnapshotState {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for SnapshotState {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => "creating".to_string(),
-                Self::Ready => "ready".to_string(),
-                Self::Faulted => "faulted".to_string(),
-                Self::Destroyed => "destroyed".to_string(),
+                Self::Creating => write!(f, "creating"),
+                Self::Ready => write!(f, "ready"),
+                Self::Faulted => write!(f, "faulted"),
+                Self::Destroyed => write!(f, "destroyed"),
             }
         }
     }
@@ -11392,12 +11392,12 @@ pub mod types {
         }
     }
 
-    impl ToString for SystemMetricName {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for SystemMetricName {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::VirtualDiskSpaceProvisioned => "virtual_disk_space_provisioned".to_string(),
-                Self::CpusProvisioned => "cpus_provisioned".to_string(),
-                Self::RamProvisioned => "ram_provisioned".to_string(),
+                Self::VirtualDiskSpaceProvisioned => write!(f, "virtual_disk_space_provisioned"),
+                Self::CpusProvisioned => write!(f, "cpus_provisioned"),
+                Self::RamProvisioned => write!(f, "ram_provisioned"),
             }
         }
     }
@@ -12041,11 +12041,11 @@ pub mod types {
         }
     }
 
-    impl ToString for UpdateStatus {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for UpdateStatus {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Updating => "updating".to_string(),
-                Self::Steady => "steady".to_string(),
+                Self::Updating => write!(f, "updating"),
+                Self::Steady => write!(f, "steady"),
             }
         }
     }
@@ -12291,21 +12291,21 @@ pub mod types {
         }
     }
 
-    impl ToString for UpdateableComponentType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for UpdateableComponentType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::BootloaderForRot => "bootloader_for_rot".to_string(),
-                Self::BootloaderForSp => "bootloader_for_sp".to_string(),
-                Self::BootloaderForHostProc => "bootloader_for_host_proc".to_string(),
-                Self::HubrisForPscRot => "hubris_for_psc_rot".to_string(),
-                Self::HubrisForPscSp => "hubris_for_psc_sp".to_string(),
-                Self::HubrisForSidecarRot => "hubris_for_sidecar_rot".to_string(),
-                Self::HubrisForSidecarSp => "hubris_for_sidecar_sp".to_string(),
-                Self::HubrisForGimletRot => "hubris_for_gimlet_rot".to_string(),
-                Self::HubrisForGimletSp => "hubris_for_gimlet_sp".to_string(),
-                Self::HeliosHostPhase1 => "helios_host_phase1".to_string(),
-                Self::HeliosHostPhase2 => "helios_host_phase2".to_string(),
-                Self::HostOmicron => "host_omicron".to_string(),
+                Self::BootloaderForRot => write!(f, "bootloader_for_rot"),
+                Self::BootloaderForSp => write!(f, "bootloader_for_sp"),
+                Self::BootloaderForHostProc => write!(f, "bootloader_for_host_proc"),
+                Self::HubrisForPscRot => write!(f, "hubris_for_psc_rot"),
+                Self::HubrisForPscSp => write!(f, "hubris_for_psc_sp"),
+                Self::HubrisForSidecarRot => write!(f, "hubris_for_sidecar_rot"),
+                Self::HubrisForSidecarSp => write!(f, "hubris_for_sidecar_sp"),
+                Self::HubrisForGimletRot => write!(f, "hubris_for_gimlet_rot"),
+                Self::HubrisForGimletSp => write!(f, "hubris_for_gimlet_sp"),
+                Self::HeliosHostPhase1 => write!(f, "helios_host_phase1"),
+                Self::HeliosHostPhase2 => write!(f, "helios_host_phase2"),
+                Self::HostOmicron => write!(f, "host_omicron"),
             }
         }
     }
@@ -13276,11 +13276,11 @@ pub mod types {
         }
     }
 
-    impl ToString for VpcFirewallRuleAction {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcFirewallRuleAction {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Allow => "allow".to_string(),
-                Self::Deny => "deny".to_string(),
+                Self::Allow => write!(f, "allow"),
+                Self::Deny => write!(f, "deny"),
             }
         }
     }
@@ -13357,11 +13357,11 @@ pub mod types {
         }
     }
 
-    impl ToString for VpcFirewallRuleDirection {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcFirewallRuleDirection {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Inbound => "inbound".to_string(),
-                Self::Outbound => "outbound".to_string(),
+                Self::Inbound => write!(f, "inbound"),
+                Self::Outbound => write!(f, "outbound"),
             }
         }
     }
@@ -13676,12 +13676,12 @@ pub mod types {
         }
     }
 
-    impl ToString for VpcFirewallRuleProtocol {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcFirewallRuleProtocol {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Tcp => "TCP".to_string(),
-                Self::Udp => "UDP".to_string(),
-                Self::Icmp => "ICMP".to_string(),
+                Self::Tcp => write!(f, "TCP"),
+                Self::Udp => write!(f, "UDP"),
+                Self::Icmp => write!(f, "ICMP"),
             }
         }
     }
@@ -13759,11 +13759,11 @@ pub mod types {
         }
     }
 
-    impl ToString for VpcFirewallRuleStatus {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcFirewallRuleStatus {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Disabled => "disabled".to_string(),
-                Self::Enabled => "enabled".to_string(),
+                Self::Disabled => write!(f, "disabled"),
+                Self::Enabled => write!(f, "enabled"),
             }
         }
     }
@@ -14385,11 +14385,11 @@ pub mod types {
         }
     }
 
-    impl ToString for VpcRouterKind {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcRouterKind {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::System => "system".to_string(),
-                Self::Custom => "custom".to_string(),
+                Self::System => write!(f, "system"),
+                Self::Custom => write!(f, "custom"),
             }
         }
     }

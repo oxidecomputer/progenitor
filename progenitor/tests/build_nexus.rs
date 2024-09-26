@@ -27,6 +27,8 @@ mod builder_untagged {
     use futures::StreamExt;
 
     mod nexus_client {
+        use std::fmt::Display;
+
         #[derive(Clone, serde::Serialize, serde::Deserialize, Debug)]
         pub struct MyIpv4Net(String);
         impl std::str::FromStr for MyIpv4Net {
@@ -35,9 +37,9 @@ mod builder_untagged {
                 Ok(Self(value.to_string()))
             }
         }
-        impl ToString for MyIpv4Net {
-            fn to_string(&self) -> String {
-                self.0.clone()
+        impl Display for MyIpv4Net {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                self.0.fmt(f)
             }
         }
         progenitor::generate_api!(

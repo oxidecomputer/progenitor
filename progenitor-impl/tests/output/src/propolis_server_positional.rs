@@ -764,19 +764,19 @@ pub mod types {
         }
     }
 
-    impl ToString for InstanceState {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for InstanceState {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => "Creating".to_string(),
-                Self::Starting => "Starting".to_string(),
-                Self::Running => "Running".to_string(),
-                Self::Stopping => "Stopping".to_string(),
-                Self::Stopped => "Stopped".to_string(),
-                Self::Rebooting => "Rebooting".to_string(),
-                Self::Migrating => "Migrating".to_string(),
-                Self::Repairing => "Repairing".to_string(),
-                Self::Failed => "Failed".to_string(),
-                Self::Destroyed => "Destroyed".to_string(),
+                Self::Creating => write!(f, "Creating"),
+                Self::Starting => write!(f, "Starting"),
+                Self::Running => write!(f, "Running"),
+                Self::Stopping => write!(f, "Stopping"),
+                Self::Stopped => write!(f, "Stopped"),
+                Self::Rebooting => write!(f, "Rebooting"),
+                Self::Migrating => write!(f, "Migrating"),
+                Self::Repairing => write!(f, "Repairing"),
+                Self::Failed => write!(f, "Failed"),
+                Self::Destroyed => write!(f, "Destroyed"),
             }
         }
     }
@@ -929,13 +929,13 @@ pub mod types {
         }
     }
 
-    impl ToString for InstanceStateRequested {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for InstanceStateRequested {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Run => "Run".to_string(),
-                Self::Stop => "Stop".to_string(),
-                Self::Reboot => "Reboot".to_string(),
-                Self::MigrateStart => "MigrateStart".to_string(),
+                Self::Run => write!(f, "Run"),
+                Self::Stop => write!(f, "Stop"),
+                Self::Reboot => write!(f, "Reboot"),
+                Self::MigrateStart => write!(f, "MigrateStart"),
             }
         }
     }
@@ -1027,19 +1027,19 @@ pub mod types {
         }
     }
 
-    impl ToString for MigrationState {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for MigrationState {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Sync => "Sync".to_string(),
-                Self::RamPush => "RamPush".to_string(),
-                Self::Pause => "Pause".to_string(),
-                Self::RamPushDirty => "RamPushDirty".to_string(),
-                Self::Device => "Device".to_string(),
-                Self::Arch => "Arch".to_string(),
-                Self::Resume => "Resume".to_string(),
-                Self::RamPull => "RamPull".to_string(),
-                Self::Finish => "Finish".to_string(),
-                Self::Error => "Error".to_string(),
+                Self::Sync => write!(f, "Sync"),
+                Self::RamPush => write!(f, "RamPush"),
+                Self::Pause => write!(f, "Pause"),
+                Self::RamPushDirty => write!(f, "RamPushDirty"),
+                Self::Device => write!(f, "Device"),
+                Self::Arch => write!(f, "Arch"),
+                Self::Resume => write!(f, "Resume"),
+                Self::RamPull => write!(f, "RamPull"),
+                Self::Finish => write!(f, "Finish"),
+                Self::Error => write!(f, "Error"),
             }
         }
     }
@@ -1271,9 +1271,9 @@ pub mod types {
         }
     }
 
-    impl ToString for Slot {
-        fn to_string(&self) -> String {
-            self.0.to_string()
+    impl ::std::fmt::Display for Slot {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
         }
     }
 
