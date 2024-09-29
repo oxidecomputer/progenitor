@@ -135,6 +135,7 @@ futures = "0.3"
 progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
 reqwest = { version = "0.12", features = ["json", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 
 [build-dependencies]
 prettyplease = "0.2.22"
