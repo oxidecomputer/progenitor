@@ -29982,14 +29982,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/groups", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -30493,14 +30493,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/organizations", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -31110,14 +31110,14 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -31648,14 +31648,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -32174,17 +32174,17 @@ pub mod builder {
                 encode_path(&metric_name.to_string()),
             );
             let mut query = Vec::with_capacity(4usize);
-            if let Some(v) = &end_time {
-                query.push(("end_time", v.to_string()));
+            if let Some(end_time) = &end_time {
+                query.push(("end_time", end_time.to_string()));
             }
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &start_time {
-                query.push(("start_time", v.to_string()));
+            if let Some(start_time) = &start_time {
+                query.push(("start_time", start_time.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -32362,14 +32362,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -32842,14 +32842,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -33339,14 +33339,14 @@ pub mod builder {
                 encode_path(&instance_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -34003,14 +34003,14 @@ pub mod builder {
                 encode_path(&instance_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -34792,14 +34792,14 @@ pub mod builder {
                 encode_path(&instance_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &from_start {
-                query.push(("from_start", v.to_string()));
+            if let Some(from_start) = &from_start {
+                query.push(("from_start", from_start.to_string()));
             }
-            if let Some(v) = &max_bytes {
-                query.push(("max_bytes", v.to_string()));
+            if let Some(max_bytes) = &max_bytes {
+                query.push(("max_bytes", max_bytes.to_string()));
             }
-            if let Some(v) = &most_recent {
-                query.push(("most_recent", v.to_string()));
+            if let Some(most_recent) = &most_recent {
+                query.push(("most_recent", most_recent.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -35408,14 +35408,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -35889,14 +35889,14 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -36734,14 +36734,14 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -37428,14 +37428,14 @@ pub mod builder {
                 encode_path(&router_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -38179,14 +38179,14 @@ pub mod builder {
                 encode_path(&vpc_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -38874,14 +38874,14 @@ pub mod builder {
                 encode_path(&subnet_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -39123,11 +39123,11 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/roles", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -39368,14 +39368,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/session/me/groups", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -39516,14 +39516,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/session/me/sshkeys", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -40039,14 +40039,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/certificates", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -40384,14 +40384,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/hardware/disks", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -40532,14 +40532,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/hardware/racks", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -40740,14 +40740,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/hardware/sleds", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -40966,14 +40966,14 @@ pub mod builder {
                 encode_path(&sled_id.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -41114,14 +41114,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/images", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -41453,14 +41453,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/ip-pools", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -41883,11 +41883,11 @@ pub mod builder {
                 encode_path(&pool_name.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -42210,11 +42210,11 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/ip-pools-service/ranges", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -42516,18 +42516,18 @@ pub mod builder {
                 encode_path(&metric_name.to_string()),
             );
             let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &end_time {
-                query.push(("end_time", v.to_string()));
+            if let Some(end_time) = &end_time {
+                query.push(("end_time", end_time.to_string()));
             }
             query.push(("id", id.to_string()));
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &start_time {
-                query.push(("start_time", v.to_string()));
+            if let Some(start_time) = &start_time {
+                query.push(("start_time", start_time.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -42736,14 +42736,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/sagas", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -42944,14 +42944,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/silos", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -43301,14 +43301,14 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -44068,14 +44068,14 @@ pub mod builder {
                 encode_path(&silo_name.to_string()),
             );
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -44295,14 +44295,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/system/user", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -44489,11 +44489,11 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/timeseries/schema", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -44633,14 +44633,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/users", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -44811,20 +44811,20 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/disks", client.baseurl,);
             let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -44976,8 +44976,8 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/disks", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
             query.push(("project", project.to_string()));
             #[allow(unused_mut)]
@@ -45076,11 +45076,11 @@ pub mod builder {
                 encode_path(&disk.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -45177,11 +45177,11 @@ pub mod builder {
                 encode_path(&disk.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -45306,20 +45306,20 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/instances", client.baseurl,);
             let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -45471,8 +45471,8 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/instances", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
             query.push(("project", project.to_string()));
             #[allow(unused_mut)]
@@ -45571,11 +45571,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -45672,11 +45672,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -45819,20 +45819,20 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46003,11 +46003,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46131,11 +46131,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46259,11 +46259,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46361,11 +46361,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46509,20 +46509,20 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(5usize);
-            if let Some(v) = &from_start {
-                query.push(("from_start", v.to_string()));
+            if let Some(from_start) = &from_start {
+                query.push(("from_start", from_start.to_string()));
             }
-            if let Some(v) = &max_bytes {
-                query.push(("max_bytes", v.to_string()));
+            if let Some(max_bytes) = &max_bytes {
+                query.push(("max_bytes", max_bytes.to_string()));
             }
-            if let Some(v) = &most_recent {
-                query.push(("most_recent", v.to_string()));
+            if let Some(most_recent) = &most_recent {
+                query.push(("most_recent", most_recent.to_string()));
             }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46622,11 +46622,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46724,11 +46724,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46825,11 +46825,11 @@ pub mod builder {
                 encode_path(&instance.to_string()),
             );
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &project {
-                query.push(("project", v.to_string()));
+            if let Some(project) = &project {
+                query.push(("project", project.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -46924,14 +46924,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/organizations", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -47537,17 +47537,17 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/projects", client.baseurl,);
             let mut query = Vec::with_capacity(4usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -47765,8 +47765,8 @@ pub mod builder {
                 encode_path(&project.to_string()),
             );
             let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -47874,8 +47874,8 @@ pub mod builder {
                 encode_path(&project.to_string()),
             );
             let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -47958,8 +47958,8 @@ pub mod builder {
                 encode_path(&project.to_string()),
             );
             let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -48043,8 +48043,8 @@ pub mod builder {
                 encode_path(&project.to_string()),
             );
             let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -48156,8 +48156,8 @@ pub mod builder {
                 encode_path(&project.to_string()),
             );
             let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &organization {
-                query.push(("organization", v.to_string()));
+            if let Some(organization) = &organization {
+                query.push(("organization", organization.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -48254,14 +48254,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/system/update/components", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -48404,14 +48404,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/system/update/deployments", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client
@@ -48769,14 +48769,14 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/system/update/updates", client.baseurl,);
             let mut query = Vec::with_capacity(3usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
-            if let Some(v) = &sort_by {
-                query.push(("sort_by", v.to_string()));
+            if let Some(sort_by) = &sort_by {
+                query.push(("sort_by", sort_by.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client

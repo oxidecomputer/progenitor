@@ -201,12 +201,12 @@ impl Client {
     ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
         let url = format!("{}/", self.baseurl,);
         let mut query = Vec::with_capacity(2usize);
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
+        if let Some(limit) = &limit {
+            query.push(("limit", limit.to_string()));
         }
 
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
+        if let Some(page_token) = &page_token {
+            query.push(("page_token", page_token.to_string()));
         }
 
         #[allow(unused_mut)]
