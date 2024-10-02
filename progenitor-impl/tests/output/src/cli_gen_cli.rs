@@ -21,7 +21,7 @@ impl<T: CliConfig> Cli<T> {
                 clap::Arg::new("gateway")
                     .long("gateway")
                     .value_parser(clap::value_parser!(String))
-                    .required(false),
+                    .required(true),
             )
             .arg(
                 clap::Arg::new("json-body")
@@ -48,7 +48,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_uno(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.uno();
         if let Some(value) = matches.get_one::<String>("gateway") {
-            request = request.body_map(|body| body.gateway(value.clone()))
+            request = request.gateway(value.clone());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
