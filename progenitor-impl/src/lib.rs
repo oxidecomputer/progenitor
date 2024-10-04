@@ -135,18 +135,32 @@ impl GenerationSettings {
     }
 
     /// Hook invoked before issuing the HTTP request.
+    /// Any hook requires the inner type to be set via
+    /// [Self::with_inner_type], otherwise the code will not compile.
+    /// The signature for the pre hook function should be
+    /// `pre_hook_func(&InnerType, &request::Client) -> ()`
     pub fn with_pre_hook(&mut self, pre_hook: TokenStream) -> &mut Self {
         self.pre_hook = Some(pre_hook);
         self
     }
 
     /// Hook invoked before issuing the HTTP request.
+    /// Any hook requires the inner type to be set via
+    /// [Self::with_inner_type], otherwise the code will not compile.
+    /// The signature for the pre hook function should be
+    /// `pre_hook_async_func(&InnerType, &mut request::Client) -> Result<_,E>`.
+    /// Returning an error result will abort the call with
+    /// an `Error::PreHookError` (type declared in generated code).
     pub fn with_pre_hook_async(&mut self, pre_hook: TokenStream) -> &mut Self {
         self.pre_hook_async = Some(pre_hook);
         self
     }
 
     /// Hook invoked prior to receiving the HTTP response.
+    /// Any hook requires the inner type to be set via
+    /// [Self::with_inner_type], otherwise the code will not compile.
+    /// The signature for the post hook function should be
+    /// `post_hook_func(&InnerType, &Result<reqwest::Response,reqwest::Error>) -> ()`
     pub fn with_post_hook(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook = Some(post_hook);
         self
