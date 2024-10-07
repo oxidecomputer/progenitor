@@ -28,7 +28,7 @@ dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features
 env_logger = "0.10.2"
 expectorate = "1.1.0"
 futures = "0.3.30"
-futures-core = "0.3.30"
+futures-core = "0.3.31"
 heck = "0.5.0"
 http = "1.1.0"
 hyper = "1.4.1"
