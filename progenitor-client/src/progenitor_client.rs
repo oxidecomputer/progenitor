@@ -391,10 +391,10 @@ where
 {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
-            Error::CommunicationError(e) => Some(e),
-            Error::InvalidUpgrade(e) => Some(e),
-            Error::ResponseBodyError(e) => Some(e),
-            Error::InvalidResponsePayload(_b, e) => Some(e),
+            Error::CommunicationError(e) => e.source(),
+            Error::InvalidUpgrade(e) => e.source(),
+            Error::ResponseBodyError(e) => e.source(),
+            Error::InvalidResponsePayload(_b, e) => e.source(),
             _ => None,
         }
     }
