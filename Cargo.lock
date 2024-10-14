@@ -73,9 +73,9 @@ checksum = "86fdf8605db99b54d3cd748a44c6d04df638eb5dafb219b135d0149bd0db01f6"
 
 [[package]]
 name = "async-stream"
-version = "0.3.5"
+version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd56dd203fef61ac097dd65721a419ddccb106b2d2b70ba60a6b529f03961a51"
+checksum = "0b5a71a6f37880a80d1d7f19efd781e4b5de42c88f0722cc13bcb6cc2cfe8476"
 dependencies = [
  "async-stream-impl",
  "futures-core",
@@ -84,9 +84,9 @@ dependencies = [
 
 [[package]]
 name = "async-stream-impl"
-version = "0.3.5"
+version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "16e62a023e7c117e27523144c5d2459f4397fcc3cab0085af8e2224f643a0193"
+checksum = "c7c24de15d275a1ecfd47a380fb4d5ec9bfe0933f309ed5e705b775596a3574d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -415,7 +415,7 @@ dependencies = [
 [[package]]
 name = "dropshot"
 version = "0.12.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#f4b8430c398eda03d006cc92b46ad4ec80ad1c1c"
+source = "git+https://github.com/oxidecomputer/dropshot#ab0194f91bfd01b1d57b26112c8d7c263cd7f9a4"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -463,7 +463,7 @@ dependencies = [
 [[package]]
 name = "dropshot_endpoint"
 version = "0.12.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#f4b8430c398eda03d006cc92b46ad4ec80ad1c1c"
+source = "git+https://github.com/oxidecomputer/dropshot#ab0194f91bfd01b1d57b26112c8d7c263cd7f9a4"
 dependencies = [
  "heck",
  "proc-macro2",
