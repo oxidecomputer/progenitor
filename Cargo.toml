@@ -21,7 +21,7 @@ progenitor-macro = { version = "0.8.0", path = "progenitor-macro" }
 anyhow = "1.0.91"
 base64 = "0.22.1"
 built = { version = "0.7.4", features = ["cargo-lock", "git2"] }
-bytes = "1.7.2"
+bytes = "1.8.0"
 chrono = { version = "0.4.0", default-features = false, features = ["serde"] }
 clap = { version = "4.5.20", default-features = false, features = ["derive", "std"] }
 dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
