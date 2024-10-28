@@ -63,7 +63,7 @@ pub struct ResponseValue<T> {
 
 impl<T: DeserializeOwned> ResponseValue<T> {
     #[doc(hidden)]
-    pub async fn from_response<E: std::fmt::Debug>(
+    pub async fn from_response<E>(
         response: reqwest::Response,
     ) -> Result<Self, Error<E>> {
         let status = response.status();
