@@ -415,7 +415,7 @@ dependencies = [
 [[package]]
 name = "dropshot"
 version = "0.12.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#ab0194f91bfd01b1d57b26112c8d7c263cd7f9a4"
+source = "git+https://github.com/oxidecomputer/dropshot#115dd34e1cfecb69d65067c7da3b20e06f88f41e"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -463,7 +463,7 @@ dependencies = [
 [[package]]
 name = "dropshot_endpoint"
 version = "0.12.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#ab0194f91bfd01b1d57b26112c8d7c263cd7f9a4"
+source = "git+https://github.com/oxidecomputer/dropshot#115dd34e1cfecb69d65067c7da3b20e06f88f41e"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -899,9 +899,9 @@ checksum = "9a3a5bfb195931eeb336b2a7b4d761daec841b97f947d34394601737a7bba5e4"
 
 [[package]]
 name = "hyper"
-version = "1.4.1"
+version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "50dfd22e0e76d0f662d429a5f80fcaf3855009297eab6a0a9f8543834744ba05"
+checksum = "bbbff0a806a4728c99295b254c8838933b5b082d75e3cb70c8dab21fdfbcfa9a"
 dependencies = [
  "bytes",
  "futures-channel",
@@ -1829,9 +1829,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.128"
+version = "1.0.132"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ff5456707a1de34e7e37f2a6fd3d3f808c318259cbd01ab6377795054b483d8"
+checksum = "d726bfaff4b320266d395898905d0eba0345aae23b54aee3a737e260fd46db03"
 dependencies = [
  "itoa",
  "memchr",
