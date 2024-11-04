@@ -312,7 +312,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 ..Default::default()
             },
 
-            openapiv3::SchemaKind::OneOf { one_of } => {
+            openapiv3::SchemaKind::OneOf { one_of } => oneof_nullable_wrapper(
                 schemars::schema::SchemaObject {
                     metadata,
                     subschemas: Some(Box::new(
@@ -323,8 +323,9 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     )),
                     extensions,
                     ..Default::default()
-                }
-            }
+                },
+                nullable,
+            ),
 
             openapiv3::SchemaKind::AllOf { all_of } => oneof_nullable_wrapper(
                 schemars::schema::SchemaObject {
