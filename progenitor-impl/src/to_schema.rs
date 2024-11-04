@@ -672,6 +672,10 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     }
                 };
 
+                // If we have exactly one type, and it's null, and we have
+                // subschemas that means that we must have had a bunch of
+                // subschemas *and* nullable = true. In such a case, we remove
+                // the type and inject the oneof wrapper.
                 match &so.instance_type {
                     Some(SingleOrVec::Single(it))
                         if **it == schemars::schema::InstanceType::Null
