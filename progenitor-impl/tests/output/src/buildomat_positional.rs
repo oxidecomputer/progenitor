@@ -37,6 +37,42 @@ pub mod types {
         }
     }
 
+    ///ObjWithOptionArray
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "things"
+    ///  ],
+    ///  "properties": {
+    ///    "things": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "allOf": [
+    ///          {
+    ///            "$ref": "#/components/schemas/Task"
+    ///          }
+    ///        ]
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ObjWithOptionArray {
+        pub things: Vec<Task>,
+    }
+
+    impl From<&ObjWithOptionArray> for ObjWithOptionArray {
+        fn from(value: &ObjWithOptionArray) -> Self {
+            value.clone()
+        }
+    }
+
     ///Task
     ///
     /// <details><summary>JSON schema</summary>

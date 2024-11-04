@@ -823,6 +823,25 @@
         "required": [
           "workers"
         ]
+      },
+      "ObjWithOptionArray": {
+        "type": "object",
+        "properties": {
+          "things": {
+            "type": "array",
+            "items": {
+              "nullable": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Task"
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "things"
+        ]
       }
     }
   }

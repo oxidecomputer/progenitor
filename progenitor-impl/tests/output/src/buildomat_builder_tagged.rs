@@ -37,6 +37,48 @@ pub mod types {
         }
     }
 
+    ///ObjWithOptionArray
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "things"
+    ///  ],
+    ///  "properties": {
+    ///    "things": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "allOf": [
+    ///          {
+    ///            "$ref": "#/components/schemas/Task"
+    ///          }
+    ///        ]
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ObjWithOptionArray {
+        pub things: Vec<Task>,
+    }
+
+    impl From<&ObjWithOptionArray> for ObjWithOptionArray {
+        fn from(value: &ObjWithOptionArray) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ObjWithOptionArray {
+        pub fn builder() -> builder::ObjWithOptionArray {
+            Default::default()
+        }
+    }
+
     ///Task
     ///
     /// <details><summary>JSON schema</summary>
@@ -875,6 +917,49 @@ pub mod types {
 
     /// Types for composing complex structures.
     pub mod builder {
+        #[derive(Clone, Debug)]
+        pub struct ObjWithOptionArray {
+            things: Result<Vec<super::Task>, String>,
+        }
+
+        impl Default for ObjWithOptionArray {
+            fn default() -> Self {
+                Self {
+                    things: Err("no value supplied for things".to_string()),
+                }
+            }
+        }
+
+        impl ObjWithOptionArray {
+            pub fn things<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<super::Task>>,
+                T::Error: std::fmt::Display,
+            {
+                self.things = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for things: {}", e));
+                self
+            }
+        }
+
+        impl std::convert::TryFrom<ObjWithOptionArray> for super::ObjWithOptionArray {
+            type Error = super::error::ConversionError;
+            fn try_from(value: ObjWithOptionArray) -> Result<Self, super::error::ConversionError> {
+                Ok(Self {
+                    things: value.things?,
+                })
+            }
+        }
+
+        impl From<super::ObjWithOptionArray> for ObjWithOptionArray {
+            fn from(value: super::ObjWithOptionArray) -> Self {
+                Self {
+                    things: Ok(value.things),
+                }
+            }
+        }
+
         #[derive(Clone, Debug)]
         pub struct Task {
             id: Result<String, String>,
