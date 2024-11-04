@@ -1,4 +1,4 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
 use indexmap::IndexMap;
 use openapiv3::AnySchema;
@@ -312,7 +312,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 ..Default::default()
             },
 
-            openapiv3::SchemaKind::OneOf { one_of } => {
+            openapiv3::SchemaKind::OneOf { one_of } => oneof_nullable_wrapper(
                 schemars::schema::SchemaObject {
                     metadata,
                     subschemas: Some(Box::new(
@@ -323,10 +323,11 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     )),
                     extensions,
                     ..Default::default()
-                }
-            }
+                },
+                nullable,
+            ),
 
-            openapiv3::SchemaKind::AllOf { all_of } => {
+            openapiv3::SchemaKind::AllOf { all_of } => oneof_nullable_wrapper(
                 schemars::schema::SchemaObject {
                     metadata,
                     subschemas: Some(Box::new(
@@ -337,10 +338,11 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     )),
                     extensions,
                     ..Default::default()
-                }
-            }
+                },
+                nullable,
+            ),
 
-            openapiv3::SchemaKind::AnyOf { any_of } => {
+            openapiv3::SchemaKind::AnyOf { any_of } => oneof_nullable_wrapper(
                 schemars::schema::SchemaObject {
                     metadata,
                     subschemas: Some(Box::new(
@@ -351,10 +353,11 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     )),
                     extensions,
                     ..Default::default()
-                }
-            }
+                },
+                nullable,
+            ),
 
-            openapiv3::SchemaKind::Not { not } => {
+            openapiv3::SchemaKind::Not { not } => oneof_nullable_wrapper(
                 schemars::schema::SchemaObject {
                     metadata,
                     subschemas: Some(Box::new(
@@ -365,10 +368,12 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     )),
                     extensions,
                     ..Default::default()
-                }
-            }
+                },
+                nullable,
+            ),
 
             // This is the permissive schema that allows anything to match.
+            // We can ignore `nullable` because--sure--null matches already.
             openapiv3::SchemaKind::Any(AnySchema {
                 typ: None,
                 pattern: None,
@@ -408,7 +413,8 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 }
             }
 
-            // A simple null value.
+            // A simple null value. (We can ignore `nullable` as it would be
+            // redundant)
             openapiv3::SchemaKind::Any(AnySchema {
                 typ: None,
                 pattern: None,
@@ -648,7 +654,8 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         .flatten()
                         .collect::<Vec<_>>();
 
-                        // TODO we could also look at enumerated values.
+                        // TODO we could also look at enumerated values to
+                        // infer a type.
 
                         so.instance_type = match (
                             instance_types.first(),
@@ -665,7 +672,25 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     }
                 };
 
-                so
+                // If we have exactly one type, and it's null, and we have
+                // subschemas that means that we must have had a bunch of
+                // subschemas *and* nullable = true. In such a case, we remove
+                // the type and inject the oneof wrapper.
+                match &so.instance_type {
+                    Some(SingleOrVec::Single(it))
+                        if **it == schemars::schema::InstanceType::Null
+                            && so.subschemas.is_some() =>
+                    {
+                        oneof_nullable_wrapper(
+                            schemars::schema::SchemaObject {
+                                instance_type: None,
+                                ..so
+                            },
+                            nullable,
+                        )
+                    }
+                    _ => so,
+                }
             }
         }
         .into()
@@ -762,6 +787,40 @@ fn instance_type(
         Some(vec![instance_type, schemars::schema::InstanceType::Null].into())
     } else {
         Some(instance_type.into())
+    }
+}
+
+fn oneof_nullable_wrapper(
+    mut schema: schemars::schema::SchemaObject,
+    nullable: bool,
+) -> schemars::schema::SchemaObject {
+    if nullable {
+        let metadata = schema.metadata;
+        let extensions = schema.extensions;
+
+        schema.metadata = None;
+        schema.extensions = Default::default();
+
+        schemars::schema::SchemaObject {
+            metadata,
+            extensions,
+            subschemas: Some(Box::new(schemars::schema::SubschemaValidation {
+                one_of: Some(vec![
+                    schemars::schema::SchemaObject {
+                        instance_type: Some(
+                            schemars::schema::InstanceType::Null.into(),
+                        ),
+                        ..Default::default()
+                    }
+                    .into(),
+                    schema.into(),
+                ]),
+                ..Default::default()
+            })),
+            ..Default::default()
+        }
+    } else {
+        schema
     }
 }
 
