@@ -837,10 +837,25 @@
                 }
               ]
             }
+          },
+          "stranger-things": {
+            "type": "array",
+            "items": {
+              "nullable": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Task"
+                }
+              ],
+              "oneOf": [
+                {}
+              ]
+            }
           }
         },
         "required": [
-          "things"
+          "things",
+          "stranger-things"
         ]
       }
     }

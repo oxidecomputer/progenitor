@@ -45,15 +45,43 @@ pub mod types {
     ///{
     ///  "type": "object",
     ///  "required": [
+    ///    "stranger-things",
     ///    "things"
     ///  ],
     ///  "properties": {
+    ///    "stranger-things": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "oneOf": [
+    ///          {
+    ///            "type": "null"
+    ///          },
+    ///          {
+    ///            "allOf": [
+    ///              {
+    ///                "$ref": "#/components/schemas/Task"
+    ///              }
+    ///            ],
+    ///            "oneOf": [
+    ///              {}
+    ///            ]
+    ///          }
+    ///        ]
+    ///      }
+    ///    },
     ///    "things": {
     ///      "type": "array",
     ///      "items": {
-    ///        "allOf": [
+    ///        "oneOf": [
     ///          {
-    ///            "$ref": "#/components/schemas/Task"
+    ///            "type": "null"
+    ///          },
+    ///          {
+    ///            "allOf": [
+    ///              {
+    ///                "$ref": "#/components/schemas/Task"
+    ///              }
+    ///            ]
     ///          }
     ///        ]
     ///      }
@@ -64,7 +92,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ObjWithOptionArray {
-        pub things: Vec<Task>,
+        #[serde(rename = "stranger-things")]
+        pub stranger_things: Vec<Option<Task>>,
+        pub things: Vec<Option<Task>>,
     }
 
     impl From<&ObjWithOptionArray> for ObjWithOptionArray {

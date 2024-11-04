@@ -45,15 +45,43 @@ pub mod types {
     ///{
     ///  "type": "object",
     ///  "required": [
+    ///    "stranger-things",
     ///    "things"
     ///  ],
     ///  "properties": {
+    ///    "stranger-things": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "oneOf": [
+    ///          {
+    ///            "type": "null"
+    ///          },
+    ///          {
+    ///            "allOf": [
+    ///              {
+    ///                "$ref": "#/components/schemas/Task"
+    ///              }
+    ///            ],
+    ///            "oneOf": [
+    ///              {}
+    ///            ]
+    ///          }
+    ///        ]
+    ///      }
+    ///    },
     ///    "things": {
     ///      "type": "array",
     ///      "items": {
-    ///        "allOf": [
+    ///        "oneOf": [
     ///          {
-    ///            "$ref": "#/components/schemas/Task"
+    ///            "type": "null"
+    ///          },
+    ///          {
+    ///            "allOf": [
+    ///              {
+    ///                "$ref": "#/components/schemas/Task"
+    ///              }
+    ///            ]
     ///          }
     ///        ]
     ///      }
@@ -64,7 +92,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ObjWithOptionArray {
-        pub things: Vec<Task>,
+        #[serde(rename = "stranger-things")]
+        pub stranger_things: Vec<Option<Task>>,
+        pub things: Vec<Option<Task>>,
     }
 
     impl From<&ObjWithOptionArray> for ObjWithOptionArray {
@@ -919,21 +949,33 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct ObjWithOptionArray {
-            things: Result<Vec<super::Task>, String>,
+            stranger_things: Result<Vec<Option<super::Task>>, String>,
+            things: Result<Vec<Option<super::Task>>, String>,
         }
 
         impl Default for ObjWithOptionArray {
             fn default() -> Self {
                 Self {
+                    stranger_things: Err("no value supplied for stranger_things".to_string()),
                     things: Err("no value supplied for things".to_string()),
                 }
             }
         }
 
         impl ObjWithOptionArray {
+            pub fn stranger_things<T>(mut self, value: T) -> Self
+            where
+                T: std::convert::TryInto<Vec<Option<super::Task>>>,
+                T::Error: std::fmt::Display,
+            {
+                self.stranger_things = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for stranger_things: {}", e)
+                });
+                self
+            }
             pub fn things<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Task>>,
+                T: std::convert::TryInto<Vec<Option<super::Task>>>,
                 T::Error: std::fmt::Display,
             {
                 self.things = value
@@ -947,6 +989,7 @@ pub mod types {
             type Error = super::error::ConversionError;
             fn try_from(value: ObjWithOptionArray) -> Result<Self, super::error::ConversionError> {
                 Ok(Self {
+                    stranger_things: value.stranger_things?,
                     things: value.things?,
                 })
             }
@@ -955,6 +998,7 @@ pub mod types {
         impl From<super::ObjWithOptionArray> for ObjWithOptionArray {
             fn from(value: super::ObjWithOptionArray) -> Self {
                 Self {
+                    stranger_things: Ok(value.stranger_things),
                     things: Ok(value.things),
                 }
             }
