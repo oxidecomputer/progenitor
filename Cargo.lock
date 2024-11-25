@@ -414,8 +414,8 @@ dependencies = [
 
 [[package]]
 name = "dropshot"
-version = "0.12.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#82c8fe40aa95cee73f4f3ad4654f9183c1a0b8df"
+version = "0.13.0"
+source = "git+https://github.com/oxidecomputer/dropshot#597d6055ee32d4abbdad0dfe027dbde18c580a6d"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -441,6 +441,7 @@ dependencies = [
  "rustls-pemfile",
  "schemars",
  "scopeguard",
+ "semver",
  "serde",
  "serde_json",
  "serde_path_to_error",
@@ -451,7 +452,7 @@ dependencies = [
  "slog-bunyan",
  "slog-json",
  "slog-term",
- "thiserror 1.0.69",
+ "thiserror 2.0.3",
  "tokio",
  "tokio-rustls",
  "toml 0.8.19",
@@ -462,12 +463,13 @@ dependencies = [
 
 [[package]]
 name = "dropshot_endpoint"
-version = "0.12.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#82c8fe40aa95cee73f4f3ad4654f9183c1a0b8df"
+version = "0.13.0"
+source = "git+https://github.com/oxidecomputer/dropshot#597d6055ee32d4abbdad0dfe027dbde18c580a6d"
 dependencies = [
  "heck",
  "proc-macro2",
  "quote",
+ "semver",
  "serde",
  "serde_tokenstream",
  "syn 2.0.87",
