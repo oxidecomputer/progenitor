@@ -337,22 +337,30 @@ impl Generator {
             &self.settings.interface,
             &self.settings.tag,
         ) {
-            (InterfaceStyle::Positional, TagStyle::Merged) => {
-                self.generate_tokens_positional_merged(&raw_methods, self.settings.inner_type.is_some())
-            }
+            (InterfaceStyle::Positional, TagStyle::Merged) => self
+                .generate_tokens_positional_merged(
+                    &raw_methods,
+                    self.settings.inner_type.is_some(),
+                ),
             (InterfaceStyle::Positional, TagStyle::Separate) => {
                 unimplemented!("positional arguments with separate tags are currently unsupported")
             }
-            (InterfaceStyle::Builder, TagStyle::Merged) => {
-                self.generate_tokens_builder_merged(&raw_methods, self.settings.inner_type.is_some())
-            }
+            (InterfaceStyle::Builder, TagStyle::Merged) => self
+                .generate_tokens_builder_merged(
+                    &raw_methods,
+                    self.settings.inner_type.is_some(),
+                ),
             (InterfaceStyle::Builder, TagStyle::Separate) => {
                 let tag_info = spec
                     .tags
                     .iter()
                     .map(|tag| (&tag.name, tag))
                     .collect::<BTreeMap<_, _>>();
-                self.generate_tokens_builder_separate(&raw_methods, tag_info, self.settings.inner_type.is_some())
+                self.generate_tokens_builder_separate(
+                    &raw_methods,
+                    tag_info,
+                    self.settings.inner_type.is_some(),
+                )
             }
         }?;
 
@@ -535,7 +543,9 @@ impl Generator {
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
             .iter()
-            .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
+            .map(|method| {
+                self.builder_struct(method, TagStyle::Merged, has_inner)
+            })
             .collect::<Result<Vec<_>>>()?;
 
         let builder_methods = input_methods
@@ -583,7 +593,9 @@ impl Generator {
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
             .iter()
-            .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
+            .map(|method| {
+                self.builder_struct(method, TagStyle::Separate, has_inner)
+            })
             .collect::<Result<Vec<_>>>()?;
 
         let (traits_and_impls, trait_preludes) =

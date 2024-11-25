@@ -1133,7 +1133,7 @@ impl Generator {
 
         let inner = match has_inner {
             true => quote! { &#client.inner, },
-            false => quote! { },
+            false => quote! {},
         };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
@@ -1480,7 +1480,7 @@ impl Generator {
         &mut self,
         method: &OperationMethod,
         tag_style: TagStyle,
-        has_inner: bool
+        has_inner: bool,
     ) -> Result<TokenStream> {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
@@ -1725,7 +1725,8 @@ impl Generator {
             success,
             error,
             body,
-        } = self.method_sig_body(method, quote! { #client_ident }, has_inner)?;
+        } =
+            self.method_sig_body(method, quote! { #client_ident }, has_inner)?;
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
