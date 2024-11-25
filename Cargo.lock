@@ -414,8 +414,9 @@ dependencies = [
 
 [[package]]
 name = "dropshot"
-version = "0.12.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#82c8fe40aa95cee73f4f3ad4654f9183c1a0b8df"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "50976b6bac0894e689bb8ce0e2e5892dfeedb0876408bc806f0582d81824a3b5"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -441,6 +442,7 @@ dependencies = [
  "rustls-pemfile",
  "schemars",
  "scopeguard",
+ "semver",
  "serde",
  "serde_json",
  "serde_path_to_error",
@@ -462,12 +464,14 @@ dependencies = [
 
 [[package]]
 name = "dropshot_endpoint"
-version = "0.12.1-dev"
-source = "git+https://github.com/oxidecomputer/dropshot#82c8fe40aa95cee73f4f3ad4654f9183c1a0b8df"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8371ca3d0ecdd13df8a00acb66312633fc66a5e412076ccbc414238536f8290"
 dependencies = [
  "heck",
  "proc-macro2",
  "quote",
+ "semver",
  "serde",
  "serde_tokenstream",
  "syn 2.0.87",
@@ -1426,6 +1430,7 @@ dependencies = [
  "reqwest",
  "rustfmt-wrapper",
  "schemars",
+ "semver",
  "serde",
  "serde_json",
  "serde_yaml",

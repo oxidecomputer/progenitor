@@ -148,7 +148,7 @@ pub mod types {
 #[derive(Clone, Debug)]
 ///Client for pagination-demo
 ///
-///Version: 9000
+///Version: 9000.0.0
 pub struct Client {
     pub(crate) baseurl: String,
     pub(crate) client: reqwest::Client,
@@ -201,7 +201,7 @@ impl Client {
     /// This string is pulled directly from the source OpenAPI
     /// document and may be in any format the API selects.
     pub fn api_version(&self) -> &'static str {
-        "9000"
+        "9000.0.0"
     }
 }
 
