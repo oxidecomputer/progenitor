@@ -614,13 +614,13 @@ impl Generator {
 
         let scalar = prop_type.has_impl(TypeSpaceImpl::FromStr);
 
-        if scalar {
+        let prop_name = name.to_kebab_case();
+        if scalar && !args.has_arg(&prop_name) {
             let volitionality = if required {
                 Volitionality::RequiredIfNoBody
             } else {
                 Volitionality::Optional
             };
-            let prop_name = name.to_kebab_case();
             let parser = clap_arg(
                 &prop_name,
                 volitionality,
