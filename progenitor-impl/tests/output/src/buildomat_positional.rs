@@ -37,6 +37,72 @@ pub mod types {
         }
     }
 
+    ///ObjWithOptionArray
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "stranger-things",
+    ///    "things"
+    ///  ],
+    ///  "properties": {
+    ///    "stranger-things": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "oneOf": [
+    ///          {
+    ///            "type": "null"
+    ///          },
+    ///          {
+    ///            "allOf": [
+    ///              {
+    ///                "$ref": "#/components/schemas/Task"
+    ///              }
+    ///            ],
+    ///            "oneOf": [
+    ///              {}
+    ///            ]
+    ///          }
+    ///        ]
+    ///      }
+    ///    },
+    ///    "things": {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "oneOf": [
+    ///          {
+    ///            "type": "null"
+    ///          },
+    ///          {
+    ///            "allOf": [
+    ///              {
+    ///                "$ref": "#/components/schemas/Task"
+    ///              }
+    ///            ]
+    ///          }
+    ///        ]
+    ///      }
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ObjWithOptionArray {
+        #[serde(rename = "stranger-things")]
+        pub stranger_things: Vec<Option<Task>>,
+        pub things: Vec<Option<Task>>,
+    }
+
+    impl From<&ObjWithOptionArray> for ObjWithOptionArray {
+        fn from(value: &ObjWithOptionArray) -> Self {
+            value.clone()
+        }
+    }
+
     ///Task
     ///
     /// <details><summary>JSON schema</summary>

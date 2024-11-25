@@ -63,7 +63,7 @@ pub struct ResponseValue<T> {
 
 impl<T: DeserializeOwned> ResponseValue<T> {
     #[doc(hidden)]
-    pub async fn from_response<E: std::fmt::Debug>(
+    pub async fn from_response<E>(
         response: reqwest::Response,
     ) -> Result<Self, Error<E>> {
         let status = response.status();
@@ -327,34 +327,45 @@ where
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Error::InvalidRequest(s) => {
-                write!(f, "Invalid Request: {}", s)
+                write!(f, "Invalid Request: {}", s)?;
             }
             Error::CommunicationError(e) => {
-                write!(f, "Communication Error: {}", e)
+                write!(f, "Communication Error: {}", e)?;
             }
             Error::ErrorResponse(rve) => {
                 write!(f, "Error Response: ")?;
-                rve.fmt_info(f)
+                rve.fmt_info(f)?;
             }
             Error::InvalidUpgrade(e) => {
-                write!(f, "Invalid Response Upgrade: {}", e)
+                write!(f, "Invalid Response Upgrade: {}", e)?;
             }
             Error::ResponseBodyError(e) => {
-                write!(f, "Invalid Response Body Bytes: {}", e)
+                write!(f, "Invalid Response Body Bytes: {}", e)?;
             }
             Error::InvalidResponsePayload(b, e) => {
-                write!(f, "Invalid Response Payload ({:?}): {}", b, e)
+                write!(f, "Invalid Response Payload ({:?}): {}", b, e)?;
             }
             Error::UnexpectedResponse(r) => {
-                write!(f, "Unexpected Response: {:?}", r)
+                write!(f, "Unexpected Response: {:?}", r)?;
             }
             Error::PreHookError(s) => {
-                write!(f, "Pre-hook Error: {}", s)
+                write!(f, "Pre-hook Error: {}", s)?;
             }
             Error::PostHookError(s) => {
                 write!(f, "Post-hook Error: {}", s)
             }
         }
+
+        if f.alternate() {
+            use std::error::Error as _;
+
+            let mut src = self.source().and_then(|e| e.source());
+            while let Some(s) = src {
+                write!(f, ": {s}")?;
+                src = s.source();
+            }
+        }
+        Ok(())
     }
 }
 

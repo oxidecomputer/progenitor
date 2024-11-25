@@ -18,47 +18,45 @@ progenitor-client = { version = "0.8.0", path = "progenitor-client" }
 progenitor-impl = { version = "0.8.0", path = "progenitor-impl" }
 progenitor-macro = { version = "0.8.0", path = "progenitor-macro" }
 
-anyhow = "1.0.89"
+anyhow = "1.0.93"
 base64 = "0.22.1"
-built = { version = "0.7.4", features = ["cargo-lock", "git2"] }
-bytes = "1.7.2"
+built = { version = "0.7.5", features = ["cargo-lock", "git2"] }
+bytes = "1.8.0"
 chrono = { version = "0.4.0", default-features = false, features = ["serde"] }
-clap = { version = "4.5.18", default-features = false, features = ["derive", "std"] }
-dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
+clap = { version = "4.5.21", default-features = false, features = ["derive", "std"] }
+dropshot = { version = "0.13.0", default-features = false }
 env_logger = "0.10.2"
 expectorate = "1.1.0"
-futures = "0.3.30"
-futures-core = "0.3.30"
+futures = "0.3.31"
+futures-core = "0.3.31"
 heck = "0.5.0"
 http = "1.1.0"
 hyper = "1.4.1"
-indexmap = "2.5.0"
+indexmap = "2.6.0"
 openapiv3 = "2.0.0"
 percent-encoding = "2.3.0"
-proc-macro2 = "1.0.86"
+proc-macro2 = "1.0.89"
 project-root = "0.2.2"
 quote = "1.0.37"
 rand = "0.8.5"
-regex = "1.10.6"
+regex = "1.11.1"
 regress = "0.10.1"
 reqwest = { version = "0.12.4", default-features = false, features = ["json", "stream"] }
 rustfmt-wrapper = "0.2.1"
 schemars = { version = "0.8.21", features = ["chrono", "uuid1"] }
-serde = { version = "1.0.210", features = ["derive"] }
-serde_json = "1.0.127"
+semver = "1.0.23"
+serde = { version = "1.0.215", features = ["derive"] }
+serde_json = "1.0.133"
 serde_urlencoded = "0.7.1"
 serde_yaml = "0.9"
-syn = { version = "2.0.77", features = ["parsing"] }
-thiserror = "1.0.64"
+syn = { version = "2.0.87", features = ["parsing"] }
+thiserror = "1.0.69"
 tokio = { version = "1.38.0", features = ["rt", "net"] }
 # change when publishing
-typify = { version = "0.2.0" }
-#typify = { git = "https://github.com/oxidecomputer/typify" }
-unicode-ident = "1.0.12"
-uuid = { version = "1.10.0", features = ["serde", "v4"] }
-
-#[patch."https://github.com/oxidecomputer/dropshot"]
-#dropshot = { path = "../dropshot/dropshot" }
+# typify = { version = "0.2.0" }
+typify = { git = "https://github.com/oxidecomputer/typify" }
+unicode-ident = "1.0.14"
+uuid = { version = "1.11.0", features = ["serde", "v4"] }
 
 #[patch."https://github.com/oxidecomputer/typify"]
 #typify = { path = "../typify/typify" }

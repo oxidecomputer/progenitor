@@ -442,9 +442,17 @@ pub mod types {
     ///      }
     ///    },
     ///    "migrate": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/InstanceMigrateInitiateRequest"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref":
+    /// "#/components/schemas/InstanceMigrateInitiateRequest"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -498,9 +506,17 @@ pub mod types {
     ///  "type": "object",
     ///  "properties": {
     ///    "migrate": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/InstanceMigrateInitiateResponse"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref":
+    /// "#/components/schemas/InstanceMigrateInitiateResponse"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -1448,9 +1464,17 @@ pub mod types {
     ///          "format": "uuid"
     ///        },
     ///        "read_only_parent": {
-    ///          "allOf": [
+    ///          "oneOf": [
     ///            {
-    ///              "$ref": "#/components/schemas/VolumeConstructionRequest"
+    ///              "type": "null"
+    ///            },
+    ///            {
+    ///              "allOf": [
+    ///                {
+    ///                  "$ref":
+    /// "#/components/schemas/VolumeConstructionRequest"
+    ///                }
+    ///              ]
     ///            }
     ///          ]
     ///        },
