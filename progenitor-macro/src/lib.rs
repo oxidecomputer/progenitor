@@ -42,6 +42,8 @@ mod token_utils;
 ///     [ tags = ( Merged | Separate ), ]
 ///     [ pre_hook = closure::or::path::to::function, ]
 ///     [ post_hook = closure::or::path::to::function, ]
+///     [ pre_hook_async = closure::or::path::to::function, ]
+///     [ post_hook_async = closure::or::path::to::function, ]
 ///
 ///     [ derives = [ path::to::DeriveMacro ], ]
 ///
@@ -67,19 +69,21 @@ mod token_utils;
 /// is `Merged`.
 ///
 /// The optional `inner_type` is for ancillary data, stored with the generated
-/// client that can be usd by the pre and post hooks.
+/// client that can be used by the pre- and post-hooks.
 ///
 /// The optional `pre_hook` is either a closure (that must be within
-/// parentheses: `(fn |inner, request| { .. })`) or a path to a function. The
-/// closure or function must take two parameters: the inner type and a
-/// `&reqwest::Request`. This allows clients to examine requests before they're
-/// sent to the server, for example to log them.
+/// parentheses: `(fn |[inner,] request| { .. })`) or a path to a function. The
+/// closure or function must take one or two parameters: the inner type (if one
+/// is specified) and a `&reqwest::Request`. This allows clients to examine
+/// requests before they're sent to the server, for example to log them. The
+/// optional `pre_hook_async` is the `async` variant of the same.
 ///
 /// The optional `post_hook` is either a closure (that must be within
-/// parentheses: `(fn |inner, result| { .. })`) or a path to a function. The
-/// closure or function must take two parameters: the inner type and a
-/// `&Result<reqwest::Response, reqwest::Error>`. This allows clients to
-/// examine responses, for example to log them.
+/// parentheses: `(fn |[inner,] result| { .. })`) or a path to a function. The
+/// closure or function must take one or two parameters: the inner type (if one
+/// is specified) and a `&Result<reqwest::Response, reqwest::Error>`. This
+/// allows clients to examine responses, for example to log them. The optional
+/// `post_hook_async` is the `async` variant of the same.
 ///
 /// Additional options control type generation:
 /// - `derives`: optional array of derive macro paths; the derive macros to be
@@ -134,6 +138,7 @@ struct MacroSettings {
     pre_hook: Option<ParseWrapper<ClosureOrPath>>,
     pre_hook_async: Option<ParseWrapper<ClosureOrPath>>,
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
+    post_hook_async: Option<ParseWrapper<ClosureOrPath>>,
 
     #[serde(default)]
     derives: Vec<ParseWrapper<syn::Path>>,
@@ -304,6 +309,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             pre_hook,
             pre_hook_async,
             post_hook,
+            post_hook_async,
             unknown_crates,
             crates,
             derives,
@@ -324,6 +330,9 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         });
         post_hook
             .map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
+        post_hook_async.map(|post_hook_async| {
+            settings.with_post_hook_async(post_hook_async.into_inner().0)
+        });
 
         settings.with_unknown_crates(unknown_crates);
         crates.into_iter().for_each(

@@ -352,7 +352,7 @@ where
                 write!(f, "Pre-hook Error: {}", s)?;
             }
             Error::PostHookError(s) => {
-                write!(f, "Post-hook Error: {}", s)
+                write!(f, "Post-hook Error: {}", s)?;
             }
         }
 

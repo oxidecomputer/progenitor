@@ -154,12 +154,11 @@ impl GenerationSettings {
     }
 
     /// Hook invoked prior to receiving the HTTP response.
-    /// Any hook requires the inner type to be set via
-    /// [Self::with_inner_type], otherwise the code will not compile.
-    /// The signature for the post hook function should be
-    /// `post_hook_func(&InnerType, &Result<reqwest::Response,reqwest::Error>) -> ()`
-    pub fn with_post_hook_async(&mut self, post_hook_async: TokenStream) -> &mut Self {
-        self.post_hook_async = Some(post_hook_async);
+    pub fn with_post_hook_async(
+        &mut self,
+        post_hook: TokenStream,
+    ) -> &mut Self {
+        self.post_hook_async = Some(post_hook);
         self
     }
 
