@@ -1155,7 +1155,7 @@ impl Generator {
         });
         let post_hook_async = self.settings.post_hook_async.as_ref().map(|hook| {
             quote! {
-                match (#hook)(&#client.inner, &#result_ident).await {
+                match (#hook)(#inner &#result_ident).await {
                     Ok(_) => (),
                     Err(e) => return Err(Error::PostHookError(e.to_string())),
                 }
