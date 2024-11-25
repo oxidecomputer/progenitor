@@ -24,7 +24,7 @@ built = { version = "0.7.5", features = ["cargo-lock", "git2"] }
 bytes = "1.8.0"
 chrono = { version = "0.4.0", default-features = false, features = ["serde"] }
 clap = { version = "4.5.21", default-features = false, features = ["derive", "std"] }
-dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
+dropshot = { version = "0.13.0", default-features = false }
 env_logger = "0.10.2"
 expectorate = "1.1.0"
 futures = "0.3.31"
@@ -44,6 +44,7 @@ regress = "0.10.1"
 reqwest = { version = "0.12.4", default-features = false, features = ["json", "stream"] }
 rustfmt-wrapper = "0.2.1"
 schemars = { version = "0.8.21", features = ["chrono", "uuid1"] }
+semver = "1.0.23"
 serde = { version = "1.0.215", features = ["derive"] }
 serde_json = "1.0.133"
 serde_urlencoded = "0.7.1"
@@ -56,9 +57,6 @@ tokio = { version = "1.38.0", features = ["rt", "net"] }
 typify = { git = "https://github.com/oxidecomputer/typify" }
 unicode-ident = "1.0.14"
 uuid = { version = "1.11.0", features = ["serde", "v4"] }
-
-#[patch."https://github.com/oxidecomputer/dropshot"]
-#dropshot = { path = "../dropshot/dropshot" }
 
 #[patch."https://github.com/oxidecomputer/typify"]
 #typify = { path = "../typify/typify" }
