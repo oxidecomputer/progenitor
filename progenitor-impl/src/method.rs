@@ -1153,6 +1153,14 @@ impl Generator {
                 (#hook)(#inner &#result_ident);
             }
         });
+        let post_hook_async = self.settings.post_hook_async.as_ref().map(|hook| {
+            quote! {
+                match (#hook)(#inner &#result_ident).await {
+                    Ok(_) => (),
+                    Err(e) => return Err(Error::PostHookError(e.to_string())),
+                }
+            }
+        });
 
         let method_func = format_ident!("{}", method.method.as_str());
 
@@ -1178,6 +1186,7 @@ impl Generator {
                 .execute(#request_ident)
                 .await;
             #post_hook
+            #post_hook_async
 
             let #response_ident = #result_ident?;
 

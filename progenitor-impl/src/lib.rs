@@ -64,6 +64,7 @@ pub struct GenerationSettings {
     pre_hook: Option<TokenStream>,
     pre_hook_async: Option<TokenStream>,
     post_hook: Option<TokenStream>,
+    post_hook_async: Option<TokenStream>,
     extra_derives: Vec<String>,
 
     unknown_crates: UnknownPolicy,
@@ -149,6 +150,15 @@ impl GenerationSettings {
     /// Hook invoked prior to receiving the HTTP response.
     pub fn with_post_hook(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook = Some(post_hook);
+        self
+    }
+
+    /// Hook invoked prior to receiving the HTTP response.
+    pub fn with_post_hook_async(
+        &mut self,
+        post_hook: TokenStream,
+    ) -> &mut Self {
+        self.post_hook_async = Some(post_hook);
         self
     }
 

@@ -258,6 +258,9 @@ pub enum Error<E = ()> {
 
     /// An error occurred in the processing of a request pre-hook.
     PreHookError(String),
+
+    /// An error occurred in the processing of a request post-hook.
+    PostHookError(String),
 }
 
 impl<E> Error<E> {
@@ -266,6 +269,7 @@ impl<E> Error<E> {
         match self {
             Error::InvalidRequest(_) => None,
             Error::PreHookError(_) => None,
+            Error::PostHookError(_) => None,
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
             Error::InvalidUpgrade(e) => e.status(),
@@ -283,6 +287,7 @@ impl<E> Error<E> {
         match self {
             Error::InvalidRequest(s) => Error::InvalidRequest(s),
             Error::PreHookError(s) => Error::PreHookError(s),
+            Error::PostHookError(s) => Error::PostHookError(s),
             Error::CommunicationError(e) => Error::CommunicationError(e),
             Error::ErrorResponse(ResponseValue {
                 inner: _,
@@ -345,6 +350,9 @@ where
             }
             Error::PreHookError(s) => {
                 write!(f, "Pre-hook Error: {}", s)?;
+            }
+            Error::PostHookError(s) => {
+                write!(f, "Post-hook Error: {}", s)?;
             }
         }
 
