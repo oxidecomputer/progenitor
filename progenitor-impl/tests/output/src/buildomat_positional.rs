@@ -1004,8 +1004,8 @@ impl Client {
             encode_path(&task.to_string()),
         );
         let mut query = Vec::with_capacity(1usize);
-        if let Some(v) = &minseq {
-            query.push(("minseq", v.to_string()));
+        if let Some(minseq) = &minseq {
+            query.push(("minseq", minseq.to_string()));
         }
 
         #[allow(unused_mut)]

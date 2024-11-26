@@ -409,11 +409,11 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
+            if let Some(limit) = &limit {
+                query.push(("limit", limit.to_string()));
             }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
+            if let Some(page_token) = &page_token {
+                query.push(("page_token", page_token.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client

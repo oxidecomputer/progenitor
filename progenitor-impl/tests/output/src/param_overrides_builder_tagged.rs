@@ -182,11 +182,11 @@ pub mod builder {
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
             let url = format!("{}/key", client.baseurl,);
             let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &key {
-                query.push(("key", v.to_string()));
+            if let Some(key) = &key {
+                query.push(("key", key.to_string()));
             }
-            if let Some(v) = &unique_key {
-                query.push(("uniqueKey", v.to_string()));
+            if let Some(unique_key) = &unique_key {
+                query.push(("uniqueKey", unique_key.to_string()));
             }
             #[allow(unused_mut)]
             let mut request = client.client.get(url).query(&query).build()?;
