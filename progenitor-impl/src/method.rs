@@ -592,6 +592,7 @@ impl Generator {
     pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
+        has_inner: bool,
     ) -> Result<TokenStream> {
         let operation_id = format_ident!("{}", method.operation_id);
 
@@ -658,7 +659,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, quote! { self })?;
+        } = self.method_sig_body(method, quote! { self }, has_inner)?;
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -814,6 +815,7 @@ impl Generator {
         &self,
         method: &OperationMethod,
         client: TokenStream,
+        has_inner: bool,
     ) -> Result<MethodSigBody> {
         let param_names = method
             .params
@@ -1129,14 +1131,18 @@ impl Generator {
             }
         };
 
+        let inner = match has_inner {
+            true => quote! { &#client.inner, },
+            false => quote! {},
+        };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &#request_ident);
+                (#hook)(#inner &#request_ident);
             }
         });
         let pre_hook_async = self.settings.pre_hook_async.as_ref().map(|hook| {
             quote! {
-                match (#hook)(&#client.inner, &mut #request_ident).await {
+                match (#hook)(#inner &mut #request_ident).await {
                     Ok(_) => (),
                     Err(e) => return Err(Error::PreHookError(e.to_string())),
                 }
@@ -1144,7 +1150,15 @@ impl Generator {
         });
         let post_hook = self.settings.post_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &#result_ident);
+                (#hook)(#inner &#result_ident);
+            }
+        });
+        let post_hook_async = self.settings.post_hook_async.as_ref().map(|hook| {
+            quote! {
+                match (#hook)(#inner &#result_ident).await {
+                    Ok(_) => (),
+                    Err(e) => return Err(Error::PostHookError(e.to_string())),
+                }
             }
         });
 
@@ -1172,6 +1186,7 @@ impl Generator {
                 .execute(#request_ident)
                 .await;
             #post_hook
+            #post_hook_async
 
             let #response_ident = #result_ident?;
 
@@ -1474,6 +1489,7 @@ impl Generator {
         &mut self,
         method: &OperationMethod,
         tag_style: TagStyle,
+        has_inner: bool,
     ) -> Result<TokenStream> {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
@@ -1718,7 +1734,8 @@ impl Generator {
             success,
             error,
             body,
-        } = self.method_sig_body(method, quote! { #client_ident })?;
+        } =
+            self.method_sig_body(method, quote! { #client_ident }, has_inner)?;
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",

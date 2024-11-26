@@ -76,7 +76,7 @@ fn test_renamed_parameters() {
 
     let mut out = Vec::new();
 
-    api.openapi("pagination-demo", "9000")
+    api.openapi("pagination-demo", semver::Version::new(9000, 0, 0))
         .write(&mut out)
         .unwrap();
 
@@ -110,7 +110,7 @@ fn test_freeform_response() {
 
     let mut out = Vec::new();
 
-    api.openapi("pagination-demo", "9000")
+    api.openapi("pagination-demo", semver::Version::new(9000, 0, 0))
         .write(&mut out)
         .unwrap();
 
@@ -164,7 +164,7 @@ fn test_default_params() {
 
     let mut out = Vec::new();
 
-    api.openapi("pagination-demo", "9000")
+    api.openapi("pagination-demo", semver::Version::new(9000, 0, 0))
         .write(&mut out)
         .unwrap();
 
@@ -237,7 +237,9 @@ async fn test_stream_pagination() {
 
     let mut out = Vec::new();
 
-    api.openapi(TEST_NAME, "1").write(&mut out).unwrap();
+    api.openapi(TEST_NAME, semver::Version::new(1, 0, 0))
+        .write(&mut out)
+        .unwrap();
 
     let out = from_utf8(&out).unwrap();
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();

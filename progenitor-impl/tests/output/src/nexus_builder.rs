@@ -2457,9 +2457,16 @@ pub mod types {
     ///      ],
     ///      "properties": {
     ///        "pool_name": {
-    ///          "allOf": [
+    ///          "oneOf": [
     ///            {
-    ///              "$ref": "#/components/schemas/Name"
+    ///              "type": "null"
+    ///            },
+    ///            {
+    ///              "allOf": [
+    ///                {
+    ///                  "$ref": "#/components/schemas/Name"
+    ///                }
+    ///              ]
     ///            }
     ///          ]
     ///        },
@@ -3009,9 +3016,16 @@ pub mod types {
     ///    },
     ///    "digest": {
     ///      "description": "Hash of the image contents, if applicable",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Digest"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Digest"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -4090,9 +4104,16 @@ pub mod types {
     ///    },
     ///    "digest": {
     ///      "description": "Hash of the image contents, if applicable",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Digest"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Digest"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -5777,9 +5798,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -7155,9 +7183,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -7671,9 +7706,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -8410,9 +8452,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -9406,9 +9455,16 @@ pub mod types {
     ///      "$ref": "#/components/schemas/RouteDestination"
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -9924,9 +9980,16 @@ pub mod types {
     ///    },
     ///    "signing_keypair": {
     ///      "description": "optional request signing key pair",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/DerEncodedKeyPair"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/DerEncodedKeyPair"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -13043,9 +13106,16 @@ pub mod types {
     /// created from this VPC must be taken from this range, which sould be a
     /// Unique Local Address in the range `fd00::/48`. The default VPC Subnet
     /// will have the first `/64` range from this prefix.",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Ipv6Net"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Ipv6Net"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -14498,9 +14568,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -14676,9 +14753,16 @@ pub mod types {
     /// prefix equal to the parent VPC's prefix. A random `/64` block will be
     /// assigned if one is not provided. It must not overlap with any existing
     /// subnet in the VPC.",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Ipv6Net"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Ipv6Net"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -14794,9 +14878,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -14843,16 +14934,30 @@ pub mod types {
     ///      ]
     ///    },
     ///    "dns_name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }

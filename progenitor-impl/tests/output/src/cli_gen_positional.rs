@@ -37,7 +37,7 @@ pub mod types {
         }
     }
 
-    ///BodyWithDefaults
+    ///UnoBody
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -45,70 +45,10 @@ pub mod types {
     ///{
     ///  "type": "object",
     ///  "required": [
-    ///    "s"
+    ///    "required"
     ///  ],
     ///  "properties": {
-    ///    "forty-two": {
-    ///      "default": 42,
-    ///      "type": "integer",
-    ///      "format": "uint32",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "s": {
-    ///      "type": "string"
-    ///    },
-    ///    "something": {
-    ///      "default": true,
-    ///      "type": [
-    ///        "boolean",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "yes": {
-    ///      "default": false,
-    ///      "type": "boolean"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct BodyWithDefaults {
-        #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
-        pub forty_two: u32,
-        pub s: String,
-        #[serde(default = "defaults::body_with_defaults_something")]
-        pub something: Option<bool>,
-        #[serde(default)]
-        pub yes: bool,
-    }
-
-    impl From<&BodyWithDefaults> for BodyWithDefaults {
-        fn from(value: &BodyWithDefaults) -> Self {
-            value.clone()
-        }
-    }
-
-    ///Error information from a response.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "Error information from a response.",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "message",
-    ///    "request_id"
-    ///  ],
-    ///  "properties": {
-    ///    "error_code": {
-    ///      "type": "string"
-    ///    },
-    ///    "message": {
-    ///      "type": "string"
-    ///    },
-    ///    "request_id": {
+    ///    "gateway": {
     ///      "type": "string"
     ///    }
     ///  }
@@ -116,39 +56,25 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct Error {
+    pub struct UnoBody {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        pub gateway: Option<String>,
+        pub required: ::serde_json::Value,
     }
 
-    impl From<&Error> for Error {
-        fn from(value: &Error) -> Self {
+    impl From<&UnoBody> for UnoBody {
+        fn from(value: &UnoBody) -> Self {
             value.clone()
-        }
-    }
-
-    /// Generation of default values for serde.
-    pub mod defaults {
-        pub(super) fn default_u64<T, const V: u64>() -> T
-        where
-            T: std::convert::TryFrom<u64>,
-            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
-        {
-            T::try_from(V).unwrap()
-        }
-
-        pub(super) fn body_with_defaults_something() -> Option<bool> {
-            Some(true)
         }
     }
 }
 
 #[derive(Clone, Debug)]
-///Client for pagination-demo
+///Client for CLI gen test
 ///
-///Version: 9000.0.0
+///Test case to exercise CLI generation
+///
+///Version: 9000
 pub struct Client {
     pub(crate) baseurl: String,
     pub(crate) client: reqwest::Client,
@@ -201,25 +127,28 @@ impl Client {
     /// This string is pulled directly from the source OpenAPI
     /// document and may be in any format the API selects.
     pub fn api_version(&self) -> &'static str {
-        "9000.0.0"
+        "9000"
     }
 }
 
 #[allow(clippy::all)]
 impl Client {
-    ///Sends a `POST` request to `/`
-    pub async fn default_params<'a>(
+    ///Sends a `GET` request to `/uno`
+    pub async fn uno<'a>(
         &'a self,
-        body: &'a types::BodyWithDefaults,
-    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/", self.baseurl,);
+        gateway: &'a str,
+        body: &'a types::UnoBody,
+    ) -> Result<ResponseValue<ByteStream>, Error<()>> {
+        let url = format!("{}/uno", self.baseurl,);
+        let mut query = Vec::with_capacity(1usize);
+        query.push(("gateway", gateway.to_string()));
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).json(&body).build()?;
+        let mut request = self.client.get(url).json(&body).query(&query).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
             200..=299 => Ok(ResponseValue::stream(response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 }
