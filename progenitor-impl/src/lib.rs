@@ -150,7 +150,7 @@ impl GenerationSettings {
     /// * `async pre_hook(&mut request::Client) -> Result<_,E>` without an inner type, or
     /// * `async pre_hook(&InnerType, &mut request::Client) -> Result<_,E>`
     ///   if an inner type was specified using [`with_inner_type()`](Self::with_inner_type).
-    /// 
+    ///
     /// Returning an error result will abort the call with
     /// an `Error::PreHookError` (type declared in generated code).
     pub fn with_pre_hook_async(&mut self, pre_hook: TokenStream) -> &mut Self {
@@ -173,7 +173,7 @@ impl GenerationSettings {
     /// * `async post_hook(&Result<reqwest::Response,reqwest::Error>) -> ()` without an innter type, or
     /// * `async post_hook(&InnerType, &Result<reqwest::Response,reqwest::Error>) -> Result<_,E>`
     ///   if an inner type was specified using [`with_inner_type()`](Self::with_inner_type).
-    /// 
+    ///
     /// Returning an error result will abort the call with
     /// an `Error::PostHookError` (type declared in generated code).
     pub fn with_post_hook_async(
