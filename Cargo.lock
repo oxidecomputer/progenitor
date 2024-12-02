@@ -1416,7 +1416,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "syn 2.0.87",
- "thiserror 1.0.69",
+ "thiserror 2.0.3",
  "tokio",
  "typify",
  "unicode-ident",
