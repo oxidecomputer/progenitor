@@ -26,10 +26,14 @@ struct MockOp {
 
 impl Generator {
     /// Generate a strongly-typed mocking extension to the `httpmock` crate.
+    ///
+    /// The `crate_path` parameter should be a valid Rust path corresponding to
+    /// the SDK. This can include `::` and instances of `-` in the crate name
+    /// should be converted to `_`.
     pub fn httpmock(
         &mut self,
         spec: &OpenAPI,
-        crate_name: &str,
+        crate_path: &str,
     ) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -81,7 +85,9 @@ impl Generator {
 
         let crate_path = syn::TypePath {
             qself: None,
-            path: syn::parse_str(crate_name).unwrap(),
+            path: syn::parse_str(crate_path).unwrap_or_else(|_| {
+                panic!("{} is not a valid identifier", crate_path)
+            }),
         };
 
         let code = quote! {
