@@ -1293,10 +1293,7 @@ impl Generator {
         parameters: &[OperationParameter],
         responses: &[OperationResponse],
     ) -> Option<DropshotPagination> {
-        let Some(value) = operation.extensions.get("x-dropshot-pagination")
-        else {
-            return None;
-        };
+        let value = operation.extensions.get("x-dropshot-pagination")?;
 
         // We expect to see at least "page_token" and "limit" parameters.
         if parameters
