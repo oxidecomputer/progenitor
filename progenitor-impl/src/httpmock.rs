@@ -1,4 +1,4 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
 //! Generation of mocking extensions for `httpmock`
 
@@ -93,7 +93,7 @@ impl Generator {
         let code = quote! {
             pub mod operations {
 
-                //! [`When`](httpmock::When) and [`Then`](httpmock::Then)
+                //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
                 //! wrappers for each operation. Each can be converted to
                 //! its inner type with a call to `into_inner()`. This can
                 //! be used to explicitly deviate from permitted values.
@@ -101,28 +101,28 @@ impl Generator {
                 use #crate_path::*;
 
                 #(
-                    pub struct #when(httpmock::When);
+                    pub struct #when(::httpmock::When);
                     #when_impl
 
-                    pub struct #then(httpmock::Then);
+                    pub struct #then(::httpmock::Then);
                     #then_impl
                 )*
             }
 
-            /// An extension trait for [`MockServer`](httpmock::MockServer) that
+            /// An extension trait for [`MockServer`](::httpmock::MockServer) that
             /// adds a method for each operation. These are the equivalent of
-            /// type-checked [`mock()`](httpmock::MockServer::mock) calls.
+            /// type-checked [`mock()`](::httpmock::MockServer::mock) calls.
             pub trait MockServerExt {
                 #(
-                    fn #op<F>(&self, config_fn: F) -> httpmock::Mock
+                    fn #op<F>(&self, config_fn: F) -> ::httpmock::Mock
                     where
                         F: FnOnce(operations::#when, operations::#then);
                 )*
             }
 
-            impl MockServerExt for httpmock::MockServer {
+            impl MockServerExt for ::httpmock::MockServer {
                 #(
-                    fn #op<F>(&self, config_fn: F) -> httpmock::Mock
+                    fn #op<F>(&self, config_fn: F) -> ::httpmock::Mock
                     where
                         F: FnOnce(operations::#when, operations::#then)
                     {
@@ -151,14 +151,14 @@ impl Generator {
         let then = format_ident!("{}", then_name).to_token_stream();
 
         let http_method = match &method.method {
-            HttpMethod::Get => quote! { httpmock::Method::GET },
-            HttpMethod::Put => quote! { httpmock::Method::PUT },
-            HttpMethod::Post => quote! { httpmock::Method::POST },
-            HttpMethod::Delete => quote! { httpmock::Method::DELETE },
-            HttpMethod::Options => quote! { httpmock::Method::OPTIONS },
-            HttpMethod::Head => quote! { httpmock::Method::HEAD },
-            HttpMethod::Patch => quote! { httpmock::Method::PATCH },
-            HttpMethod::Trace => quote! { httpmock::Method::TRACE },
+            HttpMethod::Get => quote! { ::httpmock::Method::GET },
+            HttpMethod::Put => quote! { ::httpmock::Method::PUT },
+            HttpMethod::Post => quote! { ::httpmock::Method::POST },
+            HttpMethod::Delete => quote! { ::httpmock::Method::DELETE },
+            HttpMethod::Options => quote! { ::httpmock::Method::OPTIONS },
+            HttpMethod::Head => quote! { ::httpmock::Method::HEAD },
+            HttpMethod::Patch => quote! { ::httpmock::Method::PATCH },
+            HttpMethod::Trace => quote! { ::httpmock::Method::TRACE },
         };
 
         let path_re = method.path.as_wildcard();
@@ -283,13 +283,13 @@ impl Generator {
 
         let when_impl = quote! {
             impl #when {
-                pub fn new(inner: httpmock::When) -> Self {
+                pub fn new(inner: ::httpmock::When) -> Self {
                     Self(inner
                         .method(#http_method)
                         .path_matches(regex::Regex::new(#path_re).unwrap()))
                 }
 
-                pub fn into_inner(self) -> httpmock::When {
+                pub fn into_inner(self) -> ::httpmock::When {
                     self.0
                 }
 
@@ -391,11 +391,11 @@ impl Generator {
 
         let then_impl = quote! {
             impl #then {
-                pub fn new(inner: httpmock::Then) -> Self {
+                pub fn new(inner: ::httpmock::Then) -> Self {
                     Self(inner)
                 }
 
-                pub fn into_inner(self) -> httpmock::Then {
+                pub fn into_inner(self) -> ::httpmock::Then {
                     self.0
                 }
 

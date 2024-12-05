@@ -1,20 +1,20 @@
 pub mod operations {
-    #![doc = r" [`When`](httpmock::When) and [`Then`](httpmock::Then)"]
+    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
     #![doc = r" wrappers for each operation. Each can be converted to"]
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::cli_gen_builder::*;
-    pub struct UnoWhen(httpmock::When);
+    pub struct UnoWhen(::httpmock::When);
     impl UnoWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/uno$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -27,13 +27,13 @@ pub mod operations {
         }
     }
 
-    pub struct UnoThen(httpmock::Then);
+    pub struct UnoThen(::httpmock::Then);
     impl UnoThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -49,17 +49,17 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](httpmock::MockServer) that"]
+#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
 #[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](httpmock::MockServer::mock) calls."]
+#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn uno<F>(&self, config_fn: F) -> httpmock::Mock
+    fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::UnoWhen, operations::UnoThen);
 }
 
-impl MockServerExt for httpmock::MockServer {
-    fn uno<F>(&self, config_fn: F) -> httpmock::Mock
+impl MockServerExt for ::httpmock::MockServer {
+    fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::UnoWhen, operations::UnoThen),
     {
