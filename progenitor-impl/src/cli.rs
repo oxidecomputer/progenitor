@@ -120,7 +120,7 @@ impl Generator {
                     Self { client, config }
                 }
 
-                pub fn get_command(cmd: CliCommand) -> clap::Command {
+                pub fn get_command(cmd: CliCommand) -> ::clap::Command {
                     match cmd {
                         #(
                             CliCommand::#cli_variants => Self::#cli_fns(),
@@ -133,7 +133,7 @@ impl Generator {
                 pub async fn execute(
                     &self,
                     cmd: CliCommand,
-                    matches: &clap::ArgMatches,
+                    matches: &::clap::ArgMatches,
                 ) -> anyhow::Result<()> {
                     match cmd {
                         #(
@@ -217,9 +217,9 @@ impl Generator {
         let fn_name = format_ident!("cli_{}", &method.operation_id);
 
         let cli_fn = quote! {
-            pub fn #fn_name() -> clap::Command
+            pub fn #fn_name() -> ::clap::Command
             {
-                clap::Command::new("")
+                ::clap::Command::new("")
                 #parser_args
                 #about
                 #long_about
@@ -357,7 +357,7 @@ impl Generator {
         };
 
         let execute_fn = quote! {
-            pub async fn #fn_name(&self, matches: &clap::ArgMatches)
+            pub async fn #fn_name(&self, matches: &::clap::ArgMatches)
                 -> anyhow::Result<()>
             {
                 let mut request = self.client.#op_name();
@@ -377,7 +377,7 @@ impl Generator {
         let execute_trait = quote! {
             fn #fn_name(
                 &self,
-                matches: &clap::ArgMatches,
+                matches: &::clap::ArgMatches,
                 request: &mut builder :: #struct_ident,
             ) -> anyhow::Result<()> {
                 Ok(())
@@ -517,19 +517,19 @@ impl Generator {
 
             quote! {
                 .arg(
-                    clap::Arg::new("json-body")
+                    ::clap::Arg::new("json-body")
                         .long("json-body")
                         .value_name("JSON-FILE")
                         // Required if we can't turn the body into individual
                         // parameters.
                         .required(#required)
-                        .value_parser(clap::value_parser!(std::path::PathBuf))
+                        .value_parser(::clap::value_parser!(std::path::PathBuf))
                         .help(#help)
                 )
                 .arg(
-                    clap::Arg::new("json-body-template")
+                    ::clap::Arg::new("json-body-template")
                         .long("json-body-template")
-                        .action(clap::ArgAction::SetTrue)
+                        .action(::clap::ArgAction::SetTrue)
                         .help("XXX")
                 )
             }
@@ -700,8 +700,8 @@ fn clap_arg(
 
             maybe_var_names.map(|var_names| {
                 quote! {
-                    clap::builder::TypedValueParser::map(
-                        clap::builder::PossibleValuesParser::new([
+                    ::clap::builder::TypedValueParser::map(
+                        ::clap::builder::PossibleValuesParser::new([
                             #( #arg_type_name :: #var_names.to_string(), )*
                         ]),
                         |s| #arg_type_name :: try_from(s).unwrap()
@@ -719,7 +719,7 @@ fn clap_arg(
         // allowing for override implementations. A generated client may
         // implement ValueParserFactory for a type to create a custom parser.
         quote! {
-            clap::value_parser!(#arg_type_name)
+            ::clap::value_parser!(#arg_type_name)
         }
     };
 
@@ -732,7 +732,7 @@ fn clap_arg(
     };
 
     quote! {
-        clap::Arg::new(#arg_name)
+        ::clap::Arg::new(#arg_name)
             .long(#arg_name)
             .value_parser(#value_parser)
             #required

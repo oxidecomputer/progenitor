@@ -1,31 +1,31 @@
 pub mod operations {
-    #![doc = r" [`When`](httpmock::When) and [`Then`](httpmock::Then)"]
+    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
     #![doc = r" wrappers for each operation. Each can be converted to"]
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::propolis_server_builder::*;
-    pub struct InstanceGetWhen(httpmock::When);
+    pub struct InstanceGetWhen(::httpmock::When);
     impl InstanceGetWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/instance$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct InstanceGetThen(httpmock::Then);
+    pub struct InstanceGetThen(::httpmock::Then);
     impl InstanceGetThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -59,17 +59,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceEnsureWhen(httpmock::When);
+    pub struct InstanceEnsureWhen(::httpmock::When);
     impl InstanceEnsureWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/instance$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -78,13 +78,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceEnsureThen(httpmock::Then);
+    pub struct InstanceEnsureThen(::httpmock::Then);
     impl InstanceEnsureThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -118,17 +118,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceIssueCrucibleSnapshotRequestWhen(httpmock::When);
+    pub struct InstanceIssueCrucibleSnapshotRequestWhen(::httpmock::When);
     impl InstanceIssueCrucibleSnapshotRequestWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new("^/instance/disk/[^/]*/snapshot/[^/]*$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -151,13 +151,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceIssueCrucibleSnapshotRequestThen(httpmock::Then);
+    pub struct InstanceIssueCrucibleSnapshotRequestThen(::httpmock::Then);
     impl InstanceIssueCrucibleSnapshotRequestThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -191,17 +191,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceMigrateStatusWhen(httpmock::When);
+    pub struct InstanceMigrateStatusWhen(::httpmock::When);
     impl InstanceMigrateStatusWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/instance/migrate/status$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -210,13 +210,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceMigrateStatusThen(httpmock::Then);
+    pub struct InstanceMigrateStatusThen(::httpmock::Then);
     impl InstanceMigrateStatusThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -250,28 +250,28 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceSerialWhen(httpmock::When);
+    pub struct InstanceSerialWhen(::httpmock::When);
     impl InstanceSerialWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/instance/serial$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct InstanceSerialThen(httpmock::Then);
+    pub struct InstanceSerialThen(::httpmock::Then);
     impl InstanceSerialThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -284,17 +284,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStatePutWhen(httpmock::When);
+    pub struct InstanceStatePutWhen(::httpmock::When);
     impl InstanceStatePutWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/instance/state$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -303,13 +303,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStatePutThen(httpmock::Then);
+    pub struct InstanceStatePutThen(::httpmock::Then);
     impl InstanceStatePutThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -338,17 +338,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStateMonitorWhen(httpmock::When);
+    pub struct InstanceStateMonitorWhen(::httpmock::When);
     impl InstanceStateMonitorWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/instance/state-monitor$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -357,13 +357,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStateMonitorThen(httpmock::Then);
+    pub struct InstanceStateMonitorThen(::httpmock::Then);
     impl InstanceStateMonitorThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -398,38 +398,38 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](httpmock::MockServer) that"]
+#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
 #[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](httpmock::MockServer::mock) calls."]
+#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn instance_get<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_get<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceGetWhen, operations::InstanceGetThen);
-    fn instance_ensure<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_ensure<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceEnsureWhen, operations::InstanceEnsureThen);
-    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(
             operations::InstanceIssueCrucibleSnapshotRequestWhen,
             operations::InstanceIssueCrucibleSnapshotRequestThen,
         );
-    fn instance_migrate_status<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_migrate_status<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceMigrateStatusWhen, operations::InstanceMigrateStatusThen);
-    fn instance_serial<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceSerialWhen, operations::InstanceSerialThen);
-    fn instance_state_put<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_state_put<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceStatePutWhen, operations::InstanceStatePutThen);
-    fn instance_state_monitor<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_state_monitor<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceStateMonitorWhen, operations::InstanceStateMonitorThen);
 }
 
-impl MockServerExt for httpmock::MockServer {
-    fn instance_get<F>(&self, config_fn: F) -> httpmock::Mock
+impl MockServerExt for ::httpmock::MockServer {
+    fn instance_get<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceGetWhen, operations::InstanceGetThen),
     {
@@ -441,7 +441,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_ensure<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_ensure<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceEnsureWhen, operations::InstanceEnsureThen),
     {
@@ -453,7 +453,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(
             operations::InstanceIssueCrucibleSnapshotRequestWhen,
@@ -468,7 +468,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_migrate_status<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_migrate_status<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceMigrateStatusWhen, operations::InstanceMigrateStatusThen),
     {
@@ -480,7 +480,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_serial<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceSerialWhen, operations::InstanceSerialThen),
     {
@@ -492,7 +492,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_state_put<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_state_put<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceStatePutWhen, operations::InstanceStatePutThen),
     {
@@ -504,7 +504,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_state_monitor<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_state_monitor<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::InstanceStateMonitorWhen, operations::InstanceStateMonitorThen),
     {
