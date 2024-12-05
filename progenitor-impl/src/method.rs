@@ -11,11 +11,11 @@ use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
 use typify::{TypeId, TypeSpace};
 
-use crate::{
-    template::PathTemplate,
-    util::{items, parameter_map, sanitize, unique_ident_from, Case},
-    Error, Generator, Result, TagStyle,
-};
+use crate::{Error, Generator, method, Result, TagStyle, template::PathTemplate, util::{
+    Case, generate_multi_type_for_types_stream, generate_multi_type_identifier, items, parameter_map,
+    sanitize,
+    unique_ident_from,
+}};
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
 /// The intermediate representation of an operation that will become a method.
@@ -262,6 +262,7 @@ pub(crate) enum OperationResponseKind {
     None,
     Raw,
     Upgrade,
+    Multi(Vec<Box<OperationResponseKind>>),
 }
 
 impl OperationResponseKind {
@@ -279,6 +280,10 @@ impl OperationResponseKind {
             }
             OperationResponseKind::Upgrade => {
                 quote! { reqwest::Upgraded }
+            }
+            OperationResponseKind::Multi(ref types) => {
+                let type_name = generate_multi_type_identifier(types, type_space);
+                quote! { types::#type_name }
             }
         }
     }
@@ -1034,9 +1039,22 @@ impl Generator {
                             ResponseValue::upgrade(#response_ident).await
                         }
                     }
+                    OperationResponseKind::Multi(_) => {
+                        panic!("Shouldn't occur for the original response")
+                    }
                 };
 
-                quote! { #pat => { #decode } }
+                match &response_type {
+                    OperationResponseKind::Multi(types) => {
+                        let multi_type_name = generate_multi_type_identifier(
+                            &types,
+                            &self.type_space,
+                        );
+                        let type_name = &response.typ.clone().into_tokens(&self.type_space);
+                        quote! { #pat => { #decode.map(|v: ResponseValue<#type_name>| v.map_inner(types::#multi_type_name::from)) } }
+                    }
+                    _ => { quote! { #pat => { #decode } } }
+                }
             });
 
         // Errors...
@@ -1097,9 +1115,22 @@ impl Generator {
                             );
                         }
                     }
+                    OperationResponseKind::Multi(_) => {
+                        panic!("Shouldn't occur for the original response")
+                    }
                 };
 
-                quote! { #pat => { #decode } }
+                match &response_type {
+                    OperationResponseKind::Multi(types) => {
+                        let multi_type_name = generate_multi_type_identifier(
+                            &types,
+                            &self.type_space,
+                        );
+                        let type_name = &response.typ.clone().into_tokens(&self.type_space);
+                        quote! { #pat => { #decode.map(|v: ResponseValue<#type_name>| v.map_inner(types::#multi_type_name::from)) } }
+                    }
+                    _ => { quote! { #pat => { #decode } } }
+                }
             });
 
         let accept_header = matches!(
@@ -1233,6 +1264,29 @@ impl Generator {
         })
     }
 
+    pub(crate) fn generate_multi_types_stream(
+        &self,
+        input_methods: &[method::OperationMethod],
+        type_space: &TypeSpace) -> TokenStream {
+        let mut streams = Vec::new();
+
+        for method in input_methods {
+            let (success_response_items, response_type) = self.extract_responses(
+                method,
+                method::OperationResponseStatus::is_success_or_default,
+            );
+
+            if let OperationResponseKind::Multi(types) = response_type {
+                let multi_stream = generate_multi_type_for_types_stream(&types, type_space);
+                streams.push(multi_stream);
+            }
+        }
+
+        quote! {
+            #(#streams)*
+        }
+    }
+
     /// Extract responses that match criteria specified by the `filter`. The
     /// result is a `Vec<OperationResponse>` that enumerates the cases matching
     /// the filter, and a `TokenStream` that represents the generated type for
@@ -1276,12 +1330,18 @@ impl Generator {
 
         // TODO to deal with multiple response types, we'll need to create an
         // enum type with variants for each of the response types.
-        assert!(response_types.len() <= 1);
-        let response_type = response_types
-            .into_iter()
-            .next()
-            // TODO should this be OperationResponseType::Raw?
-            .unwrap_or(OperationResponseKind::None);
+        // assert!(response_types.len() <= 1);
+        let response_type = if response_types.len() > 1 {
+            OperationResponseKind::Multi(response_types.into_iter().map(Box::new).collect())
+        } else {
+            response_types
+                .into_iter()
+                .next()
+                // TODO should this be OperationResponseType::Raw?
+                .unwrap_or(OperationResponseKind::None)
+        };
+
+
         (response_items, response_type)
     }
 
