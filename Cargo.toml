@@ -22,7 +22,7 @@ anyhow = "1.0.93"
 base64 = "0.22.1"
 built = { version = "0.7.5", features = ["cargo-lock", "git2"] }
 bytes = "1.9.0"
-chrono = { version = "0.4.0", default-features = false, features = ["serde"] }
+chrono = { version = "0.4.39", default-features = false, features = ["serde"] }
 clap = { version = "4.5.21", default-features = false, features = ["derive", "std"] }
 dropshot = { version = "0.13.0", default-features = false }
 env_logger = "0.10.2"
