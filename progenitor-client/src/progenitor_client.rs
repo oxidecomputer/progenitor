@@ -330,17 +330,17 @@ where
                 write!(f, "Invalid Request: {}", s)?;
             }
             Error::CommunicationError(e) => {
-                write!(f, "Communication Error: {}", e)?;
+                write!(f, "Communication Error: {:?}", e)?;
             }
             Error::ErrorResponse(rve) => {
                 write!(f, "Error Response: ")?;
                 rve.fmt_info(f)?;
             }
             Error::InvalidUpgrade(e) => {
-                write!(f, "Invalid Response Upgrade: {}", e)?;
+                write!(f, "Invalid Response Upgrade: {:?}", e)?;
             }
             Error::ResponseBodyError(e) => {
-                write!(f, "Invalid Response Body Bytes: {}", e)?;
+                write!(f, "Invalid Response Body Bytes: {:?}", e)?;
             }
             Error::InvalidResponsePayload(b, e) => {
                 write!(f, "Invalid Response Payload ({:?}): {}", b, e)?;
