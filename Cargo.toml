@@ -13,7 +13,7 @@ members = [
 resolver = "2"
 
 [workspace.dependencies]
-progenitor = { version = "0.8.0", path = "progenitor" }
+progenitor = { version = "0.8.0", path = "progenitor", default-features = false }
 progenitor-client = { version = "0.8.0", path = "progenitor-client" }
 progenitor-impl = { version = "0.8.0", path = "progenitor-impl" }
 progenitor-macro = { version = "0.8.0", path = "progenitor-macro" }

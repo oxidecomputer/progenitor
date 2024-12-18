@@ -9,10 +9,14 @@ readme = "../README.md"
 keywords = ["openapi", "openapiv3", "sdk", "generator", "proc_macro"]
 categories = ["api-bindings", "compilers"]
 
+[features]
+default = ["macro"]
+macro = ["dep:progenitor-client", "dep:progenitor-macro"]
+
 [dependencies]
-progenitor-client = { workspace = true }
+progenitor-client = { workspace = true, optional = true }
 progenitor-impl = { workspace = true }
-progenitor-macro = { workspace = true }
+progenitor-macro = { workspace = true, optional = true }
 
 [dev-dependencies]
 base64 = { workspace = true }

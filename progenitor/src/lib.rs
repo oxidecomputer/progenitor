@@ -12,6 +12,7 @@
 
 #![deny(missing_docs)]
 
+#[cfg(feature = "macro")]
 pub use progenitor_client;
 pub use progenitor_impl::CrateVers;
 pub use progenitor_impl::Error;
@@ -21,4 +22,5 @@ pub use progenitor_impl::InterfaceStyle;
 pub use progenitor_impl::TagStyle;
 pub use progenitor_impl::TypeImpl;
 pub use progenitor_impl::TypePatch;
+#[cfg(feature = "macro")]
 pub use progenitor_macro::generate_api;

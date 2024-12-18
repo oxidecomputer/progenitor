@@ -13,7 +13,7 @@ build = "build.rs"
 default-run = "cargo-progenitor"
 
 [dependencies]
-progenitor = { workspace = true }
+progenitor = { workspace = true, default-features = false }
 progenitor-client = { workspace = true }
 progenitor-impl = { workspace = true }
 
