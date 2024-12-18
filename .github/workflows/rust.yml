@@ -61,6 +61,16 @@ jobs:
     - name: Run tests
       run: cargo test --locked --verbose
 
+  build-no-default-features:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cargo build --locked --no-default-features
+
   test-wasm:
     runs-on: ubuntu-latest
     steps:
