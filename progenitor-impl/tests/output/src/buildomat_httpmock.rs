@@ -134,7 +134,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn ok(self, value: &Vec<types::Task>) -> Self {
+        pub fn ok(self, value: &::std::vec::Vec<types::Task>) -> Self {
             Self(
                 self.0
                     .status(200u16)
@@ -230,7 +230,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn ok(self, value: &Vec<types::TaskEvent>) -> Self {
+        pub fn ok(self, value: &::std::vec::Vec<types::TaskEvent>) -> Self {
             Self(
                 self.0
                     .status(200u16)
@@ -271,7 +271,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn ok(self, value: &Vec<types::TaskOutput>) -> Self {
+        pub fn ok(self, value: &::std::vec::Vec<types::TaskOutput>) -> Self {
             Self(
                 self.0
                     .status(200u16)

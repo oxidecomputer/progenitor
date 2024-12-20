@@ -76,9 +76,9 @@ pub mod types {
     pub struct BodyWithDefaults {
         #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
         pub forty_two: u32,
-        pub s: String,
+        pub s: ::std::string::String,
         #[serde(default = "defaults::body_with_defaults_something")]
-        pub something: Option<bool>,
+        pub something: ::std::option::Option<bool>,
         #[serde(default)]
         pub yes: bool,
     }
@@ -117,10 +117,10 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
     impl From<&Error> for Error {
@@ -139,8 +139,8 @@ pub mod types {
             T::try_from(V).unwrap()
         }
 
-        pub(super) fn body_with_defaults_something() -> Option<bool> {
-            Some(true)
+        pub(super) fn body_with_defaults_something() -> ::std::option::Option<bool> {
+            ::std::option::Option::Some(true)
         }
     }
 }

@@ -95,8 +95,8 @@ pub mod types {
     )]
     pub struct ObjWithOptionArray {
         #[serde(rename = "stranger-things")]
-        pub stranger_things: Vec<Option<Task>>,
-        pub things: Vec<Option<Task>>,
+        pub stranger_things: ::std::vec::Vec<::std::option::Option<Task>>,
+        pub things: ::std::vec::Vec<::std::option::Option<Task>>,
     }
 
     impl From<&ObjWithOptionArray> for ObjWithOptionArray {
@@ -152,11 +152,11 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct Task {
-        pub id: String,
-        pub name: String,
-        pub output_rules: Vec<String>,
-        pub script: String,
-        pub state: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
+        pub state: ::std::string::String,
     }
 
     impl From<&Task> for Task {
@@ -208,9 +208,9 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct TaskEvent {
-        pub payload: String,
+        pub payload: ::std::string::String,
         pub seq: u32,
-        pub stream: String,
+        pub stream: ::std::string::String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -258,8 +258,8 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct TaskOutput {
-        pub id: String,
-        pub path: String,
+        pub id: ::std::string::String,
+        pub path: ::std::string::String,
         pub size: u64,
     }
 
@@ -307,10 +307,10 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct TaskSubmit {
-        pub name: String,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub output_rules: Vec<String>,
-        pub script: String,
+        pub name: ::std::string::String,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
     }
 
     impl From<&TaskSubmit> for TaskSubmit {
@@ -347,7 +347,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct TaskSubmitResult {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
     impl From<&TaskSubmitResult> for TaskSubmitResult {
@@ -384,7 +384,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct UploadedChunk {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
     impl From<&UploadedChunk> for UploadedChunk {
@@ -421,7 +421,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct UserCreate {
-        pub name: String,
+        pub name: ::std::string::String,
     }
 
     impl From<&UserCreate> for UserCreate {
@@ -466,9 +466,9 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct UserCreateResult {
-        pub id: String,
-        pub name: String,
-        pub token: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub token: ::std::string::String,
     }
 
     impl From<&UserCreateResult> for UserCreateResult {
@@ -509,8 +509,8 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct WhoamiResult {
-        pub id: String,
-        pub name: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
     }
 
     impl From<&WhoamiResult> for WhoamiResult {
@@ -570,13 +570,13 @@ pub mod types {
     )]
     pub struct Worker {
         pub deleted: bool,
-        pub id: String,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub instance_id: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub lastping: Option<chrono::DateTime<chrono::offset::Utc>>,
+        pub id: ::std::string::String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub instance_id: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub lastping: ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
         pub recycle: bool,
-        pub tasks: Vec<WorkerTask>,
+        pub tasks: ::std::vec::Vec<WorkerTask>,
     }
 
     impl From<&Worker> for Worker {
@@ -625,8 +625,8 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct WorkerAddOutput {
-        pub chunks: Vec<String>,
-        pub path: String,
+        pub chunks: ::std::vec::Vec<::std::string::String>,
+        pub path: ::std::string::String,
         pub size: i64,
     }
 
@@ -673,8 +673,8 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct WorkerAppendTask {
-        pub payload: String,
-        pub stream: String,
+        pub payload: ::std::string::String,
+        pub stream: ::std::string::String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -716,8 +716,8 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct WorkerBootstrap {
-        pub bootstrap: String,
-        pub token: String,
+        pub bootstrap: ::std::string::String,
+        pub token: ::std::string::String,
     }
 
     impl From<&WorkerBootstrap> for WorkerBootstrap {
@@ -754,7 +754,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct WorkerBootstrapResult {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
     impl From<&WorkerBootstrapResult> for WorkerBootstrapResult {
@@ -832,8 +832,8 @@ pub mod types {
     )]
     pub struct WorkerPingResult {
         pub poweroff: bool,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub task: Option<WorkerPingTask>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub task: ::std::option::Option<WorkerPingTask>,
     }
 
     impl From<&WorkerPingResult> for WorkerPingResult {
@@ -881,9 +881,9 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct WorkerPingTask {
-        pub id: String,
-        pub output_rules: Vec<String>,
-        pub script: String,
+        pub id: ::std::string::String,
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
     }
 
     impl From<&WorkerPingTask> for WorkerPingTask {
@@ -928,9 +928,9 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct WorkerTask {
-        pub id: String,
-        pub name: String,
-        pub owner: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub owner: ::std::string::String,
     }
 
     impl From<&WorkerTask> for WorkerTask {
@@ -970,7 +970,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct WorkersResult {
-        pub workers: Vec<Worker>,
+        pub workers: ::std::vec::Vec<Worker>,
     }
 
     impl From<&WorkersResult> for WorkersResult {
@@ -989,8 +989,14 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct ObjWithOptionArray {
-            stranger_things: Result<Vec<Option<super::Task>>, String>,
-            things: Result<Vec<Option<super::Task>>, String>,
+            stranger_things: ::std::result::Result<
+                ::std::vec::Vec<::std::option::Option<super::Task>>,
+                ::std::string::String,
+            >,
+            things: ::std::result::Result<
+                ::std::vec::Vec<::std::option::Option<super::Task>>,
+                ::std::string::String,
+            >,
         }
 
         impl Default for ObjWithOptionArray {
@@ -1005,7 +1011,7 @@ pub mod types {
         impl ObjWithOptionArray {
             pub fn stranger_things<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<Option<super::Task>>>,
+                T: std::convert::TryInto<::std::vec::Vec<::std::option::Option<super::Task>>>,
                 T::Error: std::fmt::Display,
             {
                 self.stranger_things = value.try_into().map_err(|e| {
@@ -1015,7 +1021,7 @@ pub mod types {
             }
             pub fn things<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<Option<super::Task>>>,
+                T: std::convert::TryInto<::std::vec::Vec<::std::option::Option<super::Task>>>,
                 T::Error: std::fmt::Display,
             {
                 self.things = value
@@ -1025,9 +1031,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ObjWithOptionArray> for super::ObjWithOptionArray {
+        impl ::std::convert::TryFrom<ObjWithOptionArray> for super::ObjWithOptionArray {
             type Error = super::error::ConversionError;
-            fn try_from(value: ObjWithOptionArray) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ObjWithOptionArray,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     stranger_things: value.stranger_things?,
                     things: value.things?,
@@ -1046,11 +1054,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Task {
-            id: Result<String, String>,
-            name: Result<String, String>,
-            output_rules: Result<Vec<String>, String>,
-            script: Result<String, String>,
-            state: Result<String, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<::std::string::String, ::std::string::String>,
+            output_rules: ::std::result::Result<
+                ::std::vec::Vec<::std::string::String>,
+                ::std::string::String,
+            >,
+            script: ::std::result::Result<::std::string::String, ::std::string::String>,
+            state: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for Task {
@@ -1068,7 +1079,7 @@ pub mod types {
         impl Task {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -1078,7 +1089,7 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.name = value
@@ -1088,7 +1099,7 @@ pub mod types {
             }
             pub fn output_rules<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<String>>,
+                T: std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.output_rules = value.try_into().map_err(|e| {
@@ -1098,7 +1109,7 @@ pub mod types {
             }
             pub fn script<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.script = value
@@ -1108,7 +1119,7 @@ pub mod types {
             }
             pub fn state<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.state = value
@@ -1118,9 +1129,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Task> for super::Task {
+        impl ::std::convert::TryFrom<Task> for super::Task {
             type Error = super::error::ConversionError;
-            fn try_from(value: Task) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: Task) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -1145,10 +1156,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct TaskEvent {
-            payload: Result<String, String>,
-            seq: Result<u32, String>,
-            stream: Result<String, String>,
-            time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            payload: ::std::result::Result<::std::string::String, ::std::string::String>,
+            seq: ::std::result::Result<u32, ::std::string::String>,
+            stream: ::std::result::Result<::std::string::String, ::std::string::String>,
+            time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
         impl Default for TaskEvent {
@@ -1165,7 +1177,7 @@ pub mod types {
         impl TaskEvent {
             pub fn payload<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.payload = value
@@ -1185,7 +1197,7 @@ pub mod types {
             }
             pub fn stream<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.stream = value
@@ -1205,9 +1217,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<TaskEvent> for super::TaskEvent {
+        impl ::std::convert::TryFrom<TaskEvent> for super::TaskEvent {
             type Error = super::error::ConversionError;
-            fn try_from(value: TaskEvent) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: TaskEvent,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     payload: value.payload?,
                     seq: value.seq?,
@@ -1230,9 +1244,9 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct TaskOutput {
-            id: Result<String, String>,
-            path: Result<String, String>,
-            size: Result<u64, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            path: ::std::result::Result<::std::string::String, ::std::string::String>,
+            size: ::std::result::Result<u64, ::std::string::String>,
         }
 
         impl Default for TaskOutput {
@@ -1248,7 +1262,7 @@ pub mod types {
         impl TaskOutput {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -1258,7 +1272,7 @@ pub mod types {
             }
             pub fn path<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.path = value
@@ -1278,9 +1292,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<TaskOutput> for super::TaskOutput {
+        impl ::std::convert::TryFrom<TaskOutput> for super::TaskOutput {
             type Error = super::error::ConversionError;
-            fn try_from(value: TaskOutput) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: TaskOutput,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     path: value.path?,
@@ -1301,9 +1317,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct TaskSubmit {
-            name: Result<String, String>,
-            output_rules: Result<Vec<String>, String>,
-            script: Result<String, String>,
+            name: ::std::result::Result<::std::string::String, ::std::string::String>,
+            output_rules: ::std::result::Result<
+                ::std::vec::Vec<::std::string::String>,
+                ::std::string::String,
+            >,
+            script: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for TaskSubmit {
@@ -1319,7 +1338,7 @@ pub mod types {
         impl TaskSubmit {
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.name = value
@@ -1329,7 +1348,7 @@ pub mod types {
             }
             pub fn output_rules<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<String>>,
+                T: std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.output_rules = value.try_into().map_err(|e| {
@@ -1339,7 +1358,7 @@ pub mod types {
             }
             pub fn script<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.script = value
@@ -1349,9 +1368,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<TaskSubmit> for super::TaskSubmit {
+        impl ::std::convert::TryFrom<TaskSubmit> for super::TaskSubmit {
             type Error = super::error::ConversionError;
-            fn try_from(value: TaskSubmit) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: TaskSubmit,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     name: value.name?,
                     output_rules: value.output_rules?,
@@ -1372,7 +1393,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct TaskSubmitResult {
-            id: Result<String, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for TaskSubmitResult {
@@ -1386,7 +1407,7 @@ pub mod types {
         impl TaskSubmitResult {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -1396,9 +1417,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<TaskSubmitResult> for super::TaskSubmitResult {
+        impl ::std::convert::TryFrom<TaskSubmitResult> for super::TaskSubmitResult {
             type Error = super::error::ConversionError;
-            fn try_from(value: TaskSubmitResult) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: TaskSubmitResult,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -1411,7 +1434,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UploadedChunk {
-            id: Result<String, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for UploadedChunk {
@@ -1425,7 +1448,7 @@ pub mod types {
         impl UploadedChunk {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -1435,9 +1458,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UploadedChunk> for super::UploadedChunk {
+        impl ::std::convert::TryFrom<UploadedChunk> for super::UploadedChunk {
             type Error = super::error::ConversionError;
-            fn try_from(value: UploadedChunk) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UploadedChunk,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -1450,7 +1475,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UserCreate {
-            name: Result<String, String>,
+            name: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for UserCreate {
@@ -1464,7 +1489,7 @@ pub mod types {
         impl UserCreate {
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.name = value
@@ -1474,9 +1499,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UserCreate> for super::UserCreate {
+        impl ::std::convert::TryFrom<UserCreate> for super::UserCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: UserCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UserCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self { name: value.name? })
             }
         }
@@ -1491,9 +1518,9 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UserCreateResult {
-            id: Result<String, String>,
-            name: Result<String, String>,
-            token: Result<String, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<::std::string::String, ::std::string::String>,
+            token: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for UserCreateResult {
@@ -1509,7 +1536,7 @@ pub mod types {
         impl UserCreateResult {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -1519,7 +1546,7 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.name = value
@@ -1529,7 +1556,7 @@ pub mod types {
             }
             pub fn token<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.token = value
@@ -1539,9 +1566,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UserCreateResult> for super::UserCreateResult {
+        impl ::std::convert::TryFrom<UserCreateResult> for super::UserCreateResult {
             type Error = super::error::ConversionError;
-            fn try_from(value: UserCreateResult) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UserCreateResult,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -1562,8 +1591,8 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WhoamiResult {
-            id: Result<String, String>,
-            name: Result<String, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for WhoamiResult {
@@ -1578,7 +1607,7 @@ pub mod types {
         impl WhoamiResult {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -1588,7 +1617,7 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.name = value
@@ -1598,9 +1627,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WhoamiResult> for super::WhoamiResult {
+        impl ::std::convert::TryFrom<WhoamiResult> for super::WhoamiResult {
             type Error = super::error::ConversionError;
-            fn try_from(value: WhoamiResult) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WhoamiResult,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -1619,12 +1650,18 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Worker {
-            deleted: Result<bool, String>,
-            id: Result<String, String>,
-            instance_id: Result<Option<String>, String>,
-            lastping: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
-            recycle: Result<bool, String>,
-            tasks: Result<Vec<super::WorkerTask>, String>,
+            deleted: ::std::result::Result<bool, ::std::string::String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            instance_id: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            lastping: ::std::result::Result<
+                ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+                ::std::string::String,
+            >,
+            recycle: ::std::result::Result<bool, ::std::string::String>,
+            tasks: ::std::result::Result<::std::vec::Vec<super::WorkerTask>, ::std::string::String>,
         }
 
         impl Default for Worker {
@@ -1653,7 +1690,7 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -1663,7 +1700,7 @@ pub mod types {
             }
             pub fn instance_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
+                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.instance_id = value
@@ -1673,7 +1710,9 @@ pub mod types {
             }
             pub fn lastping<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<chrono::DateTime<chrono::offset::Utc>>>,
+                T: std::convert::TryInto<
+                    ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+                >,
                 T::Error: std::fmt::Display,
             {
                 self.lastping = value
@@ -1693,7 +1732,7 @@ pub mod types {
             }
             pub fn tasks<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::WorkerTask>>,
+                T: std::convert::TryInto<::std::vec::Vec<super::WorkerTask>>,
                 T::Error: std::fmt::Display,
             {
                 self.tasks = value
@@ -1703,9 +1742,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Worker> for super::Worker {
+        impl ::std::convert::TryFrom<Worker> for super::Worker {
             type Error = super::error::ConversionError;
-            fn try_from(value: Worker) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Worker,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     deleted: value.deleted?,
                     id: value.id?,
@@ -1732,9 +1773,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerAddOutput {
-            chunks: Result<Vec<String>, String>,
-            path: Result<String, String>,
-            size: Result<i64, String>,
+            chunks: ::std::result::Result<
+                ::std::vec::Vec<::std::string::String>,
+                ::std::string::String,
+            >,
+            path: ::std::result::Result<::std::string::String, ::std::string::String>,
+            size: ::std::result::Result<i64, ::std::string::String>,
         }
 
         impl Default for WorkerAddOutput {
@@ -1750,7 +1794,7 @@ pub mod types {
         impl WorkerAddOutput {
             pub fn chunks<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<String>>,
+                T: std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.chunks = value
@@ -1760,7 +1804,7 @@ pub mod types {
             }
             pub fn path<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.path = value
@@ -1780,9 +1824,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkerAddOutput> for super::WorkerAddOutput {
+        impl ::std::convert::TryFrom<WorkerAddOutput> for super::WorkerAddOutput {
             type Error = super::error::ConversionError;
-            fn try_from(value: WorkerAddOutput) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WorkerAddOutput,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     chunks: value.chunks?,
                     path: value.path?,
@@ -1803,9 +1849,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerAppendTask {
-            payload: Result<String, String>,
-            stream: Result<String, String>,
-            time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            payload: ::std::result::Result<::std::string::String, ::std::string::String>,
+            stream: ::std::result::Result<::std::string::String, ::std::string::String>,
+            time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
         impl Default for WorkerAppendTask {
@@ -1821,7 +1868,7 @@ pub mod types {
         impl WorkerAppendTask {
             pub fn payload<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.payload = value
@@ -1831,7 +1878,7 @@ pub mod types {
             }
             pub fn stream<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.stream = value
@@ -1851,9 +1898,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkerAppendTask> for super::WorkerAppendTask {
+        impl ::std::convert::TryFrom<WorkerAppendTask> for super::WorkerAppendTask {
             type Error = super::error::ConversionError;
-            fn try_from(value: WorkerAppendTask) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WorkerAppendTask,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     payload: value.payload?,
                     stream: value.stream?,
@@ -1874,8 +1923,8 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerBootstrap {
-            bootstrap: Result<String, String>,
-            token: Result<String, String>,
+            bootstrap: ::std::result::Result<::std::string::String, ::std::string::String>,
+            token: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for WorkerBootstrap {
@@ -1890,7 +1939,7 @@ pub mod types {
         impl WorkerBootstrap {
             pub fn bootstrap<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.bootstrap = value
@@ -1900,7 +1949,7 @@ pub mod types {
             }
             pub fn token<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.token = value
@@ -1910,9 +1959,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkerBootstrap> for super::WorkerBootstrap {
+        impl ::std::convert::TryFrom<WorkerBootstrap> for super::WorkerBootstrap {
             type Error = super::error::ConversionError;
-            fn try_from(value: WorkerBootstrap) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WorkerBootstrap,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     bootstrap: value.bootstrap?,
                     token: value.token?,
@@ -1931,7 +1982,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerBootstrapResult {
-            id: Result<String, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for WorkerBootstrapResult {
@@ -1945,7 +1996,7 @@ pub mod types {
         impl WorkerBootstrapResult {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -1955,11 +2006,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkerBootstrapResult> for super::WorkerBootstrapResult {
+        impl ::std::convert::TryFrom<WorkerBootstrapResult> for super::WorkerBootstrapResult {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: WorkerBootstrapResult,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self { id: value.id? })
             }
         }
@@ -1972,7 +2023,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerCompleteTask {
-            failed: Result<bool, String>,
+            failed: ::std::result::Result<bool, ::std::string::String>,
         }
 
         impl Default for WorkerCompleteTask {
@@ -1996,9 +2047,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkerCompleteTask> for super::WorkerCompleteTask {
+        impl ::std::convert::TryFrom<WorkerCompleteTask> for super::WorkerCompleteTask {
             type Error = super::error::ConversionError;
-            fn try_from(value: WorkerCompleteTask) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WorkerCompleteTask,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     failed: value.failed?,
                 })
@@ -2015,8 +2068,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerPingResult {
-            poweroff: Result<bool, String>,
-            task: Result<Option<super::WorkerPingTask>, String>,
+            poweroff: ::std::result::Result<bool, ::std::string::String>,
+            task: ::std::result::Result<
+                ::std::option::Option<super::WorkerPingTask>,
+                ::std::string::String,
+            >,
         }
 
         impl Default for WorkerPingResult {
@@ -2041,7 +2097,7 @@ pub mod types {
             }
             pub fn task<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::WorkerPingTask>>,
+                T: std::convert::TryInto<::std::option::Option<super::WorkerPingTask>>,
                 T::Error: std::fmt::Display,
             {
                 self.task = value
@@ -2051,9 +2107,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkerPingResult> for super::WorkerPingResult {
+        impl ::std::convert::TryFrom<WorkerPingResult> for super::WorkerPingResult {
             type Error = super::error::ConversionError;
-            fn try_from(value: WorkerPingResult) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WorkerPingResult,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     poweroff: value.poweroff?,
                     task: value.task?,
@@ -2072,9 +2130,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerPingTask {
-            id: Result<String, String>,
-            output_rules: Result<Vec<String>, String>,
-            script: Result<String, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            output_rules: ::std::result::Result<
+                ::std::vec::Vec<::std::string::String>,
+                ::std::string::String,
+            >,
+            script: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for WorkerPingTask {
@@ -2090,7 +2151,7 @@ pub mod types {
         impl WorkerPingTask {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -2100,7 +2161,7 @@ pub mod types {
             }
             pub fn output_rules<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<String>>,
+                T: std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.output_rules = value.try_into().map_err(|e| {
@@ -2110,7 +2171,7 @@ pub mod types {
             }
             pub fn script<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.script = value
@@ -2120,9 +2181,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkerPingTask> for super::WorkerPingTask {
+        impl ::std::convert::TryFrom<WorkerPingTask> for super::WorkerPingTask {
             type Error = super::error::ConversionError;
-            fn try_from(value: WorkerPingTask) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WorkerPingTask,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     output_rules: value.output_rules?,
@@ -2143,9 +2206,9 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerTask {
-            id: Result<String, String>,
-            name: Result<String, String>,
-            owner: Result<String, String>,
+            id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<::std::string::String, ::std::string::String>,
+            owner: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for WorkerTask {
@@ -2161,7 +2224,7 @@ pub mod types {
         impl WorkerTask {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.id = value
@@ -2171,7 +2234,7 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.name = value
@@ -2181,7 +2244,7 @@ pub mod types {
             }
             pub fn owner<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.owner = value
@@ -2191,9 +2254,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkerTask> for super::WorkerTask {
+        impl ::std::convert::TryFrom<WorkerTask> for super::WorkerTask {
             type Error = super::error::ConversionError;
-            fn try_from(value: WorkerTask) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WorkerTask,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -2214,7 +2279,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkersResult {
-            workers: Result<Vec<super::Worker>, String>,
+            workers: ::std::result::Result<::std::vec::Vec<super::Worker>, ::std::string::String>,
         }
 
         impl Default for WorkersResult {
@@ -2228,7 +2293,7 @@ pub mod types {
         impl WorkersResult {
             pub fn workers<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Worker>>,
+                T: std::convert::TryInto<::std::vec::Vec<super::Worker>>,
                 T::Error: std::fmt::Display,
             {
                 self.workers = value
@@ -2238,9 +2303,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<WorkersResult> for super::WorkersResult {
+        impl ::std::convert::TryFrom<WorkersResult> for super::WorkersResult {
             type Error = super::error::ConversionError;
-            fn try_from(value: WorkersResult) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: WorkersResult,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     workers: value.workers?,
                 })
@@ -2623,7 +2690,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct TaskGet<'a> {
         client: &'a super::Client,
-        task: Result<String, String>,
+        task: Result<::std::string::String, String>,
     }
 
     impl<'a> TaskGet<'a> {
@@ -2636,11 +2703,11 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for task failed".to_string());
+            self.task = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for task failed".to_string()
+            });
             self
         }
 
@@ -2685,7 +2752,7 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks`
-        pub async fn send(self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
+        pub async fn send(self) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/tasks", client.baseurl,);
             #[allow(unused_mut)]
@@ -2775,7 +2842,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct TaskEventsGet<'a> {
         client: &'a super::Client,
-        task: Result<String, String>,
+        task: Result<::std::string::String, String>,
         minseq: Result<Option<u32>, String>,
     }
 
@@ -2790,11 +2857,11 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for task failed".to_string());
+            self.task = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for task failed".to_string()
+            });
             self
         }
 
@@ -2810,7 +2877,9 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/events`
-        pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskEvent>>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
             let Self {
                 client,
                 task,
@@ -2852,7 +2921,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct TaskOutputsGet<'a> {
         client: &'a super::Client,
-        task: Result<String, String>,
+        task: Result<::std::string::String, String>,
     }
 
     impl<'a> TaskOutputsGet<'a> {
@@ -2865,16 +2934,18 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for task failed".to_string());
+            self.task = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for task failed".to_string()
+            });
             self
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
-        pub async fn send(self) -> Result<ResponseValue<Vec<types::TaskOutput>>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
             let Self { client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let url = format!(
@@ -2906,8 +2977,8 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct TaskOutputDownload<'a> {
         client: &'a super::Client,
-        task: Result<String, String>,
-        output: Result<String, String>,
+        task: Result<::std::string::String, String>,
+        output: Result<::std::string::String, String>,
     }
 
     impl<'a> TaskOutputDownload<'a> {
@@ -2921,21 +2992,21 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for task failed".to_string());
+            self.task = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for task failed".to_string()
+            });
             self
         }
 
         pub fn output<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.output = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for output failed".to_string());
+            self.output = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for output failed".to_string()
+            });
             self
         }
 
@@ -3219,7 +3290,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct WorkerTaskAppend<'a> {
         client: &'a super::Client,
-        task: Result<String, String>,
+        task: Result<::std::string::String, String>,
         body: Result<types::builder::WorkerAppendTask, String>,
     }
 
@@ -3234,11 +3305,11 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for task failed".to_string());
+            self.task = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for task failed".to_string()
+            });
             self
         }
 
@@ -3293,7 +3364,7 @@ pub mod builder {
     #[derive(Debug)]
     pub struct WorkerTaskUploadChunk<'a> {
         client: &'a super::Client,
-        task: Result<String, String>,
+        task: Result<::std::string::String, String>,
         body: Result<reqwest::Body, String>,
     }
 
@@ -3308,11 +3379,11 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for task failed".to_string());
+            self.task = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for task failed".to_string()
+            });
             self
         }
 
@@ -3365,7 +3436,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct WorkerTaskComplete<'a> {
         client: &'a super::Client,
-        task: Result<String, String>,
+        task: Result<::std::string::String, String>,
         body: Result<types::builder::WorkerCompleteTask, String>,
     }
 
@@ -3380,11 +3451,11 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for task failed".to_string());
+            self.task = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for task failed".to_string()
+            });
             self
         }
 
@@ -3439,7 +3510,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct WorkerTaskAddOutput<'a> {
         client: &'a super::Client,
-        task: Result<String, String>,
+        task: Result<::std::string::String, String>,
         body: Result<types::builder::WorkerAddOutput, String>,
     }
 
@@ -3454,11 +3525,11 @@ pub mod builder {
 
         pub fn task<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for task failed".to_string());
+            self.task = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for task failed".to_string()
+            });
             self
         }
 

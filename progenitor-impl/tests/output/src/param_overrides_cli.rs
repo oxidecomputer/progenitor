@@ -27,7 +27,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("unique-key")
                     .long("unique-key")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false)
                     .help("A key parameter that will not be overridden by the path spec"),
             )
@@ -50,7 +50,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.key(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("unique-key") {
+        if let Some(value) = matches.get_one::<::std::string::String>("unique-key") {
             request = request.unique_key(value.clone());
         }
 

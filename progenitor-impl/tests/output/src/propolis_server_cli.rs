@@ -32,7 +32,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("cloud-init-bytes")
                     .long("cloud-init-bytes")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -180,7 +180,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_ensure();
-        if let Some(value) = matches.get_one::<String>("cloud-init-bytes") {
+        if let Some(value) = matches.get_one::<::std::string::String>("cloud-init-bytes") {
             request = request.body_map(|body| body.cloud_init_bytes(value.clone()))
         }
 

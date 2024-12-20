@@ -25,20 +25,20 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("authorization")
                     .long("authorization")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("Authorization header (bearer token)"),
             )
             .arg(
                 ::clap::Arg::new("host")
                     .long("host")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("key")
                     .long("key")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -61,7 +61,7 @@ impl<T: CliConfig> Cli<T> {
         ::clap::Command::new("").arg(
             ::clap::Arg::new("authorization")
                 .long("authorization")
-                .value_parser(::clap::value_parser!(String))
+                .value_parser(::clap::value_parser!(::std::string::String))
                 .required(true)
                 .help("Authorization header (bearer token)"),
         )
@@ -71,7 +71,7 @@ impl<T: CliConfig> Cli<T> {
         ::clap::Command::new("").arg(
             ::clap::Arg::new("authorization")
                 .long("authorization")
-                .value_parser(::clap::value_parser!(String))
+                .value_parser(::clap::value_parser!(::std::string::String))
                 .required(true)
                 .help("Authorization header (bearer token)"),
         )
@@ -82,7 +82,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("authorization")
                     .long("authorization")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("Authorization header (bearer token)"),
             )
@@ -125,7 +125,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("authorization")
                     .long("authorization")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("Authorization header (bearer token)"),
             )
@@ -150,14 +150,14 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("authorization")
                     .long("authorization")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("Authorization header (bearer token)"),
             )
             .arg(
                 ::clap::Arg::new("script")
                     .long("script")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -199,15 +199,15 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_enrol(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.enrol();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("host") {
+        if let Some(value) = matches.get_one::<::std::string::String>("host") {
             request = request.body_map(|body| body.host(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("key") {
+        if let Some(value) = matches.get_one::<::std::string::String>("key") {
             request = request.body_map(|body| body.key(value.clone()))
         }
 
@@ -233,7 +233,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_global_jobs(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.global_jobs();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
@@ -253,7 +253,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_ping(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ping();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
@@ -273,7 +273,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_report_finish(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_finish();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
@@ -311,7 +311,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_report_output(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_output();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
@@ -337,11 +337,11 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_report_start(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_start();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("script") {
+        if let Some(value) = matches.get_one::<::std::string::String>("script") {
             request = request.body_map(|body| body.script(value.clone()))
         }
 

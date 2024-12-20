@@ -137,7 +137,7 @@ pub mod builder {
     pub struct KeyGet<'a> {
         client: &'a super::Client,
         key: Result<Option<bool>, String>,
-        unique_key: Result<Option<String>, String>,
+        unique_key: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> KeyGet<'a> {
@@ -162,12 +162,11 @@ pub mod builder {
 
         pub fn unique_key<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.unique_key = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for unique_key failed".to_string());
+            self.unique_key = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for unique_key failed".to_string()
+            });
             self
         }
 

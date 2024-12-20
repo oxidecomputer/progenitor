@@ -45,7 +45,7 @@ impl<T: CliConfig> Cli<T> {
         ::clap::Command::new("").arg(
             ::clap::Arg::new("task")
                 .long("task")
-                .value_parser(::clap::value_parser!(String))
+                .value_parser(::clap::value_parser!(::std::string::String))
                 .required(true),
         )
     }
@@ -59,13 +59,13 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("script")
                     .long("script")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -95,7 +95,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("task")
                     .long("task")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true),
             )
     }
@@ -104,7 +104,7 @@ impl<T: CliConfig> Cli<T> {
         ::clap::Command::new("").arg(
             ::clap::Arg::new("task")
                 .long("task")
-                .value_parser(::clap::value_parser!(String))
+                .value_parser(::clap::value_parser!(::std::string::String))
                 .required(true),
         )
     }
@@ -114,13 +114,13 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("output")
                     .long("output")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true),
             )
             .arg(
                 ::clap::Arg::new("task")
                     .long("task")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true),
             )
     }
@@ -130,7 +130,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -162,13 +162,13 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("bootstrap")
                     .long("bootstrap")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("token")
                     .long("token")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -196,19 +196,19 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("payload")
                     .long("payload")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("stream")
                     .long("stream")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("task")
                     .long("task")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true),
             )
             .arg(
@@ -237,7 +237,7 @@ impl<T: CliConfig> Cli<T> {
         ::clap::Command::new("").arg(
             ::clap::Arg::new("task")
                 .long("task")
-                .value_parser(::clap::value_parser!(String))
+                .value_parser(::clap::value_parser!(::std::string::String))
                 .required(true),
         )
     }
@@ -253,7 +253,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("task")
                     .long("task")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true),
             )
             .arg(
@@ -277,7 +277,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("path")
                     .long("path")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -289,7 +289,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("task")
                     .long("task")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true),
             )
             .arg(
@@ -380,7 +380,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_task_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_get();
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 
@@ -416,11 +416,11 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_task_submit(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_submit();
-        if let Some(value) = matches.get_one::<String>("name") {
+        if let Some(value) = matches.get_one::<::std::string::String>("name") {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("script") {
+        if let Some(value) = matches.get_one::<::std::string::String>("script") {
             request = request.body_map(|body| body.script(value.clone()))
         }
 
@@ -453,7 +453,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.minseq(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 
@@ -476,7 +476,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.task_outputs_get();
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 
@@ -500,11 +500,11 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.task_output_download();
-        if let Some(value) = matches.get_one::<String>("output") {
+        if let Some(value) = matches.get_one::<::std::string::String>("output") {
             request = request.output(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 
@@ -524,7 +524,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_user_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.user_create();
-        if let Some(value) = matches.get_one::<String>("name") {
+        if let Some(value) = matches.get_one::<::std::string::String>("name") {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
@@ -588,11 +588,11 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_bootstrap();
-        if let Some(value) = matches.get_one::<String>("bootstrap") {
+        if let Some(value) = matches.get_one::<::std::string::String>("bootstrap") {
             request = request.body_map(|body| body.bootstrap(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("token") {
+        if let Some(value) = matches.get_one::<::std::string::String>("token") {
             request = request.body_map(|body| body.token(value.clone()))
         }
 
@@ -638,15 +638,15 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_append();
-        if let Some(value) = matches.get_one::<String>("payload") {
+        if let Some(value) = matches.get_one::<::std::string::String>("payload") {
             request = request.body_map(|body| body.payload(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("stream") {
+        if let Some(value) = matches.get_one::<::std::string::String>("stream") {
             request = request.body_map(|body| body.stream(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 
@@ -680,7 +680,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_upload_chunk();
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 
@@ -708,7 +708,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.failed(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 
@@ -738,7 +738,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_add_output();
-        if let Some(value) = matches.get_one::<String>("path") {
+        if let Some(value) = matches.get_one::<::std::string::String>("path") {
             request = request.body_map(|body| body.path(value.clone()))
         }
 
@@ -746,7 +746,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.size(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("task") {
+        if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 

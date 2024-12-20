@@ -20,7 +20,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("gateway")
                     .long("gateway")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true),
             )
             .arg(
@@ -51,7 +51,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_uno(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.uno();
-        if let Some(value) = matches.get_one::<String>("gateway") {
+        if let Some(value) = matches.get_one::<::std::string::String>("gateway") {
             request = request.gateway(value.clone());
         }
 

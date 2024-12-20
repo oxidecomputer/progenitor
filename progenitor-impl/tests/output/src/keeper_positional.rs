@@ -62,8 +62,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct EnrolBody {
-        pub host: String,
-        pub key: String,
+        pub host: ::std::string::String,
+        pub key: ::std::string::String,
     }
 
     impl From<&EnrolBody> for EnrolBody {
@@ -96,7 +96,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct GlobalJobsResult {
-        pub summary: Vec<ReportSummary>,
+        pub summary: ::std::vec::Vec<ReportSummary>,
     }
 
     impl From<&GlobalJobsResult> for GlobalJobsResult {
@@ -134,8 +134,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct OutputRecord {
-        pub msg: String,
-        pub stream: String,
+        pub msg: ::std::string::String,
+        pub stream: ::std::string::String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -170,7 +170,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct PingResult {
-        pub host: String,
+        pub host: ::std::string::String,
         pub ok: bool,
     }
 
@@ -267,11 +267,11 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportId {
-        pub host: String,
-        pub job: String,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
         pub pid: u64,
         pub time: chrono::DateTime<chrono::offset::Utc>,
-        pub uuid: String,
+        pub uuid: ::std::string::String,
     }
 
     impl From<&ReportId> for ReportId {
@@ -376,7 +376,7 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportStartBody {
         pub id: ReportId,
-        pub script: String,
+        pub script: ::std::string::String,
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -432,8 +432,8 @@ pub mod types {
     pub struct ReportSummary {
         pub age_seconds: i32,
         pub duration_seconds: i32,
-        pub host: String,
-        pub job: String,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
         pub status: i32,
         pub when: chrono::DateTime<chrono::offset::Utc>,
     }
