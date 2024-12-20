@@ -57,8 +57,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UnoBody {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub gateway: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub gateway: ::std::option::Option<::std::string::String>,
         pub required: ::serde_json::Value,
     }
 
@@ -78,8 +78,11 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct UnoBody {
-            gateway: Result<Option<String>, String>,
-            required: Result<::serde_json::Value, String>,
+            gateway: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            required: ::std::result::Result<::serde_json::Value, ::std::string::String>,
         }
 
         impl Default for UnoBody {
@@ -94,7 +97,7 @@ pub mod types {
         impl UnoBody {
             pub fn gateway<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
+                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.gateway = value
@@ -114,9 +117,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UnoBody> for super::UnoBody {
+        impl ::std::convert::TryFrom<UnoBody> for super::UnoBody {
             type Error = super::error::ConversionError;
-            fn try_from(value: UnoBody) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UnoBody,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     gateway: value.gateway?,
                     required: value.required?,
@@ -226,7 +231,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct Uno<'a> {
         client: &'a super::Client,
-        gateway: Result<String, String>,
+        gateway: Result<::std::string::String, String>,
         body: Result<types::builder::UnoBody, String>,
     }
 
@@ -241,11 +246,11 @@ pub mod builder {
 
         pub fn gateway<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.gateway = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for gateway failed".to_string());
+            self.gateway = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for gateway failed".to_string()
+            });
             self
         }
 

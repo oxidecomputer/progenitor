@@ -377,7 +377,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("user-code")
                     .long("user-code")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -413,13 +413,13 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("device-code")
                     .long("device-code")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("grant-type")
                     .long("grant-type")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -471,7 +471,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("username")
                     .long("username")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -600,7 +600,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -645,7 +645,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -770,7 +770,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -829,7 +829,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -933,7 +933,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -1133,7 +1133,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -1268,13 +1268,13 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("hostname")
                     .long("hostname")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -1319,7 +1319,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("user-data")
                     .long("user-data")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false)
                     .help(
                         "User data for instance initialization systems (such as cloud-init). Must \
@@ -1635,7 +1635,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -1737,7 +1737,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -2086,7 +2086,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -2222,7 +2222,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -2308,7 +2308,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -2487,7 +2487,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -2565,7 +2565,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -2697,7 +2697,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -2787,7 +2787,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -2924,7 +2924,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -3025,7 +3025,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -3191,7 +3191,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("role-name")
                     .long("role-name")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("The built-in role's unique name."),
             )
@@ -3254,7 +3254,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -3266,7 +3266,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("public-key")
                     .long("public-key")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body")
                     .help("SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`"),
             )
@@ -3380,7 +3380,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -3601,7 +3601,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -3689,7 +3689,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -3731,7 +3731,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -3937,7 +3937,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("page-token")
                     .long("page-token")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false)
                     .help("Token returned by previous call to retrieve the subsequent page"),
             )
@@ -4039,7 +4039,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("admin-group-name")
                     .long("admin-group-name")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false)
                     .help(
                         "If set, this group will be created during Silo creation and granted the \
@@ -4053,7 +4053,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -4251,20 +4251,20 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("acs-url")
                     .long("acs-url")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body")
                     .help("service provider endpoint where the response will be sent"),
             )
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("group-attribute-name")
                     .long("group-attribute-name")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false)
                     .help(
                         "If set, SAML attributes with this name will be considered to denote a \
@@ -4275,7 +4275,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("idp-entity-id")
                     .long("idp-entity-id")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body")
                     .help("idp's entity id"),
             )
@@ -4295,21 +4295,21 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("slo-url")
                     .long("slo-url")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body")
                     .help("service provider endpoint where the idp should send log out requests"),
             )
             .arg(
                 ::clap::Arg::new("sp-client-id")
                     .long("sp-client-id")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body")
                     .help("sp's client id"),
             )
             .arg(
                 ::clap::Arg::new("technical-contact-email")
                     .long("technical-contact-email")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body")
                     .help("customer's technical contact for saml configuration"),
             )
@@ -4548,7 +4548,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -4681,13 +4681,13 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
                 ::clap::Arg::new("hostname")
                     .long("hostname")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -4730,7 +4730,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("user-data")
                     .long("user-data")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false)
                     .help(
                         "User data for instance initialization systems (such as cloud-init). Must \
@@ -5152,7 +5152,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -5194,7 +5194,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -5309,7 +5309,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -5363,7 +5363,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
-                    .value_parser(::clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
@@ -6164,7 +6164,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.device_auth_confirm();
-        if let Some(value) = matches.get_one::<String>("user-code") {
+        if let Some(value) = matches.get_one::<::std::string::String>("user-code") {
             request = request.body_map(|body| body.user_code(value.clone()))
         }
 
@@ -6198,11 +6198,11 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.client_id(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("device-code") {
+        if let Some(value) = matches.get_one::<::std::string::String>("device-code") {
             request = request.body_map(|body| body.device_code(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("grant-type") {
+        if let Some(value) = matches.get_one::<::std::string::String>("grant-type") {
             request = request.body_map(|body| body.grant_type(value.clone()))
         }
 
@@ -6263,7 +6263,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_login_spoof(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.login_spoof();
-        if let Some(value) = matches.get_one::<String>("username") {
+        if let Some(value) = matches.get_one::<::std::string::String>("username") {
             request = request.body_map(|body| body.username(value.clone()))
         }
 
@@ -6432,7 +6432,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -6490,7 +6490,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_update();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -6643,7 +6643,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_project_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -6701,7 +6701,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_project_update(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_update();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -6806,7 +6806,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_disk_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -7008,7 +7008,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_image_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -7148,11 +7148,11 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("hostname") {
+        if let Some(value) = matches.get_one::<::std::string::String>("hostname") {
             request = request.body_map(|body| body.hostname(value.clone()))
         }
 
@@ -7180,7 +7180,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.start(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("user-data") {
+        if let Some(value) = matches.get_one::<::std::string::String>("user-data") {
             request = request.body_map(|body| body.user_data(value.clone()))
         }
 
@@ -7530,7 +7530,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -7625,7 +7625,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_update();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -7982,7 +7982,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -8126,7 +8126,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_vpc_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -8200,7 +8200,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_vpc_update(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_update();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -8399,7 +8399,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -8480,7 +8480,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_update();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -8622,7 +8622,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -8713,7 +8713,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_update();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -8859,7 +8859,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -8948,7 +8948,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_update();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -9157,7 +9157,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_role_view(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.role_view();
-        if let Some(value) = matches.get_one::<String>("role-name") {
+        if let Some(value) = matches.get_one::<::std::string::String>("role-name") {
             request = request.role_name(value.clone());
         }
 
@@ -9274,7 +9274,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.session_sshkey_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -9282,7 +9282,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("public-key") {
+        if let Some(value) = matches.get_one::<::std::string::String>("public-key") {
             request = request.body_map(|body| body.public_key(value.clone()))
         }
 
@@ -9471,7 +9471,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.certificate_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -9791,7 +9791,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -9905,7 +9905,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_ip_pool_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_create();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -9955,7 +9955,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_ip_pool_update(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_update();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -10233,7 +10233,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.metric_name(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("page-token") {
+        if let Some(value) = matches.get_one::<::std::string::String>("page-token") {
             request = request.page_token(value.clone());
         }
 
@@ -10394,11 +10394,11 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_silo_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_create();
-        if let Some(value) = matches.get_one::<String>("admin-group-name") {
+        if let Some(value) = matches.get_one::<::std::string::String>("admin-group-name") {
             request = request.body_map(|body| body.admin_group_name(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -10620,19 +10620,19 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.saml_identity_provider_create();
-        if let Some(value) = matches.get_one::<String>("acs-url") {
+        if let Some(value) = matches.get_one::<::std::string::String>("acs-url") {
             request = request.body_map(|body| body.acs_url(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("group-attribute-name") {
+        if let Some(value) = matches.get_one::<::std::string::String>("group-attribute-name") {
             request = request.body_map(|body| body.group_attribute_name(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("idp-entity-id") {
+        if let Some(value) = matches.get_one::<::std::string::String>("idp-entity-id") {
             request = request.body_map(|body| body.idp_entity_id(value.clone()))
         }
 
@@ -10644,15 +10644,15 @@ impl<T: CliConfig> Cli<T> {
             request = request.silo_name(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("slo-url") {
+        if let Some(value) = matches.get_one::<::std::string::String>("slo-url") {
             request = request.body_map(|body| body.slo_url(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("sp-client-id") {
+        if let Some(value) = matches.get_one::<::std::string::String>("sp-client-id") {
             request = request.body_map(|body| body.sp_client_id(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("technical-contact-email") {
+        if let Some(value) = matches.get_one::<::std::string::String>("technical-contact-email") {
             request = request.body_map(|body| body.technical_contact_email(value.clone()))
         }
 
@@ -11007,7 +11007,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_disk_create_v1(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_create_v1();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -11155,11 +11155,11 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_create_v1();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("hostname") {
+        if let Some(value) = matches.get_one::<::std::string::String>("hostname") {
             request = request.body_map(|body| body.hostname(value.clone()))
         }
 
@@ -11187,7 +11187,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.start(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("user-data") {
+        if let Some(value) = matches.get_one::<::std::string::String>("user-data") {
             request = request.body_map(|body| body.user_data(value.clone()))
         }
 
@@ -11668,7 +11668,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_create_v1();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -11726,7 +11726,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_update_v1();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -11885,7 +11885,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.project_create_v1();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 
@@ -11950,7 +11950,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.project_update_v1();
-        if let Some(value) = matches.get_one::<String>("description") {
+        if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
 

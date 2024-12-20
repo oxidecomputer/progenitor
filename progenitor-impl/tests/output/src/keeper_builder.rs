@@ -64,8 +64,8 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct EnrolBody {
-        pub host: String,
-        pub key: String,
+        pub host: ::std::string::String,
+        pub key: ::std::string::String,
     }
 
     impl From<&EnrolBody> for EnrolBody {
@@ -106,7 +106,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct GlobalJobsResult {
-        pub summary: Vec<ReportSummary>,
+        pub summary: ::std::vec::Vec<ReportSummary>,
     }
 
     impl From<&GlobalJobsResult> for GlobalJobsResult {
@@ -152,8 +152,8 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct OutputRecord {
-        pub msg: String,
-        pub stream: String,
+        pub msg: ::std::string::String,
+        pub stream: ::std::string::String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -196,7 +196,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct PingResult {
-        pub host: String,
+        pub host: ::std::string::String,
         pub ok: bool,
     }
 
@@ -309,11 +309,11 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct ReportId {
-        pub host: String,
-        pub job: String,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
         pub pid: u64,
         pub time: chrono::DateTime<chrono::offset::Utc>,
-        pub uuid: String,
+        pub uuid: ::std::string::String,
     }
 
     impl From<&ReportId> for ReportId {
@@ -442,7 +442,7 @@ pub mod types {
     )]
     pub struct ReportStartBody {
         pub id: ReportId,
-        pub script: String,
+        pub script: ::std::string::String,
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -506,8 +506,8 @@ pub mod types {
     pub struct ReportSummary {
         pub age_seconds: usize,
         pub duration_seconds: usize,
-        pub host: String,
-        pub job: String,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
         pub status: usize,
         pub when: chrono::DateTime<chrono::offset::Utc>,
     }
@@ -528,8 +528,8 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct EnrolBody {
-            host: Result<String, String>,
-            key: Result<String, String>,
+            host: ::std::result::Result<::std::string::String, ::std::string::String>,
+            key: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for EnrolBody {
@@ -544,7 +544,7 @@ pub mod types {
         impl EnrolBody {
             pub fn host<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.host = value
@@ -554,7 +554,7 @@ pub mod types {
             }
             pub fn key<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.key = value
@@ -564,9 +564,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<EnrolBody> for super::EnrolBody {
+        impl ::std::convert::TryFrom<EnrolBody> for super::EnrolBody {
             type Error = super::error::ConversionError;
-            fn try_from(value: EnrolBody) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: EnrolBody,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     host: value.host?,
                     key: value.key?,
@@ -585,7 +587,8 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct GlobalJobsResult {
-            summary: Result<Vec<super::ReportSummary>, String>,
+            summary:
+                ::std::result::Result<::std::vec::Vec<super::ReportSummary>, ::std::string::String>,
         }
 
         impl Default for GlobalJobsResult {
@@ -599,7 +602,7 @@ pub mod types {
         impl GlobalJobsResult {
             pub fn summary<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::ReportSummary>>,
+                T: std::convert::TryInto<::std::vec::Vec<super::ReportSummary>>,
                 T::Error: std::fmt::Display,
             {
                 self.summary = value
@@ -609,9 +612,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<GlobalJobsResult> for super::GlobalJobsResult {
+        impl ::std::convert::TryFrom<GlobalJobsResult> for super::GlobalJobsResult {
             type Error = super::error::ConversionError;
-            fn try_from(value: GlobalJobsResult) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: GlobalJobsResult,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     summary: value.summary?,
                 })
@@ -628,9 +633,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct OutputRecord {
-            msg: Result<String, String>,
-            stream: Result<String, String>,
-            time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            msg: ::std::result::Result<::std::string::String, ::std::string::String>,
+            stream: ::std::result::Result<::std::string::String, ::std::string::String>,
+            time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
         impl Default for OutputRecord {
@@ -646,7 +652,7 @@ pub mod types {
         impl OutputRecord {
             pub fn msg<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.msg = value
@@ -656,7 +662,7 @@ pub mod types {
             }
             pub fn stream<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.stream = value
@@ -676,9 +682,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<OutputRecord> for super::OutputRecord {
+        impl ::std::convert::TryFrom<OutputRecord> for super::OutputRecord {
             type Error = super::error::ConversionError;
-            fn try_from(value: OutputRecord) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: OutputRecord,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     msg: value.msg?,
                     stream: value.stream?,
@@ -699,8 +707,8 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct PingResult {
-            host: Result<String, String>,
-            ok: Result<bool, String>,
+            host: ::std::result::Result<::std::string::String, ::std::string::String>,
+            ok: ::std::result::Result<bool, ::std::string::String>,
         }
 
         impl Default for PingResult {
@@ -715,7 +723,7 @@ pub mod types {
         impl PingResult {
             pub fn host<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.host = value
@@ -735,9 +743,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<PingResult> for super::PingResult {
+        impl ::std::convert::TryFrom<PingResult> for super::PingResult {
             type Error = super::error::ConversionError;
-            fn try_from(value: PingResult) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: PingResult,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     host: value.host?,
                     ok: value.ok?,
@@ -756,10 +766,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ReportFinishBody {
-            duration_millis: Result<usize, String>,
-            end_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            exit_status: Result<usize, String>,
-            id: Result<super::ReportId, String>,
+            duration_millis: ::std::result::Result<usize, ::std::string::String>,
+            end_time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            exit_status: ::std::result::Result<usize, ::std::string::String>,
+            id: ::std::result::Result<super::ReportId, ::std::string::String>,
         }
 
         impl Default for ReportFinishBody {
@@ -816,9 +827,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ReportFinishBody> for super::ReportFinishBody {
+        impl ::std::convert::TryFrom<ReportFinishBody> for super::ReportFinishBody {
             type Error = super::error::ConversionError;
-            fn try_from(value: ReportFinishBody) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ReportFinishBody,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     duration_millis: value.duration_millis?,
                     end_time: value.end_time?,
@@ -841,11 +854,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ReportId {
-            host: Result<String, String>,
-            job: Result<String, String>,
-            pid: Result<u64, String>,
-            time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            uuid: Result<String, String>,
+            host: ::std::result::Result<::std::string::String, ::std::string::String>,
+            job: ::std::result::Result<::std::string::String, ::std::string::String>,
+            pid: ::std::result::Result<u64, ::std::string::String>,
+            time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            uuid: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for ReportId {
@@ -863,7 +877,7 @@ pub mod types {
         impl ReportId {
             pub fn host<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.host = value
@@ -873,7 +887,7 @@ pub mod types {
             }
             pub fn job<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.job = value
@@ -903,7 +917,7 @@ pub mod types {
             }
             pub fn uuid<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.uuid = value
@@ -913,9 +927,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ReportId> for super::ReportId {
+        impl ::std::convert::TryFrom<ReportId> for super::ReportId {
             type Error = super::error::ConversionError;
-            fn try_from(value: ReportId) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ReportId,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     host: value.host?,
                     job: value.job?,
@@ -940,8 +956,8 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ReportOutputBody {
-            id: Result<super::ReportId, String>,
-            record: Result<super::OutputRecord, String>,
+            id: ::std::result::Result<super::ReportId, ::std::string::String>,
+            record: ::std::result::Result<super::OutputRecord, ::std::string::String>,
         }
 
         impl Default for ReportOutputBody {
@@ -976,9 +992,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ReportOutputBody> for super::ReportOutputBody {
+        impl ::std::convert::TryFrom<ReportOutputBody> for super::ReportOutputBody {
             type Error = super::error::ConversionError;
-            fn try_from(value: ReportOutputBody) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ReportOutputBody,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     record: value.record?,
@@ -997,7 +1015,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ReportResult {
-            existed_already: Result<bool, String>,
+            existed_already: ::std::result::Result<bool, ::std::string::String>,
         }
 
         impl Default for ReportResult {
@@ -1021,9 +1039,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ReportResult> for super::ReportResult {
+        impl ::std::convert::TryFrom<ReportResult> for super::ReportResult {
             type Error = super::error::ConversionError;
-            fn try_from(value: ReportResult) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ReportResult,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     existed_already: value.existed_already?,
                 })
@@ -1040,9 +1060,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ReportStartBody {
-            id: Result<super::ReportId, String>,
-            script: Result<String, String>,
-            start_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            id: ::std::result::Result<super::ReportId, ::std::string::String>,
+            script: ::std::result::Result<::std::string::String, ::std::string::String>,
+            start_time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
         impl Default for ReportStartBody {
@@ -1068,7 +1089,7 @@ pub mod types {
             }
             pub fn script<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.script = value
@@ -1088,9 +1109,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ReportStartBody> for super::ReportStartBody {
+        impl ::std::convert::TryFrom<ReportStartBody> for super::ReportStartBody {
             type Error = super::error::ConversionError;
-            fn try_from(value: ReportStartBody) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ReportStartBody,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     script: value.script?,
@@ -1111,12 +1134,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ReportSummary {
-            age_seconds: Result<usize, String>,
-            duration_seconds: Result<usize, String>,
-            host: Result<String, String>,
-            job: Result<String, String>,
-            status: Result<usize, String>,
-            when: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            age_seconds: ::std::result::Result<usize, ::std::string::String>,
+            duration_seconds: ::std::result::Result<usize, ::std::string::String>,
+            host: ::std::result::Result<::std::string::String, ::std::string::String>,
+            job: ::std::result::Result<::std::string::String, ::std::string::String>,
+            status: ::std::result::Result<usize, ::std::string::String>,
+            when:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
         impl Default for ReportSummary {
@@ -1158,7 +1182,7 @@ pub mod types {
             }
             pub fn host<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.host = value
@@ -1168,7 +1192,7 @@ pub mod types {
             }
             pub fn job<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.job = value
@@ -1198,9 +1222,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ReportSummary> for super::ReportSummary {
+        impl ::std::convert::TryFrom<ReportSummary> for super::ReportSummary {
             type Error = super::error::ConversionError;
-            fn try_from(value: ReportSummary) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ReportSummary,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     age_seconds: value.age_seconds?,
                     duration_seconds: value.duration_seconds?,
@@ -1397,7 +1423,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct Enrol<'a> {
         client: &'a super::Client,
-        authorization: Result<String, String>,
+        authorization: Result<::std::string::String, String>,
         body: Result<types::builder::EnrolBody, String>,
     }
 
@@ -1412,11 +1438,11 @@ pub mod builder {
 
         pub fn authorization<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self.authorization = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for authorization failed".to_string()
+            });
             self
         }
 
@@ -1476,7 +1502,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct GlobalJobs<'a> {
         client: &'a super::Client,
-        authorization: Result<String, String>,
+        authorization: Result<::std::string::String, String>,
     }
 
     impl<'a> GlobalJobs<'a> {
@@ -1489,11 +1515,11 @@ pub mod builder {
 
         pub fn authorization<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self.authorization = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for authorization failed".to_string()
+            });
             self
         }
 
@@ -1532,7 +1558,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct Ping<'a> {
         client: &'a super::Client,
-        authorization: Result<String, String>,
+        authorization: Result<::std::string::String, String>,
     }
 
     impl<'a> Ping<'a> {
@@ -1545,11 +1571,11 @@ pub mod builder {
 
         pub fn authorization<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self.authorization = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for authorization failed".to_string()
+            });
             self
         }
 
@@ -1588,7 +1614,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct ReportFinish<'a> {
         client: &'a super::Client,
-        authorization: Result<String, String>,
+        authorization: Result<::std::string::String, String>,
         body: Result<types::builder::ReportFinishBody, String>,
     }
 
@@ -1603,11 +1629,11 @@ pub mod builder {
 
         pub fn authorization<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self.authorization = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for authorization failed".to_string()
+            });
             self
         }
 
@@ -1673,7 +1699,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct ReportOutput<'a> {
         client: &'a super::Client,
-        authorization: Result<String, String>,
+        authorization: Result<::std::string::String, String>,
         body: Result<types::builder::ReportOutputBody, String>,
     }
 
@@ -1688,11 +1714,11 @@ pub mod builder {
 
         pub fn authorization<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self.authorization = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for authorization failed".to_string()
+            });
             self
         }
 
@@ -1758,7 +1784,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct ReportStart<'a> {
         client: &'a super::Client,
-        authorization: Result<String, String>,
+        authorization: Result<::std::string::String, String>,
         body: Result<types::builder::ReportStartBody, String>,
     }
 
@@ -1773,11 +1799,11 @@ pub mod builder {
 
         pub fn authorization<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for authorization failed".to_string());
+            self.authorization = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for authorization failed".to_string()
+            });
             self
         }
 

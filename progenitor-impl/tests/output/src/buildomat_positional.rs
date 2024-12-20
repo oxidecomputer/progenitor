@@ -93,8 +93,8 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ObjWithOptionArray {
         #[serde(rename = "stranger-things")]
-        pub stranger_things: Vec<Option<Task>>,
-        pub things: Vec<Option<Task>>,
+        pub stranger_things: ::std::vec::Vec<::std::option::Option<Task>>,
+        pub things: ::std::vec::Vec<::std::option::Option<Task>>,
     }
 
     impl From<&ObjWithOptionArray> for ObjWithOptionArray {
@@ -142,11 +142,11 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Task {
-        pub id: String,
-        pub name: String,
-        pub output_rules: Vec<String>,
-        pub script: String,
-        pub state: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
+        pub state: ::std::string::String,
     }
 
     impl From<&Task> for Task {
@@ -190,9 +190,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskEvent {
-        pub payload: String,
+        pub payload: ::std::string::String,
         pub seq: u32,
-        pub stream: String,
+        pub stream: ::std::string::String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -232,8 +232,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskOutput {
-        pub id: String,
-        pub path: String,
+        pub id: ::std::string::String,
+        pub path: ::std::string::String,
         pub size: u64,
     }
 
@@ -273,10 +273,10 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmit {
-        pub name: String,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub output_rules: Vec<String>,
-        pub script: String,
+        pub name: ::std::string::String,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
     }
 
     impl From<&TaskSubmit> for TaskSubmit {
@@ -305,7 +305,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmitResult {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
     impl From<&TaskSubmitResult> for TaskSubmitResult {
@@ -334,7 +334,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UploadedChunk {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
     impl From<&UploadedChunk> for UploadedChunk {
@@ -363,7 +363,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UserCreate {
-        pub name: String,
+        pub name: ::std::string::String,
     }
 
     impl From<&UserCreate> for UserCreate {
@@ -400,9 +400,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UserCreateResult {
-        pub id: String,
-        pub name: String,
-        pub token: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub token: ::std::string::String,
     }
 
     impl From<&UserCreateResult> for UserCreateResult {
@@ -435,8 +435,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WhoamiResult {
-        pub id: String,
-        pub name: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
     }
 
     impl From<&WhoamiResult> for WhoamiResult {
@@ -488,13 +488,13 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Worker {
         pub deleted: bool,
-        pub id: String,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub instance_id: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub lastping: Option<chrono::DateTime<chrono::offset::Utc>>,
+        pub id: ::std::string::String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub instance_id: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub lastping: ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
         pub recycle: bool,
-        pub tasks: Vec<WorkerTask>,
+        pub tasks: ::std::vec::Vec<WorkerTask>,
     }
 
     impl From<&Worker> for Worker {
@@ -535,8 +535,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerAddOutput {
-        pub chunks: Vec<String>,
-        pub path: String,
+        pub chunks: ::std::vec::Vec<::std::string::String>,
+        pub path: ::std::string::String,
         pub size: i64,
     }
 
@@ -575,8 +575,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerAppendTask {
-        pub payload: String,
-        pub stream: String,
+        pub payload: ::std::string::String,
+        pub stream: ::std::string::String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
@@ -610,8 +610,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerBootstrap {
-        pub bootstrap: String,
-        pub token: String,
+        pub bootstrap: ::std::string::String,
+        pub token: ::std::string::String,
     }
 
     impl From<&WorkerBootstrap> for WorkerBootstrap {
@@ -640,7 +640,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerBootstrapResult {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
     impl From<&WorkerBootstrapResult> for WorkerBootstrapResult {
@@ -702,8 +702,8 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerPingResult {
         pub poweroff: bool,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub task: Option<WorkerPingTask>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub task: ::std::option::Option<WorkerPingTask>,
     }
 
     impl From<&WorkerPingResult> for WorkerPingResult {
@@ -743,9 +743,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerPingTask {
-        pub id: String,
-        pub output_rules: Vec<String>,
-        pub script: String,
+        pub id: ::std::string::String,
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
     }
 
     impl From<&WorkerPingTask> for WorkerPingTask {
@@ -782,9 +782,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerTask {
-        pub id: String,
-        pub name: String,
-        pub owner: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub owner: ::std::string::String,
     }
 
     impl From<&WorkerTask> for WorkerTask {
@@ -816,7 +816,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkersResult {
-        pub workers: Vec<Worker>,
+        pub workers: ::std::vec::Vec<Worker>,
     }
 
     impl From<&WorkersResult> for WorkersResult {
@@ -949,7 +949,9 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks`
-    pub async fn tasks_get<'a>(&'a self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
+    pub async fn tasks_get<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
         #[allow(unused_mut)]
         let mut request = self
@@ -997,7 +999,7 @@ impl Client {
         &'a self,
         task: &'a str,
         minseq: Option<u32>,
-    ) -> Result<ResponseValue<Vec<types::TaskEvent>>, Error<()>> {
+    ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
         let url = format!(
             "{}/v1/tasks/{}/events",
             self.baseurl,
@@ -1030,7 +1032,7 @@ impl Client {
     pub async fn task_outputs_get<'a>(
         &'a self,
         task: &'a str,
-    ) -> Result<ResponseValue<Vec<types::TaskOutput>>, Error<()>> {
+    ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
         let url = format!(
             "{}/v1/tasks/{}/outputs",
             self.baseurl,

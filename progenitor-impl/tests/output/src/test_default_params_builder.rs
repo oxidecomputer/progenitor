@@ -76,9 +76,9 @@ pub mod types {
     pub struct BodyWithDefaults {
         #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
         pub forty_two: u32,
-        pub s: String,
+        pub s: ::std::string::String,
         #[serde(default = "defaults::body_with_defaults_something")]
-        pub something: Option<bool>,
+        pub something: ::std::option::Option<bool>,
         #[serde(default)]
         pub yes: bool,
     }
@@ -123,10 +123,10 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
     impl From<&Error> for Error {
@@ -145,10 +145,10 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct BodyWithDefaults {
-            forty_two: Result<u32, String>,
-            s: Result<String, String>,
-            something: Result<Option<bool>, String>,
-            yes: Result<bool, String>,
+            forty_two: ::std::result::Result<u32, ::std::string::String>,
+            s: ::std::result::Result<::std::string::String, ::std::string::String>,
+            something: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+            yes: ::std::result::Result<bool, ::std::string::String>,
         }
 
         impl Default for BodyWithDefaults {
@@ -175,7 +175,7 @@ pub mod types {
             }
             pub fn s<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.s = value
@@ -185,7 +185,7 @@ pub mod types {
             }
             pub fn something<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<bool>>,
+                T: std::convert::TryInto<::std::option::Option<bool>>,
                 T::Error: std::fmt::Display,
             {
                 self.something = value
@@ -205,9 +205,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<BodyWithDefaults> for super::BodyWithDefaults {
+        impl ::std::convert::TryFrom<BodyWithDefaults> for super::BodyWithDefaults {
             type Error = super::error::ConversionError;
-            fn try_from(value: BodyWithDefaults) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: BodyWithDefaults,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     forty_two: value.forty_two?,
                     s: value.s?,
@@ -230,9 +232,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Error {
-            error_code: Result<Option<String>, String>,
-            message: Result<String, String>,
-            request_id: Result<String, String>,
+            error_code: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            message: ::std::result::Result<::std::string::String, ::std::string::String>,
+            request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for Error {
@@ -248,7 +253,7 @@ pub mod types {
         impl Error {
             pub fn error_code<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
+                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.error_code = value
@@ -258,7 +263,7 @@ pub mod types {
             }
             pub fn message<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.message = value
@@ -268,7 +273,7 @@ pub mod types {
             }
             pub fn request_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.request_id = value
@@ -278,9 +283,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Error> for super::Error {
+        impl ::std::convert::TryFrom<Error> for super::Error {
             type Error = super::error::ConversionError;
-            fn try_from(value: Error) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Error,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     error_code: value.error_code?,
                     message: value.message?,
@@ -310,8 +317,8 @@ pub mod types {
             T::try_from(V).unwrap()
         }
 
-        pub(super) fn body_with_defaults_something() -> Option<bool> {
-            Some(true)
+        pub(super) fn body_with_defaults_something() -> ::std::option::Option<bool> {
+            ::std::option::Option::Some(true)
         }
     }
 }

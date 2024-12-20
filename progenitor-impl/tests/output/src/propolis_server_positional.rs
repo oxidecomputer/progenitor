@@ -111,22 +111,22 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct CrucibleOpts {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub cert_pem: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub control: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub flush_timeout: Option<u32>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub cert_pem: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub control: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub flush_timeout: ::std::option::Option<u32>,
         pub id: uuid::Uuid,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub key: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub key_pem: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub key: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub key_pem: ::std::option::Option<::std::string::String>,
         pub lossy: bool,
         pub read_only: bool,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub root_cert_pem: Option<String>,
-        pub target: Vec<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub root_cert_pem: ::std::option::Option<::std::string::String>,
+        pub target: ::std::vec::Vec<::std::string::String>,
     }
 
     impl From<&CrucibleOpts> for CrucibleOpts {
@@ -271,9 +271,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskRequest {
-        pub device: String,
+        pub device: ::std::string::String,
         pub gen: u64,
-        pub name: String,
+        pub name: ::std::string::String,
         pub read_only: bool,
         pub slot: Slot,
         pub volume_construction_request: VolumeConstructionRequest,
@@ -313,10 +313,10 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
     impl From<&Error> for Error {
@@ -363,8 +363,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Instance {
-        pub disks: Vec<DiskAttachment>,
-        pub nics: Vec<NetworkInterface>,
+        pub disks: ::std::vec::Vec<DiskAttachment>,
+        pub nics: ::std::vec::Vec<NetworkInterface>,
         pub properties: InstanceProperties,
         pub state: InstanceState,
     }
@@ -430,14 +430,14 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceEnsureRequest {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub cloud_init_bytes: Option<String>,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub disks: Vec<DiskRequest>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub migrate: Option<InstanceMigrateInitiateRequest>,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub nics: Vec<NetworkInterfaceRequest>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub cloud_init_bytes: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub disks: ::std::vec::Vec<DiskRequest>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub migrate: ::std::option::Option<InstanceMigrateInitiateRequest>,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub nics: ::std::vec::Vec<NetworkInterfaceRequest>,
         pub properties: InstanceProperties,
     }
 
@@ -476,8 +476,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceEnsureResponse {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub migrate: Option<InstanceMigrateInitiateResponse>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub migrate: ::std::option::Option<InstanceMigrateInitiateResponse>,
     }
 
     impl From<&InstanceEnsureResponse> for InstanceEnsureResponse {
@@ -546,7 +546,7 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateRequest {
         pub migration_id: uuid::Uuid,
-        pub src_addr: String,
+        pub src_addr: ::std::string::String,
         pub src_uuid: uuid::Uuid,
     }
 
@@ -707,7 +707,7 @@ pub mod types {
         ///ID of the bootrom used to initialize this Instance.
         pub bootrom_id: uuid::Uuid,
         ///Free-form text description of an Instance.
-        pub description: String,
+        pub description: ::std::string::String,
         ///Unique identifier for this Instance.
         pub id: uuid::Uuid,
         ///ID of the image used to initialize this Instance.
@@ -715,7 +715,7 @@ pub mod types {
         ///Size of memory allocated to the Instance, in MiB.
         pub memory: u64,
         ///Human-readable name of the Instance.
-        pub name: String,
+        pub name: ::std::string::String,
         ///Number of vCPUs to be allocated to the Instance.
         pub vcpus: u8,
     }
@@ -799,7 +799,7 @@ pub mod types {
 
     impl std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Creating" => Ok(Self::Creating),
                 "Starting" => Ok(Self::Starting),
@@ -818,21 +818,25 @@ pub mod types {
 
     impl std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceState {
+    impl std::convert::TryFrom<&::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceState {
+    impl std::convert::TryFrom<::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -958,7 +962,7 @@ pub mod types {
 
     impl std::str::FromStr for InstanceStateRequested {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Run" => Ok(Self::Run),
                 "Stop" => Ok(Self::Stop),
@@ -971,21 +975,25 @@ pub mod types {
 
     impl std::convert::TryFrom<&str> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceStateRequested {
+    impl std::convert::TryFrom<&::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceStateRequested {
+    impl std::convert::TryFrom<::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1062,7 +1070,7 @@ pub mod types {
 
     impl std::str::FromStr for MigrationState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Sync" => Ok(Self::Sync),
                 "RamPush" => Ok(Self::RamPush),
@@ -1081,21 +1089,25 @@ pub mod types {
 
     impl std::convert::TryFrom<&str> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for MigrationState {
+    impl std::convert::TryFrom<&::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for MigrationState {
+    impl std::convert::TryFrom<::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1125,7 +1137,7 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct NetworkInterface {
         pub attachment: NetworkInterfaceAttachmentState,
-        pub name: String,
+        pub name: ::std::string::String,
     }
 
     impl From<&NetworkInterface> for NetworkInterface {
@@ -1207,7 +1219,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct NetworkInterfaceRequest {
-        pub name: String,
+        pub name: ::std::string::String,
         pub slot: Slot,
     }
 
@@ -1260,29 +1272,29 @@ pub mod types {
     }
 
     impl std::str::FromStr for Slot {
-        type Err = <u8 as std::str::FromStr>::Err;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+        type Err = <u8 as ::std::str::FromStr>::Err;
+        fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
         }
     }
 
     impl std::convert::TryFrom<&str> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<&String> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
     impl std::convert::TryFrom<String> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
@@ -1446,15 +1458,15 @@ pub mod types {
         Volume {
             block_size: u64,
             id: uuid::Uuid,
-            #[serde(default, skip_serializing_if = "Option::is_none")]
-            read_only_parent: Option<Box<VolumeConstructionRequest>>,
-            sub_volumes: Vec<VolumeConstructionRequest>,
+            #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+            read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
+            sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
         },
         #[serde(rename = "url")]
         Url {
             block_size: u64,
             id: uuid::Uuid,
-            url: String,
+            url: ::std::string::String,
         },
         #[serde(rename = "region")]
         Region {
@@ -1466,7 +1478,7 @@ pub mod types {
         File {
             block_size: u64,
             id: uuid::Uuid,
-            path: String,
+            path: ::std::string::String,
         },
     }
 

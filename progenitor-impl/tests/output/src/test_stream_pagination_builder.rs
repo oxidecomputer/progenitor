@@ -65,10 +65,10 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
     impl From<&Error> for Error {
@@ -119,10 +119,10 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Uint32ResultsPage {
         ///list of items on this page of results
-        pub items: Vec<u32>,
+        pub items: ::std::vec::Vec<u32>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
     impl From<&Uint32ResultsPage> for Uint32ResultsPage {
@@ -141,9 +141,12 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct Error {
-            error_code: Result<Option<String>, String>,
-            message: Result<String, String>,
-            request_id: Result<String, String>,
+            error_code: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            message: ::std::result::Result<::std::string::String, ::std::string::String>,
+            request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
         impl Default for Error {
@@ -159,7 +162,7 @@ pub mod types {
         impl Error {
             pub fn error_code<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
+                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.error_code = value
@@ -169,7 +172,7 @@ pub mod types {
             }
             pub fn message<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.message = value
@@ -179,7 +182,7 @@ pub mod types {
             }
             pub fn request_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
+                T: std::convert::TryInto<::std::string::String>,
                 T::Error: std::fmt::Display,
             {
                 self.request_id = value
@@ -189,9 +192,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Error> for super::Error {
+        impl ::std::convert::TryFrom<Error> for super::Error {
             type Error = super::error::ConversionError;
-            fn try_from(value: Error) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Error,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     error_code: value.error_code?,
                     message: value.message?,
@@ -212,8 +217,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Uint32ResultsPage {
-            items: Result<Vec<u32>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<u32>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
         impl Default for Uint32ResultsPage {
@@ -228,7 +236,7 @@ pub mod types {
         impl Uint32ResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<u32>>,
+                T: std::convert::TryInto<::std::vec::Vec<u32>>,
                 T::Error: std::fmt::Display,
             {
                 self.items = value
@@ -238,7 +246,7 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
+                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
                 T::Error: std::fmt::Display,
             {
                 self.next_page = value
@@ -248,9 +256,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Uint32ResultsPage> for super::Uint32ResultsPage {
+        impl ::std::convert::TryFrom<Uint32ResultsPage> for super::Uint32ResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: Uint32ResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Uint32ResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -363,7 +373,7 @@ pub mod builder {
     pub struct PaginatedU32s<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> PaginatedU32s<'a> {
@@ -387,12 +397,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
