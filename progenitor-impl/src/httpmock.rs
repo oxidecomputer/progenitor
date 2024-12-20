@@ -16,6 +16,7 @@ use crate::{
     util::{sanitize, Case},
     validate_openapi, Generator, Result,
 };
+use crate::util::generate_multi_type_identifier;
 
 struct MockOp {
     when: TokenStream,
@@ -312,6 +313,18 @@ impl Generator {
                         (
                             quote! {
                                 value: #arg_type_ident,
+                            },
+                            quote! {
+                                .header("content-type", "application/json")
+                                .json_body_obj(value)
+                            },
+                        )
+                    }
+                    crate::method::OperationResponseKind::Multi(types) => {
+                        let arg_type = generate_multi_type_identifier(types, &self.type_space);
+                        (
+                            quote! {
+                                value: #arg_type,
                             },
                             quote! {
                                 .header("content-type", "application/json")

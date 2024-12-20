@@ -78,6 +78,18 @@ impl<T: DeserializeOwned> ResponseValue<T> {
             headers,
         })
     }
+
+    /// Transforms the inner data of this `ResponseValue` using a provided function, returning a new `ResponseValue` with the transformed data.
+    pub fn map_inner<U, F>(self, op: F) -> ResponseValue<U>
+    where
+        F: FnOnce(T) -> U,
+    {
+        ResponseValue {
+            inner: op(self.inner), // Apply the operation to the inner data
+            status: self.status,  // Preserve the status
+            headers: self.headers, // Preserve the headers
+        }
+    }
 }
 
 #[cfg(not(target_arch = "wasm32"))]

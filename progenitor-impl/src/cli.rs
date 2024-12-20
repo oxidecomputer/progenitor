@@ -259,6 +259,7 @@ impl Generator {
                         }
                     }
                     crate::method::OperationResponseKind::Raw
+                    | crate::method::OperationResponseKind::Multi(_)
                     | crate::method::OperationResponseKind::Upgrade => {
                         quote! {
                             {
@@ -279,6 +280,7 @@ impl Generator {
                         }
                     }
                     crate::method::OperationResponseKind::Raw
+                    | crate::method::OperationResponseKind::Multi(_)
                     | crate::method::OperationResponseKind::Upgrade => {
                         quote! {
                             {
@@ -306,6 +308,7 @@ impl Generator {
                     }
                     crate::method::OperationResponseKind::None => quote! { () },
                     crate::method::OperationResponseKind::Raw => todo!(),
+                    crate::method::OperationResponseKind::Multi(_) => todo!(),
                     crate::method::OperationResponseKind::Upgrade => todo!(),
                 };
                 let error_output = match error_kind {
@@ -319,6 +322,7 @@ impl Generator {
                         }
                     }
                     crate::method::OperationResponseKind::Raw
+                    | crate::method::OperationResponseKind::Multi(_)
                     | crate::method::OperationResponseKind::Upgrade => {
                         quote! {
                             {
@@ -512,10 +516,10 @@ impl Generator {
             CliBodyArg::Required => Some(true),
             CliBodyArg::Optional => Some(false),
         })
-        .map(|required| {
-            let help = "Path to a file that contains the full json body.";
+            .map(|required| {
+                let help = "Path to a file that contains the full json body.";
 
-            quote! {
+                quote! {
                 .arg(
                     ::clap::Arg::new("json-body")
                         .long("json-body")
@@ -533,7 +537,7 @@ impl Generator {
                         .help("XXX")
                 )
             }
-        });
+            });
 
         let parser = quote! {
             #(

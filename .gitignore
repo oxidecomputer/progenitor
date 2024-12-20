@@ -1,3 +1,4 @@
 target/
-
+.idea/
+.env
 progenitor-impl/tests/output/Cargo.lock
