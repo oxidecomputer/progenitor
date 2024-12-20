@@ -1,17 +1,14 @@
 // Copyright 2024 Oxide Computer Company
 
 use dropshot::{
-    endpoint, ApiDescription, Body, ConfigDropshot, ConfigLogging,
-    ConfigLoggingLevel, EmptyScanParams, HttpError, HttpResponseOk,
-    HttpResponseUpdatedNoContent, HttpServerStarter, PaginationParams, Path,
-    Query, RequestContext, ResultsPage, TypedBody,
+    endpoint, ApiDescription, Body, ConfigDropshot, ConfigLogging, ConfigLoggingLevel,
+    EmptyScanParams, HttpError, HttpResponseOk, HttpResponseUpdatedNoContent, HttpServerStarter,
+    PaginationParams, Path, Query, RequestContext, ResultsPage, TypedBody,
 };
 use futures::StreamExt;
 use http::Response;
 use openapiv3::OpenAPI;
-use progenitor_impl::{
-    space_out_items, GenerationSettings, Generator, InterfaceStyle,
-};
+use progenitor_impl::{space_out_items, GenerationSettings, Generator, InterfaceStyle};
 use schemars::JsonSchema;
 use serde::Deserialize;
 use std::{
@@ -27,10 +24,7 @@ fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(
-        rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap(),
-    )
-    .unwrap()
+    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
 }
 
 #[allow(dead_code)]
@@ -96,9 +90,7 @@ fn test_renamed_parameters() {
     method = GET,
     path = "/",
 }]
-async fn freeform_response(
-    _rqctx: RequestContext<()>,
-) -> Result<Response<Body>, HttpError> {
+async fn freeform_response(_rqctx: RequestContext<()>) -> Result<Response<Body>, HttpError> {
     unreachable!();
 }
 
@@ -178,9 +170,8 @@ fn test_default_params() {
         &output,
     );
 
-    let mut generator = Generator::new(
-        GenerationSettings::default().with_interface(InterfaceStyle::Builder),
-    );
+    let mut generator =
+        Generator::new(GenerationSettings::default().with_interface(InterfaceStyle::Builder));
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
         format!("tests/output/src/{}.rs", "test_default_params_builder"),
@@ -215,15 +206,12 @@ async fn paginated_u32s(
 
     let offset = match page_params.page {
         dropshot::WhichPage::First(EmptyScanParams {}) => 0,
-        dropshot::WhichPage::Next(offset) => {
-            usize::try_from(offset + 1).expect("non-usize offset")
-        }
+        dropshot::WhichPage::Next(offset) => usize::try_from(offset + 1).expect("non-usize offset"),
     };
 
     ctx.page_pairs.lock().unwrap().push((offset, limit));
     let values = ctx.all_values.clone().skip(offset).take(limit).collect();
-    let result =
-        ResultsPage::new(values, &(), |&x, &()| x).expect("bad results page");
+    let result = ResultsPage::new(values, &(), |&x, &()| x).expect("bad results page");
 
     Ok(HttpResponseOk(result))
 }
@@ -245,22 +233,17 @@ async fn test_stream_pagination() {
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
     // Test both interface styles.
-    let mut generator = Generator::new(
-        GenerationSettings::new().with_interface(InterfaceStyle::Positional),
-    );
+    let mut generator =
+        Generator::new(GenerationSettings::new().with_interface(InterfaceStyle::Positional));
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
         format!("tests/output/src/{TEST_NAME}_positional.rs"),
         &output,
     );
-    let mut generator = Generator::new(
-        GenerationSettings::new().with_interface(InterfaceStyle::Builder),
-    );
+    let mut generator =
+        Generator::new(GenerationSettings::new().with_interface(InterfaceStyle::Builder));
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{TEST_NAME}_builder.rs"),
-        &output,
-    );
+    expectorate::assert_contents(format!("tests/output/src/{TEST_NAME}_builder.rs"), &output);
 
     // Run the Dropshot server.
     let config_dropshot = ConfigDropshot {
@@ -277,14 +260,9 @@ async fn test_stream_pagination() {
         all_values: 0..35,
         page_pairs: Mutex::default(),
     });
-    let server = HttpServerStarter::new(
-        &config_dropshot,
-        api,
-        Arc::clone(&server_ctx),
-        &log,
-    )
-    .expect("failed to create server")
-    .start();
+    let server = HttpServerStarter::new(&config_dropshot, api, Arc::clone(&server_ctx), &log)
+        .expect("failed to create server")
+        .start();
 
     let server_addr = format!("http://{}", server.local_addr());
 

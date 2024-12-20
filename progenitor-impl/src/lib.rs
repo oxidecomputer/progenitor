@@ -154,10 +154,7 @@ impl GenerationSettings {
     }
 
     /// Hook invoked prior to receiving the HTTP response.
-    pub fn with_post_hook_async(
-        &mut self,
-        post_hook: TokenStream,
-    ) -> &mut Self {
+    pub fn with_post_hook_async(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook_async = Some(post_hook);
         self
     }
@@ -170,11 +167,7 @@ impl GenerationSettings {
 
     /// Modify a type with the given name.
     /// See [typify::TypeSpaceSettings::with_patch].
-    pub fn with_patch<S: AsRef<str>>(
-        &mut self,
-        type_name: S,
-        patch: &TypePatch,
-    ) -> &mut Self {
+    pub fn with_patch<S: AsRef<str>>(&mut self, type_name: S, patch: &TypePatch) -> &mut Self {
         self.patch
             .insert(type_name.as_ref().to_string(), patch.clone());
         self
@@ -182,11 +175,7 @@ impl GenerationSettings {
 
     /// Replace a referenced type with a named type.
     /// See [typify::TypeSpaceSettings::with_replacement].
-    pub fn with_replacement<
-        TS: ToString,
-        RS: ToString,
-        I: Iterator<Item = TypeImpl>,
-    >(
+    pub fn with_replacement<TS: ToString, RS: ToString, I: Iterator<Item = TypeImpl>>(
         &mut self,
         type_name: TS,
         replace_name: RS,
@@ -244,9 +233,7 @@ impl GenerationSettings {
 impl Default for Generator {
     fn default() -> Self {
         Self {
-            type_space: TypeSpace::new(
-                TypeSpaceSettings::default().with_type_mod("types"),
-            ),
+            type_space: TypeSpace::new(TypeSpaceSettings::default().with_type_mod("types")),
             settings: Default::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
@@ -267,38 +254,28 @@ impl Generator {
 
         // Control use of crates found in x-rust-type extension
         type_settings.with_unknown_crates(settings.unknown_crates);
-        settings.crates.iter().for_each(
-            |(crate_name, CrateSpec { version, rename })| {
-                type_settings.with_crate(
-                    crate_name,
-                    version.clone(),
-                    rename.as_ref(),
-                );
-            },
-        );
+        settings
+            .crates
+            .iter()
+            .for_each(|(crate_name, CrateSpec { version, rename })| {
+                type_settings.with_crate(crate_name, version.clone(), rename.as_ref());
+            });
 
         // Adjust generation by type, name, or schema.
         settings.patch.iter().for_each(|(type_name, patch)| {
             type_settings.with_patch(type_name, patch);
         });
-        settings.replace.iter().for_each(
-            |(type_name, (replace_name, impls))| {
-                type_settings.with_replacement(
-                    type_name,
-                    replace_name,
-                    impls.iter().cloned(),
-                );
-            },
-        );
+        settings
+            .replace
+            .iter()
+            .for_each(|(type_name, (replace_name, impls))| {
+                type_settings.with_replacement(type_name, replace_name, impls.iter().cloned());
+            });
         settings
             .convert
             .iter()
             .for_each(|(schema, type_name, impls)| {
-                type_settings.with_conversion(
-                    schema.clone(),
-                    type_name,
-                    impls.iter().cloned(),
-                );
+                type_settings.with_conversion(schema.clone(), type_name, impls.iter().cloned());
             });
 
         Self {
@@ -315,9 +292,10 @@ impl Generator {
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
-            components.schemas.iter().map(|(name, ref_or_schema)| {
-                (name.clone(), ref_or_schema.to_schema())
-            })
+            components
+                .schemas
+                .iter()
+                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
         });
 
         self.type_space.add_ref_types(schemas)?;
@@ -333,20 +311,11 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(
-                    operation,
-                    &spec.components,
-                    path,
-                    method,
-                    path_parameters,
-                )
+                self.process_operation(operation, &spec.components, path, method, path_parameters)
             })
             .collect::<Result<Vec<_>>>()?;
 
-        let operation_code = match (
-            &self.settings.interface,
-            &self.settings.tag,
-        ) {
+        let operation_code = match (&self.settings.interface, &self.settings.tag) {
             (InterfaceStyle::Positional, TagStyle::Merged) => self
                 .generate_tokens_positional_merged(
                     &raw_methods,
@@ -356,10 +325,7 @@ impl Generator {
                 unimplemented!("positional arguments with separate tags are currently unsupported")
             }
             (InterfaceStyle::Builder, TagStyle::Merged) => self
-                .generate_tokens_builder_merged(
-                    &raw_methods,
-                    self.settings.inner_type.is_some(),
-                ),
+                .generate_tokens_builder_merged(&raw_methods, self.settings.inner_type.is_some()),
             (InterfaceStyle::Builder, TagStyle::Separate) => {
                 let tag_info = spec
                     .tags
@@ -553,9 +519,7 @@ impl Generator {
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
             .iter()
-            .map(|method| {
-                self.builder_struct(method, TagStyle::Merged, has_inner)
-            })
+            .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
         let builder_methods = input_methods
@@ -603,13 +567,10 @@ impl Generator {
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
             .iter()
-            .map(|method| {
-                self.builder_struct(method, TagStyle::Separate, has_inner)
-            })
+            .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
-        let (traits_and_impls, trait_preludes) =
-            self.builder_tags(input_methods, &tag_info);
+        let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
         // generated file is not at the top level of the crate.
@@ -678,23 +639,15 @@ pub fn space_out_items(content: String) -> Result<String> {
 pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     match spec.openapi.as_str() {
         "3.0.0" | "3.0.1" | "3.0.2" | "3.0.3" => (),
-        v => {
-            return Err(Error::UnexpectedFormat(format!(
-                "invalid version: {}",
-                v
-            )))
-        }
+        v => return Err(Error::UnexpectedFormat(format!("invalid version: {}", v))),
     }
 
     let mut opids = HashSet::new();
     spec.paths.paths.iter().try_for_each(|p| {
         match p.1 {
-            openapiv3::ReferenceOr::Reference { reference: _ } => {
-                Err(Error::UnexpectedFormat(format!(
-                    "path {} uses reference, unsupported",
-                    p.0,
-                )))
-            }
+            openapiv3::ReferenceOr::Reference { reference: _ } => Err(Error::UnexpectedFormat(
+                format!("path {} uses reference, unsupported", p.0,),
+            )),
             openapiv3::ReferenceOr::Item(item) => {
                 // Make sure every operation has an operation ID, and that each
                 // operation ID is only used once in the document.

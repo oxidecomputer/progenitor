@@ -8,9 +8,8 @@ use quote::{format_ident, quote, ToTokens};
 
 use crate::{
     method::{
-        BodyContentType, HttpMethod, OperationParameter,
-        OperationParameterKind, OperationParameterType, OperationResponse,
-        OperationResponseStatus,
+        BodyContentType, HttpMethod, OperationParameter, OperationParameterKind,
+        OperationParameterType, OperationResponse, OperationResponseStatus,
     },
     to_schema::ToSchema,
     util::{sanitize, Case},
@@ -30,18 +29,15 @@ impl Generator {
     /// The `crate_path` parameter should be a valid Rust path corresponding to
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
-    pub fn httpmock(
-        &mut self,
-        spec: &OpenAPI,
-        crate_path: &str,
-    ) -> Result<TokenStream> {
+    pub fn httpmock(&mut self, spec: &OpenAPI, crate_path: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
-            components.schemas.iter().map(|(name, ref_or_schema)| {
-                (name.clone(), ref_or_schema.to_schema())
-            })
+            components
+                .schemas
+                .iter()
+                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
         });
 
         self.type_space.add_ref_types(schemas)?;
@@ -57,13 +53,7 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(
-                    operation,
-                    &spec.components,
-                    path,
-                    method,
-                    path_parameters,
-                )
+                self.process_operation(operation, &spec.components, path, method, path_parameters)
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -77,17 +67,14 @@ impl Generator {
             .map(|method| format_ident!("{}", &method.operation_id))
             .collect::<Vec<_>>();
         let when = methods.iter().map(|op| &op.when).collect::<Vec<_>>();
-        let when_impl =
-            methods.iter().map(|op| &op.when_impl).collect::<Vec<_>>();
+        let when_impl = methods.iter().map(|op| &op.when_impl).collect::<Vec<_>>();
         let then = methods.iter().map(|op| &op.then).collect::<Vec<_>>();
-        let then_impl =
-            methods.iter().map(|op| &op.then_impl).collect::<Vec<_>>();
+        let then_impl = methods.iter().map(|op| &op.then_impl).collect::<Vec<_>>();
 
         let crate_path = syn::TypePath {
             qself: None,
-            path: syn::parse_str(crate_path).unwrap_or_else(|_| {
-                panic!("{} is not a valid identifier", crate_path)
-            }),
+            path: syn::parse_str(crate_path)
+                .unwrap_or_else(|_| panic!("{} is not a valid identifier", crate_path)),
         };
 
         let code = quote! {
@@ -139,15 +126,10 @@ impl Generator {
         Ok(code)
     }
 
-    fn httpmock_method(
-        &mut self,
-        method: &crate::method::OperationMethod,
-    ) -> MockOp {
-        let when_name =
-            sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
+    fn httpmock_method(&mut self, method: &crate::method::OperationMethod) -> MockOp {
+        let when_name = sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
         let when = format_ident!("{}", when_name).to_token_stream();
-        let then_name =
-            sanitize(&format!("{}-then", method.operation_id), Case::Pascal);
+        let then_name = sanitize(&format!("{}-then", method.operation_id), Case::Pascal);
         let then = format_ident!("{}", then_name).to_token_stream();
 
         let http_method = match &method.method {
@@ -180,14 +162,10 @@ impl Generator {
                         .unwrap()
                         .parameter_ident(),
                     OperationParameterType::RawBody => match kind {
-                        OperationParameterKind::Body(
-                            BodyContentType::OctetStream,
-                        ) => quote! {
+                        OperationParameterKind::Body(BodyContentType::OctetStream) => quote! {
                             serde_json::Value
                         },
-                        OperationParameterKind::Body(
-                            BodyContentType::Text(_),
-                        ) => quote! {
+                        OperationParameterKind::Body(BodyContentType::Text(_)) => quote! {
                             String
                         },
                         _ => unreachable!(),
@@ -211,19 +189,15 @@ impl Generator {
 
                     OperationParameterKind::Query(false) => {
                         // If the type is a ref, augment it with a lifetime that we'll also use in the function
-                        let (lifetime, arg_type_name) =
-                            if let syn::Type::Reference(mut rr) =
-                                syn::parse2::<syn::Type>(arg_type_name.clone())
-                                    .unwrap()
-                            {
-                                rr.lifetime = Some(syn::Lifetime::new(
-                                    "'a",
-                                    proc_macro2::Span::call_site(),
-                                ));
-                                (Some(quote! { 'a, }), rr.to_token_stream())
-                            } else {
-                                (None, arg_type_name)
-                            };
+                        let (lifetime, arg_type_name) = if let syn::Type::Reference(mut rr) =
+                            syn::parse2::<syn::Type>(arg_type_name.clone()).unwrap()
+                        {
+                            rr.lifetime =
+                                Some(syn::Lifetime::new("'a", proc_macro2::Span::call_site()));
+                            (Some(quote! { 'a, }), rr.to_token_stream())
+                        } else {
+                            (None, arg_type_name)
+                        };
 
                         return quote! {
                             pub fn #name_ident<#lifetime T>(
@@ -253,25 +227,21 @@ impl Generator {
                         };
                     }
                     OperationParameterKind::Header(_) => quote! { todo!() },
-                    OperationParameterKind::Body(body_content_type) => {
-                        match typ {
-                            OperationParameterType::Type(_) => quote! {
-                                Self(self.0.json_body_obj(value))
+                    OperationParameterKind::Body(body_content_type) => match typ {
+                        OperationParameterType::Type(_) => quote! {
+                            Self(self.0.json_body_obj(value))
 
+                        },
+                        OperationParameterType::RawBody => match body_content_type {
+                            BodyContentType::OctetStream => quote! {
+                                Self(self.0.json_body(value))
                             },
-                            OperationParameterType::RawBody => {
-                                match body_content_type {
-                                    BodyContentType::OctetStream => quote! {
-                                        Self(self.0.json_body(value))
-                                    },
-                                    BodyContentType::Text(_) => quote! {
-                                        Self(self.0.body(value))
-                                    },
-                                    _ => unreachable!(),
-                                }
-                            }
-                        }
-                    }
+                            BodyContentType::Text(_) => quote! {
+                                Self(self.0.body(value))
+                            },
+                            _ => unreachable!(),
+                        },
+                    },
                 };
                 quote! {
                     pub fn #name_ident(self, value: #arg_type_name) -> Self {
@@ -306,8 +276,7 @@ impl Generator {
              }| {
                 let (value_param, value_use) = match typ {
                     crate::method::OperationResponseKind::Type(arg_type_id) => {
-                        let arg_type =
-                            self.type_space.get_type(arg_type_id).unwrap();
+                        let arg_type = self.type_space.get_type(arg_type_id).unwrap();
                         let arg_type_ident = arg_type.parameter_ident();
                         (
                             quote! {
@@ -319,9 +288,7 @@ impl Generator {
                             },
                         )
                     }
-                    crate::method::OperationResponseKind::None => {
-                        Default::default()
-                    }
+                    crate::method::OperationResponseKind::None => Default::default(),
                     crate::method::OperationResponseKind::Raw => (
                         quote! {
                             value: serde_json::Value,
@@ -331,22 +298,16 @@ impl Generator {
                             .json_body(value)
                         },
                     ),
-                    crate::method::OperationResponseKind::Upgrade => {
-                        Default::default()
-                    }
+                    crate::method::OperationResponseKind::Upgrade => Default::default(),
                 };
 
                 match status_code {
                     OperationResponseStatus::Code(status_code) => {
-                        let canonical_reason =
-                            http::StatusCode::from_u16(*status_code)
-                                .unwrap()
-                                .canonical_reason()
-                                .unwrap();
-                        let fn_name = format_ident!(
-                            "{}",
-                            &sanitize(canonical_reason, Case::Snake)
-                        );
+                        let canonical_reason = http::StatusCode::from_u16(*status_code)
+                            .unwrap()
+                            .canonical_reason()
+                            .unwrap();
+                        let fn_name = format_ident!("{}", &sanitize(canonical_reason, Case::Snake));
 
                         quote! {
                             pub fn #fn_name(self, #value_param) -> Self {
