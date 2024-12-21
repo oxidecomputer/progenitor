@@ -9,9 +9,7 @@ use quote::{format_ident, quote};
 use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 
 use crate::{
-    method::{
-        OperationParameterKind, OperationParameterType, OperationResponseStatus,
-    },
+    method::{OperationParameterKind, OperationParameterType, OperationResponseStatus},
     to_schema::ToSchema,
     util::{sanitize, Case},
     validate_openapi, Generator, Result,
@@ -25,18 +23,15 @@ struct CliOperation {
 
 impl Generator {
     /// Generate a `clap`-based CLI.
-    pub fn cli(
-        &mut self,
-        spec: &OpenAPI,
-        crate_name: &str,
-    ) -> Result<TokenStream> {
+    pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
-            components.schemas.iter().map(|(name, ref_or_schema)| {
-                (name.clone(), ref_or_schema.to_schema())
-            })
+            components
+                .schemas
+                .iter()
+                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
         });
 
         self.type_space.add_ref_types(schemas)?;
@@ -52,13 +47,7 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(
-                    operation,
-                    &spec.components,
-                    path,
-                    method,
-                    path_parameters,
-                )
+                self.process_operation(operation, &spec.components, path, method, path_parameters)
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -73,31 +62,16 @@ impl Generator {
 
         let cli_fns = raw_methods
             .iter()
-            .map(|method| {
-                format_ident!(
-                    "cli_{}",
-                    sanitize(&method.operation_id, Case::Snake)
-                )
-            })
+            .map(|method| format_ident!("cli_{}", sanitize(&method.operation_id, Case::Snake)))
             .collect::<Vec<_>>();
         let execute_fns = raw_methods
             .iter()
-            .map(|method| {
-                format_ident!(
-                    "execute_{}",
-                    sanitize(&method.operation_id, Case::Snake)
-                )
-            })
+            .map(|method| format_ident!("execute_{}", sanitize(&method.operation_id, Case::Snake)))
             .collect::<Vec<_>>();
 
         let cli_variants = raw_methods
             .iter()
-            .map(|method| {
-                format_ident!(
-                    "{}",
-                    sanitize(&method.operation_id, Case::Pascal)
-                )
-            })
+            .map(|method| format_ident!("{}", sanitize(&method.operation_id, Case::Pascal)))
             .collect::<Vec<_>>();
 
         let crate_path = syn::TypePath {
@@ -193,10 +167,7 @@ impl Generator {
         Ok(code)
     }
 
-    fn cli_method(
-        &mut self,
-        method: &crate::method::OperationMethod,
-    ) -> CliOperation {
+    fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,
@@ -229,14 +200,10 @@ impl Generator {
         let fn_name = format_ident!("execute_{}", &method.operation_id);
         let op_name = format_ident!("{}", &method.operation_id);
 
-        let (_, success_kind) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_success_or_default,
-        );
-        let (_, error_kind) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_error_or_default,
-        );
+        let (_, success_kind) =
+            self.extract_responses(method, OperationResponseStatus::is_success_or_default);
+        let (_, error_kind) =
+            self.extract_responses(method, OperationResponseStatus::is_error_or_default);
 
         let execute_and_output = match method.dropshot_paginated {
             // Normal, one-shot API calls.
@@ -391,10 +358,7 @@ impl Generator {
         }
     }
 
-    fn cli_method_args(
-        &self,
-        method: &crate::method::OperationMethod,
-    ) -> CliArg {
+    fn cli_method_args(&self, method: &crate::method::OperationMethod) -> CliArg {
         let mut args = CliOperationArgs::default();
 
         let first_page_required_set = method
@@ -413,9 +377,7 @@ impl Generator {
             };
 
             // For paginated endpoints, we don't generate 'page_token' args.
-            if method.dropshot_paginated.is_some()
-                && param.name.as_str() == "page_token"
-            {
+            if method.dropshot_paginated.is_some() && param.name.as_str() == "page_token" {
                 continue;
             }
 
@@ -438,12 +400,7 @@ impl Generator {
             // There should be no conflicting path or query parameters.
             assert!(!args.has_arg(&arg_name));
 
-            let parser = clap_arg(
-                &arg_name,
-                volitionality,
-                &param.description,
-                &arg_type,
-            );
+            let parser = clap_arg(&arg_name, volitionality, &param.description, &arg_type);
 
             let arg_fn_name = sanitize(&param.name, Case::Snake);
             let arg_fn = format_ident!("{}", arg_fn_name);
@@ -469,18 +426,14 @@ impl Generator {
         let maybe_body_type_id = method
             .params
             .iter()
-            .find(|param| {
-                matches!(&param.kind, OperationParameterKind::Body(_))
-            })
+            .find(|param| matches!(&param.kind, OperationParameterKind::Body(_)))
             .and_then(|param| match &param.typ {
                 // TODO not sure how to deal with raw bodies, but we definitely
                 // need **some** input so we shouldn't just ignore it... as we
                 // are currently...
                 OperationParameterType::RawBody => None,
 
-                OperationParameterType::Type(body_type_id) => {
-                    Some(body_type_id)
-                }
+                OperationParameterType::Type(body_type_id) => Some(body_type_id),
             });
 
         if let Some(body_type_id) = maybe_body_type_id {
@@ -503,8 +456,7 @@ impl Generator {
             }
         }
 
-        let parser_args =
-            args.args.values().map(|CliArg { parser, .. }| parser);
+        let parser_args = args.args.values().map(|CliArg { parser, .. }| parser);
 
         // TODO do this as args we add in.
         let body_json_args = (match args.body {
@@ -542,8 +494,7 @@ impl Generator {
             #body_json_args
         };
 
-        let consumer_args =
-            args.args.values().map(|CliArg { consumer, .. }| consumer);
+        let consumer_args = args.args.values().map(|CliArg { consumer, .. }| consumer);
 
         let body_json_consumer = maybe_body_type_id.map(|body_type_id| {
             let body_type = self.type_space.get_type(body_type_id).unwrap();
@@ -573,11 +524,7 @@ impl Generator {
         CliArg { parser, consumer }
     }
 
-    fn cli_method_body_arg(
-        &self,
-        args: &mut CliOperationArgs,
-        prop_info: TypeStructPropInfo<'_>,
-    ) {
+    fn cli_method_body_arg(&self, args: &mut CliOperationArgs, prop_info: TypeStructPropInfo<'_>) {
         let TypeStructPropInfo {
             name,
             description,
@@ -596,11 +543,8 @@ impl Generator {
         // omitting the field. Back to the first hand: is that last point just
         // a serde issue rather than an interface one?
         let maybe_inner_type =
-            if let typify::TypeDetails::Option(inner_type_id) =
-                prop_type.details()
-            {
-                let inner_type =
-                    self.type_space.get_type(&inner_type_id).unwrap();
+            if let typify::TypeDetails::Option(inner_type_id) = prop_type.details() {
+                let inner_type = self.type_space.get_type(&inner_type_id).unwrap();
                 Some(inner_type)
             } else {
                 None
@@ -685,32 +629,31 @@ fn clap_arg(
     // we use clap's `PossibleValuesParser` with each variant converted to a
     // string. Then we use TypedValueParser::map to translate that into the
     // actual type of the enum.
-    let maybe_enum_parser =
-        if let typify::TypeDetails::Enum(e) = arg_type.details() {
-            let maybe_var_names = e
-                .variants()
-                .map(|(var_name, var_details)| {
-                    if let TypeEnumVariant::Simple = var_details {
-                        Some(format_ident!("{}", var_name))
-                    } else {
-                        None
-                    }
-                })
-                .collect::<Option<Vec<_>>>();
-
-            maybe_var_names.map(|var_names| {
-                quote! {
-                    ::clap::builder::TypedValueParser::map(
-                        ::clap::builder::PossibleValuesParser::new([
-                            #( #arg_type_name :: #var_names.to_string(), )*
-                        ]),
-                        |s| #arg_type_name :: try_from(s).unwrap()
-                    )
+    let maybe_enum_parser = if let typify::TypeDetails::Enum(e) = arg_type.details() {
+        let maybe_var_names = e
+            .variants()
+            .map(|(var_name, var_details)| {
+                if let TypeEnumVariant::Simple = var_details {
+                    Some(format_ident!("{}", var_name))
+                } else {
+                    None
                 }
             })
-        } else {
-            None
-        };
+            .collect::<Option<Vec<_>>>();
+
+        maybe_var_names.map(|var_names| {
+            quote! {
+                ::clap::builder::TypedValueParser::map(
+                    ::clap::builder::PossibleValuesParser::new([
+                        #( #arg_type_name :: #var_names.to_string(), )*
+                    ]),
+                    |s| #arg_type_name :: try_from(s).unwrap()
+                )
+            }
+        })
+    } else {
+        None
+    };
 
     let value_parser = if let Some(enum_parser) = maybe_enum_parser {
         enum_parser
@@ -777,10 +720,7 @@ impl CliOperationArgs {
     }
 
     fn body_required(&mut self) {
-        assert!(
-            self.body == CliBodyArg::Optional
-                || self.body == CliBodyArg::Required
-        );
+        assert!(self.body == CliBodyArg::Optional || self.body == CliBodyArg::Required);
         self.body = CliBodyArg::Required;
     }
 }

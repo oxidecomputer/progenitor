@@ -19,11 +19,7 @@ pub struct PathTemplate {
 }
 
 impl PathTemplate {
-    pub fn compile(
-        &self,
-        rename: HashMap<&String, &String>,
-        client: TokenStream,
-    ) -> TokenStream {
+    pub fn compile(&self, rename: HashMap<&String, &String>, client: TokenStream) -> TokenStream {
         let mut fmt = String::new();
         fmt.push_str("{}");
         for c in self.components.iter() {
@@ -153,16 +149,10 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
     }
 
     match s {
-        State::Start => {
-            return Err(Error::InvalidPath("empty path".to_string()))
-        }
+        State::Start => return Err(Error::InvalidPath("empty path".to_string())),
         State::ConstantOrParameter => (),
         State::Constant => components.push(Component::Constant(a)),
-        State::Parameter => {
-            return Err(Error::InvalidPath(
-                "unterminated parameter".to_string(),
-            ))
-        }
+        State::Parameter => return Err(Error::InvalidPath("unterminated parameter".to_string())),
     }
 
     Ok(PathTemplate { components })

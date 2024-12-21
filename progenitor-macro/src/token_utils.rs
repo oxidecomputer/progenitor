@@ -20,14 +20,11 @@ pub struct TypeAndImpls {
 }
 
 impl TypeAndImpls {
-    pub(crate) fn into_name_and_impls(
-        self,
-    ) -> (String, impl Iterator<Item = TypeImpl>) {
+    pub(crate) fn into_name_and_impls(self) -> (String, impl Iterator<Item = TypeImpl>) {
         // If there are no traits specified, these are assumed to be
         // implemented. A user would use the `?FromStr` syntax to remove one of
         // these defaults;
-        const DEFAULT_IMPLS: [TypeImpl; 2] =
-            [TypeImpl::FromStr, TypeImpl::Display];
+        const DEFAULT_IMPLS: [TypeImpl; 2] = [TypeImpl::FromStr, TypeImpl::Display];
 
         let name = self.type_name.to_token_stream().to_string();
         let mut impls = DEFAULT_IMPLS.into_iter().collect::<HashSet<_>>();
@@ -40,12 +37,8 @@ impl TypeAndImpls {
                 // TODO should this be an error rather than silently ignored?
                 if let Some(impl_name) = impl_name {
                     match modifier {
-                        syn::TraitBoundModifier::None => {
-                            impls.insert(impl_name)
-                        }
-                        syn::TraitBoundModifier::Maybe(_) => {
-                            impls.remove(&impl_name)
-                        }
+                        syn::TraitBoundModifier::None => impls.insert(impl_name),
+                        syn::TraitBoundModifier::Maybe(_) => impls.remove(&impl_name),
                     };
                 }
             },
