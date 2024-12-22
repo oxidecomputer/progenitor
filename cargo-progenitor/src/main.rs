@@ -97,8 +97,7 @@ fn reformat_code(input: String) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap())
-        .unwrap()
+    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -162,9 +161,7 @@ fn main() -> Result<()> {
                 name, version, &args.license_name,
             );
             if let Some(registry_name) = args.registry_name {
-                tomlout.extend(
-                    format!("publish = [\"{}\"]\n", registry_name).chars(),
-                );
+                tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
             }
             tomlout.extend(
                 format!(
@@ -272,8 +269,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
         } else {
             built_info::PKG_VERSION
         };
-        let client_version_dep =
-            format!("progenitor-client = \"{}\"", crate_version);
+        let client_version_dep = format!("progenitor-client = \"{}\"", crate_version);
         deps.push(client_version_dep);
     }
 
@@ -287,7 +283,10 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
         ));
     }
     if type_space.uses_chrono() {
-        deps.push(format!("chrono = {{ version = \"{}\", default-features=false, features = [\"serde\"] }}", DEPENDENCIES.chrono));
+        deps.push(format!(
+            "chrono = {{ version = \"{}\", default-features=false, features = [\"serde\"] }}",
+            DEPENDENCIES.chrono
+        ));
     }
     if builder.uses_futures() {
         deps.push(format!("futures = \"{}\"", DEPENDENCIES.futures));

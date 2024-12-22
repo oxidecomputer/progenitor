@@ -12,12 +12,10 @@ use reqwest::RequestBuilder;
 use serde::{de::DeserializeOwned, Serialize};
 
 #[cfg(not(target_arch = "wasm32"))]
-type InnerByteStream =
-    std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
+type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
 
 #[cfg(target_arch = "wasm32")]
-type InnerByteStream =
-    std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>>>>;
+type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>>>>;
 
 /// Untyped byte stream used for both success and error responses.
 pub struct ByteStream(InnerByteStream);
@@ -63,14 +61,12 @@ pub struct ResponseValue<T> {
 
 impl<T: DeserializeOwned> ResponseValue<T> {
     #[doc(hidden)]
-    pub async fn from_response<E>(
-        response: reqwest::Response,
-    ) -> Result<Self, Error<E>> {
+    pub async fn from_response<E>(response: reqwest::Response) -> Result<Self, Error<E>> {
         let status = response.status();
         let headers = response.headers().clone();
         let full = response.bytes().await.map_err(Error::ResponseBodyError)?;
-        let inner = serde_json::from_slice(&full)
-            .map_err(|e| Error::InvalidResponsePayload(full, e))?;
+        let inner =
+            serde_json::from_slice(&full).map_err(|e| Error::InvalidResponsePayload(full, e))?;
 
         Ok(Self {
             inner,
@@ -89,8 +85,7 @@ impl ResponseValue<reqwest::Upgraded> {
         let status = response.status();
         let headers = response.headers().clone();
         if status == reqwest::StatusCode::SWITCHING_PROTOCOLS {
-            let inner =
-                response.upgrade().await.map_err(Error::InvalidUpgrade)?;
+            let inner = response.upgrade().await.map_err(Error::InvalidUpgrade)?;
 
             Ok(Self {
                 inner,
@@ -135,11 +130,7 @@ impl<T> ResponseValue<T> {
     /// Creates a [`ResponseValue`] from the inner type, status, and headers.
     ///
     /// Useful for generating test fixtures.
-    pub fn new(
-        inner: T,
-        status: reqwest::StatusCode,
-        headers: reqwest::header::HeaderMap,
-    ) -> Self {
+    pub fn new(inner: T, status: reqwest::StatusCode, headers: reqwest::header::HeaderMap) -> Self {
         Self {
             inner,
             status,
@@ -174,10 +165,7 @@ impl<T> ResponseValue<T> {
     }
 
     #[doc(hidden)]
-    pub fn map<U: std::fmt::Debug, F, E>(
-        self,
-        f: F,
-    ) -> Result<ResponseValue<U>, E>
+    pub fn map<U: std::fmt::Debug, F, E>(self, f: F) -> Result<ResponseValue<U>, E>
     where
         F: FnOnce(T) -> U,
     {
@@ -300,9 +288,7 @@ impl<E> Error<E> {
             }),
             Error::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
             Error::ResponseBodyError(e) => Error::ResponseBodyError(e),
-            Error::InvalidResponsePayload(b, e) => {
-                Error::InvalidResponsePayload(b, e)
-            }
+            Error::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
             Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
         }
     }
@@ -441,26 +427,19 @@ pub fn encode_path(pc: &str) -> String {
 
 #[doc(hidden)]
 pub trait RequestBuilderExt<E> {
-    fn form_urlencoded<T: Serialize + ?Sized>(
-        self,
-        body: &T,
-    ) -> Result<RequestBuilder, Error<E>>;
+    fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<RequestBuilder, Error<E>>;
 }
 
 impl<E> RequestBuilderExt<E> for RequestBuilder {
-    fn form_urlencoded<T: Serialize + ?Sized>(
-        self,
-        body: &T,
-    ) -> Result<Self, Error<E>> {
+    fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<Self, Error<E>> {
         Ok(self
             .header(
                 reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static(
-                    "application/x-www-form-urlencoded",
-                ),
+                reqwest::header::HeaderValue::from_static("application/x-www-form-urlencoded"),
             )
-            .body(serde_urlencoded::to_string(body).map_err(|_| {
-                Error::InvalidRequest("failed to serialize body".to_string())
-            })?))
+            .body(
+                serde_urlencoded::to_string(body)
+                    .map_err(|_| Error::InvalidRequest("failed to serialize body".to_string()))?,
+            ))
     }
 }
