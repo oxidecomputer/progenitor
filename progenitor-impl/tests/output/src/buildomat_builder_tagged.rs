@@ -2852,10 +2852,6 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &minseq {
-                query.push(("minseq", v.to_string()));
-            }
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -2864,7 +2860,7 @@ pub mod builder {
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&query)
+                .query(&progenitor_client::QueryParam::new("minseq", &minseq))
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;

@@ -142,10 +142,13 @@ impl Client {
         body: &'a types::UnoBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/uno", self.baseurl,);
-        let mut query = Vec::with_capacity(1usize);
-        query.push(("gateway", gateway.to_string()));
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).json(&body).query(&query).build()?;
+        let mut request = self
+            .client
+            .get(url)
+            .json(&body)
+            .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
