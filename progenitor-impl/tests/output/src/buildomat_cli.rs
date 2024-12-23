@@ -30,6 +30,7 @@ impl<T: CliConfig> Cli<T> {
             CliCommand::WorkerTaskAddOutput => Self::cli_worker_task_add_output(),
             CliCommand::WorkersList => Self::cli_workers_list(),
             CliCommand::WorkersRecycle => Self::cli_workers_recycle(),
+            CliCommand::GetThingOrThings => Self::cli_get_thing_or_things(),
         }
     }
 
@@ -316,6 +317,15 @@ impl<T: CliConfig> Cli<T> {
         ::clap::Command::new("")
     }
 
+    pub fn cli_get_thing_or_things() -> ::clap::Command {
+        ::clap::Command::new("").arg(
+            ::clap::Arg::new("id")
+                .long("id")
+                .value_parser(::clap::value_parser!(types::GetThingOrThingsId))
+                .required(false),
+        )
+    }
+
     pub async fn execute(
         &self,
         cmd: CliCommand,
@@ -343,6 +353,7 @@ impl<T: CliConfig> Cli<T> {
             CliCommand::WorkerTaskAddOutput => self.execute_worker_task_add_output(matches).await,
             CliCommand::WorkersList => self.execute_workers_list(matches).await,
             CliCommand::WorkersRecycle => self.execute_workers_recycle(matches).await,
+            CliCommand::GetThingOrThings => self.execute_get_thing_or_things(matches).await,
         }
     }
 
@@ -805,6 +816,30 @@ impl<T: CliConfig> Cli<T> {
             }
         }
     }
+
+    pub async fn execute_get_thing_or_things(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
+        let mut request = self.client.get_thing_or_things();
+        if let Some(value) = matches.get_one::<types::GetThingOrThingsId>("id") {
+            request = request.id(value.clone());
+        }
+
+        self.config
+            .execute_get_thing_or_things(matches, &mut request)?;
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                self.config.success_item(&r);
+                Ok(())
+            }
+            Err(r) => {
+                self.config.error(&r);
+                Err(anyhow::Error::new(r))
+            }
+        }
+    }
 }
 
 pub trait CliConfig {
@@ -978,6 +1013,14 @@ pub trait CliConfig {
     ) -> anyhow::Result<()> {
         Ok(())
     }
+
+    fn execute_get_thing_or_things(
+        &self,
+        matches: &::clap::ArgMatches,
+        request: &mut builder::GetThingOrThings,
+    ) -> anyhow::Result<()> {
+        Ok(())
+    }
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -1001,6 +1044,7 @@ pub enum CliCommand {
     WorkerTaskAddOutput,
     WorkersList,
     WorkersRecycle,
+    GetThingOrThings,
 }
 
 impl CliCommand {
@@ -1025,6 +1069,7 @@ impl CliCommand {
             CliCommand::WorkerTaskAddOutput,
             CliCommand::WorkersList,
             CliCommand::WorkersRecycle,
+            CliCommand::GetThingOrThings,
         ]
         .into_iter()
     }
