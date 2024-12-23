@@ -237,10 +237,7 @@ impl GenerationSettings {
     ///
     /// The requiremnets for a map type can be found in the
     /// [typify::TypeSpaceSettings::with_map_type] documentation.
-    pub fn with_map_type<MT: ToString>(
-        &mut self,
-        map_type: MT,
-    ) -> &mut Self {
+    pub fn with_map_type<MT: ToString>(&mut self, map_type: MT) -> &mut Self {
         self.map_type = Some(map_type.to_string());
         self
     }
