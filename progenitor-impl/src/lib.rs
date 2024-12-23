@@ -67,6 +67,7 @@ pub struct GenerationSettings {
     post_hook_async: Option<TokenStream>,
     extra_derives: Vec<String>,
 
+    map_type: Option<String>,
     unknown_crates: UnknownPolicy,
     crates: BTreeMap<String, CrateSpec>,
 
@@ -228,6 +229,21 @@ impl GenerationSettings {
         );
         self
     }
+
+    /// Set the type used for key-value maps. Common examples:
+    /// - [`std::collections::HashMap`] - **Default**
+    /// - [`std::collections::BTreeMap`]
+    /// - [`indexmap::IndexMap`]
+    ///
+    /// The requiremnets for a map type can be found in the
+    /// [typify::TypeSpaceSettings::with_map_type] documentation.
+    pub fn with_map_type<MT: ToString>(
+        &mut self,
+        map_type: MT,
+    ) -> &mut Self {
+        self.map_type = Some(map_type.to_string());
+        self
+    }
 }
 
 impl Default for Generator {
@@ -277,6 +293,11 @@ impl Generator {
             .for_each(|(schema, type_name, impls)| {
                 type_settings.with_conversion(schema.clone(), type_name, impls.iter().cloned());
             });
+
+        // Set the map type if specified.
+        if let Some(map_type) = &settings.map_type {
+            type_settings.with_map_type(map_type.clone());
+        }
 
         Self {
             type_space: TypeSpace::new(&type_settings),
