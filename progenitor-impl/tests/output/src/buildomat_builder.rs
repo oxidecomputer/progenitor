@@ -283,10 +283,14 @@ pub mod types {
     ///{
     ///  "type": "object",
     ///  "required": [
+    ///    "default",
     ///    "name",
     ///    "script"
     ///  ],
     ///  "properties": {
+    ///    "default": {
+    ///      "type": "boolean"
+    ///    },
     ///    "name": {
     ///      "type": "string"
     ///    },
@@ -307,6 +311,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct TaskSubmit {
+        pub default: bool,
         pub name: ::std::string::String,
         #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
         pub output_rules: ::std::vec::Vec<::std::string::String>,
@@ -1317,6 +1322,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct TaskSubmit {
+            default: ::std::result::Result<bool, ::std::string::String>,
             name: ::std::result::Result<::std::string::String, ::std::string::String>,
             output_rules: ::std::result::Result<
                 ::std::vec::Vec<::std::string::String>,
@@ -1328,6 +1334,7 @@ pub mod types {
         impl ::std::default::Default for TaskSubmit {
             fn default() -> Self {
                 Self {
+                    default: Err("no value supplied for default".to_string()),
                     name: Err("no value supplied for name".to_string()),
                     output_rules: Ok(Default::default()),
                     script: Err("no value supplied for script".to_string()),
@@ -1336,6 +1343,16 @@ pub mod types {
         }
 
         impl TaskSubmit {
+            pub fn default<T>(mut self, value: T) -> Self
+            where
+                T: ::std::convert::TryInto<bool>,
+                T::Error: ::std::fmt::Display,
+            {
+                self.default = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for default: {}", e));
+                self
+            }
             pub fn name<T>(mut self, value: T) -> Self
             where
                 T: ::std::convert::TryInto<::std::string::String>,
@@ -1374,6 +1391,7 @@ pub mod types {
                 value: TaskSubmit,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
+                    default: value.default?,
                     name: value.name?,
                     output_rules: value.output_rules?,
                     script: value.script?,
@@ -1384,6 +1402,7 @@ pub mod types {
         impl ::std::convert::From<super::TaskSubmit> for TaskSubmit {
             fn from(value: super::TaskSubmit) -> Self {
                 Self {
+                    default: Ok(value.default),
                     name: Ok(value.name),
                     output_rules: Ok(value.output_rules),
                     script: Ok(value.script),
@@ -2786,7 +2805,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::TaskSubmit::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -3049,7 +3068,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::UserCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -3199,7 +3218,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::WorkerBootstrap::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -3299,7 +3318,7 @@ pub mod builder {
             Self {
                 client: client,
                 task: Err("task was not initialized".to_string()),
-                body: Ok(types::builder::WorkerAppendTask::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -3445,7 +3464,7 @@ pub mod builder {
             Self {
                 client: client,
                 task: Err("task was not initialized".to_string()),
-                body: Ok(types::builder::WorkerCompleteTask::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -3519,7 +3538,7 @@ pub mod builder {
             Self {
                 client: client,
                 task: Err("task was not initialized".to_string()),
-                body: Ok(types::builder::WorkerAddOutput::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 

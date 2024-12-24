@@ -252,10 +252,14 @@ pub mod types {
     ///{
     ///  "type": "object",
     ///  "required": [
+    ///    "default",
     ///    "name",
     ///    "script"
     ///  ],
     ///  "properties": {
+    ///    "default": {
+    ///      "type": "boolean"
+    ///    },
     ///    "name": {
     ///      "type": "string"
     ///    },
@@ -274,6 +278,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmit {
+        pub default: bool,
         pub name: ::std::string::String,
         #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
         pub output_rules: ::std::vec::Vec<::std::string::String>,
