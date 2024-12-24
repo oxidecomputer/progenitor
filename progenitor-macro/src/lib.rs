@@ -139,6 +139,8 @@ struct MacroSettings {
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
     post_hook_async: Option<ParseWrapper<ClosureOrPath>>,
 
+    map_type: Option<ParseWrapper<syn::Type>>,
+
     #[serde(default)]
     derives: Vec<ParseWrapper<syn::Path>>,
 
@@ -305,6 +307,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             pre_hook_async,
             post_hook,
             post_hook_async,
+            map_type,
             unknown_crates,
             crates,
             derives,
@@ -322,6 +325,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         post_hook.map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
         post_hook_async
             .map(|post_hook_async| settings.with_post_hook_async(post_hook_async.into_inner().0));
+        map_type.map(|map_type| settings.with_map_type(map_type.to_token_stream()));
 
         settings.with_unknown_crates(unknown_crates);
         crates.into_iter().for_each(
