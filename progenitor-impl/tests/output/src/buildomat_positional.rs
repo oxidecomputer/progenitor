@@ -38,6 +38,45 @@ pub mod types {
         }
     }
 
+    ///GetThingOrThingsId
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "oneOf": [
+    ///    {
+    ///      "type": "string"
+    ///    },
+    ///    {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    }
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[serde(untagged)]
+    pub enum GetThingOrThingsId {
+        Variant0(::std::string::String),
+        Variant1(::std::vec::Vec<::std::string::String>),
+    }
+
+    impl ::std::convert::From<&GetThingOrThingsId> for GetThingOrThingsId {
+        fn from(value: &GetThingOrThingsId) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
+        fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
+            Self::Variant1(value)
+        }
+    }
+
     ///ObjWithOptionArray
     ///
     /// <details><summary>JSON schema</summary>
@@ -1012,11 +1051,6 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut query = Vec::with_capacity(1usize);
-        if let Some(v) = &minseq {
-            query.push(("minseq", v.to_string()));
-        }
-
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -1025,7 +1059,7 @@ impl Client {
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&query)
+            .query(&progenitor_client::QueryParam::new("minseq", &minseq))
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -1325,6 +1359,30 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/v1/things`
+    pub async fn get_thing_or_things<'a>(
+        &'a self,
+        id: Option<&'a types::GetThingOrThingsId>,
+    ) -> Result<ResponseValue<::std::string::String>, Error<()>> {
+        let url = format!("{}/v1/things", self.baseurl,);
+        #[allow(unused_mut)]
+        let mut request = self
+            .client
+            .get(url)
+            .header(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&progenitor_client::QueryParam::new("id", &id))
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }

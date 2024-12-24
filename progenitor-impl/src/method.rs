@@ -777,51 +777,25 @@ impl Generator {
 
         // Generate a unique Ident for internal variables
         let url_ident = unique_ident_from("url", &param_names);
-        let query_ident = unique_ident_from("query", &param_names);
         let request_ident = unique_ident_from("request", &param_names);
         let response_ident = unique_ident_from("response", &param_names);
         let result_ident = unique_ident_from("result", &param_names);
 
         // Generate code for query parameters.
-        let query_items = method
+        let query_params = method
             .params
             .iter()
             .filter_map(|param| match &param.kind {
-                OperationParameterKind::Query(required) => {
+                OperationParameterKind::Query(_) => {
                     let qn = &param.api_name;
                     let qn_ident = format_ident!("{}", &param.name);
-                    let res = if *required {
-                        quote! {
-                            #query_ident.push((#qn, #qn_ident .to_string()));
-                        }
-                    } else {
-                        quote! {
-                            if let Some(v) = & #qn_ident {
-                                #query_ident.push((#qn, v.to_string()));
-                            }
-                        }
-                    };
-
-                    Some(res)
+                    Some(quote! {
+                        &progenitor_client::QueryParam::new(#qn, &#qn_ident)
+                    })
                 }
                 _ => None,
             })
             .collect::<Vec<_>>();
-
-        let (query_build, query_use) = if query_items.is_empty() {
-            (quote! {}, quote! {})
-        } else {
-            let size = query_items.len();
-            let query_build = quote! {
-                let mut #query_ident = Vec::with_capacity(#size);
-                #(#query_items)*
-            };
-            let query_use = quote! {
-                .query(&#query_ident)
-            };
-
-            (query_build, query_use)
-        };
 
         let headers = method
             .params
@@ -1105,7 +1079,6 @@ impl Generator {
 
         let body_impl = quote! {
             #url_path
-            #query_build
 
             #headers_build
 
@@ -1114,7 +1087,7 @@ impl Generator {
                 . #method_func (#url_ident)
                 #accept_header
                 #(#body_func)*
-                #query_use
+                #( .query(#query_params) )*
                 #headers_use
                 #websock_hdrs
                 .build()?;

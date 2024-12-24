@@ -473,6 +473,42 @@
           }
         }
       }
+    },
+    "/v1/things": {
+      "get": {
+        "operationId": "get_thing_or_things",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "yes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

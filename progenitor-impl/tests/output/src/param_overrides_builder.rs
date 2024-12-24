@@ -180,15 +180,16 @@ pub mod builder {
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
             let url = format!("{}/key", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &key {
-                query.push(("key", v.to_string()));
-            }
-            if let Some(v) = &unique_key {
-                query.push(("uniqueKey", v.to_string()));
-            }
             #[allow(unused_mut)]
-            let mut request = client.client.get(url).query(&query).build()?;
+            let mut request = client
+                .client
+                .get(url)
+                .query(&progenitor_client::QueryParam::new("key", &key))
+                .query(&progenitor_client::QueryParam::new(
+                    "uniqueKey",
+                    &unique_key,
+                ))
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

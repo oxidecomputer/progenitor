@@ -41,11 +41,9 @@ jobs:
       with:
         components: rustfmt
     - name: Install stable
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@stable
       with:
-        toolchain: stable
         components: rustfmt
-        default: true
     - name: Build
       run: cargo build --locked --tests --verbose
     - name: Run tests
