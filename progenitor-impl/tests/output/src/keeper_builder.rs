@@ -1432,7 +1432,7 @@ pub mod builder {
             Self {
                 client: client,
                 authorization: Err("authorization was not initialized".to_string()),
-                body: Ok(types::builder::EnrolBody::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -1623,7 +1623,7 @@ pub mod builder {
             Self {
                 client: client,
                 authorization: Err("authorization was not initialized".to_string()),
-                body: Ok(types::builder::ReportFinishBody::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -1708,7 +1708,7 @@ pub mod builder {
             Self {
                 client: client,
                 authorization: Err("authorization was not initialized".to_string()),
-                body: Ok(types::builder::ReportOutputBody::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -1793,7 +1793,7 @@ pub mod builder {
             Self {
                 client: client,
                 authorization: Err("authorization was not initialized".to_string()),
-                body: Ok(types::builder::ReportStartBody::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 

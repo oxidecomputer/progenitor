@@ -30580,7 +30580,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::DeviceAuthRequest::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -30637,7 +30637,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::DeviceAuthVerify::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -30708,7 +30708,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::DeviceAccessTokenRequest::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -30916,7 +30916,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SpoofLoginBody::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -30987,7 +30987,7 @@ pub mod builder {
             Self {
                 client: client,
                 silo_name: Err("silo_name was not initialized".to_string()),
-                body: Ok(types::builder::UsernamePasswordCredentials::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -31426,7 +31426,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::OrganizationCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -31562,7 +31562,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
-                body: Ok(types::builder::OrganizationUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -31782,7 +31782,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
-                body: Ok(types::builder::OrganizationRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -32045,7 +32045,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
-                body: Ok(types::builder::ProjectCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -32217,7 +32217,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::ProjectUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -32584,7 +32584,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::DiskCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -33296,7 +33296,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::ImageCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -33776,7 +33776,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::InstanceCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -34274,7 +34274,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
-                body: Ok(types::builder::DiskIdentifier::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -34396,7 +34396,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
-                body: Ok(types::builder::DiskIdentifier::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -34615,7 +34615,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
-                body: Ok(types::builder::InstanceMigrate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -34937,7 +34937,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
-                body: Ok(types::builder::NetworkInterfaceCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -35179,7 +35179,7 @@ pub mod builder {
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
                 interface_name: Err("interface_name was not initialized".to_string()),
-                body: Ok(types::builder::NetworkInterfaceUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36045,7 +36045,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::ProjectRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36339,7 +36339,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::SnapshotCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36818,7 +36818,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -37021,7 +37021,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -37335,7 +37335,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcFirewallRuleUpdateParams::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -37665,7 +37665,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcRouterCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -37899,7 +37899,7 @@ pub mod builder {
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
                 router_name: Err("router_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcRouterUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -38360,7 +38360,7 @@ pub mod builder {
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
                 router_name: Err("router_name was not initialized".to_string()),
-                body: Ok(types::builder::RouterRouteCreateParams::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -38630,7 +38630,7 @@ pub mod builder {
                 vpc_name: Err("vpc_name was not initialized".to_string()),
                 router_name: Err("router_name was not initialized".to_string()),
                 route_name: Err("route_name was not initialized".to_string()),
-                body: Ok(types::builder::RouterRouteUpdateParams::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -39108,7 +39108,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcSubnetCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -39342,7 +39342,7 @@ pub mod builder {
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
                 subnet_name: Err("subnet_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcSubnetUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -39839,7 +39839,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SiloRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -40433,7 +40433,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SshKeyCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -40955,7 +40955,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::CertificateCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -42025,7 +42025,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::GlobalImageCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -42363,7 +42363,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::IpPoolCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -42494,7 +42494,7 @@ pub mod builder {
             Self {
                 client: client,
                 pool_name: Err("pool_name was not initialized".to_string()),
-                body: Ok(types::builder::IpPoolUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -43424,7 +43424,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::FleetRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -43849,7 +43849,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SiloCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -44208,7 +44208,7 @@ pub mod builder {
             Self {
                 client: client,
                 silo_name: Err("silo_name was not initialized".to_string()),
-                body: Ok(types::builder::UserCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -44473,7 +44473,7 @@ pub mod builder {
             Self {
                 client: client,
                 silo_name: Err("silo_name was not initialized".to_string()),
-                body: Ok(types::builder::SamlIdentityProviderCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -44716,7 +44716,7 @@ pub mod builder {
             Self {
                 client: client,
                 silo_name: Err("silo_name was not initialized".to_string()),
-                body: Ok(types::builder::SiloRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -45722,7 +45722,7 @@ pub mod builder {
                 client: client,
                 organization: Ok(None),
                 project: Err("project was not initialized".to_string()),
-                body: Ok(types::builder::DiskCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -46216,7 +46216,7 @@ pub mod builder {
                 client: client,
                 organization: Ok(None),
                 project: Err("project was not initialized".to_string()),
-                body: Ok(types::builder::InstanceCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -46730,7 +46730,7 @@ pub mod builder {
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
-                body: Ok(types::builder::DiskPath::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -46858,7 +46858,7 @@ pub mod builder {
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
-                body: Ok(types::builder::DiskPath::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -46986,7 +46986,7 @@ pub mod builder {
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
-                body: Ok(types::builder::InstanceMigrate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -47820,7 +47820,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::OrganizationCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -47956,7 +47956,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization: Err("organization was not initialized".to_string()),
-                body: Ok(types::builder::OrganizationUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -48176,7 +48176,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization: Err("organization was not initialized".to_string()),
-                body: Ok(types::builder::OrganizationRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -48438,7 +48438,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization: Err("organization was not initialized".to_string()),
-                body: Ok(types::builder::ProjectCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -48612,7 +48612,7 @@ pub mod builder {
                 client: client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
-                body: Ok(types::builder::ProjectUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -48890,7 +48890,7 @@ pub mod builder {
                 client: client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
-                body: Ok(types::builder::ProjectRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -49400,7 +49400,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SystemUpdateStart::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 

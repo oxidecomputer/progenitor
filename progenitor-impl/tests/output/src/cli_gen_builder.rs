@@ -242,7 +242,7 @@ pub mod builder {
             Self {
                 client: client,
                 gateway: Err("gateway was not initialized".to_string()),
-                body: Ok(types::builder::UnoBody::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 

@@ -418,7 +418,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::BodyWithDefaults::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 

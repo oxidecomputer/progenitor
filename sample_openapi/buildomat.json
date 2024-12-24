@@ -568,9 +568,13 @@
           },
           "script": {
             "type": "string"
+          },
+          "default": {
+            "type": "boolean"
           }
         },
         "required": [
+          "default",
           "name",
           "script"
         ]

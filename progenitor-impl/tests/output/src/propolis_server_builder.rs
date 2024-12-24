@@ -3194,7 +3194,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::InstanceEnsureRequest::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -3348,7 +3348,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::InstanceMigrateStatusRequest::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -3528,7 +3528,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::InstanceStateMonitorRequest::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 

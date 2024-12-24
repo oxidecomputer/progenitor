@@ -1478,18 +1478,20 @@ impl Generator {
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
-                    let optional = param.kind.is_optional();
-                    if optional {
-                        Ok(quote! { Ok(None) })
-                    } else if let (OperationParameterKind::Body(_), Some(builder_name)) =
-                        (&param.kind, ty.builder())
+
+                    // Fill in the appropriate initial value for the
+                    // param_types generated above.
+                    if let (OperationParameterKind::Body(_), Some(_)) = (&param.kind, ty.builder())
                     {
-                        Ok(quote! { Ok(#builder_name :: default()) })
-                    } else {
+                        Ok(quote! { Ok(::std::default::Default::default()) })
+                    } else if param.kind.is_required() {
                         let err_msg = format!("{} was not initialized", param.name);
                         Ok(quote! { Err(#err_msg.to_string()) })
+                    } else {
+                        Ok(quote! { Ok(None) })
                     }
                 }
+
                 OperationParameterType::RawBody => {
                     let err_msg = format!("{} was not initialized", param.name);
                     Ok(quote! { Err(#err_msg.to_string()) })

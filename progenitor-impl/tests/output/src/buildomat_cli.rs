@@ -57,6 +57,12 @@ impl<T: CliConfig> Cli<T> {
     pub fn cli_task_submit() -> ::clap::Command {
         ::clap::Command::new("")
             .arg(
+                ::clap::Arg::new("default")
+                    .long("default")
+                    .value_parser(::clap::value_parser!(bool))
+                    .required_unless_present("json-body"),
+            )
+            .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(::std::string::String))
@@ -416,6 +422,10 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_task_submit(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_submit();
+        if let Some(value) = matches.get_one::<bool>("default") {
+            request = request.body_map(|body| body.default(value.clone()))
+        }
+
         if let Some(value) = matches.get_one::<::std::string::String>("name") {
             request = request.body_map(|body| body.name(value.clone()))
         }
