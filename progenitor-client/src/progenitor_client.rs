@@ -550,15 +550,13 @@ where
 
     fn serialize_newtype_struct<T>(
         self,
-        _name: &'static str,
+        name: &'static str,
         value: &T,
     ) -> Result<Self::Ok, Self::Error>
     where
         T: ?Sized + Serialize,
     {
-        // TODO typify doesn't make newtype structs transparent, so we work
-        // around that here.
-        value.serialize(self)
+        self.inner.serialize_newtype_struct(name, value)
     }
 
     fn serialize_newtype_variant<T>(
