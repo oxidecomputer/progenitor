@@ -1,3 +1,4 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -97,7 +98,7 @@ pub mod types {
         pub things: ::std::vec::Vec<::std::option::Option<Task>>,
     }
 
-    impl From<&ObjWithOptionArray> for ObjWithOptionArray {
+    impl ::std::convert::From<&ObjWithOptionArray> for ObjWithOptionArray {
         fn from(value: &ObjWithOptionArray) -> Self {
             value.clone()
         }
@@ -149,7 +150,7 @@ pub mod types {
         pub state: ::std::string::String,
     }
 
-    impl From<&Task> for Task {
+    impl ::std::convert::From<&Task> for Task {
         fn from(value: &Task) -> Self {
             value.clone()
         }
@@ -196,7 +197,7 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&TaskEvent> for TaskEvent {
+    impl ::std::convert::From<&TaskEvent> for TaskEvent {
         fn from(value: &TaskEvent) -> Self {
             value.clone()
         }
@@ -237,7 +238,7 @@ pub mod types {
         pub size: u64,
     }
 
-    impl From<&TaskOutput> for TaskOutput {
+    impl ::std::convert::From<&TaskOutput> for TaskOutput {
         fn from(value: &TaskOutput) -> Self {
             value.clone()
         }
@@ -279,7 +280,7 @@ pub mod types {
         pub script: ::std::string::String,
     }
 
-    impl From<&TaskSubmit> for TaskSubmit {
+    impl ::std::convert::From<&TaskSubmit> for TaskSubmit {
         fn from(value: &TaskSubmit) -> Self {
             value.clone()
         }
@@ -308,7 +309,7 @@ pub mod types {
         pub id: ::std::string::String,
     }
 
-    impl From<&TaskSubmitResult> for TaskSubmitResult {
+    impl ::std::convert::From<&TaskSubmitResult> for TaskSubmitResult {
         fn from(value: &TaskSubmitResult) -> Self {
             value.clone()
         }
@@ -337,7 +338,7 @@ pub mod types {
         pub id: ::std::string::String,
     }
 
-    impl From<&UploadedChunk> for UploadedChunk {
+    impl ::std::convert::From<&UploadedChunk> for UploadedChunk {
         fn from(value: &UploadedChunk) -> Self {
             value.clone()
         }
@@ -366,7 +367,7 @@ pub mod types {
         pub name: ::std::string::String,
     }
 
-    impl From<&UserCreate> for UserCreate {
+    impl ::std::convert::From<&UserCreate> for UserCreate {
         fn from(value: &UserCreate) -> Self {
             value.clone()
         }
@@ -405,7 +406,7 @@ pub mod types {
         pub token: ::std::string::String,
     }
 
-    impl From<&UserCreateResult> for UserCreateResult {
+    impl ::std::convert::From<&UserCreateResult> for UserCreateResult {
         fn from(value: &UserCreateResult) -> Self {
             value.clone()
         }
@@ -439,7 +440,7 @@ pub mod types {
         pub name: ::std::string::String,
     }
 
-    impl From<&WhoamiResult> for WhoamiResult {
+    impl ::std::convert::From<&WhoamiResult> for WhoamiResult {
         fn from(value: &WhoamiResult) -> Self {
             value.clone()
         }
@@ -497,7 +498,7 @@ pub mod types {
         pub tasks: ::std::vec::Vec<WorkerTask>,
     }
 
-    impl From<&Worker> for Worker {
+    impl ::std::convert::From<&Worker> for Worker {
         fn from(value: &Worker) -> Self {
             value.clone()
         }
@@ -540,7 +541,7 @@ pub mod types {
         pub size: i64,
     }
 
-    impl From<&WorkerAddOutput> for WorkerAddOutput {
+    impl ::std::convert::From<&WorkerAddOutput> for WorkerAddOutput {
         fn from(value: &WorkerAddOutput) -> Self {
             value.clone()
         }
@@ -580,7 +581,7 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&WorkerAppendTask> for WorkerAppendTask {
+    impl ::std::convert::From<&WorkerAppendTask> for WorkerAppendTask {
         fn from(value: &WorkerAppendTask) -> Self {
             value.clone()
         }
@@ -614,7 +615,7 @@ pub mod types {
         pub token: ::std::string::String,
     }
 
-    impl From<&WorkerBootstrap> for WorkerBootstrap {
+    impl ::std::convert::From<&WorkerBootstrap> for WorkerBootstrap {
         fn from(value: &WorkerBootstrap) -> Self {
             value.clone()
         }
@@ -643,7 +644,7 @@ pub mod types {
         pub id: ::std::string::String,
     }
 
-    impl From<&WorkerBootstrapResult> for WorkerBootstrapResult {
+    impl ::std::convert::From<&WorkerBootstrapResult> for WorkerBootstrapResult {
         fn from(value: &WorkerBootstrapResult) -> Self {
             value.clone()
         }
@@ -672,7 +673,7 @@ pub mod types {
         pub failed: bool,
     }
 
-    impl From<&WorkerCompleteTask> for WorkerCompleteTask {
+    impl ::std::convert::From<&WorkerCompleteTask> for WorkerCompleteTask {
         fn from(value: &WorkerCompleteTask) -> Self {
             value.clone()
         }
@@ -706,7 +707,7 @@ pub mod types {
         pub task: ::std::option::Option<WorkerPingTask>,
     }
 
-    impl From<&WorkerPingResult> for WorkerPingResult {
+    impl ::std::convert::From<&WorkerPingResult> for WorkerPingResult {
         fn from(value: &WorkerPingResult) -> Self {
             value.clone()
         }
@@ -748,7 +749,7 @@ pub mod types {
         pub script: ::std::string::String,
     }
 
-    impl From<&WorkerPingTask> for WorkerPingTask {
+    impl ::std::convert::From<&WorkerPingTask> for WorkerPingTask {
         fn from(value: &WorkerPingTask) -> Self {
             value.clone()
         }
@@ -787,7 +788,7 @@ pub mod types {
         pub owner: ::std::string::String,
     }
 
-    impl From<&WorkerTask> for WorkerTask {
+    impl ::std::convert::From<&WorkerTask> for WorkerTask {
         fn from(value: &WorkerTask) -> Self {
             value.clone()
         }
@@ -819,7 +820,7 @@ pub mod types {
         pub workers: ::std::vec::Vec<Worker>,
     }
 
-    impl From<&WorkersResult> for WorkersResult {
+    impl ::std::convert::From<&WorkersResult> for WorkersResult {
         fn from(value: &WorkersResult) -> Self {
             value.clone()
         }
@@ -887,6 +888,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {

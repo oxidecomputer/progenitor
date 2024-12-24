@@ -71,7 +71,7 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -125,7 +125,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&Uint32ResultsPage> for Uint32ResultsPage {
+    impl ::std::convert::From<&Uint32ResultsPage> for Uint32ResultsPage {
         fn from(value: &Uint32ResultsPage) -> Self {
             value.clone()
         }
@@ -149,7 +149,7 @@ pub mod types {
             request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for Error {
+        impl ::std::default::Default for Error {
             fn default() -> Self {
                 Self {
                     error_code: Ok(Default::default()),
@@ -162,8 +162,8 @@ pub mod types {
         impl Error {
             pub fn error_code<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.error_code = value
                     .try_into()
@@ -172,8 +172,8 @@ pub mod types {
             }
             pub fn message<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::string::String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.message = value
                     .try_into()
@@ -182,8 +182,8 @@ pub mod types {
             }
             pub fn request_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::string::String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.request_id = value
                     .try_into()
@@ -205,7 +205,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Error> for Error {
+        impl ::std::convert::From<super::Error> for Error {
             fn from(value: super::Error) -> Self {
                 Self {
                     error_code: Ok(value.error_code),
@@ -224,7 +224,7 @@ pub mod types {
             >,
         }
 
-        impl Default for Uint32ResultsPage {
+        impl ::std::default::Default for Uint32ResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -236,8 +236,8 @@ pub mod types {
         impl Uint32ResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::vec::Vec<u32>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<u32>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -246,8 +246,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -268,7 +268,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Uint32ResultsPage> for Uint32ResultsPage {
+        impl ::std::convert::From<super::Uint32ResultsPage> for Uint32ResultsPage {
             fn from(value: super::Uint32ResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),

@@ -1,3 +1,4 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -62,7 +63,7 @@ pub mod types {
         pub required: ::serde_json::Value,
     }
 
-    impl From<&UnoBody> for UnoBody {
+    impl ::std::convert::From<&UnoBody> for UnoBody {
         fn from(value: &UnoBody) -> Self {
             value.clone()
         }
@@ -132,6 +133,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/uno`
     pub async fn uno<'a>(

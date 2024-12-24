@@ -29,10 +29,9 @@ expectorate = { workspace = true }
 futures = { workspace = true }
 http = { workspace = true }
 hyper = { workspace = true }
+progenitor-client = { workspace = true }
 reqwest = { workspace = true }
 rustfmt-wrapper = { workspace = true }
 semver = { workspace = true }
 serde_yaml = { workspace = true }
 tokio = { workspace = true }
-
-progenitor-client.path = "../progenitor-client"

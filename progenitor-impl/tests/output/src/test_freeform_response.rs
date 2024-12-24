@@ -71,7 +71,7 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -139,6 +139,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/`
     pub async fn freeform_response<'a>(

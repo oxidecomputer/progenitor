@@ -1,3 +1,4 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -66,7 +67,7 @@ pub mod types {
         pub key: ::std::string::String,
     }
 
-    impl From<&EnrolBody> for EnrolBody {
+    impl ::std::convert::From<&EnrolBody> for EnrolBody {
         fn from(value: &EnrolBody) -> Self {
             value.clone()
         }
@@ -99,7 +100,7 @@ pub mod types {
         pub summary: ::std::vec::Vec<ReportSummary>,
     }
 
-    impl From<&GlobalJobsResult> for GlobalJobsResult {
+    impl ::std::convert::From<&GlobalJobsResult> for GlobalJobsResult {
         fn from(value: &GlobalJobsResult) -> Self {
             value.clone()
         }
@@ -139,7 +140,7 @@ pub mod types {
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&OutputRecord> for OutputRecord {
+    impl ::std::convert::From<&OutputRecord> for OutputRecord {
         fn from(value: &OutputRecord) -> Self {
             value.clone()
         }
@@ -174,7 +175,7 @@ pub mod types {
         pub ok: bool,
     }
 
-    impl From<&PingResult> for PingResult {
+    impl ::std::convert::From<&PingResult> for PingResult {
         fn from(value: &PingResult) -> Self {
             value.clone()
         }
@@ -222,7 +223,7 @@ pub mod types {
         pub id: ReportId,
     }
 
-    impl From<&ReportFinishBody> for ReportFinishBody {
+    impl ::std::convert::From<&ReportFinishBody> for ReportFinishBody {
         fn from(value: &ReportFinishBody) -> Self {
             value.clone()
         }
@@ -274,7 +275,7 @@ pub mod types {
         pub uuid: ::std::string::String,
     }
 
-    impl From<&ReportId> for ReportId {
+    impl ::std::convert::From<&ReportId> for ReportId {
         fn from(value: &ReportId) -> Self {
             value.clone()
         }
@@ -309,7 +310,7 @@ pub mod types {
         pub record: OutputRecord,
     }
 
-    impl From<&ReportOutputBody> for ReportOutputBody {
+    impl ::std::convert::From<&ReportOutputBody> for ReportOutputBody {
         fn from(value: &ReportOutputBody) -> Self {
             value.clone()
         }
@@ -339,7 +340,7 @@ pub mod types {
         pub existed_already: bool,
     }
 
-    impl From<&ReportResult> for ReportResult {
+    impl ::std::convert::From<&ReportResult> for ReportResult {
         fn from(value: &ReportResult) -> Self {
             value.clone()
         }
@@ -380,7 +381,7 @@ pub mod types {
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&ReportStartBody> for ReportStartBody {
+    impl ::std::convert::From<&ReportStartBody> for ReportStartBody {
         fn from(value: &ReportStartBody) -> Self {
             value.clone()
         }
@@ -438,7 +439,7 @@ pub mod types {
         pub when: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&ReportSummary> for ReportSummary {
+    impl ::std::convert::From<&ReportSummary> for ReportSummary {
         fn from(value: &ReportSummary) -> Self {
             value.clone()
         }
@@ -508,6 +509,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `POST` request to `/enrol`
     ///

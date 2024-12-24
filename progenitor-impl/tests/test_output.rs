@@ -51,7 +51,11 @@ fn verify_apis(openapi_file: &str) {
 
     // Positional generation.
     let mut generator = Generator::default();
-    let output = generate_formatted(&mut generator, &spec);
+    let output = format!(
+        "{}\n{}",
+        "#![allow(elided_named_lifetimes)]",
+        generate_formatted(&mut generator, &spec),
+    );
     expectorate::assert_contents(
         format!("tests/output/src/{}_positional.rs", openapi_stem),
         &output,

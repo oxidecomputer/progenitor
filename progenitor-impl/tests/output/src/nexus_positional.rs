@@ -1,3 +1,4 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -73,7 +74,7 @@ pub mod types {
         pub serial: ::std::string::String,
     }
 
-    impl From<&Baseboard> for Baseboard {
+    impl ::std::convert::From<&Baseboard> for Baseboard {
         fn from(value: &Baseboard) -> Self {
             value.clone()
         }
@@ -181,7 +182,7 @@ pub mod types {
         RangeFrom { start: f64 },
     }
 
-    impl From<&BinRangedouble> for BinRangedouble {
+    impl ::std::convert::From<&BinRangedouble> for BinRangedouble {
         fn from(value: &BinRangedouble) -> Self {
             value.clone()
         }
@@ -289,7 +290,7 @@ pub mod types {
         RangeFrom { start: i64 },
     }
 
-    impl From<&BinRangeint64> for BinRangeint64 {
+    impl ::std::convert::From<&BinRangeint64> for BinRangeint64 {
         fn from(value: &BinRangeint64) -> Self {
             value.clone()
         }
@@ -335,7 +336,7 @@ pub mod types {
         pub range: BinRangedouble,
     }
 
-    impl From<&Bindouble> for Bindouble {
+    impl ::std::convert::From<&Bindouble> for Bindouble {
         fn from(value: &Bindouble) -> Self {
             value.clone()
         }
@@ -381,7 +382,7 @@ pub mod types {
         pub range: BinRangeint64,
     }
 
-    impl From<&Binint64> for Binint64 {
+    impl ::std::convert::From<&Binint64> for Binint64 {
         fn from(value: &Binint64) -> Self {
             value.clone()
         }
@@ -404,6 +405,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug)]
+    #[serde(transparent)]
     pub struct BlockSize(i64);
     impl ::std::ops::Deref for BlockSize {
         type Target = i64;
@@ -412,13 +414,13 @@ pub mod types {
         }
     }
 
-    impl From<BlockSize> for i64 {
+    impl ::std::convert::From<BlockSize> for i64 {
         fn from(value: BlockSize) -> Self {
             value.0
         }
     }
 
-    impl From<&BlockSize> for BlockSize {
+    impl ::std::convert::From<&BlockSize> for BlockSize {
         fn from(value: &BlockSize) -> Self {
             value.clone()
         }
@@ -471,6 +473,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[serde(transparent)]
     pub struct ByteCount(pub u64);
     impl ::std::ops::Deref for ByteCount {
         type Target = u64;
@@ -479,46 +482,46 @@ pub mod types {
         }
     }
 
-    impl From<ByteCount> for u64 {
+    impl ::std::convert::From<ByteCount> for u64 {
         fn from(value: ByteCount) -> Self {
             value.0
         }
     }
 
-    impl From<&ByteCount> for ByteCount {
+    impl ::std::convert::From<&ByteCount> for ByteCount {
         fn from(value: &ByteCount) -> Self {
             value.clone()
         }
     }
 
-    impl From<u64> for ByteCount {
+    impl ::std::convert::From<u64> for ByteCount {
         fn from(value: u64) -> Self {
             Self(value)
         }
     }
 
-    impl std::str::FromStr for ByteCount {
+    impl ::std::str::FromStr for ByteCount {
         type Err = <u64 as ::std::str::FromStr>::Err;
         fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
         }
     }
 
-    impl std::convert::TryFrom<&str> for ByteCount {
+    impl ::std::convert::TryFrom<&str> for ByteCount {
         type Error = <u64 as ::std::str::FromStr>::Err;
         fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for ByteCount {
+    impl ::std::convert::TryFrom<&String> for ByteCount {
         type Error = <u64 as ::std::str::FromStr>::Err;
         fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for ByteCount {
+    impl ::std::convert::TryFrom<String> for ByteCount {
         type Error = <u64 as ::std::str::FromStr>::Err;
         fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
@@ -599,7 +602,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Certificate> for Certificate {
+    impl ::std::convert::From<&Certificate> for Certificate {
         fn from(value: &Certificate) -> Self {
             value.clone()
         }
@@ -671,7 +674,7 @@ pub mod types {
         pub service: ServiceUsingCertificate,
     }
 
-    impl From<&CertificateCreate> for CertificateCreate {
+    impl ::std::convert::From<&CertificateCreate> for CertificateCreate {
         fn from(value: &CertificateCreate) -> Self {
             value.clone()
         }
@@ -717,7 +720,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&CertificateResultsPage> for CertificateResultsPage {
+    impl ::std::convert::From<&CertificateResultsPage> for CertificateResultsPage {
         fn from(value: &CertificateResultsPage) -> Self {
             value.clone()
         }
@@ -779,7 +782,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&ComponentUpdate> for ComponentUpdate {
+    impl ::std::convert::From<&ComponentUpdate> for ComponentUpdate {
         fn from(value: &ComponentUpdate) -> Self {
             value.clone()
         }
@@ -825,7 +828,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&ComponentUpdateResultsPage> for ComponentUpdateResultsPage {
+    impl ::std::convert::From<&ComponentUpdateResultsPage> for ComponentUpdateResultsPage {
         fn from(value: &ComponentUpdateResultsPage) -> Self {
             value.clone()
         }
@@ -862,7 +865,7 @@ pub mod types {
         pub value: f64,
     }
 
-    impl From<&Cumulativedouble> for Cumulativedouble {
+    impl ::std::convert::From<&Cumulativedouble> for Cumulativedouble {
         fn from(value: &Cumulativedouble) -> Self {
             value.clone()
         }
@@ -899,7 +902,7 @@ pub mod types {
         pub value: i64,
     }
 
-    impl From<&Cumulativeint64> for Cumulativeint64 {
+    impl ::std::convert::From<&Cumulativeint64> for Cumulativeint64 {
         fn from(value: &Cumulativeint64) -> Self {
             value.clone()
         }
@@ -1110,55 +1113,55 @@ pub mod types {
         HistogramF64(Histogramdouble),
     }
 
-    impl From<&Datum> for Datum {
+    impl ::std::convert::From<&Datum> for Datum {
         fn from(value: &Datum) -> Self {
             value.clone()
         }
     }
 
-    impl From<bool> for Datum {
+    impl ::std::convert::From<bool> for Datum {
         fn from(value: bool) -> Self {
             Self::Bool(value)
         }
     }
 
-    impl From<i64> for Datum {
+    impl ::std::convert::From<i64> for Datum {
         fn from(value: i64) -> Self {
             Self::I64(value)
         }
     }
 
-    impl From<f64> for Datum {
+    impl ::std::convert::From<f64> for Datum {
         fn from(value: f64) -> Self {
             Self::F64(value)
         }
     }
 
-    impl From<::std::vec::Vec<u8>> for Datum {
+    impl ::std::convert::From<::std::vec::Vec<u8>> for Datum {
         fn from(value: ::std::vec::Vec<u8>) -> Self {
             Self::Bytes(value)
         }
     }
 
-    impl From<Cumulativeint64> for Datum {
+    impl ::std::convert::From<Cumulativeint64> for Datum {
         fn from(value: Cumulativeint64) -> Self {
             Self::CumulativeI64(value)
         }
     }
 
-    impl From<Cumulativedouble> for Datum {
+    impl ::std::convert::From<Cumulativedouble> for Datum {
         fn from(value: Cumulativedouble) -> Self {
             Self::CumulativeF64(value)
         }
     }
 
-    impl From<Histogramint64> for Datum {
+    impl ::std::convert::From<Histogramint64> for Datum {
         fn from(value: Histogramint64) -> Self {
             Self::HistogramI64(value)
         }
     }
 
-    impl From<Histogramdouble> for Datum {
+    impl ::std::convert::From<Histogramdouble> for Datum {
         fn from(value: Histogramdouble) -> Self {
             Self::HistogramF64(value)
         }
@@ -1219,7 +1222,7 @@ pub mod types {
         HistogramF64,
     }
 
-    impl From<&DatumType> for DatumType {
+    impl ::std::convert::From<&DatumType> for DatumType {
         fn from(value: &DatumType) -> Self {
             value.clone()
         }
@@ -1241,7 +1244,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for DatumType {
+    impl ::std::str::FromStr for DatumType {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -1259,14 +1262,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for DatumType {
+    impl ::std::convert::TryFrom<&str> for DatumType {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for DatumType {
+    impl ::std::convert::TryFrom<&::std::string::String> for DatumType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -1275,7 +1278,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for DatumType {
+    impl ::std::convert::TryFrom<::std::string::String> for DatumType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -1318,7 +1321,7 @@ pub mod types {
         pub public_cert: ::std::string::String,
     }
 
-    impl From<&DerEncodedKeyPair> for DerEncodedKeyPair {
+    impl ::std::convert::From<&DerEncodedKeyPair> for DerEncodedKeyPair {
         fn from(value: &DerEncodedKeyPair) -> Self {
             value.clone()
         }
@@ -1358,7 +1361,7 @@ pub mod types {
         pub grant_type: ::std::string::String,
     }
 
-    impl From<&DeviceAccessTokenRequest> for DeviceAccessTokenRequest {
+    impl ::std::convert::From<&DeviceAccessTokenRequest> for DeviceAccessTokenRequest {
         fn from(value: &DeviceAccessTokenRequest) -> Self {
             value.clone()
         }
@@ -1388,7 +1391,7 @@ pub mod types {
         pub client_id: uuid::Uuid,
     }
 
-    impl From<&DeviceAuthRequest> for DeviceAuthRequest {
+    impl ::std::convert::From<&DeviceAuthRequest> for DeviceAuthRequest {
         fn from(value: &DeviceAuthRequest) -> Self {
             value.clone()
         }
@@ -1417,7 +1420,7 @@ pub mod types {
         pub user_code: ::std::string::String,
     }
 
-    impl From<&DeviceAuthVerify> for DeviceAuthVerify {
+    impl ::std::convert::From<&DeviceAuthVerify> for DeviceAuthVerify {
         fn from(value: &DeviceAuthVerify) -> Self {
             value.clone()
         }
@@ -1459,7 +1462,7 @@ pub mod types {
         Sha256(::std::string::String),
     }
 
-    impl From<&Digest> for Digest {
+    impl ::std::convert::From<&Digest> for Digest {
         fn from(value: &Digest) -> Self {
             value.clone()
         }
@@ -1572,7 +1575,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Disk> for Disk {
+    impl ::std::convert::From<&Disk> for Disk {
         fn from(value: &Disk) -> Self {
             value.clone()
         }
@@ -1631,7 +1634,7 @@ pub mod types {
         pub size: ByteCount,
     }
 
-    impl From<&DiskCreate> for DiskCreate {
+    impl ::std::convert::From<&DiskCreate> for DiskCreate {
         fn from(value: &DiskCreate) -> Self {
             value.clone()
         }
@@ -1665,7 +1668,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&DiskIdentifier> for DiskIdentifier {
+    impl ::std::convert::From<&DiskIdentifier> for DiskIdentifier {
         fn from(value: &DiskIdentifier) -> Self {
             value.clone()
         }
@@ -1716,7 +1719,7 @@ pub mod types {
         WriteBytes,
     }
 
-    impl From<&DiskMetricName> for DiskMetricName {
+    impl ::std::convert::From<&DiskMetricName> for DiskMetricName {
         fn from(value: &DiskMetricName) -> Self {
             value.clone()
         }
@@ -1735,7 +1738,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for DiskMetricName {
+    impl ::std::str::FromStr for DiskMetricName {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -1750,14 +1753,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for DiskMetricName {
+    impl ::std::convert::TryFrom<&str> for DiskMetricName {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for DiskMetricName {
+    impl ::std::convert::TryFrom<&::std::string::String> for DiskMetricName {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -1766,7 +1769,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for DiskMetricName {
+    impl ::std::convert::TryFrom<::std::string::String> for DiskMetricName {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -1798,7 +1801,7 @@ pub mod types {
         pub disk: NameOrId,
     }
 
-    impl From<&DiskPath> for DiskPath {
+    impl ::std::convert::From<&DiskPath> for DiskPath {
         fn from(value: &DiskPath) -> Self {
             value.clone()
         }
@@ -1844,7 +1847,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&DiskResultsPage> for DiskResultsPage {
+    impl ::std::convert::From<&DiskResultsPage> for DiskResultsPage {
         fn from(value: &DiskResultsPage) -> Self {
             value.clone()
         }
@@ -1968,7 +1971,7 @@ pub mod types {
         GlobalImage { image_id: uuid::Uuid },
     }
 
-    impl From<&DiskSource> for DiskSource {
+    impl ::std::convert::From<&DiskSource> for DiskSource {
         fn from(value: &DiskSource) -> Self {
             value.clone()
         }
@@ -2128,7 +2131,7 @@ pub mod types {
         Faulted,
     }
 
-    impl From<&DiskState> for DiskState {
+    impl ::std::convert::From<&DiskState> for DiskState {
         fn from(value: &DiskState) -> Self {
             value.clone()
         }
@@ -2173,7 +2176,7 @@ pub mod types {
         pub version: ::std::string::String,
     }
 
-    impl From<&Distribution> for Distribution {
+    impl ::std::convert::From<&Distribution> for Distribution {
         fn from(value: &Distribution) -> Self {
             value.clone()
         }
@@ -2213,7 +2216,7 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -2248,7 +2251,7 @@ pub mod types {
         pub kind: IpKind,
     }
 
-    impl From<&ExternalIp> for ExternalIp {
+    impl ::std::convert::From<&ExternalIp> for ExternalIp {
         fn from(value: &ExternalIp) -> Self {
             value.clone()
         }
@@ -2311,7 +2314,7 @@ pub mod types {
         },
     }
 
-    impl From<&ExternalIpCreate> for ExternalIpCreate {
+    impl ::std::convert::From<&ExternalIpCreate> for ExternalIpCreate {
         fn from(value: &ExternalIpCreate) -> Self {
             value.clone()
         }
@@ -2357,7 +2360,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&ExternalIpResultsPage> for ExternalIpResultsPage {
+    impl ::std::convert::From<&ExternalIpResultsPage> for ExternalIpResultsPage {
         fn from(value: &ExternalIpResultsPage) -> Self {
             value.clone()
         }
@@ -2398,7 +2401,7 @@ pub mod types {
         pub ty: FieldType,
     }
 
-    impl From<&FieldSchema> for FieldSchema {
+    impl ::std::convert::From<&FieldSchema> for FieldSchema {
         fn from(value: &FieldSchema) -> Self {
             value.clone()
         }
@@ -2439,7 +2442,7 @@ pub mod types {
         Metric,
     }
 
-    impl From<&FieldSource> for FieldSource {
+    impl ::std::convert::From<&FieldSource> for FieldSource {
         fn from(value: &FieldSource) -> Self {
             value.clone()
         }
@@ -2454,7 +2457,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for FieldSource {
+    impl ::std::str::FromStr for FieldSource {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -2465,14 +2468,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for FieldSource {
+    impl ::std::convert::TryFrom<&str> for FieldSource {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for FieldSource {
+    impl ::std::convert::TryFrom<&::std::string::String> for FieldSource {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -2481,7 +2484,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for FieldSource {
+    impl ::std::convert::TryFrom<::std::string::String> for FieldSource {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -2534,7 +2537,7 @@ pub mod types {
         Bool,
     }
 
-    impl From<&FieldType> for FieldType {
+    impl ::std::convert::From<&FieldType> for FieldType {
         fn from(value: &FieldType) -> Self {
             value.clone()
         }
@@ -2552,7 +2555,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for FieldType {
+    impl ::std::str::FromStr for FieldType {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -2566,14 +2569,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for FieldType {
+    impl ::std::convert::TryFrom<&str> for FieldType {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for FieldType {
+    impl ::std::convert::TryFrom<&::std::string::String> for FieldType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -2582,7 +2585,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for FieldType {
+    impl ::std::convert::TryFrom<::std::string::String> for FieldType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -2627,7 +2630,7 @@ pub mod types {
         Viewer,
     }
 
-    impl From<&FleetRole> for FleetRole {
+    impl ::std::convert::From<&FleetRole> for FleetRole {
         fn from(value: &FleetRole) -> Self {
             value.clone()
         }
@@ -2643,7 +2646,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for FleetRole {
+    impl ::std::str::FromStr for FleetRole {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -2655,14 +2658,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for FleetRole {
+    impl ::std::convert::TryFrom<&str> for FleetRole {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for FleetRole {
+    impl ::std::convert::TryFrom<&::std::string::String> for FleetRole {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -2671,7 +2674,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for FleetRole {
+    impl ::std::convert::TryFrom<::std::string::String> for FleetRole {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -2717,7 +2720,7 @@ pub mod types {
         pub role_assignments: ::std::vec::Vec<FleetRoleRoleAssignment>,
     }
 
-    impl From<&FleetRolePolicy> for FleetRolePolicy {
+    impl ::std::convert::From<&FleetRolePolicy> for FleetRolePolicy {
         fn from(value: &FleetRolePolicy) -> Self {
             value.clone()
         }
@@ -2767,7 +2770,7 @@ pub mod types {
         pub role_name: FleetRole,
     }
 
-    impl From<&FleetRoleRoleAssignment> for FleetRoleRoleAssignment {
+    impl ::std::convert::From<&FleetRoleRoleAssignment> for FleetRoleRoleAssignment {
         fn from(value: &FleetRoleRoleAssignment) -> Self {
             value.clone()
         }
@@ -2900,7 +2903,7 @@ pub mod types {
         pub version: ::std::string::String,
     }
 
-    impl From<&GlobalImage> for GlobalImage {
+    impl ::std::convert::From<&GlobalImage> for GlobalImage {
         fn from(value: &GlobalImage) -> Self {
             value.clone()
         }
@@ -2970,7 +2973,7 @@ pub mod types {
         pub source: ImageSource,
     }
 
-    impl From<&GlobalImageCreate> for GlobalImageCreate {
+    impl ::std::convert::From<&GlobalImageCreate> for GlobalImageCreate {
         fn from(value: &GlobalImageCreate) -> Self {
             value.clone()
         }
@@ -3016,7 +3019,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&GlobalImageResultsPage> for GlobalImageResultsPage {
+    impl ::std::convert::From<&GlobalImageResultsPage> for GlobalImageResultsPage {
         fn from(value: &GlobalImageResultsPage) -> Self {
             value.clone()
         }
@@ -3062,7 +3065,7 @@ pub mod types {
         pub silo_id: uuid::Uuid,
     }
 
-    impl From<&Group> for Group {
+    impl ::std::convert::From<&Group> for Group {
         fn from(value: &Group) -> Self {
             value.clone()
         }
@@ -3108,7 +3111,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&GroupResultsPage> for GroupResultsPage {
+    impl ::std::convert::From<&GroupResultsPage> for GroupResultsPage {
         fn from(value: &GroupResultsPage) -> Self {
             value.clone()
         }
@@ -3226,7 +3229,7 @@ pub mod types {
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Histogramdouble> for Histogramdouble {
+    impl ::std::convert::From<&Histogramdouble> for Histogramdouble {
         fn from(value: &Histogramdouble) -> Self {
             value.clone()
         }
@@ -3344,7 +3347,7 @@ pub mod types {
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Histogramint64> for Histogramint64 {
+    impl ::std::convert::From<&Histogramint64> for Histogramint64 {
         fn from(value: &Histogramint64) -> Self {
             value.clone()
         }
@@ -3390,7 +3393,7 @@ pub mod types {
         IdAscending,
     }
 
-    impl From<&IdSortMode> for IdSortMode {
+    impl ::std::convert::From<&IdSortMode> for IdSortMode {
         fn from(value: &IdSortMode) -> Self {
             value.clone()
         }
@@ -3404,7 +3407,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for IdSortMode {
+    impl ::std::str::FromStr for IdSortMode {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -3414,14 +3417,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IdSortMode {
+    impl ::std::convert::TryFrom<&str> for IdSortMode {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for IdSortMode {
+    impl ::std::convert::TryFrom<&::std::string::String> for IdSortMode {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -3430,7 +3433,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for IdSortMode {
+    impl ::std::convert::TryFrom<::std::string::String> for IdSortMode {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -3513,7 +3516,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&IdentityProvider> for IdentityProvider {
+    impl ::std::convert::From<&IdentityProvider> for IdentityProvider {
         fn from(value: &IdentityProvider) -> Self {
             value.clone()
         }
@@ -3559,7 +3562,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&IdentityProviderResultsPage> for IdentityProviderResultsPage {
+    impl ::std::convert::From<&IdentityProviderResultsPage> for IdentityProviderResultsPage {
         fn from(value: &IdentityProviderResultsPage) -> Self {
             value.clone()
         }
@@ -3601,7 +3604,7 @@ pub mod types {
         Saml,
     }
 
-    impl From<&IdentityProviderType> for IdentityProviderType {
+    impl ::std::convert::From<&IdentityProviderType> for IdentityProviderType {
         fn from(value: &IdentityProviderType) -> Self {
             value.clone()
         }
@@ -3615,7 +3618,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for IdentityProviderType {
+    impl ::std::str::FromStr for IdentityProviderType {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -3625,14 +3628,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IdentityProviderType {
+    impl ::std::convert::TryFrom<&str> for IdentityProviderType {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for IdentityProviderType {
+    impl ::std::convert::TryFrom<&::std::string::String> for IdentityProviderType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -3641,7 +3644,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for IdentityProviderType {
+    impl ::std::convert::TryFrom<::std::string::String> for IdentityProviderType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -3684,7 +3687,7 @@ pub mod types {
         SiloGroup,
     }
 
-    impl From<&IdentityType> for IdentityType {
+    impl ::std::convert::From<&IdentityType> for IdentityType {
         fn from(value: &IdentityType) -> Self {
             value.clone()
         }
@@ -3699,7 +3702,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for IdentityType {
+    impl ::std::str::FromStr for IdentityType {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -3710,14 +3713,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IdentityType {
+    impl ::std::convert::TryFrom<&str> for IdentityType {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for IdentityType {
+    impl ::std::convert::TryFrom<&::std::string::String> for IdentityType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -3726,7 +3729,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for IdentityType {
+    impl ::std::convert::TryFrom<::std::string::String> for IdentityType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -3791,7 +3794,7 @@ pub mod types {
         Base64EncodedXml { data: ::std::string::String },
     }
 
-    impl From<&IdpMetadataSource> for IdpMetadataSource {
+    impl ::std::convert::From<&IdpMetadataSource> for IdpMetadataSource {
         fn from(value: &IdpMetadataSource) -> Self {
             value.clone()
         }
@@ -3928,7 +3931,7 @@ pub mod types {
         pub version: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&Image> for Image {
+    impl ::std::convert::From<&Image> for Image {
         fn from(value: &Image) -> Self {
             value.clone()
         }
@@ -3987,7 +3990,7 @@ pub mod types {
         pub source: ImageSource,
     }
 
-    impl From<&ImageCreate> for ImageCreate {
+    impl ::std::convert::From<&ImageCreate> for ImageCreate {
         fn from(value: &ImageCreate) -> Self {
             value.clone()
         }
@@ -4033,7 +4036,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&ImageResultsPage> for ImageResultsPage {
+    impl ::std::convert::From<&ImageResultsPage> for ImageResultsPage {
         fn from(value: &ImageResultsPage) -> Self {
             value.clone()
         }
@@ -4115,7 +4118,7 @@ pub mod types {
         YouCanBootAnythingAsLongAsItsAlpine,
     }
 
-    impl From<&ImageSource> for ImageSource {
+    impl ::std::convert::From<&ImageSource> for ImageSource {
         fn from(value: &ImageSource) -> Self {
             value.clone()
         }
@@ -4232,7 +4235,7 @@ pub mod types {
         pub time_run_state_updated: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Instance> for Instance {
+    impl ::std::convert::From<&Instance> for Instance {
         fn from(value: &Instance) -> Self {
             value.clone()
         }
@@ -4252,6 +4255,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[serde(transparent)]
     pub struct InstanceCpuCount(pub u16);
     impl ::std::ops::Deref for InstanceCpuCount {
         type Target = u16;
@@ -4260,46 +4264,46 @@ pub mod types {
         }
     }
 
-    impl From<InstanceCpuCount> for u16 {
+    impl ::std::convert::From<InstanceCpuCount> for u16 {
         fn from(value: InstanceCpuCount) -> Self {
             value.0
         }
     }
 
-    impl From<&InstanceCpuCount> for InstanceCpuCount {
+    impl ::std::convert::From<&InstanceCpuCount> for InstanceCpuCount {
         fn from(value: &InstanceCpuCount) -> Self {
             value.clone()
         }
     }
 
-    impl From<u16> for InstanceCpuCount {
+    impl ::std::convert::From<u16> for InstanceCpuCount {
         fn from(value: u16) -> Self {
             Self(value)
         }
     }
 
-    impl std::str::FromStr for InstanceCpuCount {
+    impl ::std::str::FromStr for InstanceCpuCount {
         type Err = <u16 as ::std::str::FromStr>::Err;
         fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceCpuCount {
+    impl ::std::convert::TryFrom<&str> for InstanceCpuCount {
         type Error = <u16 as ::std::str::FromStr>::Err;
         fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceCpuCount {
+    impl ::std::convert::TryFrom<&String> for InstanceCpuCount {
         type Error = <u16 as ::std::str::FromStr>::Err;
         fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceCpuCount {
+    impl ::std::convert::TryFrom<String> for InstanceCpuCount {
         type Error = <u16 as ::std::str::FromStr>::Err;
         fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
@@ -4429,7 +4433,7 @@ pub mod types {
         pub user_data: ::std::string::String,
     }
 
-    impl From<&InstanceCreate> for InstanceCreate {
+    impl ::std::convert::From<&InstanceCreate> for InstanceCreate {
         fn from(value: &InstanceCreate) -> Self {
             value.clone()
         }
@@ -4533,7 +4537,7 @@ pub mod types {
         },
     }
 
-    impl From<&InstanceDiskAttachment> for InstanceDiskAttachment {
+    impl ::std::convert::From<&InstanceDiskAttachment> for InstanceDiskAttachment {
         fn from(value: &InstanceDiskAttachment) -> Self {
             value.clone()
         }
@@ -4566,7 +4570,7 @@ pub mod types {
         pub dst_sled_id: uuid::Uuid,
     }
 
-    impl From<&InstanceMigrate> for InstanceMigrate {
+    impl ::std::convert::From<&InstanceMigrate> for InstanceMigrate {
         fn from(value: &InstanceMigrate) -> Self {
             value.clone()
         }
@@ -4659,13 +4663,17 @@ pub mod types {
         None,
     }
 
-    impl From<&InstanceNetworkInterfaceAttachment> for InstanceNetworkInterfaceAttachment {
+    impl ::std::convert::From<&InstanceNetworkInterfaceAttachment>
+        for InstanceNetworkInterfaceAttachment
+    {
         fn from(value: &InstanceNetworkInterfaceAttachment) -> Self {
             value.clone()
         }
     }
 
-    impl From<::std::vec::Vec<NetworkInterfaceCreate>> for InstanceNetworkInterfaceAttachment {
+    impl ::std::convert::From<::std::vec::Vec<NetworkInterfaceCreate>>
+        for InstanceNetworkInterfaceAttachment
+    {
         fn from(value: ::std::vec::Vec<NetworkInterfaceCreate>) -> Self {
             Self::Create(value)
         }
@@ -4711,7 +4719,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&InstanceResultsPage> for InstanceResultsPage {
+    impl ::std::convert::From<&InstanceResultsPage> for InstanceResultsPage {
         fn from(value: &InstanceResultsPage) -> Self {
             value.clone()
         }
@@ -4764,7 +4772,7 @@ pub mod types {
         pub last_byte_offset: u64,
     }
 
-    impl From<&InstanceSerialConsoleData> for InstanceSerialConsoleData {
+    impl ::std::convert::From<&InstanceSerialConsoleData> for InstanceSerialConsoleData {
         fn from(value: &InstanceSerialConsoleData) -> Self {
             value.clone()
         }
@@ -4911,7 +4919,7 @@ pub mod types {
         Destroyed,
     }
 
-    impl From<&InstanceState> for InstanceState {
+    impl ::std::convert::From<&InstanceState> for InstanceState {
         fn from(value: &InstanceState) -> Self {
             value.clone()
         }
@@ -4934,7 +4942,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for InstanceState {
+    impl ::std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -4953,14 +4961,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceState {
+    impl ::std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for InstanceState {
+    impl ::std::convert::TryFrom<&::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -4969,7 +4977,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for InstanceState {
+    impl ::std::convert::TryFrom<::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -5012,7 +5020,7 @@ pub mod types {
         Floating,
     }
 
-    impl From<&IpKind> for IpKind {
+    impl ::std::convert::From<&IpKind> for IpKind {
         fn from(value: &IpKind) -> Self {
             value.clone()
         }
@@ -5027,7 +5035,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for IpKind {
+    impl ::std::str::FromStr for IpKind {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -5038,14 +5046,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IpKind {
+    impl ::std::convert::TryFrom<&str> for IpKind {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for IpKind {
+    impl ::std::convert::TryFrom<&::std::string::String> for IpKind {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -5054,7 +5062,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for IpKind {
+    impl ::std::convert::TryFrom<::std::string::String> for IpKind {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -5097,13 +5105,13 @@ pub mod types {
         V6(Ipv6Net),
     }
 
-    impl From<&IpNet> for IpNet {
+    impl ::std::convert::From<&IpNet> for IpNet {
         fn from(value: &IpNet) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for IpNet {
+    impl ::std::str::FromStr for IpNet {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if let Ok(v) = value.parse() {
@@ -5116,14 +5124,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IpNet {
+    impl ::std::convert::TryFrom<&str> for IpNet {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for IpNet {
+    impl ::std::convert::TryFrom<&::std::string::String> for IpNet {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -5132,7 +5140,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for IpNet {
+    impl ::std::convert::TryFrom<::std::string::String> for IpNet {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -5150,13 +5158,13 @@ pub mod types {
         }
     }
 
-    impl From<Ipv4Net> for IpNet {
+    impl ::std::convert::From<Ipv4Net> for IpNet {
         fn from(value: Ipv4Net) -> Self {
             Self::V4(value)
         }
     }
 
-    impl From<Ipv6Net> for IpNet {
+    impl ::std::convert::From<Ipv6Net> for IpNet {
         fn from(value: Ipv6Net) -> Self {
             Self::V6(value)
         }
@@ -5227,7 +5235,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&IpPool> for IpPool {
+    impl ::std::convert::From<&IpPool> for IpPool {
         fn from(value: &IpPool) -> Self {
             value.clone()
         }
@@ -5265,7 +5273,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&IpPoolCreate> for IpPoolCreate {
+    impl ::std::convert::From<&IpPoolCreate> for IpPoolCreate {
         fn from(value: &IpPoolCreate) -> Self {
             value.clone()
         }
@@ -5306,7 +5314,7 @@ pub mod types {
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&IpPoolRange> for IpPoolRange {
+    impl ::std::convert::From<&IpPoolRange> for IpPoolRange {
         fn from(value: &IpPoolRange) -> Self {
             value.clone()
         }
@@ -5352,7 +5360,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&IpPoolRangeResultsPage> for IpPoolRangeResultsPage {
+    impl ::std::convert::From<&IpPoolRangeResultsPage> for IpPoolRangeResultsPage {
         fn from(value: &IpPoolRangeResultsPage) -> Self {
             value.clone()
         }
@@ -5398,7 +5406,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&IpPoolResultsPage> for IpPoolResultsPage {
+    impl ::std::convert::From<&IpPoolResultsPage> for IpPoolResultsPage {
         fn from(value: &IpPoolResultsPage) -> Self {
             value.clone()
         }
@@ -5445,9 +5453,18 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&IpPoolUpdate> for IpPoolUpdate {
+    impl ::std::convert::From<&IpPoolUpdate> for IpPoolUpdate {
         fn from(value: &IpPoolUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for IpPoolUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -5485,19 +5502,19 @@ pub mod types {
         V6(Ipv6Range),
     }
 
-    impl From<&IpRange> for IpRange {
+    impl ::std::convert::From<&IpRange> for IpRange {
         fn from(value: &IpRange) -> Self {
             value.clone()
         }
     }
 
-    impl From<Ipv4Range> for IpRange {
+    impl ::std::convert::From<Ipv4Range> for IpRange {
         fn from(value: Ipv4Range) -> Self {
             Self::V4(value)
         }
     }
 
-    impl From<Ipv6Range> for IpRange {
+    impl ::std::convert::From<Ipv6Range> for IpRange {
         fn from(value: Ipv6Range) -> Self {
             Self::V6(value)
         }
@@ -5523,6 +5540,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct Ipv4Net(::std::string::String);
     impl ::std::ops::Deref for Ipv4Net {
         type Target = ::std::string::String;
@@ -5531,13 +5549,13 @@ pub mod types {
         }
     }
 
-    impl From<Ipv4Net> for ::std::string::String {
+    impl ::std::convert::From<Ipv4Net> for ::std::string::String {
         fn from(value: Ipv4Net) -> Self {
             value.0
         }
     }
 
-    impl From<&Ipv4Net> for Ipv4Net {
+    impl ::std::convert::From<&Ipv4Net> for Ipv4Net {
         fn from(value: &Ipv4Net) -> Self {
             value.clone()
         }
@@ -5638,7 +5656,7 @@ pub mod types {
         pub last: std::net::Ipv4Addr,
     }
 
-    impl From<&Ipv4Range> for Ipv4Range {
+    impl ::std::convert::From<&Ipv4Range> for Ipv4Range {
         fn from(value: &Ipv4Range) -> Self {
             value.clone()
         }
@@ -5663,6 +5681,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct Ipv6Net(::std::string::String);
     impl ::std::ops::Deref for Ipv6Net {
         type Target = ::std::string::String;
@@ -5671,13 +5690,13 @@ pub mod types {
         }
     }
 
-    impl From<Ipv6Net> for ::std::string::String {
+    impl ::std::convert::From<Ipv6Net> for ::std::string::String {
         fn from(value: Ipv6Net) -> Self {
             value.0
         }
     }
 
-    impl From<&Ipv6Net> for Ipv6Net {
+    impl ::std::convert::From<&Ipv6Net> for Ipv6Net {
         fn from(value: &Ipv6Net) -> Self {
             value.clone()
         }
@@ -5777,7 +5796,7 @@ pub mod types {
         pub last: std::net::Ipv6Addr,
     }
 
-    impl From<&Ipv6Range> for Ipv6Range {
+    impl ::std::convert::From<&Ipv6Range> for Ipv6Range {
         fn from(value: &Ipv6Range) -> Self {
             value.clone()
         }
@@ -5804,6 +5823,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct L4PortRange(::std::string::String);
     impl ::std::ops::Deref for L4PortRange {
         type Target = ::std::string::String;
@@ -5812,13 +5832,13 @@ pub mod types {
         }
     }
 
-    impl From<L4PortRange> for ::std::string::String {
+    impl ::std::convert::From<L4PortRange> for ::std::string::String {
         fn from(value: L4PortRange) -> Self {
             value.0
         }
     }
 
-    impl From<&L4PortRange> for L4PortRange {
+    impl ::std::convert::From<&L4PortRange> for L4PortRange {
         fn from(value: &L4PortRange) -> Self {
             value.clone()
         }
@@ -5901,6 +5921,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct MacAddr(::std::string::String);
     impl ::std::ops::Deref for MacAddr {
         type Target = ::std::string::String;
@@ -5909,13 +5930,13 @@ pub mod types {
         }
     }
 
-    impl From<MacAddr> for ::std::string::String {
+    impl ::std::convert::From<MacAddr> for ::std::string::String {
         fn from(value: MacAddr) -> Self {
             value.0
         }
     }
 
-    impl From<&MacAddr> for MacAddr {
+    impl ::std::convert::From<&MacAddr> for MacAddr {
         fn from(value: &MacAddr) -> Self {
             value.clone()
         }
@@ -6012,7 +6033,7 @@ pub mod types {
         pub timestamp: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Measurement> for Measurement {
+    impl ::std::convert::From<&Measurement> for Measurement {
         fn from(value: &Measurement) -> Self {
             value.clone()
         }
@@ -6058,7 +6079,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&MeasurementResultsPage> for MeasurementResultsPage {
+    impl ::std::convert::From<&MeasurementResultsPage> for MeasurementResultsPage {
         fn from(value: &MeasurementResultsPage) -> Self {
             value.clone()
         }
@@ -6086,6 +6107,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct Name(::std::string::String);
     impl ::std::ops::Deref for Name {
         type Target = ::std::string::String;
@@ -6094,13 +6116,13 @@ pub mod types {
         }
     }
 
-    impl From<Name> for ::std::string::String {
+    impl ::std::convert::From<Name> for ::std::string::String {
         fn from(value: Name) -> Self {
             value.0
         }
     }
 
-    impl From<&Name> for Name {
+    impl ::std::convert::From<&Name> for Name {
         fn from(value: &Name) -> Self {
             value.clone()
         }
@@ -6190,13 +6212,13 @@ pub mod types {
         Name(Name),
     }
 
-    impl From<&NameOrId> for NameOrId {
+    impl ::std::convert::From<&NameOrId> for NameOrId {
         fn from(value: &NameOrId) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for NameOrId {
+    impl ::std::str::FromStr for NameOrId {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if let Ok(v) = value.parse() {
@@ -6209,14 +6231,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for NameOrId {
+    impl ::std::convert::TryFrom<&str> for NameOrId {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for NameOrId {
+    impl ::std::convert::TryFrom<&::std::string::String> for NameOrId {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -6225,7 +6247,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for NameOrId {
+    impl ::std::convert::TryFrom<::std::string::String> for NameOrId {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -6243,13 +6265,13 @@ pub mod types {
         }
     }
 
-    impl From<uuid::Uuid> for NameOrId {
+    impl ::std::convert::From<uuid::Uuid> for NameOrId {
         fn from(value: uuid::Uuid) -> Self {
             Self::Id(value)
         }
     }
 
-    impl From<Name> for NameOrId {
+    impl ::std::convert::From<Name> for NameOrId {
         fn from(value: Name) -> Self {
             Self::Name(value)
         }
@@ -6313,7 +6335,7 @@ pub mod types {
         IdAscending,
     }
 
-    impl From<&NameOrIdSortMode> for NameOrIdSortMode {
+    impl ::std::convert::From<&NameOrIdSortMode> for NameOrIdSortMode {
         fn from(value: &NameOrIdSortMode) -> Self {
             value.clone()
         }
@@ -6329,7 +6351,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for NameOrIdSortMode {
+    impl ::std::str::FromStr for NameOrIdSortMode {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -6341,14 +6363,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for NameOrIdSortMode {
+    impl ::std::convert::TryFrom<&str> for NameOrIdSortMode {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for NameOrIdSortMode {
+    impl ::std::convert::TryFrom<&::std::string::String> for NameOrIdSortMode {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -6357,7 +6379,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for NameOrIdSortMode {
+    impl ::std::convert::TryFrom<::std::string::String> for NameOrIdSortMode {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -6406,7 +6428,7 @@ pub mod types {
         NameAscending,
     }
 
-    impl From<&NameSortMode> for NameSortMode {
+    impl ::std::convert::From<&NameSortMode> for NameSortMode {
         fn from(value: &NameSortMode) -> Self {
             value.clone()
         }
@@ -6420,7 +6442,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for NameSortMode {
+    impl ::std::str::FromStr for NameSortMode {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -6430,14 +6452,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for NameSortMode {
+    impl ::std::convert::TryFrom<&str> for NameSortMode {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for NameSortMode {
+    impl ::std::convert::TryFrom<&::std::string::String> for NameSortMode {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -6446,7 +6468,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for NameSortMode {
+    impl ::std::convert::TryFrom<::std::string::String> for NameSortMode {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -6571,7 +6593,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    impl From<&NetworkInterface> for NetworkInterface {
+    impl ::std::convert::From<&NetworkInterface> for NetworkInterface {
         fn from(value: &NetworkInterface) -> Self {
             value.clone()
         }
@@ -6642,7 +6664,7 @@ pub mod types {
         pub vpc_name: Name,
     }
 
-    impl From<&NetworkInterfaceCreate> for NetworkInterfaceCreate {
+    impl ::std::convert::From<&NetworkInterfaceCreate> for NetworkInterfaceCreate {
         fn from(value: &NetworkInterfaceCreate) -> Self {
             value.clone()
         }
@@ -6688,7 +6710,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&NetworkInterfaceResultsPage> for NetworkInterfaceResultsPage {
+    impl ::std::convert::From<&NetworkInterfaceResultsPage> for NetworkInterfaceResultsPage {
         fn from(value: &NetworkInterfaceResultsPage) -> Self {
             value.clone()
         }
@@ -6767,9 +6789,19 @@ pub mod types {
         pub primary: bool,
     }
 
-    impl From<&NetworkInterfaceUpdate> for NetworkInterfaceUpdate {
+    impl ::std::convert::From<&NetworkInterfaceUpdate> for NetworkInterfaceUpdate {
         fn from(value: &NetworkInterfaceUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for NetworkInterfaceUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+                primary: Default::default(),
+            }
         }
     }
 
@@ -6803,6 +6835,7 @@ pub mod types {
         PartialEq,
         PartialOrd,
     )]
+    #[serde(transparent)]
     pub struct NodeName(pub ::std::string::String);
     impl ::std::ops::Deref for NodeName {
         type Target = ::std::string::String;
@@ -6811,19 +6844,19 @@ pub mod types {
         }
     }
 
-    impl From<NodeName> for ::std::string::String {
+    impl ::std::convert::From<NodeName> for ::std::string::String {
         fn from(value: NodeName) -> Self {
             value.0
         }
     }
 
-    impl From<&NodeName> for NodeName {
+    impl ::std::convert::From<&NodeName> for NodeName {
         fn from(value: &NodeName) -> Self {
             value.clone()
         }
     }
 
-    impl From<::std::string::String> for NodeName {
+    impl ::std::convert::From<::std::string::String> for NodeName {
         fn from(value: ::std::string::String) -> Self {
             Self(value)
         }
@@ -6905,7 +6938,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Organization> for Organization {
+    impl ::std::convert::From<&Organization> for Organization {
         fn from(value: &Organization) -> Self {
             value.clone()
         }
@@ -6942,7 +6975,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&OrganizationCreate> for OrganizationCreate {
+    impl ::std::convert::From<&OrganizationCreate> for OrganizationCreate {
         fn from(value: &OrganizationCreate) -> Self {
             value.clone()
         }
@@ -6988,7 +7021,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&OrganizationResultsPage> for OrganizationResultsPage {
+    impl ::std::convert::From<&OrganizationResultsPage> for OrganizationResultsPage {
         fn from(value: &OrganizationResultsPage) -> Self {
             value.clone()
         }
@@ -7030,7 +7063,7 @@ pub mod types {
         Viewer,
     }
 
-    impl From<&OrganizationRole> for OrganizationRole {
+    impl ::std::convert::From<&OrganizationRole> for OrganizationRole {
         fn from(value: &OrganizationRole) -> Self {
             value.clone()
         }
@@ -7046,7 +7079,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for OrganizationRole {
+    impl ::std::str::FromStr for OrganizationRole {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -7058,14 +7091,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for OrganizationRole {
+    impl ::std::convert::TryFrom<&str> for OrganizationRole {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for OrganizationRole {
+    impl ::std::convert::TryFrom<&::std::string::String> for OrganizationRole {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -7074,7 +7107,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for OrganizationRole {
+    impl ::std::convert::TryFrom<::std::string::String> for OrganizationRole {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -7120,7 +7153,7 @@ pub mod types {
         pub role_assignments: ::std::vec::Vec<OrganizationRoleRoleAssignment>,
     }
 
-    impl From<&OrganizationRolePolicy> for OrganizationRolePolicy {
+    impl ::std::convert::From<&OrganizationRolePolicy> for OrganizationRolePolicy {
         fn from(value: &OrganizationRolePolicy) -> Self {
             value.clone()
         }
@@ -7170,7 +7203,7 @@ pub mod types {
         pub role_name: OrganizationRole,
     }
 
-    impl From<&OrganizationRoleRoleAssignment> for OrganizationRoleRoleAssignment {
+    impl ::std::convert::From<&OrganizationRoleRoleAssignment> for OrganizationRoleRoleAssignment {
         fn from(value: &OrganizationRoleRoleAssignment) -> Self {
             value.clone()
         }
@@ -7219,9 +7252,18 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&OrganizationUpdate> for OrganizationUpdate {
+    impl ::std::convert::From<&OrganizationUpdate> for OrganizationUpdate {
         fn from(value: &OrganizationUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for OrganizationUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -7239,6 +7281,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct Password(::std::string::String);
     impl ::std::ops::Deref for Password {
         type Target = ::std::string::String;
@@ -7247,13 +7290,13 @@ pub mod types {
         }
     }
 
-    impl From<Password> for ::std::string::String {
+    impl ::std::convert::From<Password> for ::std::string::String {
         fn from(value: Password) -> Self {
             value.0
         }
     }
 
-    impl From<&Password> for Password {
+    impl ::std::convert::From<&Password> for Password {
         fn from(value: &Password) -> Self {
             value.clone()
         }
@@ -7382,7 +7425,7 @@ pub mod types {
         pub vendor: ::std::string::String,
     }
 
-    impl From<&PhysicalDisk> for PhysicalDisk {
+    impl ::std::convert::From<&PhysicalDisk> for PhysicalDisk {
         fn from(value: &PhysicalDisk) -> Self {
             value.clone()
         }
@@ -7428,7 +7471,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&PhysicalDiskResultsPage> for PhysicalDiskResultsPage {
+    impl ::std::convert::From<&PhysicalDiskResultsPage> for PhysicalDiskResultsPage {
         fn from(value: &PhysicalDiskResultsPage) -> Self {
             value.clone()
         }
@@ -7467,7 +7510,7 @@ pub mod types {
         External,
     }
 
-    impl From<&PhysicalDiskType> for PhysicalDiskType {
+    impl ::std::convert::From<&PhysicalDiskType> for PhysicalDiskType {
         fn from(value: &PhysicalDiskType) -> Self {
             value.clone()
         }
@@ -7482,7 +7525,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for PhysicalDiskType {
+    impl ::std::str::FromStr for PhysicalDiskType {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -7493,14 +7536,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for PhysicalDiskType {
+    impl ::std::convert::TryFrom<&str> for PhysicalDiskType {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for PhysicalDiskType {
+    impl ::std::convert::TryFrom<&::std::string::String> for PhysicalDiskType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -7509,7 +7552,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for PhysicalDiskType {
+    impl ::std::convert::TryFrom<::std::string::String> for PhysicalDiskType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -7587,7 +7630,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Project> for Project {
+    impl ::std::convert::From<&Project> for Project {
         fn from(value: &Project) -> Self {
             value.clone()
         }
@@ -7624,7 +7667,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&ProjectCreate> for ProjectCreate {
+    impl ::std::convert::From<&ProjectCreate> for ProjectCreate {
         fn from(value: &ProjectCreate) -> Self {
             value.clone()
         }
@@ -7670,7 +7713,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&ProjectResultsPage> for ProjectResultsPage {
+    impl ::std::convert::From<&ProjectResultsPage> for ProjectResultsPage {
         fn from(value: &ProjectResultsPage) -> Self {
             value.clone()
         }
@@ -7712,7 +7755,7 @@ pub mod types {
         Viewer,
     }
 
-    impl From<&ProjectRole> for ProjectRole {
+    impl ::std::convert::From<&ProjectRole> for ProjectRole {
         fn from(value: &ProjectRole) -> Self {
             value.clone()
         }
@@ -7728,7 +7771,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for ProjectRole {
+    impl ::std::str::FromStr for ProjectRole {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -7740,14 +7783,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for ProjectRole {
+    impl ::std::convert::TryFrom<&str> for ProjectRole {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for ProjectRole {
+    impl ::std::convert::TryFrom<&::std::string::String> for ProjectRole {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -7756,7 +7799,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for ProjectRole {
+    impl ::std::convert::TryFrom<::std::string::String> for ProjectRole {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -7802,7 +7845,7 @@ pub mod types {
         pub role_assignments: ::std::vec::Vec<ProjectRoleRoleAssignment>,
     }
 
-    impl From<&ProjectRolePolicy> for ProjectRolePolicy {
+    impl ::std::convert::From<&ProjectRolePolicy> for ProjectRolePolicy {
         fn from(value: &ProjectRolePolicy) -> Self {
             value.clone()
         }
@@ -7852,7 +7895,7 @@ pub mod types {
         pub role_name: ProjectRole,
     }
 
-    impl From<&ProjectRoleRoleAssignment> for ProjectRoleRoleAssignment {
+    impl ::std::convert::From<&ProjectRoleRoleAssignment> for ProjectRoleRoleAssignment {
         fn from(value: &ProjectRoleRoleAssignment) -> Self {
             value.clone()
         }
@@ -7901,9 +7944,18 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&ProjectUpdate> for ProjectUpdate {
+    impl ::std::convert::From<&ProjectUpdate> for ProjectUpdate {
         fn from(value: &ProjectUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for ProjectUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -7951,7 +8003,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Rack> for Rack {
+    impl ::std::convert::From<&Rack> for Rack {
         fn from(value: &Rack) -> Self {
             value.clone()
         }
@@ -7997,7 +8049,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&RackResultsPage> for RackResultsPage {
+    impl ::std::convert::From<&RackResultsPage> for RackResultsPage {
         fn from(value: &RackResultsPage) -> Self {
             value.clone()
         }
@@ -8032,7 +8084,7 @@ pub mod types {
         pub name: RoleName,
     }
 
-    impl From<&Role> for Role {
+    impl ::std::convert::From<&Role> for Role {
         fn from(value: &Role) -> Self {
             value.clone()
         }
@@ -8054,6 +8106,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct RoleName(::std::string::String);
     impl ::std::ops::Deref for RoleName {
         type Target = ::std::string::String;
@@ -8062,13 +8115,13 @@ pub mod types {
         }
     }
 
-    impl From<RoleName> for ::std::string::String {
+    impl ::std::convert::From<RoleName> for ::std::string::String {
         fn from(value: RoleName) -> Self {
             value.0
         }
     }
 
-    impl From<&RoleName> for RoleName {
+    impl ::std::convert::From<&RoleName> for RoleName {
         fn from(value: &RoleName) -> Self {
             value.clone()
         }
@@ -8169,7 +8222,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&RoleResultsPage> for RoleResultsPage {
+    impl ::std::convert::From<&RoleResultsPage> for RoleResultsPage {
         fn from(value: &RoleResultsPage) -> Self {
             value.clone()
         }
@@ -8293,19 +8346,19 @@ pub mod types {
         Subnet(Name),
     }
 
-    impl From<&RouteDestination> for RouteDestination {
+    impl ::std::convert::From<&RouteDestination> for RouteDestination {
         fn from(value: &RouteDestination) -> Self {
             value.clone()
         }
     }
 
-    impl From<std::net::IpAddr> for RouteDestination {
+    impl ::std::convert::From<std::net::IpAddr> for RouteDestination {
         fn from(value: std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
 
-    impl From<IpNet> for RouteDestination {
+    impl ::std::convert::From<IpNet> for RouteDestination {
         fn from(value: IpNet) -> Self {
             Self::IpNet(value)
         }
@@ -8441,13 +8494,13 @@ pub mod types {
         InternetGateway(Name),
     }
 
-    impl From<&RouteTarget> for RouteTarget {
+    impl ::std::convert::From<&RouteTarget> for RouteTarget {
         fn from(value: &RouteTarget) -> Self {
             value.clone()
         }
     }
 
-    impl From<std::net::IpAddr> for RouteTarget {
+    impl ::std::convert::From<std::net::IpAddr> for RouteTarget {
         fn from(value: std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
@@ -8548,7 +8601,7 @@ pub mod types {
         pub vpc_router_id: uuid::Uuid,
     }
 
-    impl From<&RouterRoute> for RouterRoute {
+    impl ::std::convert::From<&RouterRoute> for RouterRoute {
         fn from(value: &RouterRoute) -> Self {
             value.clone()
         }
@@ -8593,7 +8646,7 @@ pub mod types {
         pub target: RouteTarget,
     }
 
-    impl From<&RouterRouteCreateParams> for RouterRouteCreateParams {
+    impl ::std::convert::From<&RouterRouteCreateParams> for RouterRouteCreateParams {
         fn from(value: &RouterRouteCreateParams) -> Self {
             value.clone()
         }
@@ -8684,7 +8737,7 @@ pub mod types {
         Custom,
     }
 
-    impl From<&RouterRouteKind> for RouterRouteKind {
+    impl ::std::convert::From<&RouterRouteKind> for RouterRouteKind {
         fn from(value: &RouterRouteKind) -> Self {
             value.clone()
         }
@@ -8701,7 +8754,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for RouterRouteKind {
+    impl ::std::str::FromStr for RouterRouteKind {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -8714,14 +8767,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for RouterRouteKind {
+    impl ::std::convert::TryFrom<&str> for RouterRouteKind {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for RouterRouteKind {
+    impl ::std::convert::TryFrom<&::std::string::String> for RouterRouteKind {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -8730,7 +8783,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for RouterRouteKind {
+    impl ::std::convert::TryFrom<::std::string::String> for RouterRouteKind {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -8779,7 +8832,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&RouterRouteResultsPage> for RouterRouteResultsPage {
+    impl ::std::convert::From<&RouterRouteResultsPage> for RouterRouteResultsPage {
         fn from(value: &RouterRouteResultsPage) -> Self {
             value.clone()
         }
@@ -8838,7 +8891,7 @@ pub mod types {
         pub target: RouteTarget,
     }
 
-    impl From<&RouterRouteUpdateParams> for RouterRouteUpdateParams {
+    impl ::std::convert::From<&RouterRouteUpdateParams> for RouterRouteUpdateParams {
         fn from(value: &RouterRouteUpdateParams) -> Self {
             value.clone()
         }
@@ -8873,7 +8926,7 @@ pub mod types {
         pub state: SagaState,
     }
 
-    impl From<&Saga> for Saga {
+    impl ::std::convert::From<&Saga> for Saga {
         fn from(value: &Saga) -> Self {
             value.clone()
         }
@@ -8989,7 +9042,7 @@ pub mod types {
         SubsagaCreateFailed { message: ::std::string::String },
     }
 
-    impl From<&SagaErrorInfo> for SagaErrorInfo {
+    impl ::std::convert::From<&SagaErrorInfo> for SagaErrorInfo {
         fn from(value: &SagaErrorInfo) -> Self {
             value.clone()
         }
@@ -9035,7 +9088,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SagaResultsPage> for SagaResultsPage {
+    impl ::std::convert::From<&SagaResultsPage> for SagaResultsPage {
         fn from(value: &SagaResultsPage) -> Self {
             value.clone()
         }
@@ -9116,7 +9169,7 @@ pub mod types {
         },
     }
 
-    impl From<&SagaState> for SagaState {
+    impl ::std::convert::From<&SagaState> for SagaState {
         fn from(value: &SagaState) -> Self {
             value.clone()
         }
@@ -9237,7 +9290,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&SamlIdentityProvider> for SamlIdentityProvider {
+    impl ::std::convert::From<&SamlIdentityProvider> for SamlIdentityProvider {
         fn from(value: &SamlIdentityProvider) -> Self {
             value.clone()
         }
@@ -9354,7 +9407,7 @@ pub mod types {
         pub technical_contact_email: ::std::string::String,
     }
 
-    impl From<&SamlIdentityProviderCreate> for SamlIdentityProviderCreate {
+    impl ::std::convert::From<&SamlIdentityProviderCreate> for SamlIdentityProviderCreate {
         fn from(value: &SamlIdentityProviderCreate) -> Self {
             value.clone()
         }
@@ -9372,6 +9425,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct SemverVersion(::std::string::String);
     impl ::std::ops::Deref for SemverVersion {
         type Target = ::std::string::String;
@@ -9380,13 +9434,13 @@ pub mod types {
         }
     }
 
-    impl From<SemverVersion> for ::std::string::String {
+    impl ::std::convert::From<SemverVersion> for ::std::string::String {
         fn from(value: SemverVersion) -> Self {
             value.0
         }
     }
 
-    impl From<&SemverVersion> for SemverVersion {
+    impl ::std::convert::From<&SemverVersion> for SemverVersion {
         fn from(value: &SemverVersion) -> Self {
             value.clone()
         }
@@ -9482,7 +9536,7 @@ pub mod types {
         ExternalApi,
     }
 
-    impl From<&ServiceUsingCertificate> for ServiceUsingCertificate {
+    impl ::std::convert::From<&ServiceUsingCertificate> for ServiceUsingCertificate {
         fn from(value: &ServiceUsingCertificate) -> Self {
             value.clone()
         }
@@ -9496,7 +9550,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for ServiceUsingCertificate {
+    impl ::std::str::FromStr for ServiceUsingCertificate {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -9506,14 +9560,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for ServiceUsingCertificate {
+    impl ::std::convert::TryFrom<&str> for ServiceUsingCertificate {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for ServiceUsingCertificate {
+    impl ::std::convert::TryFrom<&::std::string::String> for ServiceUsingCertificate {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -9522,7 +9576,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for ServiceUsingCertificate {
+    impl ::std::convert::TryFrom<::std::string::String> for ServiceUsingCertificate {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -9613,7 +9667,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Silo> for Silo {
+    impl ::std::convert::From<&Silo> for Silo {
         fn from(value: &Silo) -> Self {
             value.clone()
         }
@@ -9682,7 +9736,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&SiloCreate> for SiloCreate {
+    impl ::std::convert::From<&SiloCreate> for SiloCreate {
         fn from(value: &SiloCreate) -> Self {
             value.clone()
         }
@@ -9746,7 +9800,7 @@ pub mod types {
         LocalOnly,
     }
 
-    impl From<&SiloIdentityMode> for SiloIdentityMode {
+    impl ::std::convert::From<&SiloIdentityMode> for SiloIdentityMode {
         fn from(value: &SiloIdentityMode) -> Self {
             value.clone()
         }
@@ -9761,7 +9815,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for SiloIdentityMode {
+    impl ::std::str::FromStr for SiloIdentityMode {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -9772,14 +9826,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SiloIdentityMode {
+    impl ::std::convert::TryFrom<&str> for SiloIdentityMode {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for SiloIdentityMode {
+    impl ::std::convert::TryFrom<&::std::string::String> for SiloIdentityMode {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -9788,7 +9842,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for SiloIdentityMode {
+    impl ::std::convert::TryFrom<::std::string::String> for SiloIdentityMode {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -9837,7 +9891,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SiloResultsPage> for SiloResultsPage {
+    impl ::std::convert::From<&SiloResultsPage> for SiloResultsPage {
         fn from(value: &SiloResultsPage) -> Self {
             value.clone()
         }
@@ -9879,7 +9933,7 @@ pub mod types {
         Viewer,
     }
 
-    impl From<&SiloRole> for SiloRole {
+    impl ::std::convert::From<&SiloRole> for SiloRole {
         fn from(value: &SiloRole) -> Self {
             value.clone()
         }
@@ -9895,7 +9949,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for SiloRole {
+    impl ::std::str::FromStr for SiloRole {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -9907,14 +9961,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SiloRole {
+    impl ::std::convert::TryFrom<&str> for SiloRole {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for SiloRole {
+    impl ::std::convert::TryFrom<&::std::string::String> for SiloRole {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -9923,7 +9977,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for SiloRole {
+    impl ::std::convert::TryFrom<::std::string::String> for SiloRole {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -9969,7 +10023,7 @@ pub mod types {
         pub role_assignments: ::std::vec::Vec<SiloRoleRoleAssignment>,
     }
 
-    impl From<&SiloRolePolicy> for SiloRolePolicy {
+    impl ::std::convert::From<&SiloRolePolicy> for SiloRolePolicy {
         fn from(value: &SiloRolePolicy) -> Self {
             value.clone()
         }
@@ -10019,7 +10073,7 @@ pub mod types {
         pub role_name: SiloRole,
     }
 
-    impl From<&SiloRoleRoleAssignment> for SiloRoleRoleAssignment {
+    impl ::std::convert::From<&SiloRoleRoleAssignment> for SiloRoleRoleAssignment {
         fn from(value: &SiloRoleRoleAssignment) -> Self {
             value.clone()
         }
@@ -10079,7 +10133,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Sled> for Sled {
+    impl ::std::convert::From<&Sled> for Sled {
         fn from(value: &Sled) -> Self {
             value.clone()
         }
@@ -10125,7 +10179,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SledResultsPage> for SledResultsPage {
+    impl ::std::convert::From<&SledResultsPage> for SledResultsPage {
         fn from(value: &SledResultsPage) -> Self {
             value.clone()
         }
@@ -10216,7 +10270,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Snapshot> for Snapshot {
+    impl ::std::convert::From<&Snapshot> for Snapshot {
         fn from(value: &Snapshot) -> Self {
             value.clone()
         }
@@ -10264,7 +10318,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&SnapshotCreate> for SnapshotCreate {
+    impl ::std::convert::From<&SnapshotCreate> for SnapshotCreate {
         fn from(value: &SnapshotCreate) -> Self {
             value.clone()
         }
@@ -10310,7 +10364,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SnapshotResultsPage> for SnapshotResultsPage {
+    impl ::std::convert::From<&SnapshotResultsPage> for SnapshotResultsPage {
         fn from(value: &SnapshotResultsPage) -> Self {
             value.clone()
         }
@@ -10355,7 +10409,7 @@ pub mod types {
         Destroyed,
     }
 
-    impl From<&SnapshotState> for SnapshotState {
+    impl ::std::convert::From<&SnapshotState> for SnapshotState {
         fn from(value: &SnapshotState) -> Self {
             value.clone()
         }
@@ -10372,7 +10426,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for SnapshotState {
+    impl ::std::str::FromStr for SnapshotState {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -10385,14 +10439,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SnapshotState {
+    impl ::std::convert::TryFrom<&str> for SnapshotState {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for SnapshotState {
+    impl ::std::convert::TryFrom<&::std::string::String> for SnapshotState {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -10401,7 +10455,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for SnapshotState {
+    impl ::std::convert::TryFrom<::std::string::String> for SnapshotState {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -10433,7 +10487,7 @@ pub mod types {
         pub username: ::std::string::String,
     }
 
-    impl From<&SpoofLoginBody> for SpoofLoginBody {
+    impl ::std::convert::From<&SpoofLoginBody> for SpoofLoginBody {
         fn from(value: &SpoofLoginBody) -> Self {
             value.clone()
         }
@@ -10518,7 +10572,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&SshKey> for SshKey {
+    impl ::std::convert::From<&SshKey> for SshKey {
         fn from(value: &SshKey) -> Self {
             value.clone()
         }
@@ -10563,7 +10617,7 @@ pub mod types {
         pub public_key: ::std::string::String,
     }
 
-    impl From<&SshKeyCreate> for SshKeyCreate {
+    impl ::std::convert::From<&SshKeyCreate> for SshKeyCreate {
         fn from(value: &SshKeyCreate) -> Self {
             value.clone()
         }
@@ -10609,7 +10663,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SshKeyResultsPage> for SshKeyResultsPage {
+    impl ::std::convert::From<&SshKeyResultsPage> for SshKeyResultsPage {
         fn from(value: &SshKeyResultsPage) -> Self {
             value.clone()
         }
@@ -10651,7 +10705,7 @@ pub mod types {
         RamProvisioned,
     }
 
-    impl From<&SystemMetricName> for SystemMetricName {
+    impl ::std::convert::From<&SystemMetricName> for SystemMetricName {
         fn from(value: &SystemMetricName) -> Self {
             value.clone()
         }
@@ -10667,7 +10721,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for SystemMetricName {
+    impl ::std::str::FromStr for SystemMetricName {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -10679,14 +10733,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SystemMetricName {
+    impl ::std::convert::TryFrom<&str> for SystemMetricName {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for SystemMetricName {
+    impl ::std::convert::TryFrom<&::std::string::String> for SystemMetricName {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -10695,7 +10749,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for SystemMetricName {
+    impl ::std::convert::TryFrom<::std::string::String> for SystemMetricName {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -10755,7 +10809,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&SystemUpdate> for SystemUpdate {
+    impl ::std::convert::From<&SystemUpdate> for SystemUpdate {
         fn from(value: &SystemUpdate) -> Self {
             value.clone()
         }
@@ -10801,7 +10855,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SystemUpdateResultsPage> for SystemUpdateResultsPage {
+    impl ::std::convert::From<&SystemUpdateResultsPage> for SystemUpdateResultsPage {
         fn from(value: &SystemUpdateResultsPage) -> Self {
             value.clone()
         }
@@ -10830,7 +10884,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&SystemUpdateStart> for SystemUpdateStart {
+    impl ::std::convert::From<&SystemUpdateStart> for SystemUpdateStart {
         fn from(value: &SystemUpdateStart) -> Self {
             value.clone()
         }
@@ -10864,7 +10918,7 @@ pub mod types {
         pub version_range: VersionRange,
     }
 
-    impl From<&SystemVersion> for SystemVersion {
+    impl ::std::convert::From<&SystemVersion> for SystemVersion {
         fn from(value: &SystemVersion) -> Self {
             value.clone()
         }
@@ -10889,6 +10943,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct TimeseriesName(::std::string::String);
     impl ::std::ops::Deref for TimeseriesName {
         type Target = ::std::string::String;
@@ -10897,13 +10952,13 @@ pub mod types {
         }
     }
 
-    impl From<TimeseriesName> for ::std::string::String {
+    impl ::std::convert::From<TimeseriesName> for ::std::string::String {
         fn from(value: TimeseriesName) -> Self {
             value.0
         }
     }
 
-    impl From<&TimeseriesName> for TimeseriesName {
+    impl ::std::convert::From<&TimeseriesName> for TimeseriesName {
         fn from(value: &TimeseriesName) -> Self {
             value.clone()
         }
@@ -11014,7 +11069,7 @@ pub mod types {
         pub timeseries_name: TimeseriesName,
     }
 
-    impl From<&TimeseriesSchema> for TimeseriesSchema {
+    impl ::std::convert::From<&TimeseriesSchema> for TimeseriesSchema {
         fn from(value: &TimeseriesSchema) -> Self {
             value.clone()
         }
@@ -11060,7 +11115,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&TimeseriesSchemaResultsPage> for TimeseriesSchemaResultsPage {
+    impl ::std::convert::From<&TimeseriesSchemaResultsPage> for TimeseriesSchemaResultsPage {
         fn from(value: &TimeseriesSchemaResultsPage) -> Self {
             value.clone()
         }
@@ -11122,7 +11177,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&UpdateDeployment> for UpdateDeployment {
+    impl ::std::convert::From<&UpdateDeployment> for UpdateDeployment {
         fn from(value: &UpdateDeployment) -> Self {
             value.clone()
         }
@@ -11168,7 +11223,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&UpdateDeploymentResultsPage> for UpdateDeploymentResultsPage {
+    impl ::std::convert::From<&UpdateDeploymentResultsPage> for UpdateDeploymentResultsPage {
         fn from(value: &UpdateDeploymentResultsPage) -> Self {
             value.clone()
         }
@@ -11233,7 +11288,7 @@ pub mod types {
         Steady,
     }
 
-    impl From<&UpdateStatus> for UpdateStatus {
+    impl ::std::convert::From<&UpdateStatus> for UpdateStatus {
         fn from(value: &UpdateStatus) -> Self {
             value.clone()
         }
@@ -11248,7 +11303,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for UpdateStatus {
+    impl ::std::str::FromStr for UpdateStatus {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -11259,14 +11314,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for UpdateStatus {
+    impl ::std::convert::TryFrom<&str> for UpdateStatus {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for UpdateStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for UpdateStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -11275,7 +11330,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for UpdateStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for UpdateStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -11355,7 +11410,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&UpdateableComponent> for UpdateableComponent {
+    impl ::std::convert::From<&UpdateableComponent> for UpdateableComponent {
         fn from(value: &UpdateableComponent) -> Self {
             value.clone()
         }
@@ -11401,7 +11456,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&UpdateableComponentResultsPage> for UpdateableComponentResultsPage {
+    impl ::std::convert::From<&UpdateableComponentResultsPage> for UpdateableComponentResultsPage {
         fn from(value: &UpdateableComponentResultsPage) -> Self {
             value.clone()
         }
@@ -11470,7 +11525,7 @@ pub mod types {
         HostOmicron,
     }
 
-    impl From<&UpdateableComponentType> for UpdateableComponentType {
+    impl ::std::convert::From<&UpdateableComponentType> for UpdateableComponentType {
         fn from(value: &UpdateableComponentType) -> Self {
             value.clone()
         }
@@ -11495,7 +11550,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for UpdateableComponentType {
+    impl ::std::str::FromStr for UpdateableComponentType {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -11516,14 +11571,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for UpdateableComponentType {
+    impl ::std::convert::TryFrom<&str> for UpdateableComponentType {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for UpdateableComponentType {
+    impl ::std::convert::TryFrom<&::std::string::String> for UpdateableComponentType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -11532,7 +11587,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for UpdateableComponentType {
+    impl ::std::convert::TryFrom<::std::string::String> for UpdateableComponentType {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -11581,7 +11636,7 @@ pub mod types {
         pub silo_id: uuid::Uuid,
     }
 
-    impl From<&User> for User {
+    impl ::std::convert::From<&User> for User {
         fn from(value: &User) -> Self {
             value.clone()
         }
@@ -11650,7 +11705,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&UserBuiltin> for UserBuiltin {
+    impl ::std::convert::From<&UserBuiltin> for UserBuiltin {
         fn from(value: &UserBuiltin) -> Self {
             value.clone()
         }
@@ -11696,7 +11751,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&UserBuiltinResultsPage> for UserBuiltinResultsPage {
+    impl ::std::convert::From<&UserBuiltinResultsPage> for UserBuiltinResultsPage {
         fn from(value: &UserBuiltinResultsPage) -> Self {
             value.clone()
         }
@@ -11744,7 +11799,7 @@ pub mod types {
         pub password: UserPassword,
     }
 
-    impl From<&UserCreate> for UserCreate {
+    impl ::std::convert::From<&UserCreate> for UserCreate {
         fn from(value: &UserCreate) -> Self {
             value.clone()
         }
@@ -11772,6 +11827,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
     pub struct UserId(::std::string::String);
     impl ::std::ops::Deref for UserId {
         type Target = ::std::string::String;
@@ -11780,13 +11836,13 @@ pub mod types {
         }
     }
 
-    impl From<UserId> for ::std::string::String {
+    impl ::std::convert::From<UserId> for ::std::string::String {
         fn from(value: UserId) -> Self {
             value.0
         }
     }
 
-    impl From<&UserId> for UserId {
+    impl ::std::convert::From<&UserId> for UserId {
         fn from(value: &UserId) -> Self {
             value.clone()
         }
@@ -11898,13 +11954,13 @@ pub mod types {
         InvalidPassword,
     }
 
-    impl From<&UserPassword> for UserPassword {
+    impl ::std::convert::From<&UserPassword> for UserPassword {
         fn from(value: &UserPassword) -> Self {
             value.clone()
         }
     }
 
-    impl From<Password> for UserPassword {
+    impl ::std::convert::From<Password> for UserPassword {
         fn from(value: Password) -> Self {
             Self::Password(value)
         }
@@ -11950,7 +12006,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&UserResultsPage> for UserResultsPage {
+    impl ::std::convert::From<&UserResultsPage> for UserResultsPage {
         fn from(value: &UserResultsPage) -> Self {
             value.clone()
         }
@@ -11985,7 +12041,7 @@ pub mod types {
         pub username: UserId,
     }
 
-    impl From<&UsernamePasswordCredentials> for UsernamePasswordCredentials {
+    impl ::std::convert::From<&UsernamePasswordCredentials> for UsernamePasswordCredentials {
         fn from(value: &UsernamePasswordCredentials) -> Self {
             value.clone()
         }
@@ -12019,7 +12075,7 @@ pub mod types {
         pub low: SemverVersion,
     }
 
-    impl From<&VersionRange> for VersionRange {
+    impl ::std::convert::From<&VersionRange> for VersionRange {
         fn from(value: &VersionRange) -> Self {
             value.clone()
         }
@@ -12128,7 +12184,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Vpc> for Vpc {
+    impl ::std::convert::From<&Vpc> for Vpc {
         fn from(value: &Vpc) -> Self {
             value.clone()
         }
@@ -12195,7 +12251,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&VpcCreate> for VpcCreate {
+    impl ::std::convert::From<&VpcCreate> for VpcCreate {
         fn from(value: &VpcCreate) -> Self {
             value.clone()
         }
@@ -12338,7 +12394,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    impl From<&VpcFirewallRule> for VpcFirewallRule {
+    impl ::std::convert::From<&VpcFirewallRule> for VpcFirewallRule {
         fn from(value: &VpcFirewallRule) -> Self {
             value.clone()
         }
@@ -12377,7 +12433,7 @@ pub mod types {
         Deny,
     }
 
-    impl From<&VpcFirewallRuleAction> for VpcFirewallRuleAction {
+    impl ::std::convert::From<&VpcFirewallRuleAction> for VpcFirewallRuleAction {
         fn from(value: &VpcFirewallRuleAction) -> Self {
             value.clone()
         }
@@ -12392,7 +12448,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for VpcFirewallRuleAction {
+    impl ::std::str::FromStr for VpcFirewallRuleAction {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -12403,14 +12459,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcFirewallRuleAction {
+    impl ::std::convert::TryFrom<&str> for VpcFirewallRuleAction {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleAction {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleAction {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -12419,7 +12475,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for VpcFirewallRuleAction {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcFirewallRuleAction {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -12461,7 +12517,7 @@ pub mod types {
         Outbound,
     }
 
-    impl From<&VpcFirewallRuleDirection> for VpcFirewallRuleDirection {
+    impl ::std::convert::From<&VpcFirewallRuleDirection> for VpcFirewallRuleDirection {
         fn from(value: &VpcFirewallRuleDirection) -> Self {
             value.clone()
         }
@@ -12476,7 +12532,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for VpcFirewallRuleDirection {
+    impl ::std::str::FromStr for VpcFirewallRuleDirection {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -12487,14 +12543,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcFirewallRuleDirection {
+    impl ::std::convert::TryFrom<&str> for VpcFirewallRuleDirection {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleDirection {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleDirection {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -12503,7 +12559,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for VpcFirewallRuleDirection {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcFirewallRuleDirection {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -12576,9 +12632,19 @@ pub mod types {
         pub protocols: ::std::option::Option<::std::vec::Vec<VpcFirewallRuleProtocol>>,
     }
 
-    impl From<&VpcFirewallRuleFilter> for VpcFirewallRuleFilter {
+    impl ::std::convert::From<&VpcFirewallRuleFilter> for VpcFirewallRuleFilter {
         fn from(value: &VpcFirewallRuleFilter) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for VpcFirewallRuleFilter {
+        fn default() -> Self {
+            Self {
+                hosts: Default::default(),
+                ports: Default::default(),
+                protocols: Default::default(),
+            }
         }
     }
 
@@ -12717,19 +12783,19 @@ pub mod types {
         IpNet(IpNet),
     }
 
-    impl From<&VpcFirewallRuleHostFilter> for VpcFirewallRuleHostFilter {
+    impl ::std::convert::From<&VpcFirewallRuleHostFilter> for VpcFirewallRuleHostFilter {
         fn from(value: &VpcFirewallRuleHostFilter) -> Self {
             value.clone()
         }
     }
 
-    impl From<std::net::IpAddr> for VpcFirewallRuleHostFilter {
+    impl ::std::convert::From<std::net::IpAddr> for VpcFirewallRuleHostFilter {
         fn from(value: std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
 
-    impl From<IpNet> for VpcFirewallRuleHostFilter {
+    impl ::std::convert::From<IpNet> for VpcFirewallRuleHostFilter {
         fn from(value: IpNet) -> Self {
             Self::IpNet(value)
         }
@@ -12773,7 +12839,7 @@ pub mod types {
         Icmp,
     }
 
-    impl From<&VpcFirewallRuleProtocol> for VpcFirewallRuleProtocol {
+    impl ::std::convert::From<&VpcFirewallRuleProtocol> for VpcFirewallRuleProtocol {
         fn from(value: &VpcFirewallRuleProtocol) -> Self {
             value.clone()
         }
@@ -12789,7 +12855,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for VpcFirewallRuleProtocol {
+    impl ::std::str::FromStr for VpcFirewallRuleProtocol {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -12801,14 +12867,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcFirewallRuleProtocol {
+    impl ::std::convert::TryFrom<&str> for VpcFirewallRuleProtocol {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleProtocol {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleProtocol {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -12817,7 +12883,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for VpcFirewallRuleProtocol {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcFirewallRuleProtocol {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -12859,7 +12925,7 @@ pub mod types {
         Enabled,
     }
 
-    impl From<&VpcFirewallRuleStatus> for VpcFirewallRuleStatus {
+    impl ::std::convert::From<&VpcFirewallRuleStatus> for VpcFirewallRuleStatus {
         fn from(value: &VpcFirewallRuleStatus) -> Self {
             value.clone()
         }
@@ -12874,7 +12940,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for VpcFirewallRuleStatus {
+    impl ::std::str::FromStr for VpcFirewallRuleStatus {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -12885,14 +12951,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcFirewallRuleStatus {
+    impl ::std::convert::TryFrom<&str> for VpcFirewallRuleStatus {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -12901,7 +12967,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for VpcFirewallRuleStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcFirewallRuleStatus {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -13041,19 +13107,19 @@ pub mod types {
         IpNet(IpNet),
     }
 
-    impl From<&VpcFirewallRuleTarget> for VpcFirewallRuleTarget {
+    impl ::std::convert::From<&VpcFirewallRuleTarget> for VpcFirewallRuleTarget {
         fn from(value: &VpcFirewallRuleTarget) -> Self {
             value.clone()
         }
     }
 
-    impl From<std::net::IpAddr> for VpcFirewallRuleTarget {
+    impl ::std::convert::From<std::net::IpAddr> for VpcFirewallRuleTarget {
         fn from(value: std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
 
-    impl From<IpNet> for VpcFirewallRuleTarget {
+    impl ::std::convert::From<IpNet> for VpcFirewallRuleTarget {
         fn from(value: IpNet) -> Self {
             Self::IpNet(value)
         }
@@ -13162,7 +13228,7 @@ pub mod types {
         pub targets: ::std::vec::Vec<VpcFirewallRuleTarget>,
     }
 
-    impl From<&VpcFirewallRuleUpdate> for VpcFirewallRuleUpdate {
+    impl ::std::convert::From<&VpcFirewallRuleUpdate> for VpcFirewallRuleUpdate {
         fn from(value: &VpcFirewallRuleUpdate) -> Self {
             value.clone()
         }
@@ -13199,7 +13265,7 @@ pub mod types {
         pub rules: ::std::vec::Vec<VpcFirewallRuleUpdate>,
     }
 
-    impl From<&VpcFirewallRuleUpdateParams> for VpcFirewallRuleUpdateParams {
+    impl ::std::convert::From<&VpcFirewallRuleUpdateParams> for VpcFirewallRuleUpdateParams {
         fn from(value: &VpcFirewallRuleUpdateParams) -> Self {
             value.clone()
         }
@@ -13232,7 +13298,7 @@ pub mod types {
         pub rules: ::std::vec::Vec<VpcFirewallRule>,
     }
 
-    impl From<&VpcFirewallRules> for VpcFirewallRules {
+    impl ::std::convert::From<&VpcFirewallRules> for VpcFirewallRules {
         fn from(value: &VpcFirewallRules) -> Self {
             value.clone()
         }
@@ -13278,7 +13344,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&VpcResultsPage> for VpcResultsPage {
+    impl ::std::convert::From<&VpcResultsPage> for VpcResultsPage {
         fn from(value: &VpcResultsPage) -> Self {
             value.clone()
         }
@@ -13362,7 +13428,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    impl From<&VpcRouter> for VpcRouter {
+    impl ::std::convert::From<&VpcRouter> for VpcRouter {
         fn from(value: &VpcRouter) -> Self {
             value.clone()
         }
@@ -13399,7 +13465,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&VpcRouterCreate> for VpcRouterCreate {
+    impl ::std::convert::From<&VpcRouterCreate> for VpcRouterCreate {
         fn from(value: &VpcRouterCreate) -> Self {
             value.clone()
         }
@@ -13438,7 +13504,7 @@ pub mod types {
         Custom,
     }
 
-    impl From<&VpcRouterKind> for VpcRouterKind {
+    impl ::std::convert::From<&VpcRouterKind> for VpcRouterKind {
         fn from(value: &VpcRouterKind) -> Self {
             value.clone()
         }
@@ -13453,7 +13519,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for VpcRouterKind {
+    impl ::std::str::FromStr for VpcRouterKind {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -13464,14 +13530,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcRouterKind {
+    impl ::std::convert::TryFrom<&str> for VpcRouterKind {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for VpcRouterKind {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcRouterKind {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -13480,7 +13546,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for VpcRouterKind {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcRouterKind {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -13529,7 +13595,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&VpcRouterResultsPage> for VpcRouterResultsPage {
+    impl ::std::convert::From<&VpcRouterResultsPage> for VpcRouterResultsPage {
         fn from(value: &VpcRouterResultsPage) -> Self {
             value.clone()
         }
@@ -13578,9 +13644,18 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&VpcRouterUpdate> for VpcRouterUpdate {
+    impl ::std::convert::From<&VpcRouterUpdate> for VpcRouterUpdate {
         fn from(value: &VpcRouterUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for VpcRouterUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -13681,7 +13756,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    impl From<&VpcSubnet> for VpcSubnet {
+    impl ::std::convert::From<&VpcSubnet> for VpcSubnet {
         fn from(value: &VpcSubnet) -> Self {
             value.clone()
         }
@@ -13761,7 +13836,7 @@ pub mod types {
         pub name: Name,
     }
 
-    impl From<&VpcSubnetCreate> for VpcSubnetCreate {
+    impl ::std::convert::From<&VpcSubnetCreate> for VpcSubnetCreate {
         fn from(value: &VpcSubnetCreate) -> Self {
             value.clone()
         }
@@ -13807,7 +13882,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&VpcSubnetResultsPage> for VpcSubnetResultsPage {
+    impl ::std::convert::From<&VpcSubnetResultsPage> for VpcSubnetResultsPage {
         fn from(value: &VpcSubnetResultsPage) -> Self {
             value.clone()
         }
@@ -13856,9 +13931,18 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&VpcSubnetUpdate> for VpcSubnetUpdate {
+    impl ::std::convert::From<&VpcSubnetUpdate> for VpcSubnetUpdate {
         fn from(value: &VpcSubnetUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for VpcSubnetUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -13920,9 +14004,19 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&VpcUpdate> for VpcUpdate {
+    impl ::std::convert::From<&VpcUpdate> for VpcUpdate {
         fn from(value: &VpcUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for VpcUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                dns_name: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -14002,6 +14096,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Fetch a disk by id
     ///

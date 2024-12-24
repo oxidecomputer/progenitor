@@ -406,8 +406,9 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
-        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
-        // generated file is not at the top level of the crate.
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
 
         let file = quote! {
             // Re-export ResponseValue and Error since those are used by the
@@ -512,11 +513,13 @@ impl Generator {
             .map(|method| self.positional_method(method, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
-        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
-        // generated file is not at the top level of the crate.
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
 
         let out = quote! {
             #[allow(clippy::all)]
+            #[allow(elided_named_lifetimes)]
             impl Client {
                 #(#methods)*
             }
@@ -590,8 +593,9 @@ impl Generator {
 
         let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
 
-        // The allow(unused_imports) on the `pub use` is necessary with Rust 1.76+, in case the
-        // generated file is not at the top level of the crate.
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
 
         let out = quote! {
             #traits_and_impls
@@ -631,12 +635,14 @@ impl Generator {
         &self.type_space
     }
 
-    /// Whether the generated client needs to use additional crates to support futures.
+    /// Whether the generated client needs to use additional crates to support
+    /// futures.
     pub fn uses_futures(&self) -> bool {
         self.uses_futures
     }
 
-    /// Whether the generated client needs to use additional crates to support websockets.
+    /// Whether the generated client needs to use additional crates to support
+    /// websockets.
     pub fn uses_websockets(&self) -> bool {
         self.uses_websockets
     }
