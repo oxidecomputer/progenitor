@@ -24,7 +24,7 @@ uuid = { features = ["serde", "v4"], version = "1" }
 
 [lints.rust]
 unused_imports = "allow"
-unused_variables= "allow"
+unused_variables = "allow"
 
 [lints.clippy]
 needless_lifetimes = "allow"

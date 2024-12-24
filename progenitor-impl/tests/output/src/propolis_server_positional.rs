@@ -1,3 +1,4 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -129,7 +130,7 @@ pub mod types {
         pub target: ::std::vec::Vec<::std::string::String>,
     }
 
-    impl From<&CrucibleOpts> for CrucibleOpts {
+    impl ::std::convert::From<&CrucibleOpts> for CrucibleOpts {
         fn from(value: &CrucibleOpts) -> Self {
             value.clone()
         }
@@ -171,7 +172,7 @@ pub mod types {
         pub state: DiskAttachmentState,
     }
 
-    impl From<&DiskAttachment> for DiskAttachment {
+    impl ::std::convert::From<&DiskAttachment> for DiskAttachment {
         fn from(value: &DiskAttachment) -> Self {
             value.clone()
         }
@@ -217,13 +218,13 @@ pub mod types {
         Attached(uuid::Uuid),
     }
 
-    impl From<&DiskAttachmentState> for DiskAttachmentState {
+    impl ::std::convert::From<&DiskAttachmentState> for DiskAttachmentState {
         fn from(value: &DiskAttachmentState) -> Self {
             value.clone()
         }
     }
 
-    impl From<uuid::Uuid> for DiskAttachmentState {
+    impl ::std::convert::From<uuid::Uuid> for DiskAttachmentState {
         fn from(value: uuid::Uuid) -> Self {
             Self::Attached(value)
         }
@@ -279,7 +280,7 @@ pub mod types {
         pub volume_construction_request: VolumeConstructionRequest,
     }
 
-    impl From<&DiskRequest> for DiskRequest {
+    impl ::std::convert::From<&DiskRequest> for DiskRequest {
         fn from(value: &DiskRequest) -> Self {
             value.clone()
         }
@@ -319,7 +320,7 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -369,7 +370,7 @@ pub mod types {
         pub state: InstanceState,
     }
 
-    impl From<&Instance> for Instance {
+    impl ::std::convert::From<&Instance> for Instance {
         fn from(value: &Instance) -> Self {
             value.clone()
         }
@@ -441,7 +442,7 @@ pub mod types {
         pub properties: InstanceProperties,
     }
 
-    impl From<&InstanceEnsureRequest> for InstanceEnsureRequest {
+    impl ::std::convert::From<&InstanceEnsureRequest> for InstanceEnsureRequest {
         fn from(value: &InstanceEnsureRequest) -> Self {
             value.clone()
         }
@@ -480,9 +481,17 @@ pub mod types {
         pub migrate: ::std::option::Option<InstanceMigrateInitiateResponse>,
     }
 
-    impl From<&InstanceEnsureResponse> for InstanceEnsureResponse {
+    impl ::std::convert::From<&InstanceEnsureResponse> for InstanceEnsureResponse {
         fn from(value: &InstanceEnsureResponse) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for InstanceEnsureResponse {
+        fn default() -> Self {
+            Self {
+                migrate: Default::default(),
+            }
         }
     }
 
@@ -509,7 +518,7 @@ pub mod types {
         pub instance: Instance,
     }
 
-    impl From<&InstanceGetResponse> for InstanceGetResponse {
+    impl ::std::convert::From<&InstanceGetResponse> for InstanceGetResponse {
         fn from(value: &InstanceGetResponse) -> Self {
             value.clone()
         }
@@ -550,7 +559,7 @@ pub mod types {
         pub src_uuid: uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
+    impl ::std::convert::From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
         fn from(value: &InstanceMigrateInitiateRequest) -> Self {
             value.clone()
         }
@@ -580,7 +589,7 @@ pub mod types {
         pub migration_id: uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
+    impl ::std::convert::From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
         fn from(value: &InstanceMigrateInitiateResponse) -> Self {
             value.clone()
         }
@@ -610,7 +619,7 @@ pub mod types {
         pub migration_id: uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
+    impl ::std::convert::From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
         fn from(value: &InstanceMigrateStatusRequest) -> Self {
             value.clone()
         }
@@ -639,7 +648,7 @@ pub mod types {
         pub state: MigrationState,
     }
 
-    impl From<&InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
+    impl ::std::convert::From<&InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
         fn from(value: &InstanceMigrateStatusResponse) -> Self {
             value.clone()
         }
@@ -720,7 +729,7 @@ pub mod types {
         pub vcpus: u8,
     }
 
-    impl From<&InstanceProperties> for InstanceProperties {
+    impl ::std::convert::From<&InstanceProperties> for InstanceProperties {
         fn from(value: &InstanceProperties) -> Self {
             value.clone()
         }
@@ -774,7 +783,7 @@ pub mod types {
         Destroyed,
     }
 
-    impl From<&InstanceState> for InstanceState {
+    impl ::std::convert::From<&InstanceState> for InstanceState {
         fn from(value: &InstanceState) -> Self {
             value.clone()
         }
@@ -797,7 +806,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for InstanceState {
+    impl ::std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -816,14 +825,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceState {
+    impl ::std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for InstanceState {
+    impl ::std::convert::TryFrom<&::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -832,7 +841,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for InstanceState {
+    impl ::std::convert::TryFrom<::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -866,7 +875,7 @@ pub mod types {
         pub gen: u64,
     }
 
-    impl From<&InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
+    impl ::std::convert::From<&InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
         fn from(value: &InstanceStateMonitorRequest) -> Self {
             value.clone()
         }
@@ -902,7 +911,7 @@ pub mod types {
         pub state: InstanceState,
     }
 
-    impl From<&InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
+    impl ::std::convert::From<&InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
         fn from(value: &InstanceStateMonitorResponse) -> Self {
             value.clone()
         }
@@ -943,7 +952,7 @@ pub mod types {
         MigrateStart,
     }
 
-    impl From<&InstanceStateRequested> for InstanceStateRequested {
+    impl ::std::convert::From<&InstanceStateRequested> for InstanceStateRequested {
         fn from(value: &InstanceStateRequested) -> Self {
             value.clone()
         }
@@ -960,7 +969,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for InstanceStateRequested {
+    impl ::std::str::FromStr for InstanceStateRequested {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -973,14 +982,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<&str> for InstanceStateRequested {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<&::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -989,7 +998,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -1045,7 +1054,7 @@ pub mod types {
         Error,
     }
 
-    impl From<&MigrationState> for MigrationState {
+    impl ::std::convert::From<&MigrationState> for MigrationState {
         fn from(value: &MigrationState) -> Self {
             value.clone()
         }
@@ -1068,7 +1077,7 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for MigrationState {
+    impl ::std::str::FromStr for MigrationState {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
@@ -1087,14 +1096,14 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for MigrationState {
+    impl ::std::convert::TryFrom<&str> for MigrationState {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&::std::string::String> for MigrationState {
+    impl ::std::convert::TryFrom<&::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
         fn try_from(
             value: &::std::string::String,
@@ -1103,7 +1112,7 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<::std::string::String> for MigrationState {
+    impl ::std::convert::TryFrom<::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
@@ -1140,7 +1149,7 @@ pub mod types {
         pub name: ::std::string::String,
     }
 
-    impl From<&NetworkInterface> for NetworkInterface {
+    impl ::std::convert::From<&NetworkInterface> for NetworkInterface {
         fn from(value: &NetworkInterface) -> Self {
             value.clone()
         }
@@ -1183,13 +1192,13 @@ pub mod types {
         Attached(Slot),
     }
 
-    impl From<&NetworkInterfaceAttachmentState> for NetworkInterfaceAttachmentState {
+    impl ::std::convert::From<&NetworkInterfaceAttachmentState> for NetworkInterfaceAttachmentState {
         fn from(value: &NetworkInterfaceAttachmentState) -> Self {
             value.clone()
         }
     }
 
-    impl From<Slot> for NetworkInterfaceAttachmentState {
+    impl ::std::convert::From<Slot> for NetworkInterfaceAttachmentState {
         fn from(value: Slot) -> Self {
             Self::Attached(value)
         }
@@ -1223,7 +1232,7 @@ pub mod types {
         pub slot: Slot,
     }
 
-    impl From<&NetworkInterfaceRequest> for NetworkInterfaceRequest {
+    impl ::std::convert::From<&NetworkInterfaceRequest> for NetworkInterfaceRequest {
         fn from(value: &NetworkInterfaceRequest) -> Self {
             value.clone()
         }
@@ -1245,6 +1254,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[serde(transparent)]
     pub struct Slot(pub u8);
     impl ::std::ops::Deref for Slot {
         type Target = u8;
@@ -1253,46 +1263,46 @@ pub mod types {
         }
     }
 
-    impl From<Slot> for u8 {
+    impl ::std::convert::From<Slot> for u8 {
         fn from(value: Slot) -> Self {
             value.0
         }
     }
 
-    impl From<&Slot> for Slot {
+    impl ::std::convert::From<&Slot> for Slot {
         fn from(value: &Slot) -> Self {
             value.clone()
         }
     }
 
-    impl From<u8> for Slot {
+    impl ::std::convert::From<u8> for Slot {
         fn from(value: u8) -> Self {
             Self(value)
         }
     }
 
-    impl std::str::FromStr for Slot {
+    impl ::std::str::FromStr for Slot {
         type Err = <u8 as ::std::str::FromStr>::Err;
         fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
         }
     }
 
-    impl std::convert::TryFrom<&str> for Slot {
+    impl ::std::convert::TryFrom<&str> for Slot {
         type Error = <u8 as ::std::str::FromStr>::Err;
         fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for Slot {
+    impl ::std::convert::TryFrom<&String> for Slot {
         type Error = <u8 as ::std::str::FromStr>::Err;
         fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Slot {
+    impl ::std::convert::TryFrom<String> for Slot {
         type Error = <u8 as ::std::str::FromStr>::Err;
         fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
@@ -1482,7 +1492,7 @@ pub mod types {
         },
     }
 
-    impl From<&VolumeConstructionRequest> for VolumeConstructionRequest {
+    impl ::std::convert::From<&VolumeConstructionRequest> for VolumeConstructionRequest {
         fn from(value: &VolumeConstructionRequest) -> Self {
             value.clone()
         }
@@ -1552,6 +1562,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/instance`
     pub async fn instance_get<'a>(

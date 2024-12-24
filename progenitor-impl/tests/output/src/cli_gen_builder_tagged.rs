@@ -62,7 +62,7 @@ pub mod types {
         pub required: ::serde_json::Value,
     }
 
-    impl From<&UnoBody> for UnoBody {
+    impl ::std::convert::From<&UnoBody> for UnoBody {
         fn from(value: &UnoBody) -> Self {
             value.clone()
         }
@@ -85,7 +85,7 @@ pub mod types {
             required: ::std::result::Result<::serde_json::Value, ::std::string::String>,
         }
 
-        impl Default for UnoBody {
+        impl ::std::default::Default for UnoBody {
             fn default() -> Self {
                 Self {
                     gateway: Ok(Default::default()),
@@ -97,8 +97,8 @@ pub mod types {
         impl UnoBody {
             pub fn gateway<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.gateway = value
                     .try_into()
@@ -107,8 +107,8 @@ pub mod types {
             }
             pub fn required<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::serde_json::Value>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::serde_json::Value>,
+                T::Error: ::std::fmt::Display,
             {
                 self.required = value
                     .try_into()
@@ -129,7 +129,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UnoBody> for UnoBody {
+        impl ::std::convert::From<super::UnoBody> for UnoBody {
             fn from(value: super::UnoBody) -> Self {
                 Self {
                     gateway: Ok(value.gateway),

@@ -71,7 +71,7 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -119,7 +119,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&Uint32ResultsPage> for Uint32ResultsPage {
+    impl ::std::convert::From<&Uint32ResultsPage> for Uint32ResultsPage {
         fn from(value: &Uint32ResultsPage) -> Self {
             value.clone()
         }
@@ -187,6 +187,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/`
     ///

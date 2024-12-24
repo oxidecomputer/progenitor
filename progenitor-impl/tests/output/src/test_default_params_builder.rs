@@ -83,7 +83,7 @@ pub mod types {
         pub yes: bool,
     }
 
-    impl From<&BodyWithDefaults> for BodyWithDefaults {
+    impl ::std::convert::From<&BodyWithDefaults> for BodyWithDefaults {
         fn from(value: &BodyWithDefaults) -> Self {
             value.clone()
         }
@@ -129,7 +129,7 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -151,7 +151,7 @@ pub mod types {
             yes: ::std::result::Result<bool, ::std::string::String>,
         }
 
-        impl Default for BodyWithDefaults {
+        impl ::std::default::Default for BodyWithDefaults {
             fn default() -> Self {
                 Self {
                     forty_two: Ok(super::defaults::default_u64::<u32, 42>()),
@@ -165,8 +165,8 @@ pub mod types {
         impl BodyWithDefaults {
             pub fn forty_two<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<u32>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<u32>,
+                T::Error: ::std::fmt::Display,
             {
                 self.forty_two = value
                     .try_into()
@@ -175,8 +175,8 @@ pub mod types {
             }
             pub fn s<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::string::String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.s = value
                     .try_into()
@@ -185,8 +185,8 @@ pub mod types {
             }
             pub fn something<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::option::Option<bool>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<bool>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.something = value
                     .try_into()
@@ -195,8 +195,8 @@ pub mod types {
             }
             pub fn yes<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<bool>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<bool>,
+                T::Error: ::std::fmt::Display,
             {
                 self.yes = value
                     .try_into()
@@ -219,7 +219,7 @@ pub mod types {
             }
         }
 
-        impl From<super::BodyWithDefaults> for BodyWithDefaults {
+        impl ::std::convert::From<super::BodyWithDefaults> for BodyWithDefaults {
             fn from(value: super::BodyWithDefaults) -> Self {
                 Self {
                     forty_two: Ok(value.forty_two),
@@ -240,7 +240,7 @@ pub mod types {
             request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for Error {
+        impl ::std::default::Default for Error {
             fn default() -> Self {
                 Self {
                     error_code: Ok(Default::default()),
@@ -253,8 +253,8 @@ pub mod types {
         impl Error {
             pub fn error_code<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::option::Option<::std::string::String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.error_code = value
                     .try_into()
@@ -263,8 +263,8 @@ pub mod types {
             }
             pub fn message<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::string::String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.message = value
                     .try_into()
@@ -273,8 +273,8 @@ pub mod types {
             }
             pub fn request_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::std::string::String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.request_id = value
                     .try_into()
@@ -296,7 +296,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Error> for Error {
+        impl ::std::convert::From<super::Error> for Error {
             fn from(value: super::Error) -> Self {
                 Self {
                     error_code: Ok(value.error_code),

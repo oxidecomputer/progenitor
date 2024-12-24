@@ -18,7 +18,7 @@ use std::{
 };
 
 fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
-    let content = generator.generate_tokens(&spec).unwrap();
+    let content = generator.generate_tokens(spec).unwrap();
     let rustfmt_config = rustfmt_wrapper::config::Config {
         normalize_doc_attributes: Some(true),
         wrap_comments: Some(true),
