@@ -189,6 +189,7 @@ fn test_query_enum_untagged() {
     assert_eq!(result, "paramName=1&paramName=2&paramName=3&paramName=4");
 
     #[derive(Serialize)]
+    #[serde(transparent)]
     struct Name(String);
     #[derive(Serialize)]
     #[serde(untagged)]

@@ -65,13 +65,13 @@ pub mod types {
         Variant1(::std::vec::Vec<::std::string::String>),
     }
 
-    impl From<&GetThingOrThingsId> for GetThingOrThingsId {
+    impl ::std::convert::From<&GetThingOrThingsId> for GetThingOrThingsId {
         fn from(value: &GetThingOrThingsId) -> Self {
             value.clone()
         }
     }
 
-    impl From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
+    impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
         fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
             Self::Variant1(value)
         }

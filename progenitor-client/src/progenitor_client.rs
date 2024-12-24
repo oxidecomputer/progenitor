@@ -527,7 +527,7 @@ where
     {
         // Serialize the value through self which will proxy into the inner
         // Serializer as appropriate.
-        Ok(value.serialize(self).unwrap())
+        value.serialize(self)
     }
 
     fn serialize_unit(self) -> Result<Self::Ok, Self::Error> {
