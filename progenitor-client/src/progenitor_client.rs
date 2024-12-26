@@ -456,7 +456,7 @@ impl<'a, T> QueryParam<'a, T> {
         Self { name, value }
     }
 }
-impl<'a, T> Serialize for QueryParam<'a, T>
+impl<T> Serialize for QueryParam<'_, T>
 where
     T: Serialize,
 {
@@ -480,7 +480,7 @@ pub(crate) struct QuerySerializer<'a, S> {
 macro_rules! serialize_scalar {
     ($f:ident, $t:ty) => {
         fn $f(self, v: $t) -> Result<Self::Ok, Self::Error> {
-            Ok([(self.name, v)].serialize(self.inner).unwrap())
+            [(self.name, v)].serialize(self.inner)
         }
     };
 }
@@ -518,7 +518,7 @@ where
     }
 
     fn serialize_none(self) -> Result<Self::Ok, Self::Error> {
-        Ok(self.inner.serialize_none().unwrap())
+        self.inner.serialize_none()
     }
 
     fn serialize_some<T>(self, value: &T) -> Result<Self::Ok, Self::Error>
@@ -634,7 +634,7 @@ pub struct QuerySeq<'a, S> {
     name: &'a str,
 }
 
-impl<'a, S> serde::ser::SerializeSeq for QuerySeq<'a, S>
+impl<S> serde::ser::SerializeSeq for QuerySeq<'_, S>
 where
     S: serde::ser::SerializeSeq,
 {
