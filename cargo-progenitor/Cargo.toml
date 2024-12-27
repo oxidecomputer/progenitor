@@ -1,6 +1,6 @@
 [package]
 name = "cargo-progenitor"
-version = "0.8.0"
+version = "0.9.0"
 edition = "2021"
 license = "MPL-2.0"
 description = "A cargo command to generate a Rust client SDK from OpenAPI"
