@@ -235,7 +235,7 @@ pub mod types {
         Attached(uuid::Uuid),
     }
 
-    impl ::std::convert::From<&DiskAttachmentState> for DiskAttachmentState {
+    impl ::std::convert::From<&Self> for DiskAttachmentState {
         fn from(value: &DiskAttachmentState) -> Self {
             value.clone()
         }
@@ -889,7 +889,7 @@ pub mod types {
         Destroyed,
     }
 
-    impl ::std::convert::From<&InstanceState> for InstanceState {
+    impl ::std::convert::From<&Self> for InstanceState {
         fn from(value: &InstanceState) -> Self {
             value.clone()
         }
@@ -1075,7 +1075,7 @@ pub mod types {
         MigrateStart,
     }
 
-    impl ::std::convert::From<&InstanceStateRequested> for InstanceStateRequested {
+    impl ::std::convert::From<&Self> for InstanceStateRequested {
         fn from(value: &InstanceStateRequested) -> Self {
             value.clone()
         }
@@ -1178,7 +1178,7 @@ pub mod types {
         Error,
     }
 
-    impl ::std::convert::From<&MigrationState> for MigrationState {
+    impl ::std::convert::From<&Self> for MigrationState {
         fn from(value: &MigrationState) -> Self {
             value.clone()
         }
@@ -1326,7 +1326,7 @@ pub mod types {
         Attached(Slot),
     }
 
-    impl ::std::convert::From<&NetworkInterfaceAttachmentState> for NetworkInterfaceAttachmentState {
+    impl ::std::convert::From<&Self> for NetworkInterfaceAttachmentState {
         fn from(value: &NetworkInterfaceAttachmentState) -> Self {
             value.clone()
         }
@@ -1638,7 +1638,7 @@ pub mod types {
         },
     }
 
-    impl ::std::convert::From<&VolumeConstructionRequest> for VolumeConstructionRequest {
+    impl ::std::convert::From<&Self> for VolumeConstructionRequest {
         fn from(value: &VolumeConstructionRequest) -> Self {
             value.clone()
         }

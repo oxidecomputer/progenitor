@@ -187,7 +187,7 @@ pub mod types {
         RangeFrom { start: f64 },
     }
 
-    impl ::std::convert::From<&BinRangedouble> for BinRangedouble {
+    impl ::std::convert::From<&Self> for BinRangedouble {
         fn from(value: &BinRangedouble) -> Self {
             value.clone()
         }
@@ -295,7 +295,7 @@ pub mod types {
         RangeFrom { start: i64 },
     }
 
-    impl ::std::convert::From<&BinRangeint64> for BinRangeint64 {
+    impl ::std::convert::From<&Self> for BinRangeint64 {
         fn from(value: &BinRangeint64) -> Self {
             value.clone()
         }
@@ -1172,7 +1172,7 @@ pub mod types {
         HistogramF64(Histogramdouble),
     }
 
-    impl ::std::convert::From<&Datum> for Datum {
+    impl ::std::convert::From<&Self> for Datum {
         fn from(value: &Datum) -> Self {
             value.clone()
         }
@@ -1281,7 +1281,7 @@ pub mod types {
         HistogramF64,
     }
 
-    impl ::std::convert::From<&DatumType> for DatumType {
+    impl ::std::convert::From<&Self> for DatumType {
         fn from(value: &DatumType) -> Self {
             value.clone()
         }
@@ -1545,7 +1545,7 @@ pub mod types {
         Sha256(::std::string::String),
     }
 
-    impl ::std::convert::From<&Digest> for Digest {
+    impl ::std::convert::From<&Self> for Digest {
         fn from(value: &Digest) -> Self {
             value.clone()
         }
@@ -1820,7 +1820,7 @@ pub mod types {
         WriteBytes,
     }
 
-    impl ::std::convert::From<&DiskMetricName> for DiskMetricName {
+    impl ::std::convert::From<&Self> for DiskMetricName {
         fn from(value: &DiskMetricName) -> Self {
             value.clone()
         }
@@ -2084,7 +2084,7 @@ pub mod types {
         GlobalImage { image_id: uuid::Uuid },
     }
 
-    impl ::std::convert::From<&DiskSource> for DiskSource {
+    impl ::std::convert::From<&Self> for DiskSource {
         fn from(value: &DiskSource) -> Self {
             value.clone()
         }
@@ -2244,7 +2244,7 @@ pub mod types {
         Faulted,
     }
 
-    impl ::std::convert::From<&DiskState> for DiskState {
+    impl ::std::convert::From<&Self> for DiskState {
         fn from(value: &DiskState) -> Self {
             value.clone()
         }
@@ -2445,7 +2445,7 @@ pub mod types {
         },
     }
 
-    impl ::std::convert::From<&ExternalIpCreate> for ExternalIpCreate {
+    impl ::std::convert::From<&Self> for ExternalIpCreate {
         fn from(value: &ExternalIpCreate) -> Self {
             value.clone()
         }
@@ -2585,7 +2585,7 @@ pub mod types {
         Metric,
     }
 
-    impl ::std::convert::From<&FieldSource> for FieldSource {
+    impl ::std::convert::From<&Self> for FieldSource {
         fn from(value: &FieldSource) -> Self {
             value.clone()
         }
@@ -2680,7 +2680,7 @@ pub mod types {
         Bool,
     }
 
-    impl ::std::convert::From<&FieldType> for FieldType {
+    impl ::std::convert::From<&Self> for FieldType {
         fn from(value: &FieldType) -> Self {
             value.clone()
         }
@@ -2773,7 +2773,7 @@ pub mod types {
         Viewer,
     }
 
-    impl ::std::convert::From<&FleetRole> for FleetRole {
+    impl ::std::convert::From<&Self> for FleetRole {
         fn from(value: &FleetRole) -> Self {
             value.clone()
         }
@@ -3590,7 +3590,7 @@ pub mod types {
         IdAscending,
     }
 
-    impl ::std::convert::From<&IdSortMode> for IdSortMode {
+    impl ::std::convert::From<&Self> for IdSortMode {
         fn from(value: &IdSortMode) -> Self {
             value.clone()
         }
@@ -3813,7 +3813,7 @@ pub mod types {
         Saml,
     }
 
-    impl ::std::convert::From<&IdentityProviderType> for IdentityProviderType {
+    impl ::std::convert::From<&Self> for IdentityProviderType {
         fn from(value: &IdentityProviderType) -> Self {
             value.clone()
         }
@@ -3896,7 +3896,7 @@ pub mod types {
         SiloGroup,
     }
 
-    impl ::std::convert::From<&IdentityType> for IdentityType {
+    impl ::std::convert::From<&Self> for IdentityType {
         fn from(value: &IdentityType) -> Self {
             value.clone()
         }
@@ -4003,7 +4003,7 @@ pub mod types {
         Base64EncodedXml { data: ::std::string::String },
     }
 
-    impl ::std::convert::From<&IdpMetadataSource> for IdpMetadataSource {
+    impl ::std::convert::From<&Self> for IdpMetadataSource {
         fn from(value: &IdpMetadataSource) -> Self {
             value.clone()
         }
@@ -4345,7 +4345,7 @@ pub mod types {
         YouCanBootAnythingAsLongAsItsAlpine,
     }
 
-    impl ::std::convert::From<&ImageSource> for ImageSource {
+    impl ::std::convert::From<&Self> for ImageSource {
         fn from(value: &ImageSource) -> Self {
             value.clone()
         }
@@ -4776,7 +4776,7 @@ pub mod types {
         },
     }
 
-    impl ::std::convert::From<&InstanceDiskAttachment> for InstanceDiskAttachment {
+    impl ::std::convert::From<&Self> for InstanceDiskAttachment {
         fn from(value: &InstanceDiskAttachment) -> Self {
             value.clone()
         }
@@ -4908,9 +4908,7 @@ pub mod types {
         None,
     }
 
-    impl ::std::convert::From<&InstanceNetworkInterfaceAttachment>
-        for InstanceNetworkInterfaceAttachment
-    {
+    impl ::std::convert::From<&Self> for InstanceNetworkInterfaceAttachment {
         fn from(value: &InstanceNetworkInterfaceAttachment) -> Self {
             value.clone()
         }
@@ -5176,7 +5174,7 @@ pub mod types {
         Destroyed,
     }
 
-    impl ::std::convert::From<&InstanceState> for InstanceState {
+    impl ::std::convert::From<&Self> for InstanceState {
         fn from(value: &InstanceState) -> Self {
             value.clone()
         }
@@ -5277,7 +5275,7 @@ pub mod types {
         Floating,
     }
 
-    impl ::std::convert::From<&IpKind> for IpKind {
+    impl ::std::convert::From<&Self> for IpKind {
         fn from(value: &IpKind) -> Self {
             value.clone()
         }
@@ -5362,7 +5360,7 @@ pub mod types {
         V6(Ipv6Net),
     }
 
-    impl ::std::convert::From<&IpNet> for IpNet {
+    impl ::std::convert::From<&Self> for IpNet {
         fn from(value: &IpNet) -> Self {
             value.clone()
         }
@@ -5795,7 +5793,7 @@ pub mod types {
         V6(Ipv6Range),
     }
 
-    impl ::std::convert::From<&IpRange> for IpRange {
+    impl ::std::convert::From<&Self> for IpRange {
         fn from(value: &IpRange) -> Self {
             value.clone()
         }
@@ -6529,7 +6527,7 @@ pub mod types {
         Name(Name),
     }
 
-    impl ::std::convert::From<&NameOrId> for NameOrId {
+    impl ::std::convert::From<&Self> for NameOrId {
         fn from(value: &NameOrId) -> Self {
             value.clone()
         }
@@ -6652,7 +6650,7 @@ pub mod types {
         IdAscending,
     }
 
-    impl ::std::convert::From<&NameOrIdSortMode> for NameOrIdSortMode {
+    impl ::std::convert::From<&Self> for NameOrIdSortMode {
         fn from(value: &NameOrIdSortMode) -> Self {
             value.clone()
         }
@@ -6745,7 +6743,7 @@ pub mod types {
         NameAscending,
     }
 
-    impl ::std::convert::From<&NameSortMode> for NameSortMode {
+    impl ::std::convert::From<&Self> for NameSortMode {
         fn from(value: &NameSortMode) -> Self {
             value.clone()
         }
@@ -7422,7 +7420,7 @@ pub mod types {
         Viewer,
     }
 
-    impl ::std::convert::From<&OrganizationRole> for OrganizationRole {
+    impl ::std::convert::From<&Self> for OrganizationRole {
         fn from(value: &OrganizationRole) -> Self {
             value.clone()
         }
@@ -7899,7 +7897,7 @@ pub mod types {
         External,
     }
 
-    impl ::std::convert::From<&PhysicalDiskType> for PhysicalDiskType {
+    impl ::std::convert::From<&Self> for PhysicalDiskType {
         fn from(value: &PhysicalDiskType) -> Self {
             value.clone()
         }
@@ -8162,7 +8160,7 @@ pub mod types {
         Viewer,
     }
 
-    impl ::std::convert::From<&ProjectRole> for ProjectRole {
+    impl ::std::convert::From<&Self> for ProjectRole {
         fn from(value: &ProjectRole) -> Self {
             value.clone()
         }
@@ -8795,7 +8793,7 @@ pub mod types {
         Subnet(Name),
     }
 
-    impl ::std::convert::From<&RouteDestination> for RouteDestination {
+    impl ::std::convert::From<&Self> for RouteDestination {
         fn from(value: &RouteDestination) -> Self {
             value.clone()
         }
@@ -8943,7 +8941,7 @@ pub mod types {
         InternetGateway(Name),
     }
 
-    impl ::std::convert::From<&RouteTarget> for RouteTarget {
+    impl ::std::convert::From<&Self> for RouteTarget {
         fn from(value: &RouteTarget) -> Self {
             value.clone()
         }
@@ -9198,7 +9196,7 @@ pub mod types {
         Custom,
     }
 
-    impl ::std::convert::From<&RouterRouteKind> for RouterRouteKind {
+    impl ::std::convert::From<&Self> for RouterRouteKind {
         fn from(value: &RouterRouteKind) -> Self {
             value.clone()
         }
@@ -9521,7 +9519,7 @@ pub mod types {
         SubsagaCreateFailed { message: ::std::string::String },
     }
 
-    impl ::std::convert::From<&SagaErrorInfo> for SagaErrorInfo {
+    impl ::std::convert::From<&Self> for SagaErrorInfo {
         fn from(value: &SagaErrorInfo) -> Self {
             value.clone()
         }
@@ -9654,7 +9652,7 @@ pub mod types {
         },
     }
 
-    impl ::std::convert::From<&SagaState> for SagaState {
+    impl ::std::convert::From<&Self> for SagaState {
         fn from(value: &SagaState) -> Self {
             value.clone()
         }
@@ -10033,7 +10031,7 @@ pub mod types {
         ExternalApi,
     }
 
-    impl ::std::convert::From<&ServiceUsingCertificate> for ServiceUsingCertificate {
+    impl ::std::convert::From<&Self> for ServiceUsingCertificate {
         fn from(value: &ServiceUsingCertificate) -> Self {
             value.clone()
         }
@@ -10309,7 +10307,7 @@ pub mod types {
         LocalOnly,
     }
 
-    impl ::std::convert::From<&SiloIdentityMode> for SiloIdentityMode {
+    impl ::std::convert::From<&Self> for SiloIdentityMode {
         fn from(value: &SiloIdentityMode) -> Self {
             value.clone()
         }
@@ -10448,7 +10446,7 @@ pub mod types {
         Viewer,
     }
 
-    impl ::std::convert::From<&SiloRole> for SiloRole {
+    impl ::std::convert::From<&Self> for SiloRole {
         fn from(value: &SiloRole) -> Self {
             value.clone()
         }
@@ -10966,7 +10964,7 @@ pub mod types {
         Destroyed,
     }
 
-    impl ::std::convert::From<&SnapshotState> for SnapshotState {
+    impl ::std::convert::From<&Self> for SnapshotState {
         fn from(value: &SnapshotState) -> Self {
             value.clone()
         }
@@ -11286,7 +11284,7 @@ pub mod types {
         RamProvisioned,
     }
 
-    impl ::std::convert::From<&SystemMetricName> for SystemMetricName {
+    impl ::std::convert::From<&Self> for SystemMetricName {
         fn from(value: &SystemMetricName) -> Self {
             value.clone()
         }
@@ -11917,7 +11915,7 @@ pub mod types {
         Steady,
     }
 
-    impl ::std::convert::From<&UpdateStatus> for UpdateStatus {
+    impl ::std::convert::From<&Self> for UpdateStatus {
         fn from(value: &UpdateStatus) -> Self {
             value.clone()
         }
@@ -12166,7 +12164,7 @@ pub mod types {
         HostOmicron,
     }
 
-    impl ::std::convert::From<&UpdateableComponentType> for UpdateableComponentType {
+    impl ::std::convert::From<&Self> for UpdateableComponentType {
         fn from(value: &UpdateableComponentType) -> Self {
             value.clone()
         }
@@ -12619,7 +12617,7 @@ pub mod types {
         InvalidPassword,
     }
 
-    impl ::std::convert::From<&UserPassword> for UserPassword {
+    impl ::std::convert::From<&Self> for UserPassword {
         fn from(value: &UserPassword) -> Self {
             value.clone()
         }
@@ -13134,7 +13132,7 @@ pub mod types {
         Deny,
     }
 
-    impl ::std::convert::From<&VpcFirewallRuleAction> for VpcFirewallRuleAction {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleAction {
         fn from(value: &VpcFirewallRuleAction) -> Self {
             value.clone()
         }
@@ -13218,7 +13216,7 @@ pub mod types {
         Outbound,
     }
 
-    impl ::std::convert::From<&VpcFirewallRuleDirection> for VpcFirewallRuleDirection {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleDirection {
         fn from(value: &VpcFirewallRuleDirection) -> Self {
             value.clone()
         }
@@ -13490,7 +13488,7 @@ pub mod types {
         IpNet(IpNet),
     }
 
-    impl ::std::convert::From<&VpcFirewallRuleHostFilter> for VpcFirewallRuleHostFilter {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleHostFilter {
         fn from(value: &VpcFirewallRuleHostFilter) -> Self {
             value.clone()
         }
@@ -13546,7 +13544,7 @@ pub mod types {
         Icmp,
     }
 
-    impl ::std::convert::From<&VpcFirewallRuleProtocol> for VpcFirewallRuleProtocol {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleProtocol {
         fn from(value: &VpcFirewallRuleProtocol) -> Self {
             value.clone()
         }
@@ -13632,7 +13630,7 @@ pub mod types {
         Enabled,
     }
 
-    impl ::std::convert::From<&VpcFirewallRuleStatus> for VpcFirewallRuleStatus {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleStatus {
         fn from(value: &VpcFirewallRuleStatus) -> Self {
             value.clone()
         }
@@ -13814,7 +13812,7 @@ pub mod types {
         IpNet(IpNet),
     }
 
-    impl ::std::convert::From<&VpcFirewallRuleTarget> for VpcFirewallRuleTarget {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleTarget {
         fn from(value: &VpcFirewallRuleTarget) -> Self {
             value.clone()
         }
@@ -14247,7 +14245,7 @@ pub mod types {
         Custom,
     }
 
-    impl ::std::convert::From<&VpcRouterKind> for VpcRouterKind {
+    impl ::std::convert::From<&Self> for VpcRouterKind {
         fn from(value: &VpcRouterKind) -> Self {
             value.clone()
         }

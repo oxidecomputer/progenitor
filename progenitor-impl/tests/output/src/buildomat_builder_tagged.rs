@@ -64,7 +64,7 @@ pub mod types {
         Variant1(::std::vec::Vec<::std::string::String>),
     }
 
-    impl ::std::convert::From<&GetThingOrThingsId> for GetThingOrThingsId {
+    impl ::std::convert::From<&Self> for GetThingOrThingsId {
         fn from(value: &GetThingOrThingsId) -> Self {
             value.clone()
         }
