@@ -37,6 +37,45 @@ pub mod types {
         }
     }
 
+    ///GetThingOrThingsId
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "oneOf": [
+    ///    {
+    ///      "type": "string"
+    ///    },
+    ///    {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    }
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[serde(untagged)]
+    pub enum GetThingOrThingsId {
+        Variant0(::std::string::String),
+        Variant1(::std::vec::Vec<::std::string::String>),
+    }
+
+    impl ::std::convert::From<&GetThingOrThingsId> for GetThingOrThingsId {
+        fn from(value: &GetThingOrThingsId) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
+        fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
+            Self::Variant1(value)
+        }
+    }
+
     ///ObjWithOptionArray
     ///
     /// <details><summary>JSON schema</summary>
@@ -2590,6 +2629,18 @@ impl Client {
     pub fn workers_recycle(&self) -> builder::WorkersRecycle {
         builder::WorkersRecycle::new(self)
     }
+
+    ///Sends a `GET` request to `/v1/things`
+    ///
+    ///```ignore
+    /// let response = client.get_thing_or_things()
+    ///    .id(id)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn get_thing_or_things(&self) -> builder::GetThingOrThings {
+        builder::GetThingOrThings::new(self)
+    }
 }
 
 /// Types for composing operation parameters.
@@ -2871,10 +2922,6 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&task.to_string()),
             );
-            let mut query = Vec::with_capacity(1usize);
-            if let Some(v) = &minseq {
-                query.push(("minseq", v.to_string()));
-            }
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -2883,7 +2930,7 @@ pub mod builder {
                     reqwest::header::ACCEPT,
                     reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&query)
+                .query(&progenitor_client::QueryParam::new("minseq", &minseq))
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -3613,6 +3660,58 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 200u16 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::get_thing_or_things`]
+    ///
+    ///[`Client::get_thing_or_things`]: super::Client::get_thing_or_things
+    #[derive(Debug, Clone)]
+    pub struct GetThingOrThings<'a> {
+        client: &'a super::Client,
+        id: Result<Option<types::GetThingOrThingsId>, String>,
+    }
+
+    impl<'a> GetThingOrThings<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client: client,
+                id: Ok(None),
+            }
+        }
+
+        pub fn id<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<types::GetThingOrThingsId>,
+        {
+            self.id = value
+                .try_into()
+                .map(Some)
+                .map_err(|_| "conversion to `GetThingOrThingsId` for id failed".to_string());
+            self
+        }
+
+        ///Sends a `GET` request to `/v1/things`
+        pub async fn send(self) -> Result<ResponseValue<::std::string::String>, Error<()>> {
+            let Self { client, id } = self;
+            let id = id.map_err(Error::InvalidRequest)?;
+            let url = format!("{}/v1/things", client.baseurl,);
+            #[allow(unused_mut)]
+            let mut request = client
+                .client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("id", &id))
+                .build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200u16 => ResponseValue::from_response(response).await,
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }

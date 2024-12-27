@@ -158,10 +158,6 @@ impl Client {
             encode_path(&type_.to_string()),
             encode_path(&trait_.to_string()),
         );
-        let mut query = Vec::with_capacity(3usize);
-        query.push(("if", if_.to_string()));
-        query.push(("in", in_.to_string()));
-        query.push(("use", use_.to_string()));
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -170,7 +166,9 @@ impl Client {
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&query)
+            .query(&progenitor_client::QueryParam::new("if", &if_))
+            .query(&progenitor_client::QueryParam::new("in", &in_))
+            .query(&progenitor_client::QueryParam::new("use", &use_))
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;

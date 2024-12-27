@@ -14,3 +14,7 @@ reqwest = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 serde_urlencoded = { workspace = true }
+
+[dev-dependencies]
+url = { workspace = true }
+uuid = { workspace = true }

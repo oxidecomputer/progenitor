@@ -741,6 +741,57 @@ pub mod operations {
             Self(self.0.status(200u16))
         }
     }
+
+    pub struct GetThingOrThingsWhen(::httpmock::When);
+    impl GetThingOrThingsWhen {
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/v1/things$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> ::httpmock::When {
+            self.0
+        }
+
+        pub fn id<'a, T>(self, value: T) -> Self
+        where
+            T: Into<Option<&'a types::GetThingOrThingsId>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("id", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.query_params
+                        .as_ref()
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "id"))
+                        .is_none()
+                }))
+            }
+        }
+    }
+
+    pub struct GetThingOrThingsThen(::httpmock::Then);
+    impl GetThingOrThingsThen {
+        pub fn new(inner: ::httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> ::httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self, value: &str) -> Self {
+            Self(
+                self.0
+                    .status(200u16)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
 }
 
 #[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
@@ -804,6 +855,9 @@ pub trait MockServerExt {
     fn workers_recycle<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::WorkersRecycleWhen, operations::WorkersRecycleThen);
+    fn get_thing_or_things<F>(&self, config_fn: F) -> ::httpmock::Mock
+    where
+        F: FnOnce(operations::GetThingOrThingsWhen, operations::GetThingOrThingsThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
@@ -1031,6 +1085,18 @@ impl MockServerExt for ::httpmock::MockServer {
             config_fn(
                 operations::WorkersRecycleWhen::new(when),
                 operations::WorkersRecycleThen::new(then),
+            )
+        })
+    }
+
+    fn get_thing_or_things<F>(&self, config_fn: F) -> ::httpmock::Mock
+    where
+        F: FnOnce(operations::GetThingOrThingsWhen, operations::GetThingOrThingsThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::GetThingOrThingsWhen::new(when),
+                operations::GetThingOrThingsThen::new(then),
             )
         })
     }
