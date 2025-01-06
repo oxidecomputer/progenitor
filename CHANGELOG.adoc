@@ -15,15 +15,17 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.9.0\...HEAD[Full list of commits]
 
+* Fix regression serializing query parameter simple enums (#1033)
+
 == 0.9.0 (released 2024-12-27)
 
 https://github.com/oxidecomputer/progenitor/compare/v0.8.0\...v0.9.0[Full list of commits]
 
-    * handle array-like and map-like query parameters (#1017)
-    * support custom map types (#1011)
-    * add a progenitor feature for use of macro (and client) (#1007)
-    * add async post_hook function support (#942)
-    * fix name-collision and code-generation issues (#1019) (#993) (#933) (#941)
+* Handle array-like and map-like query parameters (#1017)
+* Support custom map types (#1011)
+* Add a progenitor feature for use of macro (and client) (#1007)
+* Add async post_hook function support (#942)
+* Fix name-collision and code-generation issues (#1019) (#993) (#933) (#941)
 
 == 0.8.0 (released 2024-09-26)
 
