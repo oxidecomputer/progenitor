@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 use std::{
     collections::{BTreeMap, BTreeSet, HashSet},
@@ -101,10 +101,12 @@ fn test_query_enum_external() {
         Object { a: u64, b: u64 },
     }
     let value = Value::Simple;
-    encode_query_param("ignored", &value).expect_err("variant not supported");
+    let result = encode_query_param("paramValue", &value).unwrap();
+    assert_eq!(result, "paramValue=simple");
 
     let value = Value::Newtype(42);
-    encode_query_param("ignored", &value).expect_err("variant not supported");
+    let result = encode_query_param("ignored", &value).unwrap();
+    assert_eq!(result, "newtype=42");
 
     let value = Value::Tuple(1, 2);
     encode_query_param("ignored", &value).expect_err("variant not supported");

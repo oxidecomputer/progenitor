@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 #![allow(dead_code)]
 
@@ -9,7 +9,7 @@ use std::ops::{Deref, DerefMut};
 use bytes::Bytes;
 use futures_core::Stream;
 use reqwest::RequestBuilder;
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{de::DeserializeOwned, ser::SerializeStruct, Serialize};
 
 #[cfg(not(target_arch = "wasm32"))]
 type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
@@ -540,12 +540,14 @@ where
 
     fn serialize_unit_variant(
         self,
-        name: &'static str,
-        variant_index: u32,
+        _name: &'static str,
+        _variant_index: u32,
         variant: &'static str,
     ) -> Result<Self::Ok, Self::Error> {
-        self.inner
-            .serialize_unit_variant(name, variant_index, variant)
+        // A query parameter with a list of enumerated values will produce an
+        // enum with unit variants. We treat these as scalar values, ignoring
+        // the unit variant wrapper.
+        variant.serialize(self)
     }
 
     fn serialize_newtype_struct<T>(
@@ -562,15 +564,21 @@ where
     fn serialize_newtype_variant<T>(
         self,
         name: &'static str,
-        variant_index: u32,
+        _variant_index: u32,
         variant: &'static str,
         value: &T,
     ) -> Result<Self::Ok, Self::Error>
     where
         T: ?Sized + Serialize,
     {
-        self.inner
-            .serialize_newtype_variant(name, variant_index, variant, value)
+        // As with serde_json, we treat a newtype variant like a struct with a
+        // single field. This may seem a little weird, but if an OpenAPI
+        // document were to specify a query parameter whose schema was a oneOf
+        // whose elements were objects with a single field, the user would end
+        // up with an enum like this as a parameter.
+        let mut map = self.inner.serialize_struct(name, 1)?;
+        map.serialize_field(variant, value)?;
+        map.end()
     }
 
     fn serialize_seq(self, len: Option<usize>) -> Result<Self::SerializeSeq, Self::Error> {
