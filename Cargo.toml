@@ -13,10 +13,10 @@ members = [
 resolver = "2"
 
 [workspace.dependencies]
-progenitor = { version = "0.9.0", path = "progenitor", default-features = false }
-progenitor-client = { version = "0.9.0", path = "progenitor-client" }
-progenitor-impl = { version = "0.9.0", path = "progenitor-impl" }
-progenitor-macro = { version = "0.9.0", path = "progenitor-macro" }
+progenitor = { version = "0.9.1", path = "progenitor", default-features = false }
+progenitor-client = { version = "0.9.1", path = "progenitor-client" }
+progenitor-impl = { version = "0.9.1", path = "progenitor-impl" }
+progenitor-macro = { version = "0.9.1", path = "progenitor-macro" }
 
 anyhow = "1.0.94"
 base64 = "0.22.1"
