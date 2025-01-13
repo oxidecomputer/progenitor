@@ -37,58 +37,6 @@ pub mod types {
         }
     }
 
-    ///BodyWithDefaults
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "s"
-    ///  ],
-    ///  "properties": {
-    ///    "forty-two": {
-    ///      "default": 42,
-    ///      "type": "integer",
-    ///      "format": "uint32",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "s": {
-    ///      "type": "string"
-    ///    },
-    ///    "something": {
-    ///      "default": true,
-    ///      "type": [
-    ///        "boolean",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "yes": {
-    ///      "default": false,
-    ///      "type": "boolean"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct BodyWithDefaults {
-        #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
-        pub forty_two: u32,
-        pub s: ::std::string::String,
-        #[serde(default = "defaults::body_with_defaults_something")]
-        pub something: ::std::option::Option<bool>,
-        #[serde(default)]
-        pub yes: bool,
-    }
-
-    impl ::std::convert::From<&BodyWithDefaults> for BodyWithDefaults {
-        fn from(value: &BodyWithDefaults) -> Self {
-            value.clone()
-        }
-    }
-
     ///Error information from a response.
     ///
     /// <details><summary>JSON schema</summary>
@@ -129,26 +77,59 @@ pub mod types {
         }
     }
 
-    /// Generation of default values for serde.
-    pub mod defaults {
-        pub(super) fn default_u64<T, const V: u64>() -> T
-        where
-            T: std::convert::TryFrom<u64>,
-            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
-        {
-            T::try_from(V).unwrap()
-        }
+    ///A single page of results
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "description": "A single page of results",
+    ///  "type": "object",
+    ///  "required": [
+    ///    "items"
+    ///  ],
+    ///  "properties": {
+    ///    "items": {
+    ///      "description": "list of items on this page of results",
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "integer",
+    ///        "format": "uint32",
+    ///        "minimum": 0.0
+    ///      }
+    ///    },
+    ///    "next_page": {
+    ///      "description": "token used to fetch the next page of results (if
+    /// any)",
+    ///      "type": [
+    ///        "string",
+    ///        "null"
+    ///      ]
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct Uint32ResultsPage {
+        ///list of items on this page of results
+        pub items: ::std::vec::Vec<u32>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
+    }
 
-        pub(super) fn body_with_defaults_something() -> ::std::option::Option<bool> {
-            ::std::option::Option::Some(true)
+    impl ::std::convert::From<&Uint32ResultsPage> for Uint32ResultsPage {
+        fn from(value: &Uint32ResultsPage) -> Self {
+            value.clone()
         }
     }
 }
 
 #[derive(Clone, Debug)]
-///Client for pagination-demo
+///Client for test_stream_pagination
 ///
-///Version: 9000.0.0
+///Version: 1.0.0
 pub struct Client {
     pub(crate) baseurl: String,
     pub(crate) client: reqwest::Client,
@@ -201,31 +182,87 @@ impl Client {
     /// This string is pulled directly from the source OpenAPI
     /// document and may be in any format the API selects.
     pub fn api_version(&self) -> &'static str {
-        "9000.0.0"
+        "1.0.0"
     }
 }
 
 #[allow(clippy::all)]
 #[allow(elided_named_lifetimes)]
 impl Client {
-    ///Sends a `POST` request to `/`
-    pub async fn default_params<'a>(
+    ///Sends a `GET` request to `/`
+    ///
+    ///Arguments:
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retrieve the
+    ///   subsequent page
+    pub async fn paginated_u32s<'a>(
         &'a self,
-        body: &'a types::BodyWithDefaults,
-    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+        limit: Option<std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+    ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/", self.baseurl,);
-            self.client.post(url).json(&body)
+            self.client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
         }
 
         .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200..=299 => Ok(ResponseValue::stream(response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
+    }
+
+    ///Sends repeated `GET` requests to `/` until there are no more results.
+    ///
+    ///Arguments:
+    /// - `limit`: Maximum number of items returned by a single call
+    pub fn paginated_u32s_stream<'a>(
+        &'a self,
+        limit: Option<std::num::NonZeroU32>,
+    ) -> impl futures::Stream<Item = Result<u32, Error<types::Error>>> + Unpin + '_ {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.paginated_u32s(limit, None)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.paginated_u32s(limit, state.as_deref())
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
     }
 }
 

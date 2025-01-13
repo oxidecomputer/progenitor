@@ -1,20 +1,20 @@
 pub mod operations {
-    #![doc = r" [`When`](httpmock::When) and [`Then`](httpmock::Then)"]
+    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
     #![doc = r" wrappers for each operation. Each can be converted to"]
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::keeper_builder::*;
-    pub struct EnrolWhen(httpmock::When);
+    pub struct EnrolWhen(::httpmock::When);
     impl EnrolWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/enrol$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -27,13 +27,13 @@ pub mod operations {
         }
     }
 
-    pub struct EnrolThen(httpmock::Then);
+    pub struct EnrolThen(::httpmock::Then);
     impl EnrolThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -42,17 +42,17 @@ pub mod operations {
         }
     }
 
-    pub struct GlobalJobsWhen(httpmock::When);
+    pub struct GlobalJobsWhen(::httpmock::When);
     impl GlobalJobsWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/global/jobs$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -61,13 +61,13 @@ pub mod operations {
         }
     }
 
-    pub struct GlobalJobsThen(httpmock::Then);
+    pub struct GlobalJobsThen(::httpmock::Then);
     impl GlobalJobsThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -81,17 +81,17 @@ pub mod operations {
         }
     }
 
-    pub struct PingWhen(httpmock::When);
+    pub struct PingWhen(::httpmock::When);
     impl PingWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/ping$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -100,13 +100,13 @@ pub mod operations {
         }
     }
 
-    pub struct PingThen(httpmock::Then);
+    pub struct PingThen(::httpmock::Then);
     impl PingThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -120,17 +120,17 @@ pub mod operations {
         }
     }
 
-    pub struct ReportFinishWhen(httpmock::When);
+    pub struct ReportFinishWhen(::httpmock::When);
     impl ReportFinishWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/report/finish$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -143,13 +143,13 @@ pub mod operations {
         }
     }
 
-    pub struct ReportFinishThen(httpmock::Then);
+    pub struct ReportFinishThen(::httpmock::Then);
     impl ReportFinishThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -163,17 +163,17 @@ pub mod operations {
         }
     }
 
-    pub struct ReportOutputWhen(httpmock::When);
+    pub struct ReportOutputWhen(::httpmock::When);
     impl ReportOutputWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/report/output$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -186,13 +186,13 @@ pub mod operations {
         }
     }
 
-    pub struct ReportOutputThen(httpmock::Then);
+    pub struct ReportOutputThen(::httpmock::Then);
     impl ReportOutputThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -206,17 +206,17 @@ pub mod operations {
         }
     }
 
-    pub struct ReportStartWhen(httpmock::When);
+    pub struct ReportStartWhen(::httpmock::When);
     impl ReportStartWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/report/start$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -229,13 +229,13 @@ pub mod operations {
         }
     }
 
-    pub struct ReportStartThen(httpmock::Then);
+    pub struct ReportStartThen(::httpmock::Then);
     impl ReportStartThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -250,32 +250,32 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](httpmock::MockServer) that"]
+#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
 #[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](httpmock::MockServer::mock) calls."]
+#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn enrol<F>(&self, config_fn: F) -> httpmock::Mock
+    fn enrol<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::EnrolWhen, operations::EnrolThen);
-    fn global_jobs<F>(&self, config_fn: F) -> httpmock::Mock
+    fn global_jobs<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::GlobalJobsWhen, operations::GlobalJobsThen);
-    fn ping<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ping<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::PingWhen, operations::PingThen);
-    fn report_finish<F>(&self, config_fn: F) -> httpmock::Mock
+    fn report_finish<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::ReportFinishWhen, operations::ReportFinishThen);
-    fn report_output<F>(&self, config_fn: F) -> httpmock::Mock
+    fn report_output<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::ReportOutputWhen, operations::ReportOutputThen);
-    fn report_start<F>(&self, config_fn: F) -> httpmock::Mock
+    fn report_start<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::ReportStartWhen, operations::ReportStartThen);
 }
 
-impl MockServerExt for httpmock::MockServer {
-    fn enrol<F>(&self, config_fn: F) -> httpmock::Mock
+impl MockServerExt for ::httpmock::MockServer {
+    fn enrol<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::EnrolWhen, operations::EnrolThen),
     {
@@ -287,7 +287,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn global_jobs<F>(&self, config_fn: F) -> httpmock::Mock
+    fn global_jobs<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::GlobalJobsWhen, operations::GlobalJobsThen),
     {
@@ -299,7 +299,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ping<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ping<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::PingWhen, operations::PingThen),
     {
@@ -311,7 +311,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn report_finish<F>(&self, config_fn: F) -> httpmock::Mock
+    fn report_finish<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::ReportFinishWhen, operations::ReportFinishThen),
     {
@@ -323,7 +323,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn report_output<F>(&self, config_fn: F) -> httpmock::Mock
+    fn report_output<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::ReportOutputWhen, operations::ReportOutputThen),
     {
@@ -335,7 +335,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn report_start<F>(&self, config_fn: F) -> httpmock::Mock
+    fn report_start<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::ReportStartWhen, operations::ReportStartThen),
     {

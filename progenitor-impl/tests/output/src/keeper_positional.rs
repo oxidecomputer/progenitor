@@ -1,3 +1,4 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -7,23 +8,20 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
-        pub struct ConversionError(std::borrow::Cow<'static, str>);
-        impl std::error::Error for ConversionError {}
-        impl std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Display::fmt(&self.0, f)
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
-        impl std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Debug::fmt(&self.0, f)
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
 
@@ -63,13 +61,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct EnrolBody {
-        pub host: String,
-        pub key: String,
+        pub host: ::std::string::String,
+        pub key: ::std::string::String,
     }
 
-    impl From<&EnrolBody> for EnrolBody {
+    impl ::std::convert::From<&EnrolBody> for EnrolBody {
         fn from(value: &EnrolBody) -> Self {
             value.clone()
         }
@@ -97,12 +95,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct GlobalJobsResult {
-        pub summary: Vec<ReportSummary>,
+        pub summary: ::std::vec::Vec<ReportSummary>,
     }
 
-    impl From<&GlobalJobsResult> for GlobalJobsResult {
+    impl ::std::convert::From<&GlobalJobsResult> for GlobalJobsResult {
         fn from(value: &GlobalJobsResult) -> Self {
             value.clone()
         }
@@ -135,14 +133,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct OutputRecord {
-        pub msg: String,
-        pub stream: String,
+        pub msg: ::std::string::String,
+        pub stream: ::std::string::String,
         pub time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&OutputRecord> for OutputRecord {
+    impl ::std::convert::From<&OutputRecord> for OutputRecord {
         fn from(value: &OutputRecord) -> Self {
             value.clone()
         }
@@ -171,13 +169,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct PingResult {
-        pub host: String,
+        pub host: ::std::string::String,
         pub ok: bool,
     }
 
-    impl From<&PingResult> for PingResult {
+    impl ::std::convert::From<&PingResult> for PingResult {
         fn from(value: &PingResult) -> Self {
             value.clone()
         }
@@ -217,7 +215,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportFinishBody {
         pub duration_millis: i32,
         pub end_time: chrono::DateTime<chrono::offset::Utc>,
@@ -225,7 +223,7 @@ pub mod types {
         pub id: ReportId,
     }
 
-    impl From<&ReportFinishBody> for ReportFinishBody {
+    impl ::std::convert::From<&ReportFinishBody> for ReportFinishBody {
         fn from(value: &ReportFinishBody) -> Self {
             value.clone()
         }
@@ -268,16 +266,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportId {
-        pub host: String,
-        pub job: String,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
         pub pid: u64,
         pub time: chrono::DateTime<chrono::offset::Utc>,
-        pub uuid: String,
+        pub uuid: ::std::string::String,
     }
 
-    impl From<&ReportId> for ReportId {
+    impl ::std::convert::From<&ReportId> for ReportId {
         fn from(value: &ReportId) -> Self {
             value.clone()
         }
@@ -306,13 +304,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
     }
 
-    impl From<&ReportOutputBody> for ReportOutputBody {
+    impl ::std::convert::From<&ReportOutputBody> for ReportOutputBody {
         fn from(value: &ReportOutputBody) -> Self {
             value.clone()
         }
@@ -337,12 +335,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportResult {
         pub existed_already: bool,
     }
 
-    impl From<&ReportResult> for ReportResult {
+    impl ::std::convert::From<&ReportResult> for ReportResult {
         fn from(value: &ReportResult) -> Self {
             value.clone()
         }
@@ -376,14 +374,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportStartBody {
         pub id: ReportId,
-        pub script: String,
+        pub script: ::std::string::String,
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&ReportStartBody> for ReportStartBody {
+    impl ::std::convert::From<&ReportStartBody> for ReportStartBody {
         fn from(value: &ReportStartBody) -> Self {
             value.clone()
         }
@@ -431,17 +429,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportSummary {
         pub age_seconds: i32,
         pub duration_seconds: i32,
-        pub host: String,
-        pub job: String,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
         pub status: i32,
         pub when: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&ReportSummary> for ReportSummary {
+    impl ::std::convert::From<&ReportSummary> for ReportSummary {
         fn from(value: &ReportSummary) -> Self {
             value.clone()
         }
@@ -511,6 +509,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `POST` request to `/enrol`
     ///

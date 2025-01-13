@@ -15,8 +15,10 @@ use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
+pub use typify::CrateVers;
 pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
+pub use typify::UnknownPolicy;
 
 mod cli;
 mod httpmock;
@@ -62,11 +64,22 @@ pub struct GenerationSettings {
     pre_hook: Option<TokenStream>,
     pre_hook_async: Option<TokenStream>,
     post_hook: Option<TokenStream>,
+    post_hook_async: Option<TokenStream>,
     extra_derives: Vec<String>,
+
+    map_type: Option<String>,
+    unknown_crates: UnknownPolicy,
+    crates: BTreeMap<String, CrateSpec>,
 
     patch: HashMap<String, TypePatch>,
     replace: HashMap<String, (String, Vec<TypeImpl>)>,
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
+}
+
+#[derive(Debug, Clone)]
+struct CrateSpec {
+    version: CrateVers,
+    rename: Option<String>,
 }
 
 /// Style of generated client.
@@ -141,6 +154,12 @@ impl GenerationSettings {
         self
     }
 
+    /// Hook invoked prior to receiving the HTTP response.
+    pub fn with_post_hook_async(&mut self, post_hook: TokenStream) -> &mut Self {
+        self.post_hook_async = Some(post_hook);
+        self
+    }
+
     /// Additional derive macros applied to generated types.
     pub fn with_derive(&mut self, derive: impl ToString) -> &mut Self {
         self.extra_derives.push(derive.to_string());
@@ -149,11 +168,7 @@ impl GenerationSettings {
 
     /// Modify a type with the given name.
     /// See [typify::TypeSpaceSettings::with_patch].
-    pub fn with_patch<S: AsRef<str>>(
-        &mut self,
-        type_name: S,
-        patch: &TypePatch,
-    ) -> &mut Self {
+    pub fn with_patch<S: AsRef<str>>(&mut self, type_name: S, patch: &TypePatch) -> &mut Self {
         self.patch
             .insert(type_name.as_ref().to_string(), patch.clone());
         self
@@ -161,11 +176,7 @@ impl GenerationSettings {
 
     /// Replace a referenced type with a named type.
     /// See [typify::TypeSpaceSettings::with_replacement].
-    pub fn with_replacement<
-        TS: ToString,
-        RS: ToString,
-        I: Iterator<Item = TypeImpl>,
-    >(
+    pub fn with_replacement<TS: ToString, RS: ToString, I: Iterator<Item = TypeImpl>>(
         &mut self,
         type_name: TS,
         replace_name: RS,
@@ -190,14 +201,52 @@ impl GenerationSettings {
             .push((schema, type_name.to_string(), impls.collect()));
         self
     }
+
+    /// Policy regarding crates referenced by the schema extension
+    /// `x-rust-type` not explicitly specified via [Self::with_crate].
+    /// See [typify::TypeSpaceSettings::with_unknown_crates].
+    pub fn with_unknown_crates(&mut self, policy: UnknownPolicy) -> &mut Self {
+        self.unknown_crates = policy;
+        self
+    }
+
+    /// Explicitly named crates whose types may be used during generation
+    /// rather than generating new types based on their schemas (base on the
+    /// presence of the x-rust-type extension).
+    /// See [typify::TypeSpaceSettings::with_crate].
+    pub fn with_crate<S1: ToString>(
+        &mut self,
+        crate_name: S1,
+        version: CrateVers,
+        rename: Option<&String>,
+    ) -> &mut Self {
+        self.crates.insert(
+            crate_name.to_string(),
+            CrateSpec {
+                version,
+                rename: rename.cloned(),
+            },
+        );
+        self
+    }
+
+    /// Set the type used for key-value maps. Common examples:
+    /// - [`std::collections::HashMap`] - **Default**
+    /// - [`std::collections::BTreeMap`]
+    /// - [`indexmap::IndexMap`]
+    ///
+    /// The requiremnets for a map type can be found in the
+    /// [typify::TypeSpaceSettings::with_map_type] documentation.
+    pub fn with_map_type<MT: ToString>(&mut self, map_type: MT) -> &mut Self {
+        self.map_type = Some(map_type.to_string());
+        self
+    }
 }
 
 impl Default for Generator {
     fn default() -> Self {
         Self {
-            type_space: TypeSpace::new(
-                TypeSpaceSettings::default().with_type_mod("types"),
-            ),
+            type_space: TypeSpace::new(TypeSpaceSettings::default().with_type_mod("types")),
             settings: Default::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
@@ -215,28 +264,38 @@ impl Generator {
         settings.extra_derives.iter().for_each(|derive| {
             let _ = type_settings.with_derive(derive.clone());
         });
+
+        // Control use of crates found in x-rust-type extension
+        type_settings.with_unknown_crates(settings.unknown_crates);
+        settings
+            .crates
+            .iter()
+            .for_each(|(crate_name, CrateSpec { version, rename })| {
+                type_settings.with_crate(crate_name, version.clone(), rename.as_ref());
+            });
+
+        // Adjust generation by type, name, or schema.
         settings.patch.iter().for_each(|(type_name, patch)| {
             type_settings.with_patch(type_name, patch);
         });
-        settings.replace.iter().for_each(
-            |(type_name, (replace_name, impls))| {
-                type_settings.with_replacement(
-                    type_name,
-                    replace_name,
-                    impls.iter().cloned(),
-                );
-            },
-        );
+        settings
+            .replace
+            .iter()
+            .for_each(|(type_name, (replace_name, impls))| {
+                type_settings.with_replacement(type_name, replace_name, impls.iter().cloned());
+            });
         settings
             .convert
             .iter()
             .for_each(|(schema, type_name, impls)| {
-                type_settings.with_conversion(
-                    schema.clone(),
-                    type_name,
-                    impls.iter().cloned(),
-                );
+                type_settings.with_conversion(schema.clone(), type_name, impls.iter().cloned());
             });
+
+        // Set the map type if specified.
+        if let Some(map_type) = &settings.map_type {
+            type_settings.with_map_type(map_type.clone());
+        }
+
         Self {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
@@ -251,9 +310,10 @@ impl Generator {
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
-            components.schemas.iter().map(|(name, ref_or_schema)| {
-                (name.clone(), ref_or_schema.to_schema())
-            })
+            components
+                .schemas
+                .iter()
+                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
         });
 
         self.type_space.add_ref_types(schemas)?;
@@ -269,36 +329,32 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(
-                    operation,
-                    &spec.components,
-                    path,
-                    method,
-                    path_parameters,
-                )
+                self.process_operation(operation, &spec.components, path, method, path_parameters)
             })
             .collect::<Result<Vec<_>>>()?;
 
-        let operation_code = match (
-            &self.settings.interface,
-            &self.settings.tag,
-        ) {
-            (InterfaceStyle::Positional, TagStyle::Merged) => {
-                self.generate_tokens_positional_merged(&raw_methods)
-            }
+        let operation_code = match (&self.settings.interface, &self.settings.tag) {
+            (InterfaceStyle::Positional, TagStyle::Merged) => self
+                .generate_tokens_positional_merged(
+                    &raw_methods,
+                    self.settings.inner_type.is_some(),
+                ),
             (InterfaceStyle::Positional, TagStyle::Separate) => {
                 unimplemented!("positional arguments with separate tags are currently unsupported")
             }
-            (InterfaceStyle::Builder, TagStyle::Merged) => {
-                self.generate_tokens_builder_merged(&raw_methods)
-            }
+            (InterfaceStyle::Builder, TagStyle::Merged) => self
+                .generate_tokens_builder_merged(&raw_methods, self.settings.inner_type.is_some()),
             (InterfaceStyle::Builder, TagStyle::Separate) => {
                 let tag_info = spec
                     .tags
                     .iter()
                     .map(|tag| (&tag.name, tag))
                     .collect::<BTreeMap<_, _>>();
-                self.generate_tokens_builder_separate(&raw_methods, tag_info)
+                self.generate_tokens_builder_separate(
+                    &raw_methods,
+                    tag_info,
+                    self.settings.inner_type.is_some(),
+                )
             }
         }?;
 
@@ -367,12 +423,6 @@ impl Generator {
             /// Types used as operation parameters and responses.
             #[allow(clippy::all)]
             pub mod types {
-                use serde::{Deserialize, Serialize};
-
-                // This may be used by some impl Deserialize, but not all.
-                #[allow(unused_imports)]
-                use std::convert::TryFrom;
-
                 #types
             }
 
@@ -456,10 +506,11 @@ impl Generator {
     fn generate_tokens_positional_merged(
         &mut self,
         input_methods: &[method::OperationMethod],
+        has_inner: bool,
     ) -> Result<TokenStream> {
         let methods = input_methods
             .iter()
-            .map(|method| self.positional_method(method))
+            .map(|method| self.positional_method(method, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
@@ -468,6 +519,7 @@ impl Generator {
 
         let out = quote! {
             #[allow(clippy::all)]
+            #[allow(elided_named_lifetimes)]
             impl Client {
                 #(#methods)*
             }
@@ -484,13 +536,11 @@ impl Generator {
     fn generate_tokens_builder_merged(
         &mut self,
         input_methods: &[method::OperationMethod],
+        has_inner: bool,
     ) -> Result<TokenStream> {
-        let (builder_struct, built_struct): (
-            Vec<TokenStream>,
-            Vec<TokenStream>,
-        ) = input_methods
+        let (builder_struct, built_struct): (Vec<TokenStream>, Vec<TokenStream>) = input_methods
             .iter()
-            .map(|method| self.builder_struct(method, TagStyle::Merged))
+            .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
             .collect::<Result<Vec<_>>>()?
             .into_iter()
             .unzip();
@@ -555,19 +605,16 @@ impl Generator {
         &mut self,
         input_methods: &[method::OperationMethod],
         tag_info: BTreeMap<&String, &openapiv3::Tag>,
+        has_inner: bool,
     ) -> Result<TokenStream> {
-        let (builder_struct, built_struct): (
-            Vec<TokenStream>,
-            Vec<TokenStream>,
-        ) = input_methods
+        let (builder_struct, built_struct): (Vec<TokenStream>, Vec<TokenStream>) = input_methods
             .iter()
-            .map(|method| self.builder_struct(method, TagStyle::Merged))
+            .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
             .collect::<Result<Vec<_>>>()?
             .into_iter()
             .unzip();
 
-        let (traits_and_impls, trait_preludes) =
-            self.builder_tags(input_methods, &tag_info);
+        let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
@@ -626,12 +673,14 @@ impl Generator {
         &self.type_space
     }
 
-    /// Whether the generated client needs to use additional crates to support futures.
+    /// Whether the generated client needs to use additional crates to support
+    /// futures.
     pub fn uses_futures(&self) -> bool {
         self.uses_futures
     }
 
-    /// Whether the generated client needs to use additional crates to support websockets.
+    /// Whether the generated client needs to use additional crates to support
+    /// websockets.
     pub fn uses_websockets(&self) -> bool {
         self.uses_websockets
     }
@@ -652,23 +701,15 @@ pub fn space_out_items(content: String) -> Result<String> {
 pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     match spec.openapi.as_str() {
         "3.0.0" | "3.0.1" | "3.0.2" | "3.0.3" => (),
-        v => {
-            return Err(Error::UnexpectedFormat(format!(
-                "invalid version: {}",
-                v
-            )))
-        }
+        v => return Err(Error::UnexpectedFormat(format!("invalid version: {}", v))),
     }
 
     let mut opids = HashSet::new();
     spec.paths.paths.iter().try_for_each(|p| {
         match p.1 {
-            openapiv3::ReferenceOr::Reference { reference: _ } => {
-                Err(Error::UnexpectedFormat(format!(
-                    "path {} uses reference, unsupported",
-                    p.0,
-                )))
-            }
+            openapiv3::ReferenceOr::Reference { reference: _ } => Err(Error::UnexpectedFormat(
+                format!("path {} uses reference, unsupported", p.0,),
+            )),
             openapiv3::ReferenceOr::Item(item) => {
                 // Make sure every operation has an operation ID, and that each
                 // operation ID is only used once in the document.

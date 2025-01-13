@@ -7,23 +7,20 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
-        pub struct ConversionError(std::borrow::Cow<'static, str>);
-        impl std::error::Error for ConversionError {}
-        impl std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Display::fmt(&self.0, f)
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
-        impl std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Debug::fmt(&self.0, f)
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
 
@@ -176,7 +173,7 @@ pub mod builder {
     pub struct KeyGet<'a> {
         client: &'a super::Client,
         key: Result<Option<bool>, String>,
-        unique_key: Result<Option<String>, String>,
+        unique_key: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> KeyGet<'a> {
@@ -201,12 +198,11 @@ pub mod builder {
 
         pub fn unique_key<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.unique_key = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for unique_key failed".to_string());
+            self.unique_key = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for unique_key failed".to_string()
+            });
             self
         }
 
@@ -225,14 +221,14 @@ pub mod builder {
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/key", client.baseurl,);
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &key {
-                    query.push(("key", v.to_string()));
-                }
-                if let Some(v) = &unique_key {
-                    query.push(("uniqueKey", v.to_string()));
-                }
-                client.client.get(url).query(&query)
+                client
+                    .client
+                    .get(url)
+                    .query(&progenitor_client::QueryParam::new("key", &key))
+                    .query(&progenitor_client::QueryParam::new(
+                        "uniqueKey",
+                        &unique_key,
+                    ))
             };
             Ok(built::KeyGet {
                 client: client,

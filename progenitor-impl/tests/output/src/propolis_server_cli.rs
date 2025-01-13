@@ -9,7 +9,7 @@ impl<T: CliConfig> Cli<T> {
         Self { client, config }
     }
 
-    pub fn get_command(cmd: CliCommand) -> clap::Command {
+    pub fn get_command(cmd: CliCommand) -> ::clap::Command {
         match cmd {
             CliCommand::InstanceGet => Self::cli_instance_get(),
             CliCommand::InstanceEnsure => Self::cli_instance_ensure(),
@@ -23,122 +23,126 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub fn cli_instance_get() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_instance_get() -> ::clap::Command {
+        ::clap::Command::new("")
     }
 
-    pub fn cli_instance_ensure() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_instance_ensure() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("cloud-init-bytes")
+                ::clap::Arg::new("cloud-init-bytes")
                     .long("cloud-init-bytes")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(false),
             )
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub fn cli_instance_issue_crucible_snapshot_request() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_instance_issue_crucible_snapshot_request() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("id")
+                ::clap::Arg::new("id")
                     .long("id")
-                    .value_parser(clap::value_parser!(uuid::Uuid))
+                    .value_parser(::clap::value_parser!(uuid::Uuid))
                     .required(true),
             )
             .arg(
-                clap::Arg::new("snapshot-id")
+                ::clap::Arg::new("snapshot-id")
                     .long("snapshot-id")
-                    .value_parser(clap::value_parser!(uuid::Uuid))
+                    .value_parser(::clap::value_parser!(uuid::Uuid))
                     .required(true),
             )
             .about("Issue a snapshot request to a crucible backend")
     }
 
-    pub fn cli_instance_migrate_status() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_instance_migrate_status() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("migration-id")
+                ::clap::Arg::new("migration-id")
                     .long("migration-id")
-                    .value_parser(clap::value_parser!(uuid::Uuid))
+                    .value_parser(::clap::value_parser!(uuid::Uuid))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(false)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub fn cli_instance_serial() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_instance_serial() -> ::clap::Command {
+        ::clap::Command::new("")
     }
 
-    pub fn cli_instance_state_put() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_instance_state_put() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub fn cli_instance_state_monitor() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_instance_state_monitor() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("gen")
+                ::clap::Arg::new("gen")
                     .long("gen")
-                    .value_parser(clap::value_parser!(u64))
+                    .value_parser(::clap::value_parser!(u64))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(false)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute(
+        &self,
+        cmd: CliCommand,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         match cmd {
             CliCommand::InstanceGet => self.execute_instance_get(matches).await,
             CliCommand::InstanceEnsure => self.execute_instance_ensure(matches).await,
@@ -155,25 +159,28 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_instance_get(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_instance_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_get();
         self.config.execute_instance_get(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_ensure(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_instance_ensure(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_ensure();
-        if let Some(value) = matches.get_one::<String>("cloud-init-bytes") {
+        if let Some(value) = matches.get_one::<::std::string::String>("cloud-init-bytes") {
             request = request.body_map(|body| body.cloud_init_bytes(value.clone()))
         }
 
@@ -188,11 +195,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -200,7 +207,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_instance_issue_crucible_snapshot_request(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_issue_crucible_snapshot_request();
         if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
@@ -216,11 +223,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -228,7 +235,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_instance_migrate_status(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate_status();
         if let Some(value) = matches.get_one::<uuid::Uuid>("migration-id") {
@@ -247,17 +254,20 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
     }
 
-    pub async fn execute_instance_serial(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_instance_serial(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_serial();
         self.config.execute_instance_serial(matches, &mut request)?;
         let result = request.send().await;
@@ -273,7 +283,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_instance_state_put(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_put();
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -288,11 +298,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_no_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -300,7 +310,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_instance_state_monitor(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_monitor();
         if let Some(value) = matches.get_one::<u64>("gen") {
@@ -319,11 +329,11 @@ impl<T: CliConfig> Cli<T> {
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.item_success(&r);
+                self.config.success_item(&r);
                 Ok(())
             }
             Err(r) => {
-                self.config.item_error(&r);
+                self.config.error(&r);
                 Err(anyhow::Error::new(r))
             }
         }
@@ -331,10 +341,11 @@ impl<T: CliConfig> Cli<T> {
 }
 
 pub trait CliConfig {
-    fn item_success<T>(&self, value: &ResponseValue<T>)
+    fn success_item<T>(&self, value: &ResponseValue<T>)
     where
         T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
-    fn item_error<T>(&self, value: &Error<T>)
+    fn success_no_item(&self, value: &ResponseValue<()>);
+    fn error<T>(&self, value: &Error<T>)
     where
         T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_start<T>(&self)
@@ -351,7 +362,7 @@ pub trait CliConfig {
         T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_instance_get(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::InstanceGet,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -359,7 +370,7 @@ pub trait CliConfig {
 
     fn execute_instance_ensure(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::InstanceEnsure,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -367,7 +378,7 @@ pub trait CliConfig {
 
     fn execute_instance_issue_crucible_snapshot_request(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::InstanceIssueCrucibleSnapshotRequest,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -375,7 +386,7 @@ pub trait CliConfig {
 
     fn execute_instance_migrate_status(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::InstanceMigrateStatus,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -383,7 +394,7 @@ pub trait CliConfig {
 
     fn execute_instance_serial(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::InstanceSerial,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -391,7 +402,7 @@ pub trait CliConfig {
 
     fn execute_instance_state_put(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::InstanceStatePut,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -399,7 +410,7 @@ pub trait CliConfig {
 
     fn execute_instance_state_monitor(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::InstanceStateMonitor,
     ) -> anyhow::Result<()> {
         Ok(())

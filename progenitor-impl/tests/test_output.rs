@@ -6,8 +6,7 @@ use std::{
 };
 
 use progenitor_impl::{
-    space_out_items, GenerationSettings, Generator, InterfaceStyle, TagStyle,
-    TypeImpl, TypePatch,
+    space_out_items, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl, TypePatch,
 };
 
 use openapiv3::OpenAPI;
@@ -39,24 +38,24 @@ fn reformat_code(content: TokenStream) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(
-        rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap(),
-    )
-    .unwrap()
+    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
 }
 
 #[track_caller]
 fn verify_apis(openapi_file: &str) {
     let mut in_path = PathBuf::from("../sample_openapi");
     in_path.push(openapi_file);
-    let openapi_stem =
-        openapi_file.split('.').next().unwrap().replace('-', "_");
+    let openapi_stem = openapi_file.split('.').next().unwrap().replace('-', "_");
 
     let spec = load_api(in_path);
 
     // Positional generation.
     let mut generator = Generator::default();
-    let output = generate_formatted(&mut generator, &spec);
+    let output = format!(
+        "{}\n{}",
+        "#![allow(elided_named_lifetimes)]",
+        generate_formatted(&mut generator, &spec),
+    );
     expectorate::assert_contents(
         format!("tests/output/src/{}_positional.rs", openapi_stem),
         &output,
@@ -71,9 +70,7 @@ fn verify_apis(openapi_file: &str) {
             .with_patch("Name", TypePatch::default().with_derive("Hash"))
             .with_conversion(
                 schemars::schema::SchemaObject {
-                    instance_type: Some(
-                        schemars::schema::InstanceType::Integer.into(),
-                    ),
+                    instance_type: Some(schemars::schema::InstanceType::Integer.into()),
                     format: Some("int32".to_string()),
                     ..Default::default()
                 },
@@ -105,10 +102,7 @@ fn verify_apis(openapi_file: &str) {
         .unwrap();
     let output = reformat_code(tokens);
 
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_cli.rs", openapi_stem),
-        &output,
-    );
+    expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
 
     // httpmock generation.
     let code = generator
@@ -165,6 +159,11 @@ fn test_yaml() {
 #[test]
 fn test_param_collision() {
     verify_apis("param-collision.json");
+}
+
+#[test]
+fn test_cli_gen() {
+    verify_apis("cli-gen.json");
 }
 
 // TODO this file is full of inconsistencies and incorrectly specified types.

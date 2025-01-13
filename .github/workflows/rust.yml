@@ -1,5 +1,5 @@
 #
-# Configuration for GitHub-based CI, based on the stock GitHub Rust config.
+# Configuration for GitHub-based CI
 #
 name: Build
 
@@ -13,19 +13,11 @@ jobs:
   check-style:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Install nightly
-      uses: actions-rs/toolchain@v1
+    - uses: actions/checkout@v4
+    - name: Install nightly rustfmt
+      uses: dtolnay/rust-toolchain@nightly
       with:
-        toolchain: nightly
         components: rustfmt
-        default: false
-    - name: Install stable
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        components: rustfmt
-        default: true
     - name: Report cargo version
       run: cargo --version
     - name: Report rustfmt version
@@ -43,45 +35,42 @@ jobs:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     steps:
-    - uses: actions/checkout@v2
-    - name: Install nightly
-      uses: actions-rs/toolchain@v1
+    - uses: actions/checkout@v4
+    - name: Install nightly rustfmt
+      uses: dtolnay/rust-toolchain@nightly
       with:
-        toolchain: nightly
         components: rustfmt
-        default: false
     - name: Install stable
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@stable
       with:
-        toolchain: stable
         components: rustfmt
-        default: true
     - name: Build
       run: cargo build --locked --tests --verbose
     - name: Run tests
       run: cargo test --locked --verbose
 
+  build-no-default-features:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cargo build --locked --no-default-features
+
   test-wasm:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install nightly
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@nightly
       with:
-        toolchain: nightly
         components: rustfmt
-        default: false
         target: wasm32-unknown-unknown
     - uses: nanasess/setup-chromedriver@v2
-    - name: Install stable
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        components: rustfmt
-        default: true
-        target: wasm32-unknown-unknown
     - name: Install wasm-bindgen-cli
-      run: cargo install --version 0.2.92 wasm-bindgen-cli
+      run: cargo install --version 0.2.95 wasm-bindgen-cli
     - name: Run tests
       run: |
         cd example-wasm

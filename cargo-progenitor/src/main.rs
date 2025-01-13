@@ -1,7 +1,6 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2024 Oxide Computer Company
 
 use std::{
-    collections::HashMap,
     fs::{File, OpenOptions},
     io::Write,
     path::{Path, PathBuf},
@@ -98,8 +97,7 @@ fn reformat_code(input: String) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap())
-        .unwrap()
+    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -146,15 +144,11 @@ fn main() -> Result<()> {
             let name = &args.name;
             let version = &args.version;
 
-            /*
-             * Create the top-level crate directory:
-             */
+            // Create the top-level crate directory:
             let root = PathBuf::from(&args.output);
             std::fs::create_dir_all(&root)?;
 
-            /*
-             * Write the Cargo.toml file:
-             */
+            // Write the Cargo.toml file:
             let mut toml = root.clone();
             toml.push("Cargo.toml");
 
@@ -167,9 +161,7 @@ fn main() -> Result<()> {
                 name, version, &args.license_name,
             );
             if let Some(registry_name) = args.registry_name {
-                tomlout.extend(
-                    format!("publish = [\"{}\"]\n", registry_name).chars(),
-                );
+                tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
             }
             tomlout.extend(
                 format!(
@@ -184,16 +176,12 @@ fn main() -> Result<()> {
 
             save(&toml, tomlout.as_str())?;
 
-            /*
-             * Create the src/ directory:
-             */
+            // Create the src/ directory:
             let mut src = root;
             src.push("src");
             std::fs::create_dir_all(&src)?;
 
-            /*
-             * Create the Rust source file containing the generated client:
-             */
+            // Create the Rust source file containing the generated client:
             let lib_code = if args.include_client {
                 format!("mod progenitor_client;\n\n{}", api_code)
             } else {
@@ -205,9 +193,7 @@ fn main() -> Result<()> {
             librs.push("lib.rs");
             save(librs, lib_code.as_str())?;
 
-            /*
-             * Create the Rust source file containing the support code:
-             */
+            // Create the Rust source file containing the support code:
             if args.include_client {
                 let progenitor_client_code = progenitor_client::code();
                 let mut clientrs = src;
@@ -225,76 +211,92 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
-    let dependency_versions: HashMap<String, String> = built_info::DEPENDENCIES
-        .iter()
-        .map(|(name, version)| (name.to_string(), version.to_string()))
-        .collect();
+// Indirect dependencies may or may not be preserved in built's output so we
+// manually encode the versions. We need to take care to update this
+// particularly when generated code depends on particular dependency versions.
+struct Dependencies {
+    base64: &'static str,
+    bytes: &'static str,
+    chrono: &'static str,
+    futures: &'static str,
+    percent_encoding: &'static str,
+    rand: &'static str,
+    regress: &'static str,
+    reqwest: &'static str,
+    serde: &'static str,
+    serde_json: &'static str,
+    serde_urlencoded: &'static str,
+    uuid: &'static str,
+}
 
+const DEPENDENCIES: Dependencies = Dependencies {
+    base64: "0.22",
+    bytes: "1.0",
+    chrono: "0.4",
+    futures: "0.3",
+    percent_encoding: "2.3",
+    rand: "0.8",
+    regress: "0.10",
+    reqwest: "0.12",
+    serde: "1.0",
+    serde_json: "1.0",
+    serde_urlencoded: "0.7",
+    uuid: "1.0",
+};
+
+pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
-        format!("bytes = \"{}\"", dependency_versions.get("bytes").unwrap()),
-        format!("futures-core = \"{}\"", dependency_versions.get("futures-core").unwrap()),
-        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", dependency_versions.get("reqwest").unwrap()),
-        format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", dependency_versions.get("serde").unwrap()),
-        format!("serde_urlencoded = \"{}\"", dependency_versions.get("serde_urlencoded").unwrap()),
+        format!("bytes = \"{}\"", DEPENDENCIES.bytes),
+        format!("futures-core = \"{}\"", DEPENDENCIES.futures),
+        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", DEPENDENCIES.reqwest),
+        format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", DEPENDENCIES.serde),
+        format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
     ];
 
     let type_space = builder.get_type_space();
+    let mut needs_serde_json = false;
 
-    let client_version_dep: String;
     if include_client {
         // code included from progenitor-client needs extra dependencies
         deps.push(format!(
             "percent-encoding = \"{}\"",
-            dependency_versions.get("percent-encoding").unwrap()
+            DEPENDENCIES.percent_encoding
         ));
+        needs_serde_json = true;
     } else {
         let crate_version = if release_is_unstable() {
             "*"
         } else {
             built_info::PKG_VERSION
         };
-        client_version_dep =
-            format!("progenitor-client = \"{}\"", crate_version);
+        let client_version_dep = format!("progenitor-client = \"{}\"", crate_version);
         deps.push(client_version_dep);
     }
 
     if type_space.uses_regress() {
-        deps.push(format!(
-            "regress = \"{}\"",
-            dependency_versions.get("regress").unwrap()
-        ));
+        deps.push(format!("regress = \"{}\"", DEPENDENCIES.regress));
     }
     if type_space.uses_uuid() {
         deps.push(format!(
             "uuid = {{ version = \"{}\", features = [\"serde\", \"v4\"] }}",
-            dependency_versions.get("uuid").unwrap()
+            DEPENDENCIES.uuid
         ));
     }
     if type_space.uses_chrono() {
-        deps.push(format!("chrono = {{ version = \"{}\", default-features=false, features = [\"serde\"] }}", dependency_versions.get("chrono").unwrap()))
+        deps.push(format!(
+            "chrono = {{ version = \"{}\", default-features=false, features = [\"serde\"] }}",
+            DEPENDENCIES.chrono
+        ));
     }
     if builder.uses_futures() {
-        deps.push(format!(
-            "futures = \"{}\"",
-            dependency_versions.get("futures").unwrap()
-        ));
+        deps.push(format!("futures = \"{}\"", DEPENDENCIES.futures));
     }
     if builder.uses_websockets() {
-        deps.push(format!(
-            "base64 = \"{}\"",
-            dependency_versions.get("base64").unwrap()
-        ));
-        deps.push(format!(
-            "rand = \"{}\"",
-            dependency_versions.get("rand").unwrap()
-        ));
+        deps.push(format!("base64 = \"{}\"", DEPENDENCIES.base64));
+        deps.push(format!("rand = \"{}\"", DEPENDENCIES.rand));
     }
-    if type_space.uses_serde_json() {
-        deps.push(format!(
-            "serde_json = \"{}\"",
-            dependency_versions.get("serde_json").unwrap()
-        ));
+    if type_space.uses_serde_json() || needs_serde_json {
+        deps.push(format!("serde_json = \"{}\"", DEPENDENCIES.serde_json));
     }
     deps.sort_unstable();
     deps

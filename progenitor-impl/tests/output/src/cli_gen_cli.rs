@@ -1,4 +1,4 @@
-use crate::param_overrides_builder::*;
+use crate::cli_gen_builder::*;
 pub struct Cli<T: CliConfig> {
     client: Client,
     config: T,
@@ -11,27 +11,32 @@ impl<T: CliConfig> Cli<T> {
 
     pub fn get_command(cmd: CliCommand) -> ::clap::Command {
         match cmd {
-            CliCommand::KeyGet => Self::cli_key_get(),
+            CliCommand::Uno => Self::cli_uno(),
         }
     }
 
-    pub fn cli_key_get() -> ::clap::Command {
+    pub fn cli_uno() -> ::clap::Command {
         ::clap::Command::new("")
             .arg(
-                ::clap::Arg::new("key")
-                    .long("key")
-                    .value_parser(::clap::value_parser!(bool))
-                    .required(false)
-                    .help("The same key parameter that overlaps with the path level parameter"),
+                ::clap::Arg::new("gateway")
+                    .long("gateway")
+                    .value_parser(::clap::value_parser!(::std::string::String))
+                    .required(true),
             )
             .arg(
-                ::clap::Arg::new("unique-key")
-                    .long("unique-key")
-                    .value_parser(::clap::value_parser!(::std::string::String))
-                    .required(false)
-                    .help("A key parameter that will not be overridden by the path spec"),
+                ::clap::Arg::new("json-body")
+                    .long("json-body")
+                    .value_name("JSON-FILE")
+                    .required(true)
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
+                    .help("Path to a file that contains the full json body."),
             )
-            .long_about("Gets a key")
+            .arg(
+                ::clap::Arg::new("json-body-template")
+                    .long("json-body-template")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("XXX"),
+            )
     }
 
     pub async fn execute(
@@ -40,26 +45,27 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         match cmd {
-            CliCommand::KeyGet => self.execute_key_get(matches).await,
+            CliCommand::Uno => self.execute_uno(matches).await,
         }
     }
 
-    pub async fn execute_key_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
-        let mut request = self.client.key_get();
-        if let Some(value) = matches.get_one::<bool>("key") {
-            request = request.key(value.clone());
+    pub async fn execute_uno(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+        let mut request = self.client.uno();
+        if let Some(value) = matches.get_one::<::std::string::String>("gateway") {
+            request = request.gateway(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<::std::string::String>("unique-key") {
-            request = request.unique_key(value.clone());
+        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
+            let body_txt = std::fs::read_to_string(value).unwrap();
+            let body_value = serde_json::from_str::<types::UnoBody>(&body_txt).unwrap();
+            request = request.body(body_value);
         }
 
-        self.config.execute_key_get(matches, &mut request)?;
+        self.config.execute_uno(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
-                self.config.success_no_item(&r);
-                Ok(())
+                todo!()
             }
             Err(r) => {
                 self.config.error(&r);
@@ -89,10 +95,10 @@ pub trait CliConfig {
     fn list_end_error<T>(&self, value: &Error<T>)
     where
         T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
-    fn execute_key_get(
+    fn execute_uno(
         &self,
         matches: &::clap::ArgMatches,
-        request: &mut builder::KeyGet,
+        request: &mut builder::Uno,
     ) -> anyhow::Result<()> {
         Ok(())
     }
@@ -100,11 +106,11 @@ pub trait CliConfig {
 
 #[derive(Copy, Clone, Debug)]
 pub enum CliCommand {
-    KeyGet,
+    Uno,
 }
 
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
-        vec![CliCommand::KeyGet].into_iter()
+        vec![CliCommand::Uno].into_iter()
     }
 }

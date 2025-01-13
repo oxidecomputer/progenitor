@@ -1,3 +1,4 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -7,23 +8,20 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
-        pub struct ConversionError(std::borrow::Cow<'static, str>);
-        impl std::error::Error for ConversionError {}
-        impl std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Display::fmt(&self.0, f)
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
-        impl std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Debug::fmt(&self.0, f)
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
 
@@ -112,27 +110,27 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct CrucibleOpts {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub cert_pem: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub control: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub flush_timeout: Option<u32>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub cert_pem: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub control: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub flush_timeout: ::std::option::Option<u32>,
         pub id: uuid::Uuid,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub key: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub key_pem: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub key: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub key_pem: ::std::option::Option<::std::string::String>,
         pub lossy: bool,
         pub read_only: bool,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub root_cert_pem: Option<String>,
-        pub target: Vec<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub root_cert_pem: ::std::option::Option<::std::string::String>,
+        pub target: ::std::vec::Vec<::std::string::String>,
     }
 
-    impl From<&CrucibleOpts> for CrucibleOpts {
+    impl ::std::convert::From<&CrucibleOpts> for CrucibleOpts {
         fn from(value: &CrucibleOpts) -> Self {
             value.clone()
         }
@@ -167,14 +165,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskAttachment {
         pub disk_id: uuid::Uuid,
         pub generation_id: u64,
         pub state: DiskAttachmentState,
     }
 
-    impl From<&DiskAttachment> for DiskAttachment {
+    impl ::std::convert::From<&DiskAttachment> for DiskAttachment {
         fn from(value: &DiskAttachment) -> Self {
             value.clone()
         }
@@ -212,7 +210,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub enum DiskAttachmentState {
         Detached,
         Destroyed,
@@ -220,13 +218,13 @@ pub mod types {
         Attached(uuid::Uuid),
     }
 
-    impl From<&DiskAttachmentState> for DiskAttachmentState {
+    impl ::std::convert::From<&Self> for DiskAttachmentState {
         fn from(value: &DiskAttachmentState) -> Self {
             value.clone()
         }
     }
 
-    impl From<uuid::Uuid> for DiskAttachmentState {
+    impl ::std::convert::From<uuid::Uuid> for DiskAttachmentState {
         fn from(value: uuid::Uuid) -> Self {
             Self::Attached(value)
         }
@@ -272,17 +270,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskRequest {
-        pub device: String,
+        pub device: ::std::string::String,
         pub gen: u64,
-        pub name: String,
+        pub name: ::std::string::String,
         pub read_only: bool,
         pub slot: Slot,
         pub volume_construction_request: VolumeConstructionRequest,
     }
 
-    impl From<&DiskRequest> for DiskRequest {
+    impl ::std::convert::From<&DiskRequest> for DiskRequest {
         fn from(value: &DiskRequest) -> Self {
             value.clone()
         }
@@ -314,15 +312,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -364,15 +362,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Instance {
-        pub disks: Vec<DiskAttachment>,
-        pub nics: Vec<NetworkInterface>,
+        pub disks: ::std::vec::Vec<DiskAttachment>,
+        pub nics: ::std::vec::Vec<NetworkInterface>,
         pub properties: InstanceProperties,
         pub state: InstanceState,
     }
 
-    impl From<&Instance> for Instance {
+    impl ::std::convert::From<&Instance> for Instance {
         fn from(value: &Instance) -> Self {
             value.clone()
         }
@@ -403,9 +401,17 @@ pub mod types {
     ///      }
     ///    },
     ///    "migrate": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/InstanceMigrateInitiateRequest"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref":
+    /// "#/components/schemas/InstanceMigrateInitiateRequest"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -423,20 +429,20 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceEnsureRequest {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub cloud_init_bytes: Option<String>,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub disks: Vec<DiskRequest>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub migrate: Option<InstanceMigrateInitiateRequest>,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub nics: Vec<NetworkInterfaceRequest>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub cloud_init_bytes: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub disks: ::std::vec::Vec<DiskRequest>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub migrate: ::std::option::Option<InstanceMigrateInitiateRequest>,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub nics: ::std::vec::Vec<NetworkInterfaceRequest>,
         pub properties: InstanceProperties,
     }
 
-    impl From<&InstanceEnsureRequest> for InstanceEnsureRequest {
+    impl ::std::convert::From<&InstanceEnsureRequest> for InstanceEnsureRequest {
         fn from(value: &InstanceEnsureRequest) -> Self {
             value.clone()
         }
@@ -451,9 +457,17 @@ pub mod types {
     ///  "type": "object",
     ///  "properties": {
     ///    "migrate": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/InstanceMigrateInitiateResponse"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref":
+    /// "#/components/schemas/InstanceMigrateInitiateResponse"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -461,15 +475,23 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceEnsureResponse {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub migrate: Option<InstanceMigrateInitiateResponse>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub migrate: ::std::option::Option<InstanceMigrateInitiateResponse>,
     }
 
-    impl From<&InstanceEnsureResponse> for InstanceEnsureResponse {
+    impl ::std::convert::From<&InstanceEnsureResponse> for InstanceEnsureResponse {
         fn from(value: &InstanceEnsureResponse) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for InstanceEnsureResponse {
+        fn default() -> Self {
+            Self {
+                migrate: Default::default(),
+            }
         }
     }
 
@@ -491,12 +513,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceGetResponse {
         pub instance: Instance,
     }
 
-    impl From<&InstanceGetResponse> for InstanceGetResponse {
+    impl ::std::convert::From<&InstanceGetResponse> for InstanceGetResponse {
         fn from(value: &InstanceGetResponse) -> Self {
             value.clone()
         }
@@ -530,14 +552,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateRequest {
         pub migration_id: uuid::Uuid,
-        pub src_addr: String,
+        pub src_addr: ::std::string::String,
         pub src_uuid: uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
+    impl ::std::convert::From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
         fn from(value: &InstanceMigrateInitiateRequest) -> Self {
             value.clone()
         }
@@ -562,12 +584,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateResponse {
         pub migration_id: uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
+    impl ::std::convert::From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
         fn from(value: &InstanceMigrateInitiateResponse) -> Self {
             value.clone()
         }
@@ -592,12 +614,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusRequest {
         pub migration_id: uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
+    impl ::std::convert::From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
         fn from(value: &InstanceMigrateStatusRequest) -> Self {
             value.clone()
         }
@@ -621,12 +643,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusResponse {
         pub state: MigrationState,
     }
 
-    impl From<&InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
+    impl ::std::convert::From<&InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
         fn from(value: &InstanceMigrateStatusResponse) -> Self {
             value.clone()
         }
@@ -689,12 +711,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
         pub bootrom_id: uuid::Uuid,
         ///Free-form text description of an Instance.
-        pub description: String,
+        pub description: ::std::string::String,
         ///Unique identifier for this Instance.
         pub id: uuid::Uuid,
         ///ID of the image used to initialize this Instance.
@@ -702,12 +724,12 @@ pub mod types {
         ///Size of memory allocated to the Instance, in MiB.
         pub memory: u64,
         ///Human-readable name of the Instance.
-        pub name: String,
+        pub name: ::std::string::String,
         ///Number of vCPUs to be allocated to the Instance.
         pub vcpus: u8,
     }
 
-    impl From<&InstanceProperties> for InstanceProperties {
+    impl ::std::convert::From<&InstanceProperties> for InstanceProperties {
         fn from(value: &InstanceProperties) -> Self {
             value.clone()
         }
@@ -736,7 +758,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+    )]
     pub enum InstanceState {
         Creating,
         Starting,
@@ -750,32 +783,32 @@ pub mod types {
         Destroyed,
     }
 
-    impl From<&InstanceState> for InstanceState {
+    impl ::std::convert::From<&Self> for InstanceState {
         fn from(value: &InstanceState) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for InstanceState {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for InstanceState {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => "Creating".to_string(),
-                Self::Starting => "Starting".to_string(),
-                Self::Running => "Running".to_string(),
-                Self::Stopping => "Stopping".to_string(),
-                Self::Stopped => "Stopped".to_string(),
-                Self::Rebooting => "Rebooting".to_string(),
-                Self::Migrating => "Migrating".to_string(),
-                Self::Repairing => "Repairing".to_string(),
-                Self::Failed => "Failed".to_string(),
-                Self::Destroyed => "Destroyed".to_string(),
+                Self::Creating => write!(f, "Creating"),
+                Self::Starting => write!(f, "Starting"),
+                Self::Running => write!(f, "Running"),
+                Self::Stopping => write!(f, "Stopping"),
+                Self::Stopped => write!(f, "Stopped"),
+                Self::Rebooting => write!(f, "Rebooting"),
+                Self::Migrating => write!(f, "Migrating"),
+                Self::Repairing => write!(f, "Repairing"),
+                Self::Failed => write!(f, "Failed"),
+                Self::Destroyed => write!(f, "Destroyed"),
             }
         }
     }
 
-    impl std::str::FromStr for InstanceState {
+    impl ::std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Creating" => Ok(Self::Creating),
                 "Starting" => Ok(Self::Starting),
@@ -792,23 +825,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceState {
+    impl ::std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceState {
+    impl ::std::convert::TryFrom<&::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceState {
+    impl ::std::convert::TryFrom<::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -833,12 +870,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorRequest {
         pub gen: u64,
     }
 
-    impl From<&InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
+    impl ::std::convert::From<&InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
         fn from(value: &InstanceStateMonitorRequest) -> Self {
             value.clone()
         }
@@ -868,13 +905,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorResponse {
         pub gen: u64,
         pub state: InstanceState,
     }
 
-    impl From<&InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
+    impl ::std::convert::From<&InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
         fn from(value: &InstanceStateMonitorResponse) -> Self {
             value.clone()
         }
@@ -896,7 +933,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+    )]
     pub enum InstanceStateRequested {
         Run,
         Stop,
@@ -904,26 +952,26 @@ pub mod types {
         MigrateStart,
     }
 
-    impl From<&InstanceStateRequested> for InstanceStateRequested {
+    impl ::std::convert::From<&Self> for InstanceStateRequested {
         fn from(value: &InstanceStateRequested) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for InstanceStateRequested {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for InstanceStateRequested {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Run => "Run".to_string(),
-                Self::Stop => "Stop".to_string(),
-                Self::Reboot => "Reboot".to_string(),
-                Self::MigrateStart => "MigrateStart".to_string(),
+                Self::Run => write!(f, "Run"),
+                Self::Stop => write!(f, "Stop"),
+                Self::Reboot => write!(f, "Reboot"),
+                Self::MigrateStart => write!(f, "MigrateStart"),
             }
         }
     }
 
-    impl std::str::FromStr for InstanceStateRequested {
+    impl ::std::str::FromStr for InstanceStateRequested {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Run" => Ok(Self::Run),
                 "Stop" => Ok(Self::Stop),
@@ -934,23 +982,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<&str> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<&::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -977,7 +1029,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+    #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+    )]
     pub enum MigrationState {
         Sync,
         RamPush,
@@ -991,32 +1054,32 @@ pub mod types {
         Error,
     }
 
-    impl From<&MigrationState> for MigrationState {
+    impl ::std::convert::From<&Self> for MigrationState {
         fn from(value: &MigrationState) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for MigrationState {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for MigrationState {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Sync => "Sync".to_string(),
-                Self::RamPush => "RamPush".to_string(),
-                Self::Pause => "Pause".to_string(),
-                Self::RamPushDirty => "RamPushDirty".to_string(),
-                Self::Device => "Device".to_string(),
-                Self::Arch => "Arch".to_string(),
-                Self::Resume => "Resume".to_string(),
-                Self::RamPull => "RamPull".to_string(),
-                Self::Finish => "Finish".to_string(),
-                Self::Error => "Error".to_string(),
+                Self::Sync => write!(f, "Sync"),
+                Self::RamPush => write!(f, "RamPush"),
+                Self::Pause => write!(f, "Pause"),
+                Self::RamPushDirty => write!(f, "RamPushDirty"),
+                Self::Device => write!(f, "Device"),
+                Self::Arch => write!(f, "Arch"),
+                Self::Resume => write!(f, "Resume"),
+                Self::RamPull => write!(f, "RamPull"),
+                Self::Finish => write!(f, "Finish"),
+                Self::Error => write!(f, "Error"),
             }
         }
     }
 
-    impl std::str::FromStr for MigrationState {
+    impl ::std::str::FromStr for MigrationState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Sync" => Ok(Self::Sync),
                 "RamPush" => Ok(Self::RamPush),
@@ -1033,23 +1096,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for MigrationState {
+    impl ::std::convert::TryFrom<&str> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for MigrationState {
+    impl ::std::convert::TryFrom<&::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for MigrationState {
+    impl ::std::convert::TryFrom<::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1076,13 +1143,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct NetworkInterface {
         pub attachment: NetworkInterfaceAttachmentState,
-        pub name: String,
+        pub name: ::std::string::String,
     }
 
-    impl From<&NetworkInterface> for NetworkInterface {
+    impl ::std::convert::From<&NetworkInterface> for NetworkInterface {
         fn from(value: &NetworkInterface) -> Self {
             value.clone()
         }
@@ -1118,20 +1185,20 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub enum NetworkInterfaceAttachmentState {
         Detached,
         Faulted,
         Attached(Slot),
     }
 
-    impl From<&NetworkInterfaceAttachmentState> for NetworkInterfaceAttachmentState {
+    impl ::std::convert::From<&Self> for NetworkInterfaceAttachmentState {
         fn from(value: &NetworkInterfaceAttachmentState) -> Self {
             value.clone()
         }
     }
 
-    impl From<Slot> for NetworkInterfaceAttachmentState {
+    impl ::std::convert::From<Slot> for NetworkInterfaceAttachmentState {
         fn from(value: Slot) -> Self {
             Self::Attached(value)
         }
@@ -1159,13 +1226,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct NetworkInterfaceRequest {
-        pub name: String,
+        pub name: ::std::string::String,
         pub slot: Slot,
     }
 
-    impl From<&NetworkInterfaceRequest> for NetworkInterfaceRequest {
+    impl ::std::convert::From<&NetworkInterfaceRequest> for NetworkInterfaceRequest {
         fn from(value: &NetworkInterfaceRequest) -> Self {
             value.clone()
         }
@@ -1186,64 +1253,65 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[serde(transparent)]
     pub struct Slot(pub u8);
-    impl std::ops::Deref for Slot {
+    impl ::std::ops::Deref for Slot {
         type Target = u8;
         fn deref(&self) -> &u8 {
             &self.0
         }
     }
 
-    impl From<Slot> for u8 {
+    impl ::std::convert::From<Slot> for u8 {
         fn from(value: Slot) -> Self {
             value.0
         }
     }
 
-    impl From<&Slot> for Slot {
+    impl ::std::convert::From<&Slot> for Slot {
         fn from(value: &Slot) -> Self {
             value.clone()
         }
     }
 
-    impl From<u8> for Slot {
+    impl ::std::convert::From<u8> for Slot {
         fn from(value: u8) -> Self {
             Self(value)
         }
     }
 
-    impl std::str::FromStr for Slot {
-        type Err = <u8 as std::str::FromStr>::Err;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+    impl ::std::str::FromStr for Slot {
+        type Err = <u8 as ::std::str::FromStr>::Err;
+        fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
         }
     }
 
-    impl std::convert::TryFrom<&str> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<&str> for Slot {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<&String> for Slot {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<String> for Slot {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl ToString for Slot {
-        fn to_string(&self) -> String {
-            self.0.to_string()
+    impl ::std::fmt::Display for Slot {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
         }
     }
 
@@ -1273,9 +1341,17 @@ pub mod types {
     ///          "format": "uuid"
     ///        },
     ///        "read_only_parent": {
-    ///          "allOf": [
+    ///          "oneOf": [
     ///            {
-    ///              "$ref": "#/components/schemas/VolumeConstructionRequest"
+    ///              "type": "null"
+    ///            },
+    ///            {
+    ///              "allOf": [
+    ///                {
+    ///                  "$ref":
+    /// "#/components/schemas/VolumeConstructionRequest"
+    ///                }
+    ///              ]
     ///            }
     ///          ]
     ///        },
@@ -1385,22 +1461,22 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize)]
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum VolumeConstructionRequest {
         #[serde(rename = "volume")]
         Volume {
             block_size: u64,
             id: uuid::Uuid,
-            #[serde(default, skip_serializing_if = "Option::is_none")]
-            read_only_parent: Option<Box<VolumeConstructionRequest>>,
-            sub_volumes: Vec<VolumeConstructionRequest>,
+            #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+            read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
+            sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
         },
         #[serde(rename = "url")]
         Url {
             block_size: u64,
             id: uuid::Uuid,
-            url: String,
+            url: ::std::string::String,
         },
         #[serde(rename = "region")]
         Region {
@@ -1412,11 +1488,11 @@ pub mod types {
         File {
             block_size: u64,
             id: uuid::Uuid,
-            path: String,
+            path: ::std::string::String,
         },
     }
 
-    impl From<&VolumeConstructionRequest> for VolumeConstructionRequest {
+    impl ::std::convert::From<&Self> for VolumeConstructionRequest {
         fn from(value: &VolumeConstructionRequest) -> Self {
             value.clone()
         }
@@ -1486,6 +1562,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/instance`
     pub async fn instance_get<'a>(

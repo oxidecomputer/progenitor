@@ -7,23 +7,20 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
-        pub struct ConversionError(std::borrow::Cow<'static, str>);
-        impl std::error::Error for ConversionError {}
-        impl std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Display::fmt(&self.0, f)
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
-        impl std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Debug::fmt(&self.0, f)
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
 
@@ -69,14 +66,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Baseboard {
-        pub part: String,
+        pub part: ::std::string::String,
         pub revision: i64,
-        pub serial: String,
+        pub serial: ::std::string::String,
     }
 
-    impl From<&Baseboard> for Baseboard {
+    impl ::std::convert::From<&Baseboard> for Baseboard {
         fn from(value: &Baseboard) -> Self {
             value.clone()
         }
@@ -175,7 +174,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum BinRangedouble {
         ///A range unbounded below and exclusively above, `..end`.
@@ -190,7 +191,7 @@ pub mod types {
         RangeFrom { start: f64 },
     }
 
-    impl From<&BinRangedouble> for BinRangedouble {
+    impl ::std::convert::From<&Self> for BinRangedouble {
         fn from(value: &BinRangedouble) -> Self {
             value.clone()
         }
@@ -283,7 +284,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum BinRangeint64 {
         ///A range unbounded below and exclusively above, `..end`.
@@ -298,7 +301,7 @@ pub mod types {
         RangeFrom { start: i64 },
     }
 
-    impl From<&BinRangeint64> for BinRangeint64 {
+    impl ::std::convert::From<&Self> for BinRangeint64 {
         fn from(value: &BinRangeint64) -> Self {
             value.clone()
         }
@@ -336,7 +339,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Bindouble {
         ///The total count of samples in this bin.
         pub count: u64,
@@ -344,7 +349,7 @@ pub mod types {
         pub range: BinRangedouble,
     }
 
-    impl From<&Bindouble> for Bindouble {
+    impl ::std::convert::From<&Bindouble> for Bindouble {
         fn from(value: &Bindouble) -> Self {
             value.clone()
         }
@@ -388,7 +393,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Binint64 {
         ///The total count of samples in this bin.
         pub count: u64,
@@ -396,7 +403,7 @@ pub mod types {
         pub range: BinRangeint64,
     }
 
-    impl From<&Binint64> for Binint64 {
+    impl ::std::convert::From<&Binint64> for Binint64 {
         fn from(value: &Binint64) -> Self {
             value.clone()
         }
@@ -424,30 +431,31 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Serialize, schemars :: JsonSchema)]
+    #[derive(:: serde :: Serialize, Clone, Debug, schemars :: JsonSchema)]
+    #[serde(transparent)]
     pub struct BlockSize(i64);
-    impl std::ops::Deref for BlockSize {
+    impl ::std::ops::Deref for BlockSize {
         type Target = i64;
         fn deref(&self) -> &i64 {
             &self.0
         }
     }
 
-    impl From<BlockSize> for i64 {
+    impl ::std::convert::From<BlockSize> for i64 {
         fn from(value: BlockSize) -> Self {
             value.0
         }
     }
 
-    impl From<&BlockSize> for BlockSize {
+    impl ::std::convert::From<&BlockSize> for BlockSize {
         fn from(value: &BlockSize) -> Self {
             value.clone()
         }
     }
 
-    impl std::convert::TryFrom<i64> for BlockSize {
+    impl ::std::convert::TryFrom<i64> for BlockSize {
         type Error = self::error::ConversionError;
-        fn try_from(value: i64) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: i64) -> ::std::result::Result<Self, self::error::ConversionError> {
             if ![512_i64, 2048_i64, 4096_i64].contains(&value) {
                 Err("invalid value".into())
             } else {
@@ -456,13 +464,13 @@ pub mod types {
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for BlockSize {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for BlockSize {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
             Self::try_from(<i64>::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as serde::de::Error>::custom(e.to_string()))
+                .map_err(|e| <D::Error as ::serde::de::Error>::custom(e.to_string()))
         }
     }
 
@@ -491,64 +499,67 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
+    #[serde(transparent)]
     pub struct ByteCount(pub u64);
-    impl std::ops::Deref for ByteCount {
+    impl ::std::ops::Deref for ByteCount {
         type Target = u64;
         fn deref(&self) -> &u64 {
             &self.0
         }
     }
 
-    impl From<ByteCount> for u64 {
+    impl ::std::convert::From<ByteCount> for u64 {
         fn from(value: ByteCount) -> Self {
             value.0
         }
     }
 
-    impl From<&ByteCount> for ByteCount {
+    impl ::std::convert::From<&ByteCount> for ByteCount {
         fn from(value: &ByteCount) -> Self {
             value.clone()
         }
     }
 
-    impl From<u64> for ByteCount {
+    impl ::std::convert::From<u64> for ByteCount {
         fn from(value: u64) -> Self {
             Self(value)
         }
     }
 
-    impl std::str::FromStr for ByteCount {
-        type Err = <u64 as std::str::FromStr>::Err;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+    impl ::std::str::FromStr for ByteCount {
+        type Err = <u64 as ::std::str::FromStr>::Err;
+        fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
         }
     }
 
-    impl std::convert::TryFrom<&str> for ByteCount {
-        type Error = <u64 as std::str::FromStr>::Err;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<&str> for ByteCount {
+        type Error = <u64 as ::std::str::FromStr>::Err;
+        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for ByteCount {
-        type Error = <u64 as std::str::FromStr>::Err;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<&String> for ByteCount {
+        type Error = <u64 as ::std::str::FromStr>::Err;
+        fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for ByteCount {
-        type Error = <u64 as std::str::FromStr>::Err;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<String> for ByteCount {
+        type Error = <u64 as ::std::str::FromStr>::Err;
+        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl ToString for ByteCount {
-        fn to_string(&self) -> String {
-            self.0.to_string()
+    impl ::std::fmt::Display for ByteCount {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
         }
     }
 
@@ -605,10 +616,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Certificate {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -620,7 +633,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Certificate> for Certificate {
+    impl ::std::convert::From<&Certificate> for Certificate {
         fn from(value: &Certificate) -> Self {
             value.clone()
         }
@@ -686,19 +699,21 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct CertificateCreate {
         ///PEM file containing public certificate chain
-        pub cert: Vec<u8>,
-        pub description: String,
+        pub cert: ::std::vec::Vec<u8>,
+        pub description: ::std::string::String,
         ///PEM file containing private key
-        pub key: Vec<u8>,
+        pub key: ::std::vec::Vec<u8>,
         pub name: Name,
         ///The service using this certificate
         pub service: ServiceUsingCertificate,
     }
 
-    impl From<&CertificateCreate> for CertificateCreate {
+    impl ::std::convert::From<&CertificateCreate> for CertificateCreate {
         fn from(value: &CertificateCreate) -> Self {
             value.clone()
         }
@@ -741,16 +756,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct CertificateResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Certificate>,
+        pub items: ::std::vec::Vec<Certificate>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&CertificateResultsPage> for CertificateResultsPage {
+    impl ::std::convert::From<&CertificateResultsPage> for CertificateResultsPage {
         fn from(value: &CertificateResultsPage) -> Self {
             value.clone()
         }
@@ -806,7 +823,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ComponentUpdate {
         pub component_type: UpdateableComponentType,
         ///unique, immutable, system-controlled identifier for each resource
@@ -818,7 +837,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&ComponentUpdate> for ComponentUpdate {
+    impl ::std::convert::From<&ComponentUpdate> for ComponentUpdate {
         fn from(value: &ComponentUpdate) -> Self {
             value.clone()
         }
@@ -861,16 +880,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ComponentUpdateResultsPage {
         ///list of items on this page of results
-        pub items: Vec<ComponentUpdate>,
+        pub items: ::std::vec::Vec<ComponentUpdate>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&ComponentUpdateResultsPage> for ComponentUpdateResultsPage {
+    impl ::std::convert::From<&ComponentUpdateResultsPage> for ComponentUpdateResultsPage {
         fn from(value: &ComponentUpdateResultsPage) -> Self {
             value.clone()
         }
@@ -907,13 +928,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Cumulativedouble {
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
         pub value: f64,
     }
 
-    impl From<&Cumulativedouble> for Cumulativedouble {
+    impl ::std::convert::From<&Cumulativedouble> for Cumulativedouble {
         fn from(value: &Cumulativedouble) -> Self {
             value.clone()
         }
@@ -950,13 +973,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Cumulativeint64 {
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
         pub value: i64,
     }
 
-    impl From<&Cumulativeint64> for Cumulativeint64 {
+    impl ::std::convert::From<&Cumulativeint64> for Cumulativeint64 {
         fn from(value: &Cumulativeint64) -> Self {
             value.clone()
         }
@@ -1150,7 +1175,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "datum")]
     pub enum Datum {
         #[serde(rename = "bool")]
@@ -1160,9 +1187,9 @@ pub mod types {
         #[serde(rename = "f64")]
         F64(f64),
         #[serde(rename = "string")]
-        String(String),
+        String(::std::string::String),
         #[serde(rename = "bytes")]
-        Bytes(Vec<u8>),
+        Bytes(::std::vec::Vec<u8>),
         #[serde(rename = "cumulative_i64")]
         CumulativeI64(Cumulativeint64),
         #[serde(rename = "cumulative_f64")]
@@ -1173,55 +1200,55 @@ pub mod types {
         HistogramF64(Histogramdouble),
     }
 
-    impl From<&Datum> for Datum {
+    impl ::std::convert::From<&Self> for Datum {
         fn from(value: &Datum) -> Self {
             value.clone()
         }
     }
 
-    impl From<bool> for Datum {
+    impl ::std::convert::From<bool> for Datum {
         fn from(value: bool) -> Self {
             Self::Bool(value)
         }
     }
 
-    impl From<i64> for Datum {
+    impl ::std::convert::From<i64> for Datum {
         fn from(value: i64) -> Self {
             Self::I64(value)
         }
     }
 
-    impl From<f64> for Datum {
+    impl ::std::convert::From<f64> for Datum {
         fn from(value: f64) -> Self {
             Self::F64(value)
         }
     }
 
-    impl From<Vec<u8>> for Datum {
-        fn from(value: Vec<u8>) -> Self {
+    impl ::std::convert::From<::std::vec::Vec<u8>> for Datum {
+        fn from(value: ::std::vec::Vec<u8>) -> Self {
             Self::Bytes(value)
         }
     }
 
-    impl From<Cumulativeint64> for Datum {
+    impl ::std::convert::From<Cumulativeint64> for Datum {
         fn from(value: Cumulativeint64) -> Self {
             Self::CumulativeI64(value)
         }
     }
 
-    impl From<Cumulativedouble> for Datum {
+    impl ::std::convert::From<Cumulativedouble> for Datum {
         fn from(value: Cumulativedouble) -> Self {
             Self::CumulativeF64(value)
         }
     }
 
-    impl From<Histogramint64> for Datum {
+    impl ::std::convert::From<Histogramint64> for Datum {
         fn from(value: Histogramint64) -> Self {
             Self::HistogramI64(value)
         }
     }
 
-    impl From<Histogramdouble> for Datum {
+    impl ::std::convert::From<Histogramdouble> for Datum {
         fn from(value: Histogramdouble) -> Self {
             Self::HistogramF64(value)
         }
@@ -1250,16 +1277,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum DatumType {
@@ -1283,31 +1310,31 @@ pub mod types {
         HistogramF64,
     }
 
-    impl From<&DatumType> for DatumType {
+    impl ::std::convert::From<&Self> for DatumType {
         fn from(value: &DatumType) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for DatumType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for DatumType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Bool => "bool".to_string(),
-                Self::I64 => "i64".to_string(),
-                Self::F64 => "f64".to_string(),
-                Self::String => "string".to_string(),
-                Self::Bytes => "bytes".to_string(),
-                Self::CumulativeI64 => "cumulative_i64".to_string(),
-                Self::CumulativeF64 => "cumulative_f64".to_string(),
-                Self::HistogramI64 => "histogram_i64".to_string(),
-                Self::HistogramF64 => "histogram_f64".to_string(),
+                Self::Bool => write!(f, "bool"),
+                Self::I64 => write!(f, "i64"),
+                Self::F64 => write!(f, "f64"),
+                Self::String => write!(f, "string"),
+                Self::Bytes => write!(f, "bytes"),
+                Self::CumulativeI64 => write!(f, "cumulative_i64"),
+                Self::CumulativeF64 => write!(f, "cumulative_f64"),
+                Self::HistogramI64 => write!(f, "histogram_i64"),
+                Self::HistogramF64 => write!(f, "histogram_f64"),
             }
         }
     }
 
-    impl std::str::FromStr for DatumType {
+    impl ::std::str::FromStr for DatumType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "bool" => Ok(Self::Bool),
                 "i64" => Ok(Self::I64),
@@ -1323,23 +1350,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for DatumType {
+    impl ::std::convert::TryFrom<&str> for DatumType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for DatumType {
+    impl ::std::convert::TryFrom<&::std::string::String> for DatumType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for DatumType {
+    impl ::std::convert::TryFrom<::std::string::String> for DatumType {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1370,15 +1401,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DerEncodedKeyPair {
         ///request signing private key (base64 encoded der file)
-        pub private_key: String,
+        pub private_key: ::std::string::String,
         ///request signing public certificate (base64 encoded der file)
-        pub public_cert: String,
+        pub public_cert: ::std::string::String,
     }
 
-    impl From<&DerEncodedKeyPair> for DerEncodedKeyPair {
+    impl ::std::convert::From<&DerEncodedKeyPair> for DerEncodedKeyPair {
         fn from(value: &DerEncodedKeyPair) -> Self {
             value.clone()
         }
@@ -1417,14 +1450,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DeviceAccessTokenRequest {
         pub client_id: uuid::Uuid,
-        pub device_code: String,
-        pub grant_type: String,
+        pub device_code: ::std::string::String,
+        pub grant_type: ::std::string::String,
     }
 
-    impl From<&DeviceAccessTokenRequest> for DeviceAccessTokenRequest {
+    impl ::std::convert::From<&DeviceAccessTokenRequest> for DeviceAccessTokenRequest {
         fn from(value: &DeviceAccessTokenRequest) -> Self {
             value.clone()
         }
@@ -1455,12 +1490,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DeviceAuthRequest {
         pub client_id: uuid::Uuid,
     }
 
-    impl From<&DeviceAuthRequest> for DeviceAuthRequest {
+    impl ::std::convert::From<&DeviceAuthRequest> for DeviceAuthRequest {
         fn from(value: &DeviceAuthRequest) -> Self {
             value.clone()
         }
@@ -1490,12 +1527,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DeviceAuthVerify {
-        pub user_code: String,
+        pub user_code: ::std::string::String,
     }
 
-    impl From<&DeviceAuthVerify> for DeviceAuthVerify {
+    impl ::std::convert::From<&DeviceAuthVerify> for DeviceAuthVerify {
         fn from(value: &DeviceAuthVerify) -> Self {
             value.clone()
         }
@@ -1536,14 +1575,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum Digest {
         #[serde(rename = "sha256")]
-        Sha256(String),
+        Sha256(::std::string::String),
     }
 
-    impl From<&Digest> for Digest {
+    impl ::std::convert::From<&Self> for Digest {
         fn from(value: &Digest) -> Self {
             value.clone()
         }
@@ -1633,22 +1674,24 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Disk {
         pub block_size: ByteCount,
         ///human-readable free-form text about a resource
-        pub description: String,
-        pub device_path: String,
+        pub description: ::std::string::String,
+        pub device_path: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub image_id: Option<uuid::Uuid>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub image_id: ::std::option::Option<uuid::Uuid>,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         pub project_id: uuid::Uuid,
         pub size: ByteCount,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub snapshot_id: Option<uuid::Uuid>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub snapshot_id: ::std::option::Option<uuid::Uuid>,
         pub state: DiskState,
         ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
@@ -1656,7 +1699,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Disk> for Disk {
+    impl ::std::convert::From<&Disk> for Disk {
         fn from(value: &Disk) -> Self {
             value.clone()
         }
@@ -1711,9 +1754,11 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DiskCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         ///initial source for this disk
         pub disk_source: DiskSource,
         pub name: Name,
@@ -1721,7 +1766,7 @@ pub mod types {
         pub size: ByteCount,
     }
 
-    impl From<&DiskCreate> for DiskCreate {
+    impl ::std::convert::From<&DiskCreate> for DiskCreate {
         fn from(value: &DiskCreate) -> Self {
             value.clone()
         }
@@ -1756,12 +1801,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DiskIdentifier {
         pub name: Name,
     }
 
-    impl From<&DiskIdentifier> for DiskIdentifier {
+    impl ::std::convert::From<&DiskIdentifier> for DiskIdentifier {
         fn from(value: &DiskIdentifier) -> Self {
             value.clone()
         }
@@ -1792,16 +1839,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum DiskMetricName {
@@ -1819,28 +1866,28 @@ pub mod types {
         WriteBytes,
     }
 
-    impl From<&DiskMetricName> for DiskMetricName {
+    impl ::std::convert::From<&Self> for DiskMetricName {
         fn from(value: &DiskMetricName) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for DiskMetricName {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for DiskMetricName {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Activated => "activated".to_string(),
-                Self::Flush => "flush".to_string(),
-                Self::Read => "read".to_string(),
-                Self::ReadBytes => "read_bytes".to_string(),
-                Self::Write => "write".to_string(),
-                Self::WriteBytes => "write_bytes".to_string(),
+                Self::Activated => write!(f, "activated"),
+                Self::Flush => write!(f, "flush"),
+                Self::Read => write!(f, "read"),
+                Self::ReadBytes => write!(f, "read_bytes"),
+                Self::Write => write!(f, "write"),
+                Self::WriteBytes => write!(f, "write_bytes"),
             }
         }
     }
 
-    impl std::str::FromStr for DiskMetricName {
+    impl ::std::str::FromStr for DiskMetricName {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "activated" => Ok(Self::Activated),
                 "flush" => Ok(Self::Flush),
@@ -1853,23 +1900,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for DiskMetricName {
+    impl ::std::convert::TryFrom<&str> for DiskMetricName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for DiskMetricName {
+    impl ::std::convert::TryFrom<&::std::string::String> for DiskMetricName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for DiskMetricName {
+    impl ::std::convert::TryFrom<::std::string::String> for DiskMetricName {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1892,12 +1943,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DiskPath {
         pub disk: NameOrId,
     }
 
-    impl From<&DiskPath> for DiskPath {
+    impl ::std::convert::From<&DiskPath> for DiskPath {
         fn from(value: &DiskPath) -> Self {
             value.clone()
         }
@@ -1940,16 +1993,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DiskResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Disk>,
+        pub items: ::std::vec::Vec<Disk>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&DiskResultsPage> for DiskResultsPage {
+    impl ::std::convert::From<&DiskResultsPage> for DiskResultsPage {
         fn from(value: &DiskResultsPage) -> Self {
             value.clone()
         }
@@ -2058,7 +2113,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum DiskSource {
         ///Create a blank disk
@@ -2079,7 +2136,7 @@ pub mod types {
         GlobalImage { image_id: uuid::Uuid },
     }
 
-    impl From<&DiskSource> for DiskSource {
+    impl ::std::convert::From<&Self> for DiskSource {
         fn from(value: &DiskSource) -> Self {
             value.clone()
         }
@@ -2217,7 +2274,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "state", content = "instance")]
     pub enum DiskState {
         #[serde(rename = "creating")]
@@ -2239,7 +2298,7 @@ pub mod types {
         Faulted,
     }
 
-    impl From<&DiskState> for DiskState {
+    impl ::std::convert::From<&Self> for DiskState {
         fn from(value: &DiskState) -> Self {
             value.clone()
         }
@@ -2276,15 +2335,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Distribution {
         ///The name of the distribution (e.g. "alpine" or "ubuntu")
         pub name: Name,
         ///The version of the distribution (e.g. "3.10" or "18.04")
-        pub version: String,
+        pub version: ::std::string::String,
     }
 
-    impl From<&Distribution> for Distribution {
+    impl ::std::convert::From<&Distribution> for Distribution {
         fn from(value: &Distribution) -> Self {
             value.clone()
         }
@@ -2322,15 +2383,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -2365,13 +2428,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ExternalIp {
         pub ip: std::net::IpAddr,
         pub kind: IpKind,
     }
 
-    impl From<&ExternalIp> for ExternalIp {
+    impl ::std::convert::From<&ExternalIp> for ExternalIp {
         fn from(value: &ExternalIp) -> Self {
             value.clone()
         }
@@ -2402,9 +2467,16 @@ pub mod types {
     ///      ],
     ///      "properties": {
     ///        "pool_name": {
-    ///          "allOf": [
+    ///          "oneOf": [
     ///            {
-    ///              "$ref": "#/components/schemas/Name"
+    ///              "type": "null"
+    ///            },
+    ///            {
+    ///              "allOf": [
+    ///                {
+    ///                  "$ref": "#/components/schemas/Name"
+    ///                }
+    ///              ]
     ///            }
     ///          ]
     ///        },
@@ -2420,7 +2492,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum ExternalIpCreate {
         ///An IP address providing both inbound and outbound access. The
@@ -2428,12 +2502,12 @@ pub mod types {
         /// available pools if not specified.
         #[serde(rename = "ephemeral")]
         Ephemeral {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
-            pool_name: Option<Name>,
+            #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+            pool_name: ::std::option::Option<Name>,
         },
     }
 
-    impl From<&ExternalIpCreate> for ExternalIpCreate {
+    impl ::std::convert::From<&Self> for ExternalIpCreate {
         fn from(value: &ExternalIpCreate) -> Self {
             value.clone()
         }
@@ -2470,16 +2544,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ExternalIpResultsPage {
         ///list of items on this page of results
-        pub items: Vec<ExternalIp>,
+        pub items: ::std::vec::Vec<ExternalIp>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&ExternalIpResultsPage> for ExternalIpResultsPage {
+    impl ::std::convert::From<&ExternalIpResultsPage> for ExternalIpResultsPage {
         fn from(value: &ExternalIpResultsPage) -> Self {
             value.clone()
         }
@@ -2519,14 +2595,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct FieldSchema {
-        pub name: String,
+        pub name: ::std::string::String,
         pub source: FieldSource,
         pub ty: FieldType,
     }
 
-    impl From<&FieldSchema> for FieldSchema {
+    impl ::std::convert::From<&FieldSchema> for FieldSchema {
         fn from(value: &FieldSchema) -> Self {
             value.clone()
         }
@@ -2555,16 +2633,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum FieldSource {
@@ -2574,24 +2652,24 @@ pub mod types {
         Metric,
     }
 
-    impl From<&FieldSource> for FieldSource {
+    impl ::std::convert::From<&Self> for FieldSource {
         fn from(value: &FieldSource) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for FieldSource {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for FieldSource {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Target => "target".to_string(),
-                Self::Metric => "metric".to_string(),
+                Self::Target => write!(f, "target"),
+                Self::Metric => write!(f, "metric"),
             }
         }
     }
 
-    impl std::str::FromStr for FieldSource {
+    impl ::std::str::FromStr for FieldSource {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "target" => Ok(Self::Target),
                 "metric" => Ok(Self::Metric),
@@ -2600,23 +2678,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for FieldSource {
+    impl ::std::convert::TryFrom<&str> for FieldSource {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for FieldSource {
+    impl ::std::convert::TryFrom<&::std::string::String> for FieldSource {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for FieldSource {
+    impl ::std::convert::TryFrom<::std::string::String> for FieldSource {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2641,16 +2723,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum FieldType {
@@ -2666,27 +2748,27 @@ pub mod types {
         Bool,
     }
 
-    impl From<&FieldType> for FieldType {
+    impl ::std::convert::From<&Self> for FieldType {
         fn from(value: &FieldType) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for FieldType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for FieldType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::String => "string".to_string(),
-                Self::I64 => "i64".to_string(),
-                Self::IpAddr => "ip_addr".to_string(),
-                Self::Uuid => "uuid".to_string(),
-                Self::Bool => "bool".to_string(),
+                Self::String => write!(f, "string"),
+                Self::I64 => write!(f, "i64"),
+                Self::IpAddr => write!(f, "ip_addr"),
+                Self::Uuid => write!(f, "uuid"),
+                Self::Bool => write!(f, "bool"),
             }
         }
     }
 
-    impl std::str::FromStr for FieldType {
+    impl ::std::str::FromStr for FieldType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "string" => Ok(Self::String),
                 "i64" => Ok(Self::I64),
@@ -2698,23 +2780,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for FieldType {
+    impl ::std::convert::TryFrom<&str> for FieldType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for FieldType {
+    impl ::std::convert::TryFrom<&::std::string::String> for FieldType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for FieldType {
+    impl ::std::convert::TryFrom<::std::string::String> for FieldType {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2735,16 +2821,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum FleetRole {
@@ -2756,25 +2842,25 @@ pub mod types {
         Viewer,
     }
 
-    impl From<&FleetRole> for FleetRole {
+    impl ::std::convert::From<&Self> for FleetRole {
         fn from(value: &FleetRole) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for FleetRole {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for FleetRole {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => "admin".to_string(),
-                Self::Collaborator => "collaborator".to_string(),
-                Self::Viewer => "viewer".to_string(),
+                Self::Admin => write!(f, "admin"),
+                Self::Collaborator => write!(f, "collaborator"),
+                Self::Viewer => write!(f, "viewer"),
             }
         }
     }
 
-    impl std::str::FromStr for FleetRole {
+    impl ::std::str::FromStr for FleetRole {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
@@ -2784,23 +2870,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for FleetRole {
+    impl ::std::convert::TryFrom<&str> for FleetRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for FleetRole {
+    impl ::std::convert::TryFrom<&::std::string::String> for FleetRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for FleetRole {
+    impl ::std::convert::TryFrom<::std::string::String> for FleetRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2836,13 +2926,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct FleetRolePolicy {
         ///Roles directly assigned on this resource
-        pub role_assignments: Vec<FleetRoleRoleAssignment>,
+        pub role_assignments: ::std::vec::Vec<FleetRoleRoleAssignment>,
     }
 
-    impl From<&FleetRolePolicy> for FleetRolePolicy {
+    impl ::std::convert::From<&FleetRolePolicy> for FleetRolePolicy {
         fn from(value: &FleetRolePolicy) -> Self {
             value.clone()
         }
@@ -2891,14 +2983,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct FleetRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: FleetRole,
     }
 
-    impl From<&FleetRoleRoleAssignment> for FleetRoleRoleAssignment {
+    impl ::std::convert::From<&FleetRoleRoleAssignment> for FleetRoleRoleAssignment {
         fn from(value: &FleetRoleRoleAssignment) -> Self {
             value.clone()
         }
@@ -2944,9 +3038,16 @@ pub mod types {
     ///    },
     ///    "digest": {
     ///      "description": "Hash of the image contents, if applicable",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Digest"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Digest"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -3002,17 +3103,19 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GlobalImage {
         ///size of blocks in bytes
         pub block_size: ByteCount,
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///Hash of the image contents, if applicable
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub digest: Option<Digest>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub digest: ::std::option::Option<Digest>,
         ///Image distribution
-        pub distribution: String,
+        pub distribution: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -3024,13 +3127,13 @@ pub mod types {
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
         ///URL source of this image, if any
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub url: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub url: ::std::option::Option<::std::string::String>,
         ///Image version
-        pub version: String,
+        pub version: ::std::string::String,
     }
 
-    impl From<&GlobalImage> for GlobalImage {
+    impl ::std::convert::From<&GlobalImage> for GlobalImage {
         fn from(value: &GlobalImage) -> Self {
             value.clone()
         }
@@ -3094,11 +3197,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GlobalImageCreate {
         ///block size in bytes
         pub block_size: BlockSize,
-        pub description: String,
+        pub description: ::std::string::String,
         ///OS image distribution
         pub distribution: Distribution,
         pub name: Name,
@@ -3106,7 +3211,7 @@ pub mod types {
         pub source: ImageSource,
     }
 
-    impl From<&GlobalImageCreate> for GlobalImageCreate {
+    impl ::std::convert::From<&GlobalImageCreate> for GlobalImageCreate {
         fn from(value: &GlobalImageCreate) -> Self {
             value.clone()
         }
@@ -3149,16 +3254,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GlobalImageResultsPage {
         ///list of items on this page of results
-        pub items: Vec<GlobalImage>,
+        pub items: ::std::vec::Vec<GlobalImage>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&GlobalImageResultsPage> for GlobalImageResultsPage {
+    impl ::std::convert::From<&GlobalImageResultsPage> for GlobalImageResultsPage {
         fn from(value: &GlobalImageResultsPage) -> Self {
             value.clone()
         }
@@ -3201,16 +3308,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Group {
         ///Human-readable name that can identify the group
-        pub display_name: String,
+        pub display_name: ::std::string::String,
         pub id: uuid::Uuid,
         ///Uuid of the silo to which this group belongs
         pub silo_id: uuid::Uuid,
     }
 
-    impl From<&Group> for Group {
+    impl ::std::convert::From<&Group> for Group {
         fn from(value: &Group) -> Self {
             value.clone()
         }
@@ -3253,16 +3362,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GroupResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Group>,
+        pub items: ::std::vec::Vec<Group>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&GroupResultsPage> for GroupResultsPage {
+    impl ::std::convert::From<&GroupResultsPage> for GroupResultsPage {
         fn from(value: &GroupResultsPage) -> Self {
             value.clone()
         }
@@ -3379,14 +3490,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Histogramdouble {
-        pub bins: Vec<Bindouble>,
+        pub bins: ::std::vec::Vec<Bindouble>,
         pub n_samples: u64,
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Histogramdouble> for Histogramdouble {
+    impl ::std::convert::From<&Histogramdouble> for Histogramdouble {
         fn from(value: &Histogramdouble) -> Self {
             value.clone()
         }
@@ -3503,14 +3616,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Histogramint64 {
-        pub bins: Vec<Binint64>,
+        pub bins: ::std::vec::Vec<Binint64>,
         pub n_samples: u64,
         pub start_time: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Histogramint64> for Histogramint64 {
+    impl ::std::convert::From<&Histogramint64> for Histogramint64 {
         fn from(value: &Histogramint64) -> Self {
             value.clone()
         }
@@ -3545,16 +3660,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum IdSortMode {
@@ -3563,23 +3678,23 @@ pub mod types {
         IdAscending,
     }
 
-    impl From<&IdSortMode> for IdSortMode {
+    impl ::std::convert::From<&Self> for IdSortMode {
         fn from(value: &IdSortMode) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for IdSortMode {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IdSortMode {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::IdAscending => "id_ascending".to_string(),
+                Self::IdAscending => write!(f, "id_ascending"),
             }
         }
     }
 
-    impl std::str::FromStr for IdSortMode {
+    impl ::std::str::FromStr for IdSortMode {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "id_ascending" => Ok(Self::IdAscending),
                 _ => Err("invalid value".into()),
@@ -3587,23 +3702,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IdSortMode {
+    impl ::std::convert::TryFrom<&str> for IdSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for IdSortMode {
+    impl ::std::convert::TryFrom<&::std::string::String> for IdSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for IdSortMode {
+    impl ::std::convert::TryFrom<::std::string::String> for IdSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3666,10 +3785,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IdentityProvider {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -3682,7 +3803,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&IdentityProvider> for IdentityProvider {
+    impl ::std::convert::From<&IdentityProvider> for IdentityProvider {
         fn from(value: &IdentityProvider) -> Self {
             value.clone()
         }
@@ -3725,16 +3846,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IdentityProviderResultsPage {
         ///list of items on this page of results
-        pub items: Vec<IdentityProvider>,
+        pub items: ::std::vec::Vec<IdentityProvider>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&IdentityProviderResultsPage> for IdentityProviderResultsPage {
+    impl ::std::convert::From<&IdentityProviderResultsPage> for IdentityProviderResultsPage {
         fn from(value: &IdentityProviderResultsPage) -> Self {
             value.clone()
         }
@@ -3765,16 +3888,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum IdentityProviderType {
@@ -3783,23 +3906,23 @@ pub mod types {
         Saml,
     }
 
-    impl From<&IdentityProviderType> for IdentityProviderType {
+    impl ::std::convert::From<&Self> for IdentityProviderType {
         fn from(value: &IdentityProviderType) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for IdentityProviderType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IdentityProviderType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Saml => "saml".to_string(),
+                Self::Saml => write!(f, "saml"),
             }
         }
     }
 
-    impl std::str::FromStr for IdentityProviderType {
+    impl ::std::str::FromStr for IdentityProviderType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "saml" => Ok(Self::Saml),
                 _ => Err("invalid value".into()),
@@ -3807,23 +3930,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IdentityProviderType {
+    impl ::std::convert::TryFrom<&str> for IdentityProviderType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for IdentityProviderType {
+    impl ::std::convert::TryFrom<&::std::string::String> for IdentityProviderType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for IdentityProviderType {
+    impl ::std::convert::TryFrom<::std::string::String> for IdentityProviderType {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3844,16 +3971,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum IdentityType {
@@ -3863,24 +3990,24 @@ pub mod types {
         SiloGroup,
     }
 
-    impl From<&IdentityType> for IdentityType {
+    impl ::std::convert::From<&Self> for IdentityType {
         fn from(value: &IdentityType) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for IdentityType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IdentityType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::SiloUser => "silo_user".to_string(),
-                Self::SiloGroup => "silo_group".to_string(),
+                Self::SiloUser => write!(f, "silo_user"),
+                Self::SiloGroup => write!(f, "silo_group"),
             }
         }
     }
 
-    impl std::str::FromStr for IdentityType {
+    impl ::std::str::FromStr for IdentityType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "silo_user" => Ok(Self::SiloUser),
                 "silo_group" => Ok(Self::SiloGroup),
@@ -3889,23 +4016,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IdentityType {
+    impl ::std::convert::TryFrom<&str> for IdentityType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for IdentityType {
+    impl ::std::convert::TryFrom<&::std::string::String> for IdentityType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for IdentityType {
+    impl ::std::convert::TryFrom<::std::string::String> for IdentityType {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3957,16 +4088,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum IdpMetadataSource {
         #[serde(rename = "url")]
-        Url { url: String },
+        Url { url: ::std::string::String },
         #[serde(rename = "base64_encoded_xml")]
-        Base64EncodedXml { data: String },
+        Base64EncodedXml { data: ::std::string::String },
     }
 
-    impl From<&IdpMetadataSource> for IdpMetadataSource {
+    impl ::std::convert::From<&Self> for IdpMetadataSource {
         fn from(value: &IdpMetadataSource) -> Self {
             value.clone()
         }
@@ -4005,9 +4138,16 @@ pub mod types {
     ///    },
     ///    "digest": {
     ///      "description": "Hash of the image contents, if applicable",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Digest"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Digest"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -4067,15 +4207,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Image {
         ///size of blocks in bytes
         pub block_size: ByteCount,
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///Hash of the image contents, if applicable
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub digest: Option<Digest>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub digest: ::std::option::Option<Digest>,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -4089,14 +4231,14 @@ pub mod types {
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
         ///URL source of this image, if any
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub url: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub url: ::std::option::Option<::std::string::String>,
         ///Version of this, if any
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub version: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub version: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&Image> for Image {
+    impl ::std::convert::From<&Image> for Image {
         fn from(value: &Image) -> Self {
             value.clone()
         }
@@ -4151,17 +4293,19 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ImageCreate {
         ///block size in bytes
         pub block_size: BlockSize,
-        pub description: String,
+        pub description: ::std::string::String,
         pub name: Name,
         ///The source of the image's contents.
         pub source: ImageSource,
     }
 
-    impl From<&ImageCreate> for ImageCreate {
+    impl ::std::convert::From<&ImageCreate> for ImageCreate {
         fn from(value: &ImageCreate) -> Self {
             value.clone()
         }
@@ -4204,16 +4348,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ImageResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Image>,
+        pub items: ::std::vec::Vec<Image>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&ImageResultsPage> for ImageResultsPage {
+    impl ::std::convert::From<&ImageResultsPage> for ImageResultsPage {
         fn from(value: &ImageResultsPage) -> Self {
             value.clone()
         }
@@ -4290,18 +4436,20 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum ImageSource {
         #[serde(rename = "url")]
-        Url { url: String },
+        Url { url: ::std::string::String },
         #[serde(rename = "snapshot")]
         Snapshot { id: uuid::Uuid },
         #[serde(rename = "you_can_boot_anything_as_long_as_its_alpine")]
         YouCanBootAnythingAsLongAsItsAlpine,
     }
 
-    impl From<&ImageSource> for ImageSource {
+    impl ::std::convert::From<&Self> for ImageSource {
         fn from(value: &ImageSource) -> Self {
             value.clone()
         }
@@ -4394,12 +4542,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Instance {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///RFC1035-compliant hostname for the Instance.
-        pub hostname: String,
+        pub hostname: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///memory allocated for this Instance
@@ -4418,7 +4568,7 @@ pub mod types {
         pub time_run_state_updated: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Instance> for Instance {
+    impl ::std::convert::From<&Instance> for Instance {
         fn from(value: &Instance) -> Self {
             value.clone()
         }
@@ -4443,64 +4593,67 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
+    #[serde(transparent)]
     pub struct InstanceCpuCount(pub u16);
-    impl std::ops::Deref for InstanceCpuCount {
+    impl ::std::ops::Deref for InstanceCpuCount {
         type Target = u16;
         fn deref(&self) -> &u16 {
             &self.0
         }
     }
 
-    impl From<InstanceCpuCount> for u16 {
+    impl ::std::convert::From<InstanceCpuCount> for u16 {
         fn from(value: InstanceCpuCount) -> Self {
             value.0
         }
     }
 
-    impl From<&InstanceCpuCount> for InstanceCpuCount {
+    impl ::std::convert::From<&InstanceCpuCount> for InstanceCpuCount {
         fn from(value: &InstanceCpuCount) -> Self {
             value.clone()
         }
     }
 
-    impl From<u16> for InstanceCpuCount {
+    impl ::std::convert::From<u16> for InstanceCpuCount {
         fn from(value: u16) -> Self {
             Self(value)
         }
     }
 
-    impl std::str::FromStr for InstanceCpuCount {
-        type Err = <u16 as std::str::FromStr>::Err;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+    impl ::std::str::FromStr for InstanceCpuCount {
+        type Err = <u16 as ::std::str::FromStr>::Err;
+        fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceCpuCount {
-        type Error = <u16 as std::str::FromStr>::Err;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<&str> for InstanceCpuCount {
+        type Error = <u16 as ::std::str::FromStr>::Err;
+        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceCpuCount {
-        type Error = <u16 as std::str::FromStr>::Err;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<&String> for InstanceCpuCount {
+        type Error = <u16 as ::std::str::FromStr>::Err;
+        fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceCpuCount {
-        type Error = <u16 as std::str::FromStr>::Err;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<String> for InstanceCpuCount {
+        type Error = <u16 as ::std::str::FromStr>::Err;
+        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl ToString for InstanceCpuCount {
-        fn to_string(&self) -> String {
-            self.0.to_string()
+    impl ::std::fmt::Display for InstanceCpuCount {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
         }
     }
 
@@ -4590,21 +4743,23 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct InstanceCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         ///The disks to be created or attached for this instance.
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub disks: Vec<InstanceDiskAttachment>,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub disks: ::std::vec::Vec<InstanceDiskAttachment>,
         ///The external IP addresses provided to this instance.
         ///
         ///By default, all instances have outbound connectivity, but no inbound
         /// connectivity. These external addresses can be used to provide a
         /// fixed, known IP address for making inbound connections to the
         /// instance.
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub external_ips: Vec<ExternalIpCreate>,
-        pub hostname: String,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub external_ips: ::std::vec::Vec<ExternalIpCreate>,
+        pub hostname: ::std::string::String,
         pub memory: ByteCount,
         pub name: Name,
         pub ncpus: InstanceCpuCount,
@@ -4618,10 +4773,10 @@ pub mod types {
         /// Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and
         /// / characters with padding). Maximum 32 KiB unencoded data.
         #[serde(default)]
-        pub user_data: String,
+        pub user_data: ::std::string::String,
     }
 
-    impl From<&InstanceCreate> for InstanceCreate {
+    impl ::std::convert::From<&InstanceCreate> for InstanceCreate {
         fn from(value: &InstanceCreate) -> Self {
             value.clone()
         }
@@ -4710,13 +4865,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum InstanceDiskAttachment {
         ///During instance creation, create and attach disks
         #[serde(rename = "create")]
         Create {
-            description: String,
+            description: ::std::string::String,
             ///initial source for this disk
             disk_source: DiskSource,
             name: Name,
@@ -4731,7 +4888,7 @@ pub mod types {
         },
     }
 
-    impl From<&InstanceDiskAttachment> for InstanceDiskAttachment {
+    impl ::std::convert::From<&Self> for InstanceDiskAttachment {
         fn from(value: &InstanceDiskAttachment) -> Self {
             value.clone()
         }
@@ -4759,12 +4916,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct InstanceMigrate {
         pub dst_sled_id: uuid::Uuid,
     }
 
-    impl From<&InstanceMigrate> for InstanceMigrate {
+    impl ::std::convert::From<&InstanceMigrate> for InstanceMigrate {
         fn from(value: &InstanceMigrate) -> Self {
             value.clone()
         }
@@ -4848,7 +5007,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
         ///Create one or more `NetworkInterface`s for the `Instance`.
@@ -4856,21 +5017,23 @@ pub mod types {
         ///If more than one interface is provided, then the first will be
         /// designated the primary interface for the instance.
         #[serde(rename = "create")]
-        Create(Vec<NetworkInterfaceCreate>),
+        Create(::std::vec::Vec<NetworkInterfaceCreate>),
         #[serde(rename = "default")]
         Default,
         #[serde(rename = "none")]
         None,
     }
 
-    impl From<&InstanceNetworkInterfaceAttachment> for InstanceNetworkInterfaceAttachment {
+    impl ::std::convert::From<&Self> for InstanceNetworkInterfaceAttachment {
         fn from(value: &InstanceNetworkInterfaceAttachment) -> Self {
             value.clone()
         }
     }
 
-    impl From<Vec<NetworkInterfaceCreate>> for InstanceNetworkInterfaceAttachment {
-        fn from(value: Vec<NetworkInterfaceCreate>) -> Self {
+    impl ::std::convert::From<::std::vec::Vec<NetworkInterfaceCreate>>
+        for InstanceNetworkInterfaceAttachment
+    {
+        fn from(value: ::std::vec::Vec<NetworkInterfaceCreate>) -> Self {
             Self::Create(value)
         }
     }
@@ -4906,16 +5069,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct InstanceResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Instance>,
+        pub items: ::std::vec::Vec<Instance>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&InstanceResultsPage> for InstanceResultsPage {
+    impl ::std::convert::From<&InstanceResultsPage> for InstanceResultsPage {
         fn from(value: &InstanceResultsPage) -> Self {
             value.clone()
         }
@@ -4963,18 +5128,20 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct InstanceSerialConsoleData {
         ///The bytes starting from the requested offset up to either the end of
         /// the buffer or the request's `max_bytes`. Provided as a u8 array
         /// rather than a string, as it may not be UTF-8.
-        pub data: Vec<u8>,
+        pub data: ::std::vec::Vec<u8>,
         ///The absolute offset since boot (suitable for use as `byte_offset` in
         /// a subsequent request) of the last byte returned in `data`.
         pub last_byte_offset: u64,
     }
 
-    impl From<&InstanceSerialConsoleData> for InstanceSerialConsoleData {
+    impl ::std::convert::From<&InstanceSerialConsoleData> for InstanceSerialConsoleData {
         fn from(value: &InstanceSerialConsoleData) -> Self {
             value.clone()
         }
@@ -5079,16 +5246,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum InstanceState {
@@ -5128,32 +5295,32 @@ pub mod types {
         Destroyed,
     }
 
-    impl From<&InstanceState> for InstanceState {
+    impl ::std::convert::From<&Self> for InstanceState {
         fn from(value: &InstanceState) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for InstanceState {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for InstanceState {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => "creating".to_string(),
-                Self::Starting => "starting".to_string(),
-                Self::Running => "running".to_string(),
-                Self::Stopping => "stopping".to_string(),
-                Self::Stopped => "stopped".to_string(),
-                Self::Rebooting => "rebooting".to_string(),
-                Self::Migrating => "migrating".to_string(),
-                Self::Repairing => "repairing".to_string(),
-                Self::Failed => "failed".to_string(),
-                Self::Destroyed => "destroyed".to_string(),
+                Self::Creating => write!(f, "creating"),
+                Self::Starting => write!(f, "starting"),
+                Self::Running => write!(f, "running"),
+                Self::Stopping => write!(f, "stopping"),
+                Self::Stopped => write!(f, "stopped"),
+                Self::Rebooting => write!(f, "rebooting"),
+                Self::Migrating => write!(f, "migrating"),
+                Self::Repairing => write!(f, "repairing"),
+                Self::Failed => write!(f, "failed"),
+                Self::Destroyed => write!(f, "destroyed"),
             }
         }
     }
 
-    impl std::str::FromStr for InstanceState {
+    impl ::std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "creating" => Ok(Self::Creating),
                 "starting" => Ok(Self::Starting),
@@ -5170,23 +5337,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceState {
+    impl ::std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceState {
+    impl ::std::convert::TryFrom<&::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceState {
+    impl ::std::convert::TryFrom<::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5207,16 +5378,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum IpKind {
@@ -5226,24 +5397,24 @@ pub mod types {
         Floating,
     }
 
-    impl From<&IpKind> for IpKind {
+    impl ::std::convert::From<&Self> for IpKind {
         fn from(value: &IpKind) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for IpKind {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IpKind {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Ephemeral => "ephemeral".to_string(),
-                Self::Floating => "floating".to_string(),
+                Self::Ephemeral => write!(f, "ephemeral"),
+                Self::Floating => write!(f, "floating"),
             }
         }
     }
 
-    impl std::str::FromStr for IpKind {
+    impl ::std::str::FromStr for IpKind {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ephemeral" => Ok(Self::Ephemeral),
                 "floating" => Ok(Self::Floating),
@@ -5252,23 +5423,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IpKind {
+    impl ::std::convert::TryFrom<&str> for IpKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for IpKind {
+    impl ::std::convert::TryFrom<&::std::string::String> for IpKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for IpKind {
+    impl ::std::convert::TryFrom<::std::string::String> for IpKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5300,22 +5475,24 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(untagged)]
     pub enum IpNet {
         V4(Ipv4Net),
         V6(Ipv6Net),
     }
 
-    impl From<&IpNet> for IpNet {
+    impl ::std::convert::From<&Self> for IpNet {
         fn from(value: &IpNet) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for IpNet {
+    impl ::std::str::FromStr for IpNet {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if let Ok(v) = value.parse() {
                 Ok(Self::V4(v))
             } else if let Ok(v) = value.parse() {
@@ -5326,43 +5503,47 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for IpNet {
+    impl ::std::convert::TryFrom<&str> for IpNet {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for IpNet {
+    impl ::std::convert::TryFrom<&::std::string::String> for IpNet {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for IpNet {
+    impl ::std::convert::TryFrom<::std::string::String> for IpNet {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl ToString for IpNet {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for IpNet {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
-                Self::V4(x) => x.to_string(),
-                Self::V6(x) => x.to_string(),
+                Self::V4(x) => x.fmt(f),
+                Self::V6(x) => x.fmt(f),
             }
         }
     }
 
-    impl From<Ipv4Net> for IpNet {
+    impl ::std::convert::From<Ipv4Net> for IpNet {
         fn from(value: Ipv4Net) -> Self {
             Self::V4(value)
         }
     }
 
-    impl From<Ipv6Net> for IpNet {
+    impl ::std::convert::From<Ipv6Net> for IpNet {
         fn from(value: Ipv6Net) -> Self {
             Self::V6(value)
         }
@@ -5419,10 +5600,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPool {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -5433,7 +5616,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&IpPool> for IpPool {
+    impl ::std::convert::From<&IpPool> for IpPool {
         fn from(value: &IpPool) -> Self {
             value.clone()
         }
@@ -5471,13 +5654,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         pub name: Name,
     }
 
-    impl From<&IpPoolCreate> for IpPoolCreate {
+    impl ::std::convert::From<&IpPoolCreate> for IpPoolCreate {
         fn from(value: &IpPoolCreate) -> Self {
             value.clone()
         }
@@ -5517,14 +5702,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolRange {
         pub id: uuid::Uuid,
         pub range: IpRange,
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&IpPoolRange> for IpPoolRange {
+    impl ::std::convert::From<&IpPoolRange> for IpPoolRange {
         fn from(value: &IpPoolRange) -> Self {
             value.clone()
         }
@@ -5567,16 +5754,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolRangeResultsPage {
         ///list of items on this page of results
-        pub items: Vec<IpPoolRange>,
+        pub items: ::std::vec::Vec<IpPoolRange>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&IpPoolRangeResultsPage> for IpPoolRangeResultsPage {
+    impl ::std::convert::From<&IpPoolRangeResultsPage> for IpPoolRangeResultsPage {
         fn from(value: &IpPoolRangeResultsPage) -> Self {
             value.clone()
         }
@@ -5619,16 +5808,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolResultsPage {
         ///list of items on this page of results
-        pub items: Vec<IpPool>,
+        pub items: ::std::vec::Vec<IpPool>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&IpPoolResultsPage> for IpPoolResultsPage {
+    impl ::std::convert::From<&IpPoolResultsPage> for IpPoolResultsPage {
         fn from(value: &IpPoolResultsPage) -> Self {
             value.clone()
         }
@@ -5656,9 +5847,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -5666,17 +5864,28 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolUpdate {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub description: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub name: Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub description: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&IpPoolUpdate> for IpPoolUpdate {
+    impl ::std::convert::From<&IpPoolUpdate> for IpPoolUpdate {
         fn from(value: &IpPoolUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for IpPoolUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -5713,26 +5922,28 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(untagged)]
     pub enum IpRange {
         V4(Ipv4Range),
         V6(Ipv6Range),
     }
 
-    impl From<&IpRange> for IpRange {
+    impl ::std::convert::From<&Self> for IpRange {
         fn from(value: &IpRange) -> Self {
             value.clone()
         }
     }
 
-    impl From<Ipv4Range> for IpRange {
+    impl ::std::convert::From<Ipv4Range> for IpRange {
         fn from(value: Ipv4Range) -> Self {
             Self::V4(value)
         }
     }
 
-    impl From<Ipv6Range> for IpRange {
+    impl ::std::convert::From<Ipv6Range> for IpRange {
         fn from(value: Ipv6Range) -> Self {
             Self::V6(value)
         }
@@ -5758,31 +5969,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct Ipv4Net(String);
-    impl std::ops::Deref for Ipv4Net {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct Ipv4Net(::std::string::String);
+    impl ::std::ops::Deref for Ipv4Net {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<Ipv4Net> for String {
+    impl ::std::convert::From<Ipv4Net> for ::std::string::String {
         fn from(value: Ipv4Net) -> Self {
             value.0
         }
     }
 
-    impl From<&Ipv4Net> for Ipv4Net {
+    impl ::std::convert::From<&Ipv4Net> for Ipv4Net {
         fn from(value: &Ipv4Net) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for Ipv4Net {
+    impl ::std::str::FromStr for Ipv4Net {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if regress::Regex::new(
                 "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
                  ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
@@ -5802,36 +6022,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for Ipv4Net {
+    impl ::std::convert::TryFrom<&str> for Ipv4Net {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for Ipv4Net {
+    impl ::std::convert::TryFrom<&::std::string::String> for Ipv4Net {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Ipv4Net {
+    impl ::std::convert::TryFrom<::std::string::String> for Ipv4Net {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for Ipv4Net {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for Ipv4Net {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -5865,13 +6089,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Ipv4Range {
         pub first: std::net::Ipv4Addr,
         pub last: std::net::Ipv4Addr,
     }
 
-    impl From<&Ipv4Range> for Ipv4Range {
+    impl ::std::convert::From<&Ipv4Range> for Ipv4Range {
         fn from(value: &Ipv4Range) -> Self {
             value.clone()
         }
@@ -5902,31 +6128,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct Ipv6Net(String);
-    impl std::ops::Deref for Ipv6Net {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct Ipv6Net(::std::string::String);
+    impl ::std::ops::Deref for Ipv6Net {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<Ipv6Net> for String {
+    impl ::std::convert::From<Ipv6Net> for ::std::string::String {
         fn from(value: Ipv6Net) -> Self {
             value.0
         }
     }
 
-    impl From<&Ipv6Net> for Ipv6Net {
+    impl ::std::convert::From<&Ipv6Net> for Ipv6Net {
         fn from(value: &Ipv6Net) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for Ipv6Net {
+    impl ::std::str::FromStr for Ipv6Net {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if regress::Regex::new(
                 "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,\
                  4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
@@ -5945,36 +6180,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for Ipv6Net {
+    impl ::std::convert::TryFrom<&str> for Ipv6Net {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for Ipv6Net {
+    impl ::std::convert::TryFrom<&::std::string::String> for Ipv6Net {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Ipv6Net {
+    impl ::std::convert::TryFrom<::std::string::String> for Ipv6Net {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for Ipv6Net {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for Ipv6Net {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -6008,13 +6247,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Ipv6Range {
         pub first: std::net::Ipv6Addr,
         pub last: std::net::Ipv6Addr,
     }
 
-    impl From<&Ipv6Range> for Ipv6Range {
+    impl ::std::convert::From<&Ipv6Range> for Ipv6Range {
         fn from(value: &Ipv6Range) -> Self {
             value.clone()
         }
@@ -6047,31 +6288,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct L4PortRange(String);
-    impl std::ops::Deref for L4PortRange {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct L4PortRange(::std::string::String);
+    impl ::std::ops::Deref for L4PortRange {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<L4PortRange> for String {
+    impl ::std::convert::From<L4PortRange> for ::std::string::String {
         fn from(value: L4PortRange) -> Self {
             value.0
         }
     }
 
-    impl From<&L4PortRange> for L4PortRange {
+    impl ::std::convert::From<&L4PortRange> for L4PortRange {
         fn from(value: &L4PortRange) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for L4PortRange {
+    impl ::std::str::FromStr for L4PortRange {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.len() > 11usize {
                 return Err("longer than 11 characters".into());
             }
@@ -6089,36 +6339,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for L4PortRange {
+    impl ::std::convert::TryFrom<&str> for L4PortRange {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for L4PortRange {
+    impl ::std::convert::TryFrom<&::std::string::String> for L4PortRange {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for L4PortRange {
+    impl ::std::convert::TryFrom<::std::string::String> for L4PortRange {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for L4PortRange {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for L4PortRange {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -6142,31 +6396,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct MacAddr(String);
-    impl std::ops::Deref for MacAddr {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct MacAddr(::std::string::String);
+    impl ::std::ops::Deref for MacAddr {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<MacAddr> for String {
+    impl ::std::convert::From<MacAddr> for ::std::string::String {
         fn from(value: MacAddr) -> Self {
             value.0
         }
     }
 
-    impl From<&MacAddr> for MacAddr {
+    impl ::std::convert::From<&MacAddr> for MacAddr {
         fn from(value: &MacAddr) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for MacAddr {
+    impl ::std::str::FromStr for MacAddr {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.len() > 17usize {
                 return Err("longer than 17 characters".into());
             }
@@ -6186,36 +6449,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for MacAddr {
+    impl ::std::convert::TryFrom<&str> for MacAddr {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for MacAddr {
+    impl ::std::convert::TryFrom<&::std::string::String> for MacAddr {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for MacAddr {
+    impl ::std::convert::TryFrom<::std::string::String> for MacAddr {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for MacAddr {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for MacAddr {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -6245,13 +6512,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Measurement {
         pub datum: Datum,
         pub timestamp: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Measurement> for Measurement {
+    impl ::std::convert::From<&Measurement> for Measurement {
         fn from(value: &Measurement) -> Self {
             value.clone()
         }
@@ -6294,16 +6563,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct MeasurementResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Measurement>,
+        pub items: ::std::vec::Vec<Measurement>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&MeasurementResultsPage> for MeasurementResultsPage {
+    impl ::std::convert::From<&MeasurementResultsPage> for MeasurementResultsPage {
         fn from(value: &MeasurementResultsPage) -> Self {
             value.clone()
         }
@@ -6337,31 +6608,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct Name(String);
-    impl std::ops::Deref for Name {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct Name(::std::string::String);
+    impl ::std::ops::Deref for Name {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<Name> for String {
+    impl ::std::convert::From<Name> for ::std::string::String {
         fn from(value: Name) -> Self {
             value.0
         }
     }
 
-    impl From<&Name> for Name {
+    impl ::std::convert::From<&Name> for Name {
         fn from(value: &Name) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for Name {
+    impl ::std::str::FromStr for Name {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.len() > 63usize {
                 return Err("longer than 63 characters".into());
             }
@@ -6370,36 +6650,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for Name {
+    impl ::std::convert::TryFrom<&str> for Name {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for Name {
+    impl ::std::convert::TryFrom<&::std::string::String> for Name {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Name {
+    impl ::std::convert::TryFrom<::std::string::String> for Name {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for Name {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for Name {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -6432,22 +6716,24 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(untagged)]
     pub enum NameOrId {
         Id(uuid::Uuid),
         Name(Name),
     }
 
-    impl From<&NameOrId> for NameOrId {
+    impl ::std::convert::From<&Self> for NameOrId {
         fn from(value: &NameOrId) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for NameOrId {
+    impl ::std::str::FromStr for NameOrId {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if let Ok(v) = value.parse() {
                 Ok(Self::Id(v))
             } else if let Ok(v) = value.parse() {
@@ -6458,43 +6744,47 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for NameOrId {
+    impl ::std::convert::TryFrom<&str> for NameOrId {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for NameOrId {
+    impl ::std::convert::TryFrom<&::std::string::String> for NameOrId {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for NameOrId {
+    impl ::std::convert::TryFrom<::std::string::String> for NameOrId {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl ToString for NameOrId {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for NameOrId {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
-                Self::Id(x) => x.to_string(),
-                Self::Name(x) => x.to_string(),
+                Self::Id(x) => x.fmt(f),
+                Self::Name(x) => x.fmt(f),
             }
         }
     }
 
-    impl From<uuid::Uuid> for NameOrId {
+    impl ::std::convert::From<uuid::Uuid> for NameOrId {
         fn from(value: uuid::Uuid) -> Self {
             Self::Id(value)
         }
     }
 
-    impl From<Name> for NameOrId {
+    impl ::std::convert::From<Name> for NameOrId {
         fn from(value: Name) -> Self {
             Self::Name(value)
         }
@@ -6535,16 +6825,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum NameOrIdSortMode {
@@ -6559,25 +6849,25 @@ pub mod types {
         IdAscending,
     }
 
-    impl From<&NameOrIdSortMode> for NameOrIdSortMode {
+    impl ::std::convert::From<&Self> for NameOrIdSortMode {
         fn from(value: &NameOrIdSortMode) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for NameOrIdSortMode {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for NameOrIdSortMode {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::NameAscending => "name_ascending".to_string(),
-                Self::NameDescending => "name_descending".to_string(),
-                Self::IdAscending => "id_ascending".to_string(),
+                Self::NameAscending => write!(f, "name_ascending"),
+                Self::NameDescending => write!(f, "name_descending"),
+                Self::IdAscending => write!(f, "id_ascending"),
             }
         }
     }
 
-    impl std::str::FromStr for NameOrIdSortMode {
+    impl ::std::str::FromStr for NameOrIdSortMode {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "name_ascending" => Ok(Self::NameAscending),
                 "name_descending" => Ok(Self::NameDescending),
@@ -6587,23 +6877,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for NameOrIdSortMode {
+    impl ::std::convert::TryFrom<&str> for NameOrIdSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for NameOrIdSortMode {
+    impl ::std::convert::TryFrom<&::std::string::String> for NameOrIdSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for NameOrIdSortMode {
+    impl ::std::convert::TryFrom<::std::string::String> for NameOrIdSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6631,16 +6925,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum NameSortMode {
@@ -6649,23 +6943,23 @@ pub mod types {
         NameAscending,
     }
 
-    impl From<&NameSortMode> for NameSortMode {
+    impl ::std::convert::From<&Self> for NameSortMode {
         fn from(value: &NameSortMode) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for NameSortMode {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for NameSortMode {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::NameAscending => "name_ascending".to_string(),
+                Self::NameAscending => write!(f, "name_ascending"),
             }
         }
     }
 
-    impl std::str::FromStr for NameSortMode {
+    impl ::std::str::FromStr for NameSortMode {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "name_ascending" => Ok(Self::NameAscending),
                 _ => Err("invalid value".into()),
@@ -6673,23 +6967,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for NameSortMode {
+    impl ::std::convert::TryFrom<&str> for NameSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for NameSortMode {
+    impl ::std::convert::TryFrom<&::std::string::String> for NameSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for NameSortMode {
+    impl ::std::convert::TryFrom<::std::string::String> for NameSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6783,10 +7081,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct NetworkInterface {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///The Instance to which the interface belongs.
@@ -6810,7 +7110,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    impl From<&NetworkInterface> for NetworkInterface {
+    impl ::std::convert::From<&NetworkInterface> for NetworkInterface {
         fn from(value: &NetworkInterface) -> Self {
             value.clone()
         }
@@ -6873,13 +7173,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct NetworkInterfaceCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         ///The IP address for the interface. One will be auto-assigned if not
         /// provided.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub ip: Option<std::net::IpAddr>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub ip: ::std::option::Option<std::net::IpAddr>,
         pub name: Name,
         ///The VPC Subnet in which to create the interface.
         pub subnet_name: Name,
@@ -6887,7 +7189,7 @@ pub mod types {
         pub vpc_name: Name,
     }
 
-    impl From<&NetworkInterfaceCreate> for NetworkInterfaceCreate {
+    impl ::std::convert::From<&NetworkInterfaceCreate> for NetworkInterfaceCreate {
         fn from(value: &NetworkInterfaceCreate) -> Self {
             value.clone()
         }
@@ -6930,16 +7232,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct NetworkInterfaceResultsPage {
         ///list of items on this page of results
-        pub items: Vec<NetworkInterface>,
+        pub items: ::std::vec::Vec<NetworkInterface>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&NetworkInterfaceResultsPage> for NetworkInterfaceResultsPage {
+    impl ::std::convert::From<&NetworkInterfaceResultsPage> for NetworkInterfaceResultsPage {
         fn from(value: &NetworkInterfaceResultsPage) -> Self {
             value.clone()
         }
@@ -6974,9 +7278,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -6996,12 +7307,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct NetworkInterfaceUpdate {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub description: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub name: Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub description: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub name: ::std::option::Option<Name>,
         ///Make a secondary interface the instance's primary interface.
         ///
         ///If applied to a secondary interface, that interface will become the
@@ -7017,9 +7330,19 @@ pub mod types {
         pub primary: bool,
     }
 
-    impl From<&NetworkInterfaceUpdate> for NetworkInterfaceUpdate {
+    impl ::std::convert::From<&NetworkInterfaceUpdate> for NetworkInterfaceUpdate {
         fn from(value: &NetworkInterfaceUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for NetworkInterfaceUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+                primary: Default::default(),
+            }
         }
     }
 
@@ -7049,53 +7372,54 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
-    pub struct NodeName(pub String);
-    impl std::ops::Deref for NodeName {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct NodeName(pub ::std::string::String);
+    impl ::std::ops::Deref for NodeName {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<NodeName> for String {
+    impl ::std::convert::From<NodeName> for ::std::string::String {
         fn from(value: NodeName) -> Self {
             value.0
         }
     }
 
-    impl From<&NodeName> for NodeName {
+    impl ::std::convert::From<&NodeName> for NodeName {
         fn from(value: &NodeName) -> Self {
             value.clone()
         }
     }
 
-    impl From<String> for NodeName {
-        fn from(value: String) -> Self {
+    impl ::std::convert::From<::std::string::String> for NodeName {
+        fn from(value: ::std::string::String) -> Self {
             Self(value)
         }
     }
 
-    impl std::str::FromStr for NodeName {
-        type Err = std::convert::Infallible;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+    impl ::std::str::FromStr for NodeName {
+        type Err = ::std::convert::Infallible;
+        fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.to_string()))
         }
     }
 
-    impl ToString for NodeName {
-        fn to_string(&self) -> String {
-            self.0.to_string()
+    impl ::std::fmt::Display for NodeName {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
         }
     }
 
@@ -7148,10 +7472,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Organization {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -7162,7 +7488,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Organization> for Organization {
+    impl ::std::convert::From<&Organization> for Organization {
         fn from(value: &Organization) -> Self {
             value.clone()
         }
@@ -7199,13 +7525,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         pub name: Name,
     }
 
-    impl From<&OrganizationCreate> for OrganizationCreate {
+    impl ::std::convert::From<&OrganizationCreate> for OrganizationCreate {
         fn from(value: &OrganizationCreate) -> Self {
             value.clone()
         }
@@ -7248,16 +7576,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Organization>,
+        pub items: ::std::vec::Vec<Organization>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&OrganizationResultsPage> for OrganizationResultsPage {
+    impl ::std::convert::From<&OrganizationResultsPage> for OrganizationResultsPage {
         fn from(value: &OrganizationResultsPage) -> Self {
             value.clone()
         }
@@ -7285,16 +7615,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum OrganizationRole {
@@ -7306,25 +7636,25 @@ pub mod types {
         Viewer,
     }
 
-    impl From<&OrganizationRole> for OrganizationRole {
+    impl ::std::convert::From<&Self> for OrganizationRole {
         fn from(value: &OrganizationRole) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for OrganizationRole {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for OrganizationRole {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => "admin".to_string(),
-                Self::Collaborator => "collaborator".to_string(),
-                Self::Viewer => "viewer".to_string(),
+                Self::Admin => write!(f, "admin"),
+                Self::Collaborator => write!(f, "collaborator"),
+                Self::Viewer => write!(f, "viewer"),
             }
         }
     }
 
-    impl std::str::FromStr for OrganizationRole {
+    impl ::std::str::FromStr for OrganizationRole {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
@@ -7334,23 +7664,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for OrganizationRole {
+    impl ::std::convert::TryFrom<&str> for OrganizationRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for OrganizationRole {
+    impl ::std::convert::TryFrom<&::std::string::String> for OrganizationRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for OrganizationRole {
+    impl ::std::convert::TryFrom<::std::string::String> for OrganizationRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -7386,13 +7720,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationRolePolicy {
         ///Roles directly assigned on this resource
-        pub role_assignments: Vec<OrganizationRoleRoleAssignment>,
+        pub role_assignments: ::std::vec::Vec<OrganizationRoleRoleAssignment>,
     }
 
-    impl From<&OrganizationRolePolicy> for OrganizationRolePolicy {
+    impl ::std::convert::From<&OrganizationRolePolicy> for OrganizationRolePolicy {
         fn from(value: &OrganizationRolePolicy) -> Self {
             value.clone()
         }
@@ -7441,14 +7777,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: OrganizationRole,
     }
 
-    impl From<&OrganizationRoleRoleAssignment> for OrganizationRoleRoleAssignment {
+    impl ::std::convert::From<&OrganizationRoleRoleAssignment> for OrganizationRoleRoleAssignment {
         fn from(value: &OrganizationRoleRoleAssignment) -> Self {
             value.clone()
         }
@@ -7478,9 +7816,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -7488,17 +7833,28 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationUpdate {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub description: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub name: Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub description: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&OrganizationUpdate> for OrganizationUpdate {
+    impl ::std::convert::From<&OrganizationUpdate> for OrganizationUpdate {
         fn from(value: &OrganizationUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for OrganizationUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -7522,31 +7878,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct Password(String);
-    impl std::ops::Deref for Password {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct Password(::std::string::String);
+    impl ::std::ops::Deref for Password {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<Password> for String {
+    impl ::std::convert::From<Password> for ::std::string::String {
         fn from(value: Password) -> Self {
             value.0
         }
     }
 
-    impl From<&Password> for Password {
+    impl ::std::convert::From<&Password> for Password {
         fn from(value: &Password) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for Password {
+    impl ::std::str::FromStr for Password {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.len() > 512usize {
                 return Err("longer than 512 characters".into());
             }
@@ -7554,36 +7919,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for Password {
+    impl ::std::convert::TryFrom<&str> for Password {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for Password {
+    impl ::std::convert::TryFrom<&::std::string::String> for Password {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Password {
+    impl ::std::convert::TryFrom<::std::string::String> for Password {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for Password {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for Password {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -7646,24 +8015,26 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct PhysicalDisk {
         pub disk_type: PhysicalDiskType,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        pub model: String,
-        pub serial: String,
+        pub model: ::std::string::String,
+        pub serial: ::std::string::String,
         ///The sled to which this disk is attached, if any.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub sled_id: Option<uuid::Uuid>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub sled_id: ::std::option::Option<uuid::Uuid>,
         ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        pub vendor: String,
+        pub vendor: ::std::string::String,
     }
 
-    impl From<&PhysicalDisk> for PhysicalDisk {
+    impl ::std::convert::From<&PhysicalDisk> for PhysicalDisk {
         fn from(value: &PhysicalDisk) -> Self {
             value.clone()
         }
@@ -7706,16 +8077,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct PhysicalDiskResultsPage {
         ///list of items on this page of results
-        pub items: Vec<PhysicalDisk>,
+        pub items: ::std::vec::Vec<PhysicalDisk>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&PhysicalDiskResultsPage> for PhysicalDiskResultsPage {
+    impl ::std::convert::From<&PhysicalDiskResultsPage> for PhysicalDiskResultsPage {
         fn from(value: &PhysicalDiskResultsPage) -> Self {
             value.clone()
         }
@@ -7742,16 +8115,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum PhysicalDiskType {
@@ -7761,24 +8134,24 @@ pub mod types {
         External,
     }
 
-    impl From<&PhysicalDiskType> for PhysicalDiskType {
+    impl ::std::convert::From<&Self> for PhysicalDiskType {
         fn from(value: &PhysicalDiskType) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for PhysicalDiskType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for PhysicalDiskType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Internal => "internal".to_string(),
-                Self::External => "external".to_string(),
+                Self::Internal => write!(f, "internal"),
+                Self::External => write!(f, "external"),
             }
         }
     }
 
-    impl std::str::FromStr for PhysicalDiskType {
+    impl ::std::str::FromStr for PhysicalDiskType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "internal" => Ok(Self::Internal),
                 "external" => Ok(Self::External),
@@ -7787,23 +8160,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for PhysicalDiskType {
+    impl ::std::convert::TryFrom<&str> for PhysicalDiskType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for PhysicalDiskType {
+    impl ::std::convert::TryFrom<&::std::string::String> for PhysicalDiskType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for PhysicalDiskType {
+    impl ::std::convert::TryFrom<::std::string::String> for PhysicalDiskType {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -7862,10 +8239,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Project {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -7877,7 +8256,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Project> for Project {
+    impl ::std::convert::From<&Project> for Project {
         fn from(value: &Project) -> Self {
             value.clone()
         }
@@ -7914,13 +8293,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         pub name: Name,
     }
 
-    impl From<&ProjectCreate> for ProjectCreate {
+    impl ::std::convert::From<&ProjectCreate> for ProjectCreate {
         fn from(value: &ProjectCreate) -> Self {
             value.clone()
         }
@@ -7963,16 +8344,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Project>,
+        pub items: ::std::vec::Vec<Project>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&ProjectResultsPage> for ProjectResultsPage {
+    impl ::std::convert::From<&ProjectResultsPage> for ProjectResultsPage {
         fn from(value: &ProjectResultsPage) -> Self {
             value.clone()
         }
@@ -8000,16 +8383,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum ProjectRole {
@@ -8021,25 +8404,25 @@ pub mod types {
         Viewer,
     }
 
-    impl From<&ProjectRole> for ProjectRole {
+    impl ::std::convert::From<&Self> for ProjectRole {
         fn from(value: &ProjectRole) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for ProjectRole {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for ProjectRole {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => "admin".to_string(),
-                Self::Collaborator => "collaborator".to_string(),
-                Self::Viewer => "viewer".to_string(),
+                Self::Admin => write!(f, "admin"),
+                Self::Collaborator => write!(f, "collaborator"),
+                Self::Viewer => write!(f, "viewer"),
             }
         }
     }
 
-    impl std::str::FromStr for ProjectRole {
+    impl ::std::str::FromStr for ProjectRole {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
@@ -8049,23 +8432,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for ProjectRole {
+    impl ::std::convert::TryFrom<&str> for ProjectRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for ProjectRole {
+    impl ::std::convert::TryFrom<&::std::string::String> for ProjectRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for ProjectRole {
+    impl ::std::convert::TryFrom<::std::string::String> for ProjectRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -8101,13 +8488,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectRolePolicy {
         ///Roles directly assigned on this resource
-        pub role_assignments: Vec<ProjectRoleRoleAssignment>,
+        pub role_assignments: ::std::vec::Vec<ProjectRoleRoleAssignment>,
     }
 
-    impl From<&ProjectRolePolicy> for ProjectRolePolicy {
+    impl ::std::convert::From<&ProjectRolePolicy> for ProjectRolePolicy {
         fn from(value: &ProjectRolePolicy) -> Self {
             value.clone()
         }
@@ -8156,14 +8545,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: ProjectRole,
     }
 
-    impl From<&ProjectRoleRoleAssignment> for ProjectRoleRoleAssignment {
+    impl ::std::convert::From<&ProjectRoleRoleAssignment> for ProjectRoleRoleAssignment {
         fn from(value: &ProjectRoleRoleAssignment) -> Self {
             value.clone()
         }
@@ -8193,9 +8584,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -8203,17 +8601,28 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectUpdate {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub description: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub name: Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub description: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&ProjectUpdate> for ProjectUpdate {
+    impl ::std::convert::From<&ProjectUpdate> for ProjectUpdate {
         fn from(value: &ProjectUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for ProjectUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -8257,7 +8666,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Rack {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
@@ -8267,7 +8678,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Rack> for Rack {
+    impl ::std::convert::From<&Rack> for Rack {
         fn from(value: &Rack) -> Self {
             value.clone()
         }
@@ -8310,16 +8721,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RackResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Rack>,
+        pub items: ::std::vec::Vec<Rack>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&RackResultsPage> for RackResultsPage {
+    impl ::std::convert::From<&RackResultsPage> for RackResultsPage {
         fn from(value: &RackResultsPage) -> Self {
             value.clone()
         }
@@ -8354,13 +8767,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Role {
-        pub description: String,
+        pub description: ::std::string::String,
         pub name: RoleName,
     }
 
-    impl From<&Role> for Role {
+    impl ::std::convert::From<&Role> for Role {
         fn from(value: &Role) -> Self {
             value.clone()
         }
@@ -8388,31 +8803,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct RoleName(String);
-    impl std::ops::Deref for RoleName {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct RoleName(::std::string::String);
+    impl ::std::ops::Deref for RoleName {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<RoleName> for String {
+    impl ::std::convert::From<RoleName> for ::std::string::String {
         fn from(value: RoleName) -> Self {
             value.0
         }
     }
 
-    impl From<&RoleName> for RoleName {
+    impl ::std::convert::From<&RoleName> for RoleName {
         fn from(value: &RoleName) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for RoleName {
+    impl ::std::str::FromStr for RoleName {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.len() > 63usize {
                 return Err("longer than 63 characters".into());
             }
@@ -8427,36 +8851,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for RoleName {
+    impl ::std::convert::TryFrom<&str> for RoleName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for RoleName {
+    impl ::std::convert::TryFrom<&::std::string::String> for RoleName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for RoleName {
+    impl ::std::convert::TryFrom<::std::string::String> for RoleName {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for RoleName {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for RoleName {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -8492,16 +8920,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RoleResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Role>,
+        pub items: ::std::vec::Vec<Role>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&RoleResultsPage> for RoleResultsPage {
+    impl ::std::convert::From<&RoleResultsPage> for RoleResultsPage {
         fn from(value: &RoleResultsPage) -> Self {
             value.clone()
         }
@@ -8614,7 +9044,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
         ///Route applies to traffic destined for a specific IP address
@@ -8631,19 +9063,19 @@ pub mod types {
         Subnet(Name),
     }
 
-    impl From<&RouteDestination> for RouteDestination {
+    impl ::std::convert::From<&Self> for RouteDestination {
         fn from(value: &RouteDestination) -> Self {
             value.clone()
         }
     }
 
-    impl From<std::net::IpAddr> for RouteDestination {
+    impl ::std::convert::From<std::net::IpAddr> for RouteDestination {
         fn from(value: std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
 
-    impl From<IpNet> for RouteDestination {
+    impl ::std::convert::From<IpNet> for RouteDestination {
         fn from(value: IpNet) -> Self {
             Self::IpNet(value)
         }
@@ -8759,7 +9191,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
         ///Forward traffic to a particular IP address.
@@ -8779,13 +9213,13 @@ pub mod types {
         InternetGateway(Name),
     }
 
-    impl From<&RouteTarget> for RouteTarget {
+    impl ::std::convert::From<&Self> for RouteTarget {
         fn from(value: &RouteTarget) -> Self {
             value.clone()
         }
     }
 
-    impl From<std::net::IpAddr> for RouteTarget {
+    impl ::std::convert::From<std::net::IpAddr> for RouteTarget {
         fn from(value: std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
@@ -8866,10 +9300,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RouterRoute {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         pub destination: RouteDestination,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
@@ -8886,7 +9322,7 @@ pub mod types {
         pub vpc_router_id: uuid::Uuid,
     }
 
-    impl From<&RouterRoute> for RouterRoute {
+    impl ::std::convert::From<&RouterRoute> for RouterRoute {
         fn from(value: &RouterRoute) -> Self {
             value.clone()
         }
@@ -8929,15 +9365,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RouterRouteCreateParams {
-        pub description: String,
+        pub description: ::std::string::String,
         pub destination: RouteDestination,
         pub name: Name,
         pub target: RouteTarget,
     }
 
-    impl From<&RouterRouteCreateParams> for RouterRouteCreateParams {
+    impl ::std::convert::From<&RouterRouteCreateParams> for RouterRouteCreateParams {
         fn from(value: &RouterRouteCreateParams) -> Self {
             value.clone()
         }
@@ -8999,16 +9437,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum RouterRouteKind {
@@ -9035,26 +9473,26 @@ pub mod types {
         Custom,
     }
 
-    impl From<&RouterRouteKind> for RouterRouteKind {
+    impl ::std::convert::From<&Self> for RouterRouteKind {
         fn from(value: &RouterRouteKind) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for RouterRouteKind {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for RouterRouteKind {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Default => "default".to_string(),
-                Self::VpcSubnet => "vpc_subnet".to_string(),
-                Self::VpcPeering => "vpc_peering".to_string(),
-                Self::Custom => "custom".to_string(),
+                Self::Default => write!(f, "default"),
+                Self::VpcSubnet => write!(f, "vpc_subnet"),
+                Self::VpcPeering => write!(f, "vpc_peering"),
+                Self::Custom => write!(f, "custom"),
             }
         }
     }
 
-    impl std::str::FromStr for RouterRouteKind {
+    impl ::std::str::FromStr for RouterRouteKind {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "default" => Ok(Self::Default),
                 "vpc_subnet" => Ok(Self::VpcSubnet),
@@ -9065,23 +9503,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for RouterRouteKind {
+    impl ::std::convert::TryFrom<&str> for RouterRouteKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for RouterRouteKind {
+    impl ::std::convert::TryFrom<&::std::string::String> for RouterRouteKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for RouterRouteKind {
+    impl ::std::convert::TryFrom<::std::string::String> for RouterRouteKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9117,16 +9559,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RouterRouteResultsPage {
         ///list of items on this page of results
-        pub items: Vec<RouterRoute>,
+        pub items: ::std::vec::Vec<RouterRoute>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&RouterRouteResultsPage> for RouterRouteResultsPage {
+    impl ::std::convert::From<&RouterRouteResultsPage> for RouterRouteResultsPage {
         fn from(value: &RouterRouteResultsPage) -> Self {
             value.clone()
         }
@@ -9161,9 +9605,16 @@ pub mod types {
     ///      "$ref": "#/components/schemas/RouteDestination"
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -9174,17 +9625,19 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RouterRouteUpdateParams {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub description: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub description: ::std::option::Option<::std::string::String>,
         pub destination: RouteDestination,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub name: Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub name: ::std::option::Option<Name>,
         pub target: RouteTarget,
     }
 
-    impl From<&RouterRouteUpdateParams> for RouterRouteUpdateParams {
+    impl ::std::convert::From<&RouterRouteUpdateParams> for RouterRouteUpdateParams {
         fn from(value: &RouterRouteUpdateParams) -> Self {
             value.clone()
         }
@@ -9219,13 +9672,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Saga {
         pub id: uuid::Uuid,
         pub state: SagaState,
     }
 
-    impl From<&Saga> for Saga {
+    impl ::std::convert::From<&Saga> for Saga {
         fn from(value: &Saga) -> Self {
             value.clone()
         }
@@ -9332,22 +9787,24 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "error")]
     pub enum SagaErrorInfo {
         #[serde(rename = "action_failed")]
-        ActionFailed { source_error: serde_json::Value },
+        ActionFailed { source_error: ::serde_json::Value },
         #[serde(rename = "deserialize_failed")]
-        DeserializeFailed { message: String },
+        DeserializeFailed { message: ::std::string::String },
         #[serde(rename = "injected_error")]
         InjectedError,
         #[serde(rename = "serialize_failed")]
-        SerializeFailed { message: String },
+        SerializeFailed { message: ::std::string::String },
         #[serde(rename = "subsaga_create_failed")]
-        SubsagaCreateFailed { message: String },
+        SubsagaCreateFailed { message: ::std::string::String },
     }
 
-    impl From<&SagaErrorInfo> for SagaErrorInfo {
+    impl ::std::convert::From<&Self> for SagaErrorInfo {
         fn from(value: &SagaErrorInfo) -> Self {
             value.clone()
         }
@@ -9384,16 +9841,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SagaResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Saga>,
+        pub items: ::std::vec::Vec<Saga>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SagaResultsPage> for SagaResultsPage {
+    impl ::std::convert::From<&SagaResultsPage> for SagaResultsPage {
         fn from(value: &SagaResultsPage) -> Self {
             value.clone()
         }
@@ -9466,7 +9925,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "state")]
     pub enum SagaState {
         #[serde(rename = "running")]
@@ -9480,7 +9941,7 @@ pub mod types {
         },
     }
 
-    impl From<&SagaState> for SagaState {
+    impl ::std::convert::From<&Self> for SagaState {
         fn from(value: &SagaState) -> Self {
             value.clone()
         }
@@ -9573,35 +10034,37 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SamlIdentityProvider {
         ///service provider endpoint where the response will be sent
-        pub acs_url: String,
+        pub acs_url: ::std::string::String,
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///idp's entity id
-        pub idp_entity_id: String,
+        pub idp_entity_id: ::std::string::String,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///optional request signing public certificate (base64 encoded der
         /// file)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub public_cert: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub public_cert: ::std::option::Option<::std::string::String>,
         ///service provider endpoint where the idp should send log out requests
-        pub slo_url: String,
+        pub slo_url: ::std::string::String,
         ///sp's client id
-        pub sp_client_id: String,
+        pub sp_client_id: ::std::string::String,
         ///customer's technical contact for saml configuration
-        pub technical_contact_email: String,
+        pub technical_contact_email: ::std::string::String,
         ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&SamlIdentityProvider> for SamlIdentityProvider {
+    impl ::std::convert::From<&SamlIdentityProvider> for SamlIdentityProvider {
         fn from(value: &SamlIdentityProvider) -> Self {
             value.clone()
         }
@@ -9667,9 +10130,16 @@ pub mod types {
     ///    },
     ///    "signing_keypair": {
     ///      "description": "optional request signing key pair",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/DerEncodedKeyPair"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/DerEncodedKeyPair"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -9691,33 +10161,35 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SamlIdentityProviderCreate {
         ///service provider endpoint where the response will be sent
-        pub acs_url: String,
-        pub description: String,
+        pub acs_url: ::std::string::String,
+        pub description: ::std::string::String,
         ///If set, SAML attributes with this name will be considered to denote
         /// a user's group membership, where the attribute value(s) should be a
         /// comma-separated list of group names.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub group_attribute_name: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub group_attribute_name: ::std::option::Option<::std::string::String>,
         ///idp's entity id
-        pub idp_entity_id: String,
+        pub idp_entity_id: ::std::string::String,
         ///the source of an identity provider metadata descriptor
         pub idp_metadata_source: IdpMetadataSource,
         pub name: Name,
         ///optional request signing key pair
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub signing_keypair: Option<DerEncodedKeyPair>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub signing_keypair: ::std::option::Option<DerEncodedKeyPair>,
         ///service provider endpoint where the idp should send log out requests
-        pub slo_url: String,
+        pub slo_url: ::std::string::String,
         ///sp's client id
-        pub sp_client_id: String,
+        pub sp_client_id: ::std::string::String,
         ///customer's technical contact for saml configuration
-        pub technical_contact_email: String,
+        pub technical_contact_email: ::std::string::String,
     }
 
-    impl From<&SamlIdentityProviderCreate> for SamlIdentityProviderCreate {
+    impl ::std::convert::From<&SamlIdentityProviderCreate> for SamlIdentityProviderCreate {
         fn from(value: &SamlIdentityProviderCreate) -> Self {
             value.clone()
         }
@@ -9741,31 +10213,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct SemverVersion(String);
-    impl std::ops::Deref for SemverVersion {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct SemverVersion(::std::string::String);
+    impl ::std::ops::Deref for SemverVersion {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<SemverVersion> for String {
+    impl ::std::convert::From<SemverVersion> for ::std::string::String {
         fn from(value: SemverVersion) -> Self {
             value.0
         }
     }
 
-    impl From<&SemverVersion> for SemverVersion {
+    impl ::std::convert::From<&SemverVersion> for SemverVersion {
         fn from(value: &SemverVersion) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for SemverVersion {
+    impl ::std::str::FromStr for SemverVersion {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if regress::Regex::new("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$")
                 .unwrap()
                 .find(value)
@@ -9777,36 +10258,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SemverVersion {
+    impl ::std::convert::TryFrom<&str> for SemverVersion {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for SemverVersion {
+    impl ::std::convert::TryFrom<&::std::string::String> for SemverVersion {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for SemverVersion {
+    impl ::std::convert::TryFrom<::std::string::String> for SemverVersion {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for SemverVersion {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for SemverVersion {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -9832,16 +10317,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum ServiceUsingCertificate {
@@ -9850,23 +10335,23 @@ pub mod types {
         ExternalApi,
     }
 
-    impl From<&ServiceUsingCertificate> for ServiceUsingCertificate {
+    impl ::std::convert::From<&Self> for ServiceUsingCertificate {
         fn from(value: &ServiceUsingCertificate) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for ServiceUsingCertificate {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for ServiceUsingCertificate {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::ExternalApi => "external_api".to_string(),
+                Self::ExternalApi => write!(f, "external_api"),
             }
         }
     }
 
-    impl std::str::FromStr for ServiceUsingCertificate {
+    impl ::std::str::FromStr for ServiceUsingCertificate {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "external_api" => Ok(Self::ExternalApi),
                 _ => Err("invalid value".into()),
@@ -9874,23 +10359,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for ServiceUsingCertificate {
+    impl ::std::convert::TryFrom<&str> for ServiceUsingCertificate {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for ServiceUsingCertificate {
+    impl ::std::convert::TryFrom<&::std::string::String> for ServiceUsingCertificate {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for ServiceUsingCertificate {
+    impl ::std::convert::TryFrom<::std::string::String> for ServiceUsingCertificate {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9958,10 +10447,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Silo {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///A silo where discoverable is false can be retrieved only by its id -
         /// it will not be part of the "list all silos" output.
         pub discoverable: bool,
@@ -9977,7 +10468,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Silo> for Silo {
+    impl ::std::convert::From<&Silo> for Silo {
         fn from(value: &Silo) -> Self {
             value.clone()
         }
@@ -10034,7 +10525,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SiloCreate {
         ///If set, this group will be created during Silo creation and granted
         /// the "Silo Admin" role. Identity providers can assert that users
@@ -10044,15 +10537,15 @@ pub mod types {
         ///Note that if configuring a SAML based identity provider,
         /// group_attribute_name must be set for users to be considered part of
         /// a group. See [`SamlIdentityProviderCreate`] for more information.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub admin_group_name: Option<String>,
-        pub description: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub admin_group_name: ::std::option::Option<::std::string::String>,
+        pub description: ::std::string::String,
         pub discoverable: bool,
         pub identity_mode: SiloIdentityMode,
         pub name: Name,
     }
 
-    impl From<&SiloCreate> for SiloCreate {
+    impl ::std::convert::From<&SiloCreate> for SiloCreate {
         fn from(value: &SiloCreate) -> Self {
             value.clone()
         }
@@ -10098,16 +10591,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum SiloIdentityMode {
@@ -10123,24 +10616,24 @@ pub mod types {
         LocalOnly,
     }
 
-    impl From<&SiloIdentityMode> for SiloIdentityMode {
+    impl ::std::convert::From<&Self> for SiloIdentityMode {
         fn from(value: &SiloIdentityMode) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for SiloIdentityMode {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for SiloIdentityMode {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::SamlJit => "saml_jit".to_string(),
-                Self::LocalOnly => "local_only".to_string(),
+                Self::SamlJit => write!(f, "saml_jit"),
+                Self::LocalOnly => write!(f, "local_only"),
             }
         }
     }
 
-    impl std::str::FromStr for SiloIdentityMode {
+    impl ::std::str::FromStr for SiloIdentityMode {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "saml_jit" => Ok(Self::SamlJit),
                 "local_only" => Ok(Self::LocalOnly),
@@ -10149,23 +10642,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SiloIdentityMode {
+    impl ::std::convert::TryFrom<&str> for SiloIdentityMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for SiloIdentityMode {
+    impl ::std::convert::TryFrom<&::std::string::String> for SiloIdentityMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for SiloIdentityMode {
+    impl ::std::convert::TryFrom<::std::string::String> for SiloIdentityMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10201,16 +10698,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SiloResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Silo>,
+        pub items: ::std::vec::Vec<Silo>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SiloResultsPage> for SiloResultsPage {
+    impl ::std::convert::From<&SiloResultsPage> for SiloResultsPage {
         fn from(value: &SiloResultsPage) -> Self {
             value.clone()
         }
@@ -10238,16 +10737,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum SiloRole {
@@ -10259,25 +10758,25 @@ pub mod types {
         Viewer,
     }
 
-    impl From<&SiloRole> for SiloRole {
+    impl ::std::convert::From<&Self> for SiloRole {
         fn from(value: &SiloRole) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for SiloRole {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for SiloRole {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => "admin".to_string(),
-                Self::Collaborator => "collaborator".to_string(),
-                Self::Viewer => "viewer".to_string(),
+                Self::Admin => write!(f, "admin"),
+                Self::Collaborator => write!(f, "collaborator"),
+                Self::Viewer => write!(f, "viewer"),
             }
         }
     }
 
-    impl std::str::FromStr for SiloRole {
+    impl ::std::str::FromStr for SiloRole {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
@@ -10287,23 +10786,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SiloRole {
+    impl ::std::convert::TryFrom<&str> for SiloRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for SiloRole {
+    impl ::std::convert::TryFrom<&::std::string::String> for SiloRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for SiloRole {
+    impl ::std::convert::TryFrom<::std::string::String> for SiloRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10339,13 +10842,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SiloRolePolicy {
         ///Roles directly assigned on this resource
-        pub role_assignments: Vec<SiloRoleRoleAssignment>,
+        pub role_assignments: ::std::vec::Vec<SiloRoleRoleAssignment>,
     }
 
-    impl From<&SiloRolePolicy> for SiloRolePolicy {
+    impl ::std::convert::From<&SiloRolePolicy> for SiloRolePolicy {
         fn from(value: &SiloRolePolicy) -> Self {
             value.clone()
         }
@@ -10394,14 +10899,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SiloRoleRoleAssignment {
         pub identity_id: uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: SiloRole,
     }
 
-    impl From<&SiloRoleRoleAssignment> for SiloRoleRoleAssignment {
+    impl ::std::convert::From<&SiloRoleRoleAssignment> for SiloRoleRoleAssignment {
         fn from(value: &SiloRoleRoleAssignment) -> Self {
             value.clone()
         }
@@ -10455,19 +10962,21 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Sled {
         pub baseboard: Baseboard,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
-        pub service_address: String,
+        pub service_address: ::std::string::String,
         ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Sled> for Sled {
+    impl ::std::convert::From<&Sled> for Sled {
         fn from(value: &Sled) -> Self {
             value.clone()
         }
@@ -10510,16 +11019,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SledResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Sled>,
+        pub items: ::std::vec::Vec<Sled>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SledResultsPage> for SledResultsPage {
+    impl ::std::convert::From<&SledResultsPage> for SledResultsPage {
         fn from(value: &SledResultsPage) -> Self {
             value.clone()
         }
@@ -10598,10 +11109,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Snapshot {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         pub disk_id: uuid::Uuid,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
@@ -10616,7 +11129,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Snapshot> for Snapshot {
+    impl ::std::convert::From<&Snapshot> for Snapshot {
         fn from(value: &Snapshot) -> Self {
             value.clone()
         }
@@ -10662,15 +11175,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SnapshotCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         ///The name of the disk to be snapshotted
         pub disk: Name,
         pub name: Name,
     }
 
-    impl From<&SnapshotCreate> for SnapshotCreate {
+    impl ::std::convert::From<&SnapshotCreate> for SnapshotCreate {
         fn from(value: &SnapshotCreate) -> Self {
             value.clone()
         }
@@ -10713,16 +11228,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SnapshotResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Snapshot>,
+        pub items: ::std::vec::Vec<Snapshot>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SnapshotResultsPage> for SnapshotResultsPage {
+    impl ::std::convert::From<&SnapshotResultsPage> for SnapshotResultsPage {
         fn from(value: &SnapshotResultsPage) -> Self {
             value.clone()
         }
@@ -10751,16 +11268,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum SnapshotState {
@@ -10774,26 +11291,26 @@ pub mod types {
         Destroyed,
     }
 
-    impl From<&SnapshotState> for SnapshotState {
+    impl ::std::convert::From<&Self> for SnapshotState {
         fn from(value: &SnapshotState) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for SnapshotState {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for SnapshotState {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => "creating".to_string(),
-                Self::Ready => "ready".to_string(),
-                Self::Faulted => "faulted".to_string(),
-                Self::Destroyed => "destroyed".to_string(),
+                Self::Creating => write!(f, "creating"),
+                Self::Ready => write!(f, "ready"),
+                Self::Faulted => write!(f, "faulted"),
+                Self::Destroyed => write!(f, "destroyed"),
             }
         }
     }
 
-    impl std::str::FromStr for SnapshotState {
+    impl ::std::str::FromStr for SnapshotState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "creating" => Ok(Self::Creating),
                 "ready" => Ok(Self::Ready),
@@ -10804,23 +11321,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SnapshotState {
+    impl ::std::convert::TryFrom<&str> for SnapshotState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for SnapshotState {
+    impl ::std::convert::TryFrom<&::std::string::String> for SnapshotState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for SnapshotState {
+    impl ::std::convert::TryFrom<::std::string::String> for SnapshotState {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10843,12 +11364,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SpoofLoginBody {
-        pub username: String,
+        pub username: ::std::string::String,
     }
 
-    impl From<&SpoofLoginBody> for SpoofLoginBody {
+    impl ::std::convert::From<&SpoofLoginBody> for SpoofLoginBody {
         fn from(value: &SpoofLoginBody) -> Self {
             value.clone()
         }
@@ -10921,16 +11444,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SshKey {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///SSH public key, e.g., `"ssh-ed25519 AAAAC3NzaC..."`
-        pub public_key: String,
+        pub public_key: ::std::string::String,
         ///The user to whom this key belongs
         pub silo_user_id: uuid::Uuid,
         ///timestamp when this resource was created
@@ -10939,7 +11464,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&SshKey> for SshKey {
+    impl ::std::convert::From<&SshKey> for SshKey {
         fn from(value: &SshKey) -> Self {
             value.clone()
         }
@@ -10982,15 +11507,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SshKeyCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         pub name: Name,
         ///SSH public key, e.g., `"ssh-ed25519 AAAAC3NzaC..."`
-        pub public_key: String,
+        pub public_key: ::std::string::String,
     }
 
-    impl From<&SshKeyCreate> for SshKeyCreate {
+    impl ::std::convert::From<&SshKeyCreate> for SshKeyCreate {
         fn from(value: &SshKeyCreate) -> Self {
             value.clone()
         }
@@ -11033,16 +11560,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SshKeyResultsPage {
         ///list of items on this page of results
-        pub items: Vec<SshKey>,
+        pub items: ::std::vec::Vec<SshKey>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SshKeyResultsPage> for SshKeyResultsPage {
+    impl ::std::convert::From<&SshKeyResultsPage> for SshKeyResultsPage {
         fn from(value: &SshKeyResultsPage) -> Self {
             value.clone()
         }
@@ -11070,16 +11599,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum SystemMetricName {
@@ -11091,25 +11620,25 @@ pub mod types {
         RamProvisioned,
     }
 
-    impl From<&SystemMetricName> for SystemMetricName {
+    impl ::std::convert::From<&Self> for SystemMetricName {
         fn from(value: &SystemMetricName) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for SystemMetricName {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for SystemMetricName {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::VirtualDiskSpaceProvisioned => "virtual_disk_space_provisioned".to_string(),
-                Self::CpusProvisioned => "cpus_provisioned".to_string(),
-                Self::RamProvisioned => "ram_provisioned".to_string(),
+                Self::VirtualDiskSpaceProvisioned => write!(f, "virtual_disk_space_provisioned"),
+                Self::CpusProvisioned => write!(f, "cpus_provisioned"),
+                Self::RamProvisioned => write!(f, "ram_provisioned"),
             }
         }
     }
 
-    impl std::str::FromStr for SystemMetricName {
+    impl ::std::str::FromStr for SystemMetricName {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "virtual_disk_space_provisioned" => Ok(Self::VirtualDiskSpaceProvisioned),
                 "cpus_provisioned" => Ok(Self::CpusProvisioned),
@@ -11119,23 +11648,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for SystemMetricName {
+    impl ::std::convert::TryFrom<&str> for SystemMetricName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for SystemMetricName {
+    impl ::std::convert::TryFrom<&::std::string::String> for SystemMetricName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for SystemMetricName {
+    impl ::std::convert::TryFrom<::std::string::String> for SystemMetricName {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11180,7 +11713,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SystemUpdate {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
@@ -11191,7 +11726,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&SystemUpdate> for SystemUpdate {
+    impl ::std::convert::From<&SystemUpdate> for SystemUpdate {
         fn from(value: &SystemUpdate) -> Self {
             value.clone()
         }
@@ -11234,16 +11769,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SystemUpdateResultsPage {
         ///list of items on this page of results
-        pub items: Vec<SystemUpdate>,
+        pub items: ::std::vec::Vec<SystemUpdate>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&SystemUpdateResultsPage> for SystemUpdateResultsPage {
+    impl ::std::convert::From<&SystemUpdateResultsPage> for SystemUpdateResultsPage {
         fn from(value: &SystemUpdateResultsPage) -> Self {
             value.clone()
         }
@@ -11273,12 +11810,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SystemUpdateStart {
         pub version: SemverVersion,
     }
 
-    impl From<&SystemUpdateStart> for SystemUpdateStart {
+    impl ::std::convert::From<&SystemUpdateStart> for SystemUpdateStart {
         fn from(value: &SystemUpdateStart) -> Self {
             value.clone()
         }
@@ -11312,13 +11851,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SystemVersion {
         pub status: UpdateStatus,
         pub version_range: VersionRange,
     }
 
-    impl From<&SystemVersion> for SystemVersion {
+    impl ::std::convert::From<&SystemVersion> for SystemVersion {
         fn from(value: &SystemVersion) -> Self {
             value.clone()
         }
@@ -11349,31 +11890,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct TimeseriesName(String);
-    impl std::ops::Deref for TimeseriesName {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct TimeseriesName(::std::string::String);
+    impl ::std::ops::Deref for TimeseriesName {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<TimeseriesName> for String {
+    impl ::std::convert::From<TimeseriesName> for ::std::string::String {
         fn from(value: TimeseriesName) -> Self {
             value.0
         }
     }
 
-    impl From<&TimeseriesName> for TimeseriesName {
+    impl ::std::convert::From<&TimeseriesName> for TimeseriesName {
         fn from(value: &TimeseriesName) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for TimeseriesName {
+    impl ::std::str::FromStr for TimeseriesName {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if regress::Regex::new(
                 "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)",
             )
@@ -11390,36 +11940,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for TimeseriesName {
+    impl ::std::convert::TryFrom<&str> for TimeseriesName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for TimeseriesName {
+    impl ::std::convert::TryFrom<&::std::string::String> for TimeseriesName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for TimeseriesName {
+    impl ::std::convert::TryFrom<::std::string::String> for TimeseriesName {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for TimeseriesName {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for TimeseriesName {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -11464,15 +12018,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct TimeseriesSchema {
         pub created: chrono::DateTime<chrono::offset::Utc>,
         pub datum_type: DatumType,
-        pub field_schema: Vec<FieldSchema>,
+        pub field_schema: ::std::vec::Vec<FieldSchema>,
         pub timeseries_name: TimeseriesName,
     }
 
-    impl From<&TimeseriesSchema> for TimeseriesSchema {
+    impl ::std::convert::From<&TimeseriesSchema> for TimeseriesSchema {
         fn from(value: &TimeseriesSchema) -> Self {
             value.clone()
         }
@@ -11515,16 +12071,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct TimeseriesSchemaResultsPage {
         ///list of items on this page of results
-        pub items: Vec<TimeseriesSchema>,
+        pub items: ::std::vec::Vec<TimeseriesSchema>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&TimeseriesSchemaResultsPage> for TimeseriesSchemaResultsPage {
+    impl ::std::convert::From<&TimeseriesSchemaResultsPage> for TimeseriesSchemaResultsPage {
         fn from(value: &TimeseriesSchemaResultsPage) -> Self {
             value.clone()
         }
@@ -11580,7 +12138,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UpdateDeployment {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
@@ -11592,7 +12152,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&UpdateDeployment> for UpdateDeployment {
+    impl ::std::convert::From<&UpdateDeployment> for UpdateDeployment {
         fn from(value: &UpdateDeployment) -> Self {
             value.clone()
         }
@@ -11635,16 +12195,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UpdateDeploymentResultsPage {
         ///list of items on this page of results
-        pub items: Vec<UpdateDeployment>,
+        pub items: ::std::vec::Vec<UpdateDeployment>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&UpdateDeploymentResultsPage> for UpdateDeploymentResultsPage {
+    impl ::std::convert::From<&UpdateDeploymentResultsPage> for UpdateDeploymentResultsPage {
         fn from(value: &UpdateDeploymentResultsPage) -> Self {
             value.clone()
         }
@@ -11696,16 +12258,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     #[serde(tag = "status")]
@@ -11716,24 +12278,24 @@ pub mod types {
         Steady,
     }
 
-    impl From<&UpdateStatus> for UpdateStatus {
+    impl ::std::convert::From<&Self> for UpdateStatus {
         fn from(value: &UpdateStatus) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for UpdateStatus {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for UpdateStatus {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Updating => "updating".to_string(),
-                Self::Steady => "steady".to_string(),
+                Self::Updating => write!(f, "updating"),
+                Self::Steady => write!(f, "steady"),
             }
         }
     }
 
-    impl std::str::FromStr for UpdateStatus {
+    impl ::std::str::FromStr for UpdateStatus {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "updating" => Ok(Self::Updating),
                 "steady" => Ok(Self::Steady),
@@ -11742,23 +12304,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for UpdateStatus {
+    impl ::std::convert::TryFrom<&str> for UpdateStatus {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for UpdateStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for UpdateStatus {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for UpdateStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for UpdateStatus {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11819,10 +12385,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UpdateableComponent {
         pub component_type: UpdateableComponentType,
-        pub device_id: String,
+        pub device_id: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         pub status: UpdateStatus,
@@ -11834,7 +12402,7 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl From<&UpdateableComponent> for UpdateableComponent {
+    impl ::std::convert::From<&UpdateableComponent> for UpdateableComponent {
         fn from(value: &UpdateableComponent) -> Self {
             value.clone()
         }
@@ -11877,16 +12445,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UpdateableComponentResultsPage {
         ///list of items on this page of results
-        pub items: Vec<UpdateableComponent>,
+        pub items: ::std::vec::Vec<UpdateableComponent>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&UpdateableComponentResultsPage> for UpdateableComponentResultsPage {
+    impl ::std::convert::From<&UpdateableComponentResultsPage> for UpdateableComponentResultsPage {
         fn from(value: &UpdateableComponentResultsPage) -> Self {
             value.clone()
         }
@@ -11923,16 +12493,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum UpdateableComponentType {
@@ -11962,34 +12532,34 @@ pub mod types {
         HostOmicron,
     }
 
-    impl From<&UpdateableComponentType> for UpdateableComponentType {
+    impl ::std::convert::From<&Self> for UpdateableComponentType {
         fn from(value: &UpdateableComponentType) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for UpdateableComponentType {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for UpdateableComponentType {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::BootloaderForRot => "bootloader_for_rot".to_string(),
-                Self::BootloaderForSp => "bootloader_for_sp".to_string(),
-                Self::BootloaderForHostProc => "bootloader_for_host_proc".to_string(),
-                Self::HubrisForPscRot => "hubris_for_psc_rot".to_string(),
-                Self::HubrisForPscSp => "hubris_for_psc_sp".to_string(),
-                Self::HubrisForSidecarRot => "hubris_for_sidecar_rot".to_string(),
-                Self::HubrisForSidecarSp => "hubris_for_sidecar_sp".to_string(),
-                Self::HubrisForGimletRot => "hubris_for_gimlet_rot".to_string(),
-                Self::HubrisForGimletSp => "hubris_for_gimlet_sp".to_string(),
-                Self::HeliosHostPhase1 => "helios_host_phase1".to_string(),
-                Self::HeliosHostPhase2 => "helios_host_phase2".to_string(),
-                Self::HostOmicron => "host_omicron".to_string(),
+                Self::BootloaderForRot => write!(f, "bootloader_for_rot"),
+                Self::BootloaderForSp => write!(f, "bootloader_for_sp"),
+                Self::BootloaderForHostProc => write!(f, "bootloader_for_host_proc"),
+                Self::HubrisForPscRot => write!(f, "hubris_for_psc_rot"),
+                Self::HubrisForPscSp => write!(f, "hubris_for_psc_sp"),
+                Self::HubrisForSidecarRot => write!(f, "hubris_for_sidecar_rot"),
+                Self::HubrisForSidecarSp => write!(f, "hubris_for_sidecar_sp"),
+                Self::HubrisForGimletRot => write!(f, "hubris_for_gimlet_rot"),
+                Self::HubrisForGimletSp => write!(f, "hubris_for_gimlet_sp"),
+                Self::HeliosHostPhase1 => write!(f, "helios_host_phase1"),
+                Self::HeliosHostPhase2 => write!(f, "helios_host_phase2"),
+                Self::HostOmicron => write!(f, "host_omicron"),
             }
         }
     }
 
-    impl std::str::FromStr for UpdateableComponentType {
+    impl ::std::str::FromStr for UpdateableComponentType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "bootloader_for_rot" => Ok(Self::BootloaderForRot),
                 "bootloader_for_sp" => Ok(Self::BootloaderForSp),
@@ -12008,23 +12578,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for UpdateableComponentType {
+    impl ::std::convert::TryFrom<&str> for UpdateableComponentType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for UpdateableComponentType {
+    impl ::std::convert::TryFrom<&::std::string::String> for UpdateableComponentType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for UpdateableComponentType {
+    impl ::std::convert::TryFrom<::std::string::String> for UpdateableComponentType {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -12060,16 +12634,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct User {
         ///Human-readable name that can identify the user
-        pub display_name: String,
+        pub display_name: ::std::string::String,
         pub id: uuid::Uuid,
         ///Uuid of the silo to which this user belongs
         pub silo_id: uuid::Uuid,
     }
 
-    impl From<&User> for User {
+    impl ::std::convert::From<&User> for User {
         fn from(value: &User) -> Self {
             value.clone()
         }
@@ -12130,10 +12706,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserBuiltin {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
@@ -12144,7 +12722,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&UserBuiltin> for UserBuiltin {
+    impl ::std::convert::From<&UserBuiltin> for UserBuiltin {
         fn from(value: &UserBuiltin) -> Self {
             value.clone()
         }
@@ -12187,16 +12765,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserBuiltinResultsPage {
         ///list of items on this page of results
-        pub items: Vec<UserBuiltin>,
+        pub items: ::std::vec::Vec<UserBuiltin>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&UserBuiltinResultsPage> for UserBuiltinResultsPage {
+    impl ::std::convert::From<&UserBuiltinResultsPage> for UserBuiltinResultsPage {
         fn from(value: &UserBuiltinResultsPage) -> Self {
             value.clone()
         }
@@ -12242,7 +12822,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserCreate {
         ///username used to log in
         pub external_id: UserId,
@@ -12250,7 +12832,7 @@ pub mod types {
         pub password: UserPassword,
     }
 
-    impl From<&UserCreate> for UserCreate {
+    impl ::std::convert::From<&UserCreate> for UserCreate {
         fn from(value: &UserCreate) -> Self {
             value.clone()
         }
@@ -12284,31 +12866,40 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, schemars :: JsonSchema,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
     )]
-    pub struct UserId(String);
-    impl std::ops::Deref for UserId {
-        type Target = String;
-        fn deref(&self) -> &String {
+    #[serde(transparent)]
+    pub struct UserId(::std::string::String);
+    impl ::std::ops::Deref for UserId {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
             &self.0
         }
     }
 
-    impl From<UserId> for String {
+    impl ::std::convert::From<UserId> for ::std::string::String {
         fn from(value: UserId) -> Self {
             value.0
         }
     }
 
-    impl From<&UserId> for UserId {
+    impl ::std::convert::From<&UserId> for UserId {
         fn from(value: &UserId) -> Self {
             value.clone()
         }
     }
 
-    impl std::str::FromStr for UserId {
+    impl ::std::str::FromStr for UserId {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.len() > 63usize {
                 return Err("longer than 63 characters".into());
             }
@@ -12317,36 +12908,40 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for UserId {
+    impl ::std::convert::TryFrom<&str> for UserId {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for UserId {
+    impl ::std::convert::TryFrom<&::std::string::String> for UserId {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for UserId {
+    impl ::std::convert::TryFrom<::std::string::String> for UserId {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl<'de> serde::Deserialize<'de> for UserId {
-        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    impl<'de> ::serde::Deserialize<'de> for UserId {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
         where
-            D: serde::Deserializer<'de>,
+            D: ::serde::Deserializer<'de>,
         {
-            String::deserialize(deserializer)?
+            ::std::string::String::deserialize(deserializer)?
                 .parse()
                 .map_err(|e: self::error::ConversionError| {
-                    <D::Error as serde::de::Error>::custom(e.to_string())
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
         }
     }
@@ -12398,7 +12993,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "user_password_value", content = "details")]
     pub enum UserPassword {
         ///Sets the user's password to the provided value
@@ -12408,13 +13005,13 @@ pub mod types {
         InvalidPassword,
     }
 
-    impl From<&UserPassword> for UserPassword {
+    impl ::std::convert::From<&Self> for UserPassword {
         fn from(value: &UserPassword) -> Self {
             value.clone()
         }
     }
 
-    impl From<Password> for UserPassword {
+    impl ::std::convert::From<Password> for UserPassword {
         fn from(value: Password) -> Self {
             Self::Password(value)
         }
@@ -12451,16 +13048,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserResultsPage {
         ///list of items on this page of results
-        pub items: Vec<User>,
+        pub items: ::std::vec::Vec<User>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&UserResultsPage> for UserResultsPage {
+    impl ::std::convert::From<&UserResultsPage> for UserResultsPage {
         fn from(value: &UserResultsPage) -> Self {
             value.clone()
         }
@@ -12495,13 +13094,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UsernamePasswordCredentials {
         pub password: Password,
         pub username: UserId,
     }
 
-    impl From<&UsernamePasswordCredentials> for UsernamePasswordCredentials {
+    impl ::std::convert::From<&UsernamePasswordCredentials> for UsernamePasswordCredentials {
         fn from(value: &UsernamePasswordCredentials) -> Self {
             value.clone()
         }
@@ -12535,13 +13136,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VersionRange {
         pub high: SemverVersion,
         pub low: SemverVersion,
     }
 
-    impl From<&VersionRange> for VersionRange {
+    impl ::std::convert::From<&VersionRange> for VersionRange {
         fn from(value: &VersionRange) -> Self {
             value.clone()
         }
@@ -12634,10 +13237,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Vpc {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///The name used for the VPC in DNS.
         pub dns_name: Name,
         ///unique, immutable, system-controlled identifier for each resource
@@ -12656,7 +13261,7 @@ pub mod types {
         pub time_modified: chrono::DateTime<chrono::offset::Utc>,
     }
 
-    impl From<&Vpc> for Vpc {
+    impl ::std::convert::From<&Vpc> for Vpc {
         fn from(value: &Vpc) -> Self {
             value.clone()
         }
@@ -12694,9 +13299,16 @@ pub mod types {
     /// created from this VPC must be taken from this range, which sould be a
     /// Unique Local Address in the range `fd00::/48`. The default VPC Subnet
     /// will have the first `/64` range from this prefix.",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Ipv6Net"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Ipv6Net"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -12707,9 +13319,11 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         pub dns_name: Name,
         ///The IPv6 prefix for this VPC.
         ///
@@ -12717,12 +13331,12 @@ pub mod types {
         /// range, which sould be a Unique Local Address in the range
         /// `fd00::/48`. The default VPC Subnet will have the first `/64` range
         /// from this prefix.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub ipv6_prefix: Option<Ipv6Net>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub ipv6_prefix: ::std::option::Option<Ipv6Net>,
         pub name: Name,
     }
 
-    impl From<&VpcCreate> for VpcCreate {
+    impl ::std::convert::From<&VpcCreate> for VpcCreate {
         fn from(value: &VpcCreate) -> Self {
             value.clone()
         }
@@ -12843,12 +13457,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRule {
         ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///whether this rule is for incoming or outgoing traffic
         pub direction: VpcFirewallRuleDirection,
         ///reductions on the scope of the rule
@@ -12862,7 +13478,7 @@ pub mod types {
         ///whether this rule is in effect
         pub status: VpcFirewallRuleStatus,
         ///list of sets of instances that the rule applies to
-        pub targets: Vec<VpcFirewallRuleTarget>,
+        pub targets: ::std::vec::Vec<VpcFirewallRuleTarget>,
         ///timestamp when this resource was created
         pub time_created: chrono::DateTime<chrono::offset::Utc>,
         ///timestamp when this resource was last modified
@@ -12871,7 +13487,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    impl From<&VpcFirewallRule> for VpcFirewallRule {
+    impl ::std::convert::From<&VpcFirewallRule> for VpcFirewallRule {
         fn from(value: &VpcFirewallRule) -> Self {
             value.clone()
         }
@@ -12898,16 +13514,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum VpcFirewallRuleAction {
@@ -12917,24 +13533,24 @@ pub mod types {
         Deny,
     }
 
-    impl From<&VpcFirewallRuleAction> for VpcFirewallRuleAction {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleAction {
         fn from(value: &VpcFirewallRuleAction) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for VpcFirewallRuleAction {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcFirewallRuleAction {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Allow => "allow".to_string(),
-                Self::Deny => "deny".to_string(),
+                Self::Allow => write!(f, "allow"),
+                Self::Deny => write!(f, "deny"),
             }
         }
     }
 
-    impl std::str::FromStr for VpcFirewallRuleAction {
+    impl ::std::str::FromStr for VpcFirewallRuleAction {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "allow" => Ok(Self::Allow),
                 "deny" => Ok(Self::Deny),
@@ -12943,23 +13559,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcFirewallRuleAction {
+    impl ::std::convert::TryFrom<&str> for VpcFirewallRuleAction {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for VpcFirewallRuleAction {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleAction {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for VpcFirewallRuleAction {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcFirewallRuleAction {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -12979,16 +13599,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum VpcFirewallRuleDirection {
@@ -12998,24 +13618,24 @@ pub mod types {
         Outbound,
     }
 
-    impl From<&VpcFirewallRuleDirection> for VpcFirewallRuleDirection {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleDirection {
         fn from(value: &VpcFirewallRuleDirection) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for VpcFirewallRuleDirection {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcFirewallRuleDirection {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Inbound => "inbound".to_string(),
-                Self::Outbound => "outbound".to_string(),
+                Self::Inbound => write!(f, "inbound"),
+                Self::Outbound => write!(f, "outbound"),
             }
         }
     }
 
-    impl std::str::FromStr for VpcFirewallRuleDirection {
+    impl ::std::str::FromStr for VpcFirewallRuleDirection {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "inbound" => Ok(Self::Inbound),
                 "outbound" => Ok(Self::Outbound),
@@ -13024,23 +13644,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcFirewallRuleDirection {
+    impl ::std::convert::TryFrom<&str> for VpcFirewallRuleDirection {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for VpcFirewallRuleDirection {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleDirection {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for VpcFirewallRuleDirection {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcFirewallRuleDirection {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -13095,23 +13719,35 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRuleFilter {
         ///If present, the sources (if incoming) or destinations (if outgoing)
         /// this rule applies to.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub hosts: Option<Vec<VpcFirewallRuleHostFilter>>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub hosts: ::std::option::Option<::std::vec::Vec<VpcFirewallRuleHostFilter>>,
         ///If present, the destination ports this rule applies to.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub ports: Option<Vec<L4PortRange>>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub ports: ::std::option::Option<::std::vec::Vec<L4PortRange>>,
         ///If present, the networking protocols this rule applies to.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub protocols: Option<Vec<VpcFirewallRuleProtocol>>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub protocols: ::std::option::Option<::std::vec::Vec<VpcFirewallRuleProtocol>>,
     }
 
-    impl From<&VpcFirewallRuleFilter> for VpcFirewallRuleFilter {
+    impl ::std::convert::From<&VpcFirewallRuleFilter> for VpcFirewallRuleFilter {
         fn from(value: &VpcFirewallRuleFilter) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for VpcFirewallRuleFilter {
+        fn default() -> Self {
+            Self {
+                hosts: Default::default(),
+                ports: Default::default(),
+                protocols: Default::default(),
+            }
         }
     }
 
@@ -13236,7 +13872,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
         ///The rule applies to traffic from/to all instances in the VPC
@@ -13256,19 +13894,19 @@ pub mod types {
         IpNet(IpNet),
     }
 
-    impl From<&VpcFirewallRuleHostFilter> for VpcFirewallRuleHostFilter {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleHostFilter {
         fn from(value: &VpcFirewallRuleHostFilter) -> Self {
             value.clone()
         }
     }
 
-    impl From<std::net::IpAddr> for VpcFirewallRuleHostFilter {
+    impl ::std::convert::From<std::net::IpAddr> for VpcFirewallRuleHostFilter {
         fn from(value: std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
 
-    impl From<IpNet> for VpcFirewallRuleHostFilter {
+    impl ::std::convert::From<IpNet> for VpcFirewallRuleHostFilter {
         fn from(value: IpNet) -> Self {
             Self::IpNet(value)
         }
@@ -13292,16 +13930,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum VpcFirewallRuleProtocol {
@@ -13313,25 +13951,25 @@ pub mod types {
         Icmp,
     }
 
-    impl From<&VpcFirewallRuleProtocol> for VpcFirewallRuleProtocol {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleProtocol {
         fn from(value: &VpcFirewallRuleProtocol) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for VpcFirewallRuleProtocol {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcFirewallRuleProtocol {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Tcp => "TCP".to_string(),
-                Self::Udp => "UDP".to_string(),
-                Self::Icmp => "ICMP".to_string(),
+                Self::Tcp => write!(f, "TCP"),
+                Self::Udp => write!(f, "UDP"),
+                Self::Icmp => write!(f, "ICMP"),
             }
         }
     }
 
-    impl std::str::FromStr for VpcFirewallRuleProtocol {
+    impl ::std::str::FromStr for VpcFirewallRuleProtocol {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "TCP" => Ok(Self::Tcp),
                 "UDP" => Ok(Self::Udp),
@@ -13341,23 +13979,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcFirewallRuleProtocol {
+    impl ::std::convert::TryFrom<&str> for VpcFirewallRuleProtocol {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for VpcFirewallRuleProtocol {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleProtocol {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for VpcFirewallRuleProtocol {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcFirewallRuleProtocol {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -13377,16 +14019,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum VpcFirewallRuleStatus {
@@ -13396,24 +14038,24 @@ pub mod types {
         Enabled,
     }
 
-    impl From<&VpcFirewallRuleStatus> for VpcFirewallRuleStatus {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleStatus {
         fn from(value: &VpcFirewallRuleStatus) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for VpcFirewallRuleStatus {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcFirewallRuleStatus {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Disabled => "disabled".to_string(),
-                Self::Enabled => "enabled".to_string(),
+                Self::Disabled => write!(f, "disabled"),
+                Self::Enabled => write!(f, "enabled"),
             }
         }
     }
 
-    impl std::str::FromStr for VpcFirewallRuleStatus {
+    impl ::std::str::FromStr for VpcFirewallRuleStatus {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "disabled" => Ok(Self::Disabled),
                 "enabled" => Ok(Self::Enabled),
@@ -13422,23 +14064,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcFirewallRuleStatus {
+    impl ::std::convert::TryFrom<&str> for VpcFirewallRuleStatus {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for VpcFirewallRuleStatus {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcFirewallRuleStatus {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for VpcFirewallRuleStatus {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcFirewallRuleStatus {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -13554,7 +14200,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
         ///The rule applies to all instances in the VPC
@@ -13574,19 +14222,19 @@ pub mod types {
         IpNet(IpNet),
     }
 
-    impl From<&VpcFirewallRuleTarget> for VpcFirewallRuleTarget {
+    impl ::std::convert::From<&Self> for VpcFirewallRuleTarget {
         fn from(value: &VpcFirewallRuleTarget) -> Self {
             value.clone()
         }
     }
 
-    impl From<std::net::IpAddr> for VpcFirewallRuleTarget {
+    impl ::std::convert::From<std::net::IpAddr> for VpcFirewallRuleTarget {
         fn from(value: std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
 
-    impl From<IpNet> for VpcFirewallRuleTarget {
+    impl ::std::convert::From<IpNet> for VpcFirewallRuleTarget {
         fn from(value: IpNet) -> Self {
             Self::IpNet(value)
         }
@@ -13675,12 +14323,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRuleUpdate {
         ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///whether this rule is for incoming or outgoing traffic
         pub direction: VpcFirewallRuleDirection,
         ///reductions on the scope of the rule
@@ -13692,10 +14342,10 @@ pub mod types {
         ///whether this rule is in effect
         pub status: VpcFirewallRuleStatus,
         ///list of sets of instances that the rule applies to
-        pub targets: Vec<VpcFirewallRuleTarget>,
+        pub targets: ::std::vec::Vec<VpcFirewallRuleTarget>,
     }
 
-    impl From<&VpcFirewallRuleUpdate> for VpcFirewallRuleUpdate {
+    impl ::std::convert::From<&VpcFirewallRuleUpdate> for VpcFirewallRuleUpdate {
         fn from(value: &VpcFirewallRuleUpdate) -> Self {
             value.clone()
         }
@@ -13733,12 +14383,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRuleUpdateParams {
-        pub rules: Vec<VpcFirewallRuleUpdate>,
+        pub rules: ::std::vec::Vec<VpcFirewallRuleUpdate>,
     }
 
-    impl From<&VpcFirewallRuleUpdateParams> for VpcFirewallRuleUpdateParams {
+    impl ::std::convert::From<&VpcFirewallRuleUpdateParams> for VpcFirewallRuleUpdateParams {
         fn from(value: &VpcFirewallRuleUpdateParams) -> Self {
             value.clone()
         }
@@ -13772,12 +14424,14 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRules {
-        pub rules: Vec<VpcFirewallRule>,
+        pub rules: ::std::vec::Vec<VpcFirewallRule>,
     }
 
-    impl From<&VpcFirewallRules> for VpcFirewallRules {
+    impl ::std::convert::From<&VpcFirewallRules> for VpcFirewallRules {
         fn from(value: &VpcFirewallRules) -> Self {
             value.clone()
         }
@@ -13820,16 +14474,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcResultsPage {
         ///list of items on this page of results
-        pub items: Vec<Vpc>,
+        pub items: ::std::vec::Vec<Vpc>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&VpcResultsPage> for VpcResultsPage {
+    impl ::std::convert::From<&VpcResultsPage> for VpcResultsPage {
         fn from(value: &VpcResultsPage) -> Self {
             value.clone()
         }
@@ -13902,10 +14558,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcRouter {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         pub kind: VpcRouterKind,
@@ -13919,7 +14577,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    impl From<&VpcRouter> for VpcRouter {
+    impl ::std::convert::From<&VpcRouter> for VpcRouter {
         fn from(value: &VpcRouter) -> Self {
             value.clone()
         }
@@ -13956,13 +14614,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcRouterCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         pub name: Name,
     }
 
-    impl From<&VpcRouterCreate> for VpcRouterCreate {
+    impl ::std::convert::From<&VpcRouterCreate> for VpcRouterCreate {
         fn from(value: &VpcRouterCreate) -> Self {
             value.clone()
         }
@@ -13989,16 +14649,16 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
         Clone,
         Copy,
         Debug,
-        Deserialize,
         Eq,
         Hash,
         Ord,
         PartialEq,
         PartialOrd,
-        Serialize,
         schemars :: JsonSchema,
     )]
     pub enum VpcRouterKind {
@@ -14008,24 +14668,24 @@ pub mod types {
         Custom,
     }
 
-    impl From<&VpcRouterKind> for VpcRouterKind {
+    impl ::std::convert::From<&Self> for VpcRouterKind {
         fn from(value: &VpcRouterKind) -> Self {
             value.clone()
         }
     }
 
-    impl ToString for VpcRouterKind {
-        fn to_string(&self) -> String {
+    impl ::std::fmt::Display for VpcRouterKind {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::System => "system".to_string(),
-                Self::Custom => "custom".to_string(),
+                Self::System => write!(f, "system"),
+                Self::Custom => write!(f, "custom"),
             }
         }
     }
 
-    impl std::str::FromStr for VpcRouterKind {
+    impl ::std::str::FromStr for VpcRouterKind {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "system" => Ok(Self::System),
                 "custom" => Ok(Self::Custom),
@@ -14034,23 +14694,27 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for VpcRouterKind {
+    impl ::std::convert::TryFrom<&str> for VpcRouterKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for VpcRouterKind {
+    impl ::std::convert::TryFrom<&::std::string::String> for VpcRouterKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for VpcRouterKind {
+    impl ::std::convert::TryFrom<::std::string::String> for VpcRouterKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -14086,16 +14750,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcRouterResultsPage {
         ///list of items on this page of results
-        pub items: Vec<VpcRouter>,
+        pub items: ::std::vec::Vec<VpcRouter>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&VpcRouterResultsPage> for VpcRouterResultsPage {
+    impl ::std::convert::From<&VpcRouterResultsPage> for VpcRouterResultsPage {
         fn from(value: &VpcRouterResultsPage) -> Self {
             value.clone()
         }
@@ -14125,9 +14791,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -14135,17 +14808,28 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcRouterUpdate {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub description: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub name: Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub description: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&VpcRouterUpdate> for VpcRouterUpdate {
+    impl ::std::convert::From<&VpcRouterUpdate> for VpcRouterUpdate {
         fn from(value: &VpcRouterUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for VpcRouterUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -14232,10 +14916,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcSubnet {
         ///human-readable free-form text about a resource
-        pub description: String,
+        pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: uuid::Uuid,
         ///The IPv4 subnet CIDR block.
@@ -14252,7 +14938,7 @@ pub mod types {
         pub vpc_id: uuid::Uuid,
     }
 
-    impl From<&VpcSubnet> for VpcSubnet {
+    impl ::std::convert::From<&VpcSubnet> for VpcSubnet {
         fn from(value: &VpcSubnet) -> Self {
             value.clone()
         }
@@ -14299,9 +14985,16 @@ pub mod types {
     /// prefix equal to the parent VPC's prefix. A random `/64` block will be
     /// assigned if one is not provided. It must not overlap with any existing
     /// subnet in the VPC.",
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Ipv6Net"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Ipv6Net"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
@@ -14312,9 +15005,11 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcSubnetCreate {
-        pub description: String,
+        pub description: ::std::string::String,
         ///The IPv4 address range for this subnet.
         ///
         ///It must be allocated from an RFC 1918 private address range, and
@@ -14326,12 +15021,12 @@ pub mod types {
         /// with the prefix equal to the parent VPC's prefix. A random `/64`
         /// block will be assigned if one is not provided. It must not overlap
         /// with any existing subnet in the VPC.
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub ipv6_block: Option<Ipv6Net>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub ipv6_block: ::std::option::Option<Ipv6Net>,
         pub name: Name,
     }
 
-    impl From<&VpcSubnetCreate> for VpcSubnetCreate {
+    impl ::std::convert::From<&VpcSubnetCreate> for VpcSubnetCreate {
         fn from(value: &VpcSubnetCreate) -> Self {
             value.clone()
         }
@@ -14374,16 +15069,18 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcSubnetResultsPage {
         ///list of items on this page of results
-        pub items: Vec<VpcSubnet>,
+        pub items: ::std::vec::Vec<VpcSubnet>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&VpcSubnetResultsPage> for VpcSubnetResultsPage {
+    impl ::std::convert::From<&VpcSubnetResultsPage> for VpcSubnetResultsPage {
         fn from(value: &VpcSubnetResultsPage) -> Self {
             value.clone()
         }
@@ -14413,9 +15110,16 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -14423,17 +15127,28 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcSubnetUpdate {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub description: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub name: Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub description: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&VpcSubnetUpdate> for VpcSubnetUpdate {
+    impl ::std::convert::From<&VpcSubnetUpdate> for VpcSubnetUpdate {
         fn from(value: &VpcSubnetUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for VpcSubnetUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -14460,16 +15175,30 @@ pub mod types {
     ///      ]
     ///    },
     ///    "dns_name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    },
     ///    "name": {
-    ///      "allOf": [
+    ///      "oneOf": [
     ///        {
-    ///          "$ref": "#/components/schemas/Name"
+    ///          "type": "null"
+    ///        },
+    ///        {
+    ///          "allOf": [
+    ///            {
+    ///              "$ref": "#/components/schemas/Name"
+    ///            }
+    ///          ]
     ///        }
     ///      ]
     ///    }
@@ -14477,19 +15206,31 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(Clone, Debug, Deserialize, Serialize, schemars :: JsonSchema)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcUpdate {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub description: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub dns_name: Option<Name>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub name: Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub description: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub dns_name: ::std::option::Option<Name>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub name: ::std::option::Option<Name>,
     }
 
-    impl From<&VpcUpdate> for VpcUpdate {
+    impl ::std::convert::From<&VpcUpdate> for VpcUpdate {
         fn from(value: &VpcUpdate) -> Self {
             value.clone()
+        }
+    }
+
+    impl ::std::default::Default for VpcUpdate {
+        fn default() -> Self {
+            Self {
+                description: Default::default(),
+                dns_name: Default::default(),
+                name: Default::default(),
+            }
         }
     }
 
@@ -14503,12 +15244,12 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct Baseboard {
-            part: Result<String, String>,
-            revision: Result<i64, String>,
-            serial: Result<String, String>,
+            part: ::std::result::Result<::std::string::String, ::std::string::String>,
+            revision: ::std::result::Result<i64, ::std::string::String>,
+            serial: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for Baseboard {
+        impl ::std::default::Default for Baseboard {
             fn default() -> Self {
                 Self {
                     part: Err("no value supplied for part".to_string()),
@@ -14521,8 +15262,8 @@ pub mod types {
         impl Baseboard {
             pub fn part<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.part = value
                     .try_into()
@@ -14531,8 +15272,8 @@ pub mod types {
             }
             pub fn revision<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<i64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<i64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.revision = value
                     .try_into()
@@ -14541,8 +15282,8 @@ pub mod types {
             }
             pub fn serial<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.serial = value
                     .try_into()
@@ -14551,9 +15292,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Baseboard> for super::Baseboard {
+        impl ::std::convert::TryFrom<Baseboard> for super::Baseboard {
             type Error = super::error::ConversionError;
-            fn try_from(value: Baseboard) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Baseboard,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     part: value.part?,
                     revision: value.revision?,
@@ -14562,7 +15305,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Baseboard> for Baseboard {
+        impl ::std::convert::From<super::Baseboard> for Baseboard {
             fn from(value: super::Baseboard) -> Self {
                 Self {
                     part: Ok(value.part),
@@ -14574,11 +15317,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Bindouble {
-            count: Result<u64, String>,
-            range: Result<super::BinRangedouble, String>,
+            count: ::std::result::Result<u64, ::std::string::String>,
+            range: ::std::result::Result<super::BinRangedouble, ::std::string::String>,
         }
 
-        impl Default for Bindouble {
+        impl ::std::default::Default for Bindouble {
             fn default() -> Self {
                 Self {
                     count: Err("no value supplied for count".to_string()),
@@ -14590,8 +15333,8 @@ pub mod types {
         impl Bindouble {
             pub fn count<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<u64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<u64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.count = value
                     .try_into()
@@ -14600,8 +15343,8 @@ pub mod types {
             }
             pub fn range<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::BinRangedouble>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::BinRangedouble>,
+                T::Error: ::std::fmt::Display,
             {
                 self.range = value
                     .try_into()
@@ -14610,9 +15353,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Bindouble> for super::Bindouble {
+        impl ::std::convert::TryFrom<Bindouble> for super::Bindouble {
             type Error = super::error::ConversionError;
-            fn try_from(value: Bindouble) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Bindouble,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     count: value.count?,
                     range: value.range?,
@@ -14620,7 +15365,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Bindouble> for Bindouble {
+        impl ::std::convert::From<super::Bindouble> for Bindouble {
             fn from(value: super::Bindouble) -> Self {
                 Self {
                     count: Ok(value.count),
@@ -14631,11 +15376,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Binint64 {
-            count: Result<u64, String>,
-            range: Result<super::BinRangeint64, String>,
+            count: ::std::result::Result<u64, ::std::string::String>,
+            range: ::std::result::Result<super::BinRangeint64, ::std::string::String>,
         }
 
-        impl Default for Binint64 {
+        impl ::std::default::Default for Binint64 {
             fn default() -> Self {
                 Self {
                     count: Err("no value supplied for count".to_string()),
@@ -14647,8 +15392,8 @@ pub mod types {
         impl Binint64 {
             pub fn count<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<u64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<u64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.count = value
                     .try_into()
@@ -14657,8 +15402,8 @@ pub mod types {
             }
             pub fn range<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::BinRangeint64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::BinRangeint64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.range = value
                     .try_into()
@@ -14667,9 +15412,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Binint64> for super::Binint64 {
+        impl ::std::convert::TryFrom<Binint64> for super::Binint64 {
             type Error = super::error::ConversionError;
-            fn try_from(value: Binint64) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Binint64,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     count: value.count?,
                     range: value.range?,
@@ -14677,7 +15424,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Binint64> for Binint64 {
+        impl ::std::convert::From<super::Binint64> for Binint64 {
             fn from(value: super::Binint64) -> Self {
                 Self {
                     count: Ok(value.count),
@@ -14688,15 +15435,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Certificate {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            service: Result<super::ServiceUsingCertificate, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            service: ::std::result::Result<super::ServiceUsingCertificate, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Certificate {
+        impl ::std::default::Default for Certificate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -14712,8 +15461,8 @@ pub mod types {
         impl Certificate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -14722,8 +15471,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -14732,8 +15481,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -14742,8 +15491,8 @@ pub mod types {
             }
             pub fn service<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ServiceUsingCertificate>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ServiceUsingCertificate>,
+                T::Error: ::std::fmt::Display,
             {
                 self.service = value
                     .try_into()
@@ -14752,8 +15501,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -14762,8 +15511,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -14772,9 +15521,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Certificate> for super::Certificate {
+        impl ::std::convert::TryFrom<Certificate> for super::Certificate {
             type Error = super::error::ConversionError;
-            fn try_from(value: Certificate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Certificate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -14786,7 +15537,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Certificate> for Certificate {
+        impl ::std::convert::From<super::Certificate> for Certificate {
             fn from(value: super::Certificate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -14801,14 +15552,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct CertificateCreate {
-            cert: Result<Vec<u8>, String>,
-            description: Result<String, String>,
-            key: Result<Vec<u8>, String>,
-            name: Result<super::Name, String>,
-            service: Result<super::ServiceUsingCertificate, String>,
+            cert: ::std::result::Result<::std::vec::Vec<u8>, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            key: ::std::result::Result<::std::vec::Vec<u8>, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            service: ::std::result::Result<super::ServiceUsingCertificate, ::std::string::String>,
         }
 
-        impl Default for CertificateCreate {
+        impl ::std::default::Default for CertificateCreate {
             fn default() -> Self {
                 Self {
                     cert: Err("no value supplied for cert".to_string()),
@@ -14823,8 +15574,8 @@ pub mod types {
         impl CertificateCreate {
             pub fn cert<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<u8>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<u8>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.cert = value
                     .try_into()
@@ -14833,8 +15584,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -14843,8 +15594,8 @@ pub mod types {
             }
             pub fn key<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<u8>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<u8>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.key = value
                     .try_into()
@@ -14853,8 +15604,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -14863,8 +15614,8 @@ pub mod types {
             }
             pub fn service<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ServiceUsingCertificate>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ServiceUsingCertificate>,
+                T::Error: ::std::fmt::Display,
             {
                 self.service = value
                     .try_into()
@@ -14873,9 +15624,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<CertificateCreate> for super::CertificateCreate {
+        impl ::std::convert::TryFrom<CertificateCreate> for super::CertificateCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: CertificateCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: CertificateCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     cert: value.cert?,
                     description: value.description?,
@@ -14886,7 +15639,7 @@ pub mod types {
             }
         }
 
-        impl From<super::CertificateCreate> for CertificateCreate {
+        impl ::std::convert::From<super::CertificateCreate> for CertificateCreate {
             fn from(value: super::CertificateCreate) -> Self {
                 Self {
                     cert: Ok(value.cert),
@@ -14900,11 +15653,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct CertificateResultsPage {
-            items: Result<Vec<super::Certificate>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::Certificate>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for CertificateResultsPage {
+        impl ::std::default::Default for CertificateResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -14916,8 +15673,8 @@ pub mod types {
         impl CertificateResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Certificate>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Certificate>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -14926,8 +15683,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -14936,11 +15693,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<CertificateResultsPage> for super::CertificateResultsPage {
+        impl ::std::convert::TryFrom<CertificateResultsPage> for super::CertificateResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: CertificateResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -14948,7 +15705,7 @@ pub mod types {
             }
         }
 
-        impl From<super::CertificateResultsPage> for CertificateResultsPage {
+        impl ::std::convert::From<super::CertificateResultsPage> for CertificateResultsPage {
             fn from(value: super::CertificateResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -14959,14 +15716,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ComponentUpdate {
-            component_type: Result<super::UpdateableComponentType, String>,
-            id: Result<uuid::Uuid, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            version: Result<super::SemverVersion, String>,
+            component_type:
+                ::std::result::Result<super::UpdateableComponentType, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            version: ::std::result::Result<super::SemverVersion, ::std::string::String>,
         }
 
-        impl Default for ComponentUpdate {
+        impl ::std::default::Default for ComponentUpdate {
             fn default() -> Self {
                 Self {
                     component_type: Err("no value supplied for component_type".to_string()),
@@ -14981,8 +15741,8 @@ pub mod types {
         impl ComponentUpdate {
             pub fn component_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::UpdateableComponentType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::UpdateableComponentType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.component_type = value.try_into().map_err(|e| {
                     format!("error converting supplied value for component_type: {}", e)
@@ -14991,8 +15751,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -15001,8 +15761,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -15011,8 +15771,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -15021,8 +15781,8 @@ pub mod types {
             }
             pub fn version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SemverVersion>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SemverVersion>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version = value
                     .try_into()
@@ -15031,9 +15791,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ComponentUpdate> for super::ComponentUpdate {
+        impl ::std::convert::TryFrom<ComponentUpdate> for super::ComponentUpdate {
             type Error = super::error::ConversionError;
-            fn try_from(value: ComponentUpdate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ComponentUpdate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     component_type: value.component_type?,
                     id: value.id?,
@@ -15044,7 +15806,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ComponentUpdate> for ComponentUpdate {
+        impl ::std::convert::From<super::ComponentUpdate> for ComponentUpdate {
             fn from(value: super::ComponentUpdate) -> Self {
                 Self {
                     component_type: Ok(value.component_type),
@@ -15058,11 +15820,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ComponentUpdateResultsPage {
-            items: Result<Vec<super::ComponentUpdate>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<
+                ::std::vec::Vec<super::ComponentUpdate>,
+                ::std::string::String,
+            >,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for ComponentUpdateResultsPage {
+        impl ::std::default::Default for ComponentUpdateResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -15074,8 +15842,8 @@ pub mod types {
         impl ComponentUpdateResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::ComponentUpdate>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::ComponentUpdate>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -15084,8 +15852,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -15094,11 +15862,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ComponentUpdateResultsPage> for super::ComponentUpdateResultsPage {
+        impl ::std::convert::TryFrom<ComponentUpdateResultsPage> for super::ComponentUpdateResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: ComponentUpdateResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -15106,7 +15874,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ComponentUpdateResultsPage> for ComponentUpdateResultsPage {
+        impl ::std::convert::From<super::ComponentUpdateResultsPage> for ComponentUpdateResultsPage {
             fn from(value: super::ComponentUpdateResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -15117,11 +15885,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Cumulativedouble {
-            start_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            value: Result<f64, String>,
+            start_time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            value: ::std::result::Result<f64, ::std::string::String>,
         }
 
-        impl Default for Cumulativedouble {
+        impl ::std::default::Default for Cumulativedouble {
             fn default() -> Self {
                 Self {
                     start_time: Err("no value supplied for start_time".to_string()),
@@ -15133,8 +15902,8 @@ pub mod types {
         impl Cumulativedouble {
             pub fn start_time<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.start_time = value
                     .try_into()
@@ -15143,8 +15912,8 @@ pub mod types {
             }
             pub fn value<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<f64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<f64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.value = value
                     .try_into()
@@ -15153,9 +15922,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Cumulativedouble> for super::Cumulativedouble {
+        impl ::std::convert::TryFrom<Cumulativedouble> for super::Cumulativedouble {
             type Error = super::error::ConversionError;
-            fn try_from(value: Cumulativedouble) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Cumulativedouble,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     start_time: value.start_time?,
                     value: value.value?,
@@ -15163,7 +15934,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Cumulativedouble> for Cumulativedouble {
+        impl ::std::convert::From<super::Cumulativedouble> for Cumulativedouble {
             fn from(value: super::Cumulativedouble) -> Self {
                 Self {
                     start_time: Ok(value.start_time),
@@ -15174,11 +15945,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Cumulativeint64 {
-            start_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            value: Result<i64, String>,
+            start_time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            value: ::std::result::Result<i64, ::std::string::String>,
         }
 
-        impl Default for Cumulativeint64 {
+        impl ::std::default::Default for Cumulativeint64 {
             fn default() -> Self {
                 Self {
                     start_time: Err("no value supplied for start_time".to_string()),
@@ -15190,8 +15962,8 @@ pub mod types {
         impl Cumulativeint64 {
             pub fn start_time<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.start_time = value
                     .try_into()
@@ -15200,8 +15972,8 @@ pub mod types {
             }
             pub fn value<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<i64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<i64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.value = value
                     .try_into()
@@ -15210,9 +15982,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Cumulativeint64> for super::Cumulativeint64 {
+        impl ::std::convert::TryFrom<Cumulativeint64> for super::Cumulativeint64 {
             type Error = super::error::ConversionError;
-            fn try_from(value: Cumulativeint64) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Cumulativeint64,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     start_time: value.start_time?,
                     value: value.value?,
@@ -15220,7 +15994,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Cumulativeint64> for Cumulativeint64 {
+        impl ::std::convert::From<super::Cumulativeint64> for Cumulativeint64 {
             fn from(value: super::Cumulativeint64) -> Self {
                 Self {
                     start_time: Ok(value.start_time),
@@ -15231,11 +16005,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DerEncodedKeyPair {
-            private_key: Result<String, String>,
-            public_cert: Result<String, String>,
+            private_key: ::std::result::Result<::std::string::String, ::std::string::String>,
+            public_cert: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for DerEncodedKeyPair {
+        impl ::std::default::Default for DerEncodedKeyPair {
             fn default() -> Self {
                 Self {
                     private_key: Err("no value supplied for private_key".to_string()),
@@ -15247,8 +16021,8 @@ pub mod types {
         impl DerEncodedKeyPair {
             pub fn private_key<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.private_key = value
                     .try_into()
@@ -15257,8 +16031,8 @@ pub mod types {
             }
             pub fn public_cert<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.public_cert = value
                     .try_into()
@@ -15267,9 +16041,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<DerEncodedKeyPair> for super::DerEncodedKeyPair {
+        impl ::std::convert::TryFrom<DerEncodedKeyPair> for super::DerEncodedKeyPair {
             type Error = super::error::ConversionError;
-            fn try_from(value: DerEncodedKeyPair) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: DerEncodedKeyPair,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     private_key: value.private_key?,
                     public_cert: value.public_cert?,
@@ -15277,7 +16053,7 @@ pub mod types {
             }
         }
 
-        impl From<super::DerEncodedKeyPair> for DerEncodedKeyPair {
+        impl ::std::convert::From<super::DerEncodedKeyPair> for DerEncodedKeyPair {
             fn from(value: super::DerEncodedKeyPair) -> Self {
                 Self {
                     private_key: Ok(value.private_key),
@@ -15288,12 +16064,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DeviceAccessTokenRequest {
-            client_id: Result<uuid::Uuid, String>,
-            device_code: Result<String, String>,
-            grant_type: Result<String, String>,
+            client_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            device_code: ::std::result::Result<::std::string::String, ::std::string::String>,
+            grant_type: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for DeviceAccessTokenRequest {
+        impl ::std::default::Default for DeviceAccessTokenRequest {
             fn default() -> Self {
                 Self {
                     client_id: Err("no value supplied for client_id".to_string()),
@@ -15306,8 +16082,8 @@ pub mod types {
         impl DeviceAccessTokenRequest {
             pub fn client_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.client_id = value
                     .try_into()
@@ -15316,8 +16092,8 @@ pub mod types {
             }
             pub fn device_code<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.device_code = value
                     .try_into()
@@ -15326,8 +16102,8 @@ pub mod types {
             }
             pub fn grant_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.grant_type = value
                     .try_into()
@@ -15336,11 +16112,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<DeviceAccessTokenRequest> for super::DeviceAccessTokenRequest {
+        impl ::std::convert::TryFrom<DeviceAccessTokenRequest> for super::DeviceAccessTokenRequest {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: DeviceAccessTokenRequest,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     client_id: value.client_id?,
                     device_code: value.device_code?,
@@ -15349,7 +16125,7 @@ pub mod types {
             }
         }
 
-        impl From<super::DeviceAccessTokenRequest> for DeviceAccessTokenRequest {
+        impl ::std::convert::From<super::DeviceAccessTokenRequest> for DeviceAccessTokenRequest {
             fn from(value: super::DeviceAccessTokenRequest) -> Self {
                 Self {
                     client_id: Ok(value.client_id),
@@ -15361,10 +16137,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DeviceAuthRequest {
-            client_id: Result<uuid::Uuid, String>,
+            client_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for DeviceAuthRequest {
+        impl ::std::default::Default for DeviceAuthRequest {
             fn default() -> Self {
                 Self {
                     client_id: Err("no value supplied for client_id".to_string()),
@@ -15375,8 +16151,8 @@ pub mod types {
         impl DeviceAuthRequest {
             pub fn client_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.client_id = value
                     .try_into()
@@ -15385,16 +16161,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<DeviceAuthRequest> for super::DeviceAuthRequest {
+        impl ::std::convert::TryFrom<DeviceAuthRequest> for super::DeviceAuthRequest {
             type Error = super::error::ConversionError;
-            fn try_from(value: DeviceAuthRequest) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: DeviceAuthRequest,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     client_id: value.client_id?,
                 })
             }
         }
 
-        impl From<super::DeviceAuthRequest> for DeviceAuthRequest {
+        impl ::std::convert::From<super::DeviceAuthRequest> for DeviceAuthRequest {
             fn from(value: super::DeviceAuthRequest) -> Self {
                 Self {
                     client_id: Ok(value.client_id),
@@ -15404,10 +16182,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DeviceAuthVerify {
-            user_code: Result<String, String>,
+            user_code: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for DeviceAuthVerify {
+        impl ::std::default::Default for DeviceAuthVerify {
             fn default() -> Self {
                 Self {
                     user_code: Err("no value supplied for user_code".to_string()),
@@ -15418,8 +16196,8 @@ pub mod types {
         impl DeviceAuthVerify {
             pub fn user_code<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.user_code = value
                     .try_into()
@@ -15428,16 +16206,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<DeviceAuthVerify> for super::DeviceAuthVerify {
+        impl ::std::convert::TryFrom<DeviceAuthVerify> for super::DeviceAuthVerify {
             type Error = super::error::ConversionError;
-            fn try_from(value: DeviceAuthVerify) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: DeviceAuthVerify,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     user_code: value.user_code?,
                 })
             }
         }
 
-        impl From<super::DeviceAuthVerify> for DeviceAuthVerify {
+        impl ::std::convert::From<super::DeviceAuthVerify> for DeviceAuthVerify {
             fn from(value: super::DeviceAuthVerify) -> Self {
                 Self {
                     user_code: Ok(value.user_code),
@@ -15447,21 +16227,25 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Disk {
-            block_size: Result<super::ByteCount, String>,
-            description: Result<String, String>,
-            device_path: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            image_id: Result<Option<uuid::Uuid>, String>,
-            name: Result<super::Name, String>,
-            project_id: Result<uuid::Uuid, String>,
-            size: Result<super::ByteCount, String>,
-            snapshot_id: Result<Option<uuid::Uuid>, String>,
-            state: Result<super::DiskState, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            block_size: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            device_path: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            image_id:
+                ::std::result::Result<::std::option::Option<uuid::Uuid>, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            project_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            size: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            snapshot_id:
+                ::std::result::Result<::std::option::Option<uuid::Uuid>, ::std::string::String>,
+            state: ::std::result::Result<super::DiskState, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Disk {
+        impl ::std::default::Default for Disk {
             fn default() -> Self {
                 Self {
                     block_size: Err("no value supplied for block_size".to_string()),
@@ -15483,8 +16267,8 @@ pub mod types {
         impl Disk {
             pub fn block_size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.block_size = value
                     .try_into()
@@ -15493,8 +16277,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -15503,8 +16287,8 @@ pub mod types {
             }
             pub fn device_path<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.device_path = value
                     .try_into()
@@ -15513,8 +16297,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -15523,8 +16307,8 @@ pub mod types {
             }
             pub fn image_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<uuid::Uuid>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<uuid::Uuid>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.image_id = value
                     .try_into()
@@ -15533,8 +16317,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -15543,8 +16327,8 @@ pub mod types {
             }
             pub fn project_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.project_id = value
                     .try_into()
@@ -15553,8 +16337,8 @@ pub mod types {
             }
             pub fn size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.size = value
                     .try_into()
@@ -15563,8 +16347,8 @@ pub mod types {
             }
             pub fn snapshot_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<uuid::Uuid>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<uuid::Uuid>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.snapshot_id = value
                     .try_into()
@@ -15573,8 +16357,8 @@ pub mod types {
             }
             pub fn state<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::DiskState>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::DiskState>,
+                T::Error: ::std::fmt::Display,
             {
                 self.state = value
                     .try_into()
@@ -15583,8 +16367,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -15593,8 +16377,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -15603,9 +16387,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Disk> for super::Disk {
+        impl ::std::convert::TryFrom<Disk> for super::Disk {
             type Error = super::error::ConversionError;
-            fn try_from(value: Disk) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: Disk) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -15623,7 +16407,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Disk> for Disk {
+        impl ::std::convert::From<super::Disk> for Disk {
             fn from(value: super::Disk) -> Self {
                 Self {
                     block_size: Ok(value.block_size),
@@ -15644,13 +16428,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DiskCreate {
-            description: Result<String, String>,
-            disk_source: Result<super::DiskSource, String>,
-            name: Result<super::Name, String>,
-            size: Result<super::ByteCount, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            disk_source: ::std::result::Result<super::DiskSource, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            size: ::std::result::Result<super::ByteCount, ::std::string::String>,
         }
 
-        impl Default for DiskCreate {
+        impl ::std::default::Default for DiskCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -15664,8 +16448,8 @@ pub mod types {
         impl DiskCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -15674,8 +16458,8 @@ pub mod types {
             }
             pub fn disk_source<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::DiskSource>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::DiskSource>,
+                T::Error: ::std::fmt::Display,
             {
                 self.disk_source = value
                     .try_into()
@@ -15684,8 +16468,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -15694,8 +16478,8 @@ pub mod types {
             }
             pub fn size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.size = value
                     .try_into()
@@ -15704,9 +16488,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<DiskCreate> for super::DiskCreate {
+        impl ::std::convert::TryFrom<DiskCreate> for super::DiskCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: DiskCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: DiskCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     disk_source: value.disk_source?,
@@ -15716,7 +16502,7 @@ pub mod types {
             }
         }
 
-        impl From<super::DiskCreate> for DiskCreate {
+        impl ::std::convert::From<super::DiskCreate> for DiskCreate {
             fn from(value: super::DiskCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -15729,10 +16515,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DiskIdentifier {
-            name: Result<super::Name, String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for DiskIdentifier {
+        impl ::std::default::Default for DiskIdentifier {
             fn default() -> Self {
                 Self {
                     name: Err("no value supplied for name".to_string()),
@@ -15743,8 +16529,8 @@ pub mod types {
         impl DiskIdentifier {
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -15753,14 +16539,16 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<DiskIdentifier> for super::DiskIdentifier {
+        impl ::std::convert::TryFrom<DiskIdentifier> for super::DiskIdentifier {
             type Error = super::error::ConversionError;
-            fn try_from(value: DiskIdentifier) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: DiskIdentifier,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self { name: value.name? })
             }
         }
 
-        impl From<super::DiskIdentifier> for DiskIdentifier {
+        impl ::std::convert::From<super::DiskIdentifier> for DiskIdentifier {
             fn from(value: super::DiskIdentifier) -> Self {
                 Self {
                     name: Ok(value.name),
@@ -15770,10 +16558,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DiskPath {
-            disk: Result<super::NameOrId, String>,
+            disk: ::std::result::Result<super::NameOrId, ::std::string::String>,
         }
 
-        impl Default for DiskPath {
+        impl ::std::default::Default for DiskPath {
             fn default() -> Self {
                 Self {
                     disk: Err("no value supplied for disk".to_string()),
@@ -15784,8 +16572,8 @@ pub mod types {
         impl DiskPath {
             pub fn disk<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::NameOrId>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::NameOrId>,
+                T::Error: ::std::fmt::Display,
             {
                 self.disk = value
                     .try_into()
@@ -15794,14 +16582,16 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<DiskPath> for super::DiskPath {
+        impl ::std::convert::TryFrom<DiskPath> for super::DiskPath {
             type Error = super::error::ConversionError;
-            fn try_from(value: DiskPath) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: DiskPath,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self { disk: value.disk? })
             }
         }
 
-        impl From<super::DiskPath> for DiskPath {
+        impl ::std::convert::From<super::DiskPath> for DiskPath {
             fn from(value: super::DiskPath) -> Self {
                 Self {
                     disk: Ok(value.disk),
@@ -15811,11 +16601,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DiskResultsPage {
-            items: Result<Vec<super::Disk>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Disk>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for DiskResultsPage {
+        impl ::std::default::Default for DiskResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -15827,8 +16620,8 @@ pub mod types {
         impl DiskResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Disk>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Disk>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -15837,8 +16630,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -15847,9 +16640,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<DiskResultsPage> for super::DiskResultsPage {
+        impl ::std::convert::TryFrom<DiskResultsPage> for super::DiskResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: DiskResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: DiskResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -15857,7 +16652,7 @@ pub mod types {
             }
         }
 
-        impl From<super::DiskResultsPage> for DiskResultsPage {
+        impl ::std::convert::From<super::DiskResultsPage> for DiskResultsPage {
             fn from(value: super::DiskResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -15868,11 +16663,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Distribution {
-            name: Result<super::Name, String>,
-            version: Result<String, String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            version: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for Distribution {
+        impl ::std::default::Default for Distribution {
             fn default() -> Self {
                 Self {
                     name: Err("no value supplied for name".to_string()),
@@ -15884,8 +16679,8 @@ pub mod types {
         impl Distribution {
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -15894,8 +16689,8 @@ pub mod types {
             }
             pub fn version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version = value
                     .try_into()
@@ -15904,9 +16699,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Distribution> for super::Distribution {
+        impl ::std::convert::TryFrom<Distribution> for super::Distribution {
             type Error = super::error::ConversionError;
-            fn try_from(value: Distribution) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Distribution,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     name: value.name?,
                     version: value.version?,
@@ -15914,7 +16711,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Distribution> for Distribution {
+        impl ::std::convert::From<super::Distribution> for Distribution {
             fn from(value: super::Distribution) -> Self {
                 Self {
                     name: Ok(value.name),
@@ -15925,12 +16722,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Error {
-            error_code: Result<Option<String>, String>,
-            message: Result<String, String>,
-            request_id: Result<String, String>,
+            error_code: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            message: ::std::result::Result<::std::string::String, ::std::string::String>,
+            request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for Error {
+        impl ::std::default::Default for Error {
             fn default() -> Self {
                 Self {
                     error_code: Ok(Default::default()),
@@ -15943,8 +16743,8 @@ pub mod types {
         impl Error {
             pub fn error_code<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.error_code = value
                     .try_into()
@@ -15953,8 +16753,8 @@ pub mod types {
             }
             pub fn message<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.message = value
                     .try_into()
@@ -15963,8 +16763,8 @@ pub mod types {
             }
             pub fn request_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.request_id = value
                     .try_into()
@@ -15973,9 +16773,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Error> for super::Error {
+        impl ::std::convert::TryFrom<Error> for super::Error {
             type Error = super::error::ConversionError;
-            fn try_from(value: Error) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Error,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     error_code: value.error_code?,
                     message: value.message?,
@@ -15984,7 +16786,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Error> for Error {
+        impl ::std::convert::From<super::Error> for Error {
             fn from(value: super::Error) -> Self {
                 Self {
                     error_code: Ok(value.error_code),
@@ -15996,11 +16798,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ExternalIp {
-            ip: Result<std::net::IpAddr, String>,
-            kind: Result<super::IpKind, String>,
+            ip: ::std::result::Result<std::net::IpAddr, ::std::string::String>,
+            kind: ::std::result::Result<super::IpKind, ::std::string::String>,
         }
 
-        impl Default for ExternalIp {
+        impl ::std::default::Default for ExternalIp {
             fn default() -> Self {
                 Self {
                     ip: Err("no value supplied for ip".to_string()),
@@ -16012,8 +16814,8 @@ pub mod types {
         impl ExternalIp {
             pub fn ip<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<std::net::IpAddr>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<std::net::IpAddr>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ip = value
                     .try_into()
@@ -16022,8 +16824,8 @@ pub mod types {
             }
             pub fn kind<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::IpKind>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::IpKind>,
+                T::Error: ::std::fmt::Display,
             {
                 self.kind = value
                     .try_into()
@@ -16032,9 +16834,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ExternalIp> for super::ExternalIp {
+        impl ::std::convert::TryFrom<ExternalIp> for super::ExternalIp {
             type Error = super::error::ConversionError;
-            fn try_from(value: ExternalIp) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ExternalIp,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     ip: value.ip?,
                     kind: value.kind?,
@@ -16042,7 +16846,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ExternalIp> for ExternalIp {
+        impl ::std::convert::From<super::ExternalIp> for ExternalIp {
             fn from(value: super::ExternalIp) -> Self {
                 Self {
                     ip: Ok(value.ip),
@@ -16053,11 +16857,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ExternalIpResultsPage {
-            items: Result<Vec<super::ExternalIp>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::ExternalIp>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for ExternalIpResultsPage {
+        impl ::std::default::Default for ExternalIpResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -16069,8 +16876,8 @@ pub mod types {
         impl ExternalIpResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::ExternalIp>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::ExternalIp>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -16079,8 +16886,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -16089,11 +16896,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ExternalIpResultsPage> for super::ExternalIpResultsPage {
+        impl ::std::convert::TryFrom<ExternalIpResultsPage> for super::ExternalIpResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: ExternalIpResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -16101,7 +16908,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ExternalIpResultsPage> for ExternalIpResultsPage {
+        impl ::std::convert::From<super::ExternalIpResultsPage> for ExternalIpResultsPage {
             fn from(value: super::ExternalIpResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -16112,12 +16919,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct FieldSchema {
-            name: Result<String, String>,
-            source: Result<super::FieldSource, String>,
-            ty: Result<super::FieldType, String>,
+            name: ::std::result::Result<::std::string::String, ::std::string::String>,
+            source: ::std::result::Result<super::FieldSource, ::std::string::String>,
+            ty: ::std::result::Result<super::FieldType, ::std::string::String>,
         }
 
-        impl Default for FieldSchema {
+        impl ::std::default::Default for FieldSchema {
             fn default() -> Self {
                 Self {
                     name: Err("no value supplied for name".to_string()),
@@ -16130,8 +16937,8 @@ pub mod types {
         impl FieldSchema {
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -16140,8 +16947,8 @@ pub mod types {
             }
             pub fn source<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::FieldSource>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::FieldSource>,
+                T::Error: ::std::fmt::Display,
             {
                 self.source = value
                     .try_into()
@@ -16150,8 +16957,8 @@ pub mod types {
             }
             pub fn ty<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::FieldType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::FieldType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ty = value
                     .try_into()
@@ -16160,9 +16967,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<FieldSchema> for super::FieldSchema {
+        impl ::std::convert::TryFrom<FieldSchema> for super::FieldSchema {
             type Error = super::error::ConversionError;
-            fn try_from(value: FieldSchema) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: FieldSchema,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     name: value.name?,
                     source: value.source?,
@@ -16171,7 +16980,7 @@ pub mod types {
             }
         }
 
-        impl From<super::FieldSchema> for FieldSchema {
+        impl ::std::convert::From<super::FieldSchema> for FieldSchema {
             fn from(value: super::FieldSchema) -> Self {
                 Self {
                     name: Ok(value.name),
@@ -16183,10 +16992,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct FleetRolePolicy {
-            role_assignments: Result<Vec<super::FleetRoleRoleAssignment>, String>,
+            role_assignments: ::std::result::Result<
+                ::std::vec::Vec<super::FleetRoleRoleAssignment>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for FleetRolePolicy {
+        impl ::std::default::Default for FleetRolePolicy {
             fn default() -> Self {
                 Self {
                     role_assignments: Err("no value supplied for role_assignments".to_string()),
@@ -16197,8 +17009,8 @@ pub mod types {
         impl FleetRolePolicy {
             pub fn role_assignments<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::FleetRoleRoleAssignment>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::FleetRoleRoleAssignment>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.role_assignments = value.try_into().map_err(|e| {
                     format!(
@@ -16210,16 +17022,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<FleetRolePolicy> for super::FleetRolePolicy {
+        impl ::std::convert::TryFrom<FleetRolePolicy> for super::FleetRolePolicy {
             type Error = super::error::ConversionError;
-            fn try_from(value: FleetRolePolicy) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: FleetRolePolicy,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     role_assignments: value.role_assignments?,
                 })
             }
         }
 
-        impl From<super::FleetRolePolicy> for FleetRolePolicy {
+        impl ::std::convert::From<super::FleetRolePolicy> for FleetRolePolicy {
             fn from(value: super::FleetRolePolicy) -> Self {
                 Self {
                     role_assignments: Ok(value.role_assignments),
@@ -16229,12 +17043,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct FleetRoleRoleAssignment {
-            identity_id: Result<uuid::Uuid, String>,
-            identity_type: Result<super::IdentityType, String>,
-            role_name: Result<super::FleetRole, String>,
+            identity_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            identity_type: ::std::result::Result<super::IdentityType, ::std::string::String>,
+            role_name: ::std::result::Result<super::FleetRole, ::std::string::String>,
         }
 
-        impl Default for FleetRoleRoleAssignment {
+        impl ::std::default::Default for FleetRoleRoleAssignment {
             fn default() -> Self {
                 Self {
                     identity_id: Err("no value supplied for identity_id".to_string()),
@@ -16247,8 +17061,8 @@ pub mod types {
         impl FleetRoleRoleAssignment {
             pub fn identity_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_id = value
                     .try_into()
@@ -16257,8 +17071,8 @@ pub mod types {
             }
             pub fn identity_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::IdentityType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::IdentityType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_type = value.try_into().map_err(|e| {
                     format!("error converting supplied value for identity_type: {}", e)
@@ -16267,8 +17081,8 @@ pub mod types {
             }
             pub fn role_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::FleetRole>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::FleetRole>,
+                T::Error: ::std::fmt::Display,
             {
                 self.role_name = value
                     .try_into()
@@ -16277,11 +17091,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<FleetRoleRoleAssignment> for super::FleetRoleRoleAssignment {
+        impl ::std::convert::TryFrom<FleetRoleRoleAssignment> for super::FleetRoleRoleAssignment {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: FleetRoleRoleAssignment,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     identity_id: value.identity_id?,
                     identity_type: value.identity_type?,
@@ -16290,7 +17104,7 @@ pub mod types {
             }
         }
 
-        impl From<super::FleetRoleRoleAssignment> for FleetRoleRoleAssignment {
+        impl ::std::convert::From<super::FleetRoleRoleAssignment> for FleetRoleRoleAssignment {
             fn from(value: super::FleetRoleRoleAssignment) -> Self {
                 Self {
                     identity_id: Ok(value.identity_id),
@@ -16302,20 +17116,26 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct GlobalImage {
-            block_size: Result<super::ByteCount, String>,
-            description: Result<String, String>,
-            digest: Result<Option<super::Digest>, String>,
-            distribution: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            size: Result<super::ByteCount, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            url: Result<Option<String>, String>,
-            version: Result<String, String>,
+            block_size: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            digest:
+                ::std::result::Result<::std::option::Option<super::Digest>, ::std::string::String>,
+            distribution: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            size: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            url: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            version: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for GlobalImage {
+        impl ::std::default::Default for GlobalImage {
             fn default() -> Self {
                 Self {
                     block_size: Err("no value supplied for block_size".to_string()),
@@ -16336,8 +17156,8 @@ pub mod types {
         impl GlobalImage {
             pub fn block_size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.block_size = value
                     .try_into()
@@ -16346,8 +17166,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -16356,8 +17176,8 @@ pub mod types {
             }
             pub fn digest<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Digest>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Digest>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.digest = value
                     .try_into()
@@ -16366,8 +17186,8 @@ pub mod types {
             }
             pub fn distribution<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.distribution = value.try_into().map_err(|e| {
                     format!("error converting supplied value for distribution: {}", e)
@@ -16376,8 +17196,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -16386,8 +17206,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -16396,8 +17216,8 @@ pub mod types {
             }
             pub fn size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.size = value
                     .try_into()
@@ -16406,8 +17226,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -16416,8 +17236,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -16426,8 +17246,8 @@ pub mod types {
             }
             pub fn url<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.url = value
                     .try_into()
@@ -16436,8 +17256,8 @@ pub mod types {
             }
             pub fn version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version = value
                     .try_into()
@@ -16446,9 +17266,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<GlobalImage> for super::GlobalImage {
+        impl ::std::convert::TryFrom<GlobalImage> for super::GlobalImage {
             type Error = super::error::ConversionError;
-            fn try_from(value: GlobalImage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: GlobalImage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -16465,7 +17287,7 @@ pub mod types {
             }
         }
 
-        impl From<super::GlobalImage> for GlobalImage {
+        impl ::std::convert::From<super::GlobalImage> for GlobalImage {
             fn from(value: super::GlobalImage) -> Self {
                 Self {
                     block_size: Ok(value.block_size),
@@ -16485,14 +17307,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct GlobalImageCreate {
-            block_size: Result<super::BlockSize, String>,
-            description: Result<String, String>,
-            distribution: Result<super::Distribution, String>,
-            name: Result<super::Name, String>,
-            source: Result<super::ImageSource, String>,
+            block_size: ::std::result::Result<super::BlockSize, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            distribution: ::std::result::Result<super::Distribution, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            source: ::std::result::Result<super::ImageSource, ::std::string::String>,
         }
 
-        impl Default for GlobalImageCreate {
+        impl ::std::default::Default for GlobalImageCreate {
             fn default() -> Self {
                 Self {
                     block_size: Err("no value supplied for block_size".to_string()),
@@ -16507,8 +17329,8 @@ pub mod types {
         impl GlobalImageCreate {
             pub fn block_size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::BlockSize>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::BlockSize>,
+                T::Error: ::std::fmt::Display,
             {
                 self.block_size = value
                     .try_into()
@@ -16517,8 +17339,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -16527,8 +17349,8 @@ pub mod types {
             }
             pub fn distribution<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Distribution>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Distribution>,
+                T::Error: ::std::fmt::Display,
             {
                 self.distribution = value.try_into().map_err(|e| {
                     format!("error converting supplied value for distribution: {}", e)
@@ -16537,8 +17359,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -16547,8 +17369,8 @@ pub mod types {
             }
             pub fn source<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ImageSource>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ImageSource>,
+                T::Error: ::std::fmt::Display,
             {
                 self.source = value
                     .try_into()
@@ -16557,9 +17379,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<GlobalImageCreate> for super::GlobalImageCreate {
+        impl ::std::convert::TryFrom<GlobalImageCreate> for super::GlobalImageCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: GlobalImageCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: GlobalImageCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -16570,7 +17394,7 @@ pub mod types {
             }
         }
 
-        impl From<super::GlobalImageCreate> for GlobalImageCreate {
+        impl ::std::convert::From<super::GlobalImageCreate> for GlobalImageCreate {
             fn from(value: super::GlobalImageCreate) -> Self {
                 Self {
                     block_size: Ok(value.block_size),
@@ -16584,11 +17408,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct GlobalImageResultsPage {
-            items: Result<Vec<super::GlobalImage>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::GlobalImage>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for GlobalImageResultsPage {
+        impl ::std::default::Default for GlobalImageResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -16600,8 +17428,8 @@ pub mod types {
         impl GlobalImageResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::GlobalImage>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::GlobalImage>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -16610,8 +17438,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -16620,11 +17448,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<GlobalImageResultsPage> for super::GlobalImageResultsPage {
+        impl ::std::convert::TryFrom<GlobalImageResultsPage> for super::GlobalImageResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: GlobalImageResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -16632,7 +17460,7 @@ pub mod types {
             }
         }
 
-        impl From<super::GlobalImageResultsPage> for GlobalImageResultsPage {
+        impl ::std::convert::From<super::GlobalImageResultsPage> for GlobalImageResultsPage {
             fn from(value: super::GlobalImageResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -16643,12 +17471,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Group {
-            display_name: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            silo_id: Result<uuid::Uuid, String>,
+            display_name: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            silo_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for Group {
+        impl ::std::default::Default for Group {
             fn default() -> Self {
                 Self {
                     display_name: Err("no value supplied for display_name".to_string()),
@@ -16661,8 +17489,8 @@ pub mod types {
         impl Group {
             pub fn display_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.display_name = value.try_into().map_err(|e| {
                     format!("error converting supplied value for display_name: {}", e)
@@ -16671,8 +17499,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -16681,8 +17509,8 @@ pub mod types {
             }
             pub fn silo_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.silo_id = value
                     .try_into()
@@ -16691,9 +17519,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Group> for super::Group {
+        impl ::std::convert::TryFrom<Group> for super::Group {
             type Error = super::error::ConversionError;
-            fn try_from(value: Group) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Group,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     display_name: value.display_name?,
                     id: value.id?,
@@ -16702,7 +17532,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Group> for Group {
+        impl ::std::convert::From<super::Group> for Group {
             fn from(value: super::Group) -> Self {
                 Self {
                     display_name: Ok(value.display_name),
@@ -16714,11 +17544,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct GroupResultsPage {
-            items: Result<Vec<super::Group>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Group>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for GroupResultsPage {
+        impl ::std::default::Default for GroupResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -16730,8 +17563,8 @@ pub mod types {
         impl GroupResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Group>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Group>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -16740,8 +17573,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -16750,9 +17583,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<GroupResultsPage> for super::GroupResultsPage {
+        impl ::std::convert::TryFrom<GroupResultsPage> for super::GroupResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: GroupResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: GroupResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -16760,7 +17595,7 @@ pub mod types {
             }
         }
 
-        impl From<super::GroupResultsPage> for GroupResultsPage {
+        impl ::std::convert::From<super::GroupResultsPage> for GroupResultsPage {
             fn from(value: super::GroupResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -16771,12 +17606,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Histogramdouble {
-            bins: Result<Vec<super::Bindouble>, String>,
-            n_samples: Result<u64, String>,
-            start_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            bins: ::std::result::Result<::std::vec::Vec<super::Bindouble>, ::std::string::String>,
+            n_samples: ::std::result::Result<u64, ::std::string::String>,
+            start_time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Histogramdouble {
+        impl ::std::default::Default for Histogramdouble {
             fn default() -> Self {
                 Self {
                     bins: Err("no value supplied for bins".to_string()),
@@ -16789,8 +17625,8 @@ pub mod types {
         impl Histogramdouble {
             pub fn bins<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Bindouble>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Bindouble>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.bins = value
                     .try_into()
@@ -16799,8 +17635,8 @@ pub mod types {
             }
             pub fn n_samples<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<u64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<u64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.n_samples = value
                     .try_into()
@@ -16809,8 +17645,8 @@ pub mod types {
             }
             pub fn start_time<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.start_time = value
                     .try_into()
@@ -16819,9 +17655,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Histogramdouble> for super::Histogramdouble {
+        impl ::std::convert::TryFrom<Histogramdouble> for super::Histogramdouble {
             type Error = super::error::ConversionError;
-            fn try_from(value: Histogramdouble) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Histogramdouble,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     bins: value.bins?,
                     n_samples: value.n_samples?,
@@ -16830,7 +17668,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Histogramdouble> for Histogramdouble {
+        impl ::std::convert::From<super::Histogramdouble> for Histogramdouble {
             fn from(value: super::Histogramdouble) -> Self {
                 Self {
                     bins: Ok(value.bins),
@@ -16842,12 +17680,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Histogramint64 {
-            bins: Result<Vec<super::Binint64>, String>,
-            n_samples: Result<u64, String>,
-            start_time: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            bins: ::std::result::Result<::std::vec::Vec<super::Binint64>, ::std::string::String>,
+            n_samples: ::std::result::Result<u64, ::std::string::String>,
+            start_time:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Histogramint64 {
+        impl ::std::default::Default for Histogramint64 {
             fn default() -> Self {
                 Self {
                     bins: Err("no value supplied for bins".to_string()),
@@ -16860,8 +17699,8 @@ pub mod types {
         impl Histogramint64 {
             pub fn bins<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Binint64>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Binint64>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.bins = value
                     .try_into()
@@ -16870,8 +17709,8 @@ pub mod types {
             }
             pub fn n_samples<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<u64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<u64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.n_samples = value
                     .try_into()
@@ -16880,8 +17719,8 @@ pub mod types {
             }
             pub fn start_time<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.start_time = value
                     .try_into()
@@ -16890,9 +17729,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Histogramint64> for super::Histogramint64 {
+        impl ::std::convert::TryFrom<Histogramint64> for super::Histogramint64 {
             type Error = super::error::ConversionError;
-            fn try_from(value: Histogramint64) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Histogramint64,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     bins: value.bins?,
                     n_samples: value.n_samples?,
@@ -16901,7 +17742,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Histogramint64> for Histogramint64 {
+        impl ::std::convert::From<super::Histogramint64> for Histogramint64 {
             fn from(value: super::Histogramint64) -> Self {
                 Self {
                     bins: Ok(value.bins),
@@ -16913,15 +17754,18 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct IdentityProvider {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            provider_type: Result<super::IdentityProviderType, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            provider_type:
+                ::std::result::Result<super::IdentityProviderType, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for IdentityProvider {
+        impl ::std::default::Default for IdentityProvider {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -16937,8 +17781,8 @@ pub mod types {
         impl IdentityProvider {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -16947,8 +17791,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -16957,8 +17801,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -16967,8 +17811,8 @@ pub mod types {
             }
             pub fn provider_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::IdentityProviderType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::IdentityProviderType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.provider_type = value.try_into().map_err(|e| {
                     format!("error converting supplied value for provider_type: {}", e)
@@ -16977,8 +17821,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -16987,8 +17831,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -16997,9 +17841,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<IdentityProvider> for super::IdentityProvider {
+        impl ::std::convert::TryFrom<IdentityProvider> for super::IdentityProvider {
             type Error = super::error::ConversionError;
-            fn try_from(value: IdentityProvider) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: IdentityProvider,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -17011,7 +17857,7 @@ pub mod types {
             }
         }
 
-        impl From<super::IdentityProvider> for IdentityProvider {
+        impl ::std::convert::From<super::IdentityProvider> for IdentityProvider {
             fn from(value: super::IdentityProvider) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -17026,11 +17872,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct IdentityProviderResultsPage {
-            items: Result<Vec<super::IdentityProvider>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<
+                ::std::vec::Vec<super::IdentityProvider>,
+                ::std::string::String,
+            >,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for IdentityProviderResultsPage {
+        impl ::std::default::Default for IdentityProviderResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -17042,8 +17894,8 @@ pub mod types {
         impl IdentityProviderResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::IdentityProvider>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::IdentityProvider>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -17052,8 +17904,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -17062,11 +17914,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<IdentityProviderResultsPage> for super::IdentityProviderResultsPage {
+        impl ::std::convert::TryFrom<IdentityProviderResultsPage> for super::IdentityProviderResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: IdentityProviderResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -17074,7 +17926,7 @@ pub mod types {
             }
         }
 
-        impl From<super::IdentityProviderResultsPage> for IdentityProviderResultsPage {
+        impl ::std::convert::From<super::IdentityProviderResultsPage> for IdentityProviderResultsPage {
             fn from(value: super::IdentityProviderResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -17085,20 +17937,29 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Image {
-            block_size: Result<super::ByteCount, String>,
-            description: Result<String, String>,
-            digest: Result<Option<super::Digest>, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            project_id: Result<uuid::Uuid, String>,
-            size: Result<super::ByteCount, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            url: Result<Option<String>, String>,
-            version: Result<Option<String>, String>,
+            block_size: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            digest:
+                ::std::result::Result<::std::option::Option<super::Digest>, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            project_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            size: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            url: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            version: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for Image {
+        impl ::std::default::Default for Image {
             fn default() -> Self {
                 Self {
                     block_size: Err("no value supplied for block_size".to_string()),
@@ -17119,8 +17980,8 @@ pub mod types {
         impl Image {
             pub fn block_size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.block_size = value
                     .try_into()
@@ -17129,8 +17990,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -17139,8 +18000,8 @@ pub mod types {
             }
             pub fn digest<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Digest>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Digest>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.digest = value
                     .try_into()
@@ -17149,8 +18010,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -17159,8 +18020,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -17169,8 +18030,8 @@ pub mod types {
             }
             pub fn project_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.project_id = value
                     .try_into()
@@ -17179,8 +18040,8 @@ pub mod types {
             }
             pub fn size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.size = value
                     .try_into()
@@ -17189,8 +18050,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -17199,8 +18060,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -17209,8 +18070,8 @@ pub mod types {
             }
             pub fn url<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.url = value
                     .try_into()
@@ -17219,8 +18080,8 @@ pub mod types {
             }
             pub fn version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version = value
                     .try_into()
@@ -17229,9 +18090,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Image> for super::Image {
+        impl ::std::convert::TryFrom<Image> for super::Image {
             type Error = super::error::ConversionError;
-            fn try_from(value: Image) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Image,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -17248,7 +18111,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Image> for Image {
+        impl ::std::convert::From<super::Image> for Image {
             fn from(value: super::Image) -> Self {
                 Self {
                     block_size: Ok(value.block_size),
@@ -17268,13 +18131,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ImageCreate {
-            block_size: Result<super::BlockSize, String>,
-            description: Result<String, String>,
-            name: Result<super::Name, String>,
-            source: Result<super::ImageSource, String>,
+            block_size: ::std::result::Result<super::BlockSize, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            source: ::std::result::Result<super::ImageSource, ::std::string::String>,
         }
 
-        impl Default for ImageCreate {
+        impl ::std::default::Default for ImageCreate {
             fn default() -> Self {
                 Self {
                     block_size: Err("no value supplied for block_size".to_string()),
@@ -17288,8 +18151,8 @@ pub mod types {
         impl ImageCreate {
             pub fn block_size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::BlockSize>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::BlockSize>,
+                T::Error: ::std::fmt::Display,
             {
                 self.block_size = value
                     .try_into()
@@ -17298,8 +18161,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -17308,8 +18171,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -17318,8 +18181,8 @@ pub mod types {
             }
             pub fn source<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ImageSource>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ImageSource>,
+                T::Error: ::std::fmt::Display,
             {
                 self.source = value
                     .try_into()
@@ -17328,9 +18191,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ImageCreate> for super::ImageCreate {
+        impl ::std::convert::TryFrom<ImageCreate> for super::ImageCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: ImageCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ImageCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     block_size: value.block_size?,
                     description: value.description?,
@@ -17340,7 +18205,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ImageCreate> for ImageCreate {
+        impl ::std::convert::From<super::ImageCreate> for ImageCreate {
             fn from(value: super::ImageCreate) -> Self {
                 Self {
                     block_size: Ok(value.block_size),
@@ -17353,11 +18218,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ImageResultsPage {
-            items: Result<Vec<super::Image>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Image>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for ImageResultsPage {
+        impl ::std::default::Default for ImageResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -17369,8 +18237,8 @@ pub mod types {
         impl ImageResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Image>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Image>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -17379,8 +18247,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -17389,9 +18257,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ImageResultsPage> for super::ImageResultsPage {
+        impl ::std::convert::TryFrom<ImageResultsPage> for super::ImageResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: ImageResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ImageResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -17399,7 +18269,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ImageResultsPage> for ImageResultsPage {
+        impl ::std::convert::From<super::ImageResultsPage> for ImageResultsPage {
             fn from(value: super::ImageResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -17410,20 +18280,23 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Instance {
-            description: Result<String, String>,
-            hostname: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            memory: Result<super::ByteCount, String>,
-            name: Result<super::Name, String>,
-            ncpus: Result<super::InstanceCpuCount, String>,
-            project_id: Result<uuid::Uuid, String>,
-            run_state: Result<super::InstanceState, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_run_state_updated: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            hostname: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            memory: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            ncpus: ::std::result::Result<super::InstanceCpuCount, ::std::string::String>,
+            project_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            run_state: ::std::result::Result<super::InstanceState, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_run_state_updated:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Instance {
+        impl ::std::default::Default for Instance {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -17446,8 +18319,8 @@ pub mod types {
         impl Instance {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -17456,8 +18329,8 @@ pub mod types {
             }
             pub fn hostname<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.hostname = value
                     .try_into()
@@ -17466,8 +18339,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -17476,8 +18349,8 @@ pub mod types {
             }
             pub fn memory<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.memory = value
                     .try_into()
@@ -17486,8 +18359,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -17496,8 +18369,8 @@ pub mod types {
             }
             pub fn ncpus<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::InstanceCpuCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::InstanceCpuCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ncpus = value
                     .try_into()
@@ -17506,8 +18379,8 @@ pub mod types {
             }
             pub fn project_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.project_id = value
                     .try_into()
@@ -17516,8 +18389,8 @@ pub mod types {
             }
             pub fn run_state<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::InstanceState>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::InstanceState>,
+                T::Error: ::std::fmt::Display,
             {
                 self.run_state = value
                     .try_into()
@@ -17526,8 +18399,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -17536,8 +18409,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -17546,8 +18419,8 @@ pub mod types {
             }
             pub fn time_run_state_updated<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_run_state_updated = value.try_into().map_err(|e| {
                     format!(
@@ -17559,9 +18432,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Instance> for super::Instance {
+        impl ::std::convert::TryFrom<Instance> for super::Instance {
             type Error = super::error::ConversionError;
-            fn try_from(value: Instance) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Instance,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     hostname: value.hostname?,
@@ -17578,7 +18453,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Instance> for Instance {
+        impl ::std::convert::From<super::Instance> for Instance {
             fn from(value: super::Instance) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -17598,19 +18473,28 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceCreate {
-            description: Result<String, String>,
-            disks: Result<Vec<super::InstanceDiskAttachment>, String>,
-            external_ips: Result<Vec<super::ExternalIpCreate>, String>,
-            hostname: Result<String, String>,
-            memory: Result<super::ByteCount, String>,
-            name: Result<super::Name, String>,
-            ncpus: Result<super::InstanceCpuCount, String>,
-            network_interfaces: Result<super::InstanceNetworkInterfaceAttachment, String>,
-            start: Result<bool, String>,
-            user_data: Result<String, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            disks: ::std::result::Result<
+                ::std::vec::Vec<super::InstanceDiskAttachment>,
+                ::std::string::String,
+            >,
+            external_ips: ::std::result::Result<
+                ::std::vec::Vec<super::ExternalIpCreate>,
+                ::std::string::String,
+            >,
+            hostname: ::std::result::Result<::std::string::String, ::std::string::String>,
+            memory: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            ncpus: ::std::result::Result<super::InstanceCpuCount, ::std::string::String>,
+            network_interfaces: ::std::result::Result<
+                super::InstanceNetworkInterfaceAttachment,
+                ::std::string::String,
+            >,
+            start: ::std::result::Result<bool, ::std::string::String>,
+            user_data: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for InstanceCreate {
+        impl ::std::default::Default for InstanceCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -17630,8 +18514,8 @@ pub mod types {
         impl InstanceCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -17640,8 +18524,8 @@ pub mod types {
             }
             pub fn disks<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::InstanceDiskAttachment>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::InstanceDiskAttachment>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.disks = value
                     .try_into()
@@ -17650,8 +18534,8 @@ pub mod types {
             }
             pub fn external_ips<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::ExternalIpCreate>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::ExternalIpCreate>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.external_ips = value.try_into().map_err(|e| {
                     format!("error converting supplied value for external_ips: {}", e)
@@ -17660,8 +18544,8 @@ pub mod types {
             }
             pub fn hostname<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.hostname = value
                     .try_into()
@@ -17670,8 +18554,8 @@ pub mod types {
             }
             pub fn memory<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.memory = value
                     .try_into()
@@ -17680,8 +18564,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -17690,8 +18574,8 @@ pub mod types {
             }
             pub fn ncpus<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::InstanceCpuCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::InstanceCpuCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ncpus = value
                     .try_into()
@@ -17700,8 +18584,8 @@ pub mod types {
             }
             pub fn network_interfaces<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::InstanceNetworkInterfaceAttachment>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::InstanceNetworkInterfaceAttachment>,
+                T::Error: ::std::fmt::Display,
             {
                 self.network_interfaces = value.try_into().map_err(|e| {
                     format!(
@@ -17713,8 +18597,8 @@ pub mod types {
             }
             pub fn start<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<bool>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<bool>,
+                T::Error: ::std::fmt::Display,
             {
                 self.start = value
                     .try_into()
@@ -17723,8 +18607,8 @@ pub mod types {
             }
             pub fn user_data<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.user_data = value
                     .try_into()
@@ -17733,9 +18617,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<InstanceCreate> for super::InstanceCreate {
+        impl ::std::convert::TryFrom<InstanceCreate> for super::InstanceCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: InstanceCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: InstanceCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     disks: value.disks?,
@@ -17751,7 +18637,7 @@ pub mod types {
             }
         }
 
-        impl From<super::InstanceCreate> for InstanceCreate {
+        impl ::std::convert::From<super::InstanceCreate> for InstanceCreate {
             fn from(value: super::InstanceCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -17770,10 +18656,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceMigrate {
-            dst_sled_id: Result<uuid::Uuid, String>,
+            dst_sled_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for InstanceMigrate {
+        impl ::std::default::Default for InstanceMigrate {
             fn default() -> Self {
                 Self {
                     dst_sled_id: Err("no value supplied for dst_sled_id".to_string()),
@@ -17784,8 +18670,8 @@ pub mod types {
         impl InstanceMigrate {
             pub fn dst_sled_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.dst_sled_id = value
                     .try_into()
@@ -17794,16 +18680,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<InstanceMigrate> for super::InstanceMigrate {
+        impl ::std::convert::TryFrom<InstanceMigrate> for super::InstanceMigrate {
             type Error = super::error::ConversionError;
-            fn try_from(value: InstanceMigrate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: InstanceMigrate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     dst_sled_id: value.dst_sled_id?,
                 })
             }
         }
 
-        impl From<super::InstanceMigrate> for InstanceMigrate {
+        impl ::std::convert::From<super::InstanceMigrate> for InstanceMigrate {
             fn from(value: super::InstanceMigrate) -> Self {
                 Self {
                     dst_sled_id: Ok(value.dst_sled_id),
@@ -17813,11 +18701,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceResultsPage {
-            items: Result<Vec<super::Instance>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Instance>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for InstanceResultsPage {
+        impl ::std::default::Default for InstanceResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -17829,8 +18720,8 @@ pub mod types {
         impl InstanceResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Instance>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Instance>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -17839,8 +18730,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -17849,9 +18740,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<InstanceResultsPage> for super::InstanceResultsPage {
+        impl ::std::convert::TryFrom<InstanceResultsPage> for super::InstanceResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: InstanceResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: InstanceResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -17859,7 +18752,7 @@ pub mod types {
             }
         }
 
-        impl From<super::InstanceResultsPage> for InstanceResultsPage {
+        impl ::std::convert::From<super::InstanceResultsPage> for InstanceResultsPage {
             fn from(value: super::InstanceResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -17870,11 +18763,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceSerialConsoleData {
-            data: Result<Vec<u8>, String>,
-            last_byte_offset: Result<u64, String>,
+            data: ::std::result::Result<::std::vec::Vec<u8>, ::std::string::String>,
+            last_byte_offset: ::std::result::Result<u64, ::std::string::String>,
         }
 
-        impl Default for InstanceSerialConsoleData {
+        impl ::std::default::Default for InstanceSerialConsoleData {
             fn default() -> Self {
                 Self {
                     data: Err("no value supplied for data".to_string()),
@@ -17886,8 +18779,8 @@ pub mod types {
         impl InstanceSerialConsoleData {
             pub fn data<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<u8>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<u8>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.data = value
                     .try_into()
@@ -17896,8 +18789,8 @@ pub mod types {
             }
             pub fn last_byte_offset<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<u64>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<u64>,
+                T::Error: ::std::fmt::Display,
             {
                 self.last_byte_offset = value.try_into().map_err(|e| {
                     format!(
@@ -17909,11 +18802,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<InstanceSerialConsoleData> for super::InstanceSerialConsoleData {
+        impl ::std::convert::TryFrom<InstanceSerialConsoleData> for super::InstanceSerialConsoleData {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceSerialConsoleData,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     data: value.data?,
                     last_byte_offset: value.last_byte_offset?,
@@ -17921,7 +18814,7 @@ pub mod types {
             }
         }
 
-        impl From<super::InstanceSerialConsoleData> for InstanceSerialConsoleData {
+        impl ::std::convert::From<super::InstanceSerialConsoleData> for InstanceSerialConsoleData {
             fn from(value: super::InstanceSerialConsoleData) -> Self {
                 Self {
                     data: Ok(value.data),
@@ -17932,14 +18825,16 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct IpPool {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for IpPool {
+        impl ::std::default::Default for IpPool {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -17954,8 +18849,8 @@ pub mod types {
         impl IpPool {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -17964,8 +18859,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -17974,8 +18869,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -17984,8 +18879,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -17994,8 +18889,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -18004,9 +18899,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<IpPool> for super::IpPool {
+        impl ::std::convert::TryFrom<IpPool> for super::IpPool {
             type Error = super::error::ConversionError;
-            fn try_from(value: IpPool) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: IpPool,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -18017,7 +18914,7 @@ pub mod types {
             }
         }
 
-        impl From<super::IpPool> for IpPool {
+        impl ::std::convert::From<super::IpPool> for IpPool {
             fn from(value: super::IpPool) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -18031,11 +18928,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct IpPoolCreate {
-            description: Result<String, String>,
-            name: Result<super::Name, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for IpPoolCreate {
+        impl ::std::default::Default for IpPoolCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -18047,8 +18944,8 @@ pub mod types {
         impl IpPoolCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -18057,8 +18954,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -18067,9 +18964,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<IpPoolCreate> for super::IpPoolCreate {
+        impl ::std::convert::TryFrom<IpPoolCreate> for super::IpPoolCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: IpPoolCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: IpPoolCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -18077,7 +18976,7 @@ pub mod types {
             }
         }
 
-        impl From<super::IpPoolCreate> for IpPoolCreate {
+        impl ::std::convert::From<super::IpPoolCreate> for IpPoolCreate {
             fn from(value: super::IpPoolCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -18088,12 +18987,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct IpPoolRange {
-            id: Result<uuid::Uuid, String>,
-            range: Result<super::IpRange, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            range: ::std::result::Result<super::IpRange, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for IpPoolRange {
+        impl ::std::default::Default for IpPoolRange {
             fn default() -> Self {
                 Self {
                     id: Err("no value supplied for id".to_string()),
@@ -18106,8 +19006,8 @@ pub mod types {
         impl IpPoolRange {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -18116,8 +19016,8 @@ pub mod types {
             }
             pub fn range<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::IpRange>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::IpRange>,
+                T::Error: ::std::fmt::Display,
             {
                 self.range = value
                     .try_into()
@@ -18126,8 +19026,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -18136,9 +19036,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<IpPoolRange> for super::IpPoolRange {
+        impl ::std::convert::TryFrom<IpPoolRange> for super::IpPoolRange {
             type Error = super::error::ConversionError;
-            fn try_from(value: IpPoolRange) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: IpPoolRange,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     range: value.range?,
@@ -18147,7 +19049,7 @@ pub mod types {
             }
         }
 
-        impl From<super::IpPoolRange> for IpPoolRange {
+        impl ::std::convert::From<super::IpPoolRange> for IpPoolRange {
             fn from(value: super::IpPoolRange) -> Self {
                 Self {
                     id: Ok(value.id),
@@ -18159,11 +19061,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct IpPoolRangeResultsPage {
-            items: Result<Vec<super::IpPoolRange>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::IpPoolRange>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for IpPoolRangeResultsPage {
+        impl ::std::default::Default for IpPoolRangeResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -18175,8 +19081,8 @@ pub mod types {
         impl IpPoolRangeResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::IpPoolRange>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::IpPoolRange>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -18185,8 +19091,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -18195,11 +19101,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<IpPoolRangeResultsPage> for super::IpPoolRangeResultsPage {
+        impl ::std::convert::TryFrom<IpPoolRangeResultsPage> for super::IpPoolRangeResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: IpPoolRangeResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -18207,7 +19113,7 @@ pub mod types {
             }
         }
 
-        impl From<super::IpPoolRangeResultsPage> for IpPoolRangeResultsPage {
+        impl ::std::convert::From<super::IpPoolRangeResultsPage> for IpPoolRangeResultsPage {
             fn from(value: super::IpPoolRangeResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -18218,11 +19124,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct IpPoolResultsPage {
-            items: Result<Vec<super::IpPool>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::IpPool>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for IpPoolResultsPage {
+        impl ::std::default::Default for IpPoolResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -18234,8 +19143,8 @@ pub mod types {
         impl IpPoolResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::IpPool>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::IpPool>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -18244,8 +19153,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -18254,9 +19163,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<IpPoolResultsPage> for super::IpPoolResultsPage {
+        impl ::std::convert::TryFrom<IpPoolResultsPage> for super::IpPoolResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: IpPoolResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: IpPoolResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -18264,7 +19175,7 @@ pub mod types {
             }
         }
 
-        impl From<super::IpPoolResultsPage> for IpPoolResultsPage {
+        impl ::std::convert::From<super::IpPoolResultsPage> for IpPoolResultsPage {
             fn from(value: super::IpPoolResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -18275,11 +19186,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct IpPoolUpdate {
-            description: Result<Option<String>, String>,
-            name: Result<Option<super::Name>, String>,
+            description: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            name: ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
         }
 
-        impl Default for IpPoolUpdate {
+        impl ::std::default::Default for IpPoolUpdate {
             fn default() -> Self {
                 Self {
                     description: Ok(Default::default()),
@@ -18291,8 +19205,8 @@ pub mod types {
         impl IpPoolUpdate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -18301,8 +19215,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -18311,9 +19225,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<IpPoolUpdate> for super::IpPoolUpdate {
+        impl ::std::convert::TryFrom<IpPoolUpdate> for super::IpPoolUpdate {
             type Error = super::error::ConversionError;
-            fn try_from(value: IpPoolUpdate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: IpPoolUpdate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -18321,7 +19237,7 @@ pub mod types {
             }
         }
 
-        impl From<super::IpPoolUpdate> for IpPoolUpdate {
+        impl ::std::convert::From<super::IpPoolUpdate> for IpPoolUpdate {
             fn from(value: super::IpPoolUpdate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -18332,11 +19248,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Ipv4Range {
-            first: Result<std::net::Ipv4Addr, String>,
-            last: Result<std::net::Ipv4Addr, String>,
+            first: ::std::result::Result<std::net::Ipv4Addr, ::std::string::String>,
+            last: ::std::result::Result<std::net::Ipv4Addr, ::std::string::String>,
         }
 
-        impl Default for Ipv4Range {
+        impl ::std::default::Default for Ipv4Range {
             fn default() -> Self {
                 Self {
                     first: Err("no value supplied for first".to_string()),
@@ -18348,8 +19264,8 @@ pub mod types {
         impl Ipv4Range {
             pub fn first<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<std::net::Ipv4Addr>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<std::net::Ipv4Addr>,
+                T::Error: ::std::fmt::Display,
             {
                 self.first = value
                     .try_into()
@@ -18358,8 +19274,8 @@ pub mod types {
             }
             pub fn last<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<std::net::Ipv4Addr>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<std::net::Ipv4Addr>,
+                T::Error: ::std::fmt::Display,
             {
                 self.last = value
                     .try_into()
@@ -18368,9 +19284,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Ipv4Range> for super::Ipv4Range {
+        impl ::std::convert::TryFrom<Ipv4Range> for super::Ipv4Range {
             type Error = super::error::ConversionError;
-            fn try_from(value: Ipv4Range) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Ipv4Range,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     first: value.first?,
                     last: value.last?,
@@ -18378,7 +19296,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Ipv4Range> for Ipv4Range {
+        impl ::std::convert::From<super::Ipv4Range> for Ipv4Range {
             fn from(value: super::Ipv4Range) -> Self {
                 Self {
                     first: Ok(value.first),
@@ -18389,11 +19307,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Ipv6Range {
-            first: Result<std::net::Ipv6Addr, String>,
-            last: Result<std::net::Ipv6Addr, String>,
+            first: ::std::result::Result<std::net::Ipv6Addr, ::std::string::String>,
+            last: ::std::result::Result<std::net::Ipv6Addr, ::std::string::String>,
         }
 
-        impl Default for Ipv6Range {
+        impl ::std::default::Default for Ipv6Range {
             fn default() -> Self {
                 Self {
                     first: Err("no value supplied for first".to_string()),
@@ -18405,8 +19323,8 @@ pub mod types {
         impl Ipv6Range {
             pub fn first<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<std::net::Ipv6Addr>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<std::net::Ipv6Addr>,
+                T::Error: ::std::fmt::Display,
             {
                 self.first = value
                     .try_into()
@@ -18415,8 +19333,8 @@ pub mod types {
             }
             pub fn last<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<std::net::Ipv6Addr>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<std::net::Ipv6Addr>,
+                T::Error: ::std::fmt::Display,
             {
                 self.last = value
                     .try_into()
@@ -18425,9 +19343,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Ipv6Range> for super::Ipv6Range {
+        impl ::std::convert::TryFrom<Ipv6Range> for super::Ipv6Range {
             type Error = super::error::ConversionError;
-            fn try_from(value: Ipv6Range) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Ipv6Range,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     first: value.first?,
                     last: value.last?,
@@ -18435,7 +19355,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Ipv6Range> for Ipv6Range {
+        impl ::std::convert::From<super::Ipv6Range> for Ipv6Range {
             fn from(value: super::Ipv6Range) -> Self {
                 Self {
                     first: Ok(value.first),
@@ -18446,11 +19366,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Measurement {
-            datum: Result<super::Datum, String>,
-            timestamp: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            datum: ::std::result::Result<super::Datum, ::std::string::String>,
+            timestamp:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Measurement {
+        impl ::std::default::Default for Measurement {
             fn default() -> Self {
                 Self {
                     datum: Err("no value supplied for datum".to_string()),
@@ -18462,8 +19383,8 @@ pub mod types {
         impl Measurement {
             pub fn datum<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Datum>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Datum>,
+                T::Error: ::std::fmt::Display,
             {
                 self.datum = value
                     .try_into()
@@ -18472,8 +19393,8 @@ pub mod types {
             }
             pub fn timestamp<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.timestamp = value
                     .try_into()
@@ -18482,9 +19403,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Measurement> for super::Measurement {
+        impl ::std::convert::TryFrom<Measurement> for super::Measurement {
             type Error = super::error::ConversionError;
-            fn try_from(value: Measurement) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Measurement,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     datum: value.datum?,
                     timestamp: value.timestamp?,
@@ -18492,7 +19415,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Measurement> for Measurement {
+        impl ::std::convert::From<super::Measurement> for Measurement {
             fn from(value: super::Measurement) -> Self {
                 Self {
                     datum: Ok(value.datum),
@@ -18503,11 +19426,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct MeasurementResultsPage {
-            items: Result<Vec<super::Measurement>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::Measurement>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for MeasurementResultsPage {
+        impl ::std::default::Default for MeasurementResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -18519,8 +19446,8 @@ pub mod types {
         impl MeasurementResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Measurement>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Measurement>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -18529,8 +19456,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -18539,11 +19466,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<MeasurementResultsPage> for super::MeasurementResultsPage {
+        impl ::std::convert::TryFrom<MeasurementResultsPage> for super::MeasurementResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: MeasurementResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -18551,7 +19478,7 @@ pub mod types {
             }
         }
 
-        impl From<super::MeasurementResultsPage> for MeasurementResultsPage {
+        impl ::std::convert::From<super::MeasurementResultsPage> for MeasurementResultsPage {
             fn from(value: super::MeasurementResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -18562,20 +19489,22 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct NetworkInterface {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            instance_id: Result<uuid::Uuid, String>,
-            ip: Result<std::net::IpAddr, String>,
-            mac: Result<super::MacAddr, String>,
-            name: Result<super::Name, String>,
-            primary: Result<bool, String>,
-            subnet_id: Result<uuid::Uuid, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            vpc_id: Result<uuid::Uuid, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            instance_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            ip: ::std::result::Result<std::net::IpAddr, ::std::string::String>,
+            mac: ::std::result::Result<super::MacAddr, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            primary: ::std::result::Result<bool, ::std::string::String>,
+            subnet_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            vpc_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for NetworkInterface {
+        impl ::std::default::Default for NetworkInterface {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -18596,8 +19525,8 @@ pub mod types {
         impl NetworkInterface {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -18606,8 +19535,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -18616,8 +19545,8 @@ pub mod types {
             }
             pub fn instance_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.instance_id = value
                     .try_into()
@@ -18626,8 +19555,8 @@ pub mod types {
             }
             pub fn ip<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<std::net::IpAddr>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<std::net::IpAddr>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ip = value
                     .try_into()
@@ -18636,8 +19565,8 @@ pub mod types {
             }
             pub fn mac<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::MacAddr>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::MacAddr>,
+                T::Error: ::std::fmt::Display,
             {
                 self.mac = value
                     .try_into()
@@ -18646,8 +19575,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -18656,8 +19585,8 @@ pub mod types {
             }
             pub fn primary<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<bool>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<bool>,
+                T::Error: ::std::fmt::Display,
             {
                 self.primary = value
                     .try_into()
@@ -18666,8 +19595,8 @@ pub mod types {
             }
             pub fn subnet_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.subnet_id = value
                     .try_into()
@@ -18676,8 +19605,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -18686,8 +19615,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -18696,8 +19625,8 @@ pub mod types {
             }
             pub fn vpc_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.vpc_id = value
                     .try_into()
@@ -18706,9 +19635,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<NetworkInterface> for super::NetworkInterface {
+        impl ::std::convert::TryFrom<NetworkInterface> for super::NetworkInterface {
             type Error = super::error::ConversionError;
-            fn try_from(value: NetworkInterface) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: NetworkInterface,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -18725,7 +19656,7 @@ pub mod types {
             }
         }
 
-        impl From<super::NetworkInterface> for NetworkInterface {
+        impl ::std::convert::From<super::NetworkInterface> for NetworkInterface {
             fn from(value: super::NetworkInterface) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -18745,14 +19676,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct NetworkInterfaceCreate {
-            description: Result<String, String>,
-            ip: Result<Option<std::net::IpAddr>, String>,
-            name: Result<super::Name, String>,
-            subnet_name: Result<super::Name, String>,
-            vpc_name: Result<super::Name, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            ip: ::std::result::Result<
+                ::std::option::Option<std::net::IpAddr>,
+                ::std::string::String,
+            >,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            subnet_name: ::std::result::Result<super::Name, ::std::string::String>,
+            vpc_name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for NetworkInterfaceCreate {
+        impl ::std::default::Default for NetworkInterfaceCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -18767,8 +19701,8 @@ pub mod types {
         impl NetworkInterfaceCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -18777,8 +19711,8 @@ pub mod types {
             }
             pub fn ip<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<std::net::IpAddr>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<std::net::IpAddr>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ip = value
                     .try_into()
@@ -18787,8 +19721,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -18797,8 +19731,8 @@ pub mod types {
             }
             pub fn subnet_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.subnet_name = value
                     .try_into()
@@ -18807,8 +19741,8 @@ pub mod types {
             }
             pub fn vpc_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.vpc_name = value
                     .try_into()
@@ -18817,11 +19751,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<NetworkInterfaceCreate> for super::NetworkInterfaceCreate {
+        impl ::std::convert::TryFrom<NetworkInterfaceCreate> for super::NetworkInterfaceCreate {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: NetworkInterfaceCreate,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     ip: value.ip?,
@@ -18832,7 +19766,7 @@ pub mod types {
             }
         }
 
-        impl From<super::NetworkInterfaceCreate> for NetworkInterfaceCreate {
+        impl ::std::convert::From<super::NetworkInterfaceCreate> for NetworkInterfaceCreate {
             fn from(value: super::NetworkInterfaceCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -18846,11 +19780,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct NetworkInterfaceResultsPage {
-            items: Result<Vec<super::NetworkInterface>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<
+                ::std::vec::Vec<super::NetworkInterface>,
+                ::std::string::String,
+            >,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for NetworkInterfaceResultsPage {
+        impl ::std::default::Default for NetworkInterfaceResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -18862,8 +19802,8 @@ pub mod types {
         impl NetworkInterfaceResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::NetworkInterface>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::NetworkInterface>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -18872,8 +19812,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -18882,11 +19822,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<NetworkInterfaceResultsPage> for super::NetworkInterfaceResultsPage {
+        impl ::std::convert::TryFrom<NetworkInterfaceResultsPage> for super::NetworkInterfaceResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: NetworkInterfaceResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -18894,7 +19834,7 @@ pub mod types {
             }
         }
 
-        impl From<super::NetworkInterfaceResultsPage> for NetworkInterfaceResultsPage {
+        impl ::std::convert::From<super::NetworkInterfaceResultsPage> for NetworkInterfaceResultsPage {
             fn from(value: super::NetworkInterfaceResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -18905,12 +19845,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct NetworkInterfaceUpdate {
-            description: Result<Option<String>, String>,
-            name: Result<Option<super::Name>, String>,
-            primary: Result<bool, String>,
+            description: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            name: ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
+            primary: ::std::result::Result<bool, ::std::string::String>,
         }
 
-        impl Default for NetworkInterfaceUpdate {
+        impl ::std::default::Default for NetworkInterfaceUpdate {
             fn default() -> Self {
                 Self {
                     description: Ok(Default::default()),
@@ -18923,8 +19866,8 @@ pub mod types {
         impl NetworkInterfaceUpdate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -18933,8 +19876,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -18943,8 +19886,8 @@ pub mod types {
             }
             pub fn primary<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<bool>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<bool>,
+                T::Error: ::std::fmt::Display,
             {
                 self.primary = value
                     .try_into()
@@ -18953,11 +19896,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<NetworkInterfaceUpdate> for super::NetworkInterfaceUpdate {
+        impl ::std::convert::TryFrom<NetworkInterfaceUpdate> for super::NetworkInterfaceUpdate {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: NetworkInterfaceUpdate,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -18966,7 +19909,7 @@ pub mod types {
             }
         }
 
-        impl From<super::NetworkInterfaceUpdate> for NetworkInterfaceUpdate {
+        impl ::std::convert::From<super::NetworkInterfaceUpdate> for NetworkInterfaceUpdate {
             fn from(value: super::NetworkInterfaceUpdate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -18978,14 +19921,16 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Organization {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Organization {
+        impl ::std::default::Default for Organization {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -19000,8 +19945,8 @@ pub mod types {
         impl Organization {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -19010,8 +19955,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -19020,8 +19965,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -19030,8 +19975,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -19040,8 +19985,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -19050,9 +19995,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Organization> for super::Organization {
+        impl ::std::convert::TryFrom<Organization> for super::Organization {
             type Error = super::error::ConversionError;
-            fn try_from(value: Organization) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Organization,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -19063,7 +20010,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Organization> for Organization {
+        impl ::std::convert::From<super::Organization> for Organization {
             fn from(value: super::Organization) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -19077,11 +20024,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct OrganizationCreate {
-            description: Result<String, String>,
-            name: Result<super::Name, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for OrganizationCreate {
+        impl ::std::default::Default for OrganizationCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -19093,8 +20040,8 @@ pub mod types {
         impl OrganizationCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -19103,8 +20050,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -19113,9 +20060,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<OrganizationCreate> for super::OrganizationCreate {
+        impl ::std::convert::TryFrom<OrganizationCreate> for super::OrganizationCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: OrganizationCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: OrganizationCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -19123,7 +20072,7 @@ pub mod types {
             }
         }
 
-        impl From<super::OrganizationCreate> for OrganizationCreate {
+        impl ::std::convert::From<super::OrganizationCreate> for OrganizationCreate {
             fn from(value: super::OrganizationCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -19134,11 +20083,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct OrganizationResultsPage {
-            items: Result<Vec<super::Organization>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::Organization>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for OrganizationResultsPage {
+        impl ::std::default::Default for OrganizationResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -19150,8 +20103,8 @@ pub mod types {
         impl OrganizationResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Organization>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Organization>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -19160,8 +20113,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -19170,11 +20123,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<OrganizationResultsPage> for super::OrganizationResultsPage {
+        impl ::std::convert::TryFrom<OrganizationResultsPage> for super::OrganizationResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: OrganizationResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -19182,7 +20135,7 @@ pub mod types {
             }
         }
 
-        impl From<super::OrganizationResultsPage> for OrganizationResultsPage {
+        impl ::std::convert::From<super::OrganizationResultsPage> for OrganizationResultsPage {
             fn from(value: super::OrganizationResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -19193,10 +20146,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct OrganizationRolePolicy {
-            role_assignments: Result<Vec<super::OrganizationRoleRoleAssignment>, String>,
+            role_assignments: ::std::result::Result<
+                ::std::vec::Vec<super::OrganizationRoleRoleAssignment>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for OrganizationRolePolicy {
+        impl ::std::default::Default for OrganizationRolePolicy {
             fn default() -> Self {
                 Self {
                     role_assignments: Err("no value supplied for role_assignments".to_string()),
@@ -19207,8 +20163,8 @@ pub mod types {
         impl OrganizationRolePolicy {
             pub fn role_assignments<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::OrganizationRoleRoleAssignment>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::OrganizationRoleRoleAssignment>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.role_assignments = value.try_into().map_err(|e| {
                     format!(
@@ -19220,18 +20176,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<OrganizationRolePolicy> for super::OrganizationRolePolicy {
+        impl ::std::convert::TryFrom<OrganizationRolePolicy> for super::OrganizationRolePolicy {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: OrganizationRolePolicy,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     role_assignments: value.role_assignments?,
                 })
             }
         }
 
-        impl From<super::OrganizationRolePolicy> for OrganizationRolePolicy {
+        impl ::std::convert::From<super::OrganizationRolePolicy> for OrganizationRolePolicy {
             fn from(value: super::OrganizationRolePolicy) -> Self {
                 Self {
                     role_assignments: Ok(value.role_assignments),
@@ -19241,12 +20197,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct OrganizationRoleRoleAssignment {
-            identity_id: Result<uuid::Uuid, String>,
-            identity_type: Result<super::IdentityType, String>,
-            role_name: Result<super::OrganizationRole, String>,
+            identity_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            identity_type: ::std::result::Result<super::IdentityType, ::std::string::String>,
+            role_name: ::std::result::Result<super::OrganizationRole, ::std::string::String>,
         }
 
-        impl Default for OrganizationRoleRoleAssignment {
+        impl ::std::default::Default for OrganizationRoleRoleAssignment {
             fn default() -> Self {
                 Self {
                     identity_id: Err("no value supplied for identity_id".to_string()),
@@ -19259,8 +20215,8 @@ pub mod types {
         impl OrganizationRoleRoleAssignment {
             pub fn identity_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_id = value
                     .try_into()
@@ -19269,8 +20225,8 @@ pub mod types {
             }
             pub fn identity_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::IdentityType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::IdentityType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_type = value.try_into().map_err(|e| {
                     format!("error converting supplied value for identity_type: {}", e)
@@ -19279,8 +20235,8 @@ pub mod types {
             }
             pub fn role_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::OrganizationRole>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::OrganizationRole>,
+                T::Error: ::std::fmt::Display,
             {
                 self.role_name = value
                     .try_into()
@@ -19289,13 +20245,13 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<OrganizationRoleRoleAssignment>
+        impl ::std::convert::TryFrom<OrganizationRoleRoleAssignment>
             for super::OrganizationRoleRoleAssignment
         {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: OrganizationRoleRoleAssignment,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     identity_id: value.identity_id?,
                     identity_type: value.identity_type?,
@@ -19304,7 +20260,9 @@ pub mod types {
             }
         }
 
-        impl From<super::OrganizationRoleRoleAssignment> for OrganizationRoleRoleAssignment {
+        impl ::std::convert::From<super::OrganizationRoleRoleAssignment>
+            for OrganizationRoleRoleAssignment
+        {
             fn from(value: super::OrganizationRoleRoleAssignment) -> Self {
                 Self {
                     identity_id: Ok(value.identity_id),
@@ -19316,11 +20274,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct OrganizationUpdate {
-            description: Result<Option<String>, String>,
-            name: Result<Option<super::Name>, String>,
+            description: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            name: ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
         }
 
-        impl Default for OrganizationUpdate {
+        impl ::std::default::Default for OrganizationUpdate {
             fn default() -> Self {
                 Self {
                     description: Ok(Default::default()),
@@ -19332,8 +20293,8 @@ pub mod types {
         impl OrganizationUpdate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -19342,8 +20303,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -19352,9 +20313,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<OrganizationUpdate> for super::OrganizationUpdate {
+        impl ::std::convert::TryFrom<OrganizationUpdate> for super::OrganizationUpdate {
             type Error = super::error::ConversionError;
-            fn try_from(value: OrganizationUpdate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: OrganizationUpdate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -19362,7 +20325,7 @@ pub mod types {
             }
         }
 
-        impl From<super::OrganizationUpdate> for OrganizationUpdate {
+        impl ::std::convert::From<super::OrganizationUpdate> for OrganizationUpdate {
             fn from(value: super::OrganizationUpdate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -19373,17 +20336,20 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct PhysicalDisk {
-            disk_type: Result<super::PhysicalDiskType, String>,
-            id: Result<uuid::Uuid, String>,
-            model: Result<String, String>,
-            serial: Result<String, String>,
-            sled_id: Result<Option<uuid::Uuid>, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            vendor: Result<String, String>,
+            disk_type: ::std::result::Result<super::PhysicalDiskType, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            model: ::std::result::Result<::std::string::String, ::std::string::String>,
+            serial: ::std::result::Result<::std::string::String, ::std::string::String>,
+            sled_id:
+                ::std::result::Result<::std::option::Option<uuid::Uuid>, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            vendor: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for PhysicalDisk {
+        impl ::std::default::Default for PhysicalDisk {
             fn default() -> Self {
                 Self {
                     disk_type: Err("no value supplied for disk_type".to_string()),
@@ -19401,8 +20367,8 @@ pub mod types {
         impl PhysicalDisk {
             pub fn disk_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::PhysicalDiskType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::PhysicalDiskType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.disk_type = value
                     .try_into()
@@ -19411,8 +20377,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -19421,8 +20387,8 @@ pub mod types {
             }
             pub fn model<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.model = value
                     .try_into()
@@ -19431,8 +20397,8 @@ pub mod types {
             }
             pub fn serial<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.serial = value
                     .try_into()
@@ -19441,8 +20407,8 @@ pub mod types {
             }
             pub fn sled_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<uuid::Uuid>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<uuid::Uuid>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.sled_id = value
                     .try_into()
@@ -19451,8 +20417,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -19461,8 +20427,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -19471,8 +20437,8 @@ pub mod types {
             }
             pub fn vendor<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.vendor = value
                     .try_into()
@@ -19481,9 +20447,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<PhysicalDisk> for super::PhysicalDisk {
+        impl ::std::convert::TryFrom<PhysicalDisk> for super::PhysicalDisk {
             type Error = super::error::ConversionError;
-            fn try_from(value: PhysicalDisk) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: PhysicalDisk,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     disk_type: value.disk_type?,
                     id: value.id?,
@@ -19497,7 +20465,7 @@ pub mod types {
             }
         }
 
-        impl From<super::PhysicalDisk> for PhysicalDisk {
+        impl ::std::convert::From<super::PhysicalDisk> for PhysicalDisk {
             fn from(value: super::PhysicalDisk) -> Self {
                 Self {
                     disk_type: Ok(value.disk_type),
@@ -19514,11 +20482,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct PhysicalDiskResultsPage {
-            items: Result<Vec<super::PhysicalDisk>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::PhysicalDisk>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for PhysicalDiskResultsPage {
+        impl ::std::default::Default for PhysicalDiskResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -19530,8 +20502,8 @@ pub mod types {
         impl PhysicalDiskResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::PhysicalDisk>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::PhysicalDisk>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -19540,8 +20512,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -19550,11 +20522,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<PhysicalDiskResultsPage> for super::PhysicalDiskResultsPage {
+        impl ::std::convert::TryFrom<PhysicalDiskResultsPage> for super::PhysicalDiskResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: PhysicalDiskResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -19562,7 +20534,7 @@ pub mod types {
             }
         }
 
-        impl From<super::PhysicalDiskResultsPage> for PhysicalDiskResultsPage {
+        impl ::std::convert::From<super::PhysicalDiskResultsPage> for PhysicalDiskResultsPage {
             fn from(value: super::PhysicalDiskResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -19573,15 +20545,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Project {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            organization_id: Result<uuid::Uuid, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            organization_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Project {
+        impl ::std::default::Default for Project {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -19597,8 +20571,8 @@ pub mod types {
         impl Project {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -19607,8 +20581,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -19617,8 +20591,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -19627,8 +20601,8 @@ pub mod types {
             }
             pub fn organization_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.organization_id = value.try_into().map_err(|e| {
                     format!("error converting supplied value for organization_id: {}", e)
@@ -19637,8 +20611,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -19647,8 +20621,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -19657,9 +20631,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Project> for super::Project {
+        impl ::std::convert::TryFrom<Project> for super::Project {
             type Error = super::error::ConversionError;
-            fn try_from(value: Project) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Project,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -19671,7 +20647,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Project> for Project {
+        impl ::std::convert::From<super::Project> for Project {
             fn from(value: super::Project) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -19686,11 +20662,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ProjectCreate {
-            description: Result<String, String>,
-            name: Result<super::Name, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for ProjectCreate {
+        impl ::std::default::Default for ProjectCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -19702,8 +20678,8 @@ pub mod types {
         impl ProjectCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -19712,8 +20688,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -19722,9 +20698,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ProjectCreate> for super::ProjectCreate {
+        impl ::std::convert::TryFrom<ProjectCreate> for super::ProjectCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: ProjectCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ProjectCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -19732,7 +20710,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ProjectCreate> for ProjectCreate {
+        impl ::std::convert::From<super::ProjectCreate> for ProjectCreate {
             fn from(value: super::ProjectCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -19743,11 +20721,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ProjectResultsPage {
-            items: Result<Vec<super::Project>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Project>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for ProjectResultsPage {
+        impl ::std::default::Default for ProjectResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -19759,8 +20740,8 @@ pub mod types {
         impl ProjectResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Project>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Project>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -19769,8 +20750,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -19779,9 +20760,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ProjectResultsPage> for super::ProjectResultsPage {
+        impl ::std::convert::TryFrom<ProjectResultsPage> for super::ProjectResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: ProjectResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ProjectResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -19789,7 +20772,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ProjectResultsPage> for ProjectResultsPage {
+        impl ::std::convert::From<super::ProjectResultsPage> for ProjectResultsPage {
             fn from(value: super::ProjectResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -19800,10 +20783,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ProjectRolePolicy {
-            role_assignments: Result<Vec<super::ProjectRoleRoleAssignment>, String>,
+            role_assignments: ::std::result::Result<
+                ::std::vec::Vec<super::ProjectRoleRoleAssignment>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for ProjectRolePolicy {
+        impl ::std::default::Default for ProjectRolePolicy {
             fn default() -> Self {
                 Self {
                     role_assignments: Err("no value supplied for role_assignments".to_string()),
@@ -19814,8 +20800,8 @@ pub mod types {
         impl ProjectRolePolicy {
             pub fn role_assignments<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::ProjectRoleRoleAssignment>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::ProjectRoleRoleAssignment>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.role_assignments = value.try_into().map_err(|e| {
                     format!(
@@ -19827,16 +20813,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ProjectRolePolicy> for super::ProjectRolePolicy {
+        impl ::std::convert::TryFrom<ProjectRolePolicy> for super::ProjectRolePolicy {
             type Error = super::error::ConversionError;
-            fn try_from(value: ProjectRolePolicy) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ProjectRolePolicy,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     role_assignments: value.role_assignments?,
                 })
             }
         }
 
-        impl From<super::ProjectRolePolicy> for ProjectRolePolicy {
+        impl ::std::convert::From<super::ProjectRolePolicy> for ProjectRolePolicy {
             fn from(value: super::ProjectRolePolicy) -> Self {
                 Self {
                     role_assignments: Ok(value.role_assignments),
@@ -19846,12 +20834,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ProjectRoleRoleAssignment {
-            identity_id: Result<uuid::Uuid, String>,
-            identity_type: Result<super::IdentityType, String>,
-            role_name: Result<super::ProjectRole, String>,
+            identity_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            identity_type: ::std::result::Result<super::IdentityType, ::std::string::String>,
+            role_name: ::std::result::Result<super::ProjectRole, ::std::string::String>,
         }
 
-        impl Default for ProjectRoleRoleAssignment {
+        impl ::std::default::Default for ProjectRoleRoleAssignment {
             fn default() -> Self {
                 Self {
                     identity_id: Err("no value supplied for identity_id".to_string()),
@@ -19864,8 +20852,8 @@ pub mod types {
         impl ProjectRoleRoleAssignment {
             pub fn identity_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_id = value
                     .try_into()
@@ -19874,8 +20862,8 @@ pub mod types {
             }
             pub fn identity_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::IdentityType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::IdentityType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_type = value.try_into().map_err(|e| {
                     format!("error converting supplied value for identity_type: {}", e)
@@ -19884,8 +20872,8 @@ pub mod types {
             }
             pub fn role_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ProjectRole>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ProjectRole>,
+                T::Error: ::std::fmt::Display,
             {
                 self.role_name = value
                     .try_into()
@@ -19894,11 +20882,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ProjectRoleRoleAssignment> for super::ProjectRoleRoleAssignment {
+        impl ::std::convert::TryFrom<ProjectRoleRoleAssignment> for super::ProjectRoleRoleAssignment {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: ProjectRoleRoleAssignment,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     identity_id: value.identity_id?,
                     identity_type: value.identity_type?,
@@ -19907,7 +20895,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ProjectRoleRoleAssignment> for ProjectRoleRoleAssignment {
+        impl ::std::convert::From<super::ProjectRoleRoleAssignment> for ProjectRoleRoleAssignment {
             fn from(value: super::ProjectRoleRoleAssignment) -> Self {
                 Self {
                     identity_id: Ok(value.identity_id),
@@ -19919,11 +20907,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ProjectUpdate {
-            description: Result<Option<String>, String>,
-            name: Result<Option<super::Name>, String>,
+            description: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            name: ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
         }
 
-        impl Default for ProjectUpdate {
+        impl ::std::default::Default for ProjectUpdate {
             fn default() -> Self {
                 Self {
                     description: Ok(Default::default()),
@@ -19935,8 +20926,8 @@ pub mod types {
         impl ProjectUpdate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -19945,8 +20936,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -19955,9 +20946,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<ProjectUpdate> for super::ProjectUpdate {
+        impl ::std::convert::TryFrom<ProjectUpdate> for super::ProjectUpdate {
             type Error = super::error::ConversionError;
-            fn try_from(value: ProjectUpdate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: ProjectUpdate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -19965,7 +20958,7 @@ pub mod types {
             }
         }
 
-        impl From<super::ProjectUpdate> for ProjectUpdate {
+        impl ::std::convert::From<super::ProjectUpdate> for ProjectUpdate {
             fn from(value: super::ProjectUpdate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -19976,12 +20969,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Rack {
-            id: Result<uuid::Uuid, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Rack {
+        impl ::std::default::Default for Rack {
             fn default() -> Self {
                 Self {
                     id: Err("no value supplied for id".to_string()),
@@ -19994,8 +20989,8 @@ pub mod types {
         impl Rack {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -20004,8 +20999,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -20014,8 +21009,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -20024,9 +21019,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Rack> for super::Rack {
+        impl ::std::convert::TryFrom<Rack> for super::Rack {
             type Error = super::error::ConversionError;
-            fn try_from(value: Rack) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: Rack) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     time_created: value.time_created?,
@@ -20035,7 +21030,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Rack> for Rack {
+        impl ::std::convert::From<super::Rack> for Rack {
             fn from(value: super::Rack) -> Self {
                 Self {
                     id: Ok(value.id),
@@ -20047,11 +21042,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct RackResultsPage {
-            items: Result<Vec<super::Rack>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Rack>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for RackResultsPage {
+        impl ::std::default::Default for RackResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -20063,8 +21061,8 @@ pub mod types {
         impl RackResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Rack>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Rack>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -20073,8 +21071,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -20083,9 +21081,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<RackResultsPage> for super::RackResultsPage {
+        impl ::std::convert::TryFrom<RackResultsPage> for super::RackResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: RackResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: RackResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -20093,7 +21093,7 @@ pub mod types {
             }
         }
 
-        impl From<super::RackResultsPage> for RackResultsPage {
+        impl ::std::convert::From<super::RackResultsPage> for RackResultsPage {
             fn from(value: super::RackResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -20104,11 +21104,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Role {
-            description: Result<String, String>,
-            name: Result<super::RoleName, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<super::RoleName, ::std::string::String>,
         }
 
-        impl Default for Role {
+        impl ::std::default::Default for Role {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -20120,8 +21120,8 @@ pub mod types {
         impl Role {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -20130,8 +21130,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::RoleName>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::RoleName>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -20140,9 +21140,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Role> for super::Role {
+        impl ::std::convert::TryFrom<Role> for super::Role {
             type Error = super::error::ConversionError;
-            fn try_from(value: Role) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: Role) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -20150,7 +21150,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Role> for Role {
+        impl ::std::convert::From<super::Role> for Role {
             fn from(value: super::Role) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -20161,11 +21161,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct RoleResultsPage {
-            items: Result<Vec<super::Role>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Role>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for RoleResultsPage {
+        impl ::std::default::Default for RoleResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -20177,8 +21180,8 @@ pub mod types {
         impl RoleResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Role>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Role>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -20187,8 +21190,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -20197,9 +21200,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<RoleResultsPage> for super::RoleResultsPage {
+        impl ::std::convert::TryFrom<RoleResultsPage> for super::RoleResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: RoleResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: RoleResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -20207,7 +21212,7 @@ pub mod types {
             }
         }
 
-        impl From<super::RoleResultsPage> for RoleResultsPage {
+        impl ::std::convert::From<super::RoleResultsPage> for RoleResultsPage {
             fn from(value: super::RoleResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -20218,18 +21223,20 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct RouterRoute {
-            description: Result<String, String>,
-            destination: Result<super::RouteDestination, String>,
-            id: Result<uuid::Uuid, String>,
-            kind: Result<super::RouterRouteKind, String>,
-            name: Result<super::Name, String>,
-            target: Result<super::RouteTarget, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            vpc_router_id: Result<uuid::Uuid, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            destination: ::std::result::Result<super::RouteDestination, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            kind: ::std::result::Result<super::RouterRouteKind, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            target: ::std::result::Result<super::RouteTarget, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            vpc_router_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for RouterRoute {
+        impl ::std::default::Default for RouterRoute {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -20248,8 +21255,8 @@ pub mod types {
         impl RouterRoute {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -20258,8 +21265,8 @@ pub mod types {
             }
             pub fn destination<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::RouteDestination>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::RouteDestination>,
+                T::Error: ::std::fmt::Display,
             {
                 self.destination = value
                     .try_into()
@@ -20268,8 +21275,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -20278,8 +21285,8 @@ pub mod types {
             }
             pub fn kind<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::RouterRouteKind>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::RouterRouteKind>,
+                T::Error: ::std::fmt::Display,
             {
                 self.kind = value
                     .try_into()
@@ -20288,8 +21295,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -20298,8 +21305,8 @@ pub mod types {
             }
             pub fn target<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::RouteTarget>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::RouteTarget>,
+                T::Error: ::std::fmt::Display,
             {
                 self.target = value
                     .try_into()
@@ -20308,8 +21315,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -20318,8 +21325,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -20328,8 +21335,8 @@ pub mod types {
             }
             pub fn vpc_router_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.vpc_router_id = value.try_into().map_err(|e| {
                     format!("error converting supplied value for vpc_router_id: {}", e)
@@ -20338,9 +21345,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<RouterRoute> for super::RouterRoute {
+        impl ::std::convert::TryFrom<RouterRoute> for super::RouterRoute {
             type Error = super::error::ConversionError;
-            fn try_from(value: RouterRoute) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: RouterRoute,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     destination: value.destination?,
@@ -20355,7 +21364,7 @@ pub mod types {
             }
         }
 
-        impl From<super::RouterRoute> for RouterRoute {
+        impl ::std::convert::From<super::RouterRoute> for RouterRoute {
             fn from(value: super::RouterRoute) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -20373,13 +21382,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct RouterRouteCreateParams {
-            description: Result<String, String>,
-            destination: Result<super::RouteDestination, String>,
-            name: Result<super::Name, String>,
-            target: Result<super::RouteTarget, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            destination: ::std::result::Result<super::RouteDestination, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            target: ::std::result::Result<super::RouteTarget, ::std::string::String>,
         }
 
-        impl Default for RouterRouteCreateParams {
+        impl ::std::default::Default for RouterRouteCreateParams {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -20393,8 +21402,8 @@ pub mod types {
         impl RouterRouteCreateParams {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -20403,8 +21412,8 @@ pub mod types {
             }
             pub fn destination<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::RouteDestination>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::RouteDestination>,
+                T::Error: ::std::fmt::Display,
             {
                 self.destination = value
                     .try_into()
@@ -20413,8 +21422,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -20423,8 +21432,8 @@ pub mod types {
             }
             pub fn target<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::RouteTarget>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::RouteTarget>,
+                T::Error: ::std::fmt::Display,
             {
                 self.target = value
                     .try_into()
@@ -20433,11 +21442,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<RouterRouteCreateParams> for super::RouterRouteCreateParams {
+        impl ::std::convert::TryFrom<RouterRouteCreateParams> for super::RouterRouteCreateParams {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: RouterRouteCreateParams,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     destination: value.destination?,
@@ -20447,7 +21456,7 @@ pub mod types {
             }
         }
 
-        impl From<super::RouterRouteCreateParams> for RouterRouteCreateParams {
+        impl ::std::convert::From<super::RouterRouteCreateParams> for RouterRouteCreateParams {
             fn from(value: super::RouterRouteCreateParams) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -20460,11 +21469,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct RouterRouteResultsPage {
-            items: Result<Vec<super::RouterRoute>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::RouterRoute>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for RouterRouteResultsPage {
+        impl ::std::default::Default for RouterRouteResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -20476,8 +21489,8 @@ pub mod types {
         impl RouterRouteResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::RouterRoute>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::RouterRoute>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -20486,8 +21499,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -20496,11 +21509,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<RouterRouteResultsPage> for super::RouterRouteResultsPage {
+        impl ::std::convert::TryFrom<RouterRouteResultsPage> for super::RouterRouteResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: RouterRouteResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -20508,7 +21521,7 @@ pub mod types {
             }
         }
 
-        impl From<super::RouterRouteResultsPage> for RouterRouteResultsPage {
+        impl ::std::convert::From<super::RouterRouteResultsPage> for RouterRouteResultsPage {
             fn from(value: super::RouterRouteResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -20519,13 +21532,16 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct RouterRouteUpdateParams {
-            description: Result<Option<String>, String>,
-            destination: Result<super::RouteDestination, String>,
-            name: Result<Option<super::Name>, String>,
-            target: Result<super::RouteTarget, String>,
+            description: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            destination: ::std::result::Result<super::RouteDestination, ::std::string::String>,
+            name: ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
+            target: ::std::result::Result<super::RouteTarget, ::std::string::String>,
         }
 
-        impl Default for RouterRouteUpdateParams {
+        impl ::std::default::Default for RouterRouteUpdateParams {
             fn default() -> Self {
                 Self {
                     description: Ok(Default::default()),
@@ -20539,8 +21555,8 @@ pub mod types {
         impl RouterRouteUpdateParams {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -20549,8 +21565,8 @@ pub mod types {
             }
             pub fn destination<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::RouteDestination>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::RouteDestination>,
+                T::Error: ::std::fmt::Display,
             {
                 self.destination = value
                     .try_into()
@@ -20559,8 +21575,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -20569,8 +21585,8 @@ pub mod types {
             }
             pub fn target<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::RouteTarget>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::RouteTarget>,
+                T::Error: ::std::fmt::Display,
             {
                 self.target = value
                     .try_into()
@@ -20579,11 +21595,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<RouterRouteUpdateParams> for super::RouterRouteUpdateParams {
+        impl ::std::convert::TryFrom<RouterRouteUpdateParams> for super::RouterRouteUpdateParams {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: RouterRouteUpdateParams,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     destination: value.destination?,
@@ -20593,7 +21609,7 @@ pub mod types {
             }
         }
 
-        impl From<super::RouterRouteUpdateParams> for RouterRouteUpdateParams {
+        impl ::std::convert::From<super::RouterRouteUpdateParams> for RouterRouteUpdateParams {
             fn from(value: super::RouterRouteUpdateParams) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -20606,11 +21622,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Saga {
-            id: Result<uuid::Uuid, String>,
-            state: Result<super::SagaState, String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            state: ::std::result::Result<super::SagaState, ::std::string::String>,
         }
 
-        impl Default for Saga {
+        impl ::std::default::Default for Saga {
             fn default() -> Self {
                 Self {
                     id: Err("no value supplied for id".to_string()),
@@ -20622,8 +21638,8 @@ pub mod types {
         impl Saga {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -20632,8 +21648,8 @@ pub mod types {
             }
             pub fn state<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SagaState>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SagaState>,
+                T::Error: ::std::fmt::Display,
             {
                 self.state = value
                     .try_into()
@@ -20642,9 +21658,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Saga> for super::Saga {
+        impl ::std::convert::TryFrom<Saga> for super::Saga {
             type Error = super::error::ConversionError;
-            fn try_from(value: Saga) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: Saga) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     state: value.state?,
@@ -20652,7 +21668,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Saga> for Saga {
+        impl ::std::convert::From<super::Saga> for Saga {
             fn from(value: super::Saga) -> Self {
                 Self {
                     id: Ok(value.id),
@@ -20663,11 +21679,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SagaResultsPage {
-            items: Result<Vec<super::Saga>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Saga>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for SagaResultsPage {
+        impl ::std::default::Default for SagaResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -20679,8 +21698,8 @@ pub mod types {
         impl SagaResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Saga>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Saga>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -20689,8 +21708,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -20699,9 +21718,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SagaResultsPage> for super::SagaResultsPage {
+        impl ::std::convert::TryFrom<SagaResultsPage> for super::SagaResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: SagaResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SagaResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -20709,7 +21730,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SagaResultsPage> for SagaResultsPage {
+        impl ::std::convert::From<super::SagaResultsPage> for SagaResultsPage {
             fn from(value: super::SagaResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -20720,20 +21741,26 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SamlIdentityProvider {
-            acs_url: Result<String, String>,
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            idp_entity_id: Result<String, String>,
-            name: Result<super::Name, String>,
-            public_cert: Result<Option<String>, String>,
-            slo_url: Result<String, String>,
-            sp_client_id: Result<String, String>,
-            technical_contact_email: Result<String, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            acs_url: ::std::result::Result<::std::string::String, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            idp_entity_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            public_cert: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            slo_url: ::std::result::Result<::std::string::String, ::std::string::String>,
+            sp_client_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            technical_contact_email:
+                ::std::result::Result<::std::string::String, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for SamlIdentityProvider {
+        impl ::std::default::Default for SamlIdentityProvider {
             fn default() -> Self {
                 Self {
                     acs_url: Err("no value supplied for acs_url".to_string()),
@@ -20756,8 +21783,8 @@ pub mod types {
         impl SamlIdentityProvider {
             pub fn acs_url<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.acs_url = value
                     .try_into()
@@ -20766,8 +21793,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -20776,8 +21803,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -20786,8 +21813,8 @@ pub mod types {
             }
             pub fn idp_entity_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.idp_entity_id = value.try_into().map_err(|e| {
                     format!("error converting supplied value for idp_entity_id: {}", e)
@@ -20796,8 +21823,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -20806,8 +21833,8 @@ pub mod types {
             }
             pub fn public_cert<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.public_cert = value
                     .try_into()
@@ -20816,8 +21843,8 @@ pub mod types {
             }
             pub fn slo_url<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.slo_url = value
                     .try_into()
@@ -20826,8 +21853,8 @@ pub mod types {
             }
             pub fn sp_client_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.sp_client_id = value.try_into().map_err(|e| {
                     format!("error converting supplied value for sp_client_id: {}", e)
@@ -20836,8 +21863,8 @@ pub mod types {
             }
             pub fn technical_contact_email<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.technical_contact_email = value.try_into().map_err(|e| {
                     format!(
@@ -20849,8 +21876,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -20859,8 +21886,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -20869,11 +21896,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SamlIdentityProvider> for super::SamlIdentityProvider {
+        impl ::std::convert::TryFrom<SamlIdentityProvider> for super::SamlIdentityProvider {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: SamlIdentityProvider,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     acs_url: value.acs_url?,
                     description: value.description?,
@@ -20890,7 +21917,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SamlIdentityProvider> for SamlIdentityProvider {
+        impl ::std::convert::From<super::SamlIdentityProvider> for SamlIdentityProvider {
             fn from(value: super::SamlIdentityProvider) -> Self {
                 Self {
                     acs_url: Ok(value.acs_url),
@@ -20910,19 +21937,27 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SamlIdentityProviderCreate {
-            acs_url: Result<String, String>,
-            description: Result<String, String>,
-            group_attribute_name: Result<Option<String>, String>,
-            idp_entity_id: Result<String, String>,
-            idp_metadata_source: Result<super::IdpMetadataSource, String>,
-            name: Result<super::Name, String>,
-            signing_keypair: Result<Option<super::DerEncodedKeyPair>, String>,
-            slo_url: Result<String, String>,
-            sp_client_id: Result<String, String>,
-            technical_contact_email: Result<String, String>,
+            acs_url: ::std::result::Result<::std::string::String, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            group_attribute_name: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            idp_entity_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            idp_metadata_source:
+                ::std::result::Result<super::IdpMetadataSource, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            signing_keypair: ::std::result::Result<
+                ::std::option::Option<super::DerEncodedKeyPair>,
+                ::std::string::String,
+            >,
+            slo_url: ::std::result::Result<::std::string::String, ::std::string::String>,
+            sp_client_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            technical_contact_email:
+                ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for SamlIdentityProviderCreate {
+        impl ::std::default::Default for SamlIdentityProviderCreate {
             fn default() -> Self {
                 Self {
                     acs_url: Err("no value supplied for acs_url".to_string()),
@@ -20946,8 +21981,8 @@ pub mod types {
         impl SamlIdentityProviderCreate {
             pub fn acs_url<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.acs_url = value
                     .try_into()
@@ -20956,8 +21991,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -20966,8 +22001,8 @@ pub mod types {
             }
             pub fn group_attribute_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.group_attribute_name = value.try_into().map_err(|e| {
                     format!(
@@ -20979,8 +22014,8 @@ pub mod types {
             }
             pub fn idp_entity_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.idp_entity_id = value.try_into().map_err(|e| {
                     format!("error converting supplied value for idp_entity_id: {}", e)
@@ -20989,8 +22024,8 @@ pub mod types {
             }
             pub fn idp_metadata_source<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::IdpMetadataSource>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::IdpMetadataSource>,
+                T::Error: ::std::fmt::Display,
             {
                 self.idp_metadata_source = value.try_into().map_err(|e| {
                     format!(
@@ -21002,8 +22037,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -21012,8 +22047,8 @@ pub mod types {
             }
             pub fn signing_keypair<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::DerEncodedKeyPair>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::DerEncodedKeyPair>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.signing_keypair = value.try_into().map_err(|e| {
                     format!("error converting supplied value for signing_keypair: {}", e)
@@ -21022,8 +22057,8 @@ pub mod types {
             }
             pub fn slo_url<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.slo_url = value
                     .try_into()
@@ -21032,8 +22067,8 @@ pub mod types {
             }
             pub fn sp_client_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.sp_client_id = value.try_into().map_err(|e| {
                     format!("error converting supplied value for sp_client_id: {}", e)
@@ -21042,8 +22077,8 @@ pub mod types {
             }
             pub fn technical_contact_email<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.technical_contact_email = value.try_into().map_err(|e| {
                     format!(
@@ -21055,11 +22090,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SamlIdentityProviderCreate> for super::SamlIdentityProviderCreate {
+        impl ::std::convert::TryFrom<SamlIdentityProviderCreate> for super::SamlIdentityProviderCreate {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: SamlIdentityProviderCreate,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     acs_url: value.acs_url?,
                     description: value.description?,
@@ -21075,7 +22110,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SamlIdentityProviderCreate> for SamlIdentityProviderCreate {
+        impl ::std::convert::From<super::SamlIdentityProviderCreate> for SamlIdentityProviderCreate {
             fn from(value: super::SamlIdentityProviderCreate) -> Self {
                 Self {
                     acs_url: Ok(value.acs_url),
@@ -21094,16 +22129,18 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Silo {
-            description: Result<String, String>,
-            discoverable: Result<bool, String>,
-            id: Result<uuid::Uuid, String>,
-            identity_mode: Result<super::SiloIdentityMode, String>,
-            name: Result<super::Name, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            discoverable: ::std::result::Result<bool, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            identity_mode: ::std::result::Result<super::SiloIdentityMode, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Silo {
+        impl ::std::default::Default for Silo {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -21120,8 +22157,8 @@ pub mod types {
         impl Silo {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -21130,8 +22167,8 @@ pub mod types {
             }
             pub fn discoverable<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<bool>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<bool>,
+                T::Error: ::std::fmt::Display,
             {
                 self.discoverable = value.try_into().map_err(|e| {
                     format!("error converting supplied value for discoverable: {}", e)
@@ -21140,8 +22177,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -21150,8 +22187,8 @@ pub mod types {
             }
             pub fn identity_mode<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SiloIdentityMode>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SiloIdentityMode>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_mode = value.try_into().map_err(|e| {
                     format!("error converting supplied value for identity_mode: {}", e)
@@ -21160,8 +22197,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -21170,8 +22207,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -21180,8 +22217,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -21190,9 +22227,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Silo> for super::Silo {
+        impl ::std::convert::TryFrom<Silo> for super::Silo {
             type Error = super::error::ConversionError;
-            fn try_from(value: Silo) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: Silo) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     discoverable: value.discoverable?,
@@ -21205,7 +22242,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Silo> for Silo {
+        impl ::std::convert::From<super::Silo> for Silo {
             fn from(value: super::Silo) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -21221,14 +22258,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SiloCreate {
-            admin_group_name: Result<Option<String>, String>,
-            description: Result<String, String>,
-            discoverable: Result<bool, String>,
-            identity_mode: Result<super::SiloIdentityMode, String>,
-            name: Result<super::Name, String>,
+            admin_group_name: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            discoverable: ::std::result::Result<bool, ::std::string::String>,
+            identity_mode: ::std::result::Result<super::SiloIdentityMode, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for SiloCreate {
+        impl ::std::default::Default for SiloCreate {
             fn default() -> Self {
                 Self {
                     admin_group_name: Ok(Default::default()),
@@ -21243,8 +22283,8 @@ pub mod types {
         impl SiloCreate {
             pub fn admin_group_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.admin_group_name = value.try_into().map_err(|e| {
                     format!(
@@ -21256,8 +22296,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -21266,8 +22306,8 @@ pub mod types {
             }
             pub fn discoverable<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<bool>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<bool>,
+                T::Error: ::std::fmt::Display,
             {
                 self.discoverable = value.try_into().map_err(|e| {
                     format!("error converting supplied value for discoverable: {}", e)
@@ -21276,8 +22316,8 @@ pub mod types {
             }
             pub fn identity_mode<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SiloIdentityMode>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SiloIdentityMode>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_mode = value.try_into().map_err(|e| {
                     format!("error converting supplied value for identity_mode: {}", e)
@@ -21286,8 +22326,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -21296,9 +22336,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SiloCreate> for super::SiloCreate {
+        impl ::std::convert::TryFrom<SiloCreate> for super::SiloCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: SiloCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SiloCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     admin_group_name: value.admin_group_name?,
                     description: value.description?,
@@ -21309,7 +22351,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SiloCreate> for SiloCreate {
+        impl ::std::convert::From<super::SiloCreate> for SiloCreate {
             fn from(value: super::SiloCreate) -> Self {
                 Self {
                     admin_group_name: Ok(value.admin_group_name),
@@ -21323,11 +22365,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SiloResultsPage {
-            items: Result<Vec<super::Silo>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Silo>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for SiloResultsPage {
+        impl ::std::default::Default for SiloResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -21339,8 +22384,8 @@ pub mod types {
         impl SiloResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Silo>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Silo>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -21349,8 +22394,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -21359,9 +22404,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SiloResultsPage> for super::SiloResultsPage {
+        impl ::std::convert::TryFrom<SiloResultsPage> for super::SiloResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: SiloResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SiloResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -21369,7 +22416,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SiloResultsPage> for SiloResultsPage {
+        impl ::std::convert::From<super::SiloResultsPage> for SiloResultsPage {
             fn from(value: super::SiloResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -21380,10 +22427,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SiloRolePolicy {
-            role_assignments: Result<Vec<super::SiloRoleRoleAssignment>, String>,
+            role_assignments: ::std::result::Result<
+                ::std::vec::Vec<super::SiloRoleRoleAssignment>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for SiloRolePolicy {
+        impl ::std::default::Default for SiloRolePolicy {
             fn default() -> Self {
                 Self {
                     role_assignments: Err("no value supplied for role_assignments".to_string()),
@@ -21394,8 +22444,8 @@ pub mod types {
         impl SiloRolePolicy {
             pub fn role_assignments<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::SiloRoleRoleAssignment>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::SiloRoleRoleAssignment>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.role_assignments = value.try_into().map_err(|e| {
                     format!(
@@ -21407,16 +22457,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SiloRolePolicy> for super::SiloRolePolicy {
+        impl ::std::convert::TryFrom<SiloRolePolicy> for super::SiloRolePolicy {
             type Error = super::error::ConversionError;
-            fn try_from(value: SiloRolePolicy) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SiloRolePolicy,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     role_assignments: value.role_assignments?,
                 })
             }
         }
 
-        impl From<super::SiloRolePolicy> for SiloRolePolicy {
+        impl ::std::convert::From<super::SiloRolePolicy> for SiloRolePolicy {
             fn from(value: super::SiloRolePolicy) -> Self {
                 Self {
                     role_assignments: Ok(value.role_assignments),
@@ -21426,12 +22478,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SiloRoleRoleAssignment {
-            identity_id: Result<uuid::Uuid, String>,
-            identity_type: Result<super::IdentityType, String>,
-            role_name: Result<super::SiloRole, String>,
+            identity_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            identity_type: ::std::result::Result<super::IdentityType, ::std::string::String>,
+            role_name: ::std::result::Result<super::SiloRole, ::std::string::String>,
         }
 
-        impl Default for SiloRoleRoleAssignment {
+        impl ::std::default::Default for SiloRoleRoleAssignment {
             fn default() -> Self {
                 Self {
                     identity_id: Err("no value supplied for identity_id".to_string()),
@@ -21444,8 +22496,8 @@ pub mod types {
         impl SiloRoleRoleAssignment {
             pub fn identity_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_id = value
                     .try_into()
@@ -21454,8 +22506,8 @@ pub mod types {
             }
             pub fn identity_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::IdentityType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::IdentityType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.identity_type = value.try_into().map_err(|e| {
                     format!("error converting supplied value for identity_type: {}", e)
@@ -21464,8 +22516,8 @@ pub mod types {
             }
             pub fn role_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SiloRole>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SiloRole>,
+                T::Error: ::std::fmt::Display,
             {
                 self.role_name = value
                     .try_into()
@@ -21474,11 +22526,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SiloRoleRoleAssignment> for super::SiloRoleRoleAssignment {
+        impl ::std::convert::TryFrom<SiloRoleRoleAssignment> for super::SiloRoleRoleAssignment {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: SiloRoleRoleAssignment,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     identity_id: value.identity_id?,
                     identity_type: value.identity_type?,
@@ -21487,7 +22539,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SiloRoleRoleAssignment> for SiloRoleRoleAssignment {
+        impl ::std::convert::From<super::SiloRoleRoleAssignment> for SiloRoleRoleAssignment {
             fn from(value: super::SiloRoleRoleAssignment) -> Self {
                 Self {
                     identity_id: Ok(value.identity_id),
@@ -21499,14 +22551,16 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Sled {
-            baseboard: Result<super::Baseboard, String>,
-            id: Result<uuid::Uuid, String>,
-            service_address: Result<String, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            baseboard: ::std::result::Result<super::Baseboard, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            service_address: ::std::result::Result<::std::string::String, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Sled {
+        impl ::std::default::Default for Sled {
             fn default() -> Self {
                 Self {
                     baseboard: Err("no value supplied for baseboard".to_string()),
@@ -21521,8 +22575,8 @@ pub mod types {
         impl Sled {
             pub fn baseboard<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Baseboard>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Baseboard>,
+                T::Error: ::std::fmt::Display,
             {
                 self.baseboard = value
                     .try_into()
@@ -21531,8 +22585,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -21541,8 +22595,8 @@ pub mod types {
             }
             pub fn service_address<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.service_address = value.try_into().map_err(|e| {
                     format!("error converting supplied value for service_address: {}", e)
@@ -21551,8 +22605,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -21561,8 +22615,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -21571,9 +22625,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Sled> for super::Sled {
+        impl ::std::convert::TryFrom<Sled> for super::Sled {
             type Error = super::error::ConversionError;
-            fn try_from(value: Sled) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: Sled) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     baseboard: value.baseboard?,
                     id: value.id?,
@@ -21584,7 +22638,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Sled> for Sled {
+        impl ::std::convert::From<super::Sled> for Sled {
             fn from(value: super::Sled) -> Self {
                 Self {
                     baseboard: Ok(value.baseboard),
@@ -21598,11 +22652,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SledResultsPage {
-            items: Result<Vec<super::Sled>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Sled>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for SledResultsPage {
+        impl ::std::default::Default for SledResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -21614,8 +22671,8 @@ pub mod types {
         impl SledResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Sled>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Sled>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -21624,8 +22681,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -21634,9 +22691,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SledResultsPage> for super::SledResultsPage {
+        impl ::std::convert::TryFrom<SledResultsPage> for super::SledResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: SledResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SledResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -21644,7 +22703,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SledResultsPage> for SledResultsPage {
+        impl ::std::convert::From<super::SledResultsPage> for SledResultsPage {
             fn from(value: super::SledResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -21655,18 +22714,20 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Snapshot {
-            description: Result<String, String>,
-            disk_id: Result<uuid::Uuid, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            project_id: Result<uuid::Uuid, String>,
-            size: Result<super::ByteCount, String>,
-            state: Result<super::SnapshotState, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            disk_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            project_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            size: ::std::result::Result<super::ByteCount, ::std::string::String>,
+            state: ::std::result::Result<super::SnapshotState, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Snapshot {
+        impl ::std::default::Default for Snapshot {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -21685,8 +22746,8 @@ pub mod types {
         impl Snapshot {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -21695,8 +22756,8 @@ pub mod types {
             }
             pub fn disk_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.disk_id = value
                     .try_into()
@@ -21705,8 +22766,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -21715,8 +22776,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -21725,8 +22786,8 @@ pub mod types {
             }
             pub fn project_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.project_id = value
                     .try_into()
@@ -21735,8 +22796,8 @@ pub mod types {
             }
             pub fn size<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::ByteCount>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::ByteCount>,
+                T::Error: ::std::fmt::Display,
             {
                 self.size = value
                     .try_into()
@@ -21745,8 +22806,8 @@ pub mod types {
             }
             pub fn state<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SnapshotState>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SnapshotState>,
+                T::Error: ::std::fmt::Display,
             {
                 self.state = value
                     .try_into()
@@ -21755,8 +22816,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -21765,8 +22826,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -21775,9 +22836,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Snapshot> for super::Snapshot {
+        impl ::std::convert::TryFrom<Snapshot> for super::Snapshot {
             type Error = super::error::ConversionError;
-            fn try_from(value: Snapshot) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Snapshot,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     disk_id: value.disk_id?,
@@ -21792,7 +22855,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Snapshot> for Snapshot {
+        impl ::std::convert::From<super::Snapshot> for Snapshot {
             fn from(value: super::Snapshot) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -21810,12 +22873,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SnapshotCreate {
-            description: Result<String, String>,
-            disk: Result<super::Name, String>,
-            name: Result<super::Name, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            disk: ::std::result::Result<super::Name, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for SnapshotCreate {
+        impl ::std::default::Default for SnapshotCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -21828,8 +22891,8 @@ pub mod types {
         impl SnapshotCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -21838,8 +22901,8 @@ pub mod types {
             }
             pub fn disk<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.disk = value
                     .try_into()
@@ -21848,8 +22911,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -21858,9 +22921,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SnapshotCreate> for super::SnapshotCreate {
+        impl ::std::convert::TryFrom<SnapshotCreate> for super::SnapshotCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: SnapshotCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SnapshotCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     disk: value.disk?,
@@ -21869,7 +22934,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SnapshotCreate> for SnapshotCreate {
+        impl ::std::convert::From<super::SnapshotCreate> for SnapshotCreate {
             fn from(value: super::SnapshotCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -21881,11 +22946,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SnapshotResultsPage {
-            items: Result<Vec<super::Snapshot>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Snapshot>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for SnapshotResultsPage {
+        impl ::std::default::Default for SnapshotResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -21897,8 +22965,8 @@ pub mod types {
         impl SnapshotResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Snapshot>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Snapshot>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -21907,8 +22975,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -21917,9 +22985,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SnapshotResultsPage> for super::SnapshotResultsPage {
+        impl ::std::convert::TryFrom<SnapshotResultsPage> for super::SnapshotResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: SnapshotResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SnapshotResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -21927,7 +22997,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SnapshotResultsPage> for SnapshotResultsPage {
+        impl ::std::convert::From<super::SnapshotResultsPage> for SnapshotResultsPage {
             fn from(value: super::SnapshotResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -21938,10 +23008,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SpoofLoginBody {
-            username: Result<String, String>,
+            username: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for SpoofLoginBody {
+        impl ::std::default::Default for SpoofLoginBody {
             fn default() -> Self {
                 Self {
                     username: Err("no value supplied for username".to_string()),
@@ -21952,8 +23022,8 @@ pub mod types {
         impl SpoofLoginBody {
             pub fn username<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.username = value
                     .try_into()
@@ -21962,16 +23032,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SpoofLoginBody> for super::SpoofLoginBody {
+        impl ::std::convert::TryFrom<SpoofLoginBody> for super::SpoofLoginBody {
             type Error = super::error::ConversionError;
-            fn try_from(value: SpoofLoginBody) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SpoofLoginBody,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     username: value.username?,
                 })
             }
         }
 
-        impl From<super::SpoofLoginBody> for SpoofLoginBody {
+        impl ::std::convert::From<super::SpoofLoginBody> for SpoofLoginBody {
             fn from(value: super::SpoofLoginBody) -> Self {
                 Self {
                     username: Ok(value.username),
@@ -21981,16 +23053,18 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SshKey {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            public_key: Result<String, String>,
-            silo_user_id: Result<uuid::Uuid, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            public_key: ::std::result::Result<::std::string::String, ::std::string::String>,
+            silo_user_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for SshKey {
+        impl ::std::default::Default for SshKey {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -22007,8 +23081,8 @@ pub mod types {
         impl SshKey {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -22017,8 +23091,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -22027,8 +23101,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -22037,8 +23111,8 @@ pub mod types {
             }
             pub fn public_key<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.public_key = value
                     .try_into()
@@ -22047,8 +23121,8 @@ pub mod types {
             }
             pub fn silo_user_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.silo_user_id = value.try_into().map_err(|e| {
                     format!("error converting supplied value for silo_user_id: {}", e)
@@ -22057,8 +23131,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -22067,8 +23141,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -22077,9 +23151,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SshKey> for super::SshKey {
+        impl ::std::convert::TryFrom<SshKey> for super::SshKey {
             type Error = super::error::ConversionError;
-            fn try_from(value: SshKey) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SshKey,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -22092,7 +23168,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SshKey> for SshKey {
+        impl ::std::convert::From<super::SshKey> for SshKey {
             fn from(value: super::SshKey) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -22108,12 +23184,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SshKeyCreate {
-            description: Result<String, String>,
-            name: Result<super::Name, String>,
-            public_key: Result<String, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            public_key: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for SshKeyCreate {
+        impl ::std::default::Default for SshKeyCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -22126,8 +23202,8 @@ pub mod types {
         impl SshKeyCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -22136,8 +23212,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -22146,8 +23222,8 @@ pub mod types {
             }
             pub fn public_key<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.public_key = value
                     .try_into()
@@ -22156,9 +23232,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SshKeyCreate> for super::SshKeyCreate {
+        impl ::std::convert::TryFrom<SshKeyCreate> for super::SshKeyCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: SshKeyCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SshKeyCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -22167,7 +23245,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SshKeyCreate> for SshKeyCreate {
+        impl ::std::convert::From<super::SshKeyCreate> for SshKeyCreate {
             fn from(value: super::SshKeyCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -22179,11 +23257,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SshKeyResultsPage {
-            items: Result<Vec<super::SshKey>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::SshKey>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for SshKeyResultsPage {
+        impl ::std::default::Default for SshKeyResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -22195,8 +23276,8 @@ pub mod types {
         impl SshKeyResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::SshKey>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::SshKey>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -22205,8 +23286,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -22215,9 +23296,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SshKeyResultsPage> for super::SshKeyResultsPage {
+        impl ::std::convert::TryFrom<SshKeyResultsPage> for super::SshKeyResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: SshKeyResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SshKeyResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -22225,7 +23308,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SshKeyResultsPage> for SshKeyResultsPage {
+        impl ::std::convert::From<super::SshKeyResultsPage> for SshKeyResultsPage {
             fn from(value: super::SshKeyResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -22236,13 +23319,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SystemUpdate {
-            id: Result<uuid::Uuid, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            version: Result<super::SemverVersion, String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            version: ::std::result::Result<super::SemverVersion, ::std::string::String>,
         }
 
-        impl Default for SystemUpdate {
+        impl ::std::default::Default for SystemUpdate {
             fn default() -> Self {
                 Self {
                     id: Err("no value supplied for id".to_string()),
@@ -22256,8 +23341,8 @@ pub mod types {
         impl SystemUpdate {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -22266,8 +23351,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -22276,8 +23361,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -22286,8 +23371,8 @@ pub mod types {
             }
             pub fn version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SemverVersion>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SemverVersion>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version = value
                     .try_into()
@@ -22296,9 +23381,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SystemUpdate> for super::SystemUpdate {
+        impl ::std::convert::TryFrom<SystemUpdate> for super::SystemUpdate {
             type Error = super::error::ConversionError;
-            fn try_from(value: SystemUpdate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SystemUpdate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     time_created: value.time_created?,
@@ -22308,7 +23395,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SystemUpdate> for SystemUpdate {
+        impl ::std::convert::From<super::SystemUpdate> for SystemUpdate {
             fn from(value: super::SystemUpdate) -> Self {
                 Self {
                     id: Ok(value.id),
@@ -22321,11 +23408,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SystemUpdateResultsPage {
-            items: Result<Vec<super::SystemUpdate>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::SystemUpdate>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for SystemUpdateResultsPage {
+        impl ::std::default::Default for SystemUpdateResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -22337,8 +23428,8 @@ pub mod types {
         impl SystemUpdateResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::SystemUpdate>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::SystemUpdate>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -22347,8 +23438,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -22357,11 +23448,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SystemUpdateResultsPage> for super::SystemUpdateResultsPage {
+        impl ::std::convert::TryFrom<SystemUpdateResultsPage> for super::SystemUpdateResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: SystemUpdateResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -22369,7 +23460,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SystemUpdateResultsPage> for SystemUpdateResultsPage {
+        impl ::std::convert::From<super::SystemUpdateResultsPage> for SystemUpdateResultsPage {
             fn from(value: super::SystemUpdateResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -22380,10 +23471,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SystemUpdateStart {
-            version: Result<super::SemverVersion, String>,
+            version: ::std::result::Result<super::SemverVersion, ::std::string::String>,
         }
 
-        impl Default for SystemUpdateStart {
+        impl ::std::default::Default for SystemUpdateStart {
             fn default() -> Self {
                 Self {
                     version: Err("no value supplied for version".to_string()),
@@ -22394,8 +23485,8 @@ pub mod types {
         impl SystemUpdateStart {
             pub fn version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SemverVersion>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SemverVersion>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version = value
                     .try_into()
@@ -22404,16 +23495,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SystemUpdateStart> for super::SystemUpdateStart {
+        impl ::std::convert::TryFrom<SystemUpdateStart> for super::SystemUpdateStart {
             type Error = super::error::ConversionError;
-            fn try_from(value: SystemUpdateStart) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SystemUpdateStart,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     version: value.version?,
                 })
             }
         }
 
-        impl From<super::SystemUpdateStart> for SystemUpdateStart {
+        impl ::std::convert::From<super::SystemUpdateStart> for SystemUpdateStart {
             fn from(value: super::SystemUpdateStart) -> Self {
                 Self {
                     version: Ok(value.version),
@@ -22423,11 +23516,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct SystemVersion {
-            status: Result<super::UpdateStatus, String>,
-            version_range: Result<super::VersionRange, String>,
+            status: ::std::result::Result<super::UpdateStatus, ::std::string::String>,
+            version_range: ::std::result::Result<super::VersionRange, ::std::string::String>,
         }
 
-        impl Default for SystemVersion {
+        impl ::std::default::Default for SystemVersion {
             fn default() -> Self {
                 Self {
                     status: Err("no value supplied for status".to_string()),
@@ -22439,8 +23532,8 @@ pub mod types {
         impl SystemVersion {
             pub fn status<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::UpdateStatus>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::UpdateStatus>,
+                T::Error: ::std::fmt::Display,
             {
                 self.status = value
                     .try_into()
@@ -22449,8 +23542,8 @@ pub mod types {
             }
             pub fn version_range<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VersionRange>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VersionRange>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version_range = value.try_into().map_err(|e| {
                     format!("error converting supplied value for version_range: {}", e)
@@ -22459,9 +23552,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<SystemVersion> for super::SystemVersion {
+        impl ::std::convert::TryFrom<SystemVersion> for super::SystemVersion {
             type Error = super::error::ConversionError;
-            fn try_from(value: SystemVersion) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: SystemVersion,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     status: value.status?,
                     version_range: value.version_range?,
@@ -22469,7 +23564,7 @@ pub mod types {
             }
         }
 
-        impl From<super::SystemVersion> for SystemVersion {
+        impl ::std::convert::From<super::SystemVersion> for SystemVersion {
             fn from(value: super::SystemVersion) -> Self {
                 Self {
                     status: Ok(value.status),
@@ -22480,13 +23575,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct TimeseriesSchema {
-            created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            datum_type: Result<super::DatumType, String>,
-            field_schema: Result<Vec<super::FieldSchema>, String>,
-            timeseries_name: Result<super::TimeseriesName, String>,
+            created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            datum_type: ::std::result::Result<super::DatumType, ::std::string::String>,
+            field_schema:
+                ::std::result::Result<::std::vec::Vec<super::FieldSchema>, ::std::string::String>,
+            timeseries_name: ::std::result::Result<super::TimeseriesName, ::std::string::String>,
         }
 
-        impl Default for TimeseriesSchema {
+        impl ::std::default::Default for TimeseriesSchema {
             fn default() -> Self {
                 Self {
                     created: Err("no value supplied for created".to_string()),
@@ -22500,8 +23597,8 @@ pub mod types {
         impl TimeseriesSchema {
             pub fn created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.created = value
                     .try_into()
@@ -22510,8 +23607,8 @@ pub mod types {
             }
             pub fn datum_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::DatumType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::DatumType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.datum_type = value
                     .try_into()
@@ -22520,8 +23617,8 @@ pub mod types {
             }
             pub fn field_schema<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::FieldSchema>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::FieldSchema>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.field_schema = value.try_into().map_err(|e| {
                     format!("error converting supplied value for field_schema: {}", e)
@@ -22530,8 +23627,8 @@ pub mod types {
             }
             pub fn timeseries_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::TimeseriesName>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::TimeseriesName>,
+                T::Error: ::std::fmt::Display,
             {
                 self.timeseries_name = value.try_into().map_err(|e| {
                     format!("error converting supplied value for timeseries_name: {}", e)
@@ -22540,9 +23637,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<TimeseriesSchema> for super::TimeseriesSchema {
+        impl ::std::convert::TryFrom<TimeseriesSchema> for super::TimeseriesSchema {
             type Error = super::error::ConversionError;
-            fn try_from(value: TimeseriesSchema) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: TimeseriesSchema,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     created: value.created?,
                     datum_type: value.datum_type?,
@@ -22552,7 +23651,7 @@ pub mod types {
             }
         }
 
-        impl From<super::TimeseriesSchema> for TimeseriesSchema {
+        impl ::std::convert::From<super::TimeseriesSchema> for TimeseriesSchema {
             fn from(value: super::TimeseriesSchema) -> Self {
                 Self {
                     created: Ok(value.created),
@@ -22565,11 +23664,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct TimeseriesSchemaResultsPage {
-            items: Result<Vec<super::TimeseriesSchema>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<
+                ::std::vec::Vec<super::TimeseriesSchema>,
+                ::std::string::String,
+            >,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for TimeseriesSchemaResultsPage {
+        impl ::std::default::Default for TimeseriesSchemaResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -22581,8 +23686,8 @@ pub mod types {
         impl TimeseriesSchemaResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::TimeseriesSchema>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::TimeseriesSchema>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -22591,8 +23696,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -22601,11 +23706,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<TimeseriesSchemaResultsPage> for super::TimeseriesSchemaResultsPage {
+        impl ::std::convert::TryFrom<TimeseriesSchemaResultsPage> for super::TimeseriesSchemaResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: TimeseriesSchemaResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -22613,7 +23718,7 @@ pub mod types {
             }
         }
 
-        impl From<super::TimeseriesSchemaResultsPage> for TimeseriesSchemaResultsPage {
+        impl ::std::convert::From<super::TimeseriesSchemaResultsPage> for TimeseriesSchemaResultsPage {
             fn from(value: super::TimeseriesSchemaResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -22624,14 +23729,16 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UpdateDeployment {
-            id: Result<uuid::Uuid, String>,
-            status: Result<super::UpdateStatus, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            version: Result<super::SemverVersion, String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            status: ::std::result::Result<super::UpdateStatus, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            version: ::std::result::Result<super::SemverVersion, ::std::string::String>,
         }
 
-        impl Default for UpdateDeployment {
+        impl ::std::default::Default for UpdateDeployment {
             fn default() -> Self {
                 Self {
                     id: Err("no value supplied for id".to_string()),
@@ -22646,8 +23753,8 @@ pub mod types {
         impl UpdateDeployment {
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -22656,8 +23763,8 @@ pub mod types {
             }
             pub fn status<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::UpdateStatus>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::UpdateStatus>,
+                T::Error: ::std::fmt::Display,
             {
                 self.status = value
                     .try_into()
@@ -22666,8 +23773,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -22676,8 +23783,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -22686,8 +23793,8 @@ pub mod types {
             }
             pub fn version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SemverVersion>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SemverVersion>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version = value
                     .try_into()
@@ -22696,9 +23803,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UpdateDeployment> for super::UpdateDeployment {
+        impl ::std::convert::TryFrom<UpdateDeployment> for super::UpdateDeployment {
             type Error = super::error::ConversionError;
-            fn try_from(value: UpdateDeployment) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UpdateDeployment,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     status: value.status?,
@@ -22709,7 +23818,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UpdateDeployment> for UpdateDeployment {
+        impl ::std::convert::From<super::UpdateDeployment> for UpdateDeployment {
             fn from(value: super::UpdateDeployment) -> Self {
                 Self {
                     id: Ok(value.id),
@@ -22723,11 +23832,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UpdateDeploymentResultsPage {
-            items: Result<Vec<super::UpdateDeployment>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<
+                ::std::vec::Vec<super::UpdateDeployment>,
+                ::std::string::String,
+            >,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for UpdateDeploymentResultsPage {
+        impl ::std::default::Default for UpdateDeploymentResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -22739,8 +23854,8 @@ pub mod types {
         impl UpdateDeploymentResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::UpdateDeployment>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::UpdateDeployment>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -22749,8 +23864,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -22759,11 +23874,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UpdateDeploymentResultsPage> for super::UpdateDeploymentResultsPage {
+        impl ::std::convert::TryFrom<UpdateDeploymentResultsPage> for super::UpdateDeploymentResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: UpdateDeploymentResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -22771,7 +23886,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UpdateDeploymentResultsPage> for UpdateDeploymentResultsPage {
+        impl ::std::convert::From<super::UpdateDeploymentResultsPage> for UpdateDeploymentResultsPage {
             fn from(value: super::UpdateDeploymentResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -22782,17 +23897,20 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UpdateableComponent {
-            component_type: Result<super::UpdateableComponentType, String>,
-            device_id: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            status: Result<super::UpdateStatus, String>,
-            system_version: Result<super::SemverVersion, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            version: Result<super::SemverVersion, String>,
+            component_type:
+                ::std::result::Result<super::UpdateableComponentType, ::std::string::String>,
+            device_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            status: ::std::result::Result<super::UpdateStatus, ::std::string::String>,
+            system_version: ::std::result::Result<super::SemverVersion, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            version: ::std::result::Result<super::SemverVersion, ::std::string::String>,
         }
 
-        impl Default for UpdateableComponent {
+        impl ::std::default::Default for UpdateableComponent {
             fn default() -> Self {
                 Self {
                     component_type: Err("no value supplied for component_type".to_string()),
@@ -22810,8 +23928,8 @@ pub mod types {
         impl UpdateableComponent {
             pub fn component_type<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::UpdateableComponentType>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::UpdateableComponentType>,
+                T::Error: ::std::fmt::Display,
             {
                 self.component_type = value.try_into().map_err(|e| {
                     format!("error converting supplied value for component_type: {}", e)
@@ -22820,8 +23938,8 @@ pub mod types {
             }
             pub fn device_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.device_id = value
                     .try_into()
@@ -22830,8 +23948,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -22840,8 +23958,8 @@ pub mod types {
             }
             pub fn status<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::UpdateStatus>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::UpdateStatus>,
+                T::Error: ::std::fmt::Display,
             {
                 self.status = value
                     .try_into()
@@ -22850,8 +23968,8 @@ pub mod types {
             }
             pub fn system_version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SemverVersion>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SemverVersion>,
+                T::Error: ::std::fmt::Display,
             {
                 self.system_version = value.try_into().map_err(|e| {
                     format!("error converting supplied value for system_version: {}", e)
@@ -22860,8 +23978,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -22870,8 +23988,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -22880,8 +23998,8 @@ pub mod types {
             }
             pub fn version<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SemverVersion>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SemverVersion>,
+                T::Error: ::std::fmt::Display,
             {
                 self.version = value
                     .try_into()
@@ -22890,9 +24008,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UpdateableComponent> for super::UpdateableComponent {
+        impl ::std::convert::TryFrom<UpdateableComponent> for super::UpdateableComponent {
             type Error = super::error::ConversionError;
-            fn try_from(value: UpdateableComponent) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UpdateableComponent,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     component_type: value.component_type?,
                     device_id: value.device_id?,
@@ -22906,7 +24026,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UpdateableComponent> for UpdateableComponent {
+        impl ::std::convert::From<super::UpdateableComponent> for UpdateableComponent {
             fn from(value: super::UpdateableComponent) -> Self {
                 Self {
                     component_type: Ok(value.component_type),
@@ -22923,11 +24043,17 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UpdateableComponentResultsPage {
-            items: Result<Vec<super::UpdateableComponent>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<
+                ::std::vec::Vec<super::UpdateableComponent>,
+                ::std::string::String,
+            >,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for UpdateableComponentResultsPage {
+        impl ::std::default::Default for UpdateableComponentResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -22939,8 +24065,8 @@ pub mod types {
         impl UpdateableComponentResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::UpdateableComponent>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::UpdateableComponent>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -22949,8 +24075,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -22959,13 +24085,13 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UpdateableComponentResultsPage>
+        impl ::std::convert::TryFrom<UpdateableComponentResultsPage>
             for super::UpdateableComponentResultsPage
         {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: UpdateableComponentResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -22973,7 +24099,9 @@ pub mod types {
             }
         }
 
-        impl From<super::UpdateableComponentResultsPage> for UpdateableComponentResultsPage {
+        impl ::std::convert::From<super::UpdateableComponentResultsPage>
+            for UpdateableComponentResultsPage
+        {
             fn from(value: super::UpdateableComponentResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -22984,12 +24112,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct User {
-            display_name: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            silo_id: Result<uuid::Uuid, String>,
+            display_name: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            silo_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for User {
+        impl ::std::default::Default for User {
             fn default() -> Self {
                 Self {
                     display_name: Err("no value supplied for display_name".to_string()),
@@ -23002,8 +24130,8 @@ pub mod types {
         impl User {
             pub fn display_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.display_name = value.try_into().map_err(|e| {
                     format!("error converting supplied value for display_name: {}", e)
@@ -23012,8 +24140,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -23022,8 +24150,8 @@ pub mod types {
             }
             pub fn silo_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.silo_id = value
                     .try_into()
@@ -23032,9 +24160,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<User> for super::User {
+        impl ::std::convert::TryFrom<User> for super::User {
             type Error = super::error::ConversionError;
-            fn try_from(value: User) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: User) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     display_name: value.display_name?,
                     id: value.id?,
@@ -23043,7 +24171,7 @@ pub mod types {
             }
         }
 
-        impl From<super::User> for User {
+        impl ::std::convert::From<super::User> for User {
             fn from(value: super::User) -> Self {
                 Self {
                     display_name: Ok(value.display_name),
@@ -23055,14 +24183,16 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UserBuiltin {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for UserBuiltin {
+        impl ::std::default::Default for UserBuiltin {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -23077,8 +24207,8 @@ pub mod types {
         impl UserBuiltin {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -23087,8 +24217,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -23097,8 +24227,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -23107,8 +24237,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -23117,8 +24247,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -23127,9 +24257,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UserBuiltin> for super::UserBuiltin {
+        impl ::std::convert::TryFrom<UserBuiltin> for super::UserBuiltin {
             type Error = super::error::ConversionError;
-            fn try_from(value: UserBuiltin) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UserBuiltin,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -23140,7 +24272,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UserBuiltin> for UserBuiltin {
+        impl ::std::convert::From<super::UserBuiltin> for UserBuiltin {
             fn from(value: super::UserBuiltin) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -23154,11 +24286,15 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UserBuiltinResultsPage {
-            items: Result<Vec<super::UserBuiltin>, String>,
-            next_page: Result<Option<String>, String>,
+            items:
+                ::std::result::Result<::std::vec::Vec<super::UserBuiltin>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for UserBuiltinResultsPage {
+        impl ::std::default::Default for UserBuiltinResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -23170,8 +24306,8 @@ pub mod types {
         impl UserBuiltinResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::UserBuiltin>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::UserBuiltin>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -23180,8 +24316,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -23190,11 +24326,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UserBuiltinResultsPage> for super::UserBuiltinResultsPage {
+        impl ::std::convert::TryFrom<UserBuiltinResultsPage> for super::UserBuiltinResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: UserBuiltinResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -23202,7 +24338,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UserBuiltinResultsPage> for UserBuiltinResultsPage {
+        impl ::std::convert::From<super::UserBuiltinResultsPage> for UserBuiltinResultsPage {
             fn from(value: super::UserBuiltinResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -23213,11 +24349,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UserCreate {
-            external_id: Result<super::UserId, String>,
-            password: Result<super::UserPassword, String>,
+            external_id: ::std::result::Result<super::UserId, ::std::string::String>,
+            password: ::std::result::Result<super::UserPassword, ::std::string::String>,
         }
 
-        impl Default for UserCreate {
+        impl ::std::default::Default for UserCreate {
             fn default() -> Self {
                 Self {
                     external_id: Err("no value supplied for external_id".to_string()),
@@ -23229,8 +24365,8 @@ pub mod types {
         impl UserCreate {
             pub fn external_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::UserId>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::UserId>,
+                T::Error: ::std::fmt::Display,
             {
                 self.external_id = value
                     .try_into()
@@ -23239,8 +24375,8 @@ pub mod types {
             }
             pub fn password<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::UserPassword>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::UserPassword>,
+                T::Error: ::std::fmt::Display,
             {
                 self.password = value
                     .try_into()
@@ -23249,9 +24385,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UserCreate> for super::UserCreate {
+        impl ::std::convert::TryFrom<UserCreate> for super::UserCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: UserCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UserCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     external_id: value.external_id?,
                     password: value.password?,
@@ -23259,7 +24397,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UserCreate> for UserCreate {
+        impl ::std::convert::From<super::UserCreate> for UserCreate {
             fn from(value: super::UserCreate) -> Self {
                 Self {
                     external_id: Ok(value.external_id),
@@ -23270,11 +24408,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UserResultsPage {
-            items: Result<Vec<super::User>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::User>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for UserResultsPage {
+        impl ::std::default::Default for UserResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -23286,8 +24427,8 @@ pub mod types {
         impl UserResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::User>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::User>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -23296,8 +24437,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -23306,9 +24447,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UserResultsPage> for super::UserResultsPage {
+        impl ::std::convert::TryFrom<UserResultsPage> for super::UserResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: UserResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UserResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -23316,7 +24459,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UserResultsPage> for UserResultsPage {
+        impl ::std::convert::From<super::UserResultsPage> for UserResultsPage {
             fn from(value: super::UserResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -23327,11 +24470,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct UsernamePasswordCredentials {
-            password: Result<super::Password, String>,
-            username: Result<super::UserId, String>,
+            password: ::std::result::Result<super::Password, ::std::string::String>,
+            username: ::std::result::Result<super::UserId, ::std::string::String>,
         }
 
-        impl Default for UsernamePasswordCredentials {
+        impl ::std::default::Default for UsernamePasswordCredentials {
             fn default() -> Self {
                 Self {
                     password: Err("no value supplied for password".to_string()),
@@ -23343,8 +24486,8 @@ pub mod types {
         impl UsernamePasswordCredentials {
             pub fn password<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Password>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Password>,
+                T::Error: ::std::fmt::Display,
             {
                 self.password = value
                     .try_into()
@@ -23353,8 +24496,8 @@ pub mod types {
             }
             pub fn username<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::UserId>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::UserId>,
+                T::Error: ::std::fmt::Display,
             {
                 self.username = value
                     .try_into()
@@ -23363,11 +24506,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UsernamePasswordCredentials> for super::UsernamePasswordCredentials {
+        impl ::std::convert::TryFrom<UsernamePasswordCredentials> for super::UsernamePasswordCredentials {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: UsernamePasswordCredentials,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     password: value.password?,
                     username: value.username?,
@@ -23375,7 +24518,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UsernamePasswordCredentials> for UsernamePasswordCredentials {
+        impl ::std::convert::From<super::UsernamePasswordCredentials> for UsernamePasswordCredentials {
             fn from(value: super::UsernamePasswordCredentials) -> Self {
                 Self {
                     password: Ok(value.password),
@@ -23386,11 +24529,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VersionRange {
-            high: Result<super::SemverVersion, String>,
-            low: Result<super::SemverVersion, String>,
+            high: ::std::result::Result<super::SemverVersion, ::std::string::String>,
+            low: ::std::result::Result<super::SemverVersion, ::std::string::String>,
         }
 
-        impl Default for VersionRange {
+        impl ::std::default::Default for VersionRange {
             fn default() -> Self {
                 Self {
                     high: Err("no value supplied for high".to_string()),
@@ -23402,8 +24545,8 @@ pub mod types {
         impl VersionRange {
             pub fn high<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SemverVersion>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SemverVersion>,
+                T::Error: ::std::fmt::Display,
             {
                 self.high = value
                     .try_into()
@@ -23412,8 +24555,8 @@ pub mod types {
             }
             pub fn low<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::SemverVersion>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::SemverVersion>,
+                T::Error: ::std::fmt::Display,
             {
                 self.low = value
                     .try_into()
@@ -23422,9 +24565,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VersionRange> for super::VersionRange {
+        impl ::std::convert::TryFrom<VersionRange> for super::VersionRange {
             type Error = super::error::ConversionError;
-            fn try_from(value: VersionRange) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VersionRange,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     high: value.high?,
                     low: value.low?,
@@ -23432,7 +24577,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VersionRange> for VersionRange {
+        impl ::std::convert::From<super::VersionRange> for VersionRange {
             fn from(value: super::VersionRange) -> Self {
                 Self {
                     high: Ok(value.high),
@@ -23443,18 +24588,20 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Vpc {
-            description: Result<String, String>,
-            dns_name: Result<super::Name, String>,
-            id: Result<uuid::Uuid, String>,
-            ipv6_prefix: Result<super::Ipv6Net, String>,
-            name: Result<super::Name, String>,
-            project_id: Result<uuid::Uuid, String>,
-            system_router_id: Result<uuid::Uuid, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            dns_name: ::std::result::Result<super::Name, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            ipv6_prefix: ::std::result::Result<super::Ipv6Net, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            project_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            system_router_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
         }
 
-        impl Default for Vpc {
+        impl ::std::default::Default for Vpc {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -23473,8 +24620,8 @@ pub mod types {
         impl Vpc {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -23483,8 +24630,8 @@ pub mod types {
             }
             pub fn dns_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.dns_name = value
                     .try_into()
@@ -23493,8 +24640,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -23503,8 +24650,8 @@ pub mod types {
             }
             pub fn ipv6_prefix<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Ipv6Net>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Ipv6Net>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ipv6_prefix = value
                     .try_into()
@@ -23513,8 +24660,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -23523,8 +24670,8 @@ pub mod types {
             }
             pub fn project_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.project_id = value
                     .try_into()
@@ -23533,8 +24680,8 @@ pub mod types {
             }
             pub fn system_router_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.system_router_id = value.try_into().map_err(|e| {
                     format!(
@@ -23546,8 +24693,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -23556,8 +24703,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -23566,9 +24713,9 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Vpc> for super::Vpc {
+        impl ::std::convert::TryFrom<Vpc> for super::Vpc {
             type Error = super::error::ConversionError;
-            fn try_from(value: Vpc) -> Result<Self, super::error::ConversionError> {
+            fn try_from(value: Vpc) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     dns_name: value.dns_name?,
@@ -23583,7 +24730,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Vpc> for Vpc {
+        impl ::std::convert::From<super::Vpc> for Vpc {
             fn from(value: super::Vpc) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -23601,13 +24748,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcCreate {
-            description: Result<String, String>,
-            dns_name: Result<super::Name, String>,
-            ipv6_prefix: Result<Option<super::Ipv6Net>, String>,
-            name: Result<super::Name, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            dns_name: ::std::result::Result<super::Name, ::std::string::String>,
+            ipv6_prefix:
+                ::std::result::Result<::std::option::Option<super::Ipv6Net>, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for VpcCreate {
+        impl ::std::default::Default for VpcCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -23621,8 +24769,8 @@ pub mod types {
         impl VpcCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -23631,8 +24779,8 @@ pub mod types {
             }
             pub fn dns_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.dns_name = value
                     .try_into()
@@ -23641,8 +24789,8 @@ pub mod types {
             }
             pub fn ipv6_prefix<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Ipv6Net>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Ipv6Net>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ipv6_prefix = value
                     .try_into()
@@ -23651,8 +24799,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -23661,9 +24809,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcCreate> for super::VpcCreate {
+        impl ::std::convert::TryFrom<VpcCreate> for super::VpcCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     dns_name: value.dns_name?,
@@ -23673,7 +24823,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcCreate> for VpcCreate {
+        impl ::std::convert::From<super::VpcCreate> for VpcCreate {
             fn from(value: super::VpcCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -23686,21 +24836,27 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcFirewallRule {
-            action: Result<super::VpcFirewallRuleAction, String>,
-            description: Result<String, String>,
-            direction: Result<super::VpcFirewallRuleDirection, String>,
-            filters: Result<super::VpcFirewallRuleFilter, String>,
-            id: Result<uuid::Uuid, String>,
-            name: Result<super::Name, String>,
-            priority: Result<u16, String>,
-            status: Result<super::VpcFirewallRuleStatus, String>,
-            targets: Result<Vec<super::VpcFirewallRuleTarget>, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            vpc_id: Result<uuid::Uuid, String>,
+            action: ::std::result::Result<super::VpcFirewallRuleAction, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            direction:
+                ::std::result::Result<super::VpcFirewallRuleDirection, ::std::string::String>,
+            filters: ::std::result::Result<super::VpcFirewallRuleFilter, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            priority: ::std::result::Result<u16, ::std::string::String>,
+            status: ::std::result::Result<super::VpcFirewallRuleStatus, ::std::string::String>,
+            targets: ::std::result::Result<
+                ::std::vec::Vec<super::VpcFirewallRuleTarget>,
+                ::std::string::String,
+            >,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            vpc_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for VpcFirewallRule {
+        impl ::std::default::Default for VpcFirewallRule {
             fn default() -> Self {
                 Self {
                     action: Err("no value supplied for action".to_string()),
@@ -23722,8 +24878,8 @@ pub mod types {
         impl VpcFirewallRule {
             pub fn action<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcFirewallRuleAction>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcFirewallRuleAction>,
+                T::Error: ::std::fmt::Display,
             {
                 self.action = value
                     .try_into()
@@ -23732,8 +24888,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -23742,8 +24898,8 @@ pub mod types {
             }
             pub fn direction<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcFirewallRuleDirection>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcFirewallRuleDirection>,
+                T::Error: ::std::fmt::Display,
             {
                 self.direction = value
                     .try_into()
@@ -23752,8 +24908,8 @@ pub mod types {
             }
             pub fn filters<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcFirewallRuleFilter>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcFirewallRuleFilter>,
+                T::Error: ::std::fmt::Display,
             {
                 self.filters = value
                     .try_into()
@@ -23762,8 +24918,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -23772,8 +24928,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -23782,8 +24938,8 @@ pub mod types {
             }
             pub fn priority<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<u16>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<u16>,
+                T::Error: ::std::fmt::Display,
             {
                 self.priority = value
                     .try_into()
@@ -23792,8 +24948,8 @@ pub mod types {
             }
             pub fn status<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcFirewallRuleStatus>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcFirewallRuleStatus>,
+                T::Error: ::std::fmt::Display,
             {
                 self.status = value
                     .try_into()
@@ -23802,8 +24958,8 @@ pub mod types {
             }
             pub fn targets<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::VpcFirewallRuleTarget>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::VpcFirewallRuleTarget>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.targets = value
                     .try_into()
@@ -23812,8 +24968,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -23822,8 +24978,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -23832,8 +24988,8 @@ pub mod types {
             }
             pub fn vpc_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.vpc_id = value
                     .try_into()
@@ -23842,9 +24998,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcFirewallRule> for super::VpcFirewallRule {
+        impl ::std::convert::TryFrom<VpcFirewallRule> for super::VpcFirewallRule {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcFirewallRule) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcFirewallRule,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     action: value.action?,
                     description: value.description?,
@@ -23862,7 +25020,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcFirewallRule> for VpcFirewallRule {
+        impl ::std::convert::From<super::VpcFirewallRule> for VpcFirewallRule {
             fn from(value: super::VpcFirewallRule) -> Self {
                 Self {
                     action: Ok(value.action),
@@ -23883,12 +25041,21 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcFirewallRuleFilter {
-            hosts: Result<Option<Vec<super::VpcFirewallRuleHostFilter>>, String>,
-            ports: Result<Option<Vec<super::L4PortRange>>, String>,
-            protocols: Result<Option<Vec<super::VpcFirewallRuleProtocol>>, String>,
+            hosts: ::std::result::Result<
+                ::std::option::Option<::std::vec::Vec<super::VpcFirewallRuleHostFilter>>,
+                ::std::string::String,
+            >,
+            ports: ::std::result::Result<
+                ::std::option::Option<::std::vec::Vec<super::L4PortRange>>,
+                ::std::string::String,
+            >,
+            protocols: ::std::result::Result<
+                ::std::option::Option<::std::vec::Vec<super::VpcFirewallRuleProtocol>>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for VpcFirewallRuleFilter {
+        impl ::std::default::Default for VpcFirewallRuleFilter {
             fn default() -> Self {
                 Self {
                     hosts: Ok(Default::default()),
@@ -23901,8 +25068,10 @@ pub mod types {
         impl VpcFirewallRuleFilter {
             pub fn hosts<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<Vec<super::VpcFirewallRuleHostFilter>>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<
+                    ::std::option::Option<::std::vec::Vec<super::VpcFirewallRuleHostFilter>>,
+                >,
+                T::Error: ::std::fmt::Display,
             {
                 self.hosts = value
                     .try_into()
@@ -23911,8 +25080,10 @@ pub mod types {
             }
             pub fn ports<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<Vec<super::L4PortRange>>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<
+                    ::std::option::Option<::std::vec::Vec<super::L4PortRange>>,
+                >,
+                T::Error: ::std::fmt::Display,
             {
                 self.ports = value
                     .try_into()
@@ -23921,8 +25092,10 @@ pub mod types {
             }
             pub fn protocols<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<Vec<super::VpcFirewallRuleProtocol>>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<
+                    ::std::option::Option<::std::vec::Vec<super::VpcFirewallRuleProtocol>>,
+                >,
+                T::Error: ::std::fmt::Display,
             {
                 self.protocols = value
                     .try_into()
@@ -23931,11 +25104,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcFirewallRuleFilter> for super::VpcFirewallRuleFilter {
+        impl ::std::convert::TryFrom<VpcFirewallRuleFilter> for super::VpcFirewallRuleFilter {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: VpcFirewallRuleFilter,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     hosts: value.hosts?,
                     ports: value.ports?,
@@ -23944,7 +25117,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcFirewallRuleFilter> for VpcFirewallRuleFilter {
+        impl ::std::convert::From<super::VpcFirewallRuleFilter> for VpcFirewallRuleFilter {
             fn from(value: super::VpcFirewallRuleFilter) -> Self {
                 Self {
                     hosts: Ok(value.hosts),
@@ -23956,17 +25129,21 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcFirewallRuleUpdate {
-            action: Result<super::VpcFirewallRuleAction, String>,
-            description: Result<String, String>,
-            direction: Result<super::VpcFirewallRuleDirection, String>,
-            filters: Result<super::VpcFirewallRuleFilter, String>,
-            name: Result<super::Name, String>,
-            priority: Result<u16, String>,
-            status: Result<super::VpcFirewallRuleStatus, String>,
-            targets: Result<Vec<super::VpcFirewallRuleTarget>, String>,
+            action: ::std::result::Result<super::VpcFirewallRuleAction, ::std::string::String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            direction:
+                ::std::result::Result<super::VpcFirewallRuleDirection, ::std::string::String>,
+            filters: ::std::result::Result<super::VpcFirewallRuleFilter, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            priority: ::std::result::Result<u16, ::std::string::String>,
+            status: ::std::result::Result<super::VpcFirewallRuleStatus, ::std::string::String>,
+            targets: ::std::result::Result<
+                ::std::vec::Vec<super::VpcFirewallRuleTarget>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for VpcFirewallRuleUpdate {
+        impl ::std::default::Default for VpcFirewallRuleUpdate {
             fn default() -> Self {
                 Self {
                     action: Err("no value supplied for action".to_string()),
@@ -23984,8 +25161,8 @@ pub mod types {
         impl VpcFirewallRuleUpdate {
             pub fn action<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcFirewallRuleAction>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcFirewallRuleAction>,
+                T::Error: ::std::fmt::Display,
             {
                 self.action = value
                     .try_into()
@@ -23994,8 +25171,8 @@ pub mod types {
             }
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -24004,8 +25181,8 @@ pub mod types {
             }
             pub fn direction<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcFirewallRuleDirection>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcFirewallRuleDirection>,
+                T::Error: ::std::fmt::Display,
             {
                 self.direction = value
                     .try_into()
@@ -24014,8 +25191,8 @@ pub mod types {
             }
             pub fn filters<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcFirewallRuleFilter>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcFirewallRuleFilter>,
+                T::Error: ::std::fmt::Display,
             {
                 self.filters = value
                     .try_into()
@@ -24024,8 +25201,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -24034,8 +25211,8 @@ pub mod types {
             }
             pub fn priority<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<u16>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<u16>,
+                T::Error: ::std::fmt::Display,
             {
                 self.priority = value
                     .try_into()
@@ -24044,8 +25221,8 @@ pub mod types {
             }
             pub fn status<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcFirewallRuleStatus>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcFirewallRuleStatus>,
+                T::Error: ::std::fmt::Display,
             {
                 self.status = value
                     .try_into()
@@ -24054,8 +25231,8 @@ pub mod types {
             }
             pub fn targets<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::VpcFirewallRuleTarget>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::VpcFirewallRuleTarget>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.targets = value
                     .try_into()
@@ -24064,11 +25241,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcFirewallRuleUpdate> for super::VpcFirewallRuleUpdate {
+        impl ::std::convert::TryFrom<VpcFirewallRuleUpdate> for super::VpcFirewallRuleUpdate {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: VpcFirewallRuleUpdate,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     action: value.action?,
                     description: value.description?,
@@ -24082,7 +25259,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcFirewallRuleUpdate> for VpcFirewallRuleUpdate {
+        impl ::std::convert::From<super::VpcFirewallRuleUpdate> for VpcFirewallRuleUpdate {
             fn from(value: super::VpcFirewallRuleUpdate) -> Self {
                 Self {
                     action: Ok(value.action),
@@ -24099,10 +25276,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcFirewallRuleUpdateParams {
-            rules: Result<Vec<super::VpcFirewallRuleUpdate>, String>,
+            rules: ::std::result::Result<
+                ::std::vec::Vec<super::VpcFirewallRuleUpdate>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for VpcFirewallRuleUpdateParams {
+        impl ::std::default::Default for VpcFirewallRuleUpdateParams {
             fn default() -> Self {
                 Self {
                     rules: Err("no value supplied for rules".to_string()),
@@ -24113,8 +25293,8 @@ pub mod types {
         impl VpcFirewallRuleUpdateParams {
             pub fn rules<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::VpcFirewallRuleUpdate>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::VpcFirewallRuleUpdate>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.rules = value
                     .try_into()
@@ -24123,18 +25303,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcFirewallRuleUpdateParams> for super::VpcFirewallRuleUpdateParams {
+        impl ::std::convert::TryFrom<VpcFirewallRuleUpdateParams> for super::VpcFirewallRuleUpdateParams {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: VpcFirewallRuleUpdateParams,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     rules: value.rules?,
                 })
             }
         }
 
-        impl From<super::VpcFirewallRuleUpdateParams> for VpcFirewallRuleUpdateParams {
+        impl ::std::convert::From<super::VpcFirewallRuleUpdateParams> for VpcFirewallRuleUpdateParams {
             fn from(value: super::VpcFirewallRuleUpdateParams) -> Self {
                 Self {
                     rules: Ok(value.rules),
@@ -24144,10 +25324,13 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcFirewallRules {
-            rules: Result<Vec<super::VpcFirewallRule>, String>,
+            rules: ::std::result::Result<
+                ::std::vec::Vec<super::VpcFirewallRule>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for VpcFirewallRules {
+        impl ::std::default::Default for VpcFirewallRules {
             fn default() -> Self {
                 Self {
                     rules: Err("no value supplied for rules".to_string()),
@@ -24158,8 +25341,8 @@ pub mod types {
         impl VpcFirewallRules {
             pub fn rules<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::VpcFirewallRule>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::VpcFirewallRule>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.rules = value
                     .try_into()
@@ -24168,16 +25351,18 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcFirewallRules> for super::VpcFirewallRules {
+        impl ::std::convert::TryFrom<VpcFirewallRules> for super::VpcFirewallRules {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcFirewallRules) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcFirewallRules,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     rules: value.rules?,
                 })
             }
         }
 
-        impl From<super::VpcFirewallRules> for VpcFirewallRules {
+        impl ::std::convert::From<super::VpcFirewallRules> for VpcFirewallRules {
             fn from(value: super::VpcFirewallRules) -> Self {
                 Self {
                     rules: Ok(value.rules),
@@ -24187,11 +25372,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcResultsPage {
-            items: Result<Vec<super::Vpc>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::Vpc>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for VpcResultsPage {
+        impl ::std::default::Default for VpcResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -24203,8 +25391,8 @@ pub mod types {
         impl VpcResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::Vpc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::Vpc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -24213,8 +25401,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -24223,9 +25411,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcResultsPage> for super::VpcResultsPage {
+        impl ::std::convert::TryFrom<VpcResultsPage> for super::VpcResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -24233,7 +25423,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcResultsPage> for VpcResultsPage {
+        impl ::std::convert::From<super::VpcResultsPage> for VpcResultsPage {
             fn from(value: super::VpcResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -24244,16 +25434,18 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcRouter {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            kind: Result<super::VpcRouterKind, String>,
-            name: Result<super::Name, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            vpc_id: Result<uuid::Uuid, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            kind: ::std::result::Result<super::VpcRouterKind, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            vpc_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for VpcRouter {
+        impl ::std::default::Default for VpcRouter {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -24270,8 +25462,8 @@ pub mod types {
         impl VpcRouter {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -24280,8 +25472,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -24290,8 +25482,8 @@ pub mod types {
             }
             pub fn kind<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::VpcRouterKind>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::VpcRouterKind>,
+                T::Error: ::std::fmt::Display,
             {
                 self.kind = value
                     .try_into()
@@ -24300,8 +25492,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -24310,8 +25502,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -24320,8 +25512,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -24330,8 +25522,8 @@ pub mod types {
             }
             pub fn vpc_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.vpc_id = value
                     .try_into()
@@ -24340,9 +25532,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcRouter> for super::VpcRouter {
+        impl ::std::convert::TryFrom<VpcRouter> for super::VpcRouter {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcRouter) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcRouter,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -24355,7 +25549,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcRouter> for VpcRouter {
+        impl ::std::convert::From<super::VpcRouter> for VpcRouter {
             fn from(value: super::VpcRouter) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -24371,11 +25565,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcRouterCreate {
-            description: Result<String, String>,
-            name: Result<super::Name, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for VpcRouterCreate {
+        impl ::std::default::Default for VpcRouterCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -24387,8 +25581,8 @@ pub mod types {
         impl VpcRouterCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -24397,8 +25591,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -24407,9 +25601,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcRouterCreate> for super::VpcRouterCreate {
+        impl ::std::convert::TryFrom<VpcRouterCreate> for super::VpcRouterCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcRouterCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcRouterCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -24417,7 +25613,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcRouterCreate> for VpcRouterCreate {
+        impl ::std::convert::From<super::VpcRouterCreate> for VpcRouterCreate {
             fn from(value: super::VpcRouterCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -24428,11 +25624,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcRouterResultsPage {
-            items: Result<Vec<super::VpcRouter>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::VpcRouter>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for VpcRouterResultsPage {
+        impl ::std::default::Default for VpcRouterResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -24444,8 +25643,8 @@ pub mod types {
         impl VpcRouterResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::VpcRouter>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::VpcRouter>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -24454,8 +25653,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -24464,11 +25663,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcRouterResultsPage> for super::VpcRouterResultsPage {
+        impl ::std::convert::TryFrom<VpcRouterResultsPage> for super::VpcRouterResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: VpcRouterResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -24476,7 +25675,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcRouterResultsPage> for VpcRouterResultsPage {
+        impl ::std::convert::From<super::VpcRouterResultsPage> for VpcRouterResultsPage {
             fn from(value: super::VpcRouterResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -24487,11 +25686,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcRouterUpdate {
-            description: Result<Option<String>, String>,
-            name: Result<Option<super::Name>, String>,
+            description: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            name: ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
         }
 
-        impl Default for VpcRouterUpdate {
+        impl ::std::default::Default for VpcRouterUpdate {
             fn default() -> Self {
                 Self {
                     description: Ok(Default::default()),
@@ -24503,8 +25705,8 @@ pub mod types {
         impl VpcRouterUpdate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -24513,8 +25715,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -24523,9 +25725,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcRouterUpdate> for super::VpcRouterUpdate {
+        impl ::std::convert::TryFrom<VpcRouterUpdate> for super::VpcRouterUpdate {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcRouterUpdate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcRouterUpdate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -24533,7 +25737,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcRouterUpdate> for VpcRouterUpdate {
+        impl ::std::convert::From<super::VpcRouterUpdate> for VpcRouterUpdate {
             fn from(value: super::VpcRouterUpdate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -24544,17 +25748,19 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcSubnet {
-            description: Result<String, String>,
-            id: Result<uuid::Uuid, String>,
-            ipv4_block: Result<super::Ipv4Net, String>,
-            ipv6_block: Result<super::Ipv6Net, String>,
-            name: Result<super::Name, String>,
-            time_created: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            time_modified: Result<chrono::DateTime<chrono::offset::Utc>, String>,
-            vpc_id: Result<uuid::Uuid, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            ipv4_block: ::std::result::Result<super::Ipv4Net, ::std::string::String>,
+            ipv6_block: ::std::result::Result<super::Ipv6Net, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
+            time_created:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time_modified:
+                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            vpc_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
         }
 
-        impl Default for VpcSubnet {
+        impl ::std::default::Default for VpcSubnet {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -24572,8 +25778,8 @@ pub mod types {
         impl VpcSubnet {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -24582,8 +25788,8 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.id = value
                     .try_into()
@@ -24592,8 +25798,8 @@ pub mod types {
             }
             pub fn ipv4_block<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Ipv4Net>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Ipv4Net>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ipv4_block = value
                     .try_into()
@@ -24602,8 +25808,8 @@ pub mod types {
             }
             pub fn ipv6_block<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Ipv6Net>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Ipv6Net>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ipv6_block = value
                     .try_into()
@@ -24612,8 +25818,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -24622,8 +25828,8 @@ pub mod types {
             }
             pub fn time_created<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_created = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_created: {}", e)
@@ -24632,8 +25838,8 @@ pub mod types {
             }
             pub fn time_modified<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.time_modified = value.try_into().map_err(|e| {
                     format!("error converting supplied value for time_modified: {}", e)
@@ -24642,8 +25848,8 @@ pub mod types {
             }
             pub fn vpc_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<uuid::Uuid>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<uuid::Uuid>,
+                T::Error: ::std::fmt::Display,
             {
                 self.vpc_id = value
                     .try_into()
@@ -24652,9 +25858,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcSubnet> for super::VpcSubnet {
+        impl ::std::convert::TryFrom<VpcSubnet> for super::VpcSubnet {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcSubnet) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcSubnet,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     id: value.id?,
@@ -24668,7 +25876,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcSubnet> for VpcSubnet {
+        impl ::std::convert::From<super::VpcSubnet> for VpcSubnet {
             fn from(value: super::VpcSubnet) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -24685,13 +25893,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcSubnetCreate {
-            description: Result<String, String>,
-            ipv4_block: Result<super::Ipv4Net, String>,
-            ipv6_block: Result<Option<super::Ipv6Net>, String>,
-            name: Result<super::Name, String>,
+            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            ipv4_block: ::std::result::Result<super::Ipv4Net, ::std::string::String>,
+            ipv6_block:
+                ::std::result::Result<::std::option::Option<super::Ipv6Net>, ::std::string::String>,
+            name: ::std::result::Result<super::Name, ::std::string::String>,
         }
 
-        impl Default for VpcSubnetCreate {
+        impl ::std::default::Default for VpcSubnetCreate {
             fn default() -> Self {
                 Self {
                     description: Err("no value supplied for description".to_string()),
@@ -24705,8 +25914,8 @@ pub mod types {
         impl VpcSubnetCreate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -24715,8 +25924,8 @@ pub mod types {
             }
             pub fn ipv4_block<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Ipv4Net>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Ipv4Net>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ipv4_block = value
                     .try_into()
@@ -24725,8 +25934,8 @@ pub mod types {
             }
             pub fn ipv6_block<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Ipv6Net>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Ipv6Net>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.ipv6_block = value
                     .try_into()
@@ -24735,8 +25944,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<super::Name>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<super::Name>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -24745,9 +25954,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcSubnetCreate> for super::VpcSubnetCreate {
+        impl ::std::convert::TryFrom<VpcSubnetCreate> for super::VpcSubnetCreate {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcSubnetCreate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcSubnetCreate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     ipv4_block: value.ipv4_block?,
@@ -24757,7 +25968,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcSubnetCreate> for VpcSubnetCreate {
+        impl ::std::convert::From<super::VpcSubnetCreate> for VpcSubnetCreate {
             fn from(value: super::VpcSubnetCreate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -24770,11 +25981,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcSubnetResultsPage {
-            items: Result<Vec<super::VpcSubnet>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<super::VpcSubnet>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for VpcSubnetResultsPage {
+        impl ::std::default::Default for VpcSubnetResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -24786,8 +26000,8 @@ pub mod types {
         impl VpcSubnetResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<super::VpcSubnet>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<super::VpcSubnet>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -24796,8 +26010,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -24806,11 +26020,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcSubnetResultsPage> for super::VpcSubnetResultsPage {
+        impl ::std::convert::TryFrom<VpcSubnetResultsPage> for super::VpcSubnetResultsPage {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: VpcSubnetResultsPage,
-            ) -> Result<Self, super::error::ConversionError> {
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -24818,7 +26032,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcSubnetResultsPage> for VpcSubnetResultsPage {
+        impl ::std::convert::From<super::VpcSubnetResultsPage> for VpcSubnetResultsPage {
             fn from(value: super::VpcSubnetResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -24829,11 +26043,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcSubnetUpdate {
-            description: Result<Option<String>, String>,
-            name: Result<Option<super::Name>, String>,
+            description: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            name: ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
         }
 
-        impl Default for VpcSubnetUpdate {
+        impl ::std::default::Default for VpcSubnetUpdate {
             fn default() -> Self {
                 Self {
                     description: Ok(Default::default()),
@@ -24845,8 +26062,8 @@ pub mod types {
         impl VpcSubnetUpdate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -24855,8 +26072,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -24865,9 +26082,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcSubnetUpdate> for super::VpcSubnetUpdate {
+        impl ::std::convert::TryFrom<VpcSubnetUpdate> for super::VpcSubnetUpdate {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcSubnetUpdate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcSubnetUpdate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     name: value.name?,
@@ -24875,7 +26094,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcSubnetUpdate> for VpcSubnetUpdate {
+        impl ::std::convert::From<super::VpcSubnetUpdate> for VpcSubnetUpdate {
             fn from(value: super::VpcSubnetUpdate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -24886,12 +26105,16 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct VpcUpdate {
-            description: Result<Option<String>, String>,
-            dns_name: Result<Option<super::Name>, String>,
-            name: Result<Option<super::Name>, String>,
+            description: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            dns_name:
+                ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
+            name: ::std::result::Result<::std::option::Option<super::Name>, ::std::string::String>,
         }
 
-        impl Default for VpcUpdate {
+        impl ::std::default::Default for VpcUpdate {
             fn default() -> Self {
                 Self {
                     description: Ok(Default::default()),
@@ -24904,8 +26127,8 @@ pub mod types {
         impl VpcUpdate {
             pub fn description<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.description = value
                     .try_into()
@@ -24914,8 +26137,8 @@ pub mod types {
             }
             pub fn dns_name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.dns_name = value
                     .try_into()
@@ -24924,8 +26147,8 @@ pub mod types {
             }
             pub fn name<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<super::Name>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<super::Name>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.name = value
                     .try_into()
@@ -24934,9 +26157,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<VpcUpdate> for super::VpcUpdate {
+        impl ::std::convert::TryFrom<VpcUpdate> for super::VpcUpdate {
             type Error = super::error::ConversionError;
-            fn try_from(value: VpcUpdate) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: VpcUpdate,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     description: value.description?,
                     dns_name: value.dns_name?,
@@ -24945,7 +26170,7 @@ pub mod types {
             }
         }
 
-        impl From<super::VpcUpdate> for VpcUpdate {
+        impl ::std::convert::From<super::VpcUpdate> for VpcUpdate {
             fn from(value: super::VpcUpdate) -> Self {
                 Self {
                     description: Ok(value.description),
@@ -36030,7 +37255,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::DeviceAuthRequest::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36090,7 +37315,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::DeviceAuthVerify::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36157,7 +37382,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::DeviceAccessTokenRequest::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36215,7 +37440,7 @@ pub mod builder {
     pub struct GroupList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -36241,12 +37466,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -36280,16 +37504,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/groups", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -36297,7 +37511,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::GroupList {
                 client: client,
@@ -36313,16 +37532,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -36357,7 +37567,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -36375,7 +37584,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SpoofLoginBody::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36442,7 +37651,7 @@ pub mod builder {
             Self {
                 client: client,
                 silo_name: Err("silo_name was not initialized".to_string()),
-                body: Ok(types::builder::UsernamePasswordCredentials::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36711,7 +37920,7 @@ pub mod builder {
     pub struct OrganizationList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
 
@@ -36737,12 +37946,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -36776,16 +37984,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/organizations", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -36793,7 +37991,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::OrganizationList {
                 client: client,
@@ -36809,16 +38012,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -36853,7 +38047,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -36871,7 +38064,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::OrganizationCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -36996,7 +38189,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
-                body: Ok(types::builder::OrganizationUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -37198,7 +38391,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
-                body: Ok(types::builder::OrganizationRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -37283,7 +38476,7 @@ pub mod builder {
         client: &'a super::Client,
         organization_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
 
@@ -37320,12 +38513,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -37366,16 +38558,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&organization_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -37383,7 +38565,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::ProjectList {
                 client: client,
@@ -37400,16 +38587,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -37444,7 +38622,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -37464,7 +38641,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
-                body: Ok(types::builder::ProjectCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -37625,7 +38802,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::ProjectUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -37791,7 +38968,7 @@ pub mod builder {
         organization_name: Result<types::Name, String>,
         project_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -37839,12 +39016,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -37888,16 +39064,6 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                     encode_path(&project_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -37905,7 +39071,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::DiskList {
                 client: client,
@@ -37922,16 +39093,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -37966,7 +39128,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -37988,7 +39149,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::DiskCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -38261,7 +39422,7 @@ pub mod builder {
         metric_name: Result<types::DiskMetricName, String>,
         end_time: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         start_time: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
     }
 
@@ -38343,12 +39504,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -38402,19 +39562,6 @@ pub mod builder {
                     encode_path(&disk_name.to_string()),
                     encode_path(&metric_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(4usize);
-                if let Some(v) = &end_time {
-                    query.push(("end_time", v.to_string()));
-                }
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &start_time {
-                    query.push(("start_time", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -38422,7 +39569,16 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("end_time", &end_time))
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new(
+                        "start_time",
+                        &start_time,
+                    ))
             };
             Ok(built::DiskMetricsList {
                 client: client,
@@ -38440,17 +39596,8 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
                 end_time: Ok(None),
-                limit: Ok(None),
                 page_token: Ok(None),
                 start_time: Ok(None),
                 ..self.clone()
@@ -38485,7 +39632,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -38499,7 +39645,7 @@ pub mod builder {
         organization_name: Result<types::Name, String>,
         project_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -38547,12 +39693,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -38596,16 +39741,6 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                     encode_path(&project_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -38613,7 +39748,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::ImageList {
                 client: client,
@@ -38630,16 +39770,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -38674,7 +39805,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -38696,7 +39826,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::ImageCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -38966,7 +40096,7 @@ pub mod builder {
         organization_name: Result<types::Name, String>,
         project_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -39014,12 +40144,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -39064,16 +40193,6 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                     encode_path(&project_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -39081,7 +40200,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::InstanceList {
                 client: client,
@@ -39099,16 +40223,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -39143,7 +40258,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -39165,7 +40279,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::InstanceCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -39437,7 +40551,7 @@ pub mod builder {
         project_name: Result<types::Name, String>,
         instance_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -39496,12 +40610,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -39549,16 +40662,6 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -39566,7 +40669,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::InstanceDiskList {
                 client: client,
@@ -39584,16 +40692,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -39628,7 +40727,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -39652,7 +40750,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
-                body: Ok(types::builder::DiskIdentifier::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -39770,7 +40868,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
-                body: Ok(types::builder::DiskIdentifier::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -39978,7 +41076,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
-                body: Ok(types::builder::InstanceMigrate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -40087,7 +41185,7 @@ pub mod builder {
         project_name: Result<types::Name, String>,
         instance_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -40146,12 +41244,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -40200,16 +41297,6 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -40217,7 +41304,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::InstanceNetworkInterfaceList {
                 client: client,
@@ -40235,16 +41327,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -40279,7 +41362,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -40303,7 +41385,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
-                body: Ok(types::builder::NetworkInterfaceCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -40536,7 +41618,7 @@ pub mod builder {
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
                 interface_name: Err("interface_name was not initialized".to_string()),
-                body: Ok(types::builder::NetworkInterfaceUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -40972,16 +42054,6 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&instance_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &from_start {
-                    query.push(("from_start", v.to_string()));
-                }
-                if let Some(v) = &max_bytes {
-                    query.push(("max_bytes", v.to_string()));
-                }
-                if let Some(v) = &most_recent {
-                    query.push(("most_recent", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -40989,7 +42061,15 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "from_start",
+                        &from_start,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
+                    .query(&progenitor_client::QueryParam::new(
+                        "most_recent",
+                        &most_recent,
+                    ))
             };
             Ok(built::InstanceSerialConsole {
                 client: client,
@@ -41366,7 +42446,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::ProjectRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -41464,7 +42544,7 @@ pub mod builder {
         organization_name: Result<types::Name, String>,
         project_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -41512,12 +42592,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -41562,16 +42641,6 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                     encode_path(&project_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -41579,7 +42648,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SnapshotList {
                 client: client,
@@ -41597,16 +42671,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -41641,7 +42706,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -41663,7 +42727,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::SnapshotCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -41934,7 +42998,7 @@ pub mod builder {
         organization_name: Result<types::Name, String>,
         project_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -41982,12 +43046,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -42031,16 +43094,6 @@ pub mod builder {
                     encode_path(&organization_name.to_string()),
                     encode_path(&project_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -42048,7 +43101,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::VpcList {
                 client: client,
@@ -42065,16 +43123,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -42109,7 +43158,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -42131,7 +43179,7 @@ pub mod builder {
                 client: client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -42323,7 +43371,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -42619,7 +43667,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcFirewallRuleUpdateParams::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -42737,7 +43785,7 @@ pub mod builder {
         project_name: Result<types::Name, String>,
         vpc_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -42796,12 +43844,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -42849,16 +43896,6 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&vpc_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -42866,7 +43903,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::VpcRouterList {
                 client: client,
@@ -42884,16 +43926,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -42928,7 +43961,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -42952,7 +43984,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcRouterCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -43175,7 +44207,7 @@ pub mod builder {
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
                 router_name: Err("router_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcRouterUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -43401,7 +44433,7 @@ pub mod builder {
         vpc_name: Result<types::Name, String>,
         router_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -43471,12 +44503,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -43527,16 +44558,6 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                     encode_path(&router_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -43544,7 +44565,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::VpcRouterRouteList {
                 client: client,
@@ -43562,16 +44588,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -43606,7 +44623,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -43632,7 +44648,7 @@ pub mod builder {
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
                 router_name: Err("router_name was not initialized".to_string()),
-                body: Ok(types::builder::RouterRouteCreateParams::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -43891,7 +44907,7 @@ pub mod builder {
                 vpc_name: Err("vpc_name was not initialized".to_string()),
                 router_name: Err("router_name was not initialized".to_string()),
                 route_name: Err("route_name was not initialized".to_string()),
-                body: Ok(types::builder::RouterRouteUpdateParams::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -44150,7 +45166,7 @@ pub mod builder {
         project_name: Result<types::Name, String>,
         vpc_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -44209,12 +45225,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -44262,16 +45277,6 @@ pub mod builder {
                     encode_path(&project_name.to_string()),
                     encode_path(&vpc_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -44279,7 +45284,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::VpcSubnetList {
                 client: client,
@@ -44297,16 +45307,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -44341,7 +45342,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -44365,7 +45365,7 @@ pub mod builder {
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcSubnetCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -44588,7 +45588,7 @@ pub mod builder {
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
                 subnet_name: Err("subnet_name was not initialized".to_string()),
-                body: Ok(types::builder::VpcSubnetUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -44814,7 +45814,7 @@ pub mod builder {
         vpc_name: Result<types::Name, String>,
         subnet_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -44884,12 +45884,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -44943,16 +45942,6 @@ pub mod builder {
                     encode_path(&vpc_name.to_string()),
                     encode_path(&subnet_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -44960,7 +45949,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::VpcSubnetListNetworkInterfaces {
                 client: client,
@@ -44978,16 +45972,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -45022,7 +46007,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -45076,7 +46060,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SiloRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -45137,7 +46121,7 @@ pub mod builder {
     pub struct RoleList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> RoleList<'a> {
@@ -45161,12 +46145,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -45187,13 +46170,6 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/roles", client.baseurl,);
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -45201,7 +46177,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
             };
             Ok(built::RoleList {
                 client: client,
@@ -45217,16 +46197,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 ..self.clone()
             };
@@ -45260,7 +46231,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -45271,7 +46241,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct RoleView<'a> {
         client: &'a super::Client,
-        role_name: Result<String, String>,
+        role_name: Result<::std::string::String, String>,
     }
 
     impl<'a> RoleView<'a> {
@@ -45284,11 +46254,11 @@ pub mod builder {
 
         pub fn role_name<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.role_name = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for role_name failed".to_string());
+            self.role_name = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for role_name failed".to_string()
+            });
             self
         }
 
@@ -45359,7 +46329,7 @@ pub mod builder {
     pub struct SessionMeGroups<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -45385,12 +46355,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -45424,16 +46393,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/session/me/groups", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -45441,7 +46400,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SessionMeGroups {
                 client: client,
@@ -45457,16 +46421,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -45501,7 +46456,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -45513,7 +46467,7 @@ pub mod builder {
     pub struct SessionSshkeyList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -45539,12 +46493,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -45578,16 +46531,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/session/me/sshkeys", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -45595,7 +46538,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SessionSshkeyList {
                 client: client,
@@ -45611,16 +46559,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -45655,7 +46594,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -45673,7 +46611,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SshKeyCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -46003,7 +46941,7 @@ pub mod builder {
     pub struct CertificateList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -46029,12 +46967,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -46068,16 +47005,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/certificates", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -46085,7 +47012,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::CertificateList {
                 client: client,
@@ -46101,16 +47033,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -46145,7 +47068,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -46163,7 +47085,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::CertificateCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -46336,7 +47258,7 @@ pub mod builder {
     pub struct PhysicalDiskList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -46362,12 +47284,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -46401,16 +47322,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/hardware/disks", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -46418,7 +47329,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::PhysicalDiskList {
                 client: client,
@@ -46434,16 +47350,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -46478,7 +47385,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -46490,7 +47396,7 @@ pub mod builder {
     pub struct RackList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -46516,12 +47422,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -46555,16 +47460,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/hardware/racks", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -46572,7 +47467,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::RackList {
                 client: client,
@@ -46588,16 +47488,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -46632,7 +47523,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -46697,7 +47587,7 @@ pub mod builder {
     pub struct SledList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -46723,12 +47613,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -46762,16 +47651,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/hardware/sleds", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -46779,7 +47658,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SledList {
                 client: client,
@@ -46795,16 +47679,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -46839,7 +47714,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -46905,7 +47779,7 @@ pub mod builder {
         client: &'a super::Client,
         sled_id: Result<uuid::Uuid, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -46942,12 +47816,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -46987,16 +47860,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&sled_id.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -47004,7 +47867,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SledPhysicalDiskList {
                 client: client,
@@ -47020,16 +47888,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -47064,7 +47923,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -47076,7 +47934,7 @@ pub mod builder {
     pub struct SystemImageList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -47102,12 +47960,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -47141,16 +47998,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/images", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -47158,7 +48005,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SystemImageList {
                 client: client,
@@ -47174,16 +48026,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -47218,7 +48061,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -47236,7 +48078,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::GlobalImageCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -47403,7 +48245,7 @@ pub mod builder {
     pub struct IpPoolList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
 
@@ -47429,12 +48271,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -47468,16 +48309,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/ip-pools", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -47485,7 +48316,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::IpPoolList {
                 client: client,
@@ -47501,16 +48337,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -47545,7 +48372,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -47563,7 +48389,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::IpPoolCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -47683,7 +48509,7 @@ pub mod builder {
             Self {
                 client: client,
                 pool_name: Err("pool_name was not initialized".to_string()),
-                body: Ok(types::builder::IpPoolUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -47815,7 +48641,7 @@ pub mod builder {
         client: &'a super::Client,
         pool_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> IpPoolRangeList<'a> {
@@ -47850,12 +48676,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -47882,13 +48707,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&pool_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -47896,7 +48714,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
             };
             Ok(built::IpPoolRangeList {
                 client: client,
@@ -47912,16 +48734,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 ..self.clone()
             };
@@ -47955,7 +48768,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -48150,7 +48962,7 @@ pub mod builder {
     pub struct IpPoolServiceRangeList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> IpPoolServiceRangeList<'a> {
@@ -48174,12 +48986,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -48200,13 +49011,6 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/ip-pools-service/ranges", client.baseurl,);
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -48214,7 +49018,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
             };
             Ok(built::IpPoolServiceRangeList {
                 client: client,
@@ -48230,16 +49038,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 ..self.clone()
             };
@@ -48273,7 +49072,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -48394,7 +49192,7 @@ pub mod builder {
         end_time: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
         id: Result<uuid::Uuid, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         start_time: Result<Option<chrono::DateTime<chrono::offset::Utc>>, String>,
     }
 
@@ -48454,12 +49252,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -48504,20 +49301,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&metric_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(5usize);
-                if let Some(v) = &end_time {
-                    query.push(("end_time", v.to_string()));
-                }
-                query.push(("id", id.to_string()));
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &start_time {
-                    query.push(("start_time", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -48525,7 +49308,17 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("end_time", &end_time))
+                    .query(&progenitor_client::QueryParam::new("id", &id))
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new(
+                        "start_time",
+                        &start_time,
+                    ))
             };
             Ok(built::SystemMetric {
                 client: client,
@@ -48583,7 +49376,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::FleetRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -48644,7 +49437,7 @@ pub mod builder {
     pub struct SagaList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -48670,12 +49463,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -48709,16 +49501,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/sagas", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -48726,7 +49508,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SagaList {
                 client: client,
@@ -48742,16 +49529,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -48786,7 +49564,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -48851,7 +49628,7 @@ pub mod builder {
     pub struct SiloList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
 
@@ -48877,12 +49654,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -48916,16 +49692,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/silos", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -48933,7 +49699,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SiloList {
                 client: client,
@@ -48949,16 +49720,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -48993,7 +49755,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -49011,7 +49772,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SiloCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -49177,7 +49938,7 @@ pub mod builder {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -49214,12 +49975,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -49261,16 +50021,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&silo_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -49278,7 +50028,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SiloIdentityProviderList {
                 client: client,
@@ -49295,16 +50050,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -49339,7 +50085,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -49359,7 +50104,7 @@ pub mod builder {
             Self {
                 client: client,
                 silo_name: Err("silo_name was not initialized".to_string()),
-                body: Ok(types::builder::UserCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -49609,7 +50354,7 @@ pub mod builder {
             Self {
                 client: client,
                 silo_name: Err("silo_name was not initialized".to_string()),
-                body: Ok(types::builder::SamlIdentityProviderCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -49834,7 +50579,7 @@ pub mod builder {
             Self {
                 client: client,
                 silo_name: Err("silo_name was not initialized".to_string()),
-                body: Ok(types::builder::SiloRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -49915,7 +50660,7 @@ pub mod builder {
         client: &'a super::Client,
         silo_name: Result<types::Name, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -49952,12 +50697,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -49997,16 +50741,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&silo_name.to_string()),
                 );
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -50014,7 +50748,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SiloUsersList {
                 client: client,
@@ -50030,16 +50769,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -50074,7 +50804,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -50158,7 +50887,7 @@ pub mod builder {
     pub struct SystemUserList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameSortMode>, String>,
     }
 
@@ -50184,12 +50913,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -50223,16 +50951,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/system/user", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -50240,7 +50958,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SystemUserList {
                 client: client,
@@ -50256,16 +50979,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -50300,7 +51014,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -50365,7 +51078,7 @@ pub mod builder {
     pub struct TimeseriesSchemaGet<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> TimeseriesSchemaGet<'a> {
@@ -50389,12 +51102,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -50416,13 +51128,6 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/timeseries/schema", client.baseurl,);
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -50430,7 +51135,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
             };
             Ok(built::TimeseriesSchemaGet {
                 client: client,
@@ -50446,16 +51155,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 ..self.clone()
             };
@@ -50489,7 +51189,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -50501,7 +51200,7 @@ pub mod builder {
     pub struct UserList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -50527,12 +51226,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -50566,16 +51264,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/users", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -50583,7 +51271,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::UserList {
                 client: client,
@@ -50599,16 +51292,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -50643,7 +51327,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -50656,7 +51339,7 @@ pub mod builder {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
         organization: Result<Option<types::NameOrId>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         project: Result<Option<types::NameOrId>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
@@ -50696,12 +51379,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -50750,22 +51432,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/disks", client.baseurl,);
-                let mut query = Vec::with_capacity(5usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -50773,7 +51439,17 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::DiskListV1 {
                 client: client,
@@ -50789,16 +51465,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
                 project: Ok(None),
@@ -50835,7 +51502,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -50857,7 +51523,7 @@ pub mod builder {
                 client: client,
                 organization: Ok(None),
                 project: Err("project was not initialized".to_string()),
-                body: Ok(types::builder::DiskCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -50921,11 +51587,6 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/disks", client.baseurl,);
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                query.push(("project", project.to_string()));
                 client
                     .client
                     .post(url)
@@ -50934,7 +51595,11 @@ pub mod builder {
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::DiskCreateV1 {
                 client: client,
@@ -51017,13 +51682,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&disk.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -51031,7 +51689,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::DiskViewV1 {
                 client: client,
@@ -51114,13 +51776,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&disk.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .delete(url)
@@ -51128,7 +51783,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::DiskDeleteV1 {
                 client: client,
@@ -51145,7 +51804,7 @@ pub mod builder {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
         organization: Result<Option<types::NameOrId>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         project: Result<Option<types::NameOrId>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
@@ -51185,12 +51844,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -51239,22 +51897,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/instances", client.baseurl,);
-                let mut query = Vec::with_capacity(5usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -51262,7 +51904,17 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::InstanceListV1 {
                 client: client,
@@ -51278,16 +51930,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
                 project: Ok(None),
@@ -51324,7 +51967,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -51346,7 +51988,7 @@ pub mod builder {
                 client: client,
                 organization: Ok(None),
                 project: Err("project was not initialized".to_string()),
-                body: Ok(types::builder::InstanceCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -51410,11 +52052,6 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/instances", client.baseurl,);
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                query.push(("project", project.to_string()));
                 client
                     .client
                     .post(url)
@@ -51423,7 +52060,11 @@ pub mod builder {
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceCreateV1 {
                 client: client,
@@ -51506,13 +52147,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -51520,7 +52154,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceViewV1 {
                 client: client,
@@ -51603,13 +52241,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .delete(url)
@@ -51617,7 +52248,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceDeleteV1 {
                 client: client,
@@ -51635,7 +52270,7 @@ pub mod builder {
         instance: Result<types::NameOrId, String>,
         limit: Result<Option<std::num::NonZeroU32>, String>,
         organization: Result<Option<types::NameOrId>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         project: Result<Option<types::NameOrId>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
@@ -51686,12 +52321,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -51746,22 +52380,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(5usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -51769,7 +52387,17 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::InstanceDiskListV1 {
                 client: client,
@@ -51785,16 +52413,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
                 project: Ok(None),
@@ -51831,7 +52450,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -51855,7 +52473,7 @@ pub mod builder {
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
-                body: Ok(types::builder::DiskPath::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -51936,13 +52554,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .post(url)
@@ -51951,7 +52562,11 @@ pub mod builder {
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceDiskAttachV1 {
                 client: client,
@@ -51979,7 +52594,7 @@ pub mod builder {
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
-                body: Ok(types::builder::DiskPath::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -52060,13 +52675,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .post(url)
@@ -52075,7 +52683,11 @@ pub mod builder {
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceDiskDetachV1 {
                 client: client,
@@ -52103,7 +52715,7 @@ pub mod builder {
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
-                body: Ok(types::builder::InstanceMigrate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -52184,13 +52796,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .post(url)
@@ -52199,7 +52804,11 @@ pub mod builder {
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceMigrateV1 {
                 client: client,
@@ -52282,13 +52891,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .post(url)
@@ -52296,7 +52898,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceRebootV1 {
                 client: client,
@@ -52426,22 +53032,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(5usize);
-                if let Some(v) = &from_start {
-                    query.push(("from_start", v.to_string()));
-                }
-                if let Some(v) = &max_bytes {
-                    query.push(("max_bytes", v.to_string()));
-                }
-                if let Some(v) = &most_recent {
-                    query.push(("most_recent", v.to_string()));
-                }
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -52449,7 +53039,20 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "from_start",
+                        &from_start,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
+                    .query(&progenitor_client::QueryParam::new(
+                        "most_recent",
+                        &most_recent,
+                    ))
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceSerialConsoleV1 {
                 client: client,
@@ -52537,17 +53140,14 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
                     .header(reqwest::header::CONNECTION, "Upgrade")
                     .header(reqwest::header::UPGRADE, "websocket")
                     .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -52640,13 +53240,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .post(url)
@@ -52654,7 +53247,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceStartV1 {
                 client: client,
@@ -52737,13 +53334,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&instance.to_string()),
                 );
-                let mut query = Vec::with_capacity(2usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &project {
-                    query.push(("project", v.to_string()));
-                }
                 client
                     .client
                     .post(url)
@@ -52751,7 +53341,11 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("project", &project))
             };
             Ok(built::InstanceStopV1 {
                 client: client,
@@ -52767,7 +53361,7 @@ pub mod builder {
     pub struct OrganizationListV1<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
 
@@ -52793,12 +53387,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -52832,16 +53425,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/organizations", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -52849,7 +53432,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::OrganizationListV1 {
                 client: client,
@@ -52865,16 +53453,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -52909,7 +53488,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -52927,7 +53505,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::OrganizationCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -53052,7 +53630,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization: Err("organization was not initialized".to_string()),
-                body: Ok(types::builder::OrganizationUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -53254,7 +53832,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization: Err("organization was not initialized".to_string()),
-                body: Ok(types::builder::OrganizationRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -53339,7 +53917,7 @@ pub mod builder {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
         organization: Result<Option<types::NameOrId>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::NameOrIdSortMode>, String>,
     }
 
@@ -53377,12 +53955,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -53418,19 +53995,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/projects", client.baseurl,);
-                let mut query = Vec::with_capacity(4usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -53438,7 +54002,16 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::ProjectListV1 {
                 client: client,
@@ -53454,16 +54027,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -53499,7 +54063,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -53519,7 +54082,7 @@ pub mod builder {
             Self {
                 client: client,
                 organization: Err("organization was not initialized".to_string()),
-                body: Ok(types::builder::ProjectCreate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -53570,8 +54133,6 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/projects", client.baseurl,);
-                let mut query = Vec::with_capacity(1usize);
-                query.push(("organization", organization.to_string()));
                 client
                     .client
                     .post(url)
@@ -53580,7 +54141,10 @@ pub mod builder {
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
             };
             Ok(built::ProjectCreateV1 {
                 client: client,
@@ -53648,10 +54212,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&project.to_string()),
                 );
-                let mut query = Vec::with_capacity(1usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -53659,7 +54219,10 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
             };
             Ok(built::ProjectViewV1 {
                 client: client,
@@ -53685,7 +54248,7 @@ pub mod builder {
                 client: client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
-                body: Ok(types::builder::ProjectUpdate::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -53753,10 +54316,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&project.to_string()),
                 );
-                let mut query = Vec::with_capacity(1usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
                 client
                     .client
                     .put(url)
@@ -53765,7 +54324,10 @@ pub mod builder {
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
             };
             Ok(built::ProjectUpdateV1 {
                 client: client,
@@ -53833,10 +54395,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&project.to_string()),
                 );
-                let mut query = Vec::with_capacity(1usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
                 client
                     .client
                     .delete(url)
@@ -53844,7 +54402,10 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
             };
             Ok(built::ProjectDeleteV1 {
                 client: client,
@@ -53914,10 +54475,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&project.to_string()),
                 );
-                let mut query = Vec::with_capacity(1usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -53925,7 +54482,10 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
             };
             Ok(built::ProjectPolicyViewV1 {
                 client: client,
@@ -53951,7 +54511,7 @@ pub mod builder {
                 client: client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
-                body: Ok(types::builder::ProjectRolePolicy::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -54023,10 +54583,6 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&project.to_string()),
                 );
-                let mut query = Vec::with_capacity(1usize);
-                if let Some(v) = &organization {
-                    query.push(("organization", v.to_string()));
-                }
                 client
                     .client
                     .put(url)
@@ -54035,7 +54591,10 @@ pub mod builder {
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new(
+                        "organization",
+                        &organization,
+                    ))
             };
             Ok(built::ProjectPolicyUpdateV1 {
                 client: client,
@@ -54051,7 +54610,7 @@ pub mod builder {
     pub struct SystemComponentVersionList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -54077,12 +54636,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -54117,16 +54675,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/system/update/components", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -54134,7 +54682,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SystemComponentVersionList {
                 client: client,
@@ -54151,16 +54704,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -54195,7 +54739,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -54207,7 +54750,7 @@ pub mod builder {
     pub struct UpdateDeploymentsList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -54233,12 +54776,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -54273,16 +54815,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/system/update/deployments", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -54290,7 +54822,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::UpdateDeploymentsList {
                 client: client,
@@ -54306,16 +54843,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -54350,7 +54878,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }
@@ -54457,7 +54984,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                body: Ok(types::builder::SystemUpdateStart::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
@@ -54554,7 +55081,7 @@ pub mod builder {
     pub struct SystemUpdateList<'a> {
         client: &'a super::Client,
         limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
         sort_by: Result<Option<types::IdSortMode>, String>,
     }
 
@@ -54580,12 +55107,11 @@ pub mod builder {
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -54619,16 +55145,6 @@ pub mod builder {
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/system/update/updates", client.baseurl,);
-                let mut query = Vec::with_capacity(3usize);
-                if let Some(v) = &limit {
-                    query.push(("limit", v.to_string()));
-                }
-                if let Some(v) = &page_token {
-                    query.push(("page_token", v.to_string()));
-                }
-                if let Some(v) = &sort_by {
-                    query.push(("sort_by", v.to_string()));
-                }
                 client
                     .client
                     .get(url)
@@ -54636,7 +55152,12 @@ pub mod builder {
                         reqwest::header::ACCEPT,
                         reqwest::header::HeaderValue::from_static("application/json"),
                     )
-                    .query(&query)
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+                    .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             };
             Ok(built::SystemUpdateList {
                 client: client,
@@ -54652,16 +55173,7 @@ pub mod builder {
             use futures::StreamExt;
             use futures::TryFutureExt;
             use futures::TryStreamExt;
-            let limit = self
-                .limit
-                .clone()
-                .ok()
-                .flatten()
-                .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                .map(std::num::NonZeroUsize::get)
-                .unwrap_or(usize::MAX);
             let next = Self {
-                limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
                 ..self.clone()
@@ -54696,7 +55208,6 @@ pub mod builder {
                     first.chain(rest)
                 })
                 .try_flatten_stream()
-                .take(limit)
                 .boxed()
         }
     }

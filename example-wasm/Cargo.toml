@@ -6,16 +6,16 @@ edition = "2021"
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
 progenitor-client = { path = "../progenitor-client" }
-reqwest = { version = "0.12.1", features = ["json", "stream"] }
+reqwest = { version = "0.12.4", features = ["json", "stream"] }
 base64 = "0.22"
 serde = { version = "1.0", features = ["derive"] }
-uuid = { version = "1.7", features = ["serde", "v4", "js"] }
+uuid = { version = "1.11", features = ["serde", "v4", "js"] }
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.42"
+wasm-bindgen-test = "0.3.45"
 
 [build-dependencies]
-prettyplease = "0.2.17"
+prettyplease = "0.2.25"
 progenitor = { path = "../progenitor" }
 serde_json = "1.0"
 syn = "2.0"

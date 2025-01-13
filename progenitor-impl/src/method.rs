@@ -150,9 +150,7 @@ impl FromStr for BodyContentType {
             "application/octet-stream" => Ok(Self::OctetStream),
             "application/json" => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
-            "text/plain" | "text/x-markdown" => {
-                Ok(Self::Text(String::from(&s[..offset])))
-            }
+            "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
                 s
@@ -296,12 +294,10 @@ impl Generator {
     ) -> Result<OperationMethod> {
         let operation_id = operation.operation_id.as_ref().unwrap();
 
-        let mut combined_path_parameters =
-            parameter_map(path_parameters, components)?;
+        let mut combined_path_parameters = parameter_map(path_parameters, components)?;
         for operation_param in items(&operation.parameters, components) {
             let parameter = operation_param?;
-            combined_path_parameters
-                .insert(&parameter.parameter_data_ref().name, parameter);
+            combined_path_parameters.insert(&parameter.parameter_data_ref().name, parameter);
         }
 
         // Filter out any path parameters that have been overridden by an
@@ -320,15 +316,10 @@ impl Generator {
                         let schema = parameter_data.schema()?.to_schema();
 
                         let name = sanitize(
-                            &format!(
-                                "{}-{}",
-                                operation_id, &parameter_data.name
-                            ),
+                            &format!("{}-{}", operation_id, &parameter_data.name),
                             Case::Pascal,
                         );
-                        let typ = self
-                            .type_space
-                            .add_type_with_name(&schema, Some(name))?;
+                        let typ = self.type_space.add_type_with_name(&schema, Some(name))?;
 
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
@@ -354,9 +345,7 @@ impl Generator {
                             Case::Pascal,
                         );
 
-                        let type_id = self
-                            .type_space
-                            .add_type_with_name(&schema, Some(name))?;
+                        let type_id = self.type_space.add_type_with_name(&schema, Some(name))?;
 
                         let ty = self.type_space.get_type(&type_id).unwrap();
 
@@ -365,9 +354,7 @@ impl Generator {
                         // the parameter) and use the "inner" type.
                         let details = ty.details();
                         let (type_id, required) =
-                            if let typify::TypeDetails::Option(inner_type_id) =
-                                details
-                            {
+                            if let typify::TypeDetails::Option(inner_type_id) = details {
                                 (inner_type_id, false)
                             } else {
                                 (type_id, parameter_data.required)
@@ -395,44 +382,30 @@ impl Generator {
                             Case::Pascal,
                         );
 
-                        let typ = self
-                            .type_space
-                            .add_type_with_name(&schema, Some(name))?;
+                        let typ = self.type_space.add_type_with_name(&schema, Some(name))?;
 
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
                             api_name: parameter_data.name.clone(),
                             description: parameter_data.description.clone(),
                             typ: OperationParameterType::Type(typ),
-                            kind: OperationParameterKind::Header(
-                                parameter_data.required,
-                            ),
+                            kind: OperationParameterKind::Header(parameter_data.required),
                         })
                     }
-                    openapiv3::Parameter::Path { style, .. } => {
-                        Err(Error::UnexpectedFormat(format!(
-                            "unsupported style of path parameter {:#?}",
-                            style,
-                        )))
-                    }
-                    openapiv3::Parameter::Query { style, .. } => {
-                        Err(Error::UnexpectedFormat(format!(
-                            "unsupported style of query parameter {:#?}",
-                            style,
-                        )))
-                    }
-                    cookie @ openapiv3::Parameter::Cookie { .. } => {
-                        Err(Error::UnexpectedFormat(format!(
-                            "cookie parameters are not supported {:#?}",
-                            cookie,
-                        )))
-                    }
+                    openapiv3::Parameter::Path { style, .. } => Err(Error::UnexpectedFormat(
+                        format!("unsupported style of path parameter {:#?}", style,),
+                    )),
+                    openapiv3::Parameter::Query { style, .. } => Err(Error::UnexpectedFormat(
+                        format!("unsupported style of query parameter {:#?}", style,),
+                    )),
+                    cookie @ openapiv3::Parameter::Cookie { .. } => Err(Error::UnexpectedFormat(
+                        format!("cookie parameters are not supported {:#?}", cookie,),
+                    )),
                 }
             })
             .collect::<Result<Vec<_>>>()?;
 
-        let dropshot_websocket =
-            operation.extensions.get("x-dropshot-websocket").is_some();
+        let dropshot_websocket = operation.extensions.get("x-dropshot-websocket").is_some();
         if dropshot_websocket {
             self.uses_websockets = true;
         }
@@ -448,99 +421,89 @@ impl Generator {
 
         let mut success = false;
 
-        let mut responses = operation
-            .responses
-            .default
-            .iter()
-            .map(|response_or_ref| {
-                Ok((
-                    OperationResponseStatus::Default,
-                    response_or_ref.item(components)?,
-                ))
-            })
-            .chain(operation.responses.responses.iter().map(
-                |(status_code, response_or_ref)| {
+        let mut responses =
+            operation
+                .responses
+                .default
+                .iter()
+                .map(|response_or_ref| {
                     Ok((
-                        match status_code {
-                            StatusCode::Code(code) => {
-                                OperationResponseStatus::Code(*code)
-                            }
-                            StatusCode::Range(range) => {
-                                OperationResponseStatus::Range(*range)
-                            }
-                        },
+                        OperationResponseStatus::Default,
                         response_or_ref.item(components)?,
                     ))
-                },
-            ))
-            .map(|v: Result<(OperationResponseStatus, &Response)>| {
-                let (status_code, response) = v?;
+                })
+                .chain(operation.responses.responses.iter().map(
+                    |(status_code, response_or_ref)| {
+                        Ok((
+                            match status_code {
+                                StatusCode::Code(code) => OperationResponseStatus::Code(*code),
+                                StatusCode::Range(range) => OperationResponseStatus::Range(*range),
+                            },
+                            response_or_ref.item(components)?,
+                        ))
+                    },
+                ))
+                .map(|v: Result<(OperationResponseStatus, &Response)>| {
+                    let (status_code, response) = v?;
 
-                // We categorize responses as "typed" based on the
-                // "application/json" content type, "upgrade" if it's a
-                // websocket channel without a meaningful content-type,
-                // "raw" if there's any other response content type (we don't
-                // investigate further), or "none" if there is no content.
-                // TODO if there are multiple response content types we could
-                // treat those like different response types and create an
-                // enum; the generated client method would check for the
-                // content type of the response just as it currently examines
-                // the status code.
-                let typ = if let Some(mt) =
-                    response.content.iter().find_map(|(x, v)| {
-                        (x == "application/json"
-                            || x.starts_with("application/json;"))
-                        .then_some(v)
+                    // We categorize responses as "typed" based on the
+                    // "application/json" content type, "upgrade" if it's a
+                    // websocket channel without a meaningful content-type,
+                    // "raw" if there's any other response content type (we don't
+                    // investigate further), or "none" if there is no content.
+                    // TODO if there are multiple response content types we could
+                    // treat those like different response types and create an
+                    // enum; the generated client method would check for the
+                    // content type of the response just as it currently examines
+                    // the status code.
+                    let typ = if let Some(mt) = response.content.iter().find_map(|(x, v)| {
+                        (x == "application/json" || x.starts_with("application/json;")).then_some(v)
                     }) {
-                    assert!(mt.encoding.is_empty());
+                        assert!(mt.encoding.is_empty());
 
-                    let typ = if let Some(schema) = &mt.schema {
-                        let schema = schema.to_schema();
-                        let name = sanitize(
-                            &format!(
-                                "{}-response",
-                                operation.operation_id.as_ref().unwrap(),
-                            ),
-                            Case::Pascal,
-                        );
-                        self.type_space
-                            .add_type_with_name(&schema, Some(name))?
+                        let typ = if let Some(schema) = &mt.schema {
+                            let schema = schema.to_schema();
+                            let name = sanitize(
+                                &format!("{}-response", operation.operation_id.as_ref().unwrap(),),
+                                Case::Pascal,
+                            );
+                            self.type_space.add_type_with_name(&schema, Some(name))?
+                        } else {
+                            todo!("media type encoding, no schema: {:#?}", mt);
+                        };
+
+                        OperationResponseKind::Type(typ)
+                    } else if dropshot_websocket {
+                        OperationResponseKind::Upgrade
+                    } else if response.content.first().is_some() {
+                        OperationResponseKind::Raw
                     } else {
-                        todo!("media type encoding, no schema: {:#?}", mt);
+                        OperationResponseKind::None
                     };
 
-                    OperationResponseKind::Type(typ)
-                } else if dropshot_websocket {
-                    OperationResponseKind::Upgrade
-                } else if response.content.first().is_some() {
-                    OperationResponseKind::Raw
-                } else {
-                    OperationResponseKind::None
-                };
+                    // See if there's a status code that covers success cases.
+                    if matches!(
+                        status_code,
+                        OperationResponseStatus::Default
+                            | OperationResponseStatus::Code(200..=299)
+                            | OperationResponseStatus::Range(2)
+                    ) {
+                        success = true;
+                    }
 
-                // See if there's a status code that covers success cases.
-                if matches!(
-                    status_code,
-                    OperationResponseStatus::Default
-                        | OperationResponseStatus::Code(200..=299)
-                        | OperationResponseStatus::Range(2)
-                ) {
-                    success = true;
-                }
+                    let description = if response.description.is_empty() {
+                        None
+                    } else {
+                        Some(response.description.clone())
+                    };
 
-                let description = if response.description.is_empty() {
-                    None
-                } else {
-                    Some(response.description.clone())
-                };
-
-                Ok(OperationResponse {
-                    status_code,
-                    typ,
-                    description,
+                    Ok(OperationResponse {
+                        status_code,
+                        typ,
+                        description,
+                    })
                 })
-            })
-            .collect::<Result<Vec<_>>>()?;
+                .collect::<Result<Vec<_>>>()?;
 
         // If the API has declined to specify the characteristics of a
         // successful response, we cons up a generic one. Note that this is
@@ -563,8 +526,7 @@ impl Generator {
             })
         }
 
-        let dropshot_paginated =
-            self.dropshot_pagination_data(operation, &params, &responses);
+        let dropshot_paginated = self.dropshot_pagination_data(operation, &params, &responses);
 
         if dropshot_websocket && dropshot_paginated.is_some() {
             return Err(Error::InvalidExtension(format!(
@@ -579,10 +541,7 @@ impl Generator {
             method: HttpMethod::from_str(method)?,
             path: tmp,
             summary: operation.summary.clone().filter(|s| !s.is_empty()),
-            description: operation
-                .description
-                .clone()
-                .filter(|s| !s.is_empty()),
+            description: operation.description.clone().filter(|s| !s.is_empty()),
             params,
             responses,
             dropshot_paginated,
@@ -593,6 +552,7 @@ impl Generator {
     pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
+        has_inner: bool,
     ) -> Result<TokenStream> {
         let operation_id = format_ident!("{}", method.operation_id);
 
@@ -616,21 +576,15 @@ impl Generator {
                             .parameter_ident_with_lifetime("a");
                         quote! { Option<#t> }
                     }
-                    (OperationParameterType::RawBody, false) => {
-                        match &param.kind {
-                            OperationParameterKind::Body(
-                                BodyContentType::OctetStream,
-                            ) => {
-                                quote! { B }
-                            }
-                            OperationParameterKind::Body(
-                                BodyContentType::Text(_),
-                            ) => {
-                                quote! { String }
-                            }
-                            _ => unreachable!(),
+                    (OperationParameterType::RawBody, false) => match &param.kind {
+                        OperationParameterKind::Body(BodyContentType::OctetStream) => {
+                            quote! { B }
                         }
-                    }
+                        OperationParameterKind::Body(BodyContentType::Text(_)) => {
+                            quote! { String }
+                        }
+                        _ => unreachable!(),
+                    },
                     (OperationParameterType::RawBody, true) => unreachable!(),
                 };
                 quote! {
@@ -641,10 +595,7 @@ impl Generator {
 
         let raw_body_param = method.params.iter().any(|param| {
             param.typ == OperationParameterType::RawBody
-                && param.kind
-                    == OperationParameterKind::Body(
-                        BodyContentType::OctetStream,
-                    )
+                && param.kind == OperationParameterKind::Body(BodyContentType::OctetStream)
         });
 
         let bounds = if raw_body_param {
@@ -660,7 +611,7 @@ impl Generator {
             error: error_type,
             build,
             send,
-        } = self.method_sig_body(method, quote! { self })?;
+        } = self.method_sig_body(method, quote! { self }, has_inner)?;
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -687,15 +638,17 @@ impl Generator {
 
             // The parameters are the same as those to the paged method, but
             // without "page_token"
-            let stream_params = method.params.iter().zip(params).filter_map(
-                |(param, stream)| {
+            let stream_params = method
+                .params
+                .iter()
+                .zip(params)
+                .filter_map(|(param, stream)| {
                     if param.name.as_str() == "page_token" {
                         None
                     } else {
                         Some(stream)
                     }
-                },
-            );
+                });
 
             // The values passed to get the first page are the inputs to the
             // stream method with "None" for the page_token.
@@ -716,9 +669,12 @@ impl Generator {
             let step_params = method.params.iter().map(|param| {
                 if param.api_name.as_str() == "page_token" {
                     quote! { state.as_deref() }
-                } else if let OperationParameterKind::Query(_) = param.kind {
-                    // Query parameters are None; having page_token as Some(_)
-                    // is mutually exclusive with other query parameters.
+                } else if param.api_name.as_str() != "limit"
+                    && matches!(param.kind, OperationParameterKind::Query(_))
+                {
+                    // Query parameters (other than "page_token" and "limit")
+                    // are None; having page_token as Some(_) is mutually
+                    // exclusive with other query parameters.
                     quote! { None }
                 } else {
                     // Non-query parameters are passed in; this is necessary
@@ -749,15 +705,6 @@ impl Generator {
                     use futures::StreamExt;
                     use futures::TryFutureExt;
                     use futures::TryStreamExt;
-
-                    // Grab the limit. This is intended to be agnostic to the
-                    // specific type for the limit input which is why it's a
-                    // bit convoluted.
-                    let final_stream_limit = limit
-                        .clone()
-                        .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                        .map(std::num::NonZeroUsize::get)
-                        .unwrap_or(usize::MAX);
 
                     // Execute the operation with the basic parameters
                     // (omitting page_token) to get the first page.
@@ -806,7 +753,6 @@ impl Generator {
                             first.chain(rest)
                         })
                         .try_flatten_stream()
-                        .take(final_stream_limit)
                         .boxed()
                 }
             }
@@ -827,6 +773,7 @@ impl Generator {
         &self,
         method: &OperationMethod,
         client: TokenStream,
+        has_inner: bool,
     ) -> Result<MethodSigBody> {
         let param_names = method
             .params
@@ -836,50 +783,24 @@ impl Generator {
 
         // Generate a unique Ident for internal variables
         let url_ident = unique_ident_from("url", &param_names);
-        let query_ident = unique_ident_from("query", &param_names);
         let response_ident = unique_ident_from("response", &param_names);
         let result_ident = unique_ident_from("result", &param_names);
 
         // Generate code for query parameters.
-        let query_items = method
+        let query_params = method
             .params
             .iter()
             .filter_map(|param| match &param.kind {
-                OperationParameterKind::Query(required) => {
+                OperationParameterKind::Query(_) => {
                     let qn = &param.api_name;
                     let qn_ident = format_ident!("{}", &param.name);
-                    let res = if *required {
-                        quote! {
-                            #query_ident.push((#qn, #qn_ident .to_string()));
-                        }
-                    } else {
-                        quote! {
-                            if let Some(v) = & #qn_ident {
-                                #query_ident.push((#qn, v.to_string()));
-                            }
-                        }
-                    };
-
-                    Some(res)
+                    Some(quote! {
+                        &progenitor_client::QueryParam::new(#qn, &#qn_ident)
+                    })
                 }
                 _ => None,
             })
             .collect::<Vec<_>>();
-
-        let (query_build, query_use) = if query_items.is_empty() {
-            (quote! {}, quote! {})
-        } else {
-            let size = query_items.len();
-            let query_build = quote! {
-                let mut #query_ident = Vec::with_capacity(#size);
-                #(#query_items)*
-            };
-            let query_use = quote! {
-                .query(&#query_ident)
-            };
-
-            (query_build, query_use)
-        };
 
         let headers = method
             .params
@@ -943,9 +864,7 @@ impl Generator {
             .params
             .iter()
             .filter_map(|param| match &param.kind {
-                OperationParameterKind::Path => {
-                    Some((&param.api_name, &param.name))
-                }
+                OperationParameterKind::Path => Some((&param.api_name, &param.name)),
                 _ => None,
             })
             .collect();
@@ -990,9 +909,7 @@ impl Generator {
                     .json(&body)
                 }),
                 (
-                    OperationParameterKind::Body(
-                        BodyContentType::FormUrlencoded
-                    ),
+                    OperationParameterKind::Body(BodyContentType::FormUrlencoded),
                     OperationParameterType::Type(_),
                 ) => Some(quote! {
                     // This uses progenitor_client::RequestBuilderExt which
@@ -1008,109 +925,100 @@ impl Generator {
         // ... and there can be at most one body.
         assert!(body_func.clone().count() <= 1);
 
-        let (success_response_items, response_type) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_success_or_default,
-        );
+        let (success_response_items, response_type) =
+            self.extract_responses(method, OperationResponseStatus::is_success_or_default);
 
-        let success_response_matches =
-            success_response_items.iter().map(|response| {
-                let pat = match &response.status_code {
-                    OperationResponseStatus::Code(code) => quote! { #code },
-                    OperationResponseStatus::Range(_)
-                    | OperationResponseStatus::Default => {
-                        quote! { 200 ..= 299 }
-                    }
-                };
+        let success_response_matches = success_response_items.iter().map(|response| {
+            let pat = match &response.status_code {
+                OperationResponseStatus::Code(code) => quote! { #code },
+                OperationResponseStatus::Range(_) | OperationResponseStatus::Default => {
+                    quote! { 200 ..= 299 }
+                }
+            };
 
-                let decode = match &response.typ {
-                    OperationResponseKind::Type(_) => {
-                        quote! {
-                            ResponseValue::from_response(#response_ident).await
-                        }
+            let decode = match &response.typ {
+                OperationResponseKind::Type(_) => {
+                    quote! {
+                        ResponseValue::from_response(#response_ident).await
                     }
-                    OperationResponseKind::None => {
-                        quote! {
-                            Ok(ResponseValue::empty(#response_ident))
-                        }
+                }
+                OperationResponseKind::None => {
+                    quote! {
+                        Ok(ResponseValue::empty(#response_ident))
                     }
-                    OperationResponseKind::Raw => {
-                        quote! {
-                            Ok(ResponseValue::stream(#response_ident))
-                        }
+                }
+                OperationResponseKind::Raw => {
+                    quote! {
+                        Ok(ResponseValue::stream(#response_ident))
                     }
-                    OperationResponseKind::Upgrade => {
-                        quote! {
-                            ResponseValue::upgrade(#response_ident).await
-                        }
+                }
+                OperationResponseKind::Upgrade => {
+                    quote! {
+                        ResponseValue::upgrade(#response_ident).await
                     }
-                };
+                }
+            };
 
-                quote! { #pat => { #decode } }
-            });
+            quote! { #pat => { #decode } }
+        });
 
         // Errors...
-        let (error_response_items, error_type) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_error_or_default,
-        );
+        let (error_response_items, error_type) =
+            self.extract_responses(method, OperationResponseStatus::is_error_or_default);
 
-        let error_response_matches =
-            error_response_items.iter().map(|response| {
-                let pat = match &response.status_code {
-                    OperationResponseStatus::Code(code) => {
-                        quote! { #code }
-                    }
-                    OperationResponseStatus::Range(r) => {
-                        let min = r * 100;
-                        let max = min + 99;
-                        quote! { #min ..= #max }
-                    }
+        let error_response_matches = error_response_items.iter().map(|response| {
+            let pat = match &response.status_code {
+                OperationResponseStatus::Code(code) => {
+                    quote! { #code }
+                }
+                OperationResponseStatus::Range(r) => {
+                    let min = r * 100;
+                    let max = min + 99;
+                    quote! { #min ..= #max }
+                }
 
-                    OperationResponseStatus::Default => {
-                        quote! { _ }
-                    }
-                };
+                OperationResponseStatus::Default => {
+                    quote! { _ }
+                }
+            };
 
-                let decode = match &response.typ {
-                    OperationResponseKind::Type(_) => {
-                        quote! {
-                            Err(Error::ErrorResponse(
-                                ResponseValue::from_response(#response_ident)
-                                    .await?
-                            ))
-                        }
+            let decode = match &response.typ {
+                OperationResponseKind::Type(_) => {
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::from_response(#response_ident)
+                                .await?
+                        ))
                     }
-                    OperationResponseKind::None => {
-                        quote! {
-                            Err(Error::ErrorResponse(
-                                ResponseValue::empty(#response_ident)
-                            ))
-                        }
+                }
+                OperationResponseKind::None => {
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::empty(#response_ident)
+                        ))
                     }
-                    OperationResponseKind::Raw => {
-                        quote! {
-                            Err(Error::ErrorResponse(
-                                ResponseValue::stream(#response_ident)
-                            ))
-                        }
+                }
+                OperationResponseKind::Raw => {
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::stream(#response_ident)
+                        ))
                     }
-                    OperationResponseKind::Upgrade => {
-                        if response.status_code
-                            == OperationResponseStatus::Default
-                        {
-                            return quote! {}; // catch-all handled below
-                        } else {
-                            todo!(
-                                "non-default error response handling for \
+                }
+                OperationResponseKind::Upgrade => {
+                    if response.status_code == OperationResponseStatus::Default {
+                        return quote! {}; // catch-all handled below
+                    } else {
+                        todo!(
+                            "non-default error response handling for \
                                 upgrade requests is not yet implemented"
-                            );
-                        }
+                        );
                     }
-                };
+                }
+            };
 
-                quote! { #pat => { #decode } }
-            });
+            quote! { #pat => { #decode } }
+        });
 
         let accept_header = matches!(
             (&response_type, &error_type),
@@ -1141,14 +1049,18 @@ impl Generator {
             }
         };
 
+        let inner = match has_inner {
+            true => quote! { &#client.inner, },
+            false => quote! {},
+        };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &request);
+                (#hook)(#inner &request);
             }
         });
         let pre_hook_async = self.settings.pre_hook_async.as_ref().map(|hook| {
             quote! {
-                match (#hook)(&#client.inner, &mut request).await {
+                match (#hook)(#inner &mut request).await {
                     Ok(_) => (),
                     Err(e) => return Err(Error::PreHookError(e.to_string())),
                 }
@@ -1156,7 +1068,15 @@ impl Generator {
         });
         let post_hook = self.settings.post_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(&#client.inner, &#result_ident);
+                (#hook)(#inner &#result_ident);
+            }
+        });
+        let post_hook_async = self.settings.post_hook_async.as_ref().map(|hook| {
+            quote! {
+                match (#hook)(#inner &#result_ident).await {
+                    Ok(_) => (),
+                    Err(e) => return Err(Error::PostHookError(e.to_string())),
+                }
             }
         });
 
@@ -1164,7 +1084,6 @@ impl Generator {
 
         let build_impl = quote! {
             #url_path
-            #query_build
 
             #headers_build
 
@@ -1172,7 +1091,7 @@ impl Generator {
                 . #method_func (#url_ident)
                 #accept_header
                 #(#body_func)*
-                #query_use
+                #( .query(#query_params) )*
                 #headers_use
                 #websock_hdrs
         };
@@ -1185,6 +1104,7 @@ impl Generator {
                 .execute(request)
                 .await;
             #post_hook
+            #post_hook_async
 
             let #response_ident = #result_ident?;
 
@@ -1292,10 +1212,7 @@ impl Generator {
         parameters: &[OperationParameter],
         responses: &[OperationResponse],
     ) -> Option<DropshotPagination> {
-        let Some(value) = operation.extensions.get("x-dropshot-pagination")
-        else {
-            return None;
-        };
+        let value = operation.extensions.get("x-dropshot-pagination")?;
 
         // We expect to see at least "page_token" and "limit" parameters.
         if parameters
@@ -1335,21 +1252,19 @@ impl Generator {
 
         // There must be exactly one successful response type.
         let mut success_response_items =
-            responses.iter().filter_map(|response| {
-                match (&response.status_code, &response.typ) {
+            responses
+                .iter()
+                .filter_map(|response| match (&response.status_code, &response.typ) {
                     (
                         OperationResponseStatus::Code(200..=299)
                         | OperationResponseStatus::Range(2),
                         OperationResponseKind::Type(type_id),
                     ) => Some(type_id),
                     _ => None,
-                }
-            });
+                });
 
-        let success_response = match (
-            success_response_items.next(),
-            success_response_items.next(),
-        ) {
+        let success_response = match (success_response_items.next(), success_response_items.next())
+        {
             (None, _) | (_, Some(_)) => return None,
             (Some(success), None) => success,
         };
@@ -1395,11 +1310,10 @@ impl Generator {
                 struct DropshotPaginationFormat {
                     required: Vec<String>,
                 }
-                let first_page_params = serde_json::from_value::<
-                    DropshotPaginationFormat,
-                >(value.clone())
-                .unwrap_or_default()
-                .required;
+                let first_page_params =
+                    serde_json::from_value::<DropshotPaginationFormat>(value.clone())
+                        .unwrap_or_default()
+                        .required;
                 Some(DropshotPagination {
                     item,
                     first_page_params,
@@ -1488,6 +1402,7 @@ impl Generator {
         &mut self,
         method: &OperationMethod,
         tag_style: TagStyle,
+        has_inner: bool,
     ) -> Result<(TokenStream, TokenStream)> {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
@@ -1513,10 +1428,8 @@ impl Generator {
 
                     // For body parameters only, if there's a builder we'll
                     // nest that within this builder.
-                    if let (
-                        OperationParameterKind::Body(_),
-                        Some(builder_name),
-                    ) = (&param.kind, ty.builder())
+                    if let (OperationParameterKind::Body(_), Some(builder_name)) =
+                        (&param.kind, ty.builder())
                     {
                         Ok(quote! { Result<#builder_name, String> })
                     } else if param.kind.is_required() {
@@ -1545,21 +1458,20 @@ impl Generator {
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
-                    let optional = param.kind.is_optional();
-                    if optional {
-                        Ok(quote! { Ok(None) })
-                    } else if let (
-                        OperationParameterKind::Body(_),
-                        Some(builder_name),
-                    ) = (&param.kind, ty.builder())
+
+                    // Fill in the appropriate initial value for the
+                    // param_types generated above.
+                    if let (OperationParameterKind::Body(_), Some(_)) = (&param.kind, ty.builder())
                     {
-                        Ok(quote! { Ok(#builder_name :: default()) })
-                    } else {
-                        let err_msg =
-                            format!("{} was not initialized", param.name);
+                        Ok(quote! { Ok(::std::default::Default::default()) })
+                    } else if param.kind.is_required() {
+                        let err_msg = format!("{} was not initialized", param.name);
                         Ok(quote! { Err(#err_msg.to_string()) })
+                    } else {
+                        Ok(quote! { Ok(None) })
                     }
                 }
+
                 OperationParameterType::RawBody => {
                     let err_msg = format!("{} was not initialized", param.name);
                     Ok(quote! { Err(#err_msg.to_string()) })
@@ -1689,10 +1601,8 @@ impl Generator {
 
                     OperationParameterType::RawBody => match param.kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => {
-                            let err_msg = format!(
-                                "conversion to `reqwest::Body` for {} failed",
-                                param.name,
-                            );
+                            let err_msg =
+                                format!("conversion to `reqwest::Body` for {} failed", param.name,);
 
                             Ok(quote! {
                                 pub fn #param_name<B>(mut self, value: B) -> Self
@@ -1703,12 +1613,10 @@ impl Generator {
                                     self
                                 }
                             })
-                        },
+                        }
                         OperationParameterKind::Body(BodyContentType::Text(_)) => {
-                            let err_msg = format!(
-                                "conversion to `String` for {} failed",
-                                param.name,
-                            );
+                            let err_msg =
+                                format!("conversion to `String` for {} failed", param.name,);
 
                             Ok(quote! {
                                 pub fn #param_name<V>(mut self, value: V) -> Self
@@ -1721,9 +1629,9 @@ impl Generator {
                                     self
                                 }
                             })
-                        },
+                        }
                         _ => unreachable!(),
-                    }
+                    },
                 }
             })
             .collect::<Result<Vec<_>>>()?;
@@ -1733,7 +1641,7 @@ impl Generator {
             error,
             build,
             send,
-        } = self.method_sig_body(method, quote! { client })?;
+        } = self.method_sig_body(method, quote! { client }, has_inner)?;
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
@@ -1786,7 +1694,12 @@ impl Generator {
             self.uses_futures = true;
 
             let step_params = method.params.iter().filter_map(|param| {
-                if let OperationParameterKind::Query(_) = param.kind {
+                if param.api_name.as_str() != "limit"
+                    && matches!(param.kind, OperationParameterKind::Query(_))
+                {
+                    // Query parameters (other than "limit") are None; having
+                    // page_token as Some(_), as we will during the loop below,
+                    // is mutually exclusive with other query parameters.
                     let name = format_ident!("{}", param.name);
                     Some(quote! {
                         #name: Ok(None)
@@ -1817,18 +1730,6 @@ impl Generator {
                     use futures::StreamExt;
                     use futures::TryFutureExt;
                     use futures::TryStreamExt;
-
-                    // Grab the limit. This is intended to be agnostic to the
-                    // specific type for the limit input which is why it's a
-                    // bit convoluted.
-                    let limit = self
-                        .limit
-                        .clone()
-                        .ok()
-                        .flatten()
-                        .and_then(|x| std::num::NonZeroUsize::try_from(x).ok())
-                        .map(std::num::NonZeroUsize::get)
-                        .unwrap_or(usize::MAX);
 
                     // This is the builder template we'll use for iterative
                     // steps past the first; it has all query params set to
@@ -1884,7 +1785,6 @@ impl Generator {
                             first.chain(rest)
                         })
                         .try_flatten_stream()
-                        .take(limit)
                         .boxed()
                 }
             }
@@ -1904,58 +1804,51 @@ impl Generator {
         // 1. A Client method
         // 2. An extension trait method
         // 3. Several extension trait methods
-        let struct_doc =
-            match (tag_style, method.tags.len(), method.tags.first()) {
-                (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
-                    let ty = format!("Client::{}", method.operation_id);
-                    format!(
-                        "Builder for [`{}`]\n\n[`{}`]: super::{}",
-                        ty, ty, ty,
-                    )
-                }
-                (TagStyle::Separate, 1, Some(tag)) => {
-                    let ty = format!(
-                        "Client{}Ext::{}",
-                        sanitize(tag, Case::Pascal),
-                        method.operation_id
-                    );
-                    format!(
-                        "Builder for [`{}`]\n\n[`{}`]: super::{}",
-                        ty, ty, ty,
-                    )
-                }
-                (TagStyle::Separate, _, _) => {
-                    format!(
-                        "Builder for `{}` operation\n\nSee {}\n\n{}",
-                        method.operation_id,
-                        method
-                            .tags
-                            .iter()
-                            .map(|tag| {
-                                format!(
-                                    "[`Client{}Ext::{}`]",
-                                    sanitize(tag, Case::Pascal),
-                                    method.operation_id,
-                                )
-                            })
-                            .collect::<Vec<_>>()
-                            .join(", "),
-                        method
-                            .tags
-                            .iter()
-                            .map(|tag| {
-                                let ty = format!(
-                                    "Client{}Ext::{}",
-                                    sanitize(tag, Case::Pascal),
-                                    method.operation_id,
-                                );
-                                format!("[`{}`]: super::{}", ty, ty)
-                            })
-                            .collect::<Vec<_>>()
-                            .join("\n"),
-                    )
-                }
-            };
+        let struct_doc = match (tag_style, method.tags.len(), method.tags.first()) {
+            (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
+                let ty = format!("Client::{}", method.operation_id);
+                format!("Builder for [`{}`]\n\n[`{}`]: super::{}", ty, ty, ty,)
+            }
+            (TagStyle::Separate, 1, Some(tag)) => {
+                let ty = format!(
+                    "Client{}Ext::{}",
+                    sanitize(tag, Case::Pascal),
+                    method.operation_id
+                );
+                format!("Builder for [`{}`]\n\n[`{}`]: super::{}", ty, ty, ty,)
+            }
+            (TagStyle::Separate, _, _) => {
+                format!(
+                    "Builder for `{}` operation\n\nSee {}\n\n{}",
+                    method.operation_id,
+                    method
+                        .tags
+                        .iter()
+                        .map(|tag| {
+                            format!(
+                                "[`Client{}Ext::{}`]",
+                                sanitize(tag, Case::Pascal),
+                                method.operation_id,
+                            )
+                        })
+                        .collect::<Vec<_>>()
+                        .join(", "),
+                    method
+                        .tags
+                        .iter()
+                        .map(|tag| {
+                            let ty = format!(
+                                "Client{}Ext::{}",
+                                sanitize(tag, Case::Pascal),
+                                method.operation_id,
+                            );
+                            format!("[`{}`]: super::{}", ty, ty)
+                        })
+                        .collect::<Vec<_>>()
+                        .join("\n"),
+                )
+            }
+        };
 
         let builder = quote! {
             #[doc = #struct_doc]
@@ -2126,12 +2019,9 @@ impl Generator {
                     .get(&tag)
                     .and_then(|tag| tag.description.as_ref())
                     .map(|d| quote! { #[doc = #d] });
-                let tr =
-                    format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));
-                let (trait_methods, trait_impls): (
-                    Vec<TokenStream>,
-                    Vec<TokenStream>,
-                ) = trait_methods.into_iter().unzip();
+                let tr = format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));
+                let (trait_methods, trait_impls): (Vec<TokenStream>, Vec<TokenStream>) =
+                    trait_methods.into_iter().unzip();
                 (
                     quote! {
                         #desc
@@ -2183,21 +2073,18 @@ impl Generator {
             None => return Ok(None),
         };
 
-        let (content_str, media_type) =
-            match (body.content.first(), body.content.len()) {
-                (None, _) => return Ok(None),
-                (Some(first), 1) => first,
-                (_, n) => todo!(
-                    "more media types than expected for {}: {}",
-                    operation.operation_id.as_ref().unwrap(),
-                    n,
-                ),
-            };
+        let (content_str, media_type) = match (body.content.first(), body.content.len()) {
+            (None, _) => return Ok(None),
+            (Some(first), 1) => first,
+            (_, n) => todo!(
+                "more media types than expected for {}: {}",
+                operation.operation_id.as_ref().unwrap(),
+                n,
+            ),
+        };
 
         let schema = media_type.schema.as_ref().ok_or_else(|| {
-            Error::UnexpectedFormat(
-                "No schema specified for request body".to_string(),
-            )
+            Error::UnexpectedFormat("No schema specified for request body".to_string())
         })?;
 
         let content_type = BodyContentType::from_str(content_str)?;
@@ -2260,8 +2147,7 @@ impl Generator {
                         schema_kind:
                             openapiv3::SchemaKind::Type(openapiv3::Type::String(
                                 openapiv3::StringType {
-                                    format:
-                                        openapiv3::VariantOrUnknownOrEmpty::Empty,
+                                    format: openapiv3::VariantOrUnknownOrEmpty::Empty,
                                     pattern: None,
                                     enumeration,
                                     min_length: None,
@@ -2284,10 +2170,7 @@ impl Generator {
                     todo!("media type encoding not empty: {:#?}", media_type);
                 }
                 let name = sanitize(
-                    &format!(
-                        "{}-body",
-                        operation.operation_id.as_ref().unwrap(),
-                    ),
+                    &format!("{}-body", operation.operation_id.as_ref().unwrap(),),
                     Case::Pascal,
                 );
                 let typ = self
@@ -2404,76 +2287,53 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
          }| {
             match (a_kind, b_kind) {
                 // Path params are first and are in positional order.
-                (
-                    OperationParameterKind::Path,
-                    OperationParameterKind::Path,
-                ) => {
-                    let a_index =
-                        names.iter().position(|x| x == a_name).unwrap_or_else(
-                            || panic!("{} missing from path", a_name),
-                        );
-                    let b_index =
-                        names.iter().position(|x| x == b_name).unwrap_or_else(
-                            || panic!("{} missing from path", b_name),
-                        );
+                (OperationParameterKind::Path, OperationParameterKind::Path) => {
+                    let a_index = names
+                        .iter()
+                        .position(|x| x == a_name)
+                        .unwrap_or_else(|| panic!("{} missing from path", a_name));
+                    let b_index = names
+                        .iter()
+                        .position(|x| x == b_name)
+                        .unwrap_or_else(|| panic!("{} missing from path", b_name));
                     a_index.cmp(&b_index)
                 }
-                (
-                    OperationParameterKind::Path,
-                    OperationParameterKind::Query(_),
-                ) => Ordering::Less,
-                (
-                    OperationParameterKind::Path,
-                    OperationParameterKind::Body(_),
-                ) => Ordering::Less,
-                (
-                    OperationParameterKind::Path,
-                    OperationParameterKind::Header(_),
-                ) => Ordering::Less,
+                (OperationParameterKind::Path, OperationParameterKind::Query(_)) => Ordering::Less,
+                (OperationParameterKind::Path, OperationParameterKind::Body(_)) => Ordering::Less,
+                (OperationParameterKind::Path, OperationParameterKind::Header(_)) => Ordering::Less,
 
                 // Query params are in lexicographic order.
-                (
-                    OperationParameterKind::Query(_),
-                    OperationParameterKind::Body(_),
-                ) => Ordering::Less,
-                (
-                    OperationParameterKind::Query(_),
-                    OperationParameterKind::Query(_),
-                ) => a_name.cmp(b_name),
-                (
-                    OperationParameterKind::Query(_),
-                    OperationParameterKind::Path,
-                ) => Ordering::Greater,
-                (
-                    OperationParameterKind::Query(_),
-                    OperationParameterKind::Header(_),
-                ) => Ordering::Less,
+                (OperationParameterKind::Query(_), OperationParameterKind::Body(_)) => {
+                    Ordering::Less
+                }
+                (OperationParameterKind::Query(_), OperationParameterKind::Query(_)) => {
+                    a_name.cmp(b_name)
+                }
+                (OperationParameterKind::Query(_), OperationParameterKind::Path) => {
+                    Ordering::Greater
+                }
+                (OperationParameterKind::Query(_), OperationParameterKind::Header(_)) => {
+                    Ordering::Less
+                }
 
                 // Body params are last and should be singular.
-                (
-                    OperationParameterKind::Body(_),
-                    OperationParameterKind::Path,
-                ) => Ordering::Greater,
-                (
-                    OperationParameterKind::Body(_),
-                    OperationParameterKind::Query(_),
-                ) => Ordering::Greater,
-                (
-                    OperationParameterKind::Body(_),
-                    OperationParameterKind::Header(_),
-                ) => Ordering::Greater,
-                (
-                    OperationParameterKind::Body(_),
-                    OperationParameterKind::Body(_),
-                ) => {
+                (OperationParameterKind::Body(_), OperationParameterKind::Path) => {
+                    Ordering::Greater
+                }
+                (OperationParameterKind::Body(_), OperationParameterKind::Query(_)) => {
+                    Ordering::Greater
+                }
+                (OperationParameterKind::Body(_), OperationParameterKind::Header(_)) => {
+                    Ordering::Greater
+                }
+                (OperationParameterKind::Body(_), OperationParameterKind::Body(_)) => {
                     panic!("should only be one body")
                 }
 
                 // Header params are in lexicographic order.
-                (
-                    OperationParameterKind::Header(_),
-                    OperationParameterKind::Header(_),
-                ) => a_name.cmp(b_name),
+                (OperationParameterKind::Header(_), OperationParameterKind::Header(_)) => {
+                    a_name.cmp(b_name)
+                }
                 (OperationParameterKind::Header(_), _) => Ordering::Greater,
             }
         },
@@ -2488,9 +2348,9 @@ impl ParameterDataExt for openapiv3::ParameterData {
     fn schema(&self) -> Result<&openapiv3::ReferenceOr<openapiv3::Schema>> {
         match &self.format {
             openapiv3::ParameterSchemaOrContent::Schema(s) => Ok(s),
-            openapiv3::ParameterSchemaOrContent::Content(c) => Err(
-                Error::UnexpectedFormat(format!("unexpected content {:#?}", c)),
-            ),
+            openapiv3::ParameterSchemaOrContent::Content(c) => Err(Error::UnexpectedFormat(
+                format!("unexpected content {:#?}", c),
+            )),
         }
     }
 }

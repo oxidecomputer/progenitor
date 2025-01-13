@@ -7,23 +7,20 @@ use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
         /// Error from a TryFrom or FromStr implementation.
-        pub struct ConversionError(std::borrow::Cow<'static, str>);
-        impl std::error::Error for ConversionError {}
-        impl std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Display::fmt(&self.0, f)
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
-        impl std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Debug::fmt(&self.0, f)
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
 
@@ -285,13 +282,14 @@ pub mod builder {
             let url = url.map_err(Error::InvalidRequest)?;
             let request = {
                 let _url = format!("{}/key/{}", client.baseurl, encode_path(&query.to_string()),);
-                let mut _query = Vec::with_capacity(5usize);
-                _query.push(("client", client.to_string()));
-                _query.push(("request", request.to_string()));
-                _query.push(("response", response.to_string()));
-                _query.push(("result", result.to_string()));
-                _query.push(("url", url.to_string()));
-                client.client.get(_url).query(&_query)
+                client
+                    .client
+                    .get(_url)
+                    .query(&progenitor_client::QueryParam::new("client", &client))
+                    .query(&progenitor_client::QueryParam::new("request", &request))
+                    .query(&progenitor_client::QueryParam::new("response", &response))
+                    .query(&progenitor_client::QueryParam::new("result", &result))
+                    .query(&progenitor_client::QueryParam::new("url", &url))
             };
             Ok(built::KeyGet {
                 client: _client,

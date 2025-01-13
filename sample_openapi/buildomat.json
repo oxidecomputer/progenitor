@@ -34,13 +34,13 @@
         }
       }
     },
-    "/v1/task/{task}": {
+    "/v1/task/{Task}": {
       "get": {
         "operationId": "task_get",
         "parameters": [
           {
             "in": "path",
-            "name": "task",
+            "name": "Task",
             "required": true,
             "schema": {
               "type": "string"
@@ -473,6 +473,42 @@
           }
         }
       }
+    },
+    "/v1/things": {
+      "get": {
+        "operationId": "get_thing_or_things",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "yes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -568,9 +604,13 @@
           },
           "script": {
             "type": "string"
+          },
+          "default": {
+            "type": "boolean"
           }
         },
         "required": [
+          "default",
           "name",
           "script"
         ]
@@ -822,6 +862,40 @@
         },
         "required": [
           "workers"
+        ]
+      },
+      "ObjWithOptionArray": {
+        "type": "object",
+        "properties": {
+          "things": {
+            "type": "array",
+            "items": {
+              "nullable": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Task"
+                }
+              ]
+            }
+          },
+          "stranger-things": {
+            "type": "array",
+            "items": {
+              "nullable": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Task"
+                }
+              ],
+              "oneOf": [
+                {}
+              ]
+            }
+          }
+        },
+        "required": [
+          "things",
+          "stranger-things"
         ]
       }
     }
