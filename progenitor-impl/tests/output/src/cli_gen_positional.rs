@@ -141,14 +141,16 @@ impl Client {
         gateway: &'a str,
         body: &'a types::UnoBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
-        let url = format!("{}/uno", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new("gateway", &gateway))
-            .build()?;
+        let mut request = {
+            let url = format!("{}/uno", self.baseurl,);
+            self.client
+                .get(url)
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

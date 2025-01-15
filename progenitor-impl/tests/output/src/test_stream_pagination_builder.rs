@@ -366,6 +366,50 @@ pub mod builder {
     use super::{
         encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
+            ResponseValue,
+        };
+        pub struct PaginatedU32s<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> PaginatedU32s<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    400u16..=499u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    500u16..=599u16 => Err(Error::ErrorResponse(
+                        ResponseValue::from_response(response).await?,
+                    )),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::paginated_u32s`]
     ///
     ///[`Client::paginated_u32s`]: super::Client::paginated_u32s
@@ -409,6 +453,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::PaginatedU32s<'a>, Error<types::Error>> {
             let Self {
                 client,
                 limit,
@@ -416,33 +464,25 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/", client.baseurl,);
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&progenitor_client::QueryParam::new("limit", &limit))
+                    .query(&progenitor_client::QueryParam::new(
+                        "page_token",
+                        &page_token,
+                    ))
+            };
+            Ok(built::PaginatedU32s {
+                client: client,
+                request,
+            })
         }
 
         ///Streams `GET` requests to `/`

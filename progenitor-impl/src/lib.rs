@@ -538,15 +538,21 @@ impl Generator {
         input_methods: &[method::OperationMethod],
         has_inner: bool,
     ) -> Result<TokenStream> {
-        let builder_struct = input_methods
+        let (builder_struct, built_struct): (Vec<TokenStream>, Vec<TokenStream>) = input_methods
             .iter()
             .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Result<Vec<_>>>()?
+            .into_iter()
+            .unzip();
 
         let builder_methods = input_methods
             .iter()
             .map(|method| self.builder_impl(method))
             .collect::<Vec<_>>();
+
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
 
         let out = quote! {
             impl Client {
@@ -568,6 +574,21 @@ impl Generator {
                     ResponseValue,
                 };
 
+                pub mod built {
+                    use super::super::types;
+                    #[allow(unused_imports)]
+                    use super::super::{
+                        encode_path,
+                        ByteStream,
+                        Error,
+                        HeaderMap,
+                        HeaderValue,
+                        RequestBuilderExt,
+                        ResponseValue,
+                    };
+                    #(#built_struct)*
+                }
+
                 #(#builder_struct)*
             }
 
@@ -586,10 +607,12 @@ impl Generator {
         tag_info: BTreeMap<&String, &openapiv3::Tag>,
         has_inner: bool,
     ) -> Result<TokenStream> {
-        let builder_struct = input_methods
+        let (builder_struct, built_struct): (Vec<TokenStream>, Vec<TokenStream>) = input_methods
             .iter()
-            .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
-            .collect::<Result<Vec<_>>>()?;
+            .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
+            .collect::<Result<Vec<_>>>()?
+            .into_iter()
+            .unzip();
 
         let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
 
@@ -614,6 +637,21 @@ impl Generator {
                     RequestBuilderExt,
                     ResponseValue,
                 };
+
+                pub mod built {
+                    use super::super::types;
+                    #[allow(unused_imports)]
+                    use super::super::{
+                        encode_path,
+                        ByteStream,
+                        Error,
+                        HeaderMap,
+                        HeaderValue,
+                        RequestBuilderExt,
+                        ResponseValue,
+                    };
+                    #(#built_struct)*
+                }
 
                 #(#builder_struct)*
             }
