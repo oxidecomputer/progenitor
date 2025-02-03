@@ -8,7 +8,6 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"
 keywords = ["openapi", "openapiv3", "sdk", "generator"]
 categories = ["api-bindings", "development-tools::cargo-plugins"]
-build = "build.rs"
 
 default-run = "cargo-progenitor"
 
@@ -18,13 +17,12 @@ progenitor-client = { workspace = true }
 progenitor-impl = { workspace = true }
 
 anyhow = { workspace = true }
+assert_cmd = { workspace = true }
 clap = { workspace = true }
+clap-cargo = { workspace = true }
 env_logger = { workspace = true }
+expectorate = { workspace = true }
 openapiv3 = { workspace = true }
 rustfmt-wrapper = { workspace = true }
 serde_json = { workspace = true }
 serde_yaml = { workspace = true }
-
-[build-dependencies]
-built = { workspace = true }
-project-root = { workspace = true }
