@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 use std::{
     fs::{File, OpenOptions},
@@ -12,14 +12,8 @@ use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use progenitor_impl::space_out_items;
 
-pub mod built_info {
-    // The file has been placed there by the build script.
-    include!(concat!(env!("OUT_DIR"), "/built.rs"));
-}
-
-/// Determine if current version is a pre-release or was built from a git-repo
-fn release_is_unstable() -> bool {
-    !built_info::PKG_VERSION_PRE.is_empty() || built_info::GIT_VERSION.is_some()
+fn is_non_release() -> bool {
+    cfg!(debug_assertions)
 }
 
 #[derive(Parser)]
@@ -29,6 +23,7 @@ enum CargoCli {
     Progenitor(Args),
 }
 
+/// Generate a stand-alone crate from an OpenAPI document
 #[derive(Parser)]
 struct Args {
     /// OpenAPI definition document (JSON or YAML)
@@ -56,8 +51,8 @@ struct Args {
     /// SDK tag style
     #[clap(value_enum, long, default_value_t = TagArg::Merged)]
     tags: TagArg,
-    /// Include client
-    #[clap(default_value = match release_is_unstable() { true => "true", false => "false" }, long, action = clap::ArgAction::Set)]
+    /// Include client code rather than depending on progenitor-client
+    #[clap(default_value = match is_non_release() { true => "true", false => "false" }, long, action = clap::ArgAction::Set)]
     include_client: bool,
 }
 
@@ -229,9 +224,9 @@ struct Dependencies {
     uuid: &'static str,
 }
 
-const DEPENDENCIES: Dependencies = Dependencies {
+static DEPENDENCIES: Dependencies = Dependencies {
     base64: "0.22",
-    bytes: "1.0",
+    bytes: "1.9",
     chrono: "0.4",
     futures: "0.3",
     percent_encoding: "2.3",
@@ -264,11 +259,12 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
         ));
         needs_serde_json = true;
     } else {
-        let crate_version = if release_is_unstable() {
-            "*"
-        } else {
-            built_info::PKG_VERSION
-        };
+        let crate_version =
+            if let (false, Some(value)) = (is_non_release(), option_env!("CARGO_PKG_VERSION")) {
+                value
+            } else {
+                "*"
+            };
         let client_version_dep = format!("progenitor-client = \"{}\"", crate_version);
         deps.push(client_version_dep);
     }
