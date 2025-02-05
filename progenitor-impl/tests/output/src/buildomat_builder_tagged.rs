@@ -9,7 +9,7 @@ use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +37,7 @@ pub mod types {
         }
     }
 
-    ///GetThingOrThingsId
+    ///`GetThingOrThingsId`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -76,7 +76,7 @@ pub mod types {
         }
     }
 
-    ///ObjWithOptionArray
+    ///`ObjWithOptionArray`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -148,7 +148,7 @@ pub mod types {
         }
     }
 
-    ///Task
+    ///`Task`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -206,7 +206,7 @@ pub mod types {
         }
     }
 
-    ///TaskEvent
+    ///`TaskEvent`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -259,7 +259,7 @@ pub mod types {
         }
     }
 
-    ///TaskOutput
+    ///`TaskOutput`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -306,7 +306,7 @@ pub mod types {
         }
     }
 
-    ///TaskSubmit
+    ///`TaskSubmit`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -359,7 +359,7 @@ pub mod types {
         }
     }
 
-    ///TaskSubmitResult
+    ///`TaskSubmitResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -394,7 +394,7 @@ pub mod types {
         }
     }
 
-    ///UploadedChunk
+    ///`UploadedChunk`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -429,7 +429,7 @@ pub mod types {
         }
     }
 
-    ///UserCreate
+    ///`UserCreate`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -464,7 +464,7 @@ pub mod types {
         }
     }
 
-    ///UserCreateResult
+    ///`UserCreateResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -509,7 +509,7 @@ pub mod types {
         }
     }
 
-    ///WhoamiResult
+    ///`WhoamiResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -549,7 +549,7 @@ pub mod types {
         }
     }
 
-    ///Worker
+    ///`Worker`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -613,7 +613,7 @@ pub mod types {
         }
     }
 
-    ///WorkerAddOutput
+    ///`WorkerAddOutput`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -662,7 +662,7 @@ pub mod types {
         }
     }
 
-    ///WorkerAppendTask
+    ///`WorkerAppendTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -708,7 +708,7 @@ pub mod types {
         }
     }
 
-    ///WorkerBootstrap
+    ///`WorkerBootstrap`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -748,7 +748,7 @@ pub mod types {
         }
     }
 
-    ///WorkerBootstrapResult
+    ///`WorkerBootstrapResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -783,7 +783,7 @@ pub mod types {
         }
     }
 
-    ///WorkerCompleteTask
+    ///`WorkerCompleteTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -818,7 +818,7 @@ pub mod types {
         }
     }
 
-    ///WorkerPingResult
+    ///`WorkerPingResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -858,7 +858,7 @@ pub mod types {
         }
     }
 
-    ///WorkerPingTask
+    ///`WorkerPingTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -906,7 +906,7 @@ pub mod types {
         }
     }
 
-    ///WorkerTask
+    ///`WorkerTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -951,7 +951,7 @@ pub mod types {
         }
     }
 
-    ///WorkersResult
+    ///`WorkersResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///

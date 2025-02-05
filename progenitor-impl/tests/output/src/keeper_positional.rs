@@ -10,7 +10,7 @@ use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -38,7 +38,7 @@ pub mod types {
         }
     }
 
-    ///EnrolBody
+    ///`EnrolBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -73,7 +73,7 @@ pub mod types {
         }
     }
 
-    ///GlobalJobsResult
+    ///`GlobalJobsResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -106,7 +106,7 @@ pub mod types {
         }
     }
 
-    ///OutputRecord
+    ///`OutputRecord`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -146,7 +146,7 @@ pub mod types {
         }
     }
 
-    ///PingResult
+    ///`PingResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -181,7 +181,7 @@ pub mod types {
         }
     }
 
-    ///ReportFinishBody
+    ///`ReportFinishBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -229,7 +229,7 @@ pub mod types {
         }
     }
 
-    ///ReportId
+    ///`ReportId`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -281,7 +281,7 @@ pub mod types {
         }
     }
 
-    ///ReportOutputBody
+    ///`ReportOutputBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -316,7 +316,7 @@ pub mod types {
         }
     }
 
-    ///ReportResult
+    ///`ReportResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -346,7 +346,7 @@ pub mod types {
         }
     }
 
-    ///ReportStartBody
+    ///`ReportStartBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -387,7 +387,7 @@ pub mod types {
         }
     }
 
-    ///ReportSummary
+    ///`ReportSummary`
     ///
     /// <details><summary>JSON schema</summary>
     ///
