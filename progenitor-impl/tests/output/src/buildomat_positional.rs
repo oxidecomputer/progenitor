@@ -936,16 +936,16 @@ impl Client {
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/control/hold", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
+        let mut request = {
+            let url = format!("{}/v1/control/hold", self.baseurl,);
+            self.client.post(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -956,9 +956,13 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/control/resume`
     pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/control/resume", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).build()?;
+        let mut request = {
+            let url = format!("{}/v1/control/resume", self.baseurl,);
+            self.client.post(url)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -972,20 +976,20 @@ impl Client {
         &'a self,
         task: &'a str,
     ) -> Result<ResponseValue<types::Task>, Error<()>> {
-        let url = format!(
-            "{}/v1/task/{}",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
+        let mut request = {
+            let url = format!(
+                "{}/v1/task/{}",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            self.client.get(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -998,16 +1002,16 @@ impl Client {
     pub async fn tasks_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
-        let url = format!("{}/v1/tasks", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
+        let mut request = {
+            let url = format!("{}/v1/tasks", self.baseurl,);
+            self.client.get(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1021,17 +1025,19 @@ impl Client {
         &'a self,
         body: &'a types::TaskSubmit,
     ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
-        let url = format!("{}/v1/tasks", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/tasks", self.baseurl,);
+            self.client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1046,21 +1052,23 @@ impl Client {
         task: &'a str,
         minseq: Option<u32>,
     ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
-        let url = format!(
-            "{}/v1/tasks/{}/events",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("minseq", &minseq))
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/tasks/{}/events",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("minseq", &minseq))
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1074,20 +1082,20 @@ impl Client {
         &'a self,
         task: &'a str,
     ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
-        let url = format!(
-            "{}/v1/tasks/{}/outputs",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
+        let mut request = {
+            let url = format!(
+                "{}/v1/tasks/{}/outputs",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            self.client.get(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1102,14 +1110,18 @@ impl Client {
         task: &'a str,
         output: &'a str,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
-        let url = format!(
-            "{}/v1/tasks/{}/outputs/{}",
-            self.baseurl,
-            encode_path(&task.to_string()),
-            encode_path(&output.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/tasks/{}/outputs/{}",
+                self.baseurl,
+                encode_path(&task.to_string()),
+                encode_path(&output.to_string()),
+            );
+            self.client.get(url)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1123,17 +1135,19 @@ impl Client {
         &'a self,
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
-        let url = format!("{}/v1/users", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/users", self.baseurl,);
+            self.client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1144,16 +1158,16 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/whoami`
     pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
-        let url = format!("{}/v1/whoami", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
+        let mut request = {
+            let url = format!("{}/v1/whoami", self.baseurl,);
+            self.client.get(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1167,17 +1181,19 @@ impl Client {
         &'a self,
         body: String,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/whoami/name", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static("text/plain"),
-            )
-            .body(body)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/whoami/name", self.baseurl,);
+            self.client
+                .put(url)
+                .header(
+                    reqwest::header::CONTENT_TYPE,
+                    reqwest::header::HeaderValue::from_static("text/plain"),
+                )
+                .body(body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1191,17 +1207,19 @@ impl Client {
         &'a self,
         body: &'a types::WorkerBootstrap,
     ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
-        let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
+            self.client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1214,16 +1232,16 @@ impl Client {
     pub async fn worker_ping<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
-        let url = format!("{}/v1/worker/ping", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
+        let mut request = {
+            let url = format!("{}/v1/worker/ping", self.baseurl,);
+            self.client.get(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1238,13 +1256,17 @@ impl Client {
         task: &'a str,
         body: &'a types::WorkerAppendTask,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!(
-            "{}/v1/worker/task/{}/append",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).json(&body).build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/worker/task/{}/append",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            self.client.post(url).json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1259,25 +1281,27 @@ impl Client {
         task: &'a str,
         body: B,
     ) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
-        let url = format!(
-            "{}/v1/worker/task/{}/chunk",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .header(
-                reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static("application/octet-stream"),
-            )
-            .body(body)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/worker/task/{}/chunk",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .header(
+                    reqwest::header::CONTENT_TYPE,
+                    reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                )
+                .body(body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1292,13 +1316,17 @@ impl Client {
         task: &'a str,
         body: &'a types::WorkerCompleteTask,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!(
-            "{}/v1/worker/task/{}/complete",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).json(&body).build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/worker/task/{}/complete",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            self.client.post(url).json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1313,13 +1341,17 @@ impl Client {
         task: &'a str,
         body: &'a types::WorkerAddOutput,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!(
-            "{}/v1/worker/task/{}/output",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).json(&body).build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/worker/task/{}/output",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            self.client.post(url).json(&body)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1332,16 +1364,16 @@ impl Client {
     pub async fn workers_list<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
-        let url = format!("{}/v1/workers", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
+        let mut request = {
+            let url = format!("{}/v1/workers", self.baseurl,);
+            self.client.get(url).header(
                 reqwest::header::ACCEPT,
                 reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .build()?;
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1352,9 +1384,13 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/workers/recycle`
     pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/workers/recycle", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).build()?;
+        let mut request = {
+            let url = format!("{}/v1/workers/recycle", self.baseurl,);
+            self.client.post(url)
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -1368,17 +1404,19 @@ impl Client {
         &'a self,
         id: Option<&'a types::GetThingOrThingsId>,
     ) -> Result<ResponseValue<::std::string::String>, Error<()>> {
-        let url = format!("{}/v1/things", self.baseurl,);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("id", &id))
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/things", self.baseurl,);
+            self.client
+                .get(url)
+                .header(
+                    reqwest::header::ACCEPT,
+                    reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("id", &id))
+        }
+
+        .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

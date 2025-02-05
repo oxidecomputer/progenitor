@@ -225,6 +225,42 @@ pub mod builder {
     use super::{
         encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
+            ResponseValue,
+        };
+        pub struct Uno<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> Uno<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let result = client.client.execute(request).await;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::uno`]
     ///
     ///[`Client::uno`]: super::Client::uno
@@ -276,6 +312,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/uno`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::Uno<'a>, Error<()>> {
             let Self {
                 client,
                 gateway,
@@ -285,20 +325,18 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::UnoBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/uno", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .json(&body)
-                .query(&progenitor_client::QueryParam::new("gateway", &gateway))
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            let request = {
+                let url = format!("{}/uno", client.baseurl,);
+                client
+                    .client
+                    .get(url)
+                    .json(&body)
+                    .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+            };
+            Ok(built::Uno {
+                client: client,
+                request,
+            })
         }
     }
 }

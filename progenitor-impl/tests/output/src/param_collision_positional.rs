@@ -124,18 +124,20 @@ impl Client {
         result: bool,
         url: bool,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let _url = format!("{}/key/{}", self.baseurl, encode_path(&query.to_string()),);
         #[allow(unused_mut)]
-        let mut _request = self
-            .client
-            .get(_url)
-            .query(&progenitor_client::QueryParam::new("client", &client))
-            .query(&progenitor_client::QueryParam::new("request", &request))
-            .query(&progenitor_client::QueryParam::new("response", &response))
-            .query(&progenitor_client::QueryParam::new("result", &result))
-            .query(&progenitor_client::QueryParam::new("url", &url))
-            .build()?;
-        let _result = self.client.execute(_request).await;
+        let mut request = {
+            let _url = format!("{}/key/{}", self.baseurl, encode_path(&query.to_string()),);
+            self.client
+                .get(_url)
+                .query(&progenitor_client::QueryParam::new("client", &client))
+                .query(&progenitor_client::QueryParam::new("request", &request))
+                .query(&progenitor_client::QueryParam::new("response", &response))
+                .query(&progenitor_client::QueryParam::new("result", &result))
+                .query(&progenitor_client::QueryParam::new("url", &url))
+        }
+
+        .build()?;
+        let _result = self.client.execute(request).await;
         let _response = _result?;
         match _response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(_response)),

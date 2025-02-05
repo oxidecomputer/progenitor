@@ -136,6 +136,42 @@ pub mod builder {
     use super::{
         encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
+            ResponseValue,
+        };
+        pub struct KeyGet<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> KeyGet<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let _result = client.client.execute(request).await;
+                let _response = _result?;
+                match _response.status().as_u16() {
+                    200u16 => Ok(ResponseValue::empty(_response)),
+                    _ => Err(Error::UnexpectedResponse(_response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::key_get`]
     ///
     ///[`Client::key_get`]: super::Client::key_get
@@ -225,6 +261,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/key/{query}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::KeyGet<'a>, Error<()>> {
             let Self {
                 _client,
                 query,
@@ -240,27 +280,21 @@ pub mod builder {
             let response = response.map_err(Error::InvalidRequest)?;
             let result = result.map_err(Error::InvalidRequest)?;
             let url = url.map_err(Error::InvalidRequest)?;
-            let _url = format!(
-                "{}/key/{}",
-                _client.baseurl,
-                encode_path(&query.to_string()),
-            );
-            #[allow(unused_mut)]
-            let mut _request = _client
-                .client
-                .get(_url)
-                .query(&progenitor_client::QueryParam::new("client", &client))
-                .query(&progenitor_client::QueryParam::new("request", &request))
-                .query(&progenitor_client::QueryParam::new("response", &response))
-                .query(&progenitor_client::QueryParam::new("result", &result))
-                .query(&progenitor_client::QueryParam::new("url", &url))
-                .build()?;
-            let _result = _client.client.execute(_request).await;
-            let _response = _result?;
-            match _response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(_response)),
-                _ => Err(Error::UnexpectedResponse(_response)),
-            }
+            let request = {
+                let _url = format!("{}/key/{}", client.baseurl, encode_path(&query.to_string()),);
+                client
+                    .client
+                    .get(_url)
+                    .query(&progenitor_client::QueryParam::new("client", &client))
+                    .query(&progenitor_client::QueryParam::new("request", &request))
+                    .query(&progenitor_client::QueryParam::new("response", &response))
+                    .query(&progenitor_client::QueryParam::new("result", &result))
+                    .query(&progenitor_client::QueryParam::new("url", &url))
+            };
+            Ok(built::KeyGet {
+                client: _client,
+                request,
+            })
         }
     }
 }
