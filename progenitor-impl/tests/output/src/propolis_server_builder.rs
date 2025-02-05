@@ -9,7 +9,7 @@ use reqwest::header::{HeaderMap, HeaderValue};
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +37,7 @@ pub mod types {
         }
     }
 
-    ///CrucibleOpts
+    ///`CrucibleOpts`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -143,7 +143,7 @@ pub mod types {
         }
     }
 
-    ///DiskAttachment
+    ///`DiskAttachment`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -193,7 +193,7 @@ pub mod types {
         }
     }
 
-    ///DiskAttachmentState
+    ///`DiskAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -247,7 +247,7 @@ pub mod types {
         }
     }
 
-    ///DiskRequest
+    ///`DiskRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -359,7 +359,7 @@ pub mod types {
         }
     }
 
-    ///Instance
+    ///`Instance`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -417,7 +417,7 @@ pub mod types {
         }
     }
 
-    ///InstanceEnsureRequest
+    ///`InstanceEnsureRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -497,7 +497,7 @@ pub mod types {
         }
     }
 
-    ///InstanceEnsureResponse
+    ///`InstanceEnsureResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -552,7 +552,7 @@ pub mod types {
         }
     }
 
-    ///InstanceGetResponse
+    ///`InstanceGetResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -589,7 +589,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateInitiateRequest
+    ///`InstanceMigrateInitiateRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -638,7 +638,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateInitiateResponse
+    ///`InstanceMigrateInitiateResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -676,7 +676,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateStatusRequest
+    ///`InstanceMigrateStatusRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -714,7 +714,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateStatusResponse
+    ///`InstanceMigrateStatusResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -751,7 +751,7 @@ pub mod types {
         }
     }
 
-    ///InstanceProperties
+    ///`InstanceProperties`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -956,7 +956,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateMonitorRequest
+    ///`InstanceStateMonitorRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -995,7 +995,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateMonitorResponse
+    ///`InstanceStateMonitorResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1039,7 +1039,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateRequested
+    ///`InstanceStateRequested`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1130,7 +1130,7 @@ pub mod types {
         }
     }
 
-    ///MigrationState
+    ///`MigrationState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1245,7 +1245,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterface
+    ///`NetworkInterface`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1287,7 +1287,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterfaceAttachmentState
+    ///`NetworkInterfaceAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1338,7 +1338,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterfaceRequest
+    ///`NetworkInterfaceRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1459,7 +1459,7 @@ pub mod types {
         }
     }
 
-    ///VolumeConstructionRequest
+    ///`VolumeConstructionRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
