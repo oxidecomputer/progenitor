@@ -57,7 +57,7 @@ tokio = { version = "1.43.0", features = ["rt", "net"] }
 typify = { git = "https://github.com/oxidecomputer/typify" }
 url = "2.5.4"
 unicode-ident = "1.0.14"
-uuid = { version = "1.12.1", features = ["serde", "v4"] }
+uuid = { version = "1.13.1", features = ["serde", "v4"] }
 
 #[patch."https://github.com/oxidecomputer/typify"]
 #typify = { path = "../typify/typify" }
