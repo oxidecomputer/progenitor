@@ -18,7 +18,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/by-id/disks/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
@@ -78,7 +78,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/by-id/images/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
@@ -138,7 +138,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/instances/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
@@ -199,7 +199,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/by-id/network-interfaces/{}$",
                 value.to_string()
@@ -263,7 +263,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/by-id/organizations/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
@@ -324,7 +324,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/projects/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
@@ -385,7 +385,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/snapshots/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
@@ -446,7 +446,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/vpc-router-routes/{}$", value.to_string()))
                     .unwrap();
@@ -508,7 +508,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/vpc-routers/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
@@ -569,7 +569,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/vpc-subnets/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
@@ -630,7 +630,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/by-id/vpcs/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
@@ -824,7 +824,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -1244,7 +1244,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -1717,7 +1717,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -2119,7 +2119,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -2491,7 +2491,7 @@ pub mod operations {
 
         pub fn end_time<'a, T>(self, value: T) -> Self
         where
-            T: Into<Option<&'a chrono::DateTime<chrono::offset::Utc>>>,
+            T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("end_time", value.to_string()))
@@ -2507,7 +2507,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -2539,7 +2539,7 @@ pub mod operations {
 
         pub fn start_time<'a, T>(self, value: T) -> Self
         where
-            T: Into<Option<&'a chrono::DateTime<chrono::offset::Utc>>>,
+            T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("start_time", value.to_string()))
@@ -2626,7 +2626,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -2975,7 +2975,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -3338,7 +3338,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -3823,7 +3823,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -4912,7 +4912,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -5261,7 +5261,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -5880,7 +5880,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -6390,7 +6390,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -6930,7 +6930,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -7441,7 +7441,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -7658,7 +7658,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -7860,7 +7860,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -7963,7 +7963,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -8240,7 +8240,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/by-id/images/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
@@ -8301,7 +8301,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/by-id/ip-pools/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
@@ -8362,7 +8362,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/system/by-id/silos/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
@@ -8425,7 +8425,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -8704,7 +8704,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -8807,7 +8807,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -8908,7 +8908,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn rack_id(self, value: &uuid::Uuid) -> Self {
+        pub fn rack_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/hardware/racks/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
@@ -8971,7 +8971,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -9072,7 +9072,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn sled_id(self, value: &uuid::Uuid) -> Self {
+        pub fn sled_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/hardware/sleds/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
@@ -9133,7 +9133,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn sled_id(self, value: &uuid::Uuid) -> Self {
+        pub fn sled_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/system/hardware/sleds/{}/disks$",
                 value.to_string()
@@ -9144,7 +9144,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -9247,7 +9247,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -9524,7 +9524,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -9874,7 +9874,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -10147,7 +10147,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -10351,7 +10351,7 @@ pub mod operations {
 
         pub fn end_time<'a, T>(self, value: T) -> Self
         where
-            T: Into<Option<&'a chrono::DateTime<chrono::offset::Utc>>>,
+            T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("end_time", value.to_string()))
@@ -10365,13 +10365,13 @@ pub mod operations {
             }
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             Self(self.0.query_param("id", value.to_string()))
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -10403,7 +10403,7 @@ pub mod operations {
 
         pub fn start_time<'a, T>(self, value: T) -> Self
         where
-            T: Into<Option<&'a chrono::DateTime<chrono::offset::Utc>>>,
+            T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("start_time", value.to_string()))
@@ -10588,7 +10588,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -10689,7 +10689,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn saga_id(self, value: &uuid::Uuid) -> Self {
+        pub fn saga_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/sagas/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
@@ -10751,7 +10751,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -11035,7 +11035,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -11212,7 +11212,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn user_id(self, value: &uuid::Uuid) -> Self {
+        pub fn user_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/system/silos/.*/identity-providers/local/users/{}$",
                 value.to_string()
@@ -11283,7 +11283,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn user_id(self, value: &uuid::Uuid) -> Self {
+        pub fn user_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/system/silos/.*/identity-providers/local/users/{}/set-password$",
                 value.to_string()
@@ -11617,7 +11617,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -11727,7 +11727,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn user_id(self, value: &uuid::Uuid) -> Self {
+        pub fn user_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/system/silos/.*/users/id/{}$",
                 value.to_string()
@@ -11793,7 +11793,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -11956,7 +11956,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -12043,7 +12043,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -12146,7 +12146,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -12539,7 +12539,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -12938,7 +12938,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -13866,7 +13866,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -14338,7 +14338,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -14905,7 +14905,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -15008,7 +15008,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
@@ -15109,7 +15109,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/v1/system/update/deployments/{}$",
                 value.to_string()
@@ -15334,7 +15334,7 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))

@@ -95,7 +95,9 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("end-time")
                     .long("end-time")
-                    .value_parser(::clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
+                    .value_parser(::clap::value_parser!(
+                        ::chrono::DateTime<::chrono::offset::Utc>
+                    ))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -163,7 +165,9 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("start-time")
                     .long("start-time")
-                    .value_parser(::clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
+                    .value_parser(::clap::value_parser!(
+                        ::chrono::DateTime<::chrono::offset::Utc>
+                    ))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -281,7 +285,9 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.duration_millis(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("end-time") {
+        if let Some(value) =
+            matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("end-time")
+        {
             request = request.body_map(|body| body.end_time(value.clone()))
         }
 
@@ -345,7 +351,8 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.script(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("start-time")
+        if let Some(value) =
+            matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("start-time")
         {
             request = request.body_map(|body| body.start_time(value.clone()))
         }

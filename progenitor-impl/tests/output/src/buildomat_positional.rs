@@ -233,7 +233,7 @@ pub mod types {
         pub payload: ::std::string::String,
         pub seq: u32,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&TaskEvent> for TaskEvent {
@@ -537,7 +537,7 @@ pub mod types {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub instance_id: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub lastping: ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+        pub lastping: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         pub recycle: bool,
         pub tasks: ::std::vec::Vec<WorkerTask>,
     }
@@ -622,7 +622,7 @@ pub mod types {
     pub struct WorkerAppendTask {
         pub payload: ::std::string::String,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&WorkerAppendTask> for WorkerAppendTask {

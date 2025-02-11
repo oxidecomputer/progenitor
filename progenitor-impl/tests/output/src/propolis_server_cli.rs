@@ -56,13 +56,13 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("id")
                     .long("id")
-                    .value_parser(::clap::value_parser!(uuid::Uuid))
+                    .value_parser(::clap::value_parser!(::uuid::Uuid))
                     .required(true),
             )
             .arg(
                 ::clap::Arg::new("snapshot-id")
                     .long("snapshot-id")
-                    .value_parser(::clap::value_parser!(uuid::Uuid))
+                    .value_parser(::clap::value_parser!(::uuid::Uuid))
                     .required(true),
             )
             .about("Issue a snapshot request to a crucible backend")
@@ -73,7 +73,7 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("migration-id")
                     .long("migration-id")
-                    .value_parser(::clap::value_parser!(uuid::Uuid))
+                    .value_parser(::clap::value_parser!(::uuid::Uuid))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -210,11 +210,11 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_issue_crucible_snapshot_request();
-        if let Some(value) = matches.get_one::<uuid::Uuid>("id") {
+        if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
             request = request.id(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<uuid::Uuid>("snapshot-id") {
+        if let Some(value) = matches.get_one::<::uuid::Uuid>("snapshot-id") {
             request = request.snapshot_id(value.clone());
         }
 
@@ -238,7 +238,7 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate_status();
-        if let Some(value) = matches.get_one::<uuid::Uuid>("migration-id") {
+        if let Some(value) = matches.get_one::<::uuid::Uuid>("migration-id") {
             request = request.body_map(|body| body.migration_id(value.clone()))
         }
 

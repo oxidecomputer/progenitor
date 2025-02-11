@@ -133,8 +133,8 @@ pub mod types {
     pub mod defaults {
         pub(super) fn default_u64<T, const V: u64>() -> T
         where
-            T: std::convert::TryFrom<u64>,
-            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
+            T: ::std::convert::TryFrom<u64>,
+            <T as ::std::convert::TryFrom<u64>>::Error: ::std::fmt::Debug,
         {
             T::try_from(V).unwrap()
         }

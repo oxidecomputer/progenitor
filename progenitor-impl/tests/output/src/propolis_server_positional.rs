@@ -118,7 +118,7 @@ pub mod types {
         pub control: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub flush_timeout: ::std::option::Option<u32>,
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub key: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -167,7 +167,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskAttachment {
-        pub disk_id: uuid::Uuid,
+        pub disk_id: ::uuid::Uuid,
         pub generation_id: u64,
         pub state: DiskAttachmentState,
     }
@@ -215,7 +215,7 @@ pub mod types {
         Detached,
         Destroyed,
         Faulted,
-        Attached(uuid::Uuid),
+        Attached(::uuid::Uuid),
     }
 
     impl ::std::convert::From<&Self> for DiskAttachmentState {
@@ -224,8 +224,8 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<uuid::Uuid> for DiskAttachmentState {
-        fn from(value: uuid::Uuid) -> Self {
+    impl ::std::convert::From<::uuid::Uuid> for DiskAttachmentState {
+        fn from(value: ::uuid::Uuid) -> Self {
             Self::Attached(value)
         }
     }
@@ -554,9 +554,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateRequest {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
         pub src_addr: ::std::string::String,
-        pub src_uuid: uuid::Uuid,
+        pub src_uuid: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
@@ -586,7 +586,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateResponse {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
@@ -616,7 +616,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusRequest {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
@@ -714,13 +714,13 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
-        pub bootrom_id: uuid::Uuid,
+        pub bootrom_id: ::uuid::Uuid,
         ///Free-form text description of an Instance.
         pub description: ::std::string::String,
         ///Unique identifier for this Instance.
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///ID of the image used to initialize this Instance.
-        pub image_id: uuid::Uuid,
+        pub image_id: ::uuid::Uuid,
         ///Size of memory allocated to the Instance, in MiB.
         pub memory: u64,
         ///Human-readable name of the Instance.
@@ -1467,7 +1467,7 @@ pub mod types {
         #[serde(rename = "volume")]
         Volume {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
             read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
             sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
@@ -1475,7 +1475,7 @@ pub mod types {
         #[serde(rename = "url")]
         Url {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             url: ::std::string::String,
         },
         #[serde(rename = "region")]
@@ -1487,7 +1487,7 @@ pub mod types {
         #[serde(rename = "file")]
         File {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             path: ::std::string::String,
         },
     }
@@ -1627,8 +1627,8 @@ impl Client {
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
     pub async fn instance_issue_crucible_snapshot_request<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
-        snapshot_id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
+        snapshot_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/instance/disk/{}/snapshot/{}",

@@ -197,7 +197,7 @@ impl Client {
     ///   subsequent page
     pub async fn paginated_u32s<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
         let url = format!("{}/", self.baseurl,);
@@ -235,7 +235,7 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     pub fn paginated_u32s_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
     ) -> impl futures::Stream<Item = Result<u32, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
