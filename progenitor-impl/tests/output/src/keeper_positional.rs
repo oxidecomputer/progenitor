@@ -137,7 +137,7 @@ pub mod types {
     pub struct OutputRecord {
         pub msg: ::std::string::String,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&OutputRecord> for OutputRecord {
@@ -218,7 +218,7 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportFinishBody {
         pub duration_millis: i32,
-        pub end_time: chrono::DateTime<chrono::offset::Utc>,
+        pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub exit_status: i32,
         pub id: ReportId,
     }
@@ -271,7 +271,7 @@ pub mod types {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
         pub pid: u64,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub uuid: ::std::string::String,
     }
 
@@ -378,7 +378,7 @@ pub mod types {
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: ::std::string::String,
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&ReportStartBody> for ReportStartBody {
@@ -436,7 +436,7 @@ pub mod types {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
         pub status: i32,
-        pub when: chrono::DateTime<chrono::offset::Utc>,
+        pub when: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&ReportSummary> for ReportSummary {

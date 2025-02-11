@@ -244,7 +244,7 @@ pub mod types {
         pub payload: ::std::string::String,
         pub seq: u32,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&TaskEvent> for TaskEvent {
@@ -596,7 +596,7 @@ pub mod types {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub instance_id: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub lastping: ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+        pub lastping: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         pub recycle: bool,
         pub tasks: ::std::vec::Vec<WorkerTask>,
     }
@@ -693,7 +693,7 @@ pub mod types {
     pub struct WorkerAppendTask {
         pub payload: ::std::string::String,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&WorkerAppendTask> for WorkerAppendTask {
@@ -1163,8 +1163,10 @@ pub mod types {
             payload: ::std::result::Result<::std::string::String, ::std::string::String>,
             seq: ::std::result::Result<u32, ::std::string::String>,
             stream: ::std::result::Result<::std::string::String, ::std::string::String>,
-            time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for TaskEvent {
@@ -1211,7 +1213,7 @@ pub mod types {
             }
             pub fn time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.time = value
@@ -1675,7 +1677,7 @@ pub mod types {
                 ::std::string::String,
             >,
             lastping: ::std::result::Result<
-                ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+                ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
                 ::std::string::String,
             >,
             recycle: ::std::result::Result<bool, ::std::string::String>,
@@ -1729,7 +1731,7 @@ pub mod types {
             pub fn lastping<T>(mut self, value: T) -> Self
             where
                 T: ::std::convert::TryInto<
-                    ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+                    ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
                 >,
                 T::Error: ::std::fmt::Display,
             {
@@ -1869,8 +1871,10 @@ pub mod types {
         pub struct WorkerAppendTask {
             payload: ::std::result::Result<::std::string::String, ::std::string::String>,
             stream: ::std::result::Result<::std::string::String, ::std::string::String>,
-            time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for WorkerAppendTask {
@@ -1906,7 +1910,7 @@ pub mod types {
             }
             pub fn time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.time = value

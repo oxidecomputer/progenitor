@@ -592,14 +592,14 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         pub service: ServiceUsingCertificate,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Certificate> for Certificate {
@@ -774,11 +774,11 @@ pub mod types {
     pub struct ComponentUpdate {
         pub component_type: UpdateableComponentType,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         pub version: SemverVersion,
     }
 
@@ -861,7 +861,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Cumulativedouble {
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub value: f64,
     }
 
@@ -898,7 +898,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Cumulativeint64 {
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub value: i64,
     }
 
@@ -1356,7 +1356,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DeviceAccessTokenRequest {
-        pub client_id: uuid::Uuid,
+        pub client_id: ::uuid::Uuid,
         pub device_code: ::std::string::String,
         pub grant_type: ::std::string::String,
     }
@@ -1388,7 +1388,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DeviceAuthRequest {
-        pub client_id: uuid::Uuid,
+        pub client_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&DeviceAuthRequest> for DeviceAuthRequest {
@@ -1559,20 +1559,20 @@ pub mod types {
         pub description: ::std::string::String,
         pub device_path: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub image_id: ::std::option::Option<uuid::Uuid>,
+        pub image_id: ::std::option::Option<::uuid::Uuid>,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        pub project_id: uuid::Uuid,
+        pub project_id: ::uuid::Uuid,
         pub size: ByteCount,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub snapshot_id: ::std::option::Option<uuid::Uuid>,
+        pub snapshot_id: ::std::option::Option<::uuid::Uuid>,
         pub state: DiskState,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Disk> for Disk {
@@ -1962,13 +1962,13 @@ pub mod types {
         },
         ///Create a disk from a disk snapshot
         #[serde(rename = "snapshot")]
-        Snapshot { snapshot_id: uuid::Uuid },
+        Snapshot { snapshot_id: ::uuid::Uuid },
         ///Create a disk from a project image
         #[serde(rename = "image")]
-        Image { image_id: uuid::Uuid },
+        Image { image_id: ::uuid::Uuid },
         ///Create a disk from a global image
         #[serde(rename = "global_image")]
-        GlobalImage { image_id: uuid::Uuid },
+        GlobalImage { image_id: ::uuid::Uuid },
     }
 
     impl ::std::convert::From<&Self> for DiskSource {
@@ -2118,13 +2118,13 @@ pub mod types {
         Detached,
         ///Disk is being attached to the given Instance
         #[serde(rename = "attaching")]
-        Attaching(uuid::Uuid),
+        Attaching(::uuid::Uuid),
         ///Disk is attached to the given Instance
         #[serde(rename = "attached")]
-        Attached(uuid::Uuid),
+        Attached(::uuid::Uuid),
         ///Disk is being detached from the given Instance
         #[serde(rename = "detaching")]
-        Detaching(uuid::Uuid),
+        Detaching(::uuid::Uuid),
         #[serde(rename = "destroyed")]
         Destroyed,
         #[serde(rename = "faulted")]
@@ -2247,7 +2247,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ExternalIp {
-        pub ip: std::net::IpAddr,
+        pub ip: ::std::net::IpAddr,
         pub kind: IpKind,
     }
 
@@ -2765,7 +2765,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct FleetRoleRoleAssignment {
-        pub identity_id: uuid::Uuid,
+        pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: FleetRole,
     }
@@ -2887,15 +2887,15 @@ pub mod types {
         ///Image distribution
         pub distribution: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///total size in bytes
         pub size: ByteCount,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         ///URL source of this image, if any
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub url: ::std::option::Option<::std::string::String>,
@@ -3060,9 +3060,9 @@ pub mod types {
     pub struct Group {
         ///Human-readable name that can identify the group
         pub display_name: ::std::string::String,
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///Uuid of the silo to which this group belongs
-        pub silo_id: uuid::Uuid,
+        pub silo_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&Group> for Group {
@@ -3226,7 +3226,7 @@ pub mod types {
     pub struct Histogramdouble {
         pub bins: ::std::vec::Vec<Bindouble>,
         pub n_samples: u64,
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Histogramdouble> for Histogramdouble {
@@ -3344,7 +3344,7 @@ pub mod types {
     pub struct Histogramint64 {
         pub bins: ::std::vec::Vec<Binint64>,
         pub n_samples: u64,
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Histogramint64> for Histogramint64 {
@@ -3505,15 +3505,15 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///Identity provider type
         pub provider_type: IdentityProviderType,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&IdentityProvider> for IdentityProvider {
@@ -3912,17 +3912,17 @@ pub mod types {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub digest: ::std::option::Option<Digest>,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///The project the disk belongs to
-        pub project_id: uuid::Uuid,
+        pub project_id: ::uuid::Uuid,
         ///total size in bytes
         pub size: ByteCount,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         ///URL source of this image, if any
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub url: ::std::option::Option<::std::string::String>,
@@ -4113,7 +4113,7 @@ pub mod types {
         #[serde(rename = "url")]
         Url { url: ::std::string::String },
         #[serde(rename = "snapshot")]
-        Snapshot { id: uuid::Uuid },
+        Snapshot { id: ::uuid::Uuid },
         #[serde(rename = "you_can_boot_anything_as_long_as_its_alpine")]
         YouCanBootAnythingAsLongAsItsAlpine,
     }
@@ -4218,7 +4218,7 @@ pub mod types {
         ///RFC1035-compliant hostname for the Instance.
         pub hostname: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///memory allocated for this Instance
         pub memory: ByteCount,
         ///unique, mutable, user-controlled identifier for each resource
@@ -4226,13 +4226,13 @@ pub mod types {
         ///number of CPUs allocated for this Instance
         pub ncpus: InstanceCpuCount,
         ///id for the project containing this Instance
-        pub project_id: uuid::Uuid,
+        pub project_id: ::uuid::Uuid,
         pub run_state: InstanceState,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
-        pub time_run_state_updated: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
+        pub time_run_state_updated: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Instance> for Instance {
@@ -4567,7 +4567,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrate {
-        pub dst_sled_id: uuid::Uuid,
+        pub dst_sled_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrate> for InstanceMigrate {
@@ -5224,13 +5224,13 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&IpPool> for IpPool {
@@ -5307,9 +5307,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct IpPoolRange {
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         pub range: IpRange,
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&IpPoolRange> for IpPoolRange {
@@ -5650,8 +5650,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Ipv4Range {
-        pub first: std::net::Ipv4Addr,
-        pub last: std::net::Ipv4Addr,
+        pub first: ::std::net::Ipv4Addr,
+        pub last: ::std::net::Ipv4Addr,
     }
 
     impl ::std::convert::From<&Ipv4Range> for Ipv4Range {
@@ -5790,8 +5790,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Ipv6Range {
-        pub first: std::net::Ipv6Addr,
-        pub last: std::net::Ipv6Addr,
+        pub first: ::std::net::Ipv6Addr,
+        pub last: ::std::net::Ipv6Addr,
     }
 
     impl ::std::convert::From<&Ipv6Range> for Ipv6Range {
@@ -6028,7 +6028,7 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Measurement {
         pub datum: Datum,
-        pub timestamp: chrono::DateTime<chrono::offset::Utc>,
+        pub timestamp: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Measurement> for Measurement {
@@ -6206,7 +6206,7 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     #[serde(untagged)]
     pub enum NameOrId {
-        Id(uuid::Uuid),
+        Id(::uuid::Uuid),
         Name(Name),
     }
 
@@ -6263,8 +6263,8 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<uuid::Uuid> for NameOrId {
-        fn from(value: uuid::Uuid) -> Self {
+    impl ::std::convert::From<::uuid::Uuid> for NameOrId {
+        fn from(value: ::uuid::Uuid) -> Self {
             Self::Id(value)
         }
     }
@@ -6569,11 +6569,11 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///The Instance to which the interface belongs.
-        pub instance_id: uuid::Uuid,
+        pub instance_id: ::uuid::Uuid,
         ///The IP address assigned to this interface.
-        pub ip: std::net::IpAddr,
+        pub ip: ::std::net::IpAddr,
         ///The MAC address assigned to this interface.
         pub mac: MacAddr,
         ///unique, mutable, user-controlled identifier for each resource
@@ -6582,13 +6582,13 @@ pub mod types {
         /// attached.
         pub primary: bool,
         ///The subnet to which the interface belongs.
-        pub subnet_id: uuid::Uuid,
+        pub subnet_id: ::uuid::Uuid,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         ///The VPC to which the interface belongs.
-        pub vpc_id: uuid::Uuid,
+        pub vpc_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&NetworkInterface> for NetworkInterface {
@@ -6654,7 +6654,7 @@ pub mod types {
         ///The IP address for the interface. One will be auto-assigned if not
         /// provided.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub ip: ::std::option::Option<std::net::IpAddr>,
+        pub ip: ::std::option::Option<::std::net::IpAddr>,
         pub name: Name,
         ///The VPC Subnet in which to create the interface.
         pub subnet_name: Name,
@@ -6927,13 +6927,13 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Organization> for Organization {
@@ -7196,7 +7196,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct OrganizationRoleRoleAssignment {
-        pub identity_id: uuid::Uuid,
+        pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: OrganizationRole,
     }
@@ -7410,16 +7410,16 @@ pub mod types {
     pub struct PhysicalDisk {
         pub disk_type: PhysicalDiskType,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         pub model: ::std::string::String,
         pub serial: ::std::string::String,
         ///The sled to which this disk is attached, if any.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub sled_id: ::std::option::Option<uuid::Uuid>,
+        pub sled_id: ::std::option::Option<::uuid::Uuid>,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         pub vendor: ::std::string::String,
     }
 
@@ -7618,14 +7618,14 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        pub organization_id: uuid::Uuid,
+        pub organization_id: ::uuid::Uuid,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Project> for Project {
@@ -7888,7 +7888,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ProjectRoleRoleAssignment {
-        pub identity_id: uuid::Uuid,
+        pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: ProjectRole,
     }
@@ -7994,11 +7994,11 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Rack {
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Rack> for Rack {
@@ -8332,7 +8332,7 @@ pub mod types {
     pub enum RouteDestination {
         ///Route applies to traffic destined for a specific IP address
         #[serde(rename = "ip")]
-        Ip(std::net::IpAddr),
+        Ip(::std::net::IpAddr),
         ///Route applies to traffic destined for a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
@@ -8350,8 +8350,8 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<std::net::IpAddr> for RouteDestination {
-        fn from(value: std::net::IpAddr) -> Self {
+    impl ::std::convert::From<::std::net::IpAddr> for RouteDestination {
+        fn from(value: ::std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
@@ -8477,7 +8477,7 @@ pub mod types {
     pub enum RouteTarget {
         ///Forward traffic to a particular IP address.
         #[serde(rename = "ip")]
-        Ip(std::net::IpAddr),
+        Ip(::std::net::IpAddr),
         ///Forward traffic to a VPC
         #[serde(rename = "vpc")]
         Vpc(Name),
@@ -8498,8 +8498,8 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<std::net::IpAddr> for RouteTarget {
-        fn from(value: std::net::IpAddr) -> Self {
+    impl ::std::convert::From<::std::net::IpAddr> for RouteTarget {
+        fn from(value: ::std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
@@ -8585,18 +8585,18 @@ pub mod types {
         pub description: ::std::string::String,
         pub destination: RouteDestination,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///Describes the kind of router. Set at creation. `read-only`
         pub kind: RouterRouteKind,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         pub target: RouteTarget,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         ///The VPC Router to which the route belongs.
-        pub vpc_router_id: uuid::Uuid,
+        pub vpc_router_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&RouterRoute> for RouterRoute {
@@ -8920,7 +8920,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Saga {
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         pub state: SagaState,
     }
 
@@ -9267,7 +9267,7 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///idp's entity id
         pub idp_entity_id: ::std::string::String,
         ///unique, mutable, user-controlled identifier for each resource
@@ -9283,9 +9283,9 @@ pub mod types {
         ///customer's technical contact for saml configuration
         pub technical_contact_email: ::std::string::String,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&SamlIdentityProvider> for SamlIdentityProvider {
@@ -9654,15 +9654,15 @@ pub mod types {
         /// it will not be part of the "list all silos" output.
         pub discoverable: bool,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///How users and groups are managed in this Silo
         pub identity_mode: SiloIdentityMode,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Silo> for Silo {
@@ -10066,7 +10066,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct SiloRoleRoleAssignment {
-        pub identity_id: uuid::Uuid,
+        pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: SiloRole,
     }
@@ -10123,12 +10123,12 @@ pub mod types {
     pub struct Sled {
         pub baseboard: Baseboard,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         pub service_address: ::std::string::String,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Sled> for Sled {
@@ -10254,18 +10254,18 @@ pub mod types {
     pub struct Snapshot {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
-        pub disk_id: uuid::Uuid,
+        pub disk_id: ::uuid::Uuid,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        pub project_id: uuid::Uuid,
+        pub project_id: ::uuid::Uuid,
         pub size: ByteCount,
         pub state: SnapshotState,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Snapshot> for Snapshot {
@@ -10557,17 +10557,17 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///SSH public key, e.g., `"ssh-ed25519 AAAAC3NzaC..."`
         pub public_key: ::std::string::String,
         ///The user to whom this key belongs
-        pub silo_user_id: uuid::Uuid,
+        pub silo_user_id: ::uuid::Uuid,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&SshKey> for SshKey {
@@ -10799,11 +10799,11 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct SystemUpdate {
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         pub version: SemverVersion,
     }
 
@@ -11061,7 +11061,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TimeseriesSchema {
-        pub created: chrono::DateTime<chrono::offset::Utc>,
+        pub created: ::chrono::DateTime<::chrono::offset::Utc>,
         pub datum_type: DatumType,
         pub field_schema: ::std::vec::Vec<FieldSchema>,
         pub timeseries_name: TimeseriesName,
@@ -11166,12 +11166,12 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UpdateDeployment {
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         pub status: UpdateStatus,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         pub version: SemverVersion,
     }
 
@@ -11398,13 +11398,13 @@ pub mod types {
         pub component_type: UpdateableComponentType,
         pub device_id: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         pub status: UpdateStatus,
         pub system_version: SemverVersion,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         pub version: SemverVersion,
     }
 
@@ -11629,9 +11629,9 @@ pub mod types {
     pub struct User {
         ///Human-readable name that can identify the user
         pub display_name: ::std::string::String,
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///Uuid of the silo to which this user belongs
-        pub silo_id: uuid::Uuid,
+        pub silo_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&User> for User {
@@ -11694,13 +11694,13 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&UserBuiltin> for UserBuiltin {
@@ -12167,19 +12167,19 @@ pub mod types {
         ///The name used for the VPC in DNS.
         pub dns_name: Name,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///The unique local IPv6 address range for subnets in this VPC
         pub ipv6_prefix: Ipv6Net,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///id for the project containing this VPC
-        pub project_id: uuid::Uuid,
+        pub project_id: ::uuid::Uuid,
         ///id for the system router where subnet default routes are registered
-        pub system_router_id: uuid::Uuid,
+        pub system_router_id: ::uuid::Uuid,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&Vpc> for Vpc {
@@ -12375,7 +12375,7 @@ pub mod types {
         ///reductions on the scope of the rule
         pub filters: VpcFirewallRuleFilter,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///the relative priority of this rule
@@ -12385,11 +12385,11 @@ pub mod types {
         ///list of sets of instances that the rule applies to
         pub targets: ::std::vec::Vec<VpcFirewallRuleTarget>,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         ///the VPC to which this rule belongs
-        pub vpc_id: uuid::Uuid,
+        pub vpc_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&VpcFirewallRule> for VpcFirewallRule {
@@ -12775,7 +12775,7 @@ pub mod types {
         Instance(Name),
         ///The rule applies to traffic from/to a specific IP address
         #[serde(rename = "ip")]
-        Ip(std::net::IpAddr),
+        Ip(::std::net::IpAddr),
         ///The rule applies to traffic from/to a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
@@ -12787,8 +12787,8 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<std::net::IpAddr> for VpcFirewallRuleHostFilter {
-        fn from(value: std::net::IpAddr) -> Self {
+    impl ::std::convert::From<::std::net::IpAddr> for VpcFirewallRuleHostFilter {
+        fn from(value: ::std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
@@ -13099,7 +13099,7 @@ pub mod types {
         Instance(Name),
         ///The rule applies to a specific IP address
         #[serde(rename = "ip")]
-        Ip(std::net::IpAddr),
+        Ip(::std::net::IpAddr),
         ///The rule applies to a specific IP subnet
         #[serde(rename = "ip_net")]
         IpNet(IpNet),
@@ -13111,8 +13111,8 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<std::net::IpAddr> for VpcFirewallRuleTarget {
-        fn from(value: std::net::IpAddr) -> Self {
+    impl ::std::convert::From<::std::net::IpAddr> for VpcFirewallRuleTarget {
+        fn from(value: ::std::net::IpAddr) -> Self {
             Self::Ip(value)
         }
     }
@@ -13414,16 +13414,16 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         pub kind: VpcRouterKind,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         ///The VPC to which the router belongs.
-        pub vpc_id: uuid::Uuid,
+        pub vpc_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&VpcRouter> for VpcRouter {
@@ -13739,7 +13739,7 @@ pub mod types {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
         ///unique, immutable, system-controlled identifier for each resource
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///The IPv4 subnet CIDR block.
         pub ipv4_block: Ipv4Net,
         ///The IPv6 subnet CIDR block.
@@ -13747,11 +13747,11 @@ pub mod types {
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
         ///timestamp when this resource was created
-        pub time_created: chrono::DateTime<chrono::offset::Utc>,
+        pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
         ///timestamp when this resource was last modified
-        pub time_modified: chrono::DateTime<chrono::offset::Utc>,
+        pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
         ///The VPC to which the subnet belongs.
-        pub vpc_id: uuid::Uuid,
+        pub vpc_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&VpcSubnet> for VpcSubnet {
@@ -14103,7 +14103,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/disks/{id}`
     pub async fn disk_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/disks/{}",
@@ -14138,7 +14138,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/images/{id}`
     pub async fn image_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/images/{}",
@@ -14173,7 +14173,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/instances/{id}`
     pub async fn instance_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/instances/{}",
@@ -14208,7 +14208,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
     pub async fn instance_network_interface_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/network-interfaces/{}",
@@ -14245,7 +14245,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/organizations/{id}`
     pub async fn organization_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/organizations/{}",
@@ -14282,7 +14282,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/projects/{id}`
     pub async fn project_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/projects/{}",
@@ -14317,7 +14317,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/snapshots/{id}`
     pub async fn snapshot_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/snapshots/{}",
@@ -14352,7 +14352,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
     pub async fn vpc_router_route_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/vpc-router-routes/{}",
@@ -14387,7 +14387,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
     pub async fn vpc_router_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/vpc-routers/{}",
@@ -14422,7 +14422,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
     pub async fn vpc_subnet_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/vpc-subnets/{}",
@@ -14457,7 +14457,7 @@ impl Client {
     ///Sends a `GET` request to `/by-id/vpcs/{id}`
     pub async fn vpc_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
         let url = format!(
             "{}/by-id/vpcs/{}",
@@ -14578,7 +14578,7 @@ impl Client {
     /// - `sort_by`
     pub async fn group_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
@@ -14622,7 +14622,7 @@ impl Client {
     /// - `sort_by`
     pub fn group_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -14821,7 +14821,7 @@ impl Client {
     /// - `sort_by`
     pub async fn organization_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
@@ -14867,7 +14867,7 @@ impl Client {
     /// - `sort_by`
     pub fn organization_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + '_
     {
@@ -15152,7 +15152,7 @@ impl Client {
     pub async fn project_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
@@ -15205,7 +15205,7 @@ impl Client {
     pub fn project_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -15430,7 +15430,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
@@ -15486,7 +15486,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -15672,10 +15672,10 @@ impl Client {
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
         metric_name: types::DiskMetricName,
-        end_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
-        limit: Option<std::num::NonZeroU32>,
+        end_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
-        start_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
+        start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
     ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
@@ -15738,9 +15738,9 @@ impl Client {
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
         metric_name: types::DiskMetricName,
-        end_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
-        limit: Option<std::num::NonZeroU32>,
-        start_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
+        end_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
+        limit: Option<::std::num::NonZeroU32>,
+        start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
     ) -> impl futures::Stream<Item = Result<types::Measurement, Error<types::Error>>> + Unpin + '_
     {
         use futures::StreamExt;
@@ -15806,7 +15806,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
@@ -15863,7 +15863,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Image, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -16049,7 +16049,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
@@ -16103,7 +16103,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + '_
     {
@@ -16291,7 +16291,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
@@ -16350,7 +16350,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -16588,7 +16588,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
@@ -16645,7 +16645,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + '_
     {
@@ -17217,7 +17217,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>> {
@@ -17271,7 +17271,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Snapshot, Error<types::Error>>> + Unpin + '_
     {
@@ -17452,7 +17452,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
@@ -17506,7 +17506,7 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Vpc, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -17814,7 +17814,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>> {
@@ -17871,7 +17871,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::VpcRouter, Error<types::Error>>> + Unpin + '_
     {
@@ -18112,7 +18112,7 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>> {
@@ -18175,7 +18175,7 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::RouterRoute, Error<types::Error>>> + Unpin + '_
     {
@@ -18422,7 +18422,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>> {
@@ -18479,7 +18479,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::VpcSubnet, Error<types::Error>>> + Unpin + '_
     {
@@ -18718,7 +18718,7 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
@@ -18779,7 +18779,7 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + '_
     {
@@ -18897,7 +18897,7 @@ impl Client {
     ///   subsequent page
     pub async fn role_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
         let url = format!("{}/roles", self.baseurl,);
@@ -18938,7 +18938,7 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     pub fn role_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
     ) -> impl futures::Stream<Item = Result<types::Role, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -19045,7 +19045,7 @@ impl Client {
     /// - `sort_by`
     pub async fn session_me_groups<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
@@ -19089,7 +19089,7 @@ impl Client {
     /// - `sort_by`
     pub fn session_me_groups_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -19131,7 +19131,7 @@ impl Client {
     /// - `sort_by`
     pub async fn session_sshkey_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
@@ -19177,7 +19177,7 @@ impl Client {
     /// - `sort_by`
     pub fn session_sshkey_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::SshKey, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -19321,7 +19321,7 @@ impl Client {
     ///Sends a `GET` request to `/system/by-id/images/{id}`
     pub async fn system_image_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
         let url = format!(
             "{}/system/by-id/images/{}",
@@ -19356,7 +19356,7 @@ impl Client {
     ///Sends a `GET` request to `/system/by-id/ip-pools/{id}`
     pub async fn ip_pool_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!(
             "{}/system/by-id/ip-pools/{}",
@@ -19391,7 +19391,7 @@ impl Client {
     ///Sends a `GET` request to `/system/by-id/silos/{id}`
     pub async fn silo_view_by_id<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
         let url = format!(
             "{}/system/by-id/silos/{}",
@@ -19436,7 +19436,7 @@ impl Client {
     /// - `sort_by`
     pub async fn certificate_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::CertificateResultsPage>, Error<types::Error>> {
@@ -19484,7 +19484,7 @@ impl Client {
     /// - `sort_by`
     pub fn certificate_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Certificate, Error<types::Error>>> + Unpin + '_
     {
@@ -19634,7 +19634,7 @@ impl Client {
     /// - `sort_by`
     pub async fn physical_disk_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
@@ -19678,7 +19678,7 @@ impl Client {
     /// - `sort_by`
     pub fn physical_disk_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + '_
     {
@@ -19719,7 +19719,7 @@ impl Client {
     /// - `sort_by`
     pub async fn rack_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
@@ -19763,7 +19763,7 @@ impl Client {
     /// - `sort_by`
     pub fn rack_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -19800,7 +19800,7 @@ impl Client {
     /// - `rack_id`: The rack's unique ID.
     pub async fn rack_view<'a>(
         &'a self,
-        rack_id: &'a uuid::Uuid,
+        rack_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
         let url = format!(
             "{}/system/hardware/racks/{}",
@@ -19841,7 +19841,7 @@ impl Client {
     /// - `sort_by`
     pub async fn sled_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
@@ -19885,7 +19885,7 @@ impl Client {
     /// - `sort_by`
     pub fn sled_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Sled, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -19922,7 +19922,7 @@ impl Client {
     /// - `sled_id`: The sled's unique ID.
     pub async fn sled_view<'a>(
         &'a self,
-        sled_id: &'a uuid::Uuid,
+        sled_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
         let url = format!(
             "{}/system/hardware/sleds/{}",
@@ -19964,8 +19964,8 @@ impl Client {
     /// - `sort_by`
     pub async fn sled_physical_disk_list<'a>(
         &'a self,
-        sled_id: &'a uuid::Uuid,
-        limit: Option<std::num::NonZeroU32>,
+        sled_id: &'a ::uuid::Uuid,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
@@ -20015,8 +20015,8 @@ impl Client {
     /// - `sort_by`
     pub fn sled_physical_disk_list_stream<'a>(
         &'a self,
-        sled_id: &'a uuid::Uuid,
-        limit: Option<std::num::NonZeroU32>,
+        sled_id: &'a ::uuid::Uuid,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + '_
     {
@@ -20061,7 +20061,7 @@ impl Client {
     /// - `sort_by`
     pub async fn system_image_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
@@ -20109,7 +20109,7 @@ impl Client {
     /// - `sort_by`
     pub fn system_image_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::GlobalImage, Error<types::Error>>> + Unpin + '_
     {
@@ -20261,7 +20261,7 @@ impl Client {
     /// - `sort_by`
     pub async fn ip_pool_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
@@ -20305,7 +20305,7 @@ impl Client {
     /// - `sort_by`
     pub fn ip_pool_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::IpPool, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -20487,7 +20487,7 @@ impl Client {
     pub async fn ip_pool_range_list<'a>(
         &'a self,
         pool_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
         let url = format!(
@@ -20536,7 +20536,7 @@ impl Client {
     pub fn ip_pool_range_list_stream<'a>(
         &'a self,
         pool_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
     ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + '_
     {
         use futures::StreamExt;
@@ -20681,7 +20681,7 @@ impl Client {
     ///   subsequent page
     pub async fn ip_pool_service_range_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges", self.baseurl,);
@@ -20724,7 +20724,7 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     pub fn ip_pool_service_range_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
     ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + '_
     {
         use futures::StreamExt;
@@ -20832,11 +20832,11 @@ impl Client {
     pub async fn system_metric<'a>(
         &'a self,
         metric_name: types::SystemMetricName,
-        end_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
-        id: &'a uuid::Uuid,
-        limit: Option<std::num::NonZeroU32>,
+        end_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
+        id: &'a ::uuid::Uuid,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
-        start_time: Option<&'a chrono::DateTime<chrono::offset::Utc>>,
+        start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
     ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
         let url = format!(
             "{}/system/metrics/{}",
@@ -20950,7 +20950,7 @@ impl Client {
     /// - `sort_by`
     pub async fn saga_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
@@ -20994,7 +20994,7 @@ impl Client {
     /// - `sort_by`
     pub fn saga_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Saga, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -21028,7 +21028,7 @@ impl Client {
     ///Sends a `GET` request to `/system/sagas/{saga_id}`
     pub async fn saga_view<'a>(
         &'a self,
-        saga_id: &'a uuid::Uuid,
+        saga_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
         let url = format!(
             "{}/system/sagas/{}",
@@ -21071,7 +21071,7 @@ impl Client {
     /// - `sort_by`
     pub async fn silo_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
@@ -21117,7 +21117,7 @@ impl Client {
     /// - `sort_by`
     pub fn silo_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Silo, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -21271,7 +21271,7 @@ impl Client {
     pub async fn silo_identity_provider_list<'a>(
         &'a self,
         silo_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>> {
@@ -21322,7 +21322,7 @@ impl Client {
     pub fn silo_identity_provider_list_stream<'a>(
         &'a self,
         silo_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::IdentityProvider, Error<types::Error>>> + Unpin + '_
     {
@@ -21409,7 +21409,7 @@ impl Client {
     pub async fn local_idp_user_delete<'a>(
         &'a self,
         silo_name: &'a types::Name,
-        user_id: &'a uuid::Uuid,
+        user_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/system/silos/{}/identity-providers/local/users/{}",
@@ -21456,7 +21456,7 @@ impl Client {
     pub async fn local_idp_user_set_password<'a>(
         &'a self,
         silo_name: &'a types::Name,
-        user_id: &'a uuid::Uuid,
+        user_id: &'a ::uuid::Uuid,
         body: &'a types::UserPassword,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
@@ -21665,7 +21665,7 @@ impl Client {
     pub async fn silo_users_list<'a>(
         &'a self,
         silo_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
@@ -21715,7 +21715,7 @@ impl Client {
     pub fn silo_users_list_stream<'a>(
         &'a self,
         silo_name: &'a types::Name,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -21754,7 +21754,7 @@ impl Client {
     pub async fn silo_user_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
-        user_id: &'a uuid::Uuid,
+        user_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!(
             "{}/system/silos/{}/users/id/{}",
@@ -21796,7 +21796,7 @@ impl Client {
     /// - `sort_by`
     pub async fn system_user_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
@@ -21840,7 +21840,7 @@ impl Client {
     /// - `sort_by`
     pub fn system_user_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
     ) -> impl futures::Stream<Item = Result<types::UserBuiltin, Error<types::Error>>> + Unpin + '_
     {
@@ -21918,7 +21918,7 @@ impl Client {
     ///   subsequent page
     pub async fn timeseries_schema_get<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
         let url = format!("{}/timeseries/schema", self.baseurl,);
@@ -21959,7 +21959,7 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     pub fn timeseries_schema_get_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
     ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema, Error<types::Error>>> + Unpin + '_
     {
         use futures::StreamExt;
@@ -21999,7 +21999,7 @@ impl Client {
     /// - `sort_by`
     pub async fn user_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
@@ -22043,7 +22043,7 @@ impl Client {
     /// - `sort_by`
     pub fn user_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
@@ -22085,7 +22085,7 @@ impl Client {
     /// - `sort_by`
     pub async fn disk_list_v1<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         page_token: Option<&'a str>,
         project: Option<&'a types::NameOrId>,
@@ -22138,7 +22138,7 @@ impl Client {
     /// - `sort_by`
     pub fn disk_list_v1_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
@@ -22305,7 +22305,7 @@ impl Client {
     /// - `sort_by`
     pub async fn instance_list_v1<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         page_token: Option<&'a str>,
         project: Option<&'a types::NameOrId>,
@@ -22358,7 +22358,7 @@ impl Client {
     /// - `sort_by`
     pub fn instance_list_v1_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
@@ -22528,7 +22528,7 @@ impl Client {
     pub async fn instance_disk_list_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         page_token: Option<&'a str>,
         project: Option<&'a types::NameOrId>,
@@ -22587,7 +22587,7 @@ impl Client {
     pub fn instance_disk_list_v1_stream<'a>(
         &'a self,
         instance: &'a types::NameOrId,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
@@ -23008,7 +23008,7 @@ impl Client {
     /// - `sort_by`
     pub async fn organization_list_v1<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
@@ -23052,7 +23052,7 @@ impl Client {
     /// - `sort_by`
     pub fn organization_list_v1_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + '_
     {
@@ -23305,7 +23305,7 @@ impl Client {
     /// - `sort_by`
     pub async fn project_list_v1<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
@@ -23355,7 +23355,7 @@ impl Client {
     /// - `sort_by`
     pub fn project_list_v1_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + '_ {
@@ -23637,7 +23637,7 @@ impl Client {
     /// - `sort_by`
     pub async fn system_component_version_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UpdateableComponentResultsPage>, Error<types::Error>> {
@@ -23681,7 +23681,7 @@ impl Client {
     /// - `sort_by`
     pub fn system_component_version_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::UpdateableComponent, Error<types::Error>>> + Unpin + '_
     {
@@ -23722,7 +23722,7 @@ impl Client {
     /// - `sort_by`
     pub async fn update_deployments_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UpdateDeploymentResultsPage>, Error<types::Error>> {
@@ -23766,7 +23766,7 @@ impl Client {
     /// - `sort_by`
     pub fn update_deployments_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::UpdateDeployment, Error<types::Error>>> + Unpin + '_
     {
@@ -23801,7 +23801,7 @@ impl Client {
     ///Sends a `GET` request to `/v1/system/update/deployments/{id}`
     pub async fn update_deployment_view<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
         let url = format!(
             "{}/v1/system/update/deployments/{}",
@@ -23936,7 +23936,7 @@ impl Client {
     /// - `sort_by`
     pub async fn system_update_list<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SystemUpdateResultsPage>, Error<types::Error>> {
@@ -23980,7 +23980,7 @@ impl Client {
     /// - `sort_by`
     pub fn system_update_list_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
     ) -> impl futures::Stream<Item = Result<types::SystemUpdate, Error<types::Error>>> + Unpin + '_
     {

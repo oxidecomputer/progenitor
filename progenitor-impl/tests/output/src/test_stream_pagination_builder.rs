@@ -372,7 +372,7 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct PaginatedU32s<'a> {
         client: &'a super::Client,
-        limit: Result<Option<std::num::NonZeroU32>, String>,
+        limit: Result<Option<::std::num::NonZeroU32>, String>,
         page_token: Result<Option<::std::string::String>, String>,
     }
 
@@ -387,10 +387,10 @@ pub mod builder {
 
         pub fn limit<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<std::num::NonZeroU32>,
+            V: std::convert::TryInto<::std::num::NonZeroU32>,
         {
             self.limit = value.try_into().map(Some).map_err(|_| {
-                "conversion to `std :: num :: NonZeroU32` for limit failed".to_string()
+                "conversion to `:: std :: num :: NonZeroU32` for limit failed".to_string()
             });
             self
         }

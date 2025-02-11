@@ -154,7 +154,7 @@ pub mod types {
     pub struct OutputRecord {
         pub msg: ::std::string::String,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&OutputRecord> for OutputRecord {
@@ -251,7 +251,7 @@ pub mod types {
     )]
     pub struct ReportFinishBody {
         pub duration_millis: usize,
-        pub end_time: chrono::DateTime<chrono::offset::Utc>,
+        pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub exit_status: usize,
         pub id: ReportId,
     }
@@ -312,7 +312,7 @@ pub mod types {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
         pub pid: u64,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub uuid: ::std::string::String,
     }
 
@@ -443,7 +443,7 @@ pub mod types {
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: ::std::string::String,
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&ReportStartBody> for ReportStartBody {
@@ -509,7 +509,7 @@ pub mod types {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
         pub status: usize,
-        pub when: chrono::DateTime<chrono::offset::Utc>,
+        pub when: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&ReportSummary> for ReportSummary {
@@ -635,8 +635,10 @@ pub mod types {
         pub struct OutputRecord {
             msg: ::std::result::Result<::std::string::String, ::std::string::String>,
             stream: ::std::result::Result<::std::string::String, ::std::string::String>,
-            time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for OutputRecord {
@@ -672,7 +674,7 @@ pub mod types {
             }
             pub fn time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.time = value
@@ -767,8 +769,10 @@ pub mod types {
         #[derive(Clone, Debug)]
         pub struct ReportFinishBody {
             duration_millis: ::std::result::Result<usize, ::std::string::String>,
-            end_time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            end_time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
             exit_status: ::std::result::Result<usize, ::std::string::String>,
             id: ::std::result::Result<super::ReportId, ::std::string::String>,
         }
@@ -797,7 +801,7 @@ pub mod types {
             }
             pub fn end_time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.end_time = value
@@ -857,8 +861,10 @@ pub mod types {
             host: ::std::result::Result<::std::string::String, ::std::string::String>,
             job: ::std::result::Result<::std::string::String, ::std::string::String>,
             pid: ::std::result::Result<u64, ::std::string::String>,
-            time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
             uuid: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
@@ -907,7 +913,7 @@ pub mod types {
             }
             pub fn time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.time = value
@@ -1062,8 +1068,10 @@ pub mod types {
         pub struct ReportStartBody {
             id: ::std::result::Result<super::ReportId, ::std::string::String>,
             script: ::std::result::Result<::std::string::String, ::std::string::String>,
-            start_time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            start_time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for ReportStartBody {
@@ -1099,7 +1107,7 @@ pub mod types {
             }
             pub fn start_time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.start_time = value
@@ -1139,8 +1147,10 @@ pub mod types {
             host: ::std::result::Result<::std::string::String, ::std::string::String>,
             job: ::std::result::Result<::std::string::String, ::std::string::String>,
             status: ::std::result::Result<usize, ::std::string::String>,
-            when:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            when: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for ReportSummary {
@@ -1212,7 +1222,7 @@ pub mod types {
             }
             pub fn when<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.when = value

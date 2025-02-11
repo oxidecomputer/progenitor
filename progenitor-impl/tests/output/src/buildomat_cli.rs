@@ -221,7 +221,9 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("time")
                     .long("time")
-                    .value_parser(::clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
+                    .value_parser(::clap::value_parser!(
+                        ::chrono::DateTime<::chrono::offset::Utc>
+                    ))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -671,7 +673,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.task(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("time") {
+        if let Some(value) = matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("time") {
             request = request.body_map(|body| body.time(value.clone()))
         }
 
