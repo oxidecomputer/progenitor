@@ -509,6 +509,31 @@
           }
         }
       }
+    },
+    "/v1/header-arg": {
+      "get": {
+        "operationId": "header-arg",
+        "parameters": [
+          {
+            "name": "accept-language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en",
+              "enum": [
+                "de",
+                "en"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
     }
   },
   "components": {

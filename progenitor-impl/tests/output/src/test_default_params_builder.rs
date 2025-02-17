@@ -2,8 +2,6 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -402,9 +400,7 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
-    };
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`Client::default_params`]
     ///
     ///[`Client::default_params`]: super::Client::default_params

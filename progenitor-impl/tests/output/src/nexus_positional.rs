@@ -3,8 +3,6 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -14115,8 +14113,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14150,8 +14148,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14185,8 +14183,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14220,8 +14218,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14257,8 +14255,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14294,8 +14292,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14329,8 +14327,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14364,8 +14362,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14399,8 +14397,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14434,8 +14432,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14469,8 +14467,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14527,8 +14525,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -14588,8 +14586,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -14662,8 +14660,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -14763,8 +14761,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                ::reqwest::header::CONTENT_TYPE,
+                ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
             )
             .body(body)
             .build()?;
@@ -14790,8 +14788,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14831,8 +14829,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -14912,8 +14910,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -14953,8 +14951,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -14995,8 +14993,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -15036,8 +15034,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -15076,8 +15074,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -15118,8 +15116,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -15166,8 +15164,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -15258,8 +15256,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -15303,8 +15301,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -15349,8 +15347,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -15394,8 +15392,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -15445,8 +15443,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -15547,8 +15545,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -15591,8 +15589,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -15632,8 +15630,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -15690,8 +15688,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("end_time", &end_time))
             .query(&progenitor_client::QueryParam::new("limit", &limit))
@@ -15821,8 +15819,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -15926,8 +15924,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -15970,8 +15968,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -16015,8 +16013,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -16064,8 +16062,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -16167,8 +16165,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -16211,8 +16209,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -16252,8 +16250,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -16307,8 +16305,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -16419,8 +16417,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -16464,8 +16462,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -16506,8 +16504,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -16550,8 +16548,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -16604,8 +16602,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -16713,8 +16711,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -16757,8 +16755,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -16801,8 +16799,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -16850,8 +16848,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -16893,8 +16891,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -16955,8 +16953,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "from_start",
@@ -17006,14 +17004,14 @@ impl Client {
         let mut request = self
             .client
             .get(url)
-            .header(reqwest::header::CONNECTION, "Upgrade")
-            .header(reqwest::header::UPGRADE, "websocket")
-            .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+            .header(::reqwest::header::CONNECTION, "Upgrade")
+            .header(::reqwest::header::UPGRADE, "websocket")
+            .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
             .header(
-                reqwest::header::SEC_WEBSOCKET_KEY,
-                base64::Engine::encode(
-                    &base64::engine::general_purpose::STANDARD,
-                    rand::random::<[u8; 16]>(),
+                ::reqwest::header::SEC_WEBSOCKET_KEY,
+                ::base64::Engine::encode(
+                    &::base64::engine::general_purpose::STANDARD,
+                    ::rand::random::<[u8; 16]>(),
                 ),
             )
             .build()?;
@@ -17051,8 +17049,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -17094,8 +17092,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -17138,8 +17136,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -17182,8 +17180,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -17232,8 +17230,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -17335,8 +17333,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -17377,8 +17375,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -17418,8 +17416,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -17467,8 +17465,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -17567,8 +17565,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -17609,8 +17607,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -17651,8 +17649,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -17693,8 +17691,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -17734,8 +17732,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -17776,8 +17774,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -17830,8 +17828,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -17939,8 +17937,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -17983,8 +17981,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -18027,8 +18025,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -18071,8 +18069,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -18129,8 +18127,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -18247,8 +18245,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -18293,8 +18291,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -18339,8 +18337,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -18385,8 +18383,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -18438,8 +18436,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -18547,8 +18545,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -18591,8 +18589,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -18635,8 +18633,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -18679,8 +18677,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -18735,8 +18733,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -18837,8 +18835,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -18868,8 +18866,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -18906,8 +18904,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -18986,8 +18984,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19016,8 +19014,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19055,8 +19053,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -19141,8 +19139,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -19221,8 +19219,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -19260,8 +19258,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19298,8 +19296,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19333,8 +19331,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19368,8 +19366,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19403,8 +19401,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19446,8 +19444,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -19530,8 +19528,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -19568,8 +19566,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19605,8 +19603,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19644,8 +19642,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -19729,8 +19727,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -19812,8 +19810,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19851,8 +19849,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -19934,8 +19932,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -19979,8 +19977,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -20071,8 +20069,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -20155,8 +20153,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -20193,8 +20191,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -20232,8 +20230,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -20271,8 +20269,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -20347,8 +20345,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -20383,8 +20381,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -20419,8 +20417,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -20455,8 +20453,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -20500,8 +20498,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -20583,8 +20581,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -20620,8 +20618,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -20651,8 +20649,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -20690,8 +20688,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -20766,8 +20764,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -20798,8 +20796,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -20848,8 +20846,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("end_time", &end_time))
             .query(&progenitor_client::QueryParam::new("id", &id))
@@ -20889,8 +20887,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -20920,8 +20918,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -20960,8 +20958,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -21040,8 +21038,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -21081,8 +21079,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -21159,8 +21157,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -21200,8 +21198,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -21240,8 +21238,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -21285,8 +21283,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -21379,8 +21377,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -21422,8 +21420,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -21470,8 +21468,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -21512,8 +21510,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -21555,8 +21553,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -21593,8 +21591,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -21633,8 +21631,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -21679,8 +21677,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -21767,8 +21765,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -21806,8 +21804,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -21890,8 +21888,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -21927,8 +21925,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -22009,8 +22007,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -22097,8 +22095,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -22184,8 +22182,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .query(&progenitor_client::QueryParam::new(
@@ -22227,8 +22225,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -22269,8 +22267,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -22317,8 +22315,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -22405,8 +22403,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .query(&progenitor_client::QueryParam::new(
@@ -22448,8 +22446,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -22490,8 +22488,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -22544,8 +22542,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -22645,8 +22643,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .query(&progenitor_client::QueryParam::new(
@@ -22689,8 +22687,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .query(&progenitor_client::QueryParam::new(
@@ -22733,8 +22731,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .query(&progenitor_client::QueryParam::new(
@@ -22776,8 +22774,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -22837,8 +22835,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "from_start",
@@ -22893,14 +22891,14 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
-            .header(reqwest::header::CONNECTION, "Upgrade")
-            .header(reqwest::header::UPGRADE, "websocket")
-            .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+            .header(::reqwest::header::CONNECTION, "Upgrade")
+            .header(::reqwest::header::UPGRADE, "websocket")
+            .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
             .header(
-                reqwest::header::SEC_WEBSOCKET_KEY,
-                base64::Engine::encode(
-                    &base64::engine::general_purpose::STANDARD,
-                    rand::random::<[u8; 16]>(),
+                ::reqwest::header::SEC_WEBSOCKET_KEY,
+                ::base64::Engine::encode(
+                    &::base64::engine::general_purpose::STANDARD,
+                    ::rand::random::<[u8; 16]>(),
                 ),
             )
             .build()?;
@@ -22932,8 +22930,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -22974,8 +22972,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -23018,8 +23016,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -23095,8 +23093,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -23131,8 +23129,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -23167,8 +23165,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -23203,8 +23201,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -23238,8 +23236,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -23274,8 +23272,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -23316,8 +23314,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -23399,8 +23397,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .query(&progenitor_client::QueryParam::new(
@@ -23440,8 +23438,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -23481,8 +23479,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .query(&progenitor_client::QueryParam::new(
@@ -23522,8 +23520,8 @@ impl Client {
             .client
             .delete(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -23562,8 +23560,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new(
                 "organization",
@@ -23603,8 +23601,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .query(&progenitor_client::QueryParam::new(
@@ -23647,8 +23645,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -23732,8 +23730,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -23813,8 +23811,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -23843,8 +23841,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -23874,8 +23872,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -23907,8 +23905,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -23946,8 +23944,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
             .query(&progenitor_client::QueryParam::new(
@@ -24027,8 +24025,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -24063,8 +24061,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -24093,8 +24091,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;

@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 //! Core implementation for the progenitor OpenAPI client generator.
 
@@ -417,8 +417,6 @@ impl Generator {
             pub use progenitor_client::{ByteStream, Error, ResponseValue};
             #[allow(unused_imports)]
             use progenitor_client::{encode_path, RequestBuilderExt};
-            #[allow(unused_imports)]
-            use reqwest::header::{HeaderMap, HeaderValue};
 
             /// Types used as operation parameters and responses.
             #[allow(clippy::all)]
@@ -562,8 +560,6 @@ impl Generator {
                     encode_path,
                     ByteStream,
                     Error,
-                    HeaderMap,
-                    HeaderValue,
                     RequestBuilderExt,
                     ResponseValue,
                 };
@@ -609,8 +605,6 @@ impl Generator {
                     encode_path,
                     ByteStream,
                     Error,
-                    HeaderMap,
-                    HeaderValue,
                     RequestBuilderExt,
                     ResponseValue,
                 };

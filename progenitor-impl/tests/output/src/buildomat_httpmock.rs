@@ -792,6 +792,40 @@ pub mod operations {
             )
         }
     }
+
+    pub struct HeaderArgWhen(::httpmock::When);
+    impl HeaderArgWhen {
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/v1/header-arg$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> ::httpmock::When {
+            self.0
+        }
+
+        pub fn accept_language(self, value: types::HeaderArgAcceptLanguage) -> Self {
+            todo!()
+        }
+    }
+
+    pub struct HeaderArgThen(::httpmock::Then);
+    impl HeaderArgThen {
+        pub fn new(inner: ::httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> ::httpmock::Then {
+            self.0
+        }
+
+        pub fn default_response(self, status: u16) -> Self {
+            Self(self.0.status(status))
+        }
+    }
 }
 
 #[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
@@ -858,6 +892,9 @@ pub trait MockServerExt {
     fn get_thing_or_things<F>(&self, config_fn: F) -> ::httpmock::Mock
     where
         F: FnOnce(operations::GetThingOrThingsWhen, operations::GetThingOrThingsThen);
+    fn header_arg<F>(&self, config_fn: F) -> ::httpmock::Mock
+    where
+        F: FnOnce(operations::HeaderArgWhen, operations::HeaderArgThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
@@ -1097,6 +1134,18 @@ impl MockServerExt for ::httpmock::MockServer {
             config_fn(
                 operations::GetThingOrThingsWhen::new(when),
                 operations::GetThingOrThingsThen::new(then),
+            )
+        })
+    }
+
+    fn header_arg<F>(&self, config_fn: F) -> ::httpmock::Mock
+    where
+        F: FnOnce(operations::HeaderArgWhen, operations::HeaderArgThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::HeaderArgWhen::new(when),
+                operations::HeaderArgThen::new(then),
             )
         })
     }

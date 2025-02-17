@@ -31,6 +31,7 @@ impl<T: CliConfig> Cli<T> {
             CliCommand::WorkersList => Self::cli_workers_list(),
             CliCommand::WorkersRecycle => Self::cli_workers_recycle(),
             CliCommand::GetThingOrThings => Self::cli_get_thing_or_things(),
+            CliCommand::HeaderArg => Self::cli_header_arg(),
         }
     }
 
@@ -332,6 +333,21 @@ impl<T: CliConfig> Cli<T> {
         )
     }
 
+    pub fn cli_header_arg() -> ::clap::Command {
+        ::clap::Command::new("").arg(
+            ::clap::Arg::new("accept-language")
+                .long("accept-language")
+                .value_parser(::clap::builder::TypedValueParser::map(
+                    ::clap::builder::PossibleValuesParser::new([
+                        types::HeaderArgAcceptLanguage::De.to_string(),
+                        types::HeaderArgAcceptLanguage::En.to_string(),
+                    ]),
+                    |s| types::HeaderArgAcceptLanguage::try_from(s).unwrap(),
+                ))
+                .required(false),
+        )
+    }
+
     pub async fn execute(
         &self,
         cmd: CliCommand,
@@ -360,6 +376,7 @@ impl<T: CliConfig> Cli<T> {
             CliCommand::WorkersList => self.execute_workers_list(matches).await,
             CliCommand::WorkersRecycle => self.execute_workers_recycle(matches).await,
             CliCommand::GetThingOrThings => self.execute_get_thing_or_things(matches).await,
+            CliCommand::HeaderArg => self.execute_header_arg(matches).await,
         }
     }
 
@@ -850,6 +867,26 @@ impl<T: CliConfig> Cli<T> {
             }
         }
     }
+
+    pub async fn execute_header_arg(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+        let mut request = self.client.header_arg();
+        if let Some(value) = matches.get_one::<types::HeaderArgAcceptLanguage>("accept-language") {
+            request = request.accept_language(value.clone());
+        }
+
+        self.config.execute_header_arg(matches, &mut request)?;
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                self.config.success_no_item(&r);
+                Ok(())
+            }
+            Err(r) => {
+                self.config.error(&r);
+                Err(anyhow::Error::new(r))
+            }
+        }
+    }
 }
 
 pub trait CliConfig {
@@ -1031,6 +1068,14 @@ pub trait CliConfig {
     ) -> anyhow::Result<()> {
         Ok(())
     }
+
+    fn execute_header_arg(
+        &self,
+        matches: &::clap::ArgMatches,
+        request: &mut builder::HeaderArg,
+    ) -> anyhow::Result<()> {
+        Ok(())
+    }
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -1055,6 +1100,7 @@ pub enum CliCommand {
     WorkersList,
     WorkersRecycle,
     GetThingOrThings,
+    HeaderArg,
 }
 
 impl CliCommand {
@@ -1080,6 +1126,7 @@ impl CliCommand {
             CliCommand::WorkersList,
             CliCommand::WorkersRecycle,
             CliCommand::GetThingOrThings,
+            CliCommand::HeaderArg,
         ]
         .into_iter()
     }

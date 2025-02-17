@@ -3,8 +3,6 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -522,8 +520,8 @@ impl Client {
         body: &'a types::EnrolBody,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/enrol", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -548,15 +546,15 @@ impl Client {
         authorization: &'a str,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
         let url = format!("{}/global/jobs", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .headers(header_map)
             .build()?;
@@ -577,15 +575,15 @@ impl Client {
         authorization: &'a str,
     ) -> Result<ResponseValue<types::PingResult>, Error<()>> {
         let url = format!("{}/ping", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .headers(header_map)
             .build()?;
@@ -608,15 +606,15 @@ impl Client {
         body: &'a types::ReportFinishBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/finish", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .headers(header_map)
@@ -640,15 +638,15 @@ impl Client {
         body: &'a types::ReportOutputBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/output", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .headers(header_map)
@@ -672,15 +670,15 @@ impl Client {
         body: &'a types::ReportStartBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/start", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .headers(header_map)
