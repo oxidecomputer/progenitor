@@ -2,8 +2,6 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -363,9 +361,7 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
-    };
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`Client::paginated_u32s`]
     ///
     ///[`Client::paginated_u32s`]: super::Client::paginated_u32s
@@ -422,8 +418,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -449,9 +445,9 @@ pub mod builder {
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<u32, Error<types::Error>>> + Unpin + 'a {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 ..self.clone()

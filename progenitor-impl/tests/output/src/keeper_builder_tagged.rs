@@ -2,8 +2,6 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -1404,9 +1402,7 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
-    };
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`Client::enrol`]
     ///
     ///[`Client::enrol`]: super::Client::enrol
@@ -1468,8 +1464,8 @@ pub mod builder {
                 .and_then(|v| types::EnrolBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/enrol", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -1521,15 +1517,15 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let url = format!("{}/global/jobs", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .headers(header_map)
                 .build()?;
@@ -1577,15 +1573,15 @@ pub mod builder {
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let url = format!("{}/ping", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .headers(header_map)
                 .build()?;
@@ -1661,15 +1657,15 @@ pub mod builder {
                 .and_then(|v| types::ReportFinishBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/finish", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .headers(header_map)
@@ -1746,15 +1742,15 @@ pub mod builder {
                 .and_then(|v| types::ReportOutputBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/output", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .headers(header_map)
@@ -1829,15 +1825,15 @@ pub mod builder {
                 .and_then(|v| types::ReportStartBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/start", client.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .headers(header_map)

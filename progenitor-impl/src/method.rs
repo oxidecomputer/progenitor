@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 use std::{
     cmp::Ordering,
@@ -806,12 +806,18 @@ impl Generator {
                     let hn_ident = format_ident!("{}", &param.name);
                     let res = if *required {
                         quote! {
-                            header_map.append(#hn, HeaderValue::try_from(#hn_ident)?);
+                            header_map.append(
+                                #hn,
+                                #hn_ident.to_string().try_into()?
+                            );
                         }
                     } else {
                         quote! {
-                            if let Some(v) = #hn_ident {
-                                header_map.append(#hn, HeaderValue::try_from(v)?);
+                            if let Some(value) = #hn_ident {
+                                header_map.append(
+                                    #hn,
+                                    value.to_string().try_into()?
+                                );
                             }
                         }
                     };
@@ -826,7 +832,7 @@ impl Generator {
         } else {
             let size = headers.len();
             let headers_build = quote! {
-                let mut header_map = HeaderMap::with_capacity(#size);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(#size);
                 #(#headers)*
             };
             let headers_use = quote! {
@@ -838,14 +844,14 @@ impl Generator {
 
         let websock_hdrs = if method.dropshot_websocket {
             quote! {
-                .header(reqwest::header::CONNECTION, "Upgrade")
-                .header(reqwest::header::UPGRADE, "websocket")
-                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(::reqwest::header::CONNECTION, "Upgrade")
+                .header(::reqwest::header::UPGRADE, "websocket")
+                .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
                 .header(
-                    reqwest::header::SEC_WEBSOCKET_KEY,
-                    base64::Engine::encode(
-                        &base64::engine::general_purpose::STANDARD,
-                        rand::random::<[u8; 16]>(),
+                    ::reqwest::header::SEC_WEBSOCKET_KEY,
+                    ::base64::Engine::encode(
+                        &::base64::engine::general_purpose::STANDARD,
+                        ::rand::random::<[u8; 16]>(),
                     )
                 )
             }
@@ -879,8 +885,8 @@ impl Generator {
                     // Set the content type (this is handled by helper
                     // functions for other MIME types).
                     .header(
-                        reqwest::header::CONTENT_TYPE,
-                        reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
                     )
                     .body(body)
                 }),
@@ -891,8 +897,8 @@ impl Generator {
                     // Set the content type (this is handled by helper
                     // functions for other MIME types).
                     .header(
-                        reqwest::header::CONTENT_TYPE,
-                        reqwest::header::HeaderValue::from_static(#mime_type),
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static(#mime_type),
                     )
                     .body(body)
                 }),
@@ -1023,8 +1029,8 @@ impl Generator {
         .then(|| {
             quote! {
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static(
                             "application/json",
                         ),
                     )
@@ -1708,9 +1714,9 @@ impl Generator {
                     #item_type,
                     Error<#error>,
                 >> + Unpin + 'a {
-                    use futures::StreamExt;
-                    use futures::TryFutureExt;
-                    use futures::TryStreamExt;
+                    use ::futures::StreamExt;
+                    use ::futures::TryFutureExt;
+                    use ::futures::TryStreamExt;
 
                     // This is the builder template we'll use for iterative
                     // steps past the first; it has all query params set to

@@ -2,8 +2,6 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -73,6 +71,97 @@ pub mod types {
     impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
         fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
             Self::Variant1(value)
+        }
+    }
+
+    ///`HeaderArgAcceptLanguage`
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "default": "en",
+    ///  "type": "string",
+    ///  "enum": [
+    ///    "de",
+    ///    "en"
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
+    #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+    )]
+    pub enum HeaderArgAcceptLanguage {
+        #[serde(rename = "de")]
+        De,
+        #[serde(rename = "en")]
+        En,
+    }
+
+    impl ::std::convert::From<&Self> for HeaderArgAcceptLanguage {
+        fn from(value: &HeaderArgAcceptLanguage) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ::std::fmt::Display for HeaderArgAcceptLanguage {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            match *self {
+                Self::De => write!(f, "de"),
+                Self::En => write!(f, "en"),
+            }
+        }
+    }
+
+    impl ::std::str::FromStr for HeaderArgAcceptLanguage {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            match value {
+                "de" => Ok(Self::De),
+                "en" => Ok(Self::En),
+                _ => Err("invalid value".into()),
+            }
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::convert::TryFrom<&::std::string::String> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::convert::TryFrom<::std::string::String> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::default::Default for HeaderArgAcceptLanguage {
+        fn default() -> Self {
+            HeaderArgAcceptLanguage::En
         }
     }
 
@@ -2645,6 +2734,18 @@ impl Client {
     pub fn get_thing_or_things(&self) -> builder::GetThingOrThings {
         builder::GetThingOrThings::new(self)
     }
+
+    ///Sends a `GET` request to `/v1/header-arg`
+    ///
+    ///```ignore
+    /// let response = client.header_arg()
+    ///    .accept_language(accept_language)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn header_arg(&self) -> builder::HeaderArg {
+        builder::HeaderArg::new(self)
+    }
 }
 
 /// Types for composing operation parameters.
@@ -2652,9 +2753,7 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
-    };
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`Client::control_hold`]
     ///
     ///[`Client::control_hold`]: super::Client::control_hold
@@ -2677,8 +2776,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -2759,8 +2858,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -2794,8 +2893,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -2856,8 +2955,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -2931,8 +3030,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("minseq", &minseq))
                 .build()?;
@@ -2988,8 +3087,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -3115,8 +3214,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -3151,8 +3250,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -3202,8 +3301,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::CONTENT_TYPE,
-                    reqwest::header::HeaderValue::from_static("text/plain"),
+                    ::reqwest::header::CONTENT_TYPE,
+                    ::reqwest::header::HeaderValue::from_static("text/plain"),
                 )
                 .body(body)
                 .build()?;
@@ -3265,8 +3364,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -3301,8 +3400,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -3442,12 +3541,12 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .header(
-                    reqwest::header::CONTENT_TYPE,
-                    reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    ::reqwest::header::CONTENT_TYPE,
+                    ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
                 )
                 .body(body)
                 .build()?;
@@ -3628,8 +3727,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -3707,8 +3806,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("id", &id))
                 .build()?;
@@ -3717,6 +3816,56 @@ pub mod builder {
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
                 _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`Client::header_arg`]
+    ///
+    ///[`Client::header_arg`]: super::Client::header_arg
+    #[derive(Debug, Clone)]
+    pub struct HeaderArg<'a> {
+        client: &'a super::Client,
+        accept_language: Result<Option<types::HeaderArgAcceptLanguage>, String>,
+    }
+
+    impl<'a> HeaderArg<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client: client,
+                accept_language: Ok(None),
+            }
+        }
+
+        pub fn accept_language<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<types::HeaderArgAcceptLanguage>,
+        {
+            self.accept_language = value.try_into().map(Some).map_err(|_| {
+                "conversion to `HeaderArgAcceptLanguage` for accept_language failed".to_string()
+            });
+            self
+        }
+
+        ///Sends a `GET` request to `/v1/header-arg`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            let Self {
+                client,
+                accept_language,
+            } = self;
+            let accept_language = accept_language.map_err(Error::InvalidRequest)?;
+            let url = format!("{}/v1/header-arg", client.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            if let Some(value) = accept_language {
+                header_map.append("accept-language", value.to_string().try_into()?);
+            }
+            #[allow(unused_mut)]
+            let mut request = client.client.get(url).headers(header_map).build()?;
+            let result = client.client.execute(request).await;
+            let response = result?;
+            match response.status().as_u16() {
+                200..=299 => Ok(ResponseValue::empty(response)),
+                _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
             }
         }
     }

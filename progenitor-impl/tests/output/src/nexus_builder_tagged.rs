@@ -2,8 +2,6 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -29873,9 +29871,7 @@ impl ClientVpcsExt for Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
-    };
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`ClientDisksExt::disk_view_by_id`]
     ///
     ///[`ClientDisksExt::disk_view_by_id`]: super::ClientDisksExt::disk_view_by_id
@@ -29917,8 +29913,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -29977,8 +29973,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30037,8 +30033,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30100,8 +30096,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30160,8 +30156,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30220,8 +30216,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30280,8 +30276,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30340,8 +30336,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30400,8 +30396,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30460,8 +30456,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30520,8 +30516,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -30647,8 +30643,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -30799,8 +30795,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -30828,9 +30824,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -30919,8 +30915,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -31172,8 +31168,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::CONTENT_TYPE,
-                    reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    ::reqwest::header::CONTENT_TYPE,
+                    ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
                 )
                 .body(body)
                 .build()?;
@@ -31214,8 +31210,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -31304,8 +31300,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -31333,9 +31329,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -31426,8 +31422,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -31490,8 +31486,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -31581,8 +31577,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -31645,8 +31641,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -31710,8 +31706,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -31805,8 +31801,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -31915,8 +31911,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -31945,9 +31941,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -32058,8 +32054,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -32138,8 +32134,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -32243,8 +32239,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -32323,8 +32319,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -32447,8 +32443,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -32477,9 +32473,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -32605,8 +32601,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -32701,8 +32697,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -32796,8 +32792,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -32968,8 +32964,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("end_time", &end_time))
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
@@ -33003,9 +32999,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Measurement, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 end_time: Ok(None),
                 page_token: Ok(None),
@@ -33151,8 +33147,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -33181,9 +33177,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Image, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -33309,8 +33305,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -33405,8 +33401,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -33500,8 +33496,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -33625,8 +33621,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -33656,9 +33652,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -33785,8 +33781,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -33881,8 +33877,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -33976,8 +33972,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -34116,8 +34112,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -34147,9 +34143,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -34291,8 +34287,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -34413,8 +34409,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -34511,8 +34507,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -34632,8 +34628,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -34774,8 +34770,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -34805,9 +34801,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -34955,8 +34951,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -35068,8 +35064,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -35210,8 +35206,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -35321,8 +35317,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -35416,8 +35412,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -35558,8 +35554,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "from_start",
@@ -35663,14 +35659,14 @@ pub mod builder {
             let mut request = client
                 .client
                 .get(url)
-                .header(reqwest::header::CONNECTION, "Upgrade")
-                .header(reqwest::header::UPGRADE, "websocket")
-                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(::reqwest::header::CONNECTION, "Upgrade")
+                .header(::reqwest::header::UPGRADE, "websocket")
+                .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
                 .header(
-                    reqwest::header::SEC_WEBSOCKET_KEY,
-                    base64::Engine::encode(
-                        &base64::engine::general_purpose::STANDARD,
-                        rand::random::<[u8; 16]>(),
+                    ::reqwest::header::SEC_WEBSOCKET_KEY,
+                    ::base64::Engine::encode(
+                        &::base64::engine::general_purpose::STANDARD,
+                        ::rand::random::<[u8; 16]>(),
                     ),
                 )
                 .build()?;
@@ -35760,8 +35756,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -35855,8 +35851,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -35936,8 +35932,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -36045,8 +36041,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -36171,8 +36167,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -36202,9 +36198,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Snapshot, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -36331,8 +36327,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -36427,8 +36423,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -36522,8 +36518,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -36646,8 +36642,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -36676,9 +36672,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Vpc, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -36804,8 +36800,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -36900,8 +36896,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -37021,8 +37017,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -37117,8 +37113,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -37214,8 +37210,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -37344,8 +37340,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -37485,8 +37481,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -37516,9 +37512,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::VpcRouter, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -37660,8 +37656,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -37771,8 +37767,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -37907,8 +37903,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -38018,8 +38014,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -38173,8 +38169,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -38204,9 +38200,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::RouterRoute, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -38369,8 +38365,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -38495,8 +38491,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -38652,8 +38648,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -38778,8 +38774,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -38918,8 +38914,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -38949,9 +38945,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::VpcSubnet, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -39093,8 +39089,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -39204,8 +39200,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -39340,8 +39336,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -39451,8 +39447,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -39607,8 +39603,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -39638,9 +39634,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -39704,8 +39700,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -39774,8 +39770,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -39850,8 +39846,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -39878,9 +39874,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Role, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 ..self.clone()
@@ -39960,8 +39956,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -40001,8 +39997,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -40091,8 +40087,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -40120,9 +40116,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -40233,8 +40229,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -40262,9 +40258,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::SshKey, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -40353,8 +40349,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -40417,8 +40413,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -40480,8 +40476,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -40540,8 +40536,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -40600,8 +40596,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -40660,8 +40656,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -40750,8 +40746,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -40779,9 +40775,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Certificate, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -40872,8 +40868,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -40936,8 +40932,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -40999,8 +40995,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -41089,8 +41085,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -41118,9 +41114,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41231,8 +41227,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -41260,9 +41256,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41343,8 +41339,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -41433,8 +41429,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -41462,9 +41458,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Sled, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41545,8 +41541,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -41653,8 +41649,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -41682,9 +41678,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41795,8 +41791,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -41824,9 +41820,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::GlobalImage, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41917,8 +41913,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -41978,8 +41974,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -42038,8 +42034,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -42128,8 +42124,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -42157,9 +42153,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::IpPool, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -42248,8 +42244,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -42309,8 +42305,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -42398,8 +42394,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -42459,8 +42455,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -42552,8 +42548,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -42580,9 +42576,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 ..self.clone()
@@ -42679,8 +42675,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -42758,8 +42754,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -42800,8 +42796,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -42875,8 +42871,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -42903,9 +42899,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 ..self.clone()
@@ -42981,8 +42977,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -43038,8 +43034,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -43178,8 +43174,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("end_time", &end_time))
                 .query(&progenitor_client::QueryParam::new("id", &id))
@@ -43232,8 +43228,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -43302,8 +43298,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -43393,8 +43389,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -43422,9 +43418,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Saga, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -43505,8 +43501,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -43595,8 +43591,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -43624,9 +43620,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Silo, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -43715,8 +43711,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -43776,8 +43772,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -43836,8 +43832,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -43946,8 +43942,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -43976,9 +43972,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::IdentityProvider, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -44089,8 +44085,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -44169,8 +44165,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -44263,8 +44259,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -44363,8 +44359,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -44445,8 +44441,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -44507,8 +44503,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -44598,8 +44594,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -44707,8 +44703,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -44736,9 +44732,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -44838,8 +44834,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -44928,8 +44924,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -44957,9 +44953,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::UserBuiltin, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -45040,8 +45036,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -45116,8 +45112,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -45144,9 +45140,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 ..self.clone()
@@ -45256,8 +45252,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -45285,9 +45281,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -45428,8 +45424,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -45462,9 +45458,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -45587,8 +45583,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new(
@@ -45686,8 +45682,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -45784,8 +45780,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -45909,8 +45905,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -45943,9 +45939,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -46068,8 +46064,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new(
@@ -46167,8 +46163,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -46265,8 +46261,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -46408,8 +46404,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -46442,9 +46438,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -46586,8 +46582,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new(
@@ -46711,8 +46707,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new(
@@ -46836,8 +46832,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new(
@@ -46935,8 +46931,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -47080,8 +47076,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "from_start",
@@ -47194,14 +47190,14 @@ pub mod builder {
                     &organization,
                 ))
                 .query(&progenitor_client::QueryParam::new("project", &project))
-                .header(reqwest::header::CONNECTION, "Upgrade")
-                .header(reqwest::header::UPGRADE, "websocket")
-                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(::reqwest::header::CONNECTION, "Upgrade")
+                .header(::reqwest::header::UPGRADE, "websocket")
+                .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
                 .header(
-                    reqwest::header::SEC_WEBSOCKET_KEY,
-                    base64::Engine::encode(
-                        &base64::engine::general_purpose::STANDARD,
-                        rand::random::<[u8; 16]>(),
+                    ::reqwest::header::SEC_WEBSOCKET_KEY,
+                    ::base64::Engine::encode(
+                        &::base64::engine::general_purpose::STANDARD,
+                        ::rand::random::<[u8; 16]>(),
                     ),
                 )
                 .build()?;
@@ -47289,8 +47285,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -47387,8 +47383,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -47482,8 +47478,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -47511,9 +47507,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -47604,8 +47600,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -47668,8 +47664,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -47759,8 +47755,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -47823,8 +47819,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -47888,8 +47884,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -47983,8 +47979,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -48089,8 +48085,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -48122,9 +48118,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -48231,8 +48227,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new(
@@ -48314,8 +48310,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -48422,8 +48418,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new(
@@ -48505,8 +48501,8 @@ pub mod builder {
                 .client
                 .delete(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -48589,8 +48585,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new(
                     "organization",
@@ -48701,8 +48697,8 @@ pub mod builder {
                 .client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new(
@@ -48797,8 +48793,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -48827,9 +48823,9 @@ pub mod builder {
         ) -> impl futures::Stream<Item = Result<types::UpdateableComponent, Error<types::Error>>>
                + Unpin
                + 'a {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -48941,8 +48937,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -48970,9 +48966,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::UpdateDeployment, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -49055,8 +49051,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -49096,8 +49092,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -49168,8 +49164,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .build()?;
@@ -49210,8 +49206,8 @@ pub mod builder {
                 .client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -49300,8 +49296,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
                 .query(&progenitor_client::QueryParam::new(
@@ -49329,9 +49325,9 @@ pub mod builder {
             self,
         ) -> impl futures::Stream<Item = Result<types::SystemUpdate, Error<types::Error>>> + Unpin + 'a
         {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -49412,8 +49408,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -49475,8 +49471,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
@@ -49518,8 +49514,8 @@ pub mod builder {
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .build()?;
             let result = client.client.execute(request).await;
