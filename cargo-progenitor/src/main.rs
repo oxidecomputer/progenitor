@@ -218,6 +218,8 @@ struct Dependencies {
     rand: &'static str,
     regress: &'static str,
     reqwest: &'static str,
+    #[cfg(feature = "middleware")]
+    reqwest_middleware: &'static str,
     serde: &'static str,
     serde_json: &'static str,
     serde_urlencoded: &'static str,
@@ -233,6 +235,8 @@ static DEPENDENCIES: Dependencies = Dependencies {
     rand: "0.8",
     regress: "0.10",
     reqwest: "0.12",
+    #[cfg(feature = "middleware")]
+    reqwest_middleware: "0.4",
     serde: "1.0",
     serde_json: "1.0",
     serde_urlencoded: "0.7",
@@ -244,6 +248,8 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),
         format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", DEPENDENCIES.reqwest),
+        #[cfg(feature = "middleware")]
+        format!("reqwest-middleware = {{ version = \"{}\", default-features=false, features = [\"json\"] }}", DEPENDENCIES.reqwest_middleware),
         format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", DEPENDENCIES.serde),
         format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
     ];

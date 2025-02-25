@@ -7,6 +7,9 @@ description = "An OpenAPI client generator - core implementation"
 repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"
 
+[features]
+middleware = ["progenitor-client/middleware"]
+
 [dependencies]
 heck = { workspace = true }
 http = { workspace = true }
@@ -31,6 +34,7 @@ http = { workspace = true }
 hyper = { workspace = true }
 progenitor-client = { workspace = true }
 reqwest = { workspace = true }
+reqwest-middleware = { workspace = true }
 rustfmt-wrapper = { workspace = true }
 semver = { workspace = true }
 serde_yaml = { workspace = true }

@@ -4,10 +4,14 @@ version = "0.0.1"
 authors = ["Adam H. Leventhal <ahl@oxidecomputer.com>"]
 edition = "2021"
 
+[features]
+middleware = ["dep:reqwest-middleware","progenitor-client/middleware"]
+
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
 progenitor-client = { path = "../progenitor-client" }
 reqwest = { version = "0.12.4", features = ["json", "stream"] }
+reqwest-middleware = { version = "0.4.1", features = ["json"], optional = true }
 base64 = "0.22"
 rand = "0.9"
 serde = { version = "1.0", features = ["derive"] }

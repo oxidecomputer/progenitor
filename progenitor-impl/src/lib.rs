@@ -404,6 +404,20 @@ impl Generator {
             s
         };
 
+        #[cfg(not(feature = "middleware"))]
+        let client_ty = quote! { reqwest::Client };
+
+        #[cfg(feature = "middleware")]
+        let client_ty = quote! { reqwest_middleware::ClientWithMiddleware };
+
+        #[cfg(not(feature = "middleware"))]
+        let build_middleware = quote! {};
+
+        #[cfg(feature = "middleware")]
+        let build_middleware = quote! {
+            let built_client = reqwest_middleware::ClientBuilder::new(built_client).build();
+        };
+
         let version_str = &spec.info.version;
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
@@ -428,7 +442,7 @@ impl Generator {
             #[doc = #client_docstring]
             pub struct Client {
                 pub(crate) baseurl: String,
-                pub(crate) client: reqwest::Client,
+                pub(crate) client: #client_ty,
                 #inner_property
             }
 
@@ -436,7 +450,7 @@ impl Generator {
                 /// Create a new client.
                 ///
                 /// `baseurl` is the base URL provided to the internal
-                /// `reqwest::Client`, and should include a scheme and hostname,
+                /// HTTP client, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
                 pub fn new(
                     baseurl: &str,
@@ -453,18 +467,21 @@ impl Generator {
                     #[cfg(target_arch = "wasm32")]
                     let client = reqwest::ClientBuilder::new();
 
-                    Self::new_with_client(baseurl, client.build().unwrap(), #inner_value)
+                    let built_client = client.build().unwrap();
+                    #build_middleware
+
+                    Self::new_with_client(baseurl, built_client, #inner_value)
                 }
 
-                /// Construct a new client with an existing `reqwest::Client`,
+                /// Construct a new client with an existing HTTP client
                 /// allowing more control over its configuration.
                 ///
                 /// `baseurl` is the base URL provided to the internal
-                /// `reqwest::Client`, and should include a scheme and hostname,
+                /// HTTP client, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
                 pub fn new_with_client(
                     baseurl: &str,
-                    client: reqwest::Client,
+                    client: #client_ty,
                     #inner_parameter
                 ) -> Self {
                     Self {
@@ -479,8 +496,8 @@ impl Generator {
                     &self.baseurl
                 }
 
-                /// Get the internal `reqwest::Client` used to make requests.
-                pub fn client(&self) -> &reqwest::Client {
+                /// Get the internal HTTP client used to make requests.
+                pub fn client(&self) -> &#client_ty {
                     &self.client
                 }
 

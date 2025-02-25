@@ -12,6 +12,11 @@ categories = ["api-bindings", "compilers"]
 [features]
 default = ["macro"]
 macro = ["dep:progenitor-client", "dep:progenitor-macro"]
+middleware = [
+    "progenitor-client/middleware",
+    "progenitor-impl/middleware",
+    "progenitor-macro/middleware",
+]
 
 [dependencies]
 progenitor-client = { workspace = true, optional = true }
@@ -26,6 +31,7 @@ percent-encoding = { workspace = true }
 rand = { workspace = true }
 regress = { workspace = true }
 reqwest = { workspace = true }
+reqwest-middleware = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
