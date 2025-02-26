@@ -626,6 +626,7 @@ dependencies = [
  "progenitor-client",
  "rand",
  "reqwest",
+ "reqwest-middleware",
  "serde",
  "serde_json",
  "syn",
@@ -639,6 +640,7 @@ dependencies = [
  "chrono",
  "progenitor",
  "reqwest",
+ "reqwest-middleware",
  "schemars",
  "serde",
  "uuid",
@@ -654,6 +656,7 @@ dependencies = [
  "progenitor",
  "progenitor-client",
  "reqwest",
+ "reqwest-middleware",
  "serde",
  "serde_json",
  "syn",
@@ -1594,6 +1597,7 @@ dependencies = [
  "rand",
  "regress",
  "reqwest",
+ "reqwest-middleware",
  "schemars",
  "serde",
  "serde_json",
@@ -1605,10 +1609,12 @@ dependencies = [
 name = "progenitor-client"
 version = "0.9.1"
 dependencies = [
+ "anyhow",
  "bytes",
  "futures-core",
  "percent-encoding",
  "reqwest",
+ "reqwest-middleware",
  "serde",
  "serde_json",
  "serde_urlencoded",
@@ -1633,6 +1639,7 @@ dependencies = [
  "quote",
  "regex",
  "reqwest",
+ "reqwest-middleware",
  "rustfmt-wrapper",
  "schemars",
  "semver",
@@ -1654,6 +1661,7 @@ dependencies = [
  "proc-macro2",
  "progenitor-impl",
  "quote",
+ "reqwest-middleware",
  "schemars",
  "serde",
  "serde_json",
@@ -1811,6 +1819,21 @@ dependencies = [
  "wasm-streams",
  "web-sys",
  "winreg",
+]
+
+[[package]]
+name = "reqwest-middleware"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "64e8975513bd9a7a43aad01030e79b3498e05db14e9d945df6483e8cf9b8c4c4"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "http",
+ "reqwest",
+ "serde",
+ "thiserror 1.0.69",
+ "tower-service",
 ]
 
 [[package]]
@@ -2532,9 +2555,9 @@ checksum = "360dfd1d6d30e05fda32ace2c8c70e9c0a9da713275777f5a4dbb8a1893930c6"
 
 [[package]]
 name = "tracing"
-version = "0.1.40"
+version = "0.1.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3523ab5a71916ccf420eebdf5521fcef02141234bbc0b8a49f2fdc4544364ef"
+checksum = "784e0ac535deb450455cbfa28a6f0df145ea1bb7ae51b821cf5e7927fdcfbdd0"
 dependencies = [
  "pin-project-lite",
  "tracing-core",
@@ -2542,9 +2565,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-core"
-version = "0.1.32"
+version = "0.1.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c06d3da6113f116aaee68e4d601191614c9053067f9ab7f6edbcb161237daa54"
+checksum = "e672c95779cf947c5311f83787af4fa8fffd12fb27e4993211a84bdfd9610f9c"
 dependencies = [
  "once_cell",
 ]

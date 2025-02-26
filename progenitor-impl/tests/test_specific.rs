@@ -80,10 +80,20 @@ fn test_renamed_parameters() {
 
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}.rs", "test_renamed_parameters"),
-        &output,
-    )
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!(
+                "tests/output/src/{}.rs",
+                "test_renamed_parameters_middleware"
+            ),
+            &output,
+        )
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}.rs", "test_renamed_parameters"),
+            &output,
+        )
+    }
 }
 
 #[endpoint {
@@ -111,10 +121,20 @@ fn test_freeform_response() {
 
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}.rs", "test_freeform_response"),
-        &output,
-    )
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!(
+                "tests/output/src/{}.rs",
+                "test_freeform_response_middleware"
+            ),
+            &output,
+        )
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}.rs", "test_freeform_response"),
+            &output,
+        )
+    }
 }
 
 #[derive(Deserialize, JsonSchema)]
@@ -165,18 +185,38 @@ fn test_default_params() {
 
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}.rs", "test_default_params_positional"),
-        &output,
-    );
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!(
+                "tests/output/src/{}.rs",
+                "test_default_params_positional_middleware"
+            ),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}.rs", "test_default_params_positional"),
+            &output,
+        );
+    }
 
     let mut generator =
         Generator::new(GenerationSettings::default().with_interface(InterfaceStyle::Builder));
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}.rs", "test_default_params_builder"),
-        &output,
-    );
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!(
+                "tests/output/src/{}.rs",
+                "test_default_params_builder_middleware"
+            ),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}.rs", "test_default_params_builder"),
+            &output,
+        );
+    }
 }
 
 #[derive(Debug)]
@@ -236,14 +276,28 @@ async fn test_stream_pagination() {
     let mut generator =
         Generator::new(GenerationSettings::new().with_interface(InterfaceStyle::Positional));
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{TEST_NAME}_positional.rs"),
-        &output,
-    );
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!("tests/output/src/{TEST_NAME}_positional_middleware.rs"),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{TEST_NAME}_positional.rs"),
+            &output,
+        );
+    }
     let mut generator =
         Generator::new(GenerationSettings::new().with_interface(InterfaceStyle::Builder));
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(format!("tests/output/src/{TEST_NAME}_builder.rs"), &output);
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!("tests/output/src/{TEST_NAME}_builder_middleware.rs"),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(format!("tests/output/src/{TEST_NAME}_builder.rs"), &output);
+    }
 
     // Run the Dropshot server.
     let config_dropshot = ConfigDropshot {

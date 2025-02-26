@@ -8,7 +8,10 @@ use std::ops::{Deref, DerefMut};
 
 use bytes::Bytes;
 use futures_core::Stream;
+#[cfg(not(feature = "middleware"))]
 use reqwest::RequestBuilder;
+#[cfg(feature = "middleware")]
+use reqwest_middleware::RequestBuilder;
 use serde::{de::DeserializeOwned, ser::SerializeStruct, Serialize};
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -249,6 +252,10 @@ pub enum Error<E = ()> {
 
     /// An error occurred in the processing of a request post-hook.
     PostHookError(String),
+
+    #[cfg(feature = "middleware")]
+    /// An error occurred when processing middleware.
+    MiddlewareError(anyhow::Error),
 }
 
 impl<E> Error<E> {
@@ -264,6 +271,8 @@ impl<E> Error<E> {
             Error::ResponseBodyError(e) => e.status(),
             Error::InvalidResponsePayload(_, _) => None,
             Error::UnexpectedResponse(r) => Some(r.status()),
+            #[cfg(feature = "middleware")]
+            Error::MiddlewareError(_) => None,
         }
     }
 
@@ -290,6 +299,8 @@ impl<E> Error<E> {
             Error::ResponseBodyError(e) => Error::ResponseBodyError(e),
             Error::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
             Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
+            #[cfg(feature = "middleware")]
+            Error::MiddlewareError(e) => Error::MiddlewareError(e),
         }
     }
 }
@@ -297,6 +308,16 @@ impl<E> Error<E> {
 impl<E> From<reqwest::Error> for Error<E> {
     fn from(e: reqwest::Error) -> Self {
         Self::CommunicationError(e)
+    }
+}
+
+#[cfg(feature = "middleware")]
+impl<E> From<reqwest_middleware::Error> for Error<E> {
+    fn from(e: reqwest_middleware::Error) -> Self {
+        match e {
+            reqwest_middleware::Error::Middleware(e) => Self::MiddlewareError(e),
+            reqwest_middleware::Error::Reqwest(e) => Self::CommunicationError(e),
+        }
     }
 }
 
@@ -339,6 +360,10 @@ where
             }
             Error::PostHookError(s) => {
                 write!(f, "Post-hook Error: {}", s)?;
+            }
+            #[cfg(feature = "middleware")]
+            Error::MiddlewareError(e) => {
+                write!(f, "Middleware Error: {}", e)?;
             }
         }
 

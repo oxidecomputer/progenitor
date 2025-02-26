@@ -11,6 +11,13 @@ categories = ["api-bindings", "development-tools::cargo-plugins"]
 
 default-run = "cargo-progenitor"
 
+[features]
+middleware = [
+    "progenitor/middleware",
+    "progenitor-client/middleware",
+    "progenitor-impl/middleware",
+]
+
 [dependencies]
 progenitor = { workspace = true, default-features = false }
 progenitor-client = { workspace = true }

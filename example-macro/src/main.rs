@@ -27,7 +27,11 @@ async fn add_auth_headers(
     Ok(())
 }
 
+#[cfg(not(feature = "middleware"))]
 fn all_done(_result: &reqwest::Result<reqwest::Response>) {}
+
+#[cfg(feature = "middleware")]
+fn all_done(_result: &reqwest_middleware::Result<reqwest::Response>) {}
 
 mod buildomat {
     use progenitor::generate_api;

@@ -56,10 +56,17 @@ fn verify_apis(openapi_file: &str) {
         "#![allow(elided_named_lifetimes)]",
         generate_formatted(&mut generator, &spec),
     );
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_positional.rs", openapi_stem),
-        &output,
-    );
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_positional_middleware.rs", openapi_stem),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_positional.rs", openapi_stem),
+            &output,
+        );
+    }
 
     // Builder generation with derives and patches.
     let mut generator = Generator::new(
@@ -79,10 +86,17 @@ fn verify_apis(openapi_file: &str) {
             ),
     );
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_builder.rs", openapi_stem),
-        &output,
-    );
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_builder_middleware.rs", openapi_stem),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_builder.rs", openapi_stem),
+            &output,
+        );
+    }
 
     // Builder generation with tags.
     let mut generator = Generator::new(
@@ -91,10 +105,20 @@ fn verify_apis(openapi_file: &str) {
             .with_tag(TagStyle::Separate),
     );
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
-        &output,
-    );
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!(
+                "tests/output/src/{}_builder_tagged_middleware.rs",
+                openapi_stem
+            ),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
+            &output,
+        );
+    }
 
     // CLI generation.
     let tokens = generator
@@ -102,7 +126,14 @@ fn verify_apis(openapi_file: &str) {
         .unwrap();
     let output = reformat_code(tokens);
 
-    expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_cli_middleware.rs", openapi_stem),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
+    }
 
     // httpmock generation.
     let code = generator
@@ -120,10 +151,17 @@ fn verify_apis(openapi_file: &str) {
     .unwrap();
 
     let output = progenitor_impl::space_out_items(output).unwrap();
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_httpmock.rs", openapi_stem),
-        &output,
-    );
+    if cfg!(feature = "middleware") {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_httpmock_middleware.rs", openapi_stem),
+            &output,
+        );
+    } else {
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_httpmock.rs", openapi_stem),
+            &output,
+        );
+    }
 }
 
 #[test]
