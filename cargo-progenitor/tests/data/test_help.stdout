@@ -19,6 +19,8 @@ Options:
           SDK interface style [default: positional] [possible values: positional, builder]
       --tags <TAGS>
           SDK tag style [default: merged] [possible values: merged, separate]
+      --client-type <CLIENT_TYPE>
+          HTTP client type [default: reqwest] [possible values: reqwest, reqwest-middleware]
       --include-client <INCLUDE_CLIENT>
           Include client code rather than depending on progenitor-client [default: true] [possible values: true, false]
   -h, --help

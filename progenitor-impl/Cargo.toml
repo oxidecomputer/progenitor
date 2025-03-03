@@ -31,6 +31,7 @@ http = { workspace = true }
 hyper = { workspace = true }
 progenitor-client = { workspace = true }
 reqwest = { workspace = true }
+reqwest-middleware = { workspace = true }
 rustfmt-wrapper = { workspace = true }
 semver = { workspace = true }
 serde_yaml = { workspace = true }

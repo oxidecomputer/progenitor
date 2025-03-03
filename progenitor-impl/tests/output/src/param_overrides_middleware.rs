@@ -44,7 +44,7 @@ pub mod types {
 ///Version: v1
 pub struct Client {
     pub(crate) baseurl: String,
-    pub(crate) client: reqwest::Client,
+    pub(crate) client: reqwest_middleware::ClientWithMiddleware,
 }
 
 impl Client {
@@ -64,6 +64,7 @@ impl Client {
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
         let built_client = client.build().unwrap();
+        let built_client = reqwest_middleware::ClientBuilder::new(built_client).build();
         Self::new_with_client(baseurl, built_client)
     }
 
@@ -73,7 +74,10 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// HTTP client, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
-    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+    pub fn new_with_client(
+        baseurl: &str,
+        client: reqwest_middleware::ClientWithMiddleware,
+    ) -> Self {
         Self {
             baseurl: baseurl.to_string(),
             client,
@@ -86,7 +90,7 @@ impl Client {
     }
 
     /// Get the internal HTTP client used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    pub fn client(&self) -> &reqwest_middleware::ClientWithMiddleware {
         &self.client
     }
 
@@ -99,6 +103,8 @@ impl Client {
     }
 }
 
+#[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Gets a key
     ///
@@ -109,95 +115,33 @@ impl Client {
     ///   parameter
     /// - `unique_key`: A key parameter that will not be overridden by the path
     ///   spec
-    ///```ignore
-    /// let response = client.key_get()
-    ///    .key(key)
-    ///    .unique_key(unique_key)
-    ///    .send()
-    ///    .await;
-    /// ```
-    pub fn key_get(&self) -> builder::KeyGet {
-        builder::KeyGet::new(self)
-    }
-}
-
-/// Types for composing operation parameters.
-#[allow(clippy::all)]
-pub mod builder {
-    use super::types;
-    #[allow(unused_imports)]
-    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
-    ///Builder for [`Client::key_get`]
-    ///
-    ///[`Client::key_get`]: super::Client::key_get
-    #[derive(Debug, Clone)]
-    pub struct KeyGet<'a> {
-        client: &'a super::Client,
-        key: Result<Option<bool>, String>,
-        unique_key: Result<Option<::std::string::String>, String>,
-    }
-
-    impl<'a> KeyGet<'a> {
-        pub fn new(client: &'a super::Client) -> Self {
-            Self {
-                client: client,
-                key: Ok(None),
-                unique_key: Ok(None),
-            }
-        }
-
-        pub fn key<V>(mut self, value: V) -> Self
-        where
-            V: std::convert::TryInto<bool>,
-        {
-            self.key = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `bool` for key failed".to_string());
-            self
-        }
-
-        pub fn unique_key<V>(mut self, value: V) -> Self
-        where
-            V: std::convert::TryInto<::std::string::String>,
-        {
-            self.unique_key = value.try_into().map(Some).map_err(|_| {
-                "conversion to `:: std :: string :: String` for unique_key failed".to_string()
-            });
-            self
-        }
-
-        ///Sends a `GET` request to `/key`
-        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self {
-                client,
-                key,
-                unique_key,
-            } = self;
-            let key = key.map_err(Error::InvalidRequest)?;
-            let unique_key = unique_key.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/key", client.baseurl,);
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .query(&progenitor_client::QueryParam::new("key", &key))
-                .query(&progenitor_client::QueryParam::new(
-                    "uniqueKey",
-                    &unique_key,
-                ))
-                .build()?;
-            let result = client.client.execute(request).await;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+    pub async fn key_get<'a>(
+        &'a self,
+        key: Option<bool>,
+        unique_key: Option<&'a str>,
+    ) -> Result<ResponseValue<()>, Error<()>> {
+        let url = format!("{}/key", self.baseurl,);
+        #[allow(unused_mut)]
+        let mut request = self
+            .client
+            .get(url)
+            .query(&progenitor_client::QueryParam::new("key", &key))
+            .query(&progenitor_client::QueryParam::new(
+                "uniqueKey",
+                &unique_key,
+            ))
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 }
 
 /// Items consumers will typically use such as the Client.
 pub mod prelude {
-    pub use self::super::Client;
+    #[allow(unused_imports)]
+    pub use super::Client;
 }

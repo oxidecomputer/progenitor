@@ -14,7 +14,8 @@ use std::{
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
 use progenitor_impl::{
-    CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch, UnknownPolicy,
+    ClientType, CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch,
+    UnknownPolicy,
 };
 use quote::{quote, ToTokens};
 use schemars::schema::SchemaObject;
@@ -138,6 +139,7 @@ struct MacroSettings {
     pre_hook_async: Option<ParseWrapper<ClosureOrPath>>,
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
     post_hook_async: Option<ParseWrapper<ClosureOrPath>>,
+    client_type: Option<ClientType>,
 
     map_type: Option<ParseWrapper<syn::Type>>,
 
@@ -307,6 +309,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             pre_hook_async,
             post_hook,
             post_hook_async,
+            client_type,
             map_type,
             unknown_crates,
             crates,
@@ -325,6 +328,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         post_hook.map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
         post_hook_async
             .map(|post_hook_async| settings.with_post_hook_async(post_hook_async.into_inner().0));
+        client_type.map(|client_type| settings.with_client_type(client_type));
         map_type.map(|map_type| settings.with_map_type(map_type.to_token_stream()));
 
         settings.with_unknown_crates(unknown_crates);

@@ -66,6 +66,7 @@ pub struct GenerationSettings {
     post_hook: Option<TokenStream>,
     post_hook_async: Option<TokenStream>,
     extra_derives: Vec<String>,
+    client_type: ClientType,
 
     map_type: Option<String>,
     unknown_crates: UnknownPolicy,
@@ -109,6 +110,21 @@ pub enum TagStyle {
 impl Default for TagStyle {
     fn default() -> Self {
         Self::Merged
+    }
+}
+
+/// The type of underlying HTTP client to use.
+#[derive(Clone, Deserialize)]
+pub enum ClientType {
+    /// Use reqwest::Client as the Client.
+    Reqwest,
+    /// Use reqwest_middleware::ClientWithMiddleware as the Client.
+    ReqwestMiddleware,
+}
+
+impl Default for ClientType {
+    fn default() -> Self {
+        Self::Reqwest
     }
 }
 
@@ -163,6 +179,12 @@ impl GenerationSettings {
     /// Additional derive macros applied to generated types.
     pub fn with_derive(&mut self, derive: impl ToString) -> &mut Self {
         self.extra_derives.push(derive.to_string());
+        self
+    }
+
+    /// Set the [ClientType].
+    pub fn with_client_type(&mut self, client: ClientType) -> &mut Self {
+        self.client_type = client;
         self
     }
 
@@ -406,6 +428,18 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
+        let client_ty = match self.settings.client_type {
+            ClientType::Reqwest => quote! { reqwest::Client },
+            ClientType::ReqwestMiddleware => quote! { reqwest_middleware::ClientWithMiddleware },
+        };
+
+        let setup_middleware = match self.settings.client_type {
+            ClientType::Reqwest => quote! {},
+            ClientType::ReqwestMiddleware => {
+                quote! { let built_client = reqwest_middleware::ClientBuilder::new(built_client).build(); }
+            }
+        };
+
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
@@ -428,7 +462,7 @@ impl Generator {
             #[doc = #client_docstring]
             pub struct Client {
                 pub(crate) baseurl: String,
-                pub(crate) client: reqwest::Client,
+                pub(crate) client: #client_ty,
                 #inner_property
             }
 
@@ -436,7 +470,7 @@ impl Generator {
                 /// Create a new client.
                 ///
                 /// `baseurl` is the base URL provided to the internal
-                /// `reqwest::Client`, and should include a scheme and hostname,
+                /// HTTP client, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
                 pub fn new(
                     baseurl: &str,
@@ -453,18 +487,21 @@ impl Generator {
                     #[cfg(target_arch = "wasm32")]
                     let client = reqwest::ClientBuilder::new();
 
-                    Self::new_with_client(baseurl, client.build().unwrap(), #inner_value)
+                    let built_client = client.build().unwrap();
+                    #setup_middleware
+
+                    Self::new_with_client(baseurl, built_client, #inner_value)
                 }
 
-                /// Construct a new client with an existing `reqwest::Client`,
+                /// Construct a new client with an existing HTTP client,
                 /// allowing more control over its configuration.
                 ///
                 /// `baseurl` is the base URL provided to the internal
-                /// `reqwest::Client`, and should include a scheme and hostname,
+                /// HTTP client, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
                 pub fn new_with_client(
                     baseurl: &str,
-                    client: reqwest::Client,
+                    client: #client_ty,
                     #inner_parameter
                 ) -> Self {
                     Self {
@@ -479,8 +516,8 @@ impl Generator {
                     &self.baseurl
                 }
 
-                /// Get the internal `reqwest::Client` used to make requests.
-                pub fn client(&self) -> &reqwest::Client {
+                /// Get the internal HTTP client used to make requests.
+                pub fn client(&self) -> &#client_ty {
                     &self.client
                 }
 

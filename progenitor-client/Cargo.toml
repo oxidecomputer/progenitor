@@ -7,10 +7,12 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 description = "An OpenAPI client generator - client support"
 
 [dependencies]
+anyhow = { workspace = true }
 bytes = { workspace = true }
 futures-core = { workspace = true }
 percent-encoding = { workspace = true }
 reqwest = { workspace = true }
+reqwest-middleware = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 serde_urlencoded = { workspace = true }

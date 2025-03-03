@@ -9,7 +9,7 @@ use std::{
 use anyhow::{bail, Result};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
-use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
+use progenitor::{ClientType, GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use progenitor_impl::space_out_items;
 
 fn is_non_release() -> bool {
@@ -51,6 +51,9 @@ struct Args {
     /// SDK tag style
     #[clap(value_enum, long, default_value_t = TagArg::Merged)]
     tags: TagArg,
+    /// HTTP client type.
+    #[clap(value_enum, long, default_value_t = ClientArg::Reqwest)]
+    client_type: ClientArg,
     /// Include client code rather than depending on progenitor-client
     #[clap(default_value = match is_non_release() { true => "true", false => "false" }, long, action = clap::ArgAction::Set)]
     include_client: bool,
@@ -82,6 +85,21 @@ impl From<TagArg> for TagStyle {
         match arg {
             TagArg::Merged => TagStyle::Merged,
             TagArg::Separate => TagStyle::Separate,
+        }
+    }
+}
+
+#[derive(Copy, Clone, ValueEnum)]
+enum ClientArg {
+    Reqwest,
+    ReqwestMiddleware,
+}
+
+impl From<ClientArg> for ClientType {
+    fn from(arg: ClientArg) -> Self {
+        match arg {
+            ClientArg::Reqwest => ClientType::Reqwest,
+            ClientArg::ReqwestMiddleware => ClientType::ReqwestMiddleware,
         }
     }
 }
@@ -119,7 +137,8 @@ fn main() -> Result<()> {
     let mut builder = Generator::new(
         GenerationSettings::default()
             .with_interface(args.interface.into())
-            .with_tag(args.tags.into()),
+            .with_tag(args.tags.into())
+            .with_client_type(args.client_type.into()),
     );
 
     match builder.generate_tokens(&api) {
@@ -218,6 +237,7 @@ struct Dependencies {
     rand: &'static str,
     regress: &'static str,
     reqwest: &'static str,
+    reqwest_middleware: &'static str,
     serde: &'static str,
     serde_json: &'static str,
     serde_urlencoded: &'static str,
@@ -233,6 +253,7 @@ static DEPENDENCIES: Dependencies = Dependencies {
     rand: "0.8",
     regress: "0.10",
     reqwest: "0.12",
+    reqwest_middleware: "0.4",
     serde: "1.0",
     serde_json: "1.0",
     serde_urlencoded: "0.7",
@@ -244,6 +265,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),
         format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", DEPENDENCIES.reqwest),
+        format!("reqwest-middleware = {{ version = \"{}\", default-features=false, features = [\"json\"] }}", DEPENDENCIES.reqwest_middleware),
         format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", DEPENDENCIES.serde),
         format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
     ];

@@ -6,7 +6,8 @@ use std::{
 };
 
 use progenitor_impl::{
-    space_out_items, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl, TypePatch,
+    space_out_items, ClientType, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl,
+    TypePatch,
 };
 
 use openapiv3::OpenAPI;
@@ -93,6 +94,18 @@ fn verify_apis(openapi_file: &str) {
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
         format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
+        &output,
+    );
+
+    // Positional generation with middleware.
+    let mut generator = Generator::new(
+        GenerationSettings::default()
+            .with_interface(InterfaceStyle::Positional)
+            .with_client_type(ClientType::ReqwestMiddleware),
+    );
+    let output = generate_formatted(&mut generator, &spec);
+    expectorate::assert_contents(
+        format!("tests/output/src/{}_middleware.rs", openapi_stem),
         &output,
     );
 
