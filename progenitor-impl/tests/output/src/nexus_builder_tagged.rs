@@ -6148,10 +6148,10 @@ pub mod types {
     impl ::std::str::FromStr for L4PortRange {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.len() > 11usize {
+            if value.chars().count() > 11usize {
                 return Err("longer than 11 characters".into());
             }
-            if value.len() < 1usize {
+            if value.chars().count() < 1usize {
                 return Err("shorter than 1 characters".into());
             }
             if regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$")
@@ -6246,10 +6246,10 @@ pub mod types {
     impl ::std::str::FromStr for MacAddr {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.len() > 17usize {
+            if value.chars().count() > 17usize {
                 return Err("longer than 17 characters".into());
             }
-            if value.len() < 17usize {
+            if value.chars().count() < 17usize {
                 return Err("shorter than 17 characters".into());
             }
             if regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$")
@@ -6444,7 +6444,7 @@ pub mod types {
     impl ::std::str::FromStr for Name {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.len() > 63usize {
+            if value.chars().count() > 63usize {
                 return Err("longer than 63 characters".into());
             }
             if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ; }
@@ -7678,7 +7678,7 @@ pub mod types {
     impl ::std::str::FromStr for Password {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.len() > 512usize {
+            if value.chars().count() > 512usize {
                 return Err("longer than 512 characters".into());
             }
             Ok(Self(value.to_string()))
@@ -8569,7 +8569,7 @@ pub mod types {
     impl ::std::str::FromStr for RoleName {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.len() > 63usize {
+            if value.chars().count() > 63usize {
                 return Err("longer than 63 characters".into());
             }
             if regress::Regex::new("[a-z-]+\\.[a-z-]+")
@@ -12512,7 +12512,7 @@ pub mod types {
     impl ::std::str::FromStr for UserId {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.len() > 63usize {
+            if value.chars().count() > 63usize {
                 return Err("longer than 63 characters".into());
             }
             if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ; }
