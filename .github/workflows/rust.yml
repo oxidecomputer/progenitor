@@ -70,7 +70,7 @@ jobs:
         target: wasm32-unknown-unknown
     - uses: nanasess/setup-chromedriver@v2
     - name: Install wasm-bindgen-cli
-      run: cargo install --version 0.2.95 wasm-bindgen-cli
+      run: cargo install --version 0.2.100 wasm-bindgen-cli
     - name: Run tests
       run: |
         cd example-wasm

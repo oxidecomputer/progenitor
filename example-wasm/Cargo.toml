@@ -12,7 +12,7 @@ serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.15", features = ["serde", "v4", "js"] }
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.45"
+wasm-bindgen-test = "0.3.50"
 
 [build-dependencies]
 prettyplease = "0.2.30"
