@@ -1,4 +1,3 @@
-#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -35,17 +34,48 @@ pub mod types {
             }
         }
     }
+
+    ///`UnoBody`
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "type": "object",
+    ///  "required": [
+    ///    "required"
+    ///  ],
+    ///  "properties": {
+    ///    "gateway": {
+    ///      "type": "string"
+    ///    }
+    ///  }
+    ///}
+    /// ```
+    /// </details>
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct UnoBody {
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub gateway: ::std::option::Option<::std::string::String>,
+        pub required: ::serde_json::Value,
+    }
+
+    impl ::std::convert::From<&UnoBody> for UnoBody {
+        fn from(value: &UnoBody) -> Self {
+            value.clone()
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
-///Client for Parameter override test
+///Client for CLI gen test
 ///
-///Minimal API for testing parameter overrides
+///Test case to exercise CLI generation
 ///
-///Version: v1
+///Version: 9000
 pub struct Client {
     pub(crate) baseurl: String,
-    pub(crate) client: reqwest::Client,
+    pub(crate) client: reqwest_middleware::ClientWithMiddleware,
 }
 
 impl Client {
@@ -65,6 +95,7 @@ impl Client {
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
         let built_client = client.build().unwrap();
+        let built_client = reqwest_middleware::ClientBuilder::new(built_client).build();
         Self::new_with_client(baseurl, built_client)
     }
 
@@ -74,7 +105,10 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// HTTP client, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
-    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+    pub fn new_with_client(
+        baseurl: &str,
+        client: reqwest_middleware::ClientWithMiddleware,
+    ) -> Self {
         Self {
             baseurl: baseurl.to_string(),
             client,
@@ -87,7 +121,7 @@ impl Client {
     }
 
     /// Get the internal HTTP client used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    pub fn client(&self) -> &reqwest_middleware::ClientWithMiddleware {
         &self.client
     }
 
@@ -96,42 +130,31 @@ impl Client {
     /// This string is pulled directly from the source OpenAPI
     /// document and may be in any format the API selects.
     pub fn api_version(&self) -> &'static str {
-        "v1"
+        "9000"
     }
 }
 
 #[allow(clippy::all)]
 #[allow(elided_named_lifetimes)]
 impl Client {
-    ///Gets a key
-    ///
-    ///Sends a `GET` request to `/key`
-    ///
-    ///Arguments:
-    /// - `key`: The same key parameter that overlaps with the path level
-    ///   parameter
-    /// - `unique_key`: A key parameter that will not be overridden by the path
-    ///   spec
-    pub async fn key_get<'a>(
+    ///Sends a `GET` request to `/uno`
+    pub async fn uno<'a>(
         &'a self,
-        key: Option<bool>,
-        unique_key: Option<&'a str>,
-    ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/key", self.baseurl,);
+        gateway: &'a str,
+        body: &'a types::UnoBody,
+    ) -> Result<ResponseValue<ByteStream>, Error<()>> {
+        let url = format!("{}/uno", self.baseurl,);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
-            .query(&progenitor_client::QueryParam::new("key", &key))
-            .query(&progenitor_client::QueryParam::new(
-                "uniqueKey",
-                &unique_key,
-            ))
+            .json(&body)
+            .query(&progenitor_client::QueryParam::new("gateway", &gateway))
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
+            200..=299 => Ok(ResponseValue::stream(response)),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }

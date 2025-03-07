@@ -1,4 +1,3 @@
-#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -38,14 +37,14 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Parameter override test
+///Client for Parameter name collision test
 ///
-///Minimal API for testing parameter overrides
+///Minimal API for testing collision between parameter names and generated code
 ///
 ///Version: v1
 pub struct Client {
     pub(crate) baseurl: String,
-    pub(crate) client: reqwest::Client,
+    pub(crate) client: reqwest_middleware::ClientWithMiddleware,
 }
 
 impl Client {
@@ -65,6 +64,7 @@ impl Client {
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
         let built_client = client.build().unwrap();
+        let built_client = reqwest_middleware::ClientBuilder::new(built_client).build();
         Self::new_with_client(baseurl, built_client)
     }
 
@@ -74,7 +74,10 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// HTTP client, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
-    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+    pub fn new_with_client(
+        baseurl: &str,
+        client: reqwest_middleware::ClientWithMiddleware,
+    ) -> Self {
         Self {
             baseurl: baseurl.to_string(),
             client,
@@ -87,7 +90,7 @@ impl Client {
     }
 
     /// Get the internal HTTP client used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    pub fn client(&self) -> &reqwest_middleware::ClientWithMiddleware {
         &self.client
     }
 
@@ -105,34 +108,40 @@ impl Client {
 impl Client {
     ///Gets a key
     ///
-    ///Sends a `GET` request to `/key`
+    ///Sends a `GET` request to `/key/{query}`
     ///
     ///Arguments:
-    /// - `key`: The same key parameter that overlaps with the path level
-    ///   parameter
-    /// - `unique_key`: A key parameter that will not be overridden by the path
-    ///   spec
+    /// - `query`: Parameter name that was previously colliding
+    /// - `client`: Parameter name that was previously colliding
+    /// - `request`: Parameter name that was previously colliding
+    /// - `response`: Parameter name that was previously colliding
+    /// - `result`: Parameter name that was previously colliding
+    /// - `url`: Parameter name that was previously colliding
     pub async fn key_get<'a>(
         &'a self,
-        key: Option<bool>,
-        unique_key: Option<&'a str>,
+        query: bool,
+        client: bool,
+        request: bool,
+        response: bool,
+        result: bool,
+        url: bool,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/key", self.baseurl,);
+        let _url = format!("{}/key/{}", self.baseurl, encode_path(&query.to_string()),);
         #[allow(unused_mut)]
-        let mut request = self
+        let mut _request = self
             .client
-            .get(url)
-            .query(&progenitor_client::QueryParam::new("key", &key))
-            .query(&progenitor_client::QueryParam::new(
-                "uniqueKey",
-                &unique_key,
-            ))
+            .get(_url)
+            .query(&progenitor_client::QueryParam::new("client", &client))
+            .query(&progenitor_client::QueryParam::new("request", &request))
+            .query(&progenitor_client::QueryParam::new("response", &response))
+            .query(&progenitor_client::QueryParam::new("result", &result))
+            .query(&progenitor_client::QueryParam::new("url", &url))
             .build()?;
-        let result = self.client.execute(request).await;
-        let response = result?;
-        match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
-            _ => Err(Error::UnexpectedResponse(response)),
+        let _result = self.client.execute(_request).await;
+        let _response = _result?;
+        match _response.status().as_u16() {
+            200u16 => Ok(ResponseValue::empty(_response)),
+            _ => Err(Error::UnexpectedResponse(_response)),
         }
     }
 }

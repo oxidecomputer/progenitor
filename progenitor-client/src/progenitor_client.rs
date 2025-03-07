@@ -8,7 +8,6 @@ use std::ops::{Deref, DerefMut};
 
 use bytes::Bytes;
 use futures_core::Stream;
-use reqwest::RequestBuilder;
 use serde::{de::DeserializeOwned, ser::SerializeStruct, Serialize};
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -249,6 +248,9 @@ pub enum Error<E = ()> {
 
     /// An error occurred in the processing of a request post-hook.
     PostHookError(String),
+
+    /// An error occurred when processing middleware.
+    MiddlewareError(anyhow::Error),
 }
 
 impl<E> Error<E> {
@@ -264,6 +266,7 @@ impl<E> Error<E> {
             Error::ResponseBodyError(e) => e.status(),
             Error::InvalidResponsePayload(_, _) => None,
             Error::UnexpectedResponse(r) => Some(r.status()),
+            Error::MiddlewareError(_) => None,
         }
     }
 
@@ -290,6 +293,7 @@ impl<E> Error<E> {
             Error::ResponseBodyError(e) => Error::ResponseBodyError(e),
             Error::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
             Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
+            Error::MiddlewareError(e) => Error::MiddlewareError(e),
         }
     }
 }
@@ -297,6 +301,15 @@ impl<E> Error<E> {
 impl<E> From<reqwest::Error> for Error<E> {
     fn from(e: reqwest::Error) -> Self {
         Self::CommunicationError(e)
+    }
+}
+
+impl<E> From<reqwest_middleware::Error> for Error<E> {
+    fn from(e: reqwest_middleware::Error) -> Self {
+        match e {
+            reqwest_middleware::Error::Middleware(e) => Self::MiddlewareError(e),
+            reqwest_middleware::Error::Reqwest(e) => Self::CommunicationError(e),
+        }
     }
 }
 
@@ -339,6 +352,9 @@ where
             }
             Error::PostHookError(s) => {
                 write!(f, "Post-hook Error: {}", s)?;
+            }
+            Error::MiddlewareError(e) => {
+                write!(f, "Middleware Error: {}", e)?;
             }
         }
 
@@ -400,6 +416,7 @@ where
             Error::InvalidUpgrade(e) => Some(e),
             Error::ResponseBodyError(e) => Some(e),
             Error::InvalidResponsePayload(_b, e) => Some(e),
+            Error::MiddlewareError(e) => Some(e.as_ref()),
             _ => None,
         }
     }
@@ -426,11 +443,28 @@ pub fn encode_path(pc: &str) -> String {
 }
 
 #[doc(hidden)]
-pub trait RequestBuilderExt<E> {
-    fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<RequestBuilder, Error<E>>;
+pub trait RequestBuilderExt<E>
+where
+    Self: Sized,
+{
+    fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<Self, Error<E>>;
 }
 
-impl<E> RequestBuilderExt<E> for RequestBuilder {
+impl<E> RequestBuilderExt<E> for reqwest::RequestBuilder {
+    fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<Self, Error<E>> {
+        Ok(self
+            .header(
+                reqwest::header::CONTENT_TYPE,
+                reqwest::header::HeaderValue::from_static("application/x-www-form-urlencoded"),
+            )
+            .body(
+                serde_urlencoded::to_string(body)
+                    .map_err(|_| Error::InvalidRequest("failed to serialize body".to_string()))?,
+            ))
+    }
+}
+
+impl<E> RequestBuilderExt<E> for reqwest_middleware::RequestBuilder {
     fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<Self, Error<E>> {
         Ok(self
             .header(

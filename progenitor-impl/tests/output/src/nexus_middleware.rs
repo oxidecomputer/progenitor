@@ -1,4 +1,3 @@
-#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -5843,10 +5842,10 @@ pub mod types {
     impl ::std::str::FromStr for L4PortRange {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.chars().count() > 11usize {
+            if value.len() > 11usize {
                 return Err("longer than 11 characters".into());
             }
-            if value.chars().count() < 1usize {
+            if value.len() < 1usize {
                 return Err("shorter than 1 characters".into());
             }
             if regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$")
@@ -5941,10 +5940,10 @@ pub mod types {
     impl ::std::str::FromStr for MacAddr {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.chars().count() > 17usize {
+            if value.len() > 17usize {
                 return Err("longer than 17 characters".into());
             }
-            if value.chars().count() < 17usize {
+            if value.len() < 17usize {
                 return Err("shorter than 17 characters".into());
             }
             if regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$")
@@ -6127,7 +6126,7 @@ pub mod types {
     impl ::std::str::FromStr for Name {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.chars().count() > 63usize {
+            if value.len() > 63usize {
                 return Err("longer than 63 characters".into());
             }
             if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ; }
@@ -7301,7 +7300,7 @@ pub mod types {
     impl ::std::str::FromStr for Password {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.chars().count() > 512usize {
+            if value.len() > 512usize {
                 return Err("longer than 512 characters".into());
             }
             Ok(Self(value.to_string()))
@@ -8126,7 +8125,7 @@ pub mod types {
     impl ::std::str::FromStr for RoleName {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.chars().count() > 63usize {
+            if value.len() > 63usize {
                 return Err("longer than 63 characters".into());
             }
             if regress::Regex::new("[a-z-]+\\.[a-z-]+")
@@ -11847,7 +11846,7 @@ pub mod types {
     impl ::std::str::FromStr for UserId {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.chars().count() > 63usize {
+            if value.len() > 63usize {
                 return Err("longer than 63 characters".into());
             }
             if regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap () . find (value) . is_none () { return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ; }
@@ -14037,7 +14036,7 @@ pub mod types {
 ///Version: 0.0.1
 pub struct Client {
     pub(crate) baseurl: String,
-    pub(crate) client: reqwest::Client,
+    pub(crate) client: reqwest_middleware::ClientWithMiddleware,
 }
 
 impl Client {
@@ -14057,6 +14056,7 @@ impl Client {
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
         let built_client = client.build().unwrap();
+        let built_client = reqwest_middleware::ClientBuilder::new(built_client).build();
         Self::new_with_client(baseurl, built_client)
     }
 
@@ -14066,7 +14066,10 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// HTTP client, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
-    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+    pub fn new_with_client(
+        baseurl: &str,
+        client: reqwest_middleware::ClientWithMiddleware,
+    ) -> Self {
         Self {
             baseurl: baseurl.to_string(),
             client,
@@ -14079,7 +14082,7 @@ impl Client {
     }
 
     /// Get the internal HTTP client used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    pub fn client(&self) -> &reqwest_middleware::ClientWithMiddleware {
         &self.client
     }
 
