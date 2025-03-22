@@ -225,7 +225,7 @@ Progenitor can generate two distinct interface styles: positional and builder
 (described below). The choice is simply a matter of preference that many vary
 by API and taste.
 
-## Positional (current default)
+### Positional (current default)
 
 The "positional" style generates `Client` methods that accept parameters in
 order, for example:
@@ -252,7 +252,7 @@ let result = client.instance_create(org, proj, body).await?;
 Note that the type of each parameter must match precisely--no conversion is
 done implicitly.
 
-## Builder
+### Builder
 
 The "builder" style generates `Client` methods that produce a builder struct.
 API parameters are applied to that builder, and then the builder is executed
@@ -347,3 +347,54 @@ let result = client
 
 Consumers do not need to specify parameters and struct properties that are not
 required or for which the API specifies defaults. Neat!
+
+#### Enabling the builder style in build.rs
+
+To enable the builder style, the `build.rs` file should look something like this:
+
+```rust
+fn main() {
+    let src = "../sample_openapi/keeper.json";
+    println!("cargo:rerun-if-changed={}", src);
+    let file = std::fs::File::open(src).unwrap();
+    let spec = serde_json::from_reader(file).unwrap();
+    let mut binding = GenerationSettings::default();
+    let settings = binding.with_interface(InterfaceStyle::Builder);
+    let mut generator = progenitor::Generator::new(&settings);
+    let tokens = generator.generate_tokens(&spec).unwrap();
+    let ast = syn::parse2(tokens).unwrap();
+    let content = prettyplease::unparse(&ast);
+
+    let mut out_file = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).to_path_buf();
+    out_file.push("codegen.rs");
+
+    std::fs::write(out_file, content).unwrap();
+}
+```
+
+## Changing default client settings
+
+Currently, the generated code doesn't deal with request headers. To add default headers to all requests, you can use the default_headers method when constructing the Client.
+
+```rust
+    let baseurl = "https://company.com/api/v2";
+    
+    let access_token = "OP7nhQY46jf3I2sqyTZBHWEOIRsldfWEFlkjRkrjlER";
+    let authorization_header = format!("Bearer {}", access_token);
+
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert(
+        reqwest::header::AUTHORIZATION,
+        authorization_header.parse().unwrap(),
+    );
+
+    let client_with_custom_defaults = reqwest::ClientBuilder::new()
+        .connect_timeout(Duration::from_secs(15))
+        .timeout(Duration::from_secs(15))
+        .default_headers(headers)
+        .build()
+        .unwrap();
+
+    let client = Client::new_with_client(baseurl, client_with_custom_defaults);
+
+```
