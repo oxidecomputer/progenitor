@@ -1,6 +1,6 @@
 [package]
 name = "progenitor-impl"
-version = "0.8.0"
+version = "0.9.1"
 edition = "2021"
 license = "MPL-2.0"
 description = "An OpenAPI client generator - core implementation"
@@ -29,10 +29,9 @@ expectorate = { workspace = true }
 futures = { workspace = true }
 http = { workspace = true }
 hyper = { workspace = true }
+progenitor-client = { workspace = true }
 reqwest = { workspace = true }
 rustfmt-wrapper = { workspace = true }
 semver = { workspace = true }
 serde_yaml = { workspace = true }
 tokio = { workspace = true }
-
-progenitor-client.path = "../progenitor-client"

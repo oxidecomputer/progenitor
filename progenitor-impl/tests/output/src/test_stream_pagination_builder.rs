@@ -2,14 +2,12 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -65,13 +63,13 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -119,13 +117,13 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Uint32ResultsPage {
         ///list of items on this page of results
-        pub items: Vec<u32>,
+        pub items: ::std::vec::Vec<u32>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&Uint32ResultsPage> for Uint32ResultsPage {
+    impl ::std::convert::From<&Uint32ResultsPage> for Uint32ResultsPage {
         fn from(value: &Uint32ResultsPage) -> Self {
             value.clone()
         }
@@ -141,12 +139,15 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct Error {
-            error_code: Result<Option<String>, String>,
-            message: Result<String, String>,
-            request_id: Result<String, String>,
+            error_code: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            message: ::std::result::Result<::std::string::String, ::std::string::String>,
+            request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
-        impl Default for Error {
+        impl ::std::default::Default for Error {
             fn default() -> Self {
                 Self {
                     error_code: Ok(Default::default()),
@@ -159,8 +160,8 @@ pub mod types {
         impl Error {
             pub fn error_code<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.error_code = value
                     .try_into()
@@ -169,8 +170,8 @@ pub mod types {
             }
             pub fn message<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.message = value
                     .try_into()
@@ -179,8 +180,8 @@ pub mod types {
             }
             pub fn request_id<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<String>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::string::String>,
+                T::Error: ::std::fmt::Display,
             {
                 self.request_id = value
                     .try_into()
@@ -189,9 +190,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Error> for super::Error {
+        impl ::std::convert::TryFrom<Error> for super::Error {
             type Error = super::error::ConversionError;
-            fn try_from(value: Error) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Error,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     error_code: value.error_code?,
                     message: value.message?,
@@ -200,7 +203,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Error> for Error {
+        impl ::std::convert::From<super::Error> for Error {
             fn from(value: super::Error) -> Self {
                 Self {
                     error_code: Ok(value.error_code),
@@ -212,11 +215,14 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct Uint32ResultsPage {
-            items: Result<Vec<u32>, String>,
-            next_page: Result<Option<String>, String>,
+            items: ::std::result::Result<::std::vec::Vec<u32>, ::std::string::String>,
+            next_page: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
         }
 
-        impl Default for Uint32ResultsPage {
+        impl ::std::default::Default for Uint32ResultsPage {
             fn default() -> Self {
                 Self {
                     items: Err("no value supplied for items".to_string()),
@@ -228,8 +234,8 @@ pub mod types {
         impl Uint32ResultsPage {
             pub fn items<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Vec<u32>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::vec::Vec<u32>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.items = value
                     .try_into()
@@ -238,8 +244,8 @@ pub mod types {
             }
             pub fn next_page<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.next_page = value
                     .try_into()
@@ -248,9 +254,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<Uint32ResultsPage> for super::Uint32ResultsPage {
+        impl ::std::convert::TryFrom<Uint32ResultsPage> for super::Uint32ResultsPage {
             type Error = super::error::ConversionError;
-            fn try_from(value: Uint32ResultsPage) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Uint32ResultsPage,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     items: value.items?,
                     next_page: value.next_page?,
@@ -258,7 +266,7 @@ pub mod types {
             }
         }
 
-        impl From<super::Uint32ResultsPage> for Uint32ResultsPage {
+        impl ::std::convert::From<super::Uint32ResultsPage> for Uint32ResultsPage {
             fn from(value: super::Uint32ResultsPage) -> Self {
                 Self {
                     items: Ok(value.items),
@@ -353,17 +361,15 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
-    };
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`Client::paginated_u32s`]
     ///
     ///[`Client::paginated_u32s`]: super::Client::paginated_u32s
     #[derive(Debug, Clone)]
     pub struct PaginatedU32s<'a> {
         client: &'a super::Client,
-        limit: Result<Option<std::num::NonZeroU32>, String>,
-        page_token: Result<Option<String>, String>,
+        limit: Result<Option<::std::num::NonZeroU32>, String>,
+        page_token: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> PaginatedU32s<'a> {
@@ -377,22 +383,21 @@ pub mod builder {
 
         pub fn limit<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<std::num::NonZeroU32>,
+            V: std::convert::TryInto<::std::num::NonZeroU32>,
         {
             self.limit = value.try_into().map(Some).map_err(|_| {
-                "conversion to `std :: num :: NonZeroU32` for limit failed".to_string()
+                "conversion to `:: std :: num :: NonZeroU32` for limit failed".to_string()
             });
             self
         }
 
         pub fn page_token<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for page_token failed".to_string());
+            self.page_token = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for page_token failed".to_string()
+            });
             self
         }
 
@@ -408,22 +413,19 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &limit {
-                query.push(("limit", v.to_string()));
-            }
-            if let Some(v) = &page_token {
-                query.push(("page_token", v.to_string()));
-            }
             #[allow(unused_mut)]
             let mut request = client
                 .client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&query)
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
@@ -443,9 +445,9 @@ pub mod builder {
         pub fn stream(
             self,
         ) -> impl futures::Stream<Item = Result<u32, Error<types::Error>>> + Unpin + 'a {
-            use futures::StreamExt;
-            use futures::TryFutureExt;
-            use futures::TryStreamExt;
+            use ::futures::StreamExt;
+            use ::futures::TryFutureExt;
+            use ::futures::TryStreamExt;
             let next = Self {
                 page_token: Ok(None),
                 ..self.clone()

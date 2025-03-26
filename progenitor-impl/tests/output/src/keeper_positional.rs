@@ -1,15 +1,14 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +36,7 @@ pub mod types {
         }
     }
 
-    ///EnrolBody
+    ///`EnrolBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -62,17 +61,17 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct EnrolBody {
-        pub host: String,
-        pub key: String,
+        pub host: ::std::string::String,
+        pub key: ::std::string::String,
     }
 
-    impl From<&EnrolBody> for EnrolBody {
+    impl ::std::convert::From<&EnrolBody> for EnrolBody {
         fn from(value: &EnrolBody) -> Self {
             value.clone()
         }
     }
 
-    ///GlobalJobsResult
+    ///`GlobalJobsResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -96,16 +95,16 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct GlobalJobsResult {
-        pub summary: Vec<ReportSummary>,
+        pub summary: ::std::vec::Vec<ReportSummary>,
     }
 
-    impl From<&GlobalJobsResult> for GlobalJobsResult {
+    impl ::std::convert::From<&GlobalJobsResult> for GlobalJobsResult {
         fn from(value: &GlobalJobsResult) -> Self {
             value.clone()
         }
     }
 
-    ///OutputRecord
+    ///`OutputRecord`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -134,18 +133,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct OutputRecord {
-        pub msg: String,
-        pub stream: String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub msg: ::std::string::String,
+        pub stream: ::std::string::String,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl From<&OutputRecord> for OutputRecord {
+    impl ::std::convert::From<&OutputRecord> for OutputRecord {
         fn from(value: &OutputRecord) -> Self {
             value.clone()
         }
     }
 
-    ///PingResult
+    ///`PingResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -170,17 +169,17 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct PingResult {
-        pub host: String,
+        pub host: ::std::string::String,
         pub ok: bool,
     }
 
-    impl From<&PingResult> for PingResult {
+    impl ::std::convert::From<&PingResult> for PingResult {
         fn from(value: &PingResult) -> Self {
             value.clone()
         }
     }
 
-    ///ReportFinishBody
+    ///`ReportFinishBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -217,18 +216,18 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportFinishBody {
         pub duration_millis: i32,
-        pub end_time: chrono::DateTime<chrono::offset::Utc>,
+        pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub exit_status: i32,
         pub id: ReportId,
     }
 
-    impl From<&ReportFinishBody> for ReportFinishBody {
+    impl ::std::convert::From<&ReportFinishBody> for ReportFinishBody {
         fn from(value: &ReportFinishBody) -> Self {
             value.clone()
         }
     }
 
-    ///ReportId
+    ///`ReportId`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -267,20 +266,20 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportId {
-        pub host: String,
-        pub job: String,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
         pub pid: u64,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
-        pub uuid: String,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
+        pub uuid: ::std::string::String,
     }
 
-    impl From<&ReportId> for ReportId {
+    impl ::std::convert::From<&ReportId> for ReportId {
         fn from(value: &ReportId) -> Self {
             value.clone()
         }
     }
 
-    ///ReportOutputBody
+    ///`ReportOutputBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -309,13 +308,13 @@ pub mod types {
         pub record: OutputRecord,
     }
 
-    impl From<&ReportOutputBody> for ReportOutputBody {
+    impl ::std::convert::From<&ReportOutputBody> for ReportOutputBody {
         fn from(value: &ReportOutputBody) -> Self {
             value.clone()
         }
     }
 
-    ///ReportResult
+    ///`ReportResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -339,13 +338,13 @@ pub mod types {
         pub existed_already: bool,
     }
 
-    impl From<&ReportResult> for ReportResult {
+    impl ::std::convert::From<&ReportResult> for ReportResult {
         fn from(value: &ReportResult) -> Self {
             value.clone()
         }
     }
 
-    ///ReportStartBody
+    ///`ReportStartBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -376,17 +375,17 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportStartBody {
         pub id: ReportId,
-        pub script: String,
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub script: ::std::string::String,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl From<&ReportStartBody> for ReportStartBody {
+    impl ::std::convert::From<&ReportStartBody> for ReportStartBody {
         fn from(value: &ReportStartBody) -> Self {
             value.clone()
         }
     }
 
-    ///ReportSummary
+    ///`ReportSummary`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -432,13 +431,13 @@ pub mod types {
     pub struct ReportSummary {
         pub age_seconds: i32,
         pub duration_seconds: i32,
-        pub host: String,
-        pub job: String,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
         pub status: i32,
-        pub when: chrono::DateTime<chrono::offset::Utc>,
+        pub when: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl From<&ReportSummary> for ReportSummary {
+    impl ::std::convert::From<&ReportSummary> for ReportSummary {
         fn from(value: &ReportSummary) -> Self {
             value.clone()
         }
@@ -508,6 +507,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `POST` request to `/enrol`
     ///
@@ -520,8 +520,8 @@ impl Client {
         body: &'a types::EnrolBody,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/enrol", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -546,15 +546,15 @@ impl Client {
         authorization: &'a str,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
         let url = format!("{}/global/jobs", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .headers(header_map)
             .build()?;
@@ -575,15 +575,15 @@ impl Client {
         authorization: &'a str,
     ) -> Result<ResponseValue<types::PingResult>, Error<()>> {
         let url = format!("{}/ping", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .headers(header_map)
             .build()?;
@@ -606,15 +606,15 @@ impl Client {
         body: &'a types::ReportFinishBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/finish", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .headers(header_map)
@@ -638,15 +638,15 @@ impl Client {
         body: &'a types::ReportOutputBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/output", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .headers(header_map)
@@ -670,15 +670,15 @@ impl Client {
         body: &'a types::ReportStartBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/start", self.baseurl,);
-        let mut header_map = HeaderMap::with_capacity(1usize);
-        header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .headers(header_map)

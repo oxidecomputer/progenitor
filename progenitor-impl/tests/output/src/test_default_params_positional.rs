@@ -2,14 +2,12 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +35,7 @@ pub mod types {
         }
     }
 
-    ///BodyWithDefaults
+    ///`BodyWithDefaults`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -76,14 +74,14 @@ pub mod types {
     pub struct BodyWithDefaults {
         #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
         pub forty_two: u32,
-        pub s: String,
+        pub s: ::std::string::String,
         #[serde(default = "defaults::body_with_defaults_something")]
-        pub something: Option<bool>,
+        pub something: ::std::option::Option<bool>,
         #[serde(default)]
         pub yes: bool,
     }
 
-    impl From<&BodyWithDefaults> for BodyWithDefaults {
+    impl ::std::convert::From<&BodyWithDefaults> for BodyWithDefaults {
         fn from(value: &BodyWithDefaults) -> Self {
             value.clone()
         }
@@ -117,13 +115,13 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -133,14 +131,14 @@ pub mod types {
     pub mod defaults {
         pub(super) fn default_u64<T, const V: u64>() -> T
         where
-            T: std::convert::TryFrom<u64>,
-            <T as std::convert::TryFrom<u64>>::Error: std::fmt::Debug,
+            T: ::std::convert::TryFrom<u64>,
+            <T as ::std::convert::TryFrom<u64>>::Error: ::std::fmt::Debug,
         {
             T::try_from(V).unwrap()
         }
 
-        pub(super) fn body_with_defaults_something() -> Option<bool> {
-            Some(true)
+        pub(super) fn body_with_defaults_something() -> ::std::option::Option<bool> {
+            ::std::option::Option::Some(true)
         }
     }
 }
@@ -206,6 +204,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `POST` request to `/`
     pub async fn default_params<'a>(

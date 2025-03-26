@@ -1,6 +1,6 @@
 [package]
 name = "progenitor-client"
-version = "0.8.0"
+version = "0.9.1"
 edition = "2021"
 license = "MPL-2.0"
 repository = "https://github.com/oxidecomputer/progenitor.git"
@@ -14,3 +14,7 @@ reqwest = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 serde_urlencoded = { workspace = true }
+
+[dev-dependencies]
+url = { workspace = true }
+uuid = { workspace = true }

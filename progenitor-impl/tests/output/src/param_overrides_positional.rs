@@ -1,15 +1,14 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -101,6 +100,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Gets a key
     ///
@@ -117,17 +117,16 @@ impl Client {
         unique_key: Option<&'a str>,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/key", self.baseurl,);
-        let mut query = Vec::with_capacity(2usize);
-        if let Some(v) = &key {
-            query.push(("key", v.to_string()));
-        }
-
-        if let Some(v) = &unique_key {
-            query.push(("uniqueKey", v.to_string()));
-        }
-
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).query(&query).build()?;
+        let mut request = self
+            .client
+            .get(url)
+            .query(&progenitor_client::QueryParam::new("key", &key))
+            .query(&progenitor_client::QueryParam::new(
+                "uniqueKey",
+                &unique_key,
+            ))
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

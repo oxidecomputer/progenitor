@@ -14,8 +14,7 @@ use std::{
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
 use progenitor_impl::{
-    CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle,
-    TypePatch, UnknownPolicy,
+    CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch, UnknownPolicy,
 };
 use quote::{quote, ToTokens};
 use schemars::schema::SchemaObject;
@@ -139,6 +138,8 @@ struct MacroSettings {
     pre_hook_async: Option<ParseWrapper<ClosureOrPath>>,
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
     post_hook_async: Option<ParseWrapper<ClosureOrPath>>,
+
+    map_type: Option<ParseWrapper<syn::Type>>,
 
     #[serde(default)]
     derives: Vec<ParseWrapper<syn::Path>>,
@@ -286,10 +287,7 @@ fn is_crate(s: &str) -> bool {
     !s.contains(|cc: char| !cc.is_alphanumeric() && cc != '_' && cc != '-')
 }
 
-fn open_file(
-    path: PathBuf,
-    span: proc_macro2::Span,
-) -> Result<File, syn::Error> {
+fn open_file(path: PathBuf, span: proc_macro2::Span) -> Result<File, syn::Error> {
     File::open(path.clone()).map_err(|e| {
         let path_str = path.to_string_lossy();
         syn::Error::new(span, format!("couldn't read file {}: {}", path_str, e))
@@ -297,8 +295,7 @@ fn open_file(
 }
 
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
-    let (spec, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone())
-    {
+    let (spec, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
         (spec, GenerationSettings::default())
     } else {
         let MacroSettings {
@@ -310,6 +307,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             pre_hook_async,
             post_hook,
             post_hook_async,
+            map_type,
             unknown_crates,
             crates,
             derives,
@@ -320,29 +318,20 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);
         settings.with_tag(tags);
-        inner_type.map(|inner_type| {
-            settings.with_inner_type(inner_type.to_token_stream())
-        });
-        pre_hook
-            .map(|pre_hook| settings.with_pre_hook(pre_hook.into_inner().0));
-        pre_hook_async.map(|pre_hook_async| {
-            settings.with_pre_hook_async(pre_hook_async.into_inner().0)
-        });
-        post_hook
-            .map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
-        post_hook_async.map(|post_hook_async| {
-            settings.with_post_hook_async(post_hook_async.into_inner().0)
-        });
+        inner_type.map(|inner_type| settings.with_inner_type(inner_type.to_token_stream()));
+        pre_hook.map(|pre_hook| settings.with_pre_hook(pre_hook.into_inner().0));
+        pre_hook_async
+            .map(|pre_hook_async| settings.with_pre_hook_async(pre_hook_async.into_inner().0));
+        post_hook.map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
+        post_hook_async
+            .map(|post_hook_async| settings.with_post_hook_async(post_hook_async.into_inner().0));
+        map_type.map(|map_type| settings.with_map_type(map_type.to_token_stream()));
 
         settings.with_unknown_crates(unknown_crates);
         crates.into_iter().for_each(
             |(CrateName(crate_name), MacroCrateSpec { original, version })| {
                 if let Some(original_crate) = original {
-                    settings.with_crate(
-                        original_crate,
-                        version,
-                        Some(&crate_name),
-                    );
+                    settings.with_crate(original_crate, version, Some(&crate_name));
                 } else {
                     settings.with_crate(crate_name, version, None);
                 }
@@ -353,20 +342,15 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             settings.with_derive(derive.to_token_stream());
         });
         patch.into_iter().for_each(|(type_name, patch)| {
-            settings.with_patch(
-                type_name.to_token_stream().to_string(),
-                &patch.into(),
-            );
+            settings.with_patch(type_name.to_token_stream().to_string(), &patch.into());
         });
         replace.into_iter().for_each(|(type_name, type_and_impls)| {
             let type_name = type_name.to_token_stream();
-            let (replace_name, impls) =
-                type_and_impls.into_inner().into_name_and_impls();
+            let (replace_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_replacement(type_name, replace_name, impls);
         });
         convert.into_iter().for_each(|(schema, type_and_impls)| {
-            let (type_name, impls) =
-                type_and_impls.into_inner().into_name_and_impls();
+            let (type_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_conversion(schema, type_name, impls);
         });
         (spec.into_inner(), settings)
@@ -386,10 +370,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         _ => {
             f = open_file(path.clone(), spec.span())?;
             serde_yaml::from_reader(f).map_err(|e| {
-                syn::Error::new(
-                    spec.span(),
-                    format!("failed to parse {}: {}", path_str, e),
-                )
+                syn::Error::new(spec.span(), format!("failed to parse {}: {}", path_str, e))
             })?
         }
     };

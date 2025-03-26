@@ -9,45 +9,49 @@ impl<T: CliConfig> Cli<T> {
         Self { client, config }
     }
 
-    pub fn get_command(cmd: CliCommand) -> clap::Command {
+    pub fn get_command(cmd: CliCommand) -> ::clap::Command {
         match cmd {
             CliCommand::Uno => Self::cli_uno(),
         }
     }
 
-    pub fn cli_uno() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_uno() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("gateway")
+                ::clap::Arg::new("gateway")
                     .long("gateway")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true),
             )
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute(
+        &self,
+        cmd: CliCommand,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         match cmd {
             CliCommand::Uno => self.execute_uno(matches).await,
         }
     }
 
-    pub async fn execute_uno(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_uno(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.uno();
-        if let Some(value) = matches.get_one::<String>("gateway") {
+        if let Some(value) = matches.get_one::<::std::string::String>("gateway") {
             request = request.gateway(value.clone());
         }
 
@@ -93,7 +97,7 @@ pub trait CliConfig {
         T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_uno(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::Uno,
     ) -> anyhow::Result<()> {
         Ok(())

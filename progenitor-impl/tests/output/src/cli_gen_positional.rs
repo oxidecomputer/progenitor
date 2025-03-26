@@ -1,15 +1,14 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +36,7 @@ pub mod types {
         }
     }
 
-    ///UnoBody
+    ///`UnoBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -57,12 +56,12 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UnoBody {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub gateway: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub gateway: ::std::option::Option<::std::string::String>,
         pub required: ::serde_json::Value,
     }
 
-    impl From<&UnoBody> for UnoBody {
+    impl ::std::convert::From<&UnoBody> for UnoBody {
         fn from(value: &UnoBody) -> Self {
             value.clone()
         }
@@ -132,6 +131,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/uno`
     pub async fn uno<'a>(
@@ -140,10 +140,13 @@ impl Client {
         body: &'a types::UnoBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/uno", self.baseurl,);
-        let mut query = Vec::with_capacity(1usize);
-        query.push(("gateway", gateway.to_string()));
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).json(&body).query(&query).build()?;
+        let mut request = self
+            .client
+            .get(url)
+            .json(&body)
+            .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {

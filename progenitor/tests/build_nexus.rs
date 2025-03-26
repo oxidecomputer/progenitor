@@ -15,9 +15,7 @@ mod positional {
             let org = types::Name::try_from("org").unwrap();
             let project = types::Name::try_from("project").unwrap();
             let instance = types::Name::try_from("instance").unwrap();
-            let stream = client.instance_disk_list_stream(
-                &org, &project, &instance, None, None,
-            );
+            let stream = client.instance_disk_list_stream(&org, &project, &instance, None, None);
             let _ = stream.collect::<Vec<_>>();
         };
     }

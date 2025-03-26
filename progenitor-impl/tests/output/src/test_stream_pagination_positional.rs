@@ -2,14 +2,12 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -65,13 +63,13 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
@@ -113,13 +111,13 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Uint32ResultsPage {
         ///list of items on this page of results
-        pub items: Vec<u32>,
+        pub items: ::std::vec::Vec<u32>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub next_page: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl From<&Uint32ResultsPage> for Uint32ResultsPage {
+    impl ::std::convert::From<&Uint32ResultsPage> for Uint32ResultsPage {
         fn from(value: &Uint32ResultsPage) -> Self {
             value.clone()
         }
@@ -187,6 +185,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/`
     ///
@@ -196,28 +195,23 @@ impl Client {
     ///   subsequent page
     pub async fn paginated_u32s<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
         let url = format!("{}/", self.baseurl,);
-        let mut query = Vec::with_capacity(2usize);
-        if let Some(v) = &limit {
-            query.push(("limit", v.to_string()));
-        }
-
-        if let Some(v) = &page_token {
-            query.push(("page_token", v.to_string()));
-        }
-
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&query)
+            .query(&progenitor_client::QueryParam::new("limit", &limit))
+            .query(&progenitor_client::QueryParam::new(
+                "page_token",
+                &page_token,
+            ))
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -239,7 +233,7 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     pub fn paginated_u32s_stream<'a>(
         &'a self,
-        limit: Option<std::num::NonZeroU32>,
+        limit: Option<::std::num::NonZeroU32>,
     ) -> impl futures::Stream<Item = Result<u32, Error<types::Error>>> + Unpin + '_ {
         use futures::StreamExt;
         use futures::TryFutureExt;

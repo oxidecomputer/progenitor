@@ -1,15 +1,14 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +36,7 @@ pub mod types {
         }
     }
 
-    ///CrucibleOpts
+    ///`CrucibleOpts`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -111,31 +110,31 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct CrucibleOpts {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub cert_pem: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub control: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub flush_timeout: Option<u32>,
-        pub id: uuid::Uuid,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub key: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub key_pem: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub cert_pem: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub control: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub flush_timeout: ::std::option::Option<u32>,
+        pub id: ::uuid::Uuid,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub key: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub key_pem: ::std::option::Option<::std::string::String>,
         pub lossy: bool,
         pub read_only: bool,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub root_cert_pem: Option<String>,
-        pub target: Vec<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub root_cert_pem: ::std::option::Option<::std::string::String>,
+        pub target: ::std::vec::Vec<::std::string::String>,
     }
 
-    impl From<&CrucibleOpts> for CrucibleOpts {
+    impl ::std::convert::From<&CrucibleOpts> for CrucibleOpts {
         fn from(value: &CrucibleOpts) -> Self {
             value.clone()
         }
     }
 
-    ///DiskAttachment
+    ///`DiskAttachment`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -166,18 +165,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskAttachment {
-        pub disk_id: uuid::Uuid,
+        pub disk_id: ::uuid::Uuid,
         pub generation_id: u64,
         pub state: DiskAttachmentState,
     }
 
-    impl From<&DiskAttachment> for DiskAttachment {
+    impl ::std::convert::From<&DiskAttachment> for DiskAttachment {
         fn from(value: &DiskAttachment) -> Self {
             value.clone()
         }
     }
 
-    ///DiskAttachmentState
+    ///`DiskAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -214,22 +213,22 @@ pub mod types {
         Detached,
         Destroyed,
         Faulted,
-        Attached(uuid::Uuid),
+        Attached(::uuid::Uuid),
     }
 
-    impl From<&DiskAttachmentState> for DiskAttachmentState {
+    impl ::std::convert::From<&Self> for DiskAttachmentState {
         fn from(value: &DiskAttachmentState) -> Self {
             value.clone()
         }
     }
 
-    impl From<uuid::Uuid> for DiskAttachmentState {
-        fn from(value: uuid::Uuid) -> Self {
+    impl ::std::convert::From<::uuid::Uuid> for DiskAttachmentState {
+        fn from(value: ::uuid::Uuid) -> Self {
             Self::Attached(value)
         }
     }
 
-    ///DiskRequest
+    ///`DiskRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -271,15 +270,15 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskRequest {
-        pub device: String,
+        pub device: ::std::string::String,
         pub gen: u64,
-        pub name: String,
+        pub name: ::std::string::String,
         pub read_only: bool,
         pub slot: Slot,
         pub volume_construction_request: VolumeConstructionRequest,
     }
 
-    impl From<&DiskRequest> for DiskRequest {
+    impl ::std::convert::From<&DiskRequest> for DiskRequest {
         fn from(value: &DiskRequest) -> Self {
             value.clone()
         }
@@ -313,19 +312,19 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub error_code: Option<String>,
-        pub message: String,
-        pub request_id: String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
     }
 
-    impl From<&Error> for Error {
+    impl ::std::convert::From<&Error> for Error {
         fn from(value: &Error) -> Self {
             value.clone()
         }
     }
 
-    ///Instance
+    ///`Instance`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -363,19 +362,19 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Instance {
-        pub disks: Vec<DiskAttachment>,
-        pub nics: Vec<NetworkInterface>,
+        pub disks: ::std::vec::Vec<DiskAttachment>,
+        pub nics: ::std::vec::Vec<NetworkInterface>,
         pub properties: InstanceProperties,
         pub state: InstanceState,
     }
 
-    impl From<&Instance> for Instance {
+    impl ::std::convert::From<&Instance> for Instance {
         fn from(value: &Instance) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceEnsureRequest
+    ///`InstanceEnsureRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -430,24 +429,24 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceEnsureRequest {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub cloud_init_bytes: Option<String>,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub disks: Vec<DiskRequest>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub migrate: Option<InstanceMigrateInitiateRequest>,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub nics: Vec<NetworkInterfaceRequest>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub cloud_init_bytes: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub disks: ::std::vec::Vec<DiskRequest>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub migrate: ::std::option::Option<InstanceMigrateInitiateRequest>,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub nics: ::std::vec::Vec<NetworkInterfaceRequest>,
         pub properties: InstanceProperties,
     }
 
-    impl From<&InstanceEnsureRequest> for InstanceEnsureRequest {
+    impl ::std::convert::From<&InstanceEnsureRequest> for InstanceEnsureRequest {
         fn from(value: &InstanceEnsureRequest) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceEnsureResponse
+    ///`InstanceEnsureResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -476,17 +475,25 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceEnsureResponse {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub migrate: Option<InstanceMigrateInitiateResponse>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub migrate: ::std::option::Option<InstanceMigrateInitiateResponse>,
     }
 
-    impl From<&InstanceEnsureResponse> for InstanceEnsureResponse {
+    impl ::std::convert::From<&InstanceEnsureResponse> for InstanceEnsureResponse {
         fn from(value: &InstanceEnsureResponse) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceGetResponse
+    impl ::std::default::Default for InstanceEnsureResponse {
+        fn default() -> Self {
+            Self {
+                migrate: Default::default(),
+            }
+        }
+    }
+
+    ///`InstanceGetResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -509,13 +516,13 @@ pub mod types {
         pub instance: Instance,
     }
 
-    impl From<&InstanceGetResponse> for InstanceGetResponse {
+    impl ::std::convert::From<&InstanceGetResponse> for InstanceGetResponse {
         fn from(value: &InstanceGetResponse) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceMigrateInitiateRequest
+    ///`InstanceMigrateInitiateRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -545,18 +552,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateRequest {
-        pub migration_id: uuid::Uuid,
-        pub src_addr: String,
-        pub src_uuid: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
+        pub src_addr: ::std::string::String,
+        pub src_uuid: ::uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
+    impl ::std::convert::From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
         fn from(value: &InstanceMigrateInitiateRequest) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceMigrateInitiateResponse
+    ///`InstanceMigrateInitiateResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -577,16 +584,16 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateResponse {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
+    impl ::std::convert::From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
         fn from(value: &InstanceMigrateInitiateResponse) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceMigrateStatusRequest
+    ///`InstanceMigrateStatusRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -607,16 +614,16 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusRequest {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
     }
 
-    impl From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
+    impl ::std::convert::From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
         fn from(value: &InstanceMigrateStatusRequest) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceMigrateStatusResponse
+    ///`InstanceMigrateStatusResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -639,13 +646,13 @@ pub mod types {
         pub state: MigrationState,
     }
 
-    impl From<&InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
+    impl ::std::convert::From<&InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
         fn from(value: &InstanceMigrateStatusResponse) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceProperties
+    ///`InstanceProperties`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -705,22 +712,22 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
-        pub bootrom_id: uuid::Uuid,
+        pub bootrom_id: ::uuid::Uuid,
         ///Free-form text description of an Instance.
-        pub description: String,
+        pub description: ::std::string::String,
         ///Unique identifier for this Instance.
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///ID of the image used to initialize this Instance.
-        pub image_id: uuid::Uuid,
+        pub image_id: ::uuid::Uuid,
         ///Size of memory allocated to the Instance, in MiB.
         pub memory: u64,
         ///Human-readable name of the Instance.
-        pub name: String,
+        pub name: ::std::string::String,
         ///Number of vCPUs to be allocated to the Instance.
         pub vcpus: u8,
     }
 
-    impl From<&InstanceProperties> for InstanceProperties {
+    impl ::std::convert::From<&InstanceProperties> for InstanceProperties {
         fn from(value: &InstanceProperties) -> Self {
             value.clone()
         }
@@ -774,7 +781,7 @@ pub mod types {
         Destroyed,
     }
 
-    impl From<&InstanceState> for InstanceState {
+    impl ::std::convert::From<&Self> for InstanceState {
         fn from(value: &InstanceState) -> Self {
             value.clone()
         }
@@ -797,9 +804,9 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for InstanceState {
+    impl ::std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Creating" => Ok(Self::Creating),
                 "Starting" => Ok(Self::Starting),
@@ -816,28 +823,32 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceState {
+    impl ::std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceState {
+    impl ::std::convert::TryFrom<&::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceState {
+    impl ::std::convert::TryFrom<::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    ///InstanceStateMonitorRequest
+    ///`InstanceStateMonitorRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -862,13 +873,13 @@ pub mod types {
         pub gen: u64,
     }
 
-    impl From<&InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
+    impl ::std::convert::From<&InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
         fn from(value: &InstanceStateMonitorRequest) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceStateMonitorResponse
+    ///`InstanceStateMonitorResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -898,13 +909,13 @@ pub mod types {
         pub state: InstanceState,
     }
 
-    impl From<&InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
+    impl ::std::convert::From<&InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
         fn from(value: &InstanceStateMonitorResponse) -> Self {
             value.clone()
         }
     }
 
-    ///InstanceStateRequested
+    ///`InstanceStateRequested`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -939,7 +950,7 @@ pub mod types {
         MigrateStart,
     }
 
-    impl From<&InstanceStateRequested> for InstanceStateRequested {
+    impl ::std::convert::From<&Self> for InstanceStateRequested {
         fn from(value: &InstanceStateRequested) -> Self {
             value.clone()
         }
@@ -956,9 +967,9 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for InstanceStateRequested {
+    impl ::std::str::FromStr for InstanceStateRequested {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Run" => Ok(Self::Run),
                 "Stop" => Ok(Self::Stop),
@@ -969,28 +980,32 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<&str> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<&::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for InstanceStateRequested {
+    impl ::std::convert::TryFrom<::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    ///MigrationState
+    ///`MigrationState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1037,7 +1052,7 @@ pub mod types {
         Error,
     }
 
-    impl From<&MigrationState> for MigrationState {
+    impl ::std::convert::From<&Self> for MigrationState {
         fn from(value: &MigrationState) -> Self {
             value.clone()
         }
@@ -1060,9 +1075,9 @@ pub mod types {
         }
     }
 
-    impl std::str::FromStr for MigrationState {
+    impl ::std::str::FromStr for MigrationState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Sync" => Ok(Self::Sync),
                 "RamPush" => Ok(Self::RamPush),
@@ -1079,28 +1094,32 @@ pub mod types {
         }
     }
 
-    impl std::convert::TryFrom<&str> for MigrationState {
+    impl ::std::convert::TryFrom<&str> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> Result<Self, self::error::ConversionError> {
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for MigrationState {
+    impl ::std::convert::TryFrom<&::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for MigrationState {
+    impl ::std::convert::TryFrom<::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: String) -> Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
 
-    ///NetworkInterface
+    ///`NetworkInterface`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1125,16 +1144,16 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct NetworkInterface {
         pub attachment: NetworkInterfaceAttachmentState,
-        pub name: String,
+        pub name: ::std::string::String,
     }
 
-    impl From<&NetworkInterface> for NetworkInterface {
+    impl ::std::convert::From<&NetworkInterface> for NetworkInterface {
         fn from(value: &NetworkInterface) -> Self {
             value.clone()
         }
     }
 
-    ///NetworkInterfaceAttachmentState
+    ///`NetworkInterfaceAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1171,19 +1190,19 @@ pub mod types {
         Attached(Slot),
     }
 
-    impl From<&NetworkInterfaceAttachmentState> for NetworkInterfaceAttachmentState {
+    impl ::std::convert::From<&Self> for NetworkInterfaceAttachmentState {
         fn from(value: &NetworkInterfaceAttachmentState) -> Self {
             value.clone()
         }
     }
 
-    impl From<Slot> for NetworkInterfaceAttachmentState {
+    impl ::std::convert::From<Slot> for NetworkInterfaceAttachmentState {
         fn from(value: Slot) -> Self {
             Self::Attached(value)
         }
     }
 
-    ///NetworkInterfaceRequest
+    ///`NetworkInterfaceRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1207,11 +1226,11 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct NetworkInterfaceRequest {
-        pub name: String,
+        pub name: ::std::string::String,
         pub slot: Slot,
     }
 
-    impl From<&NetworkInterfaceRequest> for NetworkInterfaceRequest {
+    impl ::std::convert::From<&NetworkInterfaceRequest> for NetworkInterfaceRequest {
         fn from(value: &NetworkInterfaceRequest) -> Self {
             value.clone()
         }
@@ -1233,6 +1252,7 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[serde(transparent)]
     pub struct Slot(pub u8);
     impl ::std::ops::Deref for Slot {
         type Target = u8;
@@ -1241,48 +1261,48 @@ pub mod types {
         }
     }
 
-    impl From<Slot> for u8 {
+    impl ::std::convert::From<Slot> for u8 {
         fn from(value: Slot) -> Self {
             value.0
         }
     }
 
-    impl From<&Slot> for Slot {
+    impl ::std::convert::From<&Slot> for Slot {
         fn from(value: &Slot) -> Self {
             value.clone()
         }
     }
 
-    impl From<u8> for Slot {
+    impl ::std::convert::From<u8> for Slot {
         fn from(value: u8) -> Self {
             Self(value)
         }
     }
 
-    impl std::str::FromStr for Slot {
-        type Err = <u8 as std::str::FromStr>::Err;
-        fn from_str(value: &str) -> Result<Self, Self::Err> {
+    impl ::std::str::FromStr for Slot {
+        type Err = <u8 as ::std::str::FromStr>::Err;
+        fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
         }
     }
 
-    impl std::convert::TryFrom<&str> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: &str) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<&str> for Slot {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<&String> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: &String) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<&String> for Slot {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
 
-    impl std::convert::TryFrom<String> for Slot {
-        type Error = <u8 as std::str::FromStr>::Err;
-        fn try_from(value: String) -> Result<Self, Self::Error> {
+    impl ::std::convert::TryFrom<String> for Slot {
+        type Error = <u8 as ::std::str::FromStr>::Err;
+        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
@@ -1293,7 +1313,7 @@ pub mod types {
         }
     }
 
-    ///VolumeConstructionRequest
+    ///`VolumeConstructionRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1445,16 +1465,16 @@ pub mod types {
         #[serde(rename = "volume")]
         Volume {
             block_size: u64,
-            id: uuid::Uuid,
-            #[serde(default, skip_serializing_if = "Option::is_none")]
-            read_only_parent: Option<Box<VolumeConstructionRequest>>,
-            sub_volumes: Vec<VolumeConstructionRequest>,
+            id: ::uuid::Uuid,
+            #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+            read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
+            sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
         },
         #[serde(rename = "url")]
         Url {
             block_size: u64,
-            id: uuid::Uuid,
-            url: String,
+            id: ::uuid::Uuid,
+            url: ::std::string::String,
         },
         #[serde(rename = "region")]
         Region {
@@ -1465,12 +1485,12 @@ pub mod types {
         #[serde(rename = "file")]
         File {
             block_size: u64,
-            id: uuid::Uuid,
-            path: String,
+            id: ::uuid::Uuid,
+            path: ::std::string::String,
         },
     }
 
-    impl From<&VolumeConstructionRequest> for VolumeConstructionRequest {
+    impl ::std::convert::From<&Self> for VolumeConstructionRequest {
         fn from(value: &VolumeConstructionRequest) -> Self {
             value.clone()
         }
@@ -1540,6 +1560,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/instance`
     pub async fn instance_get<'a>(
@@ -1551,8 +1572,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -1580,8 +1601,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -1604,8 +1625,8 @@ impl Client {
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
     pub async fn instance_issue_crucible_snapshot_request<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
-        snapshot_id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
+        snapshot_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
             "{}/instance/disk/{}/snapshot/{}",
@@ -1618,8 +1639,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -1647,8 +1668,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -1675,14 +1696,14 @@ impl Client {
         let mut request = self
             .client
             .get(url)
-            .header(reqwest::header::CONNECTION, "Upgrade")
-            .header(reqwest::header::UPGRADE, "websocket")
-            .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+            .header(::reqwest::header::CONNECTION, "Upgrade")
+            .header(::reqwest::header::UPGRADE, "websocket")
+            .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
             .header(
-                reqwest::header::SEC_WEBSOCKET_KEY,
-                base64::Engine::encode(
-                    &base64::engine::general_purpose::STANDARD,
-                    rand::random::<[u8; 16]>(),
+                ::reqwest::header::SEC_WEBSOCKET_KEY,
+                ::base64::Engine::encode(
+                    &::base64::engine::general_purpose::STANDARD,
+                    ::rand::random::<[u8; 16]>(),
                 ),
             )
             .build()?;
@@ -1706,8 +1727,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -1736,8 +1757,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;

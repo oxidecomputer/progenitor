@@ -1,15 +1,14 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +36,137 @@ pub mod types {
         }
     }
 
-    ///ObjWithOptionArray
+    ///`GetThingOrThingsId`
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "oneOf": [
+    ///    {
+    ///      "type": "string"
+    ///    },
+    ///    {
+    ///      "type": "array",
+    ///      "items": {
+    ///        "type": "string"
+    ///      }
+    ///    }
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[serde(untagged)]
+    pub enum GetThingOrThingsId {
+        Variant0(::std::string::String),
+        Variant1(::std::vec::Vec<::std::string::String>),
+    }
+
+    impl ::std::convert::From<&Self> for GetThingOrThingsId {
+        fn from(value: &GetThingOrThingsId) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
+        fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
+            Self::Variant1(value)
+        }
+    }
+
+    ///`HeaderArgAcceptLanguage`
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "default": "en",
+    ///  "type": "string",
+    ///  "enum": [
+    ///    "de",
+    ///    "en"
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
+    #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+    )]
+    pub enum HeaderArgAcceptLanguage {
+        #[serde(rename = "de")]
+        De,
+        #[serde(rename = "en")]
+        En,
+    }
+
+    impl ::std::convert::From<&Self> for HeaderArgAcceptLanguage {
+        fn from(value: &HeaderArgAcceptLanguage) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ::std::fmt::Display for HeaderArgAcceptLanguage {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            match *self {
+                Self::De => write!(f, "de"),
+                Self::En => write!(f, "en"),
+            }
+        }
+    }
+
+    impl ::std::str::FromStr for HeaderArgAcceptLanguage {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            match value {
+                "de" => Ok(Self::De),
+                "en" => Ok(Self::En),
+                _ => Err("invalid value".into()),
+            }
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::convert::TryFrom<&::std::string::String> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::convert::TryFrom<::std::string::String> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::default::Default for HeaderArgAcceptLanguage {
+        fn default() -> Self {
+            HeaderArgAcceptLanguage::En
+        }
+    }
+
+    ///`ObjWithOptionArray`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -93,17 +222,17 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ObjWithOptionArray {
         #[serde(rename = "stranger-things")]
-        pub stranger_things: Vec<Option<Task>>,
-        pub things: Vec<Option<Task>>,
+        pub stranger_things: ::std::vec::Vec<::std::option::Option<Task>>,
+        pub things: ::std::vec::Vec<::std::option::Option<Task>>,
     }
 
-    impl From<&ObjWithOptionArray> for ObjWithOptionArray {
+    impl ::std::convert::From<&ObjWithOptionArray> for ObjWithOptionArray {
         fn from(value: &ObjWithOptionArray) -> Self {
             value.clone()
         }
     }
 
-    ///Task
+    ///`Task`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -142,20 +271,20 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Task {
-        pub id: String,
-        pub name: String,
-        pub output_rules: Vec<String>,
-        pub script: String,
-        pub state: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
+        pub state: ::std::string::String,
     }
 
-    impl From<&Task> for Task {
+    impl ::std::convert::From<&Task> for Task {
         fn from(value: &Task) -> Self {
             value.clone()
         }
     }
 
-    ///TaskEvent
+    ///`TaskEvent`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -190,19 +319,19 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskEvent {
-        pub payload: String,
+        pub payload: ::std::string::String,
         pub seq: u32,
-        pub stream: String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub stream: ::std::string::String,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl From<&TaskEvent> for TaskEvent {
+    impl ::std::convert::From<&TaskEvent> for TaskEvent {
         fn from(value: &TaskEvent) -> Self {
             value.clone()
         }
     }
 
-    ///TaskOutput
+    ///`TaskOutput`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -232,18 +361,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskOutput {
-        pub id: String,
-        pub path: String,
+        pub id: ::std::string::String,
+        pub path: ::std::string::String,
         pub size: u64,
     }
 
-    impl From<&TaskOutput> for TaskOutput {
+    impl ::std::convert::From<&TaskOutput> for TaskOutput {
         fn from(value: &TaskOutput) -> Self {
             value.clone()
         }
     }
 
-    ///TaskSubmit
+    ///`TaskSubmit`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -251,10 +380,14 @@ pub mod types {
     ///{
     ///  "type": "object",
     ///  "required": [
+    ///    "default",
     ///    "name",
     ///    "script"
     ///  ],
     ///  "properties": {
+    ///    "default": {
+    ///      "type": "boolean"
+    ///    },
     ///    "name": {
     ///      "type": "string"
     ///    },
@@ -273,19 +406,20 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmit {
-        pub name: String,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        pub output_rules: Vec<String>,
-        pub script: String,
+        pub default: bool,
+        pub name: ::std::string::String,
+        #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
     }
 
-    impl From<&TaskSubmit> for TaskSubmit {
+    impl ::std::convert::From<&TaskSubmit> for TaskSubmit {
         fn from(value: &TaskSubmit) -> Self {
             value.clone()
         }
     }
 
-    ///TaskSubmitResult
+    ///`TaskSubmitResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -305,16 +439,16 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmitResult {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
-    impl From<&TaskSubmitResult> for TaskSubmitResult {
+    impl ::std::convert::From<&TaskSubmitResult> for TaskSubmitResult {
         fn from(value: &TaskSubmitResult) -> Self {
             value.clone()
         }
     }
 
-    ///UploadedChunk
+    ///`UploadedChunk`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -334,16 +468,16 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UploadedChunk {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
-    impl From<&UploadedChunk> for UploadedChunk {
+    impl ::std::convert::From<&UploadedChunk> for UploadedChunk {
         fn from(value: &UploadedChunk) -> Self {
             value.clone()
         }
     }
 
-    ///UserCreate
+    ///`UserCreate`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -363,16 +497,16 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UserCreate {
-        pub name: String,
+        pub name: ::std::string::String,
     }
 
-    impl From<&UserCreate> for UserCreate {
+    impl ::std::convert::From<&UserCreate> for UserCreate {
         fn from(value: &UserCreate) -> Self {
             value.clone()
         }
     }
 
-    ///UserCreateResult
+    ///`UserCreateResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -400,18 +534,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UserCreateResult {
-        pub id: String,
-        pub name: String,
-        pub token: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub token: ::std::string::String,
     }
 
-    impl From<&UserCreateResult> for UserCreateResult {
+    impl ::std::convert::From<&UserCreateResult> for UserCreateResult {
         fn from(value: &UserCreateResult) -> Self {
             value.clone()
         }
     }
 
-    ///WhoamiResult
+    ///`WhoamiResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -435,17 +569,17 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WhoamiResult {
-        pub id: String,
-        pub name: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
     }
 
-    impl From<&WhoamiResult> for WhoamiResult {
+    impl ::std::convert::From<&WhoamiResult> for WhoamiResult {
         fn from(value: &WhoamiResult) -> Self {
             value.clone()
         }
     }
 
-    ///Worker
+    ///`Worker`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -488,22 +622,22 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Worker {
         pub deleted: bool,
-        pub id: String,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub instance_id: Option<String>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub lastping: Option<chrono::DateTime<chrono::offset::Utc>>,
+        pub id: ::std::string::String,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub instance_id: ::std::option::Option<::std::string::String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub lastping: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         pub recycle: bool,
-        pub tasks: Vec<WorkerTask>,
+        pub tasks: ::std::vec::Vec<WorkerTask>,
     }
 
-    impl From<&Worker> for Worker {
+    impl ::std::convert::From<&Worker> for Worker {
         fn from(value: &Worker) -> Self {
             value.clone()
         }
     }
 
-    ///WorkerAddOutput
+    ///`WorkerAddOutput`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -535,18 +669,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerAddOutput {
-        pub chunks: Vec<String>,
-        pub path: String,
+        pub chunks: ::std::vec::Vec<::std::string::String>,
+        pub path: ::std::string::String,
         pub size: i64,
     }
 
-    impl From<&WorkerAddOutput> for WorkerAddOutput {
+    impl ::std::convert::From<&WorkerAddOutput> for WorkerAddOutput {
         fn from(value: &WorkerAddOutput) -> Self {
             value.clone()
         }
     }
 
-    ///WorkerAppendTask
+    ///`WorkerAppendTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -575,18 +709,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerAppendTask {
-        pub payload: String,
-        pub stream: String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub payload: ::std::string::String,
+        pub stream: ::std::string::String,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl From<&WorkerAppendTask> for WorkerAppendTask {
+    impl ::std::convert::From<&WorkerAppendTask> for WorkerAppendTask {
         fn from(value: &WorkerAppendTask) -> Self {
             value.clone()
         }
     }
 
-    ///WorkerBootstrap
+    ///`WorkerBootstrap`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -610,17 +744,17 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerBootstrap {
-        pub bootstrap: String,
-        pub token: String,
+        pub bootstrap: ::std::string::String,
+        pub token: ::std::string::String,
     }
 
-    impl From<&WorkerBootstrap> for WorkerBootstrap {
+    impl ::std::convert::From<&WorkerBootstrap> for WorkerBootstrap {
         fn from(value: &WorkerBootstrap) -> Self {
             value.clone()
         }
     }
 
-    ///WorkerBootstrapResult
+    ///`WorkerBootstrapResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -640,16 +774,16 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerBootstrapResult {
-        pub id: String,
+        pub id: ::std::string::String,
     }
 
-    impl From<&WorkerBootstrapResult> for WorkerBootstrapResult {
+    impl ::std::convert::From<&WorkerBootstrapResult> for WorkerBootstrapResult {
         fn from(value: &WorkerBootstrapResult) -> Self {
             value.clone()
         }
     }
 
-    ///WorkerCompleteTask
+    ///`WorkerCompleteTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -672,13 +806,13 @@ pub mod types {
         pub failed: bool,
     }
 
-    impl From<&WorkerCompleteTask> for WorkerCompleteTask {
+    impl ::std::convert::From<&WorkerCompleteTask> for WorkerCompleteTask {
         fn from(value: &WorkerCompleteTask) -> Self {
             value.clone()
         }
     }
 
-    ///WorkerPingResult
+    ///`WorkerPingResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -702,17 +836,17 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerPingResult {
         pub poweroff: bool,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub task: Option<WorkerPingTask>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub task: ::std::option::Option<WorkerPingTask>,
     }
 
-    impl From<&WorkerPingResult> for WorkerPingResult {
+    impl ::std::convert::From<&WorkerPingResult> for WorkerPingResult {
         fn from(value: &WorkerPingResult) -> Self {
             value.clone()
         }
     }
 
-    ///WorkerPingTask
+    ///`WorkerPingTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -743,18 +877,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerPingTask {
-        pub id: String,
-        pub output_rules: Vec<String>,
-        pub script: String,
+        pub id: ::std::string::String,
+        pub output_rules: ::std::vec::Vec<::std::string::String>,
+        pub script: ::std::string::String,
     }
 
-    impl From<&WorkerPingTask> for WorkerPingTask {
+    impl ::std::convert::From<&WorkerPingTask> for WorkerPingTask {
         fn from(value: &WorkerPingTask) -> Self {
             value.clone()
         }
     }
 
-    ///WorkerTask
+    ///`WorkerTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -782,18 +916,18 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerTask {
-        pub id: String,
-        pub name: String,
-        pub owner: String,
+        pub id: ::std::string::String,
+        pub name: ::std::string::String,
+        pub owner: ::std::string::String,
     }
 
-    impl From<&WorkerTask> for WorkerTask {
+    impl ::std::convert::From<&WorkerTask> for WorkerTask {
         fn from(value: &WorkerTask) -> Self {
             value.clone()
         }
     }
 
-    ///WorkersResult
+    ///`WorkersResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -816,10 +950,10 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkersResult {
-        pub workers: Vec<Worker>,
+        pub workers: ::std::vec::Vec<Worker>,
     }
 
-    impl From<&WorkersResult> for WorkersResult {
+    impl ::std::convert::From<&WorkersResult> for WorkersResult {
         fn from(value: &WorkersResult) -> Self {
             value.clone()
         }
@@ -887,6 +1021,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
@@ -896,8 +1031,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -936,8 +1071,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -949,15 +1084,17 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks`
-    pub async fn tasks_get<'a>(&'a self) -> Result<ResponseValue<Vec<types::Task>>, Error<()>> {
+    pub async fn tasks_get<'a>(
+        &'a self,
+    ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -979,8 +1116,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -997,26 +1134,21 @@ impl Client {
         &'a self,
         task: &'a str,
         minseq: Option<u32>,
-    ) -> Result<ResponseValue<Vec<types::TaskEvent>>, Error<()>> {
+    ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
         let url = format!(
             "{}/v1/tasks/{}/events",
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut query = Vec::with_capacity(1usize);
-        if let Some(v) = &minseq {
-            query.push(("minseq", v.to_string()));
-        }
-
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&query)
+            .query(&progenitor_client::QueryParam::new("minseq", &minseq))
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -1030,7 +1162,7 @@ impl Client {
     pub async fn task_outputs_get<'a>(
         &'a self,
         task: &'a str,
-    ) -> Result<ResponseValue<Vec<types::TaskOutput>>, Error<()>> {
+    ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
         let url = format!(
             "{}/v1/tasks/{}/outputs",
             self.baseurl,
@@ -1041,8 +1173,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -1086,8 +1218,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -1107,8 +1239,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -1130,8 +1262,8 @@ impl Client {
             .client
             .put(url)
             .header(
-                reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static("text/plain"),
+                ::reqwest::header::CONTENT_TYPE,
+                ::reqwest::header::HeaderValue::from_static("text/plain"),
             )
             .body(body)
             .build()?;
@@ -1154,8 +1286,8 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
             .build()?;
@@ -1177,8 +1309,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -1226,12 +1358,12 @@ impl Client {
             .client
             .post(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .header(
-                reqwest::header::CONTENT_TYPE,
-                reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                ::reqwest::header::CONTENT_TYPE,
+                ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
             )
             .body(body)
             .build()?;
@@ -1295,8 +1427,8 @@ impl Client {
             .client
             .get(url)
             .header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .build()?;
         let result = self.client.execute(request).await;
@@ -1317,6 +1449,51 @@ impl Client {
         match response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(response)),
             _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/v1/things`
+    pub async fn get_thing_or_things<'a>(
+        &'a self,
+        id: Option<&'a types::GetThingOrThingsId>,
+    ) -> Result<ResponseValue<::std::string::String>, Error<()>> {
+        let url = format!("{}/v1/things", self.baseurl,);
+        #[allow(unused_mut)]
+        let mut request = self
+            .client
+            .get(url)
+            .header(
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&progenitor_client::QueryParam::new("id", &id))
+            .build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/v1/header-arg`
+    pub async fn header_arg<'a>(
+        &'a self,
+        accept_language: Option<types::HeaderArgAcceptLanguage>,
+    ) -> Result<ResponseValue<()>, Error<()>> {
+        let url = format!("{}/v1/header-arg", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        if let Some(value) = accept_language {
+            header_map.append("accept-language", value.to_string().try_into()?);
+        }
+
+        #[allow(unused_mut)]
+        let mut request = self.client.get(url).headers(header_map).build()?;
+        let result = self.client.execute(request).await;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
         }
     }
 }

@@ -2,14 +2,12 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +35,7 @@ pub mod types {
         }
     }
 
-    ///UnoBody
+    ///`UnoBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -57,12 +55,12 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UnoBody {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pub gateway: Option<String>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        pub gateway: ::std::option::Option<::std::string::String>,
         pub required: ::serde_json::Value,
     }
 
-    impl From<&UnoBody> for UnoBody {
+    impl ::std::convert::From<&UnoBody> for UnoBody {
         fn from(value: &UnoBody) -> Self {
             value.clone()
         }
@@ -78,11 +76,14 @@ pub mod types {
     pub mod builder {
         #[derive(Clone, Debug)]
         pub struct UnoBody {
-            gateway: Result<Option<String>, String>,
-            required: Result<::serde_json::Value, String>,
+            gateway: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            required: ::std::result::Result<::serde_json::Value, ::std::string::String>,
         }
 
-        impl Default for UnoBody {
+        impl ::std::default::Default for UnoBody {
             fn default() -> Self {
                 Self {
                     gateway: Ok(Default::default()),
@@ -94,8 +95,8 @@ pub mod types {
         impl UnoBody {
             pub fn gateway<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<Option<String>>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
             {
                 self.gateway = value
                     .try_into()
@@ -104,8 +105,8 @@ pub mod types {
             }
             pub fn required<T>(mut self, value: T) -> Self
             where
-                T: std::convert::TryInto<::serde_json::Value>,
-                T::Error: std::fmt::Display,
+                T: ::std::convert::TryInto<::serde_json::Value>,
+                T::Error: ::std::fmt::Display,
             {
                 self.required = value
                     .try_into()
@@ -114,9 +115,11 @@ pub mod types {
             }
         }
 
-        impl std::convert::TryFrom<UnoBody> for super::UnoBody {
+        impl ::std::convert::TryFrom<UnoBody> for super::UnoBody {
             type Error = super::error::ConversionError;
-            fn try_from(value: UnoBody) -> Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: UnoBody,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     gateway: value.gateway?,
                     required: value.required?,
@@ -124,7 +127,7 @@ pub mod types {
             }
         }
 
-        impl From<super::UnoBody> for UnoBody {
+        impl ::std::convert::From<super::UnoBody> for UnoBody {
             fn from(value: super::UnoBody) -> Self {
                 Self {
                     gateway: Ok(value.gateway),
@@ -217,16 +220,14 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
-    };
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`Client::uno`]
     ///
     ///[`Client::uno`]: super::Client::uno
     #[derive(Debug, Clone)]
     pub struct Uno<'a> {
         client: &'a super::Client,
-        gateway: Result<String, String>,
+        gateway: Result<::std::string::String, String>,
         body: Result<types::builder::UnoBody, String>,
     }
 
@@ -235,17 +236,17 @@ pub mod builder {
             Self {
                 client: client,
                 gateway: Err("gateway was not initialized".to_string()),
-                body: Ok(types::builder::UnoBody::default()),
+                body: Ok(::std::default::Default::default()),
             }
         }
 
         pub fn gateway<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.gateway = value
-                .try_into()
-                .map_err(|_| "conversion to `String` for gateway failed".to_string());
+            self.gateway = value.try_into().map_err(|_| {
+                "conversion to `:: std :: string :: String` for gateway failed".to_string()
+            });
             self
         }
 
@@ -281,10 +282,13 @@ pub mod builder {
                 .and_then(|v| types::UnoBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/uno", client.baseurl,);
-            let mut query = Vec::with_capacity(1usize);
-            query.push(("gateway", gateway.to_string()));
             #[allow(unused_mut)]
-            let mut request = client.client.get(url).json(&body).query(&query).build()?;
+            let mut request = client
+                .client
+                .get(url)
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

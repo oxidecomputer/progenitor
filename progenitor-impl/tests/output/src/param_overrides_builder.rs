@@ -2,14 +2,12 @@
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -127,9 +125,7 @@ impl Client {
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
-    use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
-    };
+    use super::{encode_path, ByteStream, Error, RequestBuilderExt, ResponseValue};
     ///Builder for [`Client::key_get`]
     ///
     ///[`Client::key_get`]: super::Client::key_get
@@ -137,7 +133,7 @@ pub mod builder {
     pub struct KeyGet<'a> {
         client: &'a super::Client,
         key: Result<Option<bool>, String>,
-        unique_key: Result<Option<String>, String>,
+        unique_key: Result<Option<::std::string::String>, String>,
     }
 
     impl<'a> KeyGet<'a> {
@@ -162,12 +158,11 @@ pub mod builder {
 
         pub fn unique_key<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<String>,
+            V: std::convert::TryInto<::std::string::String>,
         {
-            self.unique_key = value
-                .try_into()
-                .map(Some)
-                .map_err(|_| "conversion to `String` for unique_key failed".to_string());
+            self.unique_key = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: string :: String` for unique_key failed".to_string()
+            });
             self
         }
 
@@ -181,15 +176,16 @@ pub mod builder {
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
             let url = format!("{}/key", client.baseurl,);
-            let mut query = Vec::with_capacity(2usize);
-            if let Some(v) = &key {
-                query.push(("key", v.to_string()));
-            }
-            if let Some(v) = &unique_key {
-                query.push(("uniqueKey", v.to_string()));
-            }
             #[allow(unused_mut)]
-            let mut request = client.client.get(url).query(&query).build()?;
+            let mut request = client
+                .client
+                .get(url)
+                .query(&progenitor_client::QueryParam::new("key", &key))
+                .query(&progenitor_client::QueryParam::new(
+                    "uniqueKey",
+                    &unique_key,
+                ))
+                .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
             match response.status().as_u16() {

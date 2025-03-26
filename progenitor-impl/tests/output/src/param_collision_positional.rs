@@ -1,15 +1,14 @@
+#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -101,6 +100,7 @@ impl Client {
 }
 
 #[allow(clippy::all)]
+#[allow(elided_named_lifetimes)]
 impl Client {
     ///Gets a key
     ///
@@ -123,14 +123,16 @@ impl Client {
         url: bool,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let _url = format!("{}/key/{}", self.baseurl, encode_path(&query.to_string()),);
-        let mut _query = Vec::with_capacity(5usize);
-        _query.push(("client", client.to_string()));
-        _query.push(("request", request.to_string()));
-        _query.push(("response", response.to_string()));
-        _query.push(("result", result.to_string()));
-        _query.push(("url", url.to_string()));
         #[allow(unused_mut)]
-        let mut _request = self.client.get(_url).query(&_query).build()?;
+        let mut _request = self
+            .client
+            .get(_url)
+            .query(&progenitor_client::QueryParam::new("client", &client))
+            .query(&progenitor_client::QueryParam::new("request", &request))
+            .query(&progenitor_client::QueryParam::new("response", &response))
+            .query(&progenitor_client::QueryParam::new("result", &result))
+            .query(&progenitor_client::QueryParam::new("url", &url))
+            .build()?;
         let _result = self.client.execute(_request).await;
         let _response = _result?;
         match _response.status().as_u16() {
