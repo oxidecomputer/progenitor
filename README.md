@@ -377,9 +377,9 @@ fn main() {
 Currently, the generated code doesn't deal with request headers. To add default headers to all requests, you can use the default_headers method when constructing the Client.
 
 ```rust
-    let baseurl = "https://company.com/api/v2";
+    let baseurl = env!("API_URL").to_string();
     
-    let access_token = "OP7nhQY46jf3I2sqyTZBHWEOIRsldfWEFlkjRkrjlER";
+    let access_token = env!("API_ACCESS_TOKEN").to_string();
     let authorization_header = format!("Bearer {}", access_token);
 
     let mut headers = reqwest::header::HeaderMap::new();
