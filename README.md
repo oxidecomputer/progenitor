@@ -396,5 +396,4 @@ Currently, the generated code doesn't deal with request headers. To add default 
         .unwrap();
 
     let client = Client::new_with_client(baseurl, client_with_custom_defaults);
-
 ```
