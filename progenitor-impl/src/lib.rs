@@ -4,9 +4,10 @@
 
 #![deny(missing_docs)]
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap};
 
 use openapiv3::OpenAPI;
+use opid::OperationIds;
 use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
@@ -23,6 +24,7 @@ pub use typify::UnknownPolicy;
 mod cli;
 mod httpmock;
 mod method;
+mod opid;
 mod template;
 mod to_schema;
 mod util;
@@ -49,6 +51,7 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 /// OpenAPI generator.
 pub struct Generator {
+    operation_ids: OperationIds,
     type_space: TypeSpace,
     settings: GenerationSettings,
     uses_futures: bool,
@@ -247,6 +250,7 @@ impl Default for Generator {
     fn default() -> Self {
         Self {
             type_space: TypeSpace::new(TypeSpaceSettings::default().with_type_mod("types")),
+            operation_ids: Default::default(),
             settings: Default::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
@@ -298,6 +302,7 @@ impl Generator {
 
         Self {
             type_space: TypeSpace::new(&type_settings),
+            operation_ids: OperationIds::default(),
             settings: settings.clone(),
             uses_futures: false,
             uses_websockets: false,
@@ -306,7 +311,7 @@ impl Generator {
 
     /// Emit a [TokenStream] containing the generated client code.
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
-        validate_openapi(spec)?;
+        self.operation_ids = validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
@@ -654,34 +659,53 @@ pub fn space_out_items(content: String) -> Result<String> {
 }
 
 /// Do some very basic checks of the OpenAPI documents.
-pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
+pub fn validate_openapi(spec: &OpenAPI) -> Result<OperationIds> {
     match spec.openapi.as_str() {
         "3.0.0" | "3.0.1" | "3.0.2" | "3.0.3" => (),
         v => return Err(Error::UnexpectedFormat(format!("invalid version: {}", v))),
     }
 
-    let mut opids = HashSet::new();
+    // populate OperationIds in two passes:
+    // first, add the IDs that are defined explicitely
+    // second, create synthetic operation IDs where they are not defined
+    let mut opids = OperationIds::default();
+    populate_operation_ids(spec, &mut opids, true)?;
+    populate_operation_ids(spec, &mut opids, false)?;
+
+    Ok(opids)
+}
+
+fn populate_operation_ids(
+    spec: &OpenAPI,
+    opids: &mut OperationIds,
+    process_present: bool,
+) -> Result<()> {
     spec.paths.paths.iter().try_for_each(|p| {
         match p.1 {
             openapiv3::ReferenceOr::Reference { reference: _ } => Err(Error::UnexpectedFormat(
                 format!("path {} uses reference, unsupported", p.0,),
             )),
             openapiv3::ReferenceOr::Item(item) => {
-                // Make sure every operation has an operation ID, and that each
-                // operation ID is only used once in the document.
-                item.iter().try_for_each(|(_, o)| {
+                // Make sure that each operation ID is only used once in the document.
+                // Where operation IDs are missing, create synthetic ones.
+                item.iter().try_for_each(|(method, o)| {
                     if let Some(oid) = o.operation_id.as_ref() {
-                        if !opids.insert(oid.to_string()) {
+                        if !process_present {
+                            return Ok(());
+                        }
+                        if let Err(_e) =
+                            opids.insert_opid_with_path_method(&oid.to_string(), p.0, method)
+                        {
                             return Err(Error::UnexpectedFormat(format!(
                                 "duplicate operation ID: {}",
                                 oid,
                             )));
                         }
                     } else {
-                        return Err(Error::UnexpectedFormat(format!(
-                            "path {} is missing operation ID",
-                            p.0,
-                        )));
+                        if process_present {
+                            return Ok(());
+                        }
+                        opids.insert_synthetic_opid_for_path_method(p.0, method)?
                     }
                     Ok(())
                 })

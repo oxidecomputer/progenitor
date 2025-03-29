@@ -291,7 +291,11 @@ impl Generator {
         method: &str,
         path_parameters: &[ReferenceOr<Parameter>],
     ) -> Result<OperationMethod> {
-        let operation_id = operation.operation_id.as_ref().unwrap();
+        let operation_id = self
+            .operation_ids
+            .opid_for_path_method(path, method)
+            .unwrap()
+            .to_string();
 
         let mut combined_path_parameters = parameter_map(path_parameters, components)?;
         for operation_param in items(&operation.parameters, components) {
@@ -336,11 +340,7 @@ impl Generator {
                     } => {
                         let schema = parameter_data.schema()?.to_schema();
                         let name = sanitize(
-                            &format!(
-                                "{}-{}",
-                                operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
-                            ),
+                            &format!("{}-{}", operation_id, &parameter_data.name,),
                             Case::Pascal,
                         );
 
@@ -373,11 +373,7 @@ impl Generator {
                     } => {
                         let schema = parameter_data.schema()?.to_schema();
                         let name = sanitize(
-                            &format!(
-                                "{}-{}",
-                                operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
-                            ),
+                            &format!("{}-{}", operation_id, &parameter_data.name,),
                             Case::Pascal,
                         );
 
@@ -409,7 +405,7 @@ impl Generator {
             self.uses_websockets = true;
         }
 
-        if let Some(body_param) = self.get_body_param(operation, components)? {
+        if let Some(body_param) = self.get_body_param(operation, &operation_id, components)? {
             params.push(body_param);
         }
 
@@ -462,10 +458,8 @@ impl Generator {
 
                         let typ = if let Some(schema) = &mt.schema {
                             let schema = schema.to_schema();
-                            let name = sanitize(
-                                &format!("{}-response", operation.operation_id.as_ref().unwrap(),),
-                                Case::Pascal,
-                            );
+                            let name =
+                                sanitize(&format!("{}-response", operation_id,), Case::Pascal);
                             self.type_space.add_type_with_name(&schema, Some(name))?
                         } else {
                             todo!("media type encoding, no schema: {:#?}", mt);
@@ -535,7 +529,7 @@ impl Generator {
         }
 
         Ok(OperationMethod {
-            operation_id: sanitize(operation_id, Case::Snake),
+            operation_id: sanitize(&operation_id, Case::Snake),
             tags: operation.tags.clone(),
             method: HttpMethod::from_str(method)?,
             path: tmp,
@@ -1385,7 +1379,7 @@ impl Generator {
     ///             param_1,
     ///             param_2,
     ///         } = self;
-    ///     
+    ///
     ///         let param_1 = param_1.map_err(Error::InvalidRequest)?;
     ///         let param_2 = param_1.map_err(Error::InvalidRequest)?;
     ///
@@ -2016,6 +2010,7 @@ impl Generator {
     fn get_body_param(
         &mut self,
         operation: &openapiv3::Operation,
+        operation_id: &str,
         components: &Option<Components>,
     ) -> Result<Option<OperationParameter>> {
         let body = match &operation.request_body {
@@ -2026,11 +2021,7 @@ impl Generator {
         let (content_str, media_type) = match (body.content.first(), body.content.len()) {
             (None, _) => return Ok(None),
             (Some(first), 1) => first,
-            (_, n) => todo!(
-                "more media types than expected for {}: {}",
-                operation.operation_id.as_ref().unwrap(),
-                n,
-            ),
+            (_, n) => todo!("more media types than expected for {}: {}", operation_id, n,),
         };
 
         let schema = media_type.schema.as_ref().ok_or_else(|| {
@@ -2119,10 +2110,7 @@ impl Generator {
                 if !media_type.encoding.is_empty() {
                     todo!("media type encoding not empty: {:#?}", media_type);
                 }
-                let name = sanitize(
-                    &format!("{}-body", operation.operation_id.as_ref().unwrap(),),
-                    Case::Pascal,
-                );
+                let name = sanitize(&format!("{}-body", operation_id), Case::Pascal);
                 let typ = self
                     .type_space
                     .add_type_with_name(&schema.to_schema(), Some(name))?;
