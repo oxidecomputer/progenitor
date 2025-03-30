@@ -655,8 +655,6 @@ pub fn space_out_items(content: String) -> Result<String> {
 
 fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
     // progenitor currenlty only support OAS 3.0.x
-    // (a limitation coming from using the openapiv3 crate, see
-    // https://github.com/glademiller/openapiv3/issues/50)
     if spec_version.trim().starts_with("3.0.") {
         Ok(())
     } else {
