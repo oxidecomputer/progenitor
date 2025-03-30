@@ -653,12 +653,23 @@ pub fn space_out_items(content: String) -> Result<String> {
     })
 }
 
+fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
+    // progenitor currenlty only support OAS 3.0.x
+    // (a limitation coming from using the openapiv3 crate, see
+    // https://github.com/glademiller/openapiv3/issues/50)
+    if spec_version.trim().starts_with("3.0.") {
+        Ok(())
+    } else {
+        Err(Error::UnexpectedFormat(format!(
+            "invalid version: {}",
+            spec_version
+        )))
+    }
+}
+
 /// Do some very basic checks of the OpenAPI documents.
 pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
-    match spec.openapi.as_str() {
-        "3.0.0" | "3.0.1" | "3.0.2" | "3.0.3" => (),
-        v => return Err(Error::UnexpectedFormat(format!("invalid version: {}", v))),
-    }
+    validate_openapi_spec_version(spec.openapi.as_str())?;
 
     let mut opids = HashSet::new();
     spec.paths.paths.iter().try_for_each(|p| {
@@ -696,7 +707,7 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
 mod tests {
     use serde_json::json;
 
-    use crate::Error;
+    use crate::{validate_openapi_spec_version, Error};
 
     #[test]
     fn test_bad_value() {
@@ -727,6 +738,20 @@ mod tests {
         assert_eq!(
             Error::InternalError("nope".to_string()).to_string(),
             "internal error nope",
+        );
+    }
+
+    #[test]
+    fn test_validate_openapi_spec_version() {
+        assert!(validate_openapi_spec_version("3.0.0").is_ok());
+        assert!(validate_openapi_spec_version("3.0.1").is_ok());
+        assert!(validate_openapi_spec_version("3.0.4").is_ok());
+        assert!(validate_openapi_spec_version("3.0.5-draft").is_ok());
+        assert_eq!(
+            validate_openapi_spec_version("3.1.0")
+                .unwrap_err()
+                .to_string(),
+            "unexpected or unhandled format in the OpenAPI document invalid version: 3.1.0"
         );
     }
 }
