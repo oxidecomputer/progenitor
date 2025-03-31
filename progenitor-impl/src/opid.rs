@@ -6,7 +6,7 @@ use super::{Error, Result};
 /// which can uniquely identify a HTTP endpoint. The struct is
 /// designed to be used as a key for map implementations
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub(super) struct PathMethod {
+struct PathMethod {
     path: String,
     method: String,
 }
