@@ -76,12 +76,23 @@ impl OperationIds {
         }
     }
 
+    fn remove_duplicate_char(s: &str, c: char) -> String {
+        let mut r = String::new();
+        r.reserve(s.len());
+        let mut last_char_is_c = false;
+        for l in s.chars() {
+            if l != '_' || !last_char_is_c {
+                r.push(l)
+            }
+            last_char_is_c = l == c;
+        }
+        r
+    }
+
     /// Generate a new operation ID candidate for the given PathMethod, considering
     /// the number of attempts that have already been made. The number of attempts
     /// is included in the candiate name (unless it is 0), to help resolve name
     /// collisions.
-    /// For generated operation IDs that would start with a number,
-    /// the character 'n' is prepended.
     ///
     /// The operation_id names are created with the pattern
     /// `converted_path [attempt] converted_method`.
@@ -93,15 +104,28 @@ impl OperationIds {
     /// This is useful when the operation ID is used to
     /// generate client method names: `foo_bar_get` and `foo_bar_post` will
     /// be listed next to each other in a method name list.
+    ///
+    /// For generated operation IDs that would start with a number,
+    /// the character 'n' is prepended. So 'GET /1' would yield
+    /// 'n1_get'
+    ///
+    /// The path '/' is special and replaced by 'root', so 'GET /' would yield
+    /// 'root_get'.
+    ///
     fn gen_operation_id(path_method: &PathMethod, attempt: u32) -> String {
-        let mut p: String = path_method
-            .path
-            .replace(|c: char| !c.is_alphanumeric(), "_")
-            .trim_matches('_')
-            .to_lowercase();
-        if p.starts_with(char::is_numeric) {
-            p.insert(0, 'n');
-        }
+        let p = match path_method.path.as_str() {
+            "/" => "root".to_string(),
+            path => {
+                let mut p: String = path
+                    .replace(|c: char| !c.is_alphanumeric(), "_")
+                    .trim_matches('_')
+                    .to_lowercase();
+                if p.starts_with(char::is_numeric) {
+                    p.insert(0, 'n');
+                }
+                Self::remove_duplicate_char(&p, '_')
+            }
+        };
 
         let m = path_method.method.to_lowercase();
         if attempt == 0 {
@@ -182,6 +206,8 @@ fn mk_pm(path: &str, method: &str) -> PathMethod {
 
 #[test]
 fn test_operation_id_generation() {
+    // all non-alphanumeric chars are replaced by '_'; leading
+    // and trailing '_' are trimmed
     assert_eq!(
         OperationIds::gen_operation_id(&mk_pm("/foo/bar", "get"), 0),
         "foo_bar_get"
@@ -193,6 +219,37 @@ fn test_operation_id_generation() {
     assert_eq!(
         OperationIds::gen_operation_id(&mk_pm("/some.json", "get"), 0),
         "some_json_get"
+    );
+
+    // the root path "/" is a special case: If we'd simply replace
+    // '/' with '_' and then trim '_', we'd get the empty string.
+    // so we replace it with "root".
+    assert_eq!(
+        OperationIds::gen_operation_id(&mk_pm("/", "get"), 0),
+        "root_get"
+    );
+
+    // numbers are a special case: because operation ids become identifiers,
+    // they may not start with numbers. However, mid-word we allow numbers:
+    assert_eq!(
+        OperationIds::gen_operation_id(&mk_pm("/1/two/3", "get"), 0),
+        "n1_two_3_get"
+    );
+
+    // path params
+    assert_eq!(
+        OperationIds::gen_operation_id(
+            &mk_pm("/banks/{bankId}/accounts/{accountNo}/ledger", "get"),
+            0
+        ),
+        "banks_bankid_accounts_accountno_ledger_get"
+    );
+    assert_eq!(
+        OperationIds::gen_operation_id(
+            &mk_pm("/geocoords/{longitude}/{latitude}/humidity", "get"),
+            0
+        ),
+        "geocoords_longitude_latitude_humidity_get"
     );
 }
 

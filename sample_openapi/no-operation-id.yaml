@@ -4,8 +4,19 @@ info:
   title: Parameter override test
   version: v1
 paths:
+  "/":
+    # NOTE: the root path is special when generating an operationId
+    get:
+      responses:
+        "200":
+          description: return some JSON string
+          content:
+            "application/json":
+              schema:
+                type: string
   "/bazzz":
     get:
+      # NOTE: check if all is still well _with_ a set operationId
       operationId: "bazooka"
       responses:
         "200":
@@ -16,7 +27,7 @@ paths:
                 type: string
   "/foo/bar":
     get:
-      # NOTE: no operation_id is set
+      # NOTE: no operationId is set
       responses:
         "200":
           description: return some JSON string
@@ -25,7 +36,7 @@ paths:
               schema:
                 type: string
     post:
-      # NOTE: no operation_id is set
+      # NOTE: no operationId is set
       responses:
         "200":
           description: return some JSON string
@@ -35,7 +46,7 @@ paths:
                 type: string
   "/foo.bar":
     get:
-      # NOTE: no operation_id is set, however, the path will create a name collision
+      # NOTE: no operationId is set, however, the path will create a name collision
       # with GET /foo/bar
       responses:
         "200":
