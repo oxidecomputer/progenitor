@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  description: Minimal API for testing parameter overrides
+  title: Parameter override test
+  version: v1
+paths:
+  "/":
+    # NOTE: the root path is special when generating an operationId
+    get:
+      responses:
+        "200":
+          description: return some JSON string
+          content:
+            "application/json":
+              schema:
+                type: string
+  "/bazzz":
+    get:
+      # NOTE: check if all is still well _with_ a set operationId
+      operationId: "bazooka"
+      responses:
+        "200":
+          description: return some JSON string
+          content:
+            "application/json":
+              schema:
+                type: string
+  "/foo/bar":
+    get:
+      # NOTE: no operationId is set
+      responses:
+        "200":
+          description: return some JSON string
+          content:
+            "application/json":
+              schema:
+                type: string
+    post:
+      # NOTE: no operationId is set
+      responses:
+        "200":
+          description: return some JSON string
+          content:
+            "application/json":
+              schema:
+                type: string
+  "/foo.bar":
+    get:
+      # NOTE: no operationId is set, however, the path will create a name collision
+      # with GET /foo/bar
+      responses:
+        "200":
+          description: return some JSON string
+          content:
+            "application/json":
+              schema:
+                type: string

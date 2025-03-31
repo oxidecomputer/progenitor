@@ -30,7 +30,7 @@ impl Generator {
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
     pub fn httpmock(&mut self, spec: &OpenAPI, crate_path: &str) -> Result<TokenStream> {
-        validate_openapi(spec)?;
+        self.operation_ids = validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {

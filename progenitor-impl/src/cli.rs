@@ -24,7 +24,7 @@ struct CliOperation {
 impl Generator {
     /// Generate a `clap`-based CLI.
     pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
-        validate_openapi(spec)?;
+        self.operation_ids = validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
