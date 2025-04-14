@@ -294,6 +294,12 @@ impl<E> Error<E> {
     }
 }
 
+impl<E> From<std::convert::Infallible> for Error<E> {
+    fn from(_: std::convert::Infallible) -> Self {
+        unreachable!()
+    }
+}
+
 impl<E> From<reqwest::Error> for Error<E> {
     fn from(e: reqwest::Error) -> Self {
         Self::CommunicationError(e)
