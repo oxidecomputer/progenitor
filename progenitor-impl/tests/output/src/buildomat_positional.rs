@@ -1026,7 +1026,7 @@ impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1052,7 +1052,7 @@ impl Client {
     ///Sends a `POST` request to `/v1/control/resume`
     pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/resume", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1077,7 +1077,7 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1105,7 +1105,7 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1134,7 +1134,7 @@ impl Client {
         body: &'a types::TaskSubmit,
     ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1169,7 +1169,7 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1203,7 +1203,7 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1238,7 +1238,7 @@ impl Client {
             encode_path(&task.to_string()),
             encode_path(&output.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1259,7 +1259,7 @@ impl Client {
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
         let url = format!("{}/v1/users", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1286,7 +1286,7 @@ impl Client {
     ///Sends a `GET` request to `/v1/whoami`
     pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
         let url = format!("{}/v1/whoami", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1315,7 +1315,7 @@ impl Client {
         body: String,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/whoami/name", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1345,7 +1345,7 @@ impl Client {
         body: &'a types::WorkerBootstrap,
     ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
         let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1374,7 +1374,7 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
         let url = format!("{}/v1/worker/ping", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1408,7 +1408,7 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1439,7 +1439,7 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1478,7 +1478,7 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1509,7 +1509,7 @@ impl Client {
             self.baseurl,
             encode_path(&task.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1534,7 +1534,7 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
         let url = format!("{}/v1/workers", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1560,7 +1560,7 @@ impl Client {
     ///Sends a `POST` request to `/v1/workers/recycle`
     pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/workers/recycle", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1581,7 +1581,7 @@ impl Client {
         id: Option<&'a types::GetThingOrThingsId>,
     ) -> Result<ResponseValue<::std::string::String>, Error<()>> {
         let url = format!("{}/v1/things", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
@@ -1611,7 +1611,7 @@ impl Client {
         accept_language: Option<types::HeaderArgAcceptLanguage>,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/header-arg", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),

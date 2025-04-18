@@ -827,7 +827,7 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let headers_size = headers.len();
+        let headers_size = headers.len() + 1;
         let headers_build = quote! {
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(#headers_size);
             header_map.append(

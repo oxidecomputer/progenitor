@@ -3108,7 +3108,7 @@ pub mod builder {
         ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/instance", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
                 ::reqwest::header::HeaderValue::from_static(client.api_version()),
@@ -3188,7 +3188,7 @@ pub mod builder {
                 .and_then(|v| types::InstanceEnsureRequest::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
                 ::reqwest::header::HeaderValue::from_static(client.api_version()),
@@ -3274,7 +3274,7 @@ pub mod builder {
                 encode_path(&id.to_string()),
                 encode_path(&snapshot_id.to_string()),
             );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
                 ::reqwest::header::HeaderValue::from_static(client.api_version()),
@@ -3358,7 +3358,7 @@ pub mod builder {
                 })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/migrate/status", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
                 ::reqwest::header::HeaderValue::from_static(client.api_version()),
@@ -3408,7 +3408,7 @@ pub mod builder {
         ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
             let Self { client } = self;
             let url = format!("{}/instance/serial", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
                 ::reqwest::header::HeaderValue::from_static(client.api_version()),
@@ -3471,7 +3471,7 @@ pub mod builder {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
                 ::reqwest::header::HeaderValue::from_static(client.api_version()),
@@ -3556,7 +3556,7 @@ pub mod builder {
                 })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state-monitor", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
                 ::reqwest::header::HeaderValue::from_static(client.api_version()),

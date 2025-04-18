@@ -156,7 +156,7 @@ impl Client {
             encode_path(&type_.to_string()),
             encode_path(&trait_.to_string()),
         );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),

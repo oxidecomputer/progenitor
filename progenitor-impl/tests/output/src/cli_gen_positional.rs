@@ -140,7 +140,7 @@ impl Client {
         body: &'a types::UnoBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
         let url = format!("{}/uno", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(self.api_version()),
