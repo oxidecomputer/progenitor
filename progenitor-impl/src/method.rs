@@ -827,19 +827,19 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let (headers_build, headers_use) = if headers.is_empty() {
-            (quote! {}, quote! {})
-        } else {
-            let size = headers.len();
-            let headers_build = quote! {
-                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(#size);
-                #(#headers)*
-            };
-            let headers_use = quote! {
-                .headers(header_map)
-            };
+        let headers_size = headers.len() + 1;
+        let headers_build = quote! {
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(#headers_size);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(#client.api_version()),
+            );
 
-            (headers_build, headers_use)
+            #(#headers)*
+        };
+
+        let headers_use = quote! {
+            .headers(header_map)
         };
 
         let websock_hdrs = if method.dropshot_websocket {
