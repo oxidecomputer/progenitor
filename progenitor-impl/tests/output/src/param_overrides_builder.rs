@@ -176,6 +176,11 @@ pub mod builder {
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
             let url = format!("{}/key", client.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(client.api_version()),
+            );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -185,6 +190,7 @@ pub mod builder {
                     "uniqueKey",
                     &unique_key,
                 ))
+                .headers(header_map)
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;

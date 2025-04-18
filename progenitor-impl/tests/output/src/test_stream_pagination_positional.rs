@@ -199,6 +199,11 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
         let url = format!("{}/", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -212,6 +217,7 @@ impl Client {
                 "page_token",
                 &page_token,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;

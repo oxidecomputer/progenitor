@@ -156,6 +156,11 @@ impl Client {
             encode_path(&type_.to_string()),
             encode_path(&trait_.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -167,6 +172,7 @@ impl Client {
             .query(&progenitor_client::QueryParam::new("if", &if_))
             .query(&progenitor_client::QueryParam::new("in", &in_))
             .query(&progenitor_client::QueryParam::new("use", &use_))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;

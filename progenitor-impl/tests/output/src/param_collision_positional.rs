@@ -123,6 +123,11 @@ impl Client {
         url: bool,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let _url = format!("{}/key/{}", self.baseurl, encode_path(&query.to_string()),);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut _request = self
             .client
@@ -132,6 +137,7 @@ impl Client {
             .query(&progenitor_client::QueryParam::new("response", &response))
             .query(&progenitor_client::QueryParam::new("result", &result))
             .query(&progenitor_client::QueryParam::new("url", &url))
+            .headers(header_map)
             .build()?;
         let _result = self.client.execute(_request).await;
         let _response = _result?;

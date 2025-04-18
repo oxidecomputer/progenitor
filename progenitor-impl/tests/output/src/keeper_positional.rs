@@ -521,6 +521,10 @@ impl Client {
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/enrol", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -547,6 +551,10 @@ impl Client {
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
         let url = format!("{}/global/jobs", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -576,6 +584,10 @@ impl Client {
     ) -> Result<ResponseValue<types::PingResult>, Error<()>> {
         let url = format!("{}/ping", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -607,6 +619,10 @@ impl Client {
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/finish", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -639,6 +655,10 @@ impl Client {
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/output", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -671,6 +691,10 @@ impl Client {
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/start", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self

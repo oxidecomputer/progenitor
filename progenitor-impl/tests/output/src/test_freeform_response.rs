@@ -144,8 +144,13 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(0usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).build()?;
+        let mut request = self.client.get(url).headers(header_map).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
