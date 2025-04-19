@@ -609,7 +609,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -766,7 +766,8 @@ impl Generator {
     fn method_sig_body(
         &self,
         method: &OperationMethod,
-        client: TokenStream,
+        client_type: TokenStream,
+        client_value: TokenStream,
         has_inner: bool,
     ) -> Result<MethodSigBody> {
         let param_names = method
@@ -832,7 +833,7 @@ impl Generator {
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(#headers_size);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(#client.api_version()),
+                ::reqwest::header::HeaderValue::from_static(#client_type::api_version()),
             );
 
             #(#headers)*
@@ -870,7 +871,7 @@ impl Generator {
             })
             .collect();
 
-        let url_path = method.path.compile(url_renames, client.clone());
+        let url_path = method.path.compile(url_renames, client_value.clone());
         let url_path = quote! {
             let #url_ident = #url_path;
         };
@@ -1051,7 +1052,7 @@ impl Generator {
         };
 
         let inner = match has_inner {
-            true => quote! { &#client.inner, },
+            true => quote! { &#client_value.inner, },
             false => quote! {},
         };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
@@ -1089,7 +1090,7 @@ impl Generator {
             #headers_build
 
             #[allow(unused_mut)]
-            let mut #request_ident = #client.client
+            let mut #request_ident = #client_value.client
                 . #method_func (#url_ident)
                 #accept_header
                 #(#body_func)*
@@ -1100,9 +1101,17 @@ impl Generator {
 
             #pre_hook
             #pre_hook_async
-            let #result_ident = #client.client
-                .execute(#request_ident)
+            #client_value
+                .pre(&mut #request_ident)
+                .await?;
+
+            let #result_ident = #client_value
+                .wrap(#client_value.exec(#request_ident))
                 .await;
+
+            #client_value
+                .post(&#result_ident)
+                .await?;
             #post_hook
             #post_hook_async
 
@@ -1639,7 +1648,12 @@ impl Generator {
             success,
             error,
             body,
-        } = self.method_sig_body(method, quote! { #client_ident }, has_inner)?;
+        } = self.method_sig_body(
+            method,
+            quote! { super::Client },
+            quote! { #client_ident },
+            has_inner,
+        )?;
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
