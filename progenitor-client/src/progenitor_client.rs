@@ -48,6 +48,82 @@ impl DerefMut for ByteStream {
     }
 }
 
+/// Interface generic for all generated clients.
+pub trait ClientInfo<Inner> {
+    /// Get the version of this API.
+    ///
+    /// This string is pulled directly from the source OpenAPI document and may
+    /// be in any format the API selects.
+    fn api_version() -> &'static str;
+
+    /// Get the base URL to which requests are made.
+    fn baseurl(&self) -> &str;
+
+    /// Get the internal `reqwest::Client` used to make requests.
+    fn client(&self) -> &reqwest::Client;
+
+    /// Get the inner value of type `T` if one is specified.
+    fn inner(&self) -> &Inner;
+}
+
+impl<T, Inner> ClientInfo<Inner> for &T
+where
+    T: ClientInfo<Inner>,
+{
+    fn api_version() -> &'static str {
+        T::api_version()
+    }
+
+    fn baseurl(&self) -> &str {
+        (*self).baseurl()
+    }
+
+    fn client(&self) -> &reqwest::Client {
+        (*self).client()
+    }
+
+    fn inner(&self) -> &Inner {
+        (*self).inner()
+    }
+}
+
+/// Interface for changing the behavior of generated clients. All clients
+/// implement this for `&Client`; to override the default behavior, implement
+/// some or all of the interfaces for the `Client` type (without the
+/// reference). This mechanism relies on so-called "auto-ref specialization".
+#[allow(async_fn_in_trait)]
+pub trait ClientHooks<Inner = ()>
+where
+    Self: ClientInfo<Inner>,
+{
+    /// Implement to execute code prior to the execution of all requests.
+    async fn pre<T>(&self, _request: &mut reqwest::Request) -> std::result::Result<(), Error<T>> {
+        Ok(())
+    }
+
+    /// Implement to execute code after the execution of all requests.
+    async fn post<T>(
+        &self,
+        _result: &reqwest::Result<reqwest::Response>,
+    ) -> std::result::Result<(), Error<T>> {
+        Ok(())
+    }
+
+    /// Implement to bracket the `execute` Future with your own code. Do not
+    /// forget to `execute.await` at some point.
+    async fn wrap(
+        &self,
+        execute: impl std::future::Future<Output = reqwest::Result<reqwest::Response>>,
+    ) -> reqwest::Result<reqwest::Response> {
+        execute.await
+    }
+
+    /// Implement to customize the execution of the given request.
+    async fn exec(&self, request: reqwest::Request) -> reqwest::Result<reqwest::Response> {
+        self.client().execute(request).await
+    }
+}
+
 /// Typed value returned by generated client methods.
 ///
 /// This is used for successful responses and may appear in error responses
