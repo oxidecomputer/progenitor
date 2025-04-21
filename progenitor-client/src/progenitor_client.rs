@@ -295,8 +295,8 @@ impl<E> Error<E> {
 }
 
 impl<E> From<std::convert::Infallible> for Error<E> {
-    fn from(_: std::convert::Infallible) -> Self {
-        unreachable!()
+    fn from(x: std::convert::Infallible) -> Self {
+        match x {}
     }
 }
 
