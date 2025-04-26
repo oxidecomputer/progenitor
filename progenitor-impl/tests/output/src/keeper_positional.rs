@@ -1,6 +1,6 @@
 #![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -534,9 +534,12 @@ impl Client {
             .json(&body)
             .headers(header_map)
             .build()?;
-        self.pre(&mut request).await?;
-        let result = self.wrap(self.exec(request)).await;
-        self.post(&result).await?;
+        let info = OperationInfo {
+            operation_id: "enrol",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => Ok(ResponseValue::empty(response)),
@@ -569,9 +572,12 @@ impl Client {
             )
             .headers(header_map)
             .build()?;
-        self.pre(&mut request).await?;
-        let result = self.wrap(self.exec(request)).await;
-        self.post(&result).await?;
+        let info = OperationInfo {
+            operation_id: "global_jobs",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -604,9 +610,12 @@ impl Client {
             )
             .headers(header_map)
             .build()?;
-        self.pre(&mut request).await?;
-        let result = self.wrap(self.exec(request)).await;
-        self.post(&result).await?;
+        let info = OperationInfo {
+            operation_id: "ping",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -642,9 +651,12 @@ impl Client {
             .json(&body)
             .headers(header_map)
             .build()?;
-        self.pre(&mut request).await?;
-        let result = self.wrap(self.exec(request)).await;
-        self.post(&result).await?;
+        let info = OperationInfo {
+            operation_id: "report_finish",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -680,9 +692,12 @@ impl Client {
             .json(&body)
             .headers(header_map)
             .build()?;
-        self.pre(&mut request).await?;
-        let result = self.wrap(self.exec(request)).await;
-        self.post(&result).await?;
+        let info = OperationInfo {
+            operation_id: "report_output",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -718,9 +733,12 @@ impl Client {
             .json(&body)
             .headers(header_map)
             .build()?;
-        self.pre(&mut request).await?;
-        let result = self.wrap(self.exec(request)).await;
-        self.post(&result).await?;
+        let info = OperationInfo {
+            operation_id: "report_start",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,

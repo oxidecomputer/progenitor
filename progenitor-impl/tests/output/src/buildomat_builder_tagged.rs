@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -2755,7 +2755,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, RequestBuilderExt, ResponseValue,
+        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
+        ResponseValue,
     };
     ///Builder for [`Client::control_hold`]
     ///
@@ -2789,9 +2790,12 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "control_hold",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -2824,9 +2828,12 @@ pub mod builder {
             );
             #[allow(unused_mut)]
             let mut request = client.client.post(url).headers(header_map).build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "control_resume",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => Ok(ResponseValue::empty(response)),
@@ -2886,9 +2893,12 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "task_get",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -2929,9 +2939,12 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "tasks_get",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -3000,9 +3013,12 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "task_submit",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 201u16 => ResponseValue::from_response(response).await,
@@ -3083,9 +3099,12 @@ pub mod builder {
                 .query(&progenitor_client::QueryParam::new("minseq", &minseq))
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "task_events_get",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -3147,9 +3166,12 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "task_outputs_get",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -3219,9 +3241,12 @@ pub mod builder {
             );
             #[allow(unused_mut)]
             let mut request = client.client.get(url).headers(header_map).build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "task_output_download",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200..=299 => Ok(ResponseValue::stream(response)),
@@ -3290,9 +3315,12 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "user_create",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 201u16 => ResponseValue::from_response(response).await,
@@ -3333,9 +3361,12 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "whoami",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -3393,9 +3424,12 @@ pub mod builder {
                 .body(body)
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "whoami_put_name",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => Ok(ResponseValue::empty(response)),
@@ -3464,9 +3498,12 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "worker_bootstrap",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 201u16 => ResponseValue::from_response(response).await,
@@ -3507,9 +3544,12 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "worker_ping",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -3593,9 +3633,12 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "worker_task_append",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 201u16 => Ok(ResponseValue::empty(response)),
@@ -3673,9 +3716,12 @@ pub mod builder {
                 .body(body)
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "worker_task_upload_chunk",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 201u16 => ResponseValue::from_response(response).await,
@@ -3759,9 +3805,12 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "worker_task_complete",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => Ok(ResponseValue::empty(response)),
@@ -3843,9 +3892,12 @@ pub mod builder {
                 .json(&body)
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "worker_task_add_output",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 201u16 => Ok(ResponseValue::empty(response)),
@@ -3886,9 +3938,12 @@ pub mod builder {
                 )
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "workers_list",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -3921,9 +3976,12 @@ pub mod builder {
             );
             #[allow(unused_mut)]
             let mut request = client.client.post(url).headers(header_map).build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "workers_recycle",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => Ok(ResponseValue::empty(response)),
@@ -3981,9 +4039,12 @@ pub mod builder {
                 .query(&progenitor_client::QueryParam::new("id", &id))
                 .headers(header_map)
                 .build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "get_thing_or_things",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
@@ -4037,9 +4098,12 @@ pub mod builder {
             }
             #[allow(unused_mut)]
             let mut request = client.client.get(url).headers(header_map).build()?;
-            client.pre(&mut request).await?;
-            let result = client.wrap(client.exec(request)).await;
-            client.post(&result).await?;
+            let info = OperationInfo {
+                operation_id: "header_arg",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
                 200..=299 => Ok(ResponseValue::empty(response)),

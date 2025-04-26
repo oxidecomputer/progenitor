@@ -414,7 +414,12 @@ impl Generator {
                 ResponseValue,
             };
             #[allow(unused_imports)]
-            use progenitor_client::{encode_path, ClientHooks, RequestBuilderExt};
+            use progenitor_client::{
+                encode_path,
+                ClientHooks,
+                OperationInfo,
+                RequestBuilderExt,
+            };
 
             /// Types used as operation parameters and responses.
             #[allow(clippy::all)]
@@ -560,6 +565,7 @@ impl Generator {
                     ClientInfo,
                     ClientHooks,
                     Error,
+                    OperationInfo,
                     RequestBuilderExt,
                     ResponseValue,
                 };
@@ -607,6 +613,7 @@ impl Generator {
                     ClientInfo,
                     ClientHooks,
                     Error,
+                    OperationInfo,
                     RequestBuilderExt,
                     ResponseValue,
                 };

@@ -87,39 +87,45 @@ where
     }
 }
 
+/// Information about an operation, used by hook implementations.
+pub struct OperationInfo {
+    /// The corresponding operationId from the source OpenAPI document.
+    pub operation_id: &'static str,
+}
+
 /// Interface for changing the behavior of generated clients. All clients
 /// implement this for `&Client`; to override the default behavior, implement
 /// some or all of the interfaces for the `Client` type (without the
 /// reference). This mechanism relies on so-called "auto-ref specialization".
-#[allow(async_fn_in_trait)]
+#[allow(async_fn_in_trait, unused)]
 pub trait ClientHooks<Inner = ()>
 where
     Self: ClientInfo<Inner>,
 {
     /// Implement to execute code prior to the execution of all requests.
-    async fn pre<T>(&self, _request: &mut reqwest::Request) -> std::result::Result<(), Error<T>> {
+    async fn pre<E>(
+        &self,
+        request: &mut reqwest::Request,
+        info: &OperationInfo,
+    ) -> std::result::Result<(), Error<E>> {
         Ok(())
     }
 
     /// Implement to execute code after the execution of all requests.
-    async fn post<T>(
+    async fn post<E>(
         &self,
-        _result: &reqwest::Result<reqwest::Response>,
-    ) -> std::result::Result<(), Error<T>> {
+        result: &reqwest::Result<reqwest::Response>,
+        info: &OperationInfo,
+    ) -> std::result::Result<(), Error<E>> {
         Ok(())
     }
 
-    /// Implement to bracket the `execute` Future with your own code. Do not
-    /// forget to `execute.await` at some point.
-    async fn wrap(
-        &self,
-        execute: impl std::future::Future<Output = reqwest::Result<reqwest::Response>>,
-    ) -> reqwest::Result<reqwest::Response> {
-        execute.await
-    }
-
     /// Implement to customize the execution of the given request.
-    async fn exec(&self, request: reqwest::Request) -> reqwest::Result<reqwest::Response> {
+    async fn exec(
+        &self,
+        request: reqwest::Request,
+        info: &OperationInfo,
+    ) -> reqwest::Result<reqwest::Response> {
         self.client().execute(request).await
     }
 }
@@ -320,11 +326,8 @@ pub enum Error<E = ()> {
     /// success or failure response; check `status().is_success()`.
     UnexpectedResponse(reqwest::Response),
 
-    /// An error occurred in the processing of a request pre-hook.
-    PreHookError(String),
-
-    /// An error occurred in the processing of a request post-hook.
-    PostHookError(String),
+    /// A custom error from a consumer-defined hook.
+    Custom(String),
 }
 
 impl<E> Error<E> {
@@ -332,8 +335,7 @@ impl<E> Error<E> {
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
             Error::InvalidRequest(_) => None,
-            Error::PreHookError(_) => None,
-            Error::PostHookError(_) => None,
+            Error::Custom(_) => None,
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
             Error::InvalidUpgrade(e) => e.status(),
@@ -350,8 +352,7 @@ impl<E> Error<E> {
     pub fn into_untyped(self) -> Error {
         match self {
             Error::InvalidRequest(s) => Error::InvalidRequest(s),
-            Error::PreHookError(s) => Error::PreHookError(s),
-            Error::PostHookError(s) => Error::PostHookError(s),
+            Error::Custom(s) => Error::Custom(s),
             Error::CommunicationError(e) => Error::CommunicationError(e),
             Error::ErrorResponse(ResponseValue {
                 inner: _,
@@ -410,11 +411,8 @@ where
             Error::UnexpectedResponse(r) => {
                 write!(f, "Unexpected Response: {:?}", r)?;
             }
-            Error::PreHookError(s) => {
-                write!(f, "Pre-hook Error: {}", s)?;
-            }
-            Error::PostHookError(s) => {
-                write!(f, "Post-hook Error: {}", s)?;
+            Error::Custom(s) => {
+                write!(f, "Error: {}", s)?;
             }
         }
 

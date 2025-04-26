@@ -1064,7 +1064,7 @@ impl Generator {
             quote! {
                 match (#hook)(#inner &mut #request_ident).await {
                     Ok(_) => (),
-                    Err(e) => return Err(Error::PreHookError(e.to_string())),
+                    Err(e) => return Err(Error::Custom(e.to_string())),
                 }
             }
         });
@@ -1077,11 +1077,12 @@ impl Generator {
             quote! {
                 match (#hook)(#inner &#result_ident).await {
                     Ok(_) => (),
-                    Err(e) => return Err(Error::PostHookError(e.to_string())),
+                    Err(e) => return Err(Error::Custom(e.to_string())),
                 }
             }
         });
 
+        let operation_id = &method.operation_id;
         let method_func = format_ident!("{}", method.method.as_str());
 
         let body_impl = quote! {
@@ -1099,21 +1100,25 @@ impl Generator {
                 #websock_hdrs
                 .build()?;
 
+            let info = OperationInfo {
+                operation_id: #operation_id,
+            };
+
             #pre_hook
             #pre_hook_async
             #client_value
-                .pre(&mut #request_ident)
+                .pre(&mut #request_ident, &info)
                 .await?;
 
             let #result_ident = #client_value
-                .wrap(#client_value.exec(#request_ident))
+                .exec(#request_ident, &info)
                 .await;
 
             #client_value
-                .post(&#result_ident)
+                .post(&#result_ident, &info)
                 .await?;
-            #post_hook
             #post_hook_async
+            #post_hook
 
             let #response_ident = #result_ident?;
 

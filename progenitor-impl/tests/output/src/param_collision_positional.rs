@@ -1,6 +1,6 @@
 #![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -140,9 +140,12 @@ impl Client {
             .query(&progenitor_client::QueryParam::new("url", &url))
             .headers(header_map)
             .build()?;
-        self.pre(&mut _request).await?;
-        let _result = self.wrap(self.exec(_request)).await;
-        self.post(&_result).await?;
+        let info = OperationInfo {
+            operation_id: "key_get",
+        };
+        self.pre(&mut _request, &info).await?;
+        let _result = self.exec(_request, &info).await;
+        self.post(&_result, &info).await?;
         let _response = _result?;
         match _response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(_response)),
