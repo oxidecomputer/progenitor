@@ -24,14 +24,23 @@ typify = { workspace = true }
 unicode-ident = { workspace = true }
 
 [dev-dependencies]
+anyhow = { workspace = true }
+base64 = { workspace = true }
+clap = { workspace = true }
+chrono = { workspace = true }
 dropshot = { workspace = true }
 expectorate = { workspace = true }
 futures = { workspace = true }
 http = { workspace = true }
 hyper = { workspace = true }
 progenitor-client = { workspace = true }
+rand = { workspace = true }
+regress = { workspace = true }
 reqwest = { workspace = true }
 rustfmt-wrapper = { workspace = true }
+schemars = { workspace = true }
 semver = { workspace = true }
 serde_yaml = { workspace = true }
+test-progenitor-compilation = { path = "../test-progenitor-compilation" }
 tokio = { workspace = true }
+uuid = { workspace = true }
