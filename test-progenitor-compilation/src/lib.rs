@@ -31,10 +31,6 @@ pub fn cli_tokens(item: TokenStream) -> TokenStream {
 
     // CLI generation.
     let cli = generator.cli(&spec, "sdk").unwrap();
-    
-    // println!("{}", cli);
-    
-    // panic!("exit");
 
     quote! {
         pub mod sdk {
